@@ -1,0 +1,1152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example of an UWB channel Ray Tracing simulation &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example of an UWB channel Ray Tracing simulation</a><ul>
+<li><a class="reference internal" href="#adding-coordinates-of-transmiting-and-receiving-points">Adding coordinates of transmiting and receiving points</a></li>
+<li><a class="reference internal" href="#signatures-rays-and-propagation-and-transmission-channel">Signatures, rays and propagation and transmission channel</a></li>
+<li><a class="reference internal" href="#calulating-the-propagation-channel">Calulating the Propagation Channel</a></li>
+<li><a class="reference internal" href="#apply-waveform">Apply waveform</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-of-an-uwb-channel-ray-tracing-simulation">
+<h1>Example of an UWB channel Ray Tracing simulation<a class="headerlink" href="#example-of-an-uwb-channel-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
+<p>In the following, all steps required for going from the descrpition of
+the radio scene until the calculation of the UWB channel impulse
+response is described on a simple example.</p>
+<p>A ray-tracing simulation is controlled via a configuration file which is
+stored in the <em>ini</em> directory of the project directory. By default, a
+default configuration file named <strong>default.ini</strong> is loaded.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x37c6890&gt;</pre>
+</div>
+<p>A first step consists in loading a layout associated with the
+simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
+corresponding slabs and materials files <tt class="docutils literal"><span class="pre">matDB.ini</span></tt> and
+<tt class="docutils literal"><span class="pre">slabDB.ini</span></tt>.</p>
+<p>This layout corresponds to the office building where the first WHERE1
+UWB measurement campaign has been conducted.</p>
+<p>The layout method loads those in a member layout object <strong>L</strong> of the
+simulation object <strong>S</strong>.</p>
+<p>If not already available, the layout associated graphs are built.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="c"># loading a layout</span>
+<span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;WHERE1&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The layout display is fully parameterized via the embedded <strong>display</strong>
+dictionnary member of the Layout object.which allows to configure the
+<tt class="docutils literal"><span class="pre">showGs()</span></tt> method behavior.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;WHERE1 Project Office Measurement Site&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_7_0.png" src="./SIM-raytracing_files/SIM-raytracing_7_0.png" />
+<div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
+<h2>Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
+<p>Coordinates of transmitters and receivers for the simulation are stored
+in <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
+RadioNode which offers different methods for specifying nodes positions.
+The stucture of this <strong>.ini</strong> file presented below. The node Id is
+associated with the 3 coordinates <img class="math" src="../_images/math/accc80fdf164cef264f56a82b6f9f6add320fe05.png" alt="x,y,z"/> separated by white
+spaces.</p>
+<div class="highlight-python"><pre>[coordinates]
+1 = -12.2724 7.76319999993 1.2
+2 = -18.7747 15.1779999998 1.2
+3 = -4.14179999998 8.86029999983 1.2
+4 = -9.09139999998 15.1899000001 1.2</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1tx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The whole simulation setup can then be displayed using the <strong>show</strong>
+method of the Simulation object</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_13_1.png" src="./SIM-raytracing_files/SIM-raytracing_13_1.png" />
+<p>The different object of the simulation cans be accessed to obtain
+different information. Below the number of transmitter and receiver.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;number of Tx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>number of Tx : 302
+number of rx : 4</pre>
+</div>
+<p>The decomposition of the layout in a set of disjoint cycles is
+represented below. Not all cycles are rooms.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_17_1.png" src="./SIM-raytracing_files/SIM-raytracing_17_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_18_1.png" src="./SIM-raytracing_files/SIM-raytracing_18_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">istup</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">==</span><span class="nb">tuple</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">cy5</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">,</span><span class="n">istup</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">cy5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;(15, 5, 76)&#39;</span><span class="p">,</span> <span class="s">&#39;(12, 5, 4)&#39;</span><span class="p">,</span> <span class="s">&#39;(13, 5, 6)&#39;</span><span class="p">,</span> <span class="s">&#39;(13, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(12, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(2, 5, 0)&#39;</span><span class="p">,</span> <span class="s">&#39;(331, 5, 6)&#39;</span><span class="p">,</span> <span class="s">&#39;(4, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(4, 5, 1)&#39;</span><span class="p">,</span> <span class="s">&#39;(156, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(15, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(2, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(5, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(156, 5, 75)&#39;</span><span class="p">,</span> <span class="s">&#39;(331, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(330, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(329, 5, 0)&#39;</span><span class="p">,</span> <span class="s">&#39;(329, 5)&#39;</span><span class="p">,</span> <span class="s">&#39;(140, 5, 78)&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="s">&#39;(140, 5, 78)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;(38, 78)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(14, 78)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(135, 78, 22)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;-253&#39;</span><span class="p">,</span>
+ <span class="s">&#39;-250&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(32, 78, 76)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(42, 78, 21)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(36, 78)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(37, 78)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(36, 78, 2)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(32, 78)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(14, 78, 76)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(38, 78, 2)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(43, 78)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(42, 78)&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="s">&#39;(140, 5, 78)&#39;</span><span class="p">][</span><span class="s">&#39;(38, 78)&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;output&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;(135, 78, 22)&#39;</span><span class="p">:</span> <span class="mf">0.35579843644453529</span><span class="p">,</span>
+  <span class="s">&#39;(140, 78, 5)&#39;</span><span class="p">:</span> <span class="mf">0.20141398602845637</span><span class="p">,</span>
+  <span class="s">&#39;(42, 78)&#39;</span><span class="p">:</span> <span class="mf">0.4427875775270072</span><span class="p">,</span>
+  <span class="s">&#39;(42, 78, 21)&#39;</span><span class="p">:</span> <span class="mf">0.4427875775270072</span><span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="signatures-rays-and-propagation-and-transmission-channel">
+<h2>Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Choose Tx and Rx coordinates</span>
+<span class="n">itx</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">irx</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">tx</span><span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">itx</span><span class="p">]</span>
+<span class="n">rx</span><span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">irx</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">24.867</span> <span class="p">,</span>  <span class="mf">12.3097</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">])</span>
+</pre></div>
+</div>
+<p>A signature is a sequence of layout objects (points and segments) which
+are involved in a given optical ray, relating the transmiter and the
+receiver. The signatutre is calculated from a layout cycle to an other
+layout cycle. This means that is is required first to retrieve the cycle
+number from point coordinates. This is done thanks to the <strong>pt2cy</strong>,
+point to cycle function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ctx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+<span class="n">crx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;tx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">ctx</span>
+<span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>tx point belongs to cycle  5
+rx point belongs to cycle  4</pre>
+</div>
+<p>Then the signature between cycle 5 and cycle 4 can be calculated. This
+is done by instantiating a Signature object with a given layout and the
+2 cycle number.</p>
+<p>The representaion of a signature object provides information about the
+number of signatures for each number of interactions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">run4</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Signatures
+----------
+from cycle : 5 to cycle 4
+1 : 1
+   [12]
+   [2]
+2 : 21
+   [ 12  12  12  12  12  12  12  12  12  13  13 331 331 329   5   4 156  15
+  13 330   2]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1]
+   [ 29  30  16 333  22 328  23 335 334  11 342  11 342  12  12  12  12  12
+  12  12  12]
+   [1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2]
+3 : 158
+   [140 140  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  12  13  13  13  13  13  13  13  13  13  13  13  13  13 331 331 331
+ 331 331 331 331 331 331 331 331 331 331 331 331 331 331 329 329 329 329
+ 329 329 329 329 329   5   5   5   5   5   5   5   5   5   5   5   5   5
+   5   5   5   5   5   5   4   4   4   4   4   4   4   4   4   4 156 156
+ 156 156 156 156 156 156 156 156  15  15  15  15  15  15  15  15  15  15
+  15  12  12  12  13  13  13  13  13  13 331 331 331 330 330 330 330 330
+ 330 330 330   2   2   2   2   2   2   2   2   2   2   2]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1]
+   [135 135  16 335 333  16 335 333  16 335  16 335  30 335  30 335  22  30
+ 335  22  30 333  30 335  30 335  30 335  16  30  23 333  29 334 328  16
+ 335 333   8 331   3   8 342   8 331  11  11 342  11  11  11   3  13   8
+ 342   8  13  11  11  11  11 342  11 342  11  11 342  11   5  12  12  12
+  12  12  12  12  12 330 156  15 329  13   4  13 331  13 331  12  12  12
+  12  12  12  12  12  12 330   5  13  13  12  12  12  12  12  12 330   5
+  13  13  12  12  12  12  12  12   5  13 330  13  12  12  12  12  12  12
+  12   2   5  13   2   5  12  12  12  12   2   5  13   2   5 331 331  12
+  12  12  12 330 331 331  12  12  12  12  12  12  12  12]
+   [2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 1 2 2 2 2 2
+ 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 2 2 2 2 2 1 1 1 2 2
+ 2 2 2 2 2 1 1 1 2 2 2 2 2 2 2 2 1 1 1 1 1 2 2 2 2 1 1 2 1 1 2 2 2 2 2 2 1
+ 2 2 2 2 2 2 2 2 2 2]
+   [ 29 334  29  29  29  30  30  30  12  12  11  11  16  16 342 342 342 333
+ 333 333  22  22 328 328  24  24  23  23 335 335 335 335 335 335 335 334
+ 334 334  11  11  11  16  16 342 342  16 333 333  22 328 335  11  11  16
+  16 342 342  29  30  16 333 333  22  22 328 335 335 334  12  29  30 333
+  22 328  23 335 334  12  12  12  12  12  12  11  11 342 342  29  30  16
+ 333  22 328  23 335 334  12  12  12  11  16 333  22 328  23 335  12  12
+  12  11  16 333  22 328  23 335  12  12  12  11  30  16 333  22 328  23
+ 335  12  12  12  12  12  29  30 335 334  12  12  11  12  12  11 342  29
+  30 335 334  12  11 342  29  30 333  22 328  23 335 334]
+   [2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1
+ 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 1 1 1 1 1 1 2 2 2 2 1
+ 1 1 1 1 1 2 2 2 2 1 1 1 1 1 1 1 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 2
+ 2 2 1 1 1 1 1 1 1 1]
+4 : 1083
+   [329 329 329 ...,   2   2   2]
+   [2 2 2 ..., 1 1 1]
+   [  1 350 350 ...,  12  12 331]
+   [1 1 1 ..., 2 2 2]
+   [  2   2 329 ..., 335 333  11]
+   [2 2 2 ..., 1 1 2]
+   [ 12  12  12 ..., 334 334 334]
+   [2 2 2 ..., 1 1 1]
+5 : 6875
+   [329 329 329 ...,   2   2   2]
+   [2 2 2 ..., 1 1 1]
+   [  2   2   2 ..., 331 331 331]
+   [1 1 1 ..., 2 2 2]
+   [350 350 329 ...,  11 342 342]
+   [1 1 2 ..., 2 2 2]
+   [  2 329   5 ..., 333 333 335]
+   [2 2 1 ..., 1 1 1]
+   [ 12  12  12 ..., 334 334 334]
+   [2 2 2 ..., 1 1 1]
+6 : 3181
+   [329 329 329 ...,   2   2   2]
+   [2 2 2 ..., 1 1 1]
+   [  1 350 350 ..., 140 140 140]
+   [1 1 1 ..., 2 2 2]
+   [  2   2 329 ...,  43  37  37]
+   [2 2 2 ..., 1 1 1]
+   [140 140 140 ..., 135 135 140]
+   [2 2 2 ..., 2 2 2]
+   [135 135 135 ...,  30  30  12]
+   [2 2 2 ..., 2 2 2]
+   [ 29  29  29 ..., 335 335 335]
+   [2 2 2 ..., 1 1 1]
+7 : 10857
+   [329 329 329 ...,   2   2   2]
+   [2 2 2 ..., 1 1 1]
+   [  1   1   1 ..., 140 140 140]
+   [1 1 1 ..., 2 2 2]
+   [ 2  2  2 ..., 37 37 37]
+   [2 2 2 ..., 1 1 1]
+   [140 140 140 ..., 140 140 140]
+   [2 2 2 ..., 2 2 2]
+   [135 135 135 ...,  12  12  12]
+   [2 2 2 ..., 2 2 2]
+   [ 44  20 337 ..., 335  16 333]
+   [1 1 1 ..., 1 1 1]
+   [ 29  29  29 ..., 334 334 334]
+   [2 2 2 ..., 1 1 1]
+8 : 672
+   [  4   4   4   4   4   4   4   4   4   4   4   4   4 156 156 156 156 156
+ 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156
+ 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156
+ 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 329 329
+ 329 329 329 329 329 329 329 329 329 329 329 329 329 329 329 329 329 329
+ 329 329 329 329 329 329 329 329 329 329   5   5   5   5   5   5   5   5
+   5   5   5   5   5   5   5   5   5   5   5   5   5   5   5   5   4   4
+   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4   4
+   4   4   4   4   4   4   4 156 156 156 156 156 156 156 156 156 156 156
+ 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156 156  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  12  12  12  12  12  13  13  13  13  13 331
+ 331 331 331 331 330 330 330 330 330 330 330 330 330 330 330 330 330 330
+ 330 330 330 330 330 330 330 330 330 330 330 330 330 330 330   2   2   2
+   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2   2
+   2   2   2   2   2   2]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1]
+   [  7   7   7   7   7   7   7   7   7   7   7   7   7   7   7   7   7   7
+ 285 285 285 285 285   6   6   6   6   6 168 168  25  25  25  25  25   7
+   7 285 285   6   6  25  25   7   7   7   7   7 285 285 285 285 285   6
+   6   6   6   6 168 168  25  25  25  25  25   7 285   6  25 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 170 168 168 168 168 168 168 168 168 168 168 168 168  14  14
+  14  14  14  14 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 170 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2]
+   [168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168  14  32 168 168 168 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168  14  32 168 168 168 168 168 168 168 168 168   7   7   7
+   7   7   7   7   7 285 285 285 285 285 285 285 285   6   6   6   6   6
+  25  25  25  25   7   7   7   7 285 285 285 285   6   6  25  25 135 135
+ 135 135 135 135   7   7   7   7 285 285 285 285  25  25  25  25   7   7
+ 285 285  25  25   7   7   7   7   7   7   7   7 285 285 285 285 285 285
+ 285 285   6   6   6   6   6  25  25  25  25   7   7 285 285  25   7   7
+   7   7 285 285 285 285  25  25  25   7   7 285 285  25   7   7   7   7
+ 285 285 285 285  25  25  25   7   7   7   7 285 285 285 285  25  25  25
+   7   7   7   7 285 285 285 285  25  25  25   7   7 285 285  25   7   7
+   7   7 285 285 285 285  25  25  25   7   7   7   7   7   7 285 285 285
+ 285 285 285   6  25  25  25  25  46  46  46  46  46  46  46  46  47  47
+  47  47  47  47  47  47  46  46  46  46  46  46  46  46  47  47  47  47
+  47  47  47  47  44  44  44  44  44  44  44  44  44  44  44  44  44  44
+  44  44  44  20  20  20  20  29  29  29  29  41  41  35  35  47  47  47
+  47  47  47  47  47  47  47  47  47  47  47  47  47  47  47  47  47  47
+  47  47  47  47 337 337 337 337  21  21  21  21  34  34  46  46  46  46
+  46  46  46  46  46  46  46  46  46  46  46  46  46  46  46  46  46  46
+  46  44  44  44  47  47  47  46  46  46  44  44  44  47  47  47  46  46
+  46  46  46  46  46  46  46  46  46  46  46  46  46  47  47  47  47  47
+  47  47  47  47  47  47  47  46  46  46  46  46  46  46  46  46  46  46
+  46  47  47  47  47  47  47  47  47  47  47  47  47  44  44  47  47  46
+  46  44  44  47  47  46  46  44  47  46  44  47  46  44  47  46  44  47
+  46  44  47  46  44  44  47  47  46  46  44  44  47  47  46  46 135 135
+ 135 135 135 135 135 135 135  14  14  14 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135  32  32  14  14  14  32  32  14  14  14  32
+  32  14  14  14 135 135 135 135 135 135  32  32  14  14  14 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2
+ 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2]
+   [ 15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15 140 140  15  15  15  15  15  15
+  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15 140 140  15  15  15  15  15  15  15  15  15 168 168 168
+ 168 168 168 168 168 168 168 168 168 168 168 168 168 156 156 156 156 156
+ 168 170 170 168 168 168 168 168 168 168 168 168 156 156 170 170  44  44
+  47  47  46  46 168 168 168 168 168 168 168 168 170 170 170 170 168 168
+ 168 168 170 170 168 168 168 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 156 156 156 156 156 168 170 170 168 168 168 168 168 170 168 168
+ 168 168 168 168 168 168 170 170 170 168 168 168 168 170 168 168 168 168
+ 168 168 168 168 170 170 170 168 168 168 168 168 168 168 168 170 170 170
+ 168 168 168 168 168 168 168 168 170 170 170 168 168 168 168 170 168 168
+ 168 168 168 168 168 168 170 170 170 168 168 168 168 168 168 168 168 168
+ 168 168 168 156 170 170 170 170 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136  29  29 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 334 334  46  46  47  47  44  44  46  46  47  47  47  47  41  41 337
+ 337  21  21  34  34  20  20 135 135 135 135 135 135 135 135 135 135 135
+ 135 135  35  35  46  46  47  47  46  46  47  47  47  47  29  29  21  21
+  20  20 135 135 135 135 135 135 135 135 135 135 135 135 135 334 334 337
+ 337 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136 136 136 136 136 136 136 136 136 136 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135  46  46
+  46  44  44  47  47  46  46 168 168 170  46  46  46  46  35  35  35  35
+  35  34  34  34  34  34  47  47  47  47  46  46  46  44  47  46  46  46
+  46  46  35  35  35  35  35  34  34  34  34  34  47  47  47  47  46  46
+  46  44  44  47  47  46  46  46  46  46  46  35  35  35  35  35  34  34
+  34  34  34  47  47  47  47  46  46  46  44  44  47  47  46  46  46  46
+  46  46  35  35  35  35  35  34  34  34  34  34  47  47  47  47  46  46
+  46  44  44  47  47  46  46  46  46  46  46  35  35  35  35  35  34  34
+  34  34  34  47  47  47  47 170 170 168 168 170 170 170 168 168 170 170
+ 170 168 168 170  46  46  46  44  47  46 170 170 168 168 170  46  46  46
+  46  35  35  35  35  35  34  34  34  34  34  47  47  47  47  46  46  46
+  44  44  47  47  46  46  46  46  46  46  35  35  35  35  35  34  34  34
+  34  34  47  47  47  47]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1
+ 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1
+ 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2]
+   [140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 330 330 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 330 330 140 140 140 140 140 140 140 140 140  14  14  14
+  14  14  32  32  15  14  14  14  14  14  32  32  15 140 140 140 140 140
+  15  32  32  15  14  14  32  32  14  14  32  32 140 140  32  32 135 135
+ 135 135 135 135  14  14  32  32  14  14  32  32  14  14  32  32  14  32
+  14  32  14  32  14  14  14  14  14  32  32  15  14  14  14  14  14  32
+  32  15 140 140 140 140 140  15  32  32  15  14  32  14  32  32  14  14
+  32  32  14  14  32  32  14  32  32  14  32  14  32  32  14  14  32  32
+  14  14  32  32  14  32  32  14  14  32  32  14  14  32  32  14  32  32
+  14  14  32  32  14  14  32  32  14  32  32  14  32  14  32  32  14  14
+  32  32  14  14  32  32  14  32  32  14  14  14  32  32  32  14  14  14
+  32  32  32 140  14  32  32  32  70  70  69  69  61  61  60  60  70  70
+  69  69  61  61  60  60  70  70  69  69  61  61  60  60  70  70  69  69
+  61  61  60  60 135 135 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 140 140 140 140 140 140 140 140 140 140 140 140 140 135 135 135
+ 135 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140  70  70  70  69  69  69  61  61  61  60  60  60  70  70  70  69  69
+  69  61  61  61  60  60  60  70  70  70  69  69  69  61  61  61  60  60
+  60  70  70  70  69  69  69  61  61  61  60  60  60 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 136 136
+ 136 135 135 135 135 135 135   7 285  25 136 136 136 136  48  48  48  48
+  48  48  48  48  48  48 136 136 136 136 136 136 136 135 135 135 136 136
+ 136 136  48  48  48  48  48  48  48  48  48  48 136 136 136 136 136 136
+ 136 135 135 135 135 135 135 136 136 136 136  48  48  48  48  48  48  48
+  48  48  48 136 136 136 136 136 136 136 135 135 135 135 135 135 136 136
+ 136 136  48  48  48  48  48  48  48  48  48  48 136 136 136 136 136 136
+ 136 135 135 135 135 135 135 136 136 136 136  48  48  48  48  48  48  48
+  48  48  48 136 136 136 136  18  25   7 285  25  18  25   7 285  25  18
+  25   7 285  25 136 136 136 135 135 135  18  25   7 285  25 136 136 136
+ 136  48  48  48  48  48  48  48  48  48  48 136 136 136 136 136 136 136
+ 135 135 135 135 135 135 136 136 136 136  48  48  48  48  48  48  48  48
+  48  48 136 136 136 136]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2]
+   [135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 140 140 135 135 135 135 135 135
+ 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 140 140 135 135 135 135 135 135 135 135 135 135 135 135
+ 135 135 135 135 140 135 135 135 135 135 135 135 140 135 135 135 135 135
+ 140 135 135 140 135 135 135 135 135 135 135 135 135 135 135 135 140 140
+ 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 135 135 135 135 135 135 135 140 135 135 135 135 135 135
+ 135 140 135 135 135 135 135 140 135 135 140 135 135 135 135 135 140 135
+ 135 140 140 135 135 140 140 135 140 135 135 135 135 135 140 135 135 140
+ 140 135 135 140 140 135 140 140 135 135 140 140 135 135 140 140 135 140
+ 140 135 135 140 140 135 135 140 140 135 140 135 135 135 135 135 140 135
+ 135 140 140 135 135 140 140 135 140 140 135 135 135 135 140 140 135 135
+ 135 135 140 135 140 135 135 140 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136 140 140 156  15   2   5   5   5   5   5   5 330 330   4
+ 329 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 140 140 140 140 140 156  15   2   5   5   5   5   5   5 330 330
+   4 329 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140 140
+ 140 140 156  15   2   5   5   5   5   5   5 330 330   4 329 140 140 140
+ 140   5   5 330   5   5 330   5   5 330   5   5 330   5   5 330   5   5
+ 330 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136 136
+ 136 136 136 136 136 136 136 136 136 136 136 136 136   5 330   5 330   5
+ 330   5 330   5 330   5 330   5   5   5   5   5   5   5   5   5   5   5
+   5   5   5   5   5 330   5 330   5 330   5 330   5 330   5 330  48  48
+  48 140 140 140 140 140 140 168 168 168  70  69  61  60 136 136 136 136
+ 136 136 136 136 136 136  70  69  61  60  48  48  48 140 140 140  70  69
+  61  60 136 136 136 136 136 136 136 136 136 136  70  69  61  60  48  48
+  48 140 140 140 140 140 140  70  69  61  60 136 136 136 136 136 136 136
+ 136 136 136  70  69  61  60  48  48  48 140 140 140 140 140 140  70  69
+  61  60 136 136 136 136 136 136 136 136 136 136  70  69  61  60  48  48
+  48 140 140 140 140 140 140  70  69  61  60 136 136 136 136 136 136 136
+ 136 136 136  70  69  61  60 168 168 168 168 168 168 168 168 168 168 168
+ 168 168 168 168  48  48  48 140 140 140 168 168 168 168 168  70  69  61
+  60 136 136 136 136 136 136 136 136 136 136  70  69  61  60  48  48  48
+ 140 140 140 140 140 140  70  69  61  60 136 136 136 136 136 136 136 136
+ 136 136  70  69  61  60]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1
+ 1 2 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1
+ 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2
+ 2 1 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2
+ 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1
+ 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2 2 2 2
+ 2 2 1 1 1 1]
+   [ 44  20 337  21  46  44  46  44  20 337  21  46  29  44  20 337  21  46
+  44  20 337  21  46  44  20 337  21  46 135 135  44  20 337  21  46  44
+  46  44  46  44  46  44  46  44  20 337  21  46  44  20 337  21  46  44
+  20 337  21  46 135 135  44  20 337  21  46  29  29  29  29  44  20 337
+  21  46  44  46 135  44  20 337  21  46  44  46 135  44  20 337  21  46
+ 135  44  46 135  44  46  44  46  44  46  44  46  44  46  44  46   5 330
+   5 330   5 330  13 330  13 330  13 330  13 330  13 330  13 330  13  13
+  13  13  13  13  44  20 337  21  46  44  46 135  44  20 337  21  46  44
+  46 135  44  20 337  21  46 135  44  46 135  30  30  30  30  30  12  30
+  30  12  12  30  30  12  12  30  12  30  30  30  30  30  12  30  30  12
+  12  30  30  12  12  30  12  12  30  30  12  12  30  30  12  12  30  12
+  12  30  30  12  12  30  30  12  12  30  12  30  30  30  30  30  12  30
+  30  12  12  30  30  12  12  30  12  12  29  30  29  30  12  12  29  30
+  29  30  12  29  12  29  30  12  46  47  46  47  46  47  46  47  46  47
+  46  47  46  47  46  47  46  47  46  47  46  47  46  47  46  47  46  47
+  46  47  46  47   5 330   5   5 330 330 156  15 329  13   4   2   5   5
+   5   5 330   5 330   5 330   5 330   5 330   5 330   5 330   5 330   5
+ 330   5 330   5 330   5 330   5   5 330 330 156  15 329  13   4   2   5
+   5   5   5 330   5 330   5 330   5 330   5 330   5 330   5 330   5 330
+   5 330   5   5 330 330 156  15 329  13   4   2   5   5   5   5 330   5
+ 330  13 331 331  13 331 331  13 331 331  13 331 331  13 331 331  13 331
+ 331 336  53  45 336  45  53 336  53  45 336  53  45 336  53  45 336  45
+  53 336  53  45 336  53  45  46  44  47  46  44  47  46  44  47  46  44
+  47  46  44  47  46  44  47  46  44  47  46  44  47  12  12  12  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  35  35
+  34   5 330   5 330   5 330  15  15  15 136 136 136 136 320 336  53  45
+ 319 320 336  53  45 319 136 136 136 136  35  35  34 330 330 330 136 136
+ 136 136 320 336  53  45 319 320 336  53  45 319 136 136 136 136  35  35
+  34   5 330   5 330   5 330 136 136 136 136 320 336  53  45 319 320 336
+  53  45 319 136 136 136 136  35  35  34   5 330   5 330   5 330 136 136
+ 136 136 320 336  53  45 319 320 336  53  45 319 136 136 136 136  35  35
+  34   5 330   5 330   5 330 136 136 136 136 320 336  53  45 319 320 336
+  53  45 319 136 136 136 136  15  15  15  15  15  15  15  15  15  15  15
+  15  15  15  15  35  35  34   5   5   5  15  15  15  15  15 136 136 136
+ 136 320 336  53  45 319 320 336  53  45 319 136 136 136 136  35  35  34
+   5 330   5 330   5 330 136 136 136 136 320 336  53  45 319 320 336  53
+  45 319 136 136 136 136]
+   [1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 1 2 2 2 2 1 1 1 1 1
+ 1 1 2 1 1 1 1 1 1 1 2 1 1 1 1 1 2 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 2 1 1
+ 1 1 1 2 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
+ 2 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 2 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2
+ 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1
+ 1 2 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 1 1 1 1 1
+ 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 2 2 2 2 2
+ 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 1 1 1 1 1 1 1 1
+ 1 1 2 2 2 2]
+   [ 29  29  29  29  29  30  30 334 334 334 334 334 335  29  29  29  29  29
+  29  29  29  29  29  29  29  29  29  29  29  29  29  29  29  29  29  30
+  30  30  30  30  30  30  30 334 334 334 334 334 334 334 334 334 334 334
+ 334 334 334 334 334 334 334 334 334 334 334 335 335 335 335  29  29  29
+  29  29  29  29  29  29  29  29  29  29  29  29  29  29  29  29  29  29
+  29  29  29  29  30  30  30  30  30  30  30  30  30  30  30  30  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  11  11
+  11  11  11  11 334 334 334 334 334 334 334 334 334 334 334 334 334 334
+ 334 334 334 334 334 334 334 334 334 334 334  11  11  11  11  11  16  16
+  16  16  16  16  16  16  16  16  16 342 342 342 342 342 333 333 333 333
+ 333 333 333 333 333 333 333  22  22  22  22  22  22  22  22  22  22  22
+ 328 328 328 328 328 328 328 328 328 328 328  24  24  24  24  24  23  23
+  23  23  23  23  23  23  23  23  23 335 335 335 335 335 335 335 335 335
+ 335 335 335 335 335 335 335 335  29  29  29  29  29  29  29  29  29  29
+  29  29  29  29  29  29  30  30  30  30  30  30  30  30  30  30  30  30
+  30  30  30  30  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12  12
+  12  11  11  11  11  11  11  11  11  11 342 342 342 342 342 342 342 342
+ 342 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335
+ 335 335 335 335 335 335 335 334 334 334 334 334 334 334 334 334 334 334
+ 334 334 334 334 334 334 334 334 334 334 334 334 334  29  29  29  29  29
+  29  30  30  30  30  30  30  16  16  16 333 333 333  22  22  22 328 328
+ 328  23  23  23 335 335 335 335 335 335 334 334 334 334 334 334  29  30
+  30  12  12  12  12  12  12  12  12  12 335 335 335 335 335 335 335 335
+ 335 335 335 335 335 335 335 335 335 335  29  30  30  12  12  12 335 335
+ 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335  29  30
+  30  12  12  12  12  12  12 335 335 335 335 335 335 335 335 335 335 335
+ 335 335 335 335 335 335 335  29  30  30  12  12  12  12  12  12 335 335
+ 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335  29  30
+  30  12  12  12  12  12  12 335 335 335 335 335 335 335 335 335 335 335
+ 335 335 335 335 335 335 335  12  12  12  12  12  12  12  12  12  12  12
+  12  12  12  12  29  30  30  12  12  12  12  12  12  12  12 335 335 335
+ 335 335 335 335 335 335 335 335 335 335 335 335 335 335 335  29  30  30
+  12  12  12  12  12  12 335 335 335 335 335 335 335 335 335 335 335 335
+ 335 335 335 335 335 335]
+   [2 2 2 2 2 2 2 2 2 2 2 2 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2]
+9 : 1547
+   [156 156 156 ...,   2   2   2]
+   [2 2 2 ..., 1 1 1]
+   [168 168 168 ..., 140 140 140]
+   [2 2 2 ..., 2 2 2]
+   [ 14  14  14 ..., 135 135 135]
+   [2 2 2 ..., 2 2 2]
+   [140 140 140 ...,  47  46  46]
+   [2 2 2 ..., 1 1 1]
+   [330 330 330 ..., 135 135 135]
+   [1 1 1 ..., 2 2 2]
+   [140 140 140 ..., 140 140 140]
+   [2 2 2 ..., 2 2 2]
+   [135 135 135 ..., 330   5 330]
+   [2 2 2 ..., 1 1 1]
+   [ 44  20 337 ...,  12  12  12]
+   [1 1 1 ..., 2 2 2]
+   [ 29  29  29 ..., 334 334 334]
+   [2 2 2 ..., 1 1 1]</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#Si.run4(cutoff=5)</span>
+</pre></div>
+</div>
+<p>Once the signature has been obtained, 2D rays are calculated with the
+<tt class="docutils literal"><span class="pre">rays()</span></tt> method of the signature <strong>Si</strong>. The coordinates of a
+transmitter and a receiver should be parameters of the function. <strong>r2d</strong>
+object has a <tt class="docutils literal"><span class="pre">show</span></tt> and <tt class="docutils literal"><span class="pre">show3</span></tt> method</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">24.867</span> <span class="p">,</span>  <span class="mf">12.3097</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x8681f90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x862fc90&gt;)</pre>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_34_1.png" src="./SIM-raytracing_files/SIM-raytracing_34_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>N2Drays : 42
+from 24395 signatures
+#Rays/#Sig: 0.00172166427547
+pTx : [-24.867   12.3097   1.2   ]
+pRx : [-18.7747  15.178    1.2   ]
+1: [[12]]
+2: [[ 12  12   5]
+ [333 335  12]]
+3: [[ 12  12  12   5   5   4  12  13]
+ [335 335  30  12  12   5   5  12]
+ [ 12  23 335 333 335  12  12  30]]
+4: [[ 12  12  12   5   5 156  12   2]
+ [335  30 335  12  15   5   5 330]
+ [283 335 333 335  12  12  12  12]
+ [335  12 342  12 335 333 335  30]]
+5: [[ 12  12  12  12  12  12  12  13   5   5   5   5  15  12  12  12  12 330]
+ [328  22  30 328 335  30 333   3  12  12 156 330   5   5   5  15   5  12]
+ [339 339 335 335 283 335 334  13 335 335  12  12 330 331  12   5  12  30]
+ [ 24 328 283  30 335 333 335  12 283 333 335 334  12   8 335  12  23  21]
+ [328  24 335  12  12 342 328  30 335  11  23 335  30 342  12 335 335  30]]
+6: [[140 140]
+ [ 38  32]
+ [135  37]
+ [ 30 135]
+ [333  30]
+ [ 30 333]]
+7: [[  5 330]
+ [140 140]
+ [135  38]
+ [337 135]
+ [ 46  30]
+ [319 333]
+ [335  30]]</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># r2d.show3(strucname=&#39;WHERE1&#39;)</span>
+</pre></div>
+</div>
+<p>Then, the <strong>r2d</strong> object is transformed in 3D ray, taking into account
+the reflection on ceil and floor.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+<span class="c"># r3d.show3(strucname=&#39;WHERE1&#39;)</span>
+</pre></div>
+</div>
+<p>Once the 3D rays are obtained the local basis are determined</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and the the interaction matrices are filled.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Below <tt class="docutils literal"><span class="pre">ni</span></tt> is the number of interactions</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Rays3D
+----------
+1 / 1 : [0]
+2 / 5 : [1 2 3 4 5]
+3 / 16 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21]
+4 / 30 : [22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
+ 47 48 49 50 51]
+5 / 50 : [ 52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69
+  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87
+  88  89  90  91  92  93  94  95  96  97  98  99 100 101]
+6 / 54 : [102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119
+ 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137
+ 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155]
+7 / 42 : [156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173
+ 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191
+ 192 193 194 195 196 197]
+8 / 8 : [198 199 200 201 202 203 204 205]
+9 / 4 : [206 207 208 209]
+-----
+ni : 1147
+nl : 2504</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">18</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="mi">13</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">268</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calulating-the-propagation-channel">
+<h2>Calulating the Propagation Channel<a class="headerlink" href="#calulating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<p>The propagation channel is a <tt class="docutils literal"><span class="pre">Ctilde</span></tt> object. This object can be
+evaluated for different frequency point thanks to the <tt class="docutils literal"><span class="pre">eval()</span></tt> method
+with a frequency array as argument.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">2.</span>  <span class="p">,</span>   <span class="mf">2.05</span><span class="p">,</span>   <span class="mf">2.1</span> <span class="p">,</span>   <span class="mf">2.15</span><span class="p">,</span>   <span class="mf">2.2</span> <span class="p">,</span>   <span class="mf">2.25</span><span class="p">,</span>   <span class="mf">2.3</span> <span class="p">,</span>   <span class="mf">2.35</span><span class="p">,</span>
+         <span class="mf">2.4</span> <span class="p">,</span>   <span class="mf">2.45</span><span class="p">,</span>   <span class="mf">2.5</span> <span class="p">,</span>   <span class="mf">2.55</span><span class="p">,</span>   <span class="mf">2.6</span> <span class="p">,</span>   <span class="mf">2.65</span><span class="p">,</span>   <span class="mf">2.7</span> <span class="p">,</span>   <span class="mf">2.75</span><span class="p">,</span>
+         <span class="mf">2.8</span> <span class="p">,</span>   <span class="mf">2.85</span><span class="p">,</span>   <span class="mf">2.9</span> <span class="p">,</span>   <span class="mf">2.95</span><span class="p">,</span>   <span class="mf">3.</span>  <span class="p">,</span>   <span class="mf">3.05</span><span class="p">,</span>   <span class="mf">3.1</span> <span class="p">,</span>   <span class="mf">3.15</span><span class="p">,</span>
+         <span class="mf">3.2</span> <span class="p">,</span>   <span class="mf">3.25</span><span class="p">,</span>   <span class="mf">3.3</span> <span class="p">,</span>   <span class="mf">3.35</span><span class="p">,</span>   <span class="mf">3.4</span> <span class="p">,</span>   <span class="mf">3.45</span><span class="p">,</span>   <span class="mf">3.5</span> <span class="p">,</span>   <span class="mf">3.55</span><span class="p">,</span>
+         <span class="mf">3.6</span> <span class="p">,</span>   <span class="mf">3.65</span><span class="p">,</span>   <span class="mf">3.7</span> <span class="p">,</span>   <span class="mf">3.75</span><span class="p">,</span>   <span class="mf">3.8</span> <span class="p">,</span>   <span class="mf">3.85</span><span class="p">,</span>   <span class="mf">3.9</span> <span class="p">,</span>   <span class="mf">3.95</span><span class="p">,</span>
+         <span class="mf">4.</span>  <span class="p">,</span>   <span class="mf">4.05</span><span class="p">,</span>   <span class="mf">4.1</span> <span class="p">,</span>   <span class="mf">4.15</span><span class="p">,</span>   <span class="mf">4.2</span> <span class="p">,</span>   <span class="mf">4.25</span><span class="p">,</span>   <span class="mf">4.3</span> <span class="p">,</span>   <span class="mf">4.35</span><span class="p">,</span>
+         <span class="mf">4.4</span> <span class="p">,</span>   <span class="mf">4.45</span><span class="p">,</span>   <span class="mf">4.5</span> <span class="p">,</span>   <span class="mf">4.55</span><span class="p">,</span>   <span class="mf">4.6</span> <span class="p">,</span>   <span class="mf">4.65</span><span class="p">,</span>   <span class="mf">4.7</span> <span class="p">,</span>   <span class="mf">4.75</span><span class="p">,</span>
+         <span class="mf">4.8</span> <span class="p">,</span>   <span class="mf">4.85</span><span class="p">,</span>   <span class="mf">4.9</span> <span class="p">,</span>   <span class="mf">4.95</span><span class="p">,</span>   <span class="mf">5.</span>  <span class="p">,</span>   <span class="mf">5.05</span><span class="p">,</span>   <span class="mf">5.1</span> <span class="p">,</span>   <span class="mf">5.15</span><span class="p">,</span>
+         <span class="mf">5.2</span> <span class="p">,</span>   <span class="mf">5.25</span><span class="p">,</span>   <span class="mf">5.3</span> <span class="p">,</span>   <span class="mf">5.35</span><span class="p">,</span>   <span class="mf">5.4</span> <span class="p">,</span>   <span class="mf">5.45</span><span class="p">,</span>   <span class="mf">5.5</span> <span class="p">,</span>   <span class="mf">5.55</span><span class="p">,</span>
+         <span class="mf">5.6</span> <span class="p">,</span>   <span class="mf">5.65</span><span class="p">,</span>   <span class="mf">5.7</span> <span class="p">,</span>   <span class="mf">5.75</span><span class="p">,</span>   <span class="mf">5.8</span> <span class="p">,</span>   <span class="mf">5.85</span><span class="p">,</span>   <span class="mf">5.9</span> <span class="p">,</span>   <span class="mf">5.95</span><span class="p">,</span>
+         <span class="mf">6.</span>  <span class="p">,</span>   <span class="mf">6.05</span><span class="p">,</span>   <span class="mf">6.1</span> <span class="p">,</span>   <span class="mf">6.15</span><span class="p">,</span>   <span class="mf">6.2</span> <span class="p">,</span>   <span class="mf">6.25</span><span class="p">,</span>   <span class="mf">6.3</span> <span class="p">,</span>   <span class="mf">6.35</span><span class="p">,</span>
+         <span class="mf">6.4</span> <span class="p">,</span>   <span class="mf">6.45</span><span class="p">,</span>   <span class="mf">6.5</span> <span class="p">,</span>   <span class="mf">6.55</span><span class="p">,</span>   <span class="mf">6.6</span> <span class="p">,</span>   <span class="mf">6.65</span><span class="p">,</span>   <span class="mf">6.7</span> <span class="p">,</span>   <span class="mf">6.75</span><span class="p">,</span>
+         <span class="mf">6.8</span> <span class="p">,</span>   <span class="mf">6.85</span><span class="p">,</span>   <span class="mf">6.9</span> <span class="p">,</span>   <span class="mf">6.95</span><span class="p">,</span>   <span class="mf">7.</span>  <span class="p">,</span>   <span class="mf">7.05</span><span class="p">,</span>   <span class="mf">7.1</span> <span class="p">,</span>   <span class="mf">7.15</span><span class="p">,</span>
+         <span class="mf">7.2</span> <span class="p">,</span>   <span class="mf">7.25</span><span class="p">,</span>   <span class="mf">7.3</span> <span class="p">,</span>   <span class="mf">7.35</span><span class="p">,</span>   <span class="mf">7.4</span> <span class="p">,</span>   <span class="mf">7.45</span><span class="p">,</span>   <span class="mf">7.5</span> <span class="p">,</span>   <span class="mf">7.55</span><span class="p">,</span>
+         <span class="mf">7.6</span> <span class="p">,</span>   <span class="mf">7.65</span><span class="p">,</span>   <span class="mf">7.7</span> <span class="p">,</span>   <span class="mf">7.75</span><span class="p">,</span>   <span class="mf">7.8</span> <span class="p">,</span>   <span class="mf">7.85</span><span class="p">,</span>   <span class="mf">7.9</span> <span class="p">,</span>   <span class="mf">7.95</span><span class="p">,</span>
+         <span class="mf">8.</span>  <span class="p">,</span>   <span class="mf">8.05</span><span class="p">,</span>   <span class="mf">8.1</span> <span class="p">,</span>   <span class="mf">8.15</span><span class="p">,</span>   <span class="mf">8.2</span> <span class="p">,</span>   <span class="mf">8.25</span><span class="p">,</span>   <span class="mf">8.3</span> <span class="p">,</span>   <span class="mf">8.35</span><span class="p">,</span>
+         <span class="mf">8.4</span> <span class="p">,</span>   <span class="mf">8.45</span><span class="p">,</span>   <span class="mf">8.5</span> <span class="p">,</span>   <span class="mf">8.55</span><span class="p">,</span>   <span class="mf">8.6</span> <span class="p">,</span>   <span class="mf">8.65</span><span class="p">,</span>   <span class="mf">8.7</span> <span class="p">,</span>   <span class="mf">8.75</span><span class="p">,</span>
+         <span class="mf">8.8</span> <span class="p">,</span>   <span class="mf">8.85</span><span class="p">,</span>   <span class="mf">8.9</span> <span class="p">,</span>   <span class="mf">8.95</span><span class="p">,</span>   <span class="mf">9.</span>  <span class="p">,</span>   <span class="mf">9.05</span><span class="p">,</span>   <span class="mf">9.1</span> <span class="p">,</span>   <span class="mf">9.15</span><span class="p">,</span>
+         <span class="mf">9.2</span> <span class="p">,</span>   <span class="mf">9.25</span><span class="p">,</span>   <span class="mf">9.3</span> <span class="p">,</span>   <span class="mf">9.35</span><span class="p">,</span>   <span class="mf">9.4</span> <span class="p">,</span>   <span class="mf">9.45</span><span class="p">,</span>   <span class="mf">9.5</span> <span class="p">,</span>   <span class="mf">9.55</span><span class="p">,</span>
+         <span class="mf">9.6</span> <span class="p">,</span>   <span class="mf">9.65</span><span class="p">,</span>   <span class="mf">9.7</span> <span class="p">,</span>   <span class="mf">9.75</span><span class="p">,</span>   <span class="mf">9.8</span> <span class="p">,</span>   <span class="mf">9.85</span><span class="p">,</span>   <span class="mf">9.9</span> <span class="p">,</span>   <span class="mf">9.95</span><span class="p">,</span>
+        <span class="mf">10.</span>  <span class="p">,</span>  <span class="mf">10.05</span><span class="p">,</span>  <span class="mf">10.1</span> <span class="p">,</span>  <span class="mf">10.15</span><span class="p">,</span>  <span class="mf">10.2</span> <span class="p">,</span>  <span class="mf">10.25</span><span class="p">,</span>  <span class="mf">10.3</span> <span class="p">,</span>  <span class="mf">10.35</span><span class="p">,</span>
+        <span class="mf">10.4</span> <span class="p">,</span>  <span class="mf">10.45</span><span class="p">,</span>  <span class="mf">10.5</span> <span class="p">,</span>  <span class="mf">10.55</span><span class="p">,</span>  <span class="mf">10.6</span> <span class="p">,</span>  <span class="mf">10.65</span><span class="p">,</span>  <span class="mf">10.7</span> <span class="p">,</span>  <span class="mf">10.75</span><span class="p">,</span>
+        <span class="mf">10.8</span> <span class="p">,</span>  <span class="mf">10.85</span><span class="p">,</span>  <span class="mf">10.9</span> <span class="p">,</span>  <span class="mf">10.95</span><span class="p">,</span>  <span class="mf">11.</span>  <span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;fmin : &quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;fmax : &quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Nf : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>fmin :  2.0
+fmax :  11.0
+Nf :  181</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Rays3D
+----------
+1 / 1 : [0]
+2 / 5 : [1 2 3 4 5]
+3 / 16 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21]
+4 / 30 : [22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
+ 47 48 49 50 51]
+5 / 50 : [ 52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69
+  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87
+  88  89  90  91  92  93  94  95  96  97  98  99 100 101]
+6 / 54 : [102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119
+ 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137
+ 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155]
+7 / 42 : [156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173
+ 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191
+ 192 193 194 195 196 197]
+8 / 8 : [198 199 200 201 202 203 204 205]
+9 / 4 : [206 207 208 209]
+-----
+ni : 1147
+nl : 2504</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ectt</span><span class="p">,</span><span class="n">Ecpp</span><span class="p">,</span><span class="n">Ectp</span><span class="p">,</span><span class="n">Ecpt</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Eco</span> <span class="o">=</span> <span class="n">Ectt</span><span class="o">+</span><span class="n">Ecpp</span>
+<span class="n">Ecross</span> <span class="o">=</span> <span class="n">Ectp</span><span class="o">+</span><span class="n">Ecpt</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eco</span><span class="p">),</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ecross</span><span class="p">),</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;path energy (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;Co-pol&#39;</span><span class="p">,</span><span class="s">&#39;X-pol&#39;</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_54_1.png" src="./SIM-raytracing_files/SIM-raytracing_54_1.png" />
+<p>The multipath doa/dod diagram can be obtained via the method <tt class="docutils literal"><span class="pre">doadod</span></tt>.
+The colorbar corresponds to the total energy of the path.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_56_0.png" src="./SIM-raytracing_files/SIM-raytracing_56_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Nfreq  : 181
+Nray : 210
+shape Ctt : (210, 181)
+shape Ctp : (210, 181)
+shape Cpt : (210, 181)
+shape Cpp : (210, 181)</pre>
+</div>
+</div>
+<div class="section" id="apply-waveform">
+<h2>Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
+<p>Once the propagation channel is obtained the transmission channel is
+calculated with the method <tt class="docutils literal"><span class="pre">prop2tran</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
+<span class="n">sco</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
+<span class="n">sca</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The applied waveform which is here loaded from a measurement file, and
+compensated for a small time shift. It is important for the latter
+treatment for the applied waveform to be centered on the middle of the
+array as it is illustrated below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">mesdir</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>/home/uguen/data/WHERE1/measures</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;generic&#39;</span><span class="p">,</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_63_0.png" src="./SIM-raytracing_files/SIM-raytracing_63_0.png" />
+<p>Finally, the received UWB waveform can be synthesize in applyng the
+waveform to the transmission channel.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+<span class="n">ra</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ro</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;voltage (V)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;without antenna&#39;</span><span class="p">)</span>
+<span class="c">#plt.axis((0,180,-0.006,0.006))</span>
+
+<span class="n">ra</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;voltage (V)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;with antenna&#39;</span><span class="p">)</span>
+<span class="c">#plt.axis((0,180,-0.1,0.1))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+  warnings.warn("No labeled objects found. "</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x605f810&gt;</pre>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_66_2.png" src="./SIM-raytracing_files/SIM-raytracing_66_2.png" />
+<img alt="./SIM-raytracing_files/SIM-raytracing_66_3.png" src="./SIM-raytracing_files/SIM-raytracing_66_3.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

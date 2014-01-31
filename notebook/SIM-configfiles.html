@@ -1,0 +1,527 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Network Simulation Configuration &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Network Simulation Configuration</a><ul>
+<li><a class="reference internal" href="#simulnet-ini">Simulnet.ini</a></li>
+<li><a class="reference internal" href="#save-section">Save section</a><ul>
+<li><a class="reference internal" href="#layout">Layout</a></li>
+<li><a class="reference internal" href="#network">Network</a></li>
+<li><a class="reference internal" href="#mechanics">Mechanics</a></li>
+<li><a class="reference internal" href="#localization">Localization</a></li>
+<li><a class="reference internal" href="#simulation">Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">ConfigParser</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4575890&gt;</pre>
+</div>
+<div class="section" id="network-simulation-configuration">
+<h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
+<p>PyLayers is designed to provide indoor radio channel simulation for
+mobile agents.</p>
+<p>The goal is to adress mobility in indoor environement heterogeneous
+network, with human being carriers of a mobile User Equipement (UE)
+which possibly embeds several Radio Acess Technology (RAT).</p>
+<p>Several human can be created and their motion in the environement should
+be as realistic as possible, because for many applications it turns out
+that many parameter of interest are stongly dependent of the dynamic
+topology of the mobile network.</p>
+<p>In the following the configuration files for proceeding with those high
+level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simulation are described.</p>
+<p>The configuration file is <tt class="docutils literal"><span class="pre">simulnet.ini</span></tt></p>
+<div class="section" id="simulnet-ini">
+<h2>Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
+<p>This file is located in <tt class="docutils literal"><span class="pre">$BASENAME/ini</span></tt></p>
+<div class="highlight-python"><pre>!cat $BASENAME/ini/simulnet.ini</pre>
+</div>
+<div class="highlight-python"><pre>[Mysql]
+host = localhost
+user = root
+passwd = sqlsql
+dbname = test
+dumpdb =True
+
+[Save]
+save=[]
+;save=['csv','mysql','matlab','pyray','txt','ini']
+savep=True
+
+[Layout]
+filename = TA-Office.ini
+
+x_offset  = 30
+y_offset = 2
+
+the_world_width      = 65
+the_world_height = 20
+the_world_scale      = 20
+
+[Mechanics]
+; update time for agent movement
+mecanic_update_time = 0.1
+; select how agnt choose destiantion
+;'random' ; file
+choose_destination = 'random'
+
+
+[Network]
+; refresh TOA regulary 'synchro 'or with distance 'autionomous'
+Communication_mode='autonomous'
+; update time for refreshing network
+network_update_time = 0.1
+; show nodes moving &amp; radio link
+show = False
+; show in ipython .
+ipython_nb_show = False
+; show signature ( not fully functionnal)
+show_sg = False
+; show 2 tables : mecanic &amp; network
+show_table = False
+; show the same information but in terminal
+dispinfo = False
+
+[Localization]
+; perform localization
+localization = True
+; time to refresh localization
+localization_update_time = 1.0
+; list of used methods method = ['alg','geo']
+method = ['alg']
+
+
+
+[Simulation]
+; Simulation duration
+duration = 10.0
+; speed ratio
+speedratio = 1.
+; time for refreshing tk plot ( obsolete)
+show_interval = 0.5
+; show scene using tk renderer ( obsolete)
+showtk   = False
+; choose seed for random mobiliity
+seed = 1
+; verbose output
+verbose = True</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Cp</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">Cp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;/home/uguen/Bureau/P1/ini/simulnet.ini&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Simulnet.ini contains the following sections</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Cp</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;Mysql&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Save&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Layout&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Mechanics&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Network&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Localization&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Simulation&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="save-section">
+<h2>Save section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h2>
+<p>This section define the save options.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;save&#39;</span><span class="p">:</span> <span class="s">&#39;[]&#39;</span><span class="p">,</span> <span class="s">&#39;savep&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">savep</span></tt> boolean enable/disable saving of the simulation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))[</span><span class="s">&#39;savep&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
+</pre></div>
+</div>
+<p>The log file which contains all traces from the dynamic are in
+<tt class="docutils literal"><span class="pre">$BASENAME/netsave</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ls</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">Bureau</span><span class="o">/</span><span class="n">P1</span><span class="o">/</span><span class="n">netsave</span><span class="o">/</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>ls: impossible d'accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type</pre>
+</div>
+<div class="section" id="layout">
+<h3>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h3>
+<p>This section allow setup the layout for the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;filename&#39;</span><span class="p">:</span> <span class="s">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;the_world_height&#39;</span><span class="p">:</span> <span class="s">&#39;20&#39;</span><span class="p">,</span>
+ <span class="s">&#39;the_world_scale&#39;</span><span class="p">:</span> <span class="s">&#39;20&#39;</span><span class="p">,</span>
+ <span class="s">&#39;the_world_width&#39;</span><span class="p">:</span> <span class="s">&#39;65&#39;</span><span class="p">,</span>
+ <span class="s">&#39;x_offset&#39;</span><span class="p">:</span> <span class="s">&#39;30&#39;</span><span class="p">,</span>
+ <span class="s">&#39;y_offset&#39;</span><span class="p">:</span> <span class="s">&#39;2&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Choose the used Layout for simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))[</span><span class="s">&#39;filename&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;TA-Office.ini&#39;</span>
+</pre></div>
+</div>
+<p>Setup an offset on the origin of axis</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))[</span><span class="s">&#39;x_offset&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))[</span><span class="s">&#39;y_offset&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">30</span>
+<span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="network">
+<h3>Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;communication_mode&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;autonomous&#39;&quot;</span><span class="p">,</span>
+ <span class="s">&#39;dispinfo&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s">&#39;ipython_nb_show&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s">&#39;network_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;0.1&#39;</span><span class="p">,</span>
+ <span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s">&#39;show_sg&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s">&#39;show_table&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Setup communication mode between node:</p>
+<ul class="simple">
+<li>autonomous : the data exchange between nodes is driven by the
+localization layer. If more information is required to estimate the
+position a communication request is send to the communication stae</li>
+<li>synchro : the data exchange between nodes is periodic. LDPs are
+periodically refreshed at the network_update_time</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;communication_mode&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;&#39;autonomous&#39;&quot;</span>
+</pre></div>
+</div>
+<p>Time step for the refresh network information</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;network_update_time&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;0.1&#39;</span>
+</pre></div>
+</div>
+<p>Vizualization of the simulation using matplotlib</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;show&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+</pre></div>
+</div>
+<p>Vizualization of a table summing up the data exchange of the nodes</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;show_table&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+</pre></div>
+</div>
+<p>Vizualization of the simulation inside ipython .</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;ipython_nb_show&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mechanics">
+<h3>Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h3>
+<p>This section allow to setup the agent movement during simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;choose_destination&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;random&#39;&quot;</span><span class="p">,</span> <span class="s">&#39;mecanic_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;0.1&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Setup how agent choose their target:</p>
+<ul class="simple">
+<li>random : the agnet move into the layout randomly</li>
+<li>file : the agent follow the sequence specified in
+/nodes_destination.ini</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s">&#39;choose_destination&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;&#39;random&#39;&quot;</span>
+</pre></div>
+</div>
+<p>Time step for refreshing the mechanical layer (ground truth position)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;0.1&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="localization">
+<h3>Localization<a class="headerlink" href="#localization" title="Permalink to this headline">¶</a></h3>
+<p>Setup Localization algorithms</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;localization&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">,</span>
+ <span class="s">&#39;localization_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;1.0&#39;</span><span class="p">,</span>
+ <span class="s">&#39;method&#39;</span><span class="p">:</span> <span class="s">&quot;[&#39;alg&#39;]&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>enable/disable localizaiton of the agents</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;localization&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
+</pre></div>
+</div>
+<p>Select localization methods :</p>
+<ul class="simple">
+<li>Algebraic : hétérogeneous localization algorithm</li>
+<li>Geometric : RGPA</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;[&#39;alg&#39;]&quot;</span>
+</pre></div>
+</div>
+<p>Time step for localization update</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;localization_update_time&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;1.0&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="simulation">
+<h3>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;duration&#39;</span><span class="p">:</span> <span class="s">&#39;10.0&#39;</span><span class="p">,</span>
+ <span class="s">&#39;seed&#39;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
+ <span class="s">&#39;show_interval&#39;</span><span class="p">:</span> <span class="s">&#39;0.5&#39;</span><span class="p">,</span>
+ <span class="s">&#39;showtk&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s">&#39;speedratio&#39;</span><span class="p">:</span> <span class="s">&#39;1.&#39;</span><span class="p">,</span>
+ <span class="s">&#39;verbose&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Setup simulation duration in second</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;10.0&#39;</span>
+</pre></div>
+</div>
+<p>Setup random seed for simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s">&#39;seed&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;1&#39;</span>
+</pre></div>
+</div>
+<p>Display messages during simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s">&#39;verbose&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">FileLink</span>
+<span class="n">FileLink</span><span class="p">(</span><span class="s">&#39;Mobility.ipynb&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of being generated, or you may have the incorrect path.<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script><div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

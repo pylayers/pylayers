@@ -23,9 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="next" title="1. What is PyLayers about ?" href="1-introduction/Introduction.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -39,12 +37,6 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="1-introduction/Introduction.html" title="1. What is PyLayers about ?"
-             accesskey="N">next</a></li>
-        <li class="right" >
-          <a href="../index.html" title="&lt;no title&gt;"
-             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="#">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -55,12 +47,6 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">&lt;no title&gt;</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="1-introduction/Introduction.html"
-                        title="next chapter">1. What is PyLayers about ?</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -86,130 +72,84 @@
 <span id="usermanual"></span><h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html">1. What is PyLayers about ?</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction/Introduction.html#pylayers-keywords">1.1. PyLayers Keywords</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction/Introduction.html#warnings">1.2. Warnings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#what-is-pylayers-about">1.1. What is PyLayers about ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#pylayers-keywords">1.2. PyLayers Keywords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#warnings">1.3. Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#how-to-install-pylayers">1.4. How to install PyLayers ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#the-layout-class">1.5. The Layout class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#channel-variability-due-to-different-layout-constitutive-materials">1.6. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html#how-to-install-pylayers">2. How to install PyLayers ?</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction/Introduction.html#dependencies">2.1. Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction/Introduction.html#setting-of-environment-variables-basename-and-pylayers">2.2. Setting of environment variables $BASENAME and $PYLAYERS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction/Introduction.html#installing-pyinterval">2.3. Installing PyInterval</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1-introduction/Introduction.html#testing">2.4. Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#slabs-and-materials">2. Slabs and Materials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#defining-a-new-slab-and-a-new-material">2.1. Defining a new Slab and a new Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#slab-information">2.2. Slab Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#slab-evaluation">2.3. Slab evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#transmission-and-reflexion-coefficients">2.4. Transmission and Reflexion coefficients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#evaluation-without-phase-compensation">2.5. Evaluation without phase compensation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">2.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#references">2.7. References</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="2-gis/DEV-Layout.html">3. Description of the propagation environment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DEV-Layout.html#getting-the-list-of-all-available-layouts-the-ls-method">3.1. Getting the list of all available Layouts : the <tt class="docutils literal"><span class="pre">ls()</span></tt> method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DEV-Layout.html#the-useful-numpy-arrays-of-the-layout">3.2. The useful numpy arrays of the Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DEV-Layout.html#pt-the-array-of-points">3.3. <tt class="docutils literal"><span class="pre">pt</span></tt> the array of points</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DEV-Layout.html#tahe-tail-head">3.3.1. tahe (tail-head)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#multi-wall-model">3. Multi-wall model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#defining-a-radio-link">3.1. Defining a radio link</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#ploting-the-scene">3.2. Ploting the scene</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DEV-Layout.html#tgs-trancodage-from-graph-indexing-to-numpy-array-indexing">3.4. <tt class="docutils literal"><span class="pre">tgs</span></tt> : trancodage from graph indexing to numpy array indexing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DEV-Layout.html#layout-seg2pts-a-function-for-getting-points-coordinates-from-segment-number-array">3.5. <tt class="docutils literal"><span class="pre">Layout.seg2pts</span></tt> a function for getting points coordinates from segment number array</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#coverage-class">4. Coverage class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#coverage-with-a-multi-wall-model">5. Coverage with a Multi Wall model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#calculating-received-power-coverage">6. Calculating Received Power Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#ray-signatures">7. Ray Signatures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#synthesis-of-ultra-wide-band-waveforms">7.1. Synthesis of Ultra Wide Band Waveforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#verification-of-energy-normalization-in-both-domains">7.2. Verification of energy normalization in both domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calculation-of-uwb-channel-impulse-response">7.3. Calculation of UWB channel impulse response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#construction-of-the-propagation-channel">7.4. Construction of the propagation channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#construction-of-the-transmission-channel">7.5. Construction of the transmission channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calculate-uwb-channel-impulse-response">7.6. Calculate UWB Channel Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#hermitian-symetry-enforcment">7.7. Hermitian symetry enforcment</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html">4. The Layout class</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#introduction">4.1. Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#structure-of-a-layout">4.2. Structure of a Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#subsegments">4.3. Subsegments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-different-layout-format">4.4. The different layout format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#reading-an-exiting-layout">4.5. Reading an exiting Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-display-options-dictionnary">4.6. The display options dictionnary</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#layers">4.6.1. Layers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#strings">4.6.2. Strings</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#sizes">4.6.3. Sizes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#booleans">4.6.4. Booleans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#example-of-an-uwb-channel-ray-tracing-simulation">8. Example of an UWB channel Ray Tracing simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#adding-coordinates-of-transmiting-and-receiving-points">8.1. Adding coordinates of transmiting and receiving points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#signatures-rays-and-propagation-and-transmission-channel">8.2. Signatures, rays and propagation and transmission channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calulating-the-propagation-channel">8.3. Calulating the Propagation Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#apply-waveform">8.4. Apply waveform</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#interactive-editor">4.7. Interactive editor</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#image-overlay">4.7.1. Image overlay</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#scaling-the-figure-overlay">4.7.2. Scaling the figure overlay</a></li>
-<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#vizualisation-of-the-layout">4.7.3. Vizualisation of the layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#simulation-creation">9. Simulation Creation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#id2">9.1. Adding coordinates of transmiting and receiving points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#signatures-rays-and-channel">9.2. Signatures, Rays and channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#id3">9.3. Apply waveform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#example-of-a-trajectory-synthesis-in-dlr-where2-environment">9.4. Example of a trajectory synthesis in DLR WHERE2 environment</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#algebraic-localization-class">10. Algebraic Localization Class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#example-of-tdoa">10.1. Example of TDOA</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="2-gis/MultiSubsegments.html">5. Segment and sub-segments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/MultiSubsegments.html#channel-variability-due-to-different-layout-constitutive-materials">5.1. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#rgpa-robust-geometric-positioning-algorithm">11. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#exploiting-time-of-arrival-toa-only">11.1. Exploiting Time of Arrival (ToA) only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#rss">11.2. RSS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#tdoa">11.3. TDOA</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="3-antprop/Antennas.html">6. Handling Antennas</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/Antennas.html#unwraping-the-phase">6.1. Unwraping the phase</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/Antennas.html#evaluation-of-vector-spherical-harmonics-coefficients">6.2. Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#network-simulation-configuration">12. Network Simulation Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#layout">12.1. Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#network">12.2. Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#mechanics">12.3. Mechanics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#localization">12.4. Localization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#simulation">12.5. Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="3-antprop/Signatures.html">7. Ray Signatures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html">8. Slabs and Materials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#defining-a-new-slab-and-a-new-material">8.1. Defining a new Slab and a new Material</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#slab-information">8.2. Slab Information</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#slab-evaluation">8.3. Slab evaluation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#transmission-and-reflexion-coefficients">8.4. Transmission and Reflexion coefficients</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#ploting-coefficients">8.4.1. Ploting Coefficients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#class-polygon">13. Class Polygon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#ploting-polygons">13.1. ploting polygons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#buildgv">13.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#evaluation-without-phase-compensation">8.5. Evaluation without phase compensation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">8.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#references">8.7. References</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="3-antprop/MultiwallModel.html">9. Multi-wall model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/MultiwallModel.html#defining-a-radio-link">9.1. Defining a radio link</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-antprop/MultiwallModel.html#ploting-the-scene">9.2. Ploting the scene</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="3-antprop/MultiwallModel.html#finding-the-intersection-between-the-direct-path-and-the-walls">9.2.1. Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="3-antprop/MultiwallModel.html#computing-the-multi-wall-model">9.2.2. Computing the Multi-wall model</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="3-antprop/MultiwallModel.html#coverage-class">10. Coverage class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3-antprop/Coverage.html">11. Coverage with a Multi Wall model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3-antprop/Coverage.html#calculating-received-power-coverage">12. Calculating Received Power Coverage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html">13. Synthesis of Ultra Wide Band Waveforms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="4-signal/UwbWaveforms.html#generation-of-an-impulse-of-normalized-energy">13.1. Generation of an Impulse of normalized energy</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html#verification-of-energy-normalization-in-both-domains">14. Verification of energy normalization in both domains</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html#calculation-of-uwb-channel-impulse-response">15. Calculation of UWB channel impulse response</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html#construction-of-the-propagation-channel">16. Construction of the propagation channel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html#construction-of-the-transmission-channel">17. Construction of the transmission channel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html#calculate-uwb-channel-impulse-response">18. Calculate UWB Channel Impulse Response</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html#hermitian-symetry-enforcment">19. Hermitian symetry enforcment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="8-simul/DEV-RayTracingW1.html">20. Simulation Creation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="8-simul/DEV-RayTracingW1.html#adding-coordinates-of-transmiting-and-receiving-points">20.1. Adding coordinates of transmiting and receiving points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-simul/DEV-RayTracingW1.html#signatures-rays-and-channel">20.2. Signatures, Rays and channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-simul/DEV-RayTracingW1.html#apply-waveform">20.3. Apply waveform</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="8-simul/DOC-RayTracing2.html">21. Example of an UWB channel Ray Tracing simulation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="8-simul/DOC-RayTracing2.html#adding-coordinates-of-transmiting-and-receiving-points">21.1. Adding coordinates of transmiting and receiving points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-simul/DOC-RayTracing2.html#signatures-rays-and-propagation-and-transmission-channel">21.2. Signatures, rays and propagation and transmission channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-simul/DOC-RayTracing2.html#calulating-the-propagation-channel">21.3. Calulating the Propagation Channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="8-simul/DOC-RayTracing2.html#apply-waveform">21.4. Apply waveform</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-mobility/ConfigFiles.html">22. Network Simulation Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-mobility/ConfigFiles.html#simulnet-ini">22.1. Simulnet.ini</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-mobility/ConfigFiles.html#save-section">22.2. Save section</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#layout">22.2.1. Layout</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#network">22.2.2. Network</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#mechanics">22.2.3. Mechanics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#localization">22.2.4. Localization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#simulation">22.2.5. Simulation</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-mobility/Trajectory.html">23. Example of a trajectory synthesis in DLR WHERE2 environment</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="5-mobility/Trajectory.html#loading-the-layout">23.1. loading the Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="5-mobility/Trajectory.html#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">23.2. Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="7-location/DEV-Algebraic.html">24. Algebraic Localization Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html">25. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#exploiting-time-of-arrival-toa-only">25.1. Exploiting Time of Arrival (ToA) only</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#rss">25.2. RSS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#tdoa">25.3. TDOA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#geomview-classes">14. Geomview classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#geomvect-class">14.1. GeomVect class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#utility-functions">14.2. Utility functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#useful-functions">14.3. Useful functions</a></li>
 </ul>
 </li>
 </ul>
@@ -225,12 +165,6 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="1-introduction/Introduction.html" title="1. What is PyLayers about ?"
-             >next</a></li>
-        <li class="right" >
-          <a href="../index.html" title="&lt;no title&gt;"
-             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="#">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
