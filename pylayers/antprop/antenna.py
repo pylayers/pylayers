@@ -212,12 +212,18 @@ class Antenna(object):
             if pattern :
                 Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
                 Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+                self.theta=self.th[:,np.newaxis]
+                self.phi=self.ph[np.newaxis,:]
+                self.SqG=np.ones((self.nf,self.ntheta,self.nphi))
+                self.SqG[:]=Fap
             else:
                 Fat = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
                 Fap = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
                 Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
                 Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
-                
+       
+            
+
         return (Fat,Fap)    
 
     def loadmat(self, directory="ant"):
