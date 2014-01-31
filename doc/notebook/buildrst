@@ -3,14 +3,14 @@
 #. $WEBNB/cleanfiles
 # for all notebooks below
 
-for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
+for i in *.ipynb;
 do
     # display filename
     # if rst file exists
     if [ -f ${i%%.ipynb}.rst ]; 
     then
            # rst file exists
-           echo "${i%%.ipynb}.rst exists"
+           echo "${i%%.ipynb}.rst already exists"
     else
             # regenerate out put cell 
            echo "run notebook",$i 
@@ -30,7 +30,7 @@ do
         cat f1 | sed 's/code::/code-block::/'  > ${i%%.ipynb}.rst 
         # mv images in WEBNB directory
         mv -f ${file%%.ipynb}_files $WEBNB/${i%%.ipynb}_files 
-        rm ${file%%.ipynb}.rst
+        #rm ${file%%.ipynb}.rst
         rm f1
     else
         echo "Problem in  ",$i
