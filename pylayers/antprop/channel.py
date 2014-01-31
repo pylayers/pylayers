@@ -925,6 +925,7 @@ class Tchannel(bs.FUDAsignal):
                     'fig': [],
                     'ax': [],
                     'phi':(-180,180),
+                    'reverse' : False,
                     'cmap':plt.cm.hot_r,
                     's':30,
                     'fontsize':12,
@@ -948,6 +949,7 @@ class Tchannel(bs.FUDAsignal):
         fig = kwargs.pop('fig')
         ax = kwargs.pop('ax')  
         colorbar = kwargs.pop('colorbar')  
+        reverse = kwargs.pop('reverse')  
 
 
         if fig==[]:
@@ -972,11 +974,17 @@ class Tchannel(bs.FUDAsignal):
             print "len(di):", len(dir)
         if ax == []:
             ax= fig.add_subplot(111,polar=polar)
+        if not reverse :
+            scat = ax.scatter(di[:, 0] * al, di[:, 1] * al, **kwargs)
+            ax.axis((0, 180, phi[0], phi[1]))
+            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
+        else: 
+            scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)   
+            ax.axis((phi[0], phi[1], 0, 180))
+            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
 
-        scat = ax.scatter(di[:, 0] * al, di[:, 1] * al, **kwargs)
-        ax.axis((0, 180, phi[0], phi[1]))
-        ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
-        ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
         ax.set_title(d,fontsize=fontsize+2)
         if colorbar:
             fig.colorbar(scat)
