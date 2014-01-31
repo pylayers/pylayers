@@ -569,6 +569,7 @@ class RadioNode(object):
         .vect : geomview format
 
         """
+        
         _filespa = self.filespa
         _fileini = self.fileini
         fileini = pyu.getlong(_fileini, 'ini')
@@ -605,20 +606,22 @@ class RadioNode(object):
         # save points in GeomVect container
         filename = self.filegeom.replace('.vect', '')
         filename = filename.replace('.off', '')
-
         try: 
             gv = geo.Geomoff(filename)
             ant = self.A
             if not hasattr(ant,'theta'):
-                ant.Fsynth3()
+                if not ant.pattern:
+                    ant.Fsynth3()
+                else: 
+                   ant.Fpatt(pattern=True)
             V = ant.SqG[ant.nf/2,:,:]
             if not hasattr(self,'position'):
                 print "no position available"
-            gv.pattern(ant.theta,ant.phi,V,po=self.position,ilog=False,minr=0.01,maxr=0.2)
+            gv.pattern(ant.theta,ant.phi,V,po=self.position,ilog=False,minr=0.01,maxr=1.)
             self.filegeom=filename + '.off'
         except:
             if hasattr(self,'position'):
-                gv.points(self.position, colorname)
+                self.points(self.position, colorname)
             else :
                 print " no position available "
 

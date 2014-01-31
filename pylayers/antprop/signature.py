@@ -26,7 +26,7 @@ from pylayers.antprop.rays import Rays
 import copy
 import pickle
 import logging
-
+import time
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
@@ -1033,7 +1033,7 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
-    def run4(self,cutoff=2,algo='new'):
+    def run4(self,cutoff=2,algo='new',progress=False):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1150,12 +1150,24 @@ class Signatures(dict):
         #Gi = edgeout(self.L,Gi)
         #Gi = edgeout2(self.L,Gi)
         #pdb.set_trace()
-
+        lmax = len(lis)*len(lit)
+        pe = 0
+        tic = time.time()
+        tic0 = tic
         #for interaction source  in list of source interaction 
-        for s in lis:
+        for us,s in enumerate(lis):
             #for target interaction in list of target interaction
-            for t in lit:
+            for ut,t in enumerate(lit):
 
+                if progress :
+                    ratio = np.round((((us)*len(lis)+ut)/(1.*lmax))*10 )
+                    if ratio != pe:
+                        pe = ratio
+                        toc = time.time()
+                        print '~%d ' % (ratio*10),
+                        print '%',
+                        print '%6.3f %6.3f' % (toc-tic, toc-tic0) 
+                        tic = toc
                 if (s != t):
                     #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
                     #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
