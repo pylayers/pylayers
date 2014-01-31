@@ -35,7 +35,6 @@ class Trajectory(pd.DataFrame):
     def __init__(self,t=[],pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000),np.zeros(1000))).T,unit='s'):
         """ initialization 
         """
-        pdb.set_trace()
         npt = np.shape(pt)[0]
         if t ==[]:
             t = np.linspace(0,10,npt)

@@ -79,7 +79,6 @@ class Body(object):
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
         di = self.load(_filebody)
-        self.centered = False
         self.loadC3D(filename=_filemocap,centered=True)
 
     def __repr__(self):
@@ -1121,6 +1120,7 @@ if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()
     bd = Body(_filemocap='walk.c3d')
+    
     traj = tr.Trajectory()
     #bd.settopos(traj,0.0)
     #bd.setccs(topos=True)
