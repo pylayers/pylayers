@@ -618,7 +618,9 @@ class RadioNode(object):
             self.filegeom=filename + '.off'
         except:
             if hasattr(self,'position'):
-                gv.points(self.position, colorname)
+                pass
+            #    problem gv is not a geomvect    
+            #    gv.points(self.position, colorname)
             else :
                 print " no position available "
 

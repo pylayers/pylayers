@@ -156,8 +156,8 @@ class Body(object):
             self.g[t][h]['radius']= r 
        
         self.ant={}
-        for ant in di['antenna'].keys():
-            self.ant[ant]=di['antenna'][ant]
+        for ant in di['device'].keys():
+            self.ant[ant]=di['device'][ant]
 
         return(di)
 
@@ -1083,14 +1083,15 @@ if __name__ == '__main__':
     # doctest.testmod()
     bd = Body(_filemocap='walk.c3d')
     traj = tr.Trajectory()
-    #bd.settopos(traj,0.3)
-    #bd.setccs(topos=True)
-    #bd.setdcs()
+    bd.settopos(traj,0.3)
+    bd.setccs(topos=True)
+    bd.setdcs()
     #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
+    bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=False)
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
     lt = tr.importsn()
-    bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')
+    #bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')
 
 	# nframes = 126
 	# Bc = Body()

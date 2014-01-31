@@ -23,7 +23,7 @@ do
         echo $file
         # create rst file from notebook  
         ipython nbconvert --to rst $i >> log 2>>log-err 
-        ipython nbconvert --to mkd $i >> log 2>>log-err 
+        #ipython nbconvert --to mkd $i >> log 2>>log-err 
         # supress In[ ]
         cat ${file%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
         # code --> code-block
