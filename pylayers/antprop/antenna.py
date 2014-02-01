@@ -90,7 +90,7 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', directory="ant", nf=104, ntheta=181, nphi=90):
+    def __init__(self, _filename='defant.vsh3', directory="ant", pattern=False, nf=104, ntheta=90, nphi=181):
         """
 
         Parameters
@@ -123,27 +123,43 @@ class Antenna(object):
          A = Antenna('my_antenna.mat')
 
         """
-        typ = _filename.split('.')[1]
-        self.typ = typ
-        self._filename = _filename
-        if typ == 'vsh3':
-            self.loadvsh3()
-        if typ == 'vsh2':
-            self.loadvsh2()
-        if typ == 'sh3':
-            self.loadsh3()
-        if typ == 'sh2':
-            self.loadsh2()
-        if typ == 'trx1':
-            self.load_trx(directory, nf, ntheta, nphi)
-        if typ == 'trx':
-            self.loadtrx(directory)
-        if typ == 'mat':
-            self.loadmat(directory)
+        self.nf = nf
+        self.ntheta = ntheta
+        self.nphi = nphi
+        self.pattern = pattern
+        if not pattern :
+            typ = _filename.split('.')[1]
+            self.typ = typ
+            self._filename = _filename
+            if typ == 'vsh3':
+                self.loadvsh3()
+            if typ == 'vsh2':
+                self.loadvsh2()
+            if typ == 'sh3':
+                self.loadsh3()
+            if typ == 'sh2':
+                self.loadsh2()
+            if typ == 'trx1':
+                self.load_trx(directory, nf, ntheta, nphi)
+            if typ == 'trx':
+                self.loadtrx(directory)
+            if typ == 'mat':
+                self.loadmat(directory)
+
+        else :
+            self.typ = 'Gauss'
+            self.p0 = 0
+            self.t0 = np.pi/2.
+            self.p3 = np.pi/6. # 30 degrees
+            self.t3 = np.pi/6. # 30 degrees
+            self.GdB  = 10. # gain
+            self.G  = pow(10.,self.GdB/10.) # gain
+            self.sqG = np.sqrt(self.G)
 
     def __repr__(self):
         st = ''
-        st = st + 'file name : ' + self._filename+'\n'
+        if not self.pattern:
+            st = st + 'file name : ' + self._filename+'\n'
         #st = st + 'file type : ' + self.typ+'\n'
         if self.typ == 'mat':
             #st = st + self.DataFile + '\n'
@@ -155,7 +171,60 @@ class Antenna(object):
             st = st + 'Run : ' + str(self.Run)+'\n'
             st = st + "Nb theta (lat) : "+ str(self.Nt)+'\n'
             st = st + "Nb phi (lon) :"+ str(self.Np)+'\n'
+        if self.typ == 'Gauss':
+            st = st + 'Gaussian pattern' + '\n'
+            st = st + 'phi0 : ' + str(self.p0) +'\n'
+            st = st + 'theta0 :' + str(self.t0) + '\n'
+            st = st + 'phi 3dB :' + str(self.p3) + '\n'
+            st = st + 'theta 3dB :' + str(self.t3) + '\n'
+            st = st + 'Gain dB :' + str(self.GdB) + '\n'
+            st = st + 'Gain linear :' + str(self.G ) + '\n'
+            st = st + 'sqrt G :' + str(self.sqG) + '\n'
+
         return(st)
+
+
+    def Fpatt(self,th=[],ph=[],pattern=True):
+        """
+        """
+
+        assert self.pattern , 'not a pattern antenna' 
+
+        self.fa = np.linspace(2,10,self.nf)
+
+
+        if (th == []) and (ph == []):
+            self.th = np.linspace(0,np.pi,self.ntheta)
+            self.ph = np.linspace(0,2*np.pi,self.nphi,endpoint=False)
+        else :
+            self.th = th
+            self.ph = ph
+
+        if self.typ == 'Gauss':
+
+
+            argth = ((self.th-self.t0)**2)/self.t3
+            e1 = np.mod(self.ph-self.p0,2*np.pi)
+            e2 = np.mod(self.p0-self.ph,2*np.pi)
+            e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
+            argphi = (e**2)/self.p3
+
+            if pattern :
+                Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+                Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+                self.theta=self.th[:,np.newaxis]
+                self.phi=self.ph[np.newaxis,:]
+                self.SqG=np.ones((self.nf,self.ntheta,self.nphi))
+                self.SqG[:]=Fap
+            else:
+                Fat = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+                Fap = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+                Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+                Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+       
+            
+
+        return (Fat,Fap)    
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
@@ -1386,7 +1455,6 @@ class Antenna(object):
         return Fth, Fph
 
 
-
     def Fsynth3(self, theta = [], phi=[], pattern=True):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
@@ -1429,7 +1497,6 @@ class Antenna(object):
         once the V,W function
 
         """
-
         typ = self._filename.split('.')[1]
         if typ not in ['sh3','vsh3']:
             # temporary what to do if originbal file is not sh3 or vsh3 ? 
@@ -1488,8 +1555,6 @@ class Antenna(object):
                 Fph = Fph.reshape(Nf, Nt, Np)
 
                 
-
-            
         if typ == 'sh3':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3
@@ -2287,6 +2352,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
 
     Parameters
     ----------
+
     k : frequency index
     A : Antenna
 
@@ -2298,6 +2364,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
 
     lang = 'french'
          = 'english'
+
     """
 
     Nf = np.shape(Fthr)[0]
@@ -2405,7 +2472,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         title(r'Im ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'phase':
         #pcolor(A.phi*rtd,A.theta*rtd,angle(Ftho[k,:,:]),cmap=cm.gray_r,vmin=maT0,vmax=maT)
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Ftho[k, :, :]),
                    cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) original', fontsize=fontsize)
@@ -2433,7 +2500,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
                    cmap=cm.hot_r, vmin=miP, vmax=MiP)
         plt.title('Im ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fpho[k, :, :]),
                    cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) original', fontsize=fontsize)
@@ -2469,7 +2536,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         else:
             plt.title(r'Im ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fthr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fthr[k, :, :]),
                    cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) reconstruit', fontsize=fontsize)
@@ -2507,7 +2574,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         else:
             plt.title('Im ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fphr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fphr[k, :, :]),
                    cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) reconstruit', fontsize=fontsize)

@@ -284,6 +284,8 @@ class Layout(object):
         st = st + "\nUseful arrays"+"\n----------------\n"
         if hasattr(self,'tsg'):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
+        if hasattr(self,'isss'):
+            st = st + "isss :  sub-segment index above Nsmax"+"\n"
         if hasattr(self,'tgs'):
             st = st + "tgs : get segment index in tahe from Gs" +"\n"
         if hasattr(self,'lsss'):
@@ -291,9 +293,7 @@ class Layout(object):
         if hasattr(self,'sridess'):
             st = st + "stridess : stride to calculate the index of a subsegment" +"\n"
         if hasattr(self,'sla'):
-            st = st + "sla : associated slab name" +"\n"
-        if hasattr(self,'stridess'):
-            st = st + "stridess : stride for adressing sub segment " +"\n"
+            st = st + "sla : list of all slab names (Nsmax+Nss+1)" +"\n"
         if hasattr(self,'degree'):
             st = st + "degree : degree of nodes " +"\n"
             
@@ -2979,8 +2979,8 @@ class Layout(object):
         seglist2 = seglist[upos_intersect]
         idxlnk = ilink[upos_intersect]
 
-        #k
-        # Calculate  angle of incidence refered from segment normal 
+        #
+        # Calculate angle of incidence refered from segment normal 
         #
 
         norm  = self.normal[0:2,seglist2]
@@ -4738,7 +4738,7 @@ class Layout(object):
                         delta = nl / 10
 
                         # with  AIR or ABSORBENT there is no reflection
-                        if (name<>'AIR') & (name<>'ABSORBENT'):
+                        if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss) :
                             self.dGi[k].add_node(str((n,k)))
                             if k==cy0:
                                 self.dGi[k].pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
@@ -4747,7 +4747,7 @@ class Layout(object):
 
 
                         # with METAL or ABSORBENT there is no transmission
-                        if (name<>'METAL') & (name<>'ABSORBENT'):
+                        if ((name<>'METAL') & (name<>'ABSORBENT')) or (n in self.lsss):
                             self.dGi[k].add_node(str((n,cy0,cy1))) 
                             self.dGi[k].add_node(str((n,cy1,cy0)))
                             self.dGi[k].pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.) 
@@ -4871,14 +4871,14 @@ class Layout(object):
 
                     delta = nl / 10
                     # On AIR or ABSORBENT there is no reflection
-                    if (name<>'AIR') & (name<>'ABSORBENT'):
+                    if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
                         self.Gi.add_node(str((n,cy0)))
                         self.Gi.add_node(str((n,cy1)))
                         self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
                         self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
 
                     # Through METAL or ABSORBENT there is no transmission
-                    if (name<>'METAL') & (name<>'ABSORBENT'):
+                    if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
                         self.Gi.add_node(str((n,cy0,cy1)))
                         self.Gi.add_node(str((n,cy1,cy0)))
                         self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
@@ -4886,7 +4886,7 @@ class Layout(object):
 
                 if len(cy) == 1: # segment which is not a separation between rooms
                     # On AIR or ABSORBENT there is no reflection
-                    if (name<>'AIR') & (name<>'ABSORBENT'):
+                    if (name<>'AIR') & (name<>'ABSORBENT')  or (n in self.lsss):
                         self.Gi.add_node(str((n, cy[0])))
                         self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
 

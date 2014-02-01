@@ -27,6 +27,12 @@ class Inter(object):
 
         typ : int
             type of interaction
+            1 : R 
+            2 : T
+            3 : D 
+            0 : Tx or Rx 
+           -1 : B
+
         data: np.array
             data for the interaction
         idx:
@@ -45,8 +51,15 @@ class Inter(object):
                  _filemat='matDB.ini',_fileslab='slabDB.ini'):
         """
 
+        Parameters
+        ----------
 
-        
+        typ 
+        data  : ndarray 
+        idx 
+        _filemat 
+        _fileslab 
+
         """
 
         self.typ = typ
@@ -83,18 +96,24 @@ class Inter(object):
 
 
 
-    def delay(self):
-        """ calculate delays of a given basis Interaction
+    def sinsout(self):
+        """ calculate sin sout of the interaction 
 
-        Note
-        ----
+        Notes
+        -----
 
-        typ 
+        if typ 
 
             1 : Reflexion 
             2 : Transmission 
             3 : Diffraction
-
+            
+            si : self.data[:,1]
+            so : self.data[:,2]
+        
+        if typ = 0 
+            
+        if typ = -1    
         """
 
         if self.typ in [1, 2, 3]:
@@ -426,7 +445,7 @@ class IntB(Inter):
         self.nf=len(fGHz)
 
 
-        self.delay()
+        self.sinsout()
         if len(self.data) != 0:
             lidx = len(self.idx)
             data = self.data.reshape(lidx, 2, 2)
@@ -486,7 +505,7 @@ class IntL(Inter):
         self.fGHz=fGHz
         self.nf=len(fGHz)
 
-        self.delay()
+        self.sinsout()
 
         if len(self.data != 0):
             try:
@@ -594,7 +613,7 @@ class IntR(Inter):
 
 
 
-        self.delay()
+        self.sinsout()
 
 
         self.fGHz=fGHz
@@ -709,7 +728,7 @@ class IntT(Inter):
         array([ 13.33333333,   2.        ])
         """
 
-        self.delay()
+        self.sinsout()
 
         self.fGHz=fGHz
         self.nf=len(fGHz)
@@ -791,7 +810,7 @@ class IntD(Inter):
         self.fGHz=fGHz
         self.nf=len(fGHz)
 
-        self.delay()
+        self.sinsout()
 
         if len(self.data) != 0:
             self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]
