@@ -1355,7 +1355,6 @@ class Rays(dict):
 
                 #ray2nbi = np.ones((nbray))
 
-                
                 #try:
                 #    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
                 #except:
