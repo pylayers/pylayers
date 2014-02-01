@@ -38,7 +38,7 @@ class Bsignal(object):
 
     This class offers a transparent back and forth mechanism between time and frequency domain.
 
-    The base is not necessarily uniform
+    The x base is not necessarily uniform
 
     x can have 1 or two axis
 
@@ -92,10 +92,12 @@ class Bsignal(object):
 
         Parameters
         ----------
-            filename
+        
+        filename : string
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -150,13 +152,13 @@ class Bsignal(object):
         Np = len(self.x)
         self.y = np.zeros(Np, dtype=float)
 
-    def sety(self, function):
+    def sety(self, fun):
         """ sety : set y vector
 
         Parameters
         ----------
 
-        function 
+        fun : function  
 
         """
         self.y = function(self.x)
@@ -170,6 +172,19 @@ class Bsignal(object):
         color : string
             default 'b-'
 
+        Examples
+        --------
+
+        >>> from pylayers.signal import *
+        >>> import matplotlib.pyplot as plt
+        >>> si = Bsignal()
+        >>> si.setx(np.arange(100))
+        >>> def f1(x):
+        >>>     y = (-1)**x
+        >>>     return(y)
+        >>> si.sety(f1)
+        >>> si.stem()
+        >>> plt.show()
 
         """
         ndim = self.y.ndim

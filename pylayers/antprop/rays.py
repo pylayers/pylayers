@@ -1115,7 +1115,6 @@ class Rays(dict):
 
                 ray2nbi = np.ones((nbray))
 
-                
                 try:
                     self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
                 except:
@@ -1376,7 +1375,7 @@ class Rays(dict):
                 self.dis[self[l]['rayidx']] = self[l]['dis']
         #
         # true LOS when no interaction
-        # 
+        #
         if self.los:
             Ct[:,0, :, :]= np.eye(2,2)[np.newaxis,np.newaxis,:,:]
             #self[0]['dis'] = self[0]['si'][0]
@@ -1396,7 +1395,7 @@ class Rays(dict):
 
 
         #
-        # Construction of the Ctilde channel 
+        # Construction of the Ctilde channel
         #
         Cn = Ctilde()
         Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
@@ -1411,7 +1410,7 @@ class Rays(dict):
         Cn.tang = aod.T
         # r x 2
         Cn.rang = aoa.T
-        # add aoa and aod 
+        # add aoa and aod
 
         self.evaluated = True
         return(Cn)
@@ -1424,7 +1423,7 @@ class Rays(dict):
         ----------
         r : integer
             ray index
-        
+
         Notes
         -----
 
@@ -1508,21 +1507,22 @@ class Rays(dict):
         Parameters
         ----------
 
-        L : Layout 
+        L : Layout
 
         Returns
         -------
 
-        sig 
+        sig
 
         Notes
         -----
 
-        Signature of a ray is store as a member 
+        Signature of a ray is store as a member
 
         r[nint]['sig']
 
         """
+ 
         sig = Signatures(L, self.pTx, self.pRx)
         for k in self:
             sig[k] = self[k]['sig']
