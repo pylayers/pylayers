@@ -82,7 +82,19 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#the-layout-class">5. The Layout class</a><ul>
-<li><a class="reference internal" href="#channel-variability-due-to-different-layout-constitutive-materials">5.1. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
+<li><a class="reference internal" href="#structure-of-a-layout">5.1. Structure of a Layout</a></li>
+<li><a class="reference internal" href="#subsegments">5.2. Subsegments</a></li>
+<li><a class="reference internal" href="#layout-file-formats">5.3. Layout file formats</a></li>
+<li><a class="reference internal" href="#reading-an-exiting-layout">5.4. Reading an exiting Layout</a></li>
+<li><a class="reference internal" href="#the-display-options-dictionnary">5.5. The display options dictionnary</a></li>
+<li><a class="reference internal" href="#interactive-editor">5.6. Interactive editor</a><ul>
+<li><a class="reference internal" href="#image-overlay">5.6.1. Image overlay</a></li>
+<li><a class="reference internal" href="#scaling-the-figure-overlay">5.6.2. Scaling the figure overlay</a></li>
+<li><a class="reference internal" href="#vizualisation-of-the-layout">5.6.3. Vizualisation of the layout</a></li>
+<li><a class="reference internal" href="#segment-and-sub-segments">5.6.4. Segment and sub-segments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#channel-variability-due-to-different-layout-constitutive-materials">5.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#multi-wall-model">6. Multi-wall model</a><ul>
@@ -730,6 +742,8 @@ with the plugin <em>PicLayer</em>. This is well described in
 <li><tt class="docutils literal"><span class="pre">loadosm()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">saveosm()</span></tt></li>
 </ul>
+<div class="section" id="structure-of-a-layout">
+<h2>5.1. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>A Layout is firstly described by a set of points (negative index) and a
 set of segments (positive index).</p>
 <p>Both points and segments are nodes of the <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> graph.</p>
@@ -737,6 +751,9 @@ set of segments (positive index).</p>
 can recover partially or totally an other segment</strong>.</p>
 <p>This rule allows to capture topological relations of the network which
 are exploited for further analysis.</p>
+</div>
+<div class="section" id="subsegments">
+<h2>5.2. Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
 <p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
 introduced.</p>
 <p>A <tt class="docutils literal"><span class="pre">segment</span></tt> has attributes :</p>
@@ -759,6 +776,9 @@ minimum and maximum heights of associated subsegments (meters)</li>
 </ul>
 <p>When appearing in a 3D ray a subsegment has a unique index
 different from the segment index.</p>
+</div>
+<div class="section" id="layout-file-formats">
+<h2>5.3. Layout file formats<a class="headerlink" href="#layout-file-formats" title="Permalink to this headline">¶</a></h2>
 <p>The layout format has regularly evolved over time and is going to evolve
 again. Currently, the different recognized file extensions are the
 following :</p>
@@ -775,6 +795,9 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="reading-an-exiting-layout">
+<h2>5.4. Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
@@ -934,6 +957,9 @@ ray signatures.</p>
 </pre></div>
 </div>
 <img alt="./GIS-editor_files/GIS-editor_33_0.png" src="./GIS-editor_files/GIS-editor_33_0.png" />
+</div>
+<div class="section" id="the-display-options-dictionnary">
+<h2>5.5. The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1009,50 +1035,20 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
  <span class="s">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li>&#8216;layer&#8217; : list , []</li>
-<li>&#8216;layerset&#8217;,list, list of available layers</li>
-<li>&#8216;layers&#8217;, list , []</li>
-<li>&#8216;activelayer&#8217;, str , &#8216;WINDOW_GLASS&#8217;</li>
-<li>&#8216;alpha&#8217;, float , 0.5 , overlay transparency</li>
-<li>&#8216;box&#8217;, tuple , (-20,20,-10,10), (xmin xmax,ymin,ymax)</li>
-</ul>
-<ul class="simple">
-<li>&#8216;title&#8217; : str , &#8216;Init&#8217;</li>
-<li>&#8216;fileoverlay&#8217; : str , &#8216;TA-Office.png&#8217;</li>
-</ul>
-<ul class="simple">
-<li>&#8216;fontsize&#8217;, float , 10</li>
-<li>&#8216;ndsize&#8217;, float , 10</li>
-<li>&#8216;ndlblsize&#8217; : float 20</li>
-<li>&#8216;edlblsize&#8217; : float , 20</li>
-</ul>
-<ul class="simple">
-<li>&#8216;edlabel&#8217;, boolean, False</li>
-<li>&#8216;ticksoff&#8217;,boolean, True</li>
-<li>&#8216;scaled&#8217; : boolean , True</li>
-<li>&#8216;subseg&#8217; : boolean , True</li>
-<li>&#8216;nodes&#8217;, boolean , True</li>
-<li>&#8216;visu&#8217;, boolean , False</li>
-<li>&#8216;edges&#8217;, boolean , True</li>
-<li>&#8216;clear&#8217;, boolean, False</li>
-<li>&#8216;overlay&#8217;, boolean , False</li>
-<li>&#8216;thin&#8217;, boolean , False , If True trace all segments with thickness 1</li>
-<li>&#8216;ndlabel&#8217;,boolean, If True display node labels</li>
-<li>&#8216;ednodes&#8217;, boolean, True</li>
-</ul>
-<p>The command L.editor() launches an interactive editor. The state machine
-is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
+</div>
+<div class="section" id="interactive-editor">
+<h2>5.6. Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
+<p>The command <cite>L.editor()</cite> launches a simple Layout interactive editor.
+The state machine is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
 <p>To have an idea of all available options, look in the
 <tt class="docutils literal"><span class="pre">`pylayers.gis.SelectL</span></tt> &lt;<a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a>&gt;`__
 module</p>
-<p>All bug correction and ergonomic improvement of this editor is welcome.
+<p>All ergonomic improvement of this editor is welcome.
 Just pull request your modifications.</p>
 <p>PyLayers comes along with a low level structure editor based on
 <tt class="docutils literal"><span class="pre">matplotlib</span></tt> which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method. This
-editor is more suited for modyfing constitutive properties of walls. In
-the future a dedicated plugin in <tt class="docutils literal"><span class="pre">JOSM</span></tt> could be a much better
-solution.</p>
+editor is more suited for modyfing constitutive properties of walls.</p>
+<p>An alternative editing solution is to use the open street map editor <tt class="docutils literal"><span class="pre">JOSM</span></tt></p>
 <p>There are two different modes of edition</p>
 <ul class="simple">
 <li>A create points mode CP<ul>
@@ -1070,6 +1066,8 @@ solution.</p>
 </ul>
 <p><strong>m</strong> : to switch from one mode to an other</p>
 <p><strong>i</strong> : to return to init state</p>
+<div class="section" id="image-overlay">
+<h3>5.6.1. Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h3>
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
@@ -1089,6 +1087,9 @@ a filename. In that case the file is stored in</p>
 </pre></div>
 </div>
 <img alt="./GIS-editor_files/GIS-editor_53_1.png" src="./GIS-editor_files/GIS-editor_53_1.png" />
+</div>
+<div class="section" id="scaling-the-figure-overlay">
+<h3>5.6.2. Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
 <p>Before going further it is necessary :</p>
 <ul class="simple">
 <li>to place the global origin</li>
@@ -1125,6 +1126,9 @@ meters) between the two points.</li>
 'x'  : save .str2 file
 'w'  : display all layers</pre>
 </div>
+</div>
+<div class="section" id="vizualisation-of-the-layout">
+<h3>5.6.3. Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
@@ -1139,6 +1143,9 @@ meters) between the two points.</li>
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 <p><a class="reference external" href="MultiSubsegments.ipynb">Multi Subsegments</a></p>
+</div>
+<div class="section" id="segment-and-sub-segments">
+<h3>5.6.4. Segment and sub-segments<a class="headerlink" href="#segment-and-sub-segments" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1303,8 +1310,6 @@ None</pre>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
-</div>
 <img alt="./GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
@@ -1328,8 +1333,10 @@ None</pre>
 <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+</div>
 <div class="section" id="channel-variability-due-to-different-layout-constitutive-materials">
-<h2>5.1. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials<a class="headerlink" href="#channel-variability-due-to-different-layout-constitutive-materials" title="Permalink to this headline">¶</a></h2>
+<h2>5.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials<a class="headerlink" href="#channel-variability-due-to-different-layout-constitutive-materials" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
@@ -1374,9 +1381,6 @@ nl : 4048</pre>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">xmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 <span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
 </div>
 <img alt="./GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">type</span><span class="p">(</span><span class="n">cirair</span><span class="p">)</span>
@@ -1796,9 +1800,6 @@ different frequencies</p>
 <span class="n">toc</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="k">print</span> <span class="s">&#39;Elapsed time : {0:.2f} seconds&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/numpy/ma/core.py:3847: UserWarning: Warning: converting a masked element to nan.
-  warnings.warn("Warning: converting a masked element to nan.")</pre>
 </div>
 <img alt="./AP-coverage_files/AP-coverage_15_1.png" src="./AP-coverage_files/AP-coverage_15_1.png" />
 <div class="highlight-python"><pre>Elapsed time : 1.07 seconds</pre>
@@ -2482,9 +2483,6 @@ waveform with the channel impulse response to get the received waveform.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">u&#39;Received Waveform $r(t)$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
-</div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4cc2750&gt;</pre>
 </div>
 <img alt="./PHY-signal_files/PHY-signal_53_2.png" src="./PHY-signal_files/PHY-signal_53_2.png" />
@@ -2678,8 +2676,6 @@ spaces.</p>
 method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
 <img alt="./SIM-raytracing_files/SIM-raytracing_13_1.png" src="./SIM-raytracing_files/SIM-raytracing_13_1.png" />
 <p>The different object of the simulation cans be accessed to obtain
@@ -3051,11 +3047,6 @@ waveform to the transmission channel.</p>
 <span class="c">#plt.axis((0,180,-0.1,0.1))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x605f810&gt;</pre>
-</div>
 <img alt="./SIM-raytracing_files/SIM-raytracing_66_2.png" src="./SIM-raytracing_files/SIM-raytracing_66_2.png" />
 <img alt="./SIM-raytracing_files/SIM-raytracing_66_3.png" src="./SIM-raytracing_files/SIM-raytracing_66_3.png" />
 </div>
@@ -3152,8 +3143,6 @@ separated by white spaces.</p>
 method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_15_1.png" src="./SIM-where1_files/SIM-where1_15_1.png" />
 <p>Select Tx and Rx positions</p>
@@ -3525,11 +3514,6 @@ nl : 1027</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ciro</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">u&#39;received waveform without antenna $</span><span class="se">\\</span><span class="s">theta</span><span class="se">\\</span><span class="s">theta$&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x1081a150&gt;</pre>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_42_2.png" src="./SIM-where1_files/SIM-where1_42_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
