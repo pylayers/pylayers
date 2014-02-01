@@ -109,7 +109,7 @@ FHsignal</p>
 <dd><p>Signal with an embedded time base</p>
 <p>This class gathers a 1D signal and its axis indexation.</p>
 <p>This class offers a transparent back and forth mechanism between time and frequency domain.</p>
-<p>The base is not necessarily uniform</p>
+<p>The x base is not necessarily uniform</p>
 <p>x can have 1 or two axis</p>
 <p>The first axis of x and y have the same length</p>
 <p>By construction len(y):=len(x), len(x) takes priority in case of observed conflict</p>
@@ -159,7 +159,7 @@ Parameters
 yrange : array of y index values to be flattenned
 reversible : boolean</p>
 <blockquote>
-<div>if True the sum is place in object member yf 
+<div>if True the sum is place in object member yf
 else y is smashed</div></blockquote>
 </dd></dl>
 
@@ -328,7 +328,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>filename</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>filename</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -374,13 +374,13 @@ else y is smashed</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.sety">
-<tt class="descname">sety</tt><big>(</big><em>function</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.sety"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.sety" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sety</tt><big>(</big><em>fun</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.sety"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.sety" title="Permalink to this definition">¶</a></dt>
 <dd><p>sety : set y vector</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>function</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>fun</strong> : function</td>
 </tr>
 </tbody>
 </table>
@@ -402,6 +402,19 @@ else y is smashed</div></blockquote>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span> <span class="o">=</span> <span class="n">Bsignal</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">setx</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">sety</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1462,7 +1475,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>W1-M1 
+<p>W1-M1
 te     = 0.005 ns
 left  = 12
 Nright = 33

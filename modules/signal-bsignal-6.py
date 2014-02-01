@@ -1,4 +1,4 @@
-import matplotlib.pylab as plt 
+import matplotlib.pylab as plt
 from pylayers.signal.bsignal import *
 i1 = EnImpulse()
 i2 = EnImpulse()
