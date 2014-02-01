@@ -77,7 +77,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="UserManual.html#warnings">2. Warnings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#how-to-install-pylayers">3. How to install PyLayers ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#installation">3. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#dependencies">3.1. Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#setting-of-environment-variables-basename-and-pylayers">3.2. Setting of environment variables $BASENAME and $PYLAYERS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#testing">3.3. Testing</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="UserManual.html#slabs-and-materials">4. Slabs and Materials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="UserManual.html#defining-a-new-slab-and-a-new-material">4.1. Defining a new Slab and a new Material</a></li>
 <li class="toctree-l2"><a class="reference internal" href="UserManual.html#slab-information">4.2. Slab Information</a></li>
@@ -100,57 +105,55 @@
 <li class="toctree-l1"><a class="reference internal" href="UserManual.html#coverage-class">7. Coverage class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="UserManual.html#coverage-with-a-multi-wall-model">8. Coverage with a Multi Wall model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="UserManual.html#calculating-received-power-coverage">9. Calculating Received Power Coverage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#ray-signatures">10. Ray Signatures</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#synthesis-of-ultra-wide-band-waveforms">10.1. Synthesis of Ultra Wide Band Waveforms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#verification-of-energy-normalization-in-both-domains">10.2. Verification of energy normalization in both domains</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calculation-of-uwb-channel-impulse-response">10.3. Calculation of UWB channel impulse response</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#construction-of-the-propagation-channel">10.4. Construction of the propagation channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#construction-of-the-transmission-channel">10.5. Construction of the transmission channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calculate-uwb-channel-impulse-response">10.6. Calculate UWB Channel Impulse Response</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#hermitian-symetry-enforcment">10.7. Hermitian symetry enforcment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#ray-signatures">10. Ray Signatures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#synthesis-of-ultra-wide-band-waveforms">11. Synthesis of Ultra Wide Band Waveforms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#construction-of-the-propagation-channel">11.1. Construction of the propagation channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#construction-of-the-transmission-channel">11.2. Construction of the transmission channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calculate-uwb-channel-impulse-response">11.3. Calculate UWB Channel Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#hermitian-symetry-enforcment">11.4. Hermitian symetry enforcment</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#example-of-an-uwb-channel-ray-tracing-simulation">11. Example of an UWB channel Ray Tracing simulation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#adding-coordinates-of-transmiting-and-receiving-points">11.1. Adding coordinates of transmiting and receiving points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#signatures-rays-and-propagation-and-transmission-channel">11.2. Signatures, rays and propagation and transmission channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calulating-the-propagation-channel">11.3. Calulating the Propagation Channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#apply-waveform">11.4. Apply waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#example-of-an-uwb-channel-ray-tracing-simulation">12. Example of an UWB channel Ray Tracing simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#adding-coordinates-of-transmiting-and-receiving-points">12.1. Adding coordinates of transmiting and receiving points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#signatures-rays-and-propagation-and-transmission-channel">12.2. Signatures, rays and propagation and transmission channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#calulating-the-propagation-channel">12.3. Calulating the Propagation Channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#apply-waveform">12.4. Apply waveform</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#simulation-creation">12. Simulation Creation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#id1">12.1. Adding coordinates of transmiting and receiving points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#signatures-rays-and-channel">12.2. Signatures, Rays and channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#id2">12.3. Apply waveform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#example-of-a-trajectory-synthesis-in-dlr-where2-environment">12.4. Example of a trajectory synthesis in DLR WHERE2 environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#simulation-creation">13. Simulation Creation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#id1">13.1. Adding coordinates of transmiting and receiving points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#signatures-rays-and-channel">13.2. Signatures, Rays and channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#id2">13.3. Apply waveform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#example-of-a-trajectory-synthesis-in-dlr-where2-environment">13.4. Example of a trajectory synthesis in DLR WHERE2 environment</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#algebraic-localization-class">13. Algebraic Localization Class</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#example-of-tdoa">13.1. Example of TDOA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#algebraic-localization-class">14. Algebraic Localization Class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#example-of-tdoa">14.1. Example of TDOA</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#rgpa-robust-geometric-positioning-algorithm">14. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#exploiting-time-of-arrival-toa-only">14.1. Exploiting Time of Arrival (ToA) only</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#rss">14.2. RSS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#tdoa">14.3. TDOA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#rgpa-robust-geometric-positioning-algorithm">15. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#exploiting-time-of-arrival-toa-only">15.1. Exploiting Time of Arrival (ToA) only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#rss">15.2. RSS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#tdoa">15.3. TDOA</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#network-simulation-configuration">15. Network Simulation Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#layout">15.1. Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#network">15.2. Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#mechanics">15.3. Mechanics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#localization">15.4. Localization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#simulation">15.5. Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#network-simulation-configuration">16. Network Simulation Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#layout">16.1. Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#network">16.2. Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#mechanics">16.3. Mechanics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#localization">16.4. Localization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#simulation">16.5. Simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#class-polygon">16. Class Polygon</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#ploting-polygons">16.1. ploting polygons</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#buildgv">16.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#class-polygon">17. Class Polygon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#ploting-polygons">17.1. ploting polygons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#buildgv">17.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UserManual.html#geomview-classes">17. Geomview classes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#geomvect-class">17.1. GeomVect class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#utility-functions">17.2. Utility functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="UserManual.html#useful-functions">17.3. Useful functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserManual.html#geomview-classes">18. Geomview classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#geomvect-class">18.1. GeomVect class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#utility-functions">18.2. Utility functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UserManual.html#useful-functions">18.3. Useful functions</a></li>
 </ul>
 </li>
 </ul>
