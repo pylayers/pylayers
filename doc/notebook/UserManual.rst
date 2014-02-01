@@ -1,9 +1,5 @@
-
-Introduction
-============
-
 What is PyLayers about ?
-------------------------
+========================
 
 PyLayers is an ongoing endeavour to build a versatile, intuitive and
 efficient open-source platform for cross layer studies, deeply rooted in
@@ -56,28 +52,26 @@ PyLayers Keywords
 -  Motion capture
 
 Warnings
---------
+========
 
 This documentation is generated automatically with sphinx from the
 PyLayers source code files on github
-(https://github.com/pylayers/pylayers). It contains at that stage a
-significant number of typos, wrong english expressions, and
-unsufficiently explained features which remain in the source code.
+(https://github.com/pylayers/pylayers).
 
 The collection of notebooks in the doc directory is used as a
 complementary battery of tests using
 `runipy <https://pypi.python.org/pypi/runipy>`__, it is used to track
-regressions and unworking functionalities.
+regressions and broken functionalities as it happens on a regular basis
+in a living project.
 
-It is expected that the magic of ``git`` (an other gi(f)t from Linus
-Torvalds) will gradually improve this document and the code at the same
-time.
+It is expected that the magic of ``git`` will gradually improves
+this document and the code at the same time.
 
-Nothing here is warantee, nothing should be taken for granted. This
+Nothing in PyLayers is guarantee, nothing should be taken for granted. This
 documention is by far not sufficiently peer reviewed at that time to
 have reach a sufficient level of quality. It is expected that there are
 engineers and scientists out there, interested by the PyLayers endeavour
-and are curious to have a try, to provide feed back and to contribute to
+curious to have a try, which will provide feed back and will contribute to
 the necessary continuous improvement of the PyLayers platform.
 
 So, if you see any wrong assertion or have seen any thing that could be
@@ -88,8 +82,8 @@ project <https://github.com/pylayers/pylayers/issues?milestone=1&state=open>`__
 If you find any bug, please keep preciously track of it in a notebook
 and ``gist`` it and send the link on the issues page.
 
-PyLayers's developers are not experts in computer science, sorry for
-that, but they are keen to learn more simple and efficient (== pythonic)
+PyLayers's developers are not experts in computer science,
+but they are keen to learn more simple and efficient (== pythonic)
 manners to do things. So any feedback from advanced Python users is more
 than welcome for any suggestions of improvement about the source code.
 
@@ -100,7 +94,7 @@ needs, and if you wish provide feedback to the project with a **pull
 request**.
 
 How to install PyLayers ?
--------------------------
+=========================
 
 PyLayers is developped on Linux platform. If you are working on a
 Windows platform and you are not familiar with the Python ecosystem, a
@@ -164,29 +158,14 @@ Setting of environment variables $BASENAME and $PYLAYERS
     export PYLAYERS=~/pylayers
     export BASENAME=~/plproject
 
-Installing PyInterval
-~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    get crlibm library first 
-    http://lipforge.ens-lyon.fr/frs/?group_id=8&release_id=123
-
-    if problem for compilation add 
-    CPPFLAGS= -fPIC in scs_lib/Makefile
-
-    sudo easy_install pyinterval
-
 Testing
 ~~~~~~~
 
 make test-code
 
 The Layout class
-----------------
+================
 
-Introduction
-~~~~~~~~~~~~
 
 This section explains the main features of the **Layout** class.
 
@@ -210,10 +189,10 @@ See the following methods of the layout object
 Structure of a Layout
 ~~~~~~~~~~~~~~~~~~~~~
 
-At first a Layout is described by a set of points (negative index) and a
+A Layout is firstly described by a set of points (negative index) and a
 set of segments (positive index).
 
-Points and segments are nodes of the :math:`\mathcal{G}_s` graph.
+Both points and segments are nodes of the :math:`\mathcal{G}_s` graph.
 
 It is required to respect a strict non overlapping rule. **No segments
 can recover partially or totally an other segment**.
@@ -243,13 +222,13 @@ parameters :
 
 -  ``ss_name`` : subsegment slab name
 -  ``ss_z`` : [(zmin1,zmax1),(zmin2,zmax2),...,(zminK,zmaxK))] list of
-   minimum and maximum height of associated subsegments (meters)
+   minimum and maximum heights of associated subsegments (meters)
 
-When appearing in a 3D ray a subsegment should have a unique index
+When appearing in a 3D ray a subsegment has a unique index
 different from the segment index.
 
-The different layout format
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Layout file formats
+~~~~~~~~~~~~~~~~~~~
 
 The layout format has regularly evolved over time and is going to evolve
 again. Currently, the different recognized file extensions are the
@@ -430,30 +409,6 @@ The different graphs associated with the layout are then built
 
     L.build()
 
-.. parsed-literal::
-
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:176: RuntimeWarning: invalid value encountered in arccos
-      pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5088: RuntimeWarning: invalid value encountered in greater
-      isegkeep = isegments[prob>0]
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5090: RuntimeWarning: invalid value encountered in greater
-      dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:152: RuntimeWarning: invalid value encountered in arccos
-      pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:168: RuntimeWarning: invalid value encountered in arccos
-      pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
-
-
-.. parsed-literal::
-
-    [1, 18, 14]
-
-
-.. parsed-literal::
-
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:160: RuntimeWarning: invalid value encountered in arccos
-      pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
-
 
 The topological graph :math:`\mathcal{G}_t` or graph of non overlapping
 cycles.
@@ -554,8 +509,6 @@ are exploited in ``showGs()`` vizualisation method.
 .. code-block:: python
 
     L.display
-
-
 
 .. parsed-literal::
 
@@ -1253,8 +1206,6 @@ Defining a new Slab and a new Material
 
     S.mat['wall2']
 
-
-
 .. parsed-literal::
 
     {'epr': array(2.6),
@@ -1317,38 +1268,37 @@ Defining a new Slab and a new Material
 .. code-block:: python
 
     R=A.R
+
 Slab Information
 ----------------
 
-Each slab contains informations about its constitutive materials
-electromagnetic properties.
+Each slab contains informations about the electromagnetic properties of its constitutive materials.
 
-Below an example for a simple slab, constituted with a single material.
-The slab 'WOOD' is a layer of 4cm 'WOOD' material.
+
+Below is presented an example for a simple slab, constituted with a single material.
+The slab 'WOOD' is defined as a layer of 4cm 'WOOD' material.
+
+``lmatname`` list of material names
 
 .. code-block:: python
 
     S['WOOD']['lmatname']
 
-
-
 .. parsed-literal::
 
     ['WOOD']
 
-
+``lithickname`` list of slab thickness
 
 .. code-block:: python
 
     S['WOOD']['lthick']
 
-
-
 .. parsed-literal::
 
     [0.04]
 
-
+There is also a ``color`` attribute
 
 .. code-block:: python
 
