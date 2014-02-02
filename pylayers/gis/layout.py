@@ -6058,6 +6058,45 @@ class Layout(object):
         waypoint.append((proom2[0], proom2[1]))
         return(waypoint)
 
+    def editor(self):
+        """ invoke interactive layout graphical editor
+
+        Notes
+        -----
+
+        point edition
+
+            m  toggle point edition mode  (CP : Create Point)
+
+                lclic same x
+                rclic same y
+                cclic free point
+
+        segment edition
+
+            [0-f] - display one of the 16 first layers
+            x : save structure
+            o : toggle overlay
+
+        """
+
+        fig = plt.gcf()
+        ax  = fig.add_subplot(111)
+        self.display['nodes']=True
+        self.display['ednodes']=True
+
+        self.af = SelectL(self,fig=fig,ax=ax)
+
+        fig,ax = self.af.show(fig,ax,clear=True)
+
+        self.cid1 = fig.canvas.mpl_connect('button_press_event',
+                                           self.af.OnClick)
+        self.cid2 = fig.canvas.mpl_connect('key_press_event',
+                                           self.af.OnPress)
+        plt.draw()
+        plt.axis('tight')
+        plt.show()
+
     def editorGtk(self):
         """
         """
