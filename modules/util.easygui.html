@@ -70,9 +70,10 @@
             
   <div class="section" id="easygui">
 <span id="id1"></span><h1>easygui<a class="headerlink" href="#easygui" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-pylayers.util.easygui"></span><p>&#64;version: 0.95(2010-06-12)
-&#64;note:
-EasyGui provides an easy-to-use interface for simple GUI interaction
+<span class="target" id="module-pylayers.util.easygui"></span><p>&#64;version: 0.96(2010-08-29)</p>
+<p>&#64;note:
+ABOUT EASYGUI</p>
+<p>EasyGui provides an easy-to-use interface for simple GUI interaction
 with a user.  It does not require the programmer to know anything about
 tkinter, frames, widgets, callbacks or lambda.  All GUI interactions are
 invoked by simple function calls that return results.</p>
@@ -84,6 +85,47 @@ event loops.  IDLE is also a Tkinter application, with its own event loop.  The
 two may conflict, with unpredictable results. If you find that you have
 problems, try running your EasyGui program outside of IDLE.</p>
 <p>Note that EasyGui requires Tk release 8.0 or greater.</p>
+<p>&#64;note:
+LICENSE INFORMATION</p>
+<p>EasyGui version 0.96</p>
+<p>Copyright (c) 2010, Stephen Raymond Ferg</p>
+<p>All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.</li>
+<li>Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.</li>
+<li>The name of the author may not be used to endorse or promote products derived
+from this software without specific prior written permission.</li>
+</ol>
+</div></blockquote>
+<p>THIS SOFTWARE IS PROVIDED BY THE AUTHOR &#8220;AS IS&#8221;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>&#64;note:
+ABOUT THE EASYGUI LICENSE</p>
+<p>This license is what is generally known as the &#8220;modified BSD license&#8221;,
+aka &#8220;revised BSD&#8221;, &#8220;new BSD&#8221;, &#8220;3-clause BSD&#8221;.
+See <a class="reference external" href="http://www.opensource.org/licenses/bsd-license.php">http://www.opensource.org/licenses/bsd-license.php</a></p>
+<p>This license is GPL-compatible.
+See <a class="reference external" href="http://en.wikipedia.org/wiki/License_compatibility">http://en.wikipedia.org/wiki/License_compatibility</a>
+See <a class="reference external" href="http://www.gnu.org/licenses/license-list.html#GPLCompatibleLicenses">http://www.gnu.org/licenses/license-list.html#GPLCompatibleLicenses</a></p>
+<p>The BSD License is less restrictive than GPL.
+It allows software released under the license to be incorporated into proprietary products. 
+Works based on the software may be released under a proprietary license or as closed source software.
+<a class="reference external" href="http://en.wikipedia.org/wiki/BSD_licenses#3">http://en.wikipedia.org/wiki/BSD_licenses#3</a>-<a href="#id2"><span class="problematic" id="id3">clause_license_</span></a>.28.22New_BSD_License.22.29</p>
 <dl class="function">
 <dt id="pylayers.util.easygui.ynbox">
 <tt class="descclassname">pylayers.util.easygui.</tt><tt class="descname">ynbox</tt><big>(</big><em>msg='Shall I continue?'</em>, <em>title=' '</em>, <em>choices=('Yes'</em>, <em>'No')</em>, <em>image=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/easygui.html#ynbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.easygui.ynbox" title="Permalink to this definition">¶</a></dt>
@@ -177,33 +219,6 @@ Return the text of the button that the user selected.</p>
 <p>&#64;arg msg: the msg to be displayed.
 &#64;arg title: the window title
 &#64;arg choices: a list or tuple of the choices to be displayed</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.easygui.floatbox">
-<tt class="descclassname">pylayers.util.easygui.</tt><tt class="descname">floatbox</tt><big>(</big><em>text1='Enter float'</em>, <em>text2=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/easygui.html#floatbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.easygui.floatbox" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>GUI for points</dt>
-<dd>npt is a number of points (default : npt=1)</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.easygui.offsetbox">
-<tt class="descclassname">pylayers.util.easygui.</tt><tt class="descname">offsetbox</tt><big>(</big><em>text1='Enter offset values'</em>, <em>text2=''</em>, <em>default=('0'</em>, <em>'0')</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/easygui.html#offsetbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.easygui.offsetbox" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>GUI for points</dt>
-<dd>npt is a number of points (default : npt=1)</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.easygui.pointbox">
-<tt class="descclassname">pylayers.util.easygui.</tt><tt class="descname">pointbox</tt><big>(</big><em>pt</em>, <em>npt=1</em>, <em>text1='Enter point coordinates'</em>, <em>text2=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/easygui.html#pointbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.easygui.pointbox" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>GUI for points</dt>
-<dd>npt is a number of points (default : npt=1)</dd>
-</dl>
 </dd></dl>
 
 <dl class="function">
@@ -393,26 +408,22 @@ of user settings for an EasyGui application.</p>
 # define a class named Settings as a subclass of EgStore
 #&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;
 class Settings(EgStore):</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>def __init__(self, filename):  # filename is required</dt>
-<dd><p class="first">#&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-# Specify default/initial values for variables that
-# this particular application wants to remember.
-#&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-self.userId = &#8220;&#8221;
-self.targetServer = &#8220;&#8221;</p>
-<p>#&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-# For subclasses of EgStore, these must be
-# the last two statements in  __init__
-#&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-
-self.filename = filename  # this is required
-self.restore()</p>
-<blockquote class="last">
-<div># restore values from the storage file if possible</div></blockquote>
-</dd>
-</dl>
-</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>  <span class="c"># filename is required</span>
+    <span class="c">#-------------------------------------------------</span>
+    <span class="c"># Specify default/initial values for variables that</span>
+    <span class="c"># this particular application wants to remember.</span>
+    <span class="c">#-------------------------------------------------</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">userId</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">targetServer</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+    <span class="c">#-------------------------------------------------</span>
+    <span class="c"># For subclasses of EgStore, these must be</span>
+    <span class="c"># the last two statements in  __init__</span>
+    <span class="c">#-------------------------------------------------</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>  <span class="c"># this is required</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">restore</span><span class="p">()</span>            <span class="c"># restore values from the storage file if possible</span>
+</pre></div>
+</div>
 <p># Example B
 #&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;
 # create settings, a persistent Settings object

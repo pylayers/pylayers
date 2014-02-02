@@ -97,81 +97,79 @@
 <li><a class="reference internal" href="#channel-variability-due-to-different-layout-constitutive-materials">5.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#multi-wall-model">6. Multi-wall model</a><ul>
-<li><a class="reference internal" href="#defining-a-radio-link">6.1. Defining a radio link</a></li>
-<li><a class="reference internal" href="#ploting-the-scene">6.2. Ploting the scene</a><ul>
-<li><a class="reference internal" href="#finding-the-intersection-between-the-direct-path-and-the-walls">6.2.1. Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
-<li><a class="reference internal" href="#computing-the-multi-wall-model">6.2.2. Computing the Multi-wall model</a></li>
+<li><a class="reference internal" href="#electromagnetic-simulation">6. Electromagnetic Simulation</a><ul>
+<li><a class="reference internal" href="#mutliwall-model">6.1. Mutliwall Model</a><ul>
+<li><a class="reference internal" href="#computing-the-multi-wall-model">6.1.1. Computing the Multi-wall model</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#the-coverage-class">6.2. The Coverage class</a></li>
+<li><a class="reference internal" href="#ray-signatures">6.3. Ray Signatures</a></li>
+<li><a class="reference internal" href="#synthesis-of-ultra-wide-band-waveforms">6.4. Synthesis of Ultra Wide Band Waveforms</a><ul>
+<li><a class="reference internal" href="#calculation-of-uwb-channel-impulse-response">6.4.1. Calculation of UWB channel impulse response</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#coverage-class">7. Coverage class</a></li>
-<li><a class="reference internal" href="#coverage-with-a-multi-wall-model">8. Coverage with a Multi Wall model</a></li>
-<li><a class="reference internal" href="#calculating-received-power-coverage">9. Calculating Received Power Coverage</a></li>
-<li><a class="reference internal" href="#ray-signatures">10. Ray Signatures</a></li>
-<li><a class="reference internal" href="#synthesis-of-ultra-wide-band-waveforms">11. Synthesis of Ultra Wide Band Waveforms</a><ul>
-<li><a class="reference internal" href="#construction-of-the-propagation-channel">11.1. Construction of the propagation channel</a></li>
-<li><a class="reference internal" href="#construction-of-the-transmission-channel">11.2. Construction of the transmission channel</a></li>
-<li><a class="reference internal" href="#calculate-uwb-channel-impulse-response">11.3. Calculate UWB Channel Impulse Response</a></li>
-<li><a class="reference internal" href="#hermitian-symetry-enforcment">11.4. Hermitian symetry enforcment</a></li>
+<li><a class="reference internal" href="#construction-of-the-propagation-channel">6.5. Construction of the propagation channel</a></li>
+<li><a class="reference internal" href="#construction-of-the-transmission-channel">6.6. Construction of the transmission channel</a></li>
+<li><a class="reference internal" href="#calculate-uwb-channel-impulse-response">6.7. Calculate UWB Channel Impulse Response</a></li>
+<li><a class="reference internal" href="#hermitian-symetry-enforcment">6.8. Hermitian symetry enforcment</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#example-of-an-uwb-channel-ray-tracing-simulation">12. Example of an UWB channel Ray Tracing simulation</a><ul>
-<li><a class="reference internal" href="#adding-coordinates-of-transmiting-and-receiving-points">12.1. Adding coordinates of transmiting and receiving points</a></li>
-<li><a class="reference internal" href="#signatures-rays-and-propagation-and-transmission-channel">12.2. Signatures, rays and propagation and transmission channel</a></li>
-<li><a class="reference internal" href="#calulating-the-propagation-channel">12.3. Calulating the Propagation Channel</a></li>
-<li><a class="reference internal" href="#apply-waveform">12.4. Apply waveform</a></li>
+<li><a class="reference internal" href="#example-of-an-uwb-channel-ray-tracing-simulation">7. Example of an UWB channel Ray Tracing simulation</a><ul>
+<li><a class="reference internal" href="#adding-coordinates-of-transmiting-and-receiving-points">7.1. Adding coordinates of transmiting and receiving points</a></li>
+<li><a class="reference internal" href="#signatures-rays-and-propagation-and-transmission-channel">7.2. Signatures, rays and propagation and transmission channel</a></li>
+<li><a class="reference internal" href="#calulating-the-propagation-channel">7.3. Calulating the Propagation Channel</a></li>
+<li><a class="reference internal" href="#apply-waveform">7.4. Apply waveform</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#simulation-creation">13. Simulation Creation</a><ul>
-<li><a class="reference internal" href="#id1">13.1. Adding coordinates of transmiting and receiving points</a></li>
-<li><a class="reference internal" href="#signatures-rays-and-channel">13.2. Signatures, Rays and channel</a></li>
-<li><a class="reference internal" href="#id2">13.3. Apply waveform</a></li>
-<li><a class="reference internal" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment">13.4. Example of a trajectory synthesis in DLR WHERE2 environment</a></li>
+<li><a class="reference internal" href="#simulation-creation">8. Simulation Creation</a><ul>
+<li><a class="reference internal" href="#id1">8.1. Adding coordinates of transmiting and receiving points</a></li>
+<li><a class="reference internal" href="#signatures-rays-and-channel">8.2. Signatures, Rays and channel</a></li>
+<li><a class="reference internal" href="#id2">8.3. Apply waveform</a></li>
+<li><a class="reference internal" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment">8.4. Example of a trajectory synthesis in DLR WHERE2 environment</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#algebraic-localization-class">14. Algebraic Localization Class</a><ul>
-<li><a class="reference internal" href="#example-of-tdoa">14.1. Example of TDOA</a></li>
+<li><a class="reference internal" href="#algebraic-localization-class">9. Algebraic Localization Class</a><ul>
+<li><a class="reference internal" href="#example-of-tdoa">9.1. Example of TDOA</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#rgpa-robust-geometric-positioning-algorithm">15. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
-<li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">15.1. Exploiting Time of Arrival (ToA) only</a></li>
-<li><a class="reference internal" href="#rss">15.2. RSS</a></li>
-<li><a class="reference internal" href="#tdoa">15.3. TDOA</a></li>
+<li><a class="reference internal" href="#rgpa-robust-geometric-positioning-algorithm">10. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">10.1. Exploiting Time of Arrival (ToA) only</a></li>
+<li><a class="reference internal" href="#rss">10.2. RSS</a></li>
+<li><a class="reference internal" href="#tdoa">10.3. TDOA</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#network-simulation-configuration">16. Network Simulation Configuration</a><ul>
-<li><a class="reference internal" href="#layout">16.1. Layout</a></li>
-<li><a class="reference internal" href="#network">16.2. Network</a></li>
-<li><a class="reference internal" href="#mechanics">16.3. Mechanics</a></li>
-<li><a class="reference internal" href="#localization">16.4. Localization</a></li>
-<li><a class="reference internal" href="#simulation">16.5. Simulation</a></li>
+<li><a class="reference internal" href="#network-simulation-configuration">11. Network Simulation Configuration</a><ul>
+<li><a class="reference internal" href="#layout">11.1. Layout</a></li>
+<li><a class="reference internal" href="#network">11.2. Network</a></li>
+<li><a class="reference internal" href="#mechanics">11.3. Mechanics</a></li>
+<li><a class="reference internal" href="#localization">11.4. Localization</a></li>
+<li><a class="reference internal" href="#simulation">11.5. Simulation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#class-polygon">17. Class Polygon</a><ul>
-<li><a class="reference internal" href="#ploting-polygons">17.1. ploting polygons</a></li>
-<li><a class="reference internal" href="#buildgv">17.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
+<li><a class="reference internal" href="#geomutil-class">12. Geomutil Class</a></li>
+<li><a class="reference internal" href="#class-polygon">13. Class Polygon</a><ul>
+<li><a class="reference internal" href="#ploting-polygons">13.1. ploting polygons</a></li>
+<li><a class="reference internal" href="#buildgv">13.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#geomview-classes">18. Geomview classes</a><ul>
-<li><a class="reference internal" href="#geomvect-class">18.1. GeomVect class</a><ul>
-<li><a class="reference internal" href="#geombase">18.1.1. geomBase</a></li>
-<li><a class="reference internal" href="#points">18.1.2. points</a></li>
-<li><a class="reference internal" href="#plotting-a-box">18.1.3. plotting a box</a></li>
+<li><a class="reference internal" href="#geomview-classes">14. Geomview classes</a><ul>
+<li><a class="reference internal" href="#geomvect-class">14.1. GeomVect class</a><ul>
+<li><a class="reference internal" href="#geombase">14.1.1. geomBase</a></li>
+<li><a class="reference internal" href="#points">14.1.2. points</a></li>
+<li><a class="reference internal" href="#plotting-a-box">14.1.3. plotting a box</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#utility-functions">18.2. Utility functions</a><ul>
-<li><a class="reference internal" href="#angledir">18.2.1. angledir</a></li>
-<li><a class="reference internal" href="#linet">18.2.2. linet</a></li>
-<li><a class="reference internal" href="#dptseg-p-pt-ph">18.2.3. dptseg(p,pt,ph)</a></li>
-<li><a class="reference internal" href="#displot">18.2.4. displot</a></li>
-<li><a class="reference internal" href="#ptonseg-pta-phe-pt">18.2.5. ptonseg(pta,phe,pt)</a></li>
-<li><a class="reference internal" href="#ptconvex">18.2.6. ptconvex</a></li>
-<li><a class="reference internal" href="#intersect">18.2.7. intersect</a></li>
+<li><a class="reference internal" href="#utility-functions">14.2. Utility functions</a><ul>
+<li><a class="reference internal" href="#angledir">14.2.1. angledir</a></li>
+<li><a class="reference internal" href="#linet">14.2.2. linet</a></li>
+<li><a class="reference internal" href="#dptseg-p-pt-ph">14.2.3. dptseg(p,pt,ph)</a></li>
+<li><a class="reference internal" href="#displot">14.2.4. displot</a></li>
+<li><a class="reference internal" href="#ptonseg-pta-phe-pt">14.2.5. ptonseg(pta,phe,pt)</a></li>
+<li><a class="reference internal" href="#ptconvex">14.2.6. ptconvex</a></li>
+<li><a class="reference internal" href="#intersect">14.2.7. intersect</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#useful-functions">18.3. Useful functions</a></li>
+<li><a class="reference internal" href="#useful-functions">14.3. Useful functions</a></li>
 </ul>
 </li>
 </ul>
@@ -1438,8 +1436,14 @@ nl : 4048</pre>
 <img alt="./GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" />
 </div>
 </div>
-<div class="section" id="multi-wall-model">
-<h1>6. Multi-wall model<a class="headerlink" href="#multi-wall-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="electromagnetic-simulation">
+<h1>6. Electromagnetic Simulation<a class="headerlink" href="#electromagnetic-simulation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="mutliwall-model">
+<h2>6.1. Mutliwall Model<a class="headerlink" href="#mutliwall-model" title="Permalink to this headline">¶</a></h2>
+<p>The multiwall model is an adaptation of the Motley Keenan model. It determines
+the LOS attenuation between Tx and Rx in addoin to free space attenuation the
+losses in the crossed wall takin into account incidence angle, frequency,
+polarisation and constitutive properties of slabs.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
@@ -1450,27 +1454,18 @@ nl : 4048</pre>
 <span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>The layout is loaded from an <cite>ini</cite> file. If graphs are not already created,
-they are built.</p>
+<p>The layout is loaded from an <cite>ini</cite> file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="defining-a-radio-link">
-<h2>6.1. Defining a radio link<a class="headerlink" href="#defining-a-radio-link" title="Permalink to this headline">¶</a></h2>
 <p>The 2 extremities of the radio link are coordinates in <tt class="docutils literal"><span class="pre">numpy.array</span></tt>
-of transmitter and receiver.</p>
-<ul class="simple">
-<li>A a radio node</li>
-<li>B a radio node</li>
-</ul>
+of transmitter and receiver. <cite>A</cite> and  <cite>B</cite> are radionodes at the two
+termination of the radio link.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="c"># defining transmitter position</span>
 <span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span> <span class="c"># defining receiver position</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="ploting-the-scene">
-<h2>6.2. Ploting the scene<a class="headerlink" href="#ploting-the-scene" title="Permalink to this headline">¶</a></h2>
-<p>The scene is plotted with the <tt class="docutils literal"><span class="pre">showG</span></tt> method of the Layout</p>
+<p>The scene is plotted with the <tt class="docutils literal"><span class="pre">showG</span></tt> method of the Layout.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># figure instanciation</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -1486,22 +1481,14 @@ of transmitter and receiver.</p>
 </pre></div>
 </div>
 <img alt="./AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" />
-<div class="section" id="finding-the-intersection-between-the-direct-path-and-the-walls">
-<h3>6.2.1. Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
 <p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
 and the corresponding incidence angles (in radians) with respect to the
 segment normal.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">pdef</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span>
-</pre></div>
-</div>
-<div class="highlight-python"><pre>[0mL[0m[1;33m.[0m[0mangleonlink[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mp1[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m0[0m[1;33m,[0m [1;36m0[0m[1;33m][0m[1;33m)[0m[1;33m,[0m [0mp2[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m10[0m[1;33m,[0m  [1;36m3[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m</pre>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">data</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
 <div class="section" id="computing-the-multi-wall-model">
-<h3>6.2.2. Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.1. Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
 <p>The multi-wall model computation returns losses and LOS excess delay for
 orthogonal and parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="mf">2.4</span>
@@ -1524,50 +1511,20 @@ Excess delay parallel polarization           2.12364 ns</pre>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="coverage-class">
-<h1>7. Coverage class<a class="headerlink" href="#coverage-class" title="Permalink to this headline">¶</a></h1>
-<p>By extension, the multi-wall model can also be used to perform a full
+<div class="section" id="the-coverage-class">
+<h2>6.2. The Coverage class<a class="headerlink" href="#the-coverage-class" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes it might be useful to get a fast estimate about losses in
+a given indoor environment. Ray tracing is generally time consuming
+and depending on the purpose of the study it could be relevant to
+proceed with a simpler approach while staying site-specific.
+<tt class="docutils literal"><span class="pre">PyLayers</span></tt> provides such a tool which heavily relies on the core
+module <tt class="docutils literal"><span class="pre">slab.py</span></tt></p>
+<p>The multi-wall model can also be used to perform a full
 coverage of a Layout given a transmitter position.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span>  <span class="o">=</span> <span class="n">L</span> <span class="c"># set layout</span>
 <span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">A</span> <span class="c"># set the transmitter</span>
 </pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">L</span>
-</pre></div>
-</div>
-<div class="highlight-python"><pre>----------------
-TA-Office.ini
-Image('/home/uguen/Bureau/P1/struc/images/DLR4991.png')
-----------------
-
-Number of points  : 71
-Number of segments  : 87
-Number of sub segments  : 16
-Number of cycles  : 0
-Number of rooms  : 0
-degree 0 : []
-degree 1 : []
-degree 2 : 39
-degree 3 : 32
-
-xrange :(0.0, 40.0)
-yrange :(0.0, 15.0)
-
-Useful dictionnaries
-----------------
-sl {slab name : slab dictionary}
-name :  {slab :seglist}
-
-Useful arrays
-----------------
-tsg : get segment index in Gs from tahe
-isss :  sub-segment index above Nsmax
-tgs : get segment index in tahe from Gs
-lsss : list of segments with sub-segment
-sla : list of all slab names (Nsmax+Nss+1)
-degree : degree of nodes</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">creategrid</span><span class="p">()</span>
 </pre></div>
@@ -1592,9 +1549,10 @@ the coverage.ini file</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Coverage performed in  1.34146499634 s</pre>
+<div class="highlight-python"><pre>Coverage performed in  1.34146499634 s
+
+For Orthogonal polarization</pre>
 </div>
-<p>For Orthogonal polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig1</span><span class="p">)</span>
 
@@ -1614,83 +1572,6 @@ the coverage.ini file</p>
 </div>
 <img alt="./AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" />
 <img alt="./AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" />
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script></div>
-<div class="section" id="coverage-with-a-multi-wall-model">
-<h1>8. Coverage with a Multi Wall model<a class="headerlink" href="#coverage-with-a-multi-wall-model" title="Permalink to this headline">¶</a></h1>
-<blockquote>
-<div>Sometimes it might be useful to get a fast estimate about losses in
-a given indoor environment. Ray tracing is generally time consuming
-and depending on the purpose of the study it could be relevant to
-proceed with a simpler approach while staying site-specific.
-<tt class="docutils literal"><span class="pre">PyLayers</span></tt> provides such a tool which heavily relies on the core
-module <tt class="docutils literal"><span class="pre">slab.py</span></tt></div></blockquote>
 <p>First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -1774,16 +1655,14 @@ plm : {'fghz': '3.0', 'rssnp': '2.64', 'd0': '1.0', 'sigrss': '3.0'}</pre>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="calculating-received-power-coverage">
-<h1>9. Calculating Received Power Coverage<a class="headerlink" href="#calculating-received-power-coverage" title="Permalink to this headline">¶</a></h1>
+<p>Calculating Received Power Coverage</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="./AP-coverage_files/AP-coverage_11_1.png" src="./AP-coverage_files/AP-coverage_11_1.png" />
-<p>Then, the coverage calculation is launched by calling the <tt class="docutils literal"><span class="pre">cover()</span></tt>
+<p>The coverage calculation is launched by calling the <tt class="docutils literal"><span class="pre">cover()</span></tt>
 method</p>
 <p>The shadowing map coverage results can be displayed by invoquing various
 functions.</p>
@@ -1833,8 +1712,7 @@ different frequencies</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span>  <span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>This can be modified on the flight, and the coverage is updated
-accordingly</p>
+<p>This can be modified on the flight, and the coverage is updated accordingly</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">100</span>
 <span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">21</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 
@@ -1846,77 +1724,10 @@ accordingly</p>
 </div>
 <img alt="./AP-coverage_files/AP-coverage_21_0.png" src="./AP-coverage_files/AP-coverage_21_0.png" />
 <img alt="./AP-coverage_files/AP-coverage_21_1.png" src="./AP-coverage_files/AP-coverage_21_1.png" />
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><p>The excess delay due to crossing the wall can also be evaluted.</p>
+<p>The excess delay due to crossing the wall can also be evaluted.</p>
 </div>
 <div class="section" id="ray-signatures">
-<h1>10. Ray Signatures<a class="headerlink" href="#ray-signatures" title="Permalink to this headline">¶</a></h1>
+<h2>6.3. Ray Signatures<a class="headerlink" href="#ray-signatures" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1993,76 +1804,9 @@ interactions.</p>
 <div class="highlight-python"><pre>[ 8.35174751  0.30020702]
 [ 3.43281369  0.44106546]</pre>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
 </div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script></div>
 <div class="section" id="synthesis-of-ultra-wide-band-waveforms">
-<h1>11. Synthesis of Ultra Wide Band Waveforms<a class="headerlink" href="#synthesis-of-ultra-wide-band-waveforms" title="Permalink to this headline">¶</a></h1>
+<h2>6.4. Synthesis of Ultra Wide Band Waveforms<a class="headerlink" href="#synthesis-of-ultra-wide-band-waveforms" title="Permalink to this headline">¶</a></h2>
 <p>Once the propagation channel has been evaluated. This is done in the
 <tt class="docutils literal"><span class="pre">pylayers.antprop.channel</span></tt> module. The received signal is evaluated in
 applying a convolution product of each ray tranfer function with a
@@ -2080,6 +1824,7 @@ electromagnetic simulation.</p>
 <span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
+<p>Generation of a pulse of normalized energy</p>
 <p>One possible manner to define an energy normalized short UWB pulse is
 as follows using <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt> function.</p>
 <p>The default waveform is a gaussian windowing of a sine wave of frequency
@@ -2110,6 +1855,7 @@ xmax : 1.71
 ymin : -1.89545539648
 ymax : 2.16154131873</pre>
 </div>
+<p>Verification of energy normalization in both domains</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">E1</span><span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
 <span class="k">print</span> <span class="s">&quot;Integration in time&quot;</span><span class="p">,</span><span class="n">E1</span>
 </pre></div>
@@ -2123,6 +1869,8 @@ ymax : 2.16154131873</pre>
 </div>
 <div class="highlight-python"><pre>Integration in frequency domain  1.0</pre>
 </div>
+<div class="section" id="calculation-of-uwb-channel-impulse-response">
+<h3>6.4.1. Calculation of UWB channel impulse response<a class="headerlink" href="#calculation-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h3>
 <p>We choose to load a simple floor plan.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
@@ -2283,16 +2031,16 @@ bandGHz  :  0.499</pre>
 </div>
 <img alt="./PHY-signal_files/PHY-signal_18_0.png" src="./PHY-signal_files/PHY-signal_18_0.png" />
 <p>Above the waveform is a generic UWB waveform. The interested user can
-add easyly any other mathematical expression of UWB waveform for
+add easily any other mathematical expression of UWB waveform for
 investigation on pulse waveform modulation for example. The waveform can
-also comes from measurement. For now there are two version of this
+also comes from measurement. For now there are two versions of this
 waveform which has been used during the M1 measurement campaign. One is
 not compensated <tt class="docutils literal"><span class="pre">W1compensate</span></tt> for an extra short delay which can
-introduse a bias when interpretating the observed delay in terms of
+introduce a bias when interpreting the observed delay in terms of
 distance. The non compensated version is <tt class="docutils literal"><span class="pre">W1offset</span></tt> from the time
 origin about 0.7 ns.</p>
 <p>The waveform class should grow for incorporating more waveforms,
-especially waveforms compliants with the current IEEE 802.15.4a and IEEE
+especially waveforms compliant with the current IEEE 802.15.4a and IEEE
 802.15.6 standards.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wavmeasured</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
 <span class="n">wavmeasured</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -2325,8 +2073,10 @@ representation.</p>
 <li><tt class="docutils literal"><span class="pre">FUsignal</span></tt> Frequency domain uniformly sampled base signal</li>
 <li><tt class="docutils literal"><span class="pre">TUsignal</span></tt> Time domain uniformly sampled base signal</li>
 </ul>
+</div>
+</div>
 <div class="section" id="construction-of-the-propagation-channel">
-<h2>11.1. Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<h2>6.5. Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <p>The following representation shows the spatial spreading of the
 propagation channel. On the left are scattered the intensity of rays wrt
 to angles of departure (in azimut and elevation). On the right is the
@@ -2426,7 +2176,7 @@ the phase term due to delay along the ray.</p>
 </div>
 </div>
 <div class="section" id="construction-of-the-transmission-channel">
-<h2>11.2. Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<h2>6.6. Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <p>The transmission channel is obtained from the combination of the
 propagation channel <img class="math" src="../_images/math/87014c4cc01fa3b85528899e96ea01ad3676c1eb.png" alt="\tilde{\mathbf{C}}"/> and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
@@ -2465,7 +2215,7 @@ modulus and phase of the ray transfer function.</p>
 </div>
 </div>
 <div class="section" id="calculate-uwb-channel-impulse-response">
-<h2>11.3. Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<h2>6.7. Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
 <p>Once the transmission channel has been evaluated on can convolved the
 waveform with the channel impulse response to get the received waveform.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
@@ -2497,9 +2247,9 @@ waveform with the channel impulse response to get the received waveform.</p>
 <img alt="./PHY-signal_files/PHY-signal_54_1.png" src="./PHY-signal_files/PHY-signal_54_1.png" />
 </div>
 <div class="section" id="hermitian-symetry-enforcment">
-<h2>11.4. Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
+<h2>6.8. Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
 <p>If the number of point for the transmission channel and the waveform
-were the same the mathematical operation is an Hadamrd-Shur product
+were the same the mathematical operation is an Hadamard-Shur product
 between <img class="math" src="../_images/math/669fb203c2329b8b404de01e7a228bd7c8ca1461.png" alt="\mathbf{Y}"/> and <img class="math" src="../_images/math/3d297b08b2be3554447c92b5982773d47c0de100.png" alt="\mathbf{W}"/>.</p>
 <p><img class="math" src="../_images/math/fbf1075a3606b9534a58cd9bfadac1148e9692ed.png" alt="\mathbf{Y} = \mathbf{S} \odot \mathbf{W}"/></p>
 <p>In practice this is what is done after a resampling of the time base
@@ -2607,7 +2357,7 @@ delay introduced by dielectrics material crossing.</p>
 </div>
 </div>
 <div class="section" id="example-of-an-uwb-channel-ray-tracing-simulation">
-<h1>12. Example of an UWB channel Ray Tracing simulation<a class="headerlink" href="#example-of-an-uwb-channel-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
+<h1>7. Example of an UWB channel Ray Tracing simulation<a class="headerlink" href="#example-of-an-uwb-channel-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
 <p>In the following, all steps required for going from the descrpition of
 the radio scene until the calculation of the UWB channel impulse
 response is described on a simple example.</p>
@@ -2655,7 +2405,7 @@ dictionnary member of the Layout object.which allows to configure the
 </div>
 <img alt="./SIM-raytracing_files/SIM-raytracing_7_0.png" src="./SIM-raytracing_files/SIM-raytracing_7_0.png" />
 <div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
-<h2>12.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
+<h2>7.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation are stored
 in <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
 RadioNode which offers different methods for specifying nodes positions.
@@ -2745,7 +2495,7 @@ represented below. Not all cycles are rooms.</p>
 </div>
 </div>
 <div class="section" id="signatures-rays-and-propagation-and-transmission-channel">
-<h2>12.2. Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<h2>7.2. Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Choose Tx and Rx coordinates</span>
 <span class="n">itx</span><span class="o">=</span><span class="mi">10</span>
 <span class="n">irx</span><span class="o">=</span><span class="mi">2</span>
@@ -2900,7 +2650,7 @@ nl : 2504</pre>
 </div>
 </div>
 <div class="section" id="calulating-the-propagation-channel">
-<h2>12.3. Calulating the Propagation Channel<a class="headerlink" href="#calulating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<h2>7.3. Calulating the Propagation Channel<a class="headerlink" href="#calulating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <p>The propagation channel is a <tt class="docutils literal"><span class="pre">Ctilde</span></tt> object. This object can be
 evaluated for different frequency point thanks to the <tt class="docutils literal"><span class="pre">eval()</span></tt> method
 with a frequency array as argument.</p>
@@ -3006,7 +2756,7 @@ shape Cpp : (210, 181)</pre>
 </div>
 </div>
 <div class="section" id="apply-waveform">
-<h2>12.4. Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
+<h2>7.4. Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
 <p>Once the propagation channel is obtained the transmission channel is
 calculated with the method <tt class="docutils literal"><span class="pre">prop2tran</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
@@ -3052,7 +2802,7 @@ waveform to the transmission channel.</p>
 </div>
 </div>
 <div class="section" id="simulation-creation">
-<h1>13. Simulation Creation<a class="headerlink" href="#simulation-creation" title="Permalink to this headline">¶</a></h1>
+<h1>8. Simulation Creation<a class="headerlink" href="#simulation-creation" title="Permalink to this headline">¶</a></h1>
 <p>A ray-tracing simulation is controlled via a configuration file which is
 stored in the <em>ini</em> directory of the project directory. By default,
 there is a default configuration file named <strong>default.ini</strong>.</p>
@@ -3122,7 +2872,7 @@ dictionnary member of the Layout object.</p>
 </pre></div>
 </div>
 <div class="section" id="id1">
-<h2>13.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>8.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation to be
 perform are stotred in <strong>.ini</strong> files. Transmitter and Receiver are
 instances of the class <tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for
@@ -3241,7 +2991,7 @@ Rxs OK</pre>
 </div>
 </div>
 <div class="section" id="signatures-rays-and-channel">
-<h2>13.2. Signatures, Rays and channel<a class="headerlink" href="#signatures-rays-and-channel" title="Permalink to this headline">¶</a></h2>
+<h2>8.2. Signatures, Rays and channel<a class="headerlink" href="#signatures-rays-and-channel" title="Permalink to this headline">¶</a></h2>
 <p>A signature is a sequence of layout objects (points and segments) which
 are involved in a given optical ray joinint the transmiter and the
 receiver. The signatutre is calculated from a layout cycle to an other
@@ -3495,7 +3245,7 @@ nl : 1027</pre>
 </div>
 </div>
 <div class="section" id="id2">
-<h2>13.3. Apply waveform<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<h2>8.3. Apply waveform<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">freq</span>
 <span class="n">sco</span><span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
 <span class="n">sca</span><span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
@@ -3623,7 +3373,7 @@ rotation matrix# [0] type: B
 <img alt="./SIM-where1_files/SIM-where1_49_0.png" src="./SIM-where1_files/SIM-where1_49_0.png" />
 </div>
 <div class="section" id="example-of-a-trajectory-synthesis-in-dlr-where2-environment">
-<h2>13.4. Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h2>
+<h2>8.4. Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
@@ -3841,7 +3591,7 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 </div>
 </div>
 <div class="section" id="algebraic-localization-class">
-<h1>14. Algebraic Localization Class<a class="headerlink" href="#algebraic-localization-class" title="Permalink to this headline">¶</a></h1>
+<h1>9. Algebraic Localization Class<a class="headerlink" href="#algebraic-localization-class" title="Permalink to this headline">¶</a></h1>
 <p>For localization in the plane it is important not to provide the z
 coordinates. Otherwise a singularity problem arises.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -3899,7 +3649,7 @@ LDPs :{'TOA_std': array([1, 1, 1]), 'TOA': array([ 1.41421356,  1.41421356,  1. 
 </pre></div>
 </div>
 <div class="section" id="example-of-tdoa">
-<h2>14.1. Example of TDOA<a class="headerlink" href="#example-of-tdoa" title="Permalink to this headline">¶</a></h2>
+<h2>9.1. Example of TDOA<a class="headerlink" href="#example-of-tdoa" title="Permalink to this headline">¶</a></h2>
 <p>First, it is necesary to define Anchor nodes and associated Reference
 Anchor Nodes. This is important to be very specific about what exactly
 the TDOA is. In the example the Blin node is draw randomly as well as
@@ -4068,9 +3818,9 @@ distance p-4= 18.0277563773 / toa3= 60.0925212577</pre>
 </div>
 </div>
 <div class="section" id="rgpa-robust-geometric-positioning-algorithm">
-<h1>15. RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
+<h1>10. RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="exploiting-time-of-arrival-toa-only">
-<h2>15.1. Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
+<h2>10.1. Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
 <p>We call <tt class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></tt> (CLA) the object which gathers all
 the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
@@ -4153,7 +3903,7 @@ TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0</
 </div>
 </div>
 <div class="section" id="rss">
-<h2>15.2. RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
+<h2>10.2. RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
 <p>The RSS is a quantity which is weakly related to distance via a
 parametric model. The bettet the model, better would be tthe inference
 ab out tthe associated distance. t To model the Path Loss shadowing
@@ -4179,7 +3929,7 @@ with the above model</p>
 </div>
 </div>
 <div class="section" id="tdoa">
-<h2>15.3. TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
+<h2>10.3. TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Td1</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt2</span><span class="p">]))</span>
 <span class="n">Td2</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt3</span><span class="p">]))</span>
 <span class="n">Td3</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt4</span><span class="p">]))</span>
@@ -4216,81 +3966,14 @@ TDOA 1.375</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.021</span><span class="p">,</span>  <span class="mf">4.987</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">ConfigParser</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="network-simulation-configuration">
-<h1>16. Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
+<h1>11. Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
 <p>PyLayers is designed to provide indoor radio channel simulation for
 mobile agents.</p>
 <p>The goal is to adress mobility in indoor environement heterogeneous
@@ -4418,7 +4101,7 @@ verbose = True</pre>
 <div class="highlight-python"><pre>ls: impossible d'accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type</pre>
 </div>
 <div class="section" id="layout">
-<h2>16.1. Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<h2>11.1. Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
 <p>This section allow setup the layout for the simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
 </pre></div>
@@ -4449,7 +4132,7 @@ verbose = True</pre>
 </div>
 </div>
 <div class="section" id="network">
-<h2>16.2. Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h2>
+<h2>11.2. Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -4506,7 +4189,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="mechanics">
-<h2>16.3. Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
+<h2>11.3. Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
 <p>This section allow to setup the agent movement during simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
 </pre></div>
@@ -4535,7 +4218,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="localization">
-<h2>16.4. Localization<a class="headerlink" href="#localization" title="Permalink to this headline">¶</a></h2>
+<h2>11.4. Localization<a class="headerlink" href="#localization" title="Permalink to this headline">¶</a></h2>
 <p>Setup Localization algorithms</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))</span>
 </pre></div>
@@ -4572,7 +4255,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="simulation">
-<h2>16.5. Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
+<h2>11.5. Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -4605,94 +4288,12 @@ periodically refreshed at the network_update_time</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">FileLink</span>
-<span class="n">FileLink</span><span class="p">(</span><span class="s">&#39;Mobility.ipynb&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of being generated, or you may have the incorrect path.<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
-
-<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
-    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
-<span class="n">css_styling</span><span class="p">()</span>
-</pre></div>
-</div>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><div class="highlight-python"><div class="highlight"><pre>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Latex</span><span class="p">,</span> <span class="n">YouTubeVideo</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#YouTubeVideo(&#39;1Qa6xLpU5-M&#39;)</span>
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">as</span> <span class="nn">traj</span>
 <span class="kn">from</span> <span class="nn">pylayers.mobility.body.body</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>trajectories can be imported from a simulnet simulation with the
-<tt class="docutils literal"><span class="pre">importsn</span></tt> method</p>
+<p>trajectories can be imported from a simulnet simulation with the <tt class="docutils literal"><span class="pre">importsn</span></tt> method</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -4711,69 +4312,11 @@ Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of 
 </div>
 <img alt="./MOB-mobility_files/MOB-mobility_7_0.png" src="./MOB-mobility_files/MOB-mobility_7_0.png" />
 <img alt="./SIM-workflow_files/SIM-workflow_4_0.png" src="./SIM-workflow_files/SIM-workflow_4_0.png" />
-<p>nbconvert Workflow.ipynb -o latex</p>
-<p>padflatex Workflow.tex</p>
-<p>This is a latex equation <img class="math" src="../_images/math/4805dddb4e6911989af8be91da334b5ba2054757.png" alt="\sqrt{x}"/></p>
-<style>
-    @font-face {
-        font-family: "Computer Modern";
-        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-    }
-    div.cell{
-        width:800px;
-        margin-left:16% !important;
-        margin-right:auto;
-    }
-    h1 {
-        font-family: Helvetica, serif;
-    }
-    h4{
-        margin-top:12px;
-        margin-bottom: 3px;
-       }
-    div.text_cell_render{
-        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-        line-height: 145%;
-        font-size: 130%;
-        width:800px;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    .CodeMirror{
-            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-    }
-    .prompt{
-        display: None;
-    }
-    .text_cell_render h5 {
-        font-weight: 300;
-        font-size: 22pt;
-        color: #4057A1;
-        font-style: italic;
-        margin-bottom: .5em;
-        margin-top: 0.5em;
-        display: block;
-    }
-
-    .warning{
-        color: rgb( 240, 20, 20 )
-        }
-</style>
-<script>
-    MathJax.Hub.Config({
-                        TeX: {
-                           extensions: ["AMSmath.js"]
-                           },
-                tex2jax: {
-                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                },
-                displayAlign: 'center', // Change this to 'center' to center equations.
-                "HTML-CSS": {
-                    styles: {'.MathJax_Display': {"margin": 4}}
-                }
-        });
-</script><p><strong>Geomutil</strong> is a module which gathers different geometrical functions
+</div>
+</div>
+<div class="section" id="geomutil-class">
+<h1>12. Geomutil Class<a class="headerlink" href="#geomutil-class" title="Permalink to this headline">¶</a></h1>
+<p><strong>Geomutil</strong> is a module which gathers different geometrical functions
 used in other modeule of pylayers.</p>
 <p>The importation is done as below. The geoutil alias is <em>geu</em></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
@@ -4782,9 +4325,8 @@ used in other modeule of pylayers.</p>
 </pre></div>
 </div>
 </div>
-</div>
 <div class="section" id="class-polygon">
-<h1>17. Class Polygon<a class="headerlink" href="#class-polygon" title="Permalink to this headline">¶</a></h1>
+<h1>13. Class Polygon<a class="headerlink" href="#class-polygon" title="Permalink to this headline">¶</a></h1>
 <p>This class is important because it implements the visibility graph, of a
 Polygon.</p>
 <p>The Polygon class is a subclass of the shapely polygon class. It allows
@@ -4802,7 +4344,7 @@ to initialize a Polygon with different object
 </pre></div>
 </div>
 <div class="section" id="ploting-polygons">
-<h2>17.1. ploting polygons<a class="headerlink" href="#ploting-polygons" title="Permalink to this headline">¶</a></h2>
+<h2>13.1. ploting polygons<a class="headerlink" href="#ploting-polygons" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
@@ -4815,7 +4357,7 @@ to initialize a Polygon with different object
 <img alt="./MISC-geomutil_files/MISC-geomutil_8_0.png" src="./MISC-geomutil_files/MISC-geomutil_8_0.png" />
 </div>
 <div class="section" id="buildgv">
-<h2>17.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
+<h2>13.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
 <p>Dertermine visibility relationships in a Polygon. Returns a graph</p>
 <p>This function is used for determining visibility relationships in indoor
 environement.</p>
@@ -4835,12 +4377,12 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="geomview-classes">
-<h1>18. Geomview classes<a class="headerlink" href="#geomview-classes" title="Permalink to this headline">¶</a></h1>
+<h1>14. Geomview classes<a class="headerlink" href="#geomview-classes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="geomvect-class">
-<h2>18.1. GeomVect class<a class="headerlink" href="#geomvect-class" title="Permalink to this headline">¶</a></h2>
+<h2>14.1. GeomVect class<a class="headerlink" href="#geomvect-class" title="Permalink to this headline">¶</a></h2>
 <p>This class is used to interact with geomview 3D viewer.</p>
 <div class="section" id="geombase">
-<h3>18.1.1. geomBase<a class="headerlink" href="#geombase" title="Permalink to this headline">¶</a></h3>
+<h3>14.1.1. geomBase<a class="headerlink" href="#geombase" title="Permalink to this headline">¶</a></h3>
 <p>Display a base</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -4853,7 +4395,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="points">
-<h3>18.1.2. points<a class="headerlink" href="#points" title="Permalink to this headline">¶</a></h3>
+<h3>14.1.2. points<a class="headerlink" href="#points" title="Permalink to this headline">¶</a></h3>
 <p>display a set of points</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">gv1</span> <span class="o">=</span> <span class="n">GeomVect</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
 <span class="n">gv1</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -4894,7 +4436,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="plotting-a-box">
-<h3>18.1.3. plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h3>
+<h3>14.1.3. plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">geo</span><span class="o">=</span><span class="n">Geomoff</span><span class="p">(</span><span class="s">&#39;test3&#39;</span><span class="p">)</span>
 <span class="n">geo</span><span class="o">.</span><span class="n">box</span><span class="p">()</span>
 </pre></div>
@@ -4905,9 +4447,9 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="utility-functions">
-<h2>18.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<h2>14.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="angledir">
-<h3>18.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
+<h3>14.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
 <p>angledir converts a 3D vector into the 2 spherical angle <img class="math" src="../_images/math/52e8ed7a3ba22130ad3984eb2cd413406475a689.png" alt="\theta"/>,
 <img class="math" src="../_images/math/2c175f60eecef1de7560c3bdea495d69f26f719d.png" alt="\phi"/> expressed in radians</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
@@ -4922,7 +4464,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="linet">
-<h3>18.2.2. linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h3>
+<h3>14.2.2. linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -4939,7 +4481,7 @@ environement.</p>
 <img alt="./MISC-geomutil_files/MISC-geomutil_36_0.png" src="./MISC-geomutil_files/MISC-geomutil_36_0.png" />
 </div>
 <div class="section" id="dptseg-p-pt-ph">
-<h3>18.2.3. dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
+<h3>14.2.3. dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
 <p>this function calculates distances between a set of points and a segment</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -4954,7 +4496,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="displot">
-<h3>18.2.4. displot<a class="headerlink" href="#displot" title="Permalink to this headline">¶</a></h3>
+<h3>14.2.4. displot<a class="headerlink" href="#displot" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
 <span class="n">N</span>   <span class="o">=</span> <span class="mi">50</span>
@@ -4966,7 +4508,7 @@ environement.</p>
 <img alt="./MISC-geomutil_files/MISC-geomutil_42_0.png" src="./MISC-geomutil_files/MISC-geomutil_42_0.png" />
 </div>
 <div class="section" id="ptonseg-pta-phe-pt">
-<h3>18.2.5. ptonseg(pta,phe,pt)<a class="headerlink" href="#ptonseg-pta-phe-pt" title="Permalink to this headline">¶</a></h3>
+<h3>14.2.5. ptonseg(pta,phe,pt)<a class="headerlink" href="#ptonseg-pta-phe-pt" title="Permalink to this headline">¶</a></h3>
 <p>used in select.py</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -4979,7 +4521,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="ptconvex">
-<h3>18.2.6. ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h3>
+<h3>14.2.6. ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
 <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -5002,7 +4544,7 @@ environement.</p>
 <img alt="./MISC-geomutil_files/MISC-geomutil_48_1.png" src="./MISC-geomutil_files/MISC-geomutil_48_1.png" />
 </div>
 <div class="section" id="intersect">
-<h3>18.2.7. intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
+<h3>14.2.7. intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
 <p>intersect(A,B,C,D) wether or not the N segments (AB) intersects N
 segments (CD). The intersection is tested only for the segment of same
 index in the ndarray.</p>
@@ -5068,7 +4610,7 @@ index in the ndarray.</p>
 </div>
 </div>
 <div class="section" id="useful-functions">
-<h2>18.3. Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
+<h2>14.3. Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><pre>isaligned?</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">])</span>
