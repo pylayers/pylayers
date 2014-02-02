@@ -6172,7 +6172,7 @@ class Layout(object):
             print "filegeom : ", self.filegeom
         except:
             print "geomfile (.off) has no been generated"
-        
+
         self.boundary()
         print "boundaries ",self.ax
         print "number of Points :", self.Np

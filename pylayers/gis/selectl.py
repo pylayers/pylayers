@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from pylayers.util.easygui import *
 
 
-class SelectL(object):
+class SelectL2(object):
     """ Associates a Layout and a figure
 
     'l'  : select activelayer
