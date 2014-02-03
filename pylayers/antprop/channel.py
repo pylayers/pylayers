@@ -235,7 +235,7 @@ class Ctilde(object):
 
         """
 
-        c = 0.3  # m/ns celerity of light 
+        c = 0.3  # m/ns celerity of light
         tauk = self.tauk
         tang = self.tang
         rang = self.rang
@@ -254,6 +254,10 @@ class Ctilde(object):
 
         return(tauk_ch)
 
+    def PLoss(sef,f):
+        """
+        """
+        pass
     def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),polar=False):
         """ doadod scatter plot
 
@@ -275,7 +279,7 @@ class Ctilde(object):
         """
         dod = self.tang
         doa = self.rang
-        # determine Energy in each channel 
+        # determine Energy in each channel
         Ett, Epp, Etp, Ept = self.energy()
         Etot = Ett+Epp+Etp+Ept
         Emax = max(Etot)
@@ -444,7 +448,7 @@ class Ctilde(object):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-        
+       
         if 'fig' not in kwargs:
             fig = plt.figure()
         else:
@@ -464,7 +468,7 @@ class Ctilde(object):
         fig, ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
         ax3.set_xlabel('f (GHz)')
         ax3.set_title(u'$C_{\phi\\theta}$')
-        
+
         ax4 = fig.add_subplot(224)
         fig, ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
         ax4.set_xlabel('f (GHz)')
@@ -480,37 +484,36 @@ class Ctilde(object):
 
         # assert np.allclose(self.tang,C.rang)
         # assert np.allclose(self.rang,C.tang)
-        
 
-    def energy(self):
+
+    def energy(self,mode='mean'):
         """ Calculates energy on each channel
 
         Returns
         -------
 
-        ECtt  : Energy on co channel    tt 
-        ECpp  : Energy on co channel    pp 
-        ECtp  : Energy on co channel    tp 
-        ECpt  : Energy on co channel    pt 
+        ECtt  : Energy on co channel    tt
+        ECpp  : Energy on co channel    pp
+        ECtp  : Energy on co channel    tp
+        ECpt  : Energy on co channel    pt
 
-        
+
         See Also
         --------
 
         pylayers.signal.bsignal.FUsignal.energy
 
-    
+
 
         """
 
-        ECtt = self.Ctt.energy(1)
-        ECtp = self.Ctp.energy(1)
-        ECpt = self.Cpt.energy(1)
-        ECpp = self.Cpp.energy(1)
-        # Eco = ECtt + ECpp
-        # Ecross = ECtp + ECpt
+        ECtt = self.Ctt.energy(axis=1,Friis=True,mode=mode)
+        ECtp = self.Ctp.energy(axis=1,Friis=True,mode=mode)
+        ECpt = self.Cpt.energy(axis=1,Friis=True,mode=mode)
+        ECpp = self.Cpp.energy(axis=1,Friis=True,mode=mode)
 
         return ECtt, ECpp, ECtp, ECpt
+        #return MH,ECtt
 
     def sort(self,typ='tauk'):
         """ sort Ctilde with respect to typ (default tauk)
@@ -518,14 +521,14 @@ class Ctilde(object):
         Parameters
         ----------
 
-        typ  : string 
+        typ  : string
             which parameter to sort '
                 tauk : (default)
                 att  : theta Tx
                 atp  : phi Tx
-                art  : theta Rx 
-                arp  : phi Rx 
-                energy 
+                art  : theta Rx
+                arp  : phi Rx
+                energy
 
         """
         if typ == 'tauk':
@@ -540,7 +543,7 @@ class Ctilde(object):
             u = np.argsort(self.rang[:, 1])
         if typ == 'energy':
             Ett, Epp, Etp, Ept = self.energy()
-            Etot = Ett+Epp+Etp+Ept 
+            Etot = Ett+Epp+Etp+Ept
             u = np.argsort(Etot)
 
         self.tauk = self.tauk[u]
@@ -559,9 +562,9 @@ class Ctilde(object):
         ----------
 
         a : string or antenna array
-            polarization antenna a ( 'theta' | 'phi' | 'ant' ) 
+            polarization antenna a ( 'theta' | 'phi' | 'ant' )
         b : string or antenna array
-            polarization antenna b ( 'theta' | 'phi' | 'ant' ) 
+            polarization antenna b ( 'theta' | 'phi' | 'ant' )
 
             0 : theta
             1 : phi
@@ -597,14 +600,14 @@ class Ctilde(object):
                 Fap = Fap.transpose()
                 Fat = bs.FUsignal(a.fa, Fat)
                 Fap = bs.FUsignal(a.fa, Fap)
-            else: 
+            else:
                 Fat, Fap = a.Fpatt(self.rang[:, 0], self.rang[:, 1], pattern=False)
                 Fat = bs.FUsignal(a.fa, Fat)
                 Fap = bs.FUsignal(a.fa, Fap)
-            
+
 
         if type(b) == str:
-            
+
             if b == 'theta':
                 Fbt = np.ones((nray, nfreq))
                 Fbp = np.zeros(nray*nfreq).reshape((nray, nfreq))
@@ -622,12 +625,12 @@ class Ctilde(object):
                 Fbp = Fbp.transpose()
                 Fbt = bs.FUsignal(b.fa, Fbt)
                 Fbp = bs.FUsignal(b.fa, Fbp)
-            else: 
+            else:
                 Fbt, Fbp = b.Fpatt(self.rang[:, 0], self.rang[:, 1], pattern=False)
                 Fbt = bs.FUsignal(b.fa, Fbt)
                 Fbp = bs.FUsignal(b.fa, Fbp)
         # Ctt : r x f
-        
+       
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -643,7 +646,7 @@ class Ctilde(object):
 
         slach : ScalChannel
 
-        Note 
+        Note
         ----
 
         deprecated this is now replaced by the function prop2tran
@@ -663,14 +666,14 @@ class Ctilde(object):
 
     def vec2scalA(self, At, Ar, alpha=1.0):
         """
-        
+       
         Parameters
         ----------
 
         At : transmitter antenna
         Ar : receiver antenna
         alpha : normalization factor
-    
+   
         Notes
         -----
 
@@ -711,7 +714,7 @@ class Ctilde(object):
 
 
 class Tchannel(bs.FUDAsignal):
-    """ Handle the transmission channel 
+    """ Handle the transmission channel
 
     The transmission channel TChannel is obtained through combination of the propagation
     channel and the antenna transfer functions from both transmitter and
@@ -727,16 +730,16 @@ class Tchannel(bs.FUDAsignal):
         direction of arrival (rad)  [theta_r,phi_r]  nray x 2
     tauk :
         delay ray k in ns
-    
+   
     Methods
     -------
 
     imshow()
-    apply(W) 
-    applywavB(Wgam,Tw) 
-    applywavB(Wgam) 
-    applywavC(Wgam) 
-    chantap(fcGHz,WGHz,Ntap) 
+    apply(W)
+    applywavB(Wgam,Tw)
+    applywavB(Wgam)
+    applywavC(Wgam)
+    chantap(fcGHz,WGHz,Ntap)
     doddoa()
     wavefig(w,Nray)
     rayfig(w,Nray)
@@ -759,7 +762,7 @@ class Tchannel(bs.FUDAsignal):
         """
 
         bs.FUDAsignal.__init__(self, fGHz, alpha, tau, dod, doa)
-    
+   
     def __repr__(self):
         st = ''
         st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
@@ -845,8 +848,8 @@ class Tchannel(bs.FUDAsignal):
 
         fcGHz :
             WGHz  :
-        Ntap  : 
-        
+        Ntap  :
+       
         """
 
         defaults = {'fcGHz':4.5,
@@ -862,8 +865,8 @@ class Tchannel(bs.FUDAsignal):
         h = bs.FUDsignal(self.x, self.y, self.tau0)
         htap = h.chantap(**kwargs)
         return htap
- 
-        
+
+       
 
 
 
@@ -928,7 +931,7 @@ class Tchannel(bs.FUDAsignal):
     #     """
     #     dod = self.dod
     #     doa = self.doa
-    # 
+    #
     # col  = 1 - (10*np.log10(Etot)-Emin)/(Emax-Emin)
     #     Etot = self.energy()
     #     Etot = Etot / max(Etot)
@@ -973,8 +976,8 @@ class Tchannel(bs.FUDAsignal):
             if key not in kwargs:
                 kwargs[key] = value
 
-                
-        
+
+
         di = getattr(self, d, 'doa')
 
         # remove non plt.scatter kwargs
@@ -982,14 +985,14 @@ class Tchannel(bs.FUDAsignal):
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
         fig = kwargs.pop('fig')
-        ax = kwargs.pop('ax')  
-        colorbar = kwargs.pop('colorbar')  
-        reverse = kwargs.pop('reverse')  
+        ax = kwargs.pop('ax')
+        colorbar = kwargs.pop('colorbar')
+        reverse = kwargs.pop('reverse')
 
 
         if fig == []:
             fig = plt.gcf()
-            
+
 
         Etot = self.energy(axis=1)
         Emax = max(Etot)
@@ -1014,8 +1017,8 @@ class Tchannel(bs.FUDAsignal):
             ax.axis((0, 180, phi[0], phi[1]))
             ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
             ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
-        else: 
-            scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)   
+        else:
+            scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)
             ax.axis((phi[0], phi[1], 0, 180))
             ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
             ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
@@ -1048,17 +1051,19 @@ class Tchannel(bs.FUDAsignal):
         """
         dod = self.dod
         doa = self.doa
-        # determine Energy in each channel 
-        
+
+        # determine Energy in each channel
+
         Etot = self.energy(axis=1)
         Emax = max(Etot)
         Etot = Etot / Emax + 1e-7
         Emax = max(10 * np.log10(Etot))
         Emin = min(10 * np.log10(Etot))
-        #
-        #
+
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        #
+
         al = 180. / np.pi
         col = 10 * np.log10(Etot)
         if len(col) != len(dod):
@@ -1092,9 +1097,9 @@ class Tchannel(bs.FUDAsignal):
         plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
         plt.title('DoA', fontsize=fontsize+2)
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
-        plt.axis 
+        plt.axis
 
-        
+       
     def wavefig(self, w, Nray=5):
         """ display
 
@@ -1127,13 +1132,13 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
-        
+       
         k : ray index
         W : waveform    (FUsignal)
 
         Notes
         -----
-        
+       
         W is apply on k-th ray and the received signal is built in time domain
 
         """
@@ -1171,12 +1176,12 @@ class Tchannel(bs.FUDAsignal):
         # qHk.x[0]==Wk.x[0]
 
     def RSSI(self,ufreq=0) :
-        """ Compute RSSI value from a 
+        """ Compute RSSI value from a
         specific frequency of the transmission channel
-    
+   
         Parameters
         ----------
-        
+       
         ufreq : int
             index in the frequency range
 
@@ -1187,7 +1192,7 @@ class Tchannel(bs.FUDAsignal):
                 RSSI value
 
         """
-    
+   
         Tk = np.real(self.y[:, ufreq])
         return(20*np.log(np.sum(Tk**2)))
 
@@ -1204,24 +1209,24 @@ def Cg2Cl(Cg, Tt, Tr):
     Returns
     -------
 
-    Cl : Ctilde local 
+    Cl : Ctilde local
 
     Examples
     --------
 
     """
     import copy
-    
+   
     # don't loose the global channel
     Cl = copy.deepcopy(Cg)
-    
-    # get frequency axes    
+   
+    # get frequency axes   
     fGHz = Cl.fGHz
-    
+   
     # get angular axes
 
     # Rt (2x2)
-    # Rr (2x2) 
+    # Rr (2x2)
     Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
     Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
 

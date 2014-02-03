@@ -937,7 +937,7 @@ class Usignal(Bsignal):
         """
         energy = self.dx() * sum(self.y * np.conj(self.y))
         return(energy)
-   
+
     def fftshift(self):
         self.y = fft.fftshift(self.y,axes=1)
 
@@ -2914,25 +2914,44 @@ class FUsignal(FBsignal, Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self, axis=0):
+    def energy(self, axis=0,Friis=False,mode='mean'):
         """ calculate energy along given axis
 
         Parameters
         ----------
+
         axis : (default 0)
+        Friis :  c/(4 pi fGHz)
+        mode : string
+            mean | center | integ
 
         Examples
         --------
-            >>> e   = EnImpulse()
-            >>> En1 = e.energy()
-            >>> E   = e.esd()
-            >>> En2 = E.energy()
-            >>> assert((En1>0.99) & (En1<1.01))
+
+        >>> e   = EnImpulse()
+        >>> En1 = e.energy()
+        >>> E   = e.esd()
+        >>> En2 = E.energy()
+        >>> assert((En1>0.99) & (En1<1.01))
 
         """
+
         H = self.y
+
+        if Friis:
+            factor = 0.3/(4*np.pi*self.x)
+            H = H*factor[np.newaxis,:]
+
         MH2 = abs(H * np.conjugate(H))
-        EMH2 = MH2.sum(axis=axis)
+
+        if mode=='mean':
+            EMH2  = MH2.mean(axis=axis)
+
+        if mode=='integ':
+            EMH2  = MH2.sum(axis=axis)*(self.x[1]-self.x[0])
+
+        if mode=='center':
+            EMH2  = MH2[:,len(self.x)/2]
 
         return(EMH2)
 
