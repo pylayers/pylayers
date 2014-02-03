@@ -414,7 +414,7 @@ class Ctilde(object):
         #r0 = np.outer(Rt[0, 1,:], uf)
         r0 = Rt[0,1,:][:,np.newaxis]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[0,1,:][:,np.newaxis]
+        r1 = Rt[1,1,:][:,np.newaxis]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -552,7 +552,7 @@ class Ctilde(object):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a='theta',b='theta'):
+    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[]):
         """ transform propagation channel into transmission channel
 
         Parameters
@@ -628,6 +628,8 @@ class Ctilde(object):
                 Fbp = bs.FUsignal(b.fa, Fbp)
         # Ctt : r x f
         
+        # Cg2cl should be applied here 
+
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -1027,7 +1029,7 @@ class Tchannel(bs.FUDAsignal):
 
 
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),polar=False):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),norm=False,polar=False):
         """ doadod scatter plot
 
         Parameters
@@ -1048,13 +1050,15 @@ class Tchannel(bs.FUDAsignal):
         """
         dod = self.dod
         doa = self.doa
-        # determine Energy in each channel 
+
         
-        Etot = self.energy(axis=1)
+        # determine Energy in each channel 
+        Etot = self.energy(axis=1) 
         Emax = max(Etot)
         Etot = Etot / Emax + 1e-7
         Emax = max(10 * np.log10(Etot))
         Emin = min(10 * np.log10(Etot))
+
         #
         #
         #
