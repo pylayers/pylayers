@@ -339,7 +339,7 @@ class Body(object):
         
     
 
-	def setdcs(self):
+	def setdcs(self,frameId=0, topos = False):
 		""" set device coordinate system (dcs) from a topos
 
 		This method evaluates the set of all dcs.
@@ -399,8 +399,18 @@ class Body(object):
 			khe = self.sl[int(Id),1]
 			#Rcyl = self.g[kta][khe]['radius']
 			Rcyl = self.sl[int(Id),2]
-			pta = np.array(self.topos[:,kta])
-			phe = np.array(self.topos[:,khe])			
+			if not topos:
+				# pA : tail point
+				pta = self.d[:,kta,frameId]
+				# pB : head point
+				phe = self.d[:,khe,frameId]
+				
+			else:
+				# pA : tail point
+				pta = self.topos[:,kta]
+				# pB : head point
+				phe = self.topos[:,khe]
+									
 			vl = phe - pta
 			lmax = np.sqrt(np.dot(vl,vl))
 			
@@ -415,7 +425,7 @@ class Body(object):
 			neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)			
 			self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
-    def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
+	def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
 		""" load nframes of motion capture C3D file
 
 		Parameters
@@ -510,7 +520,7 @@ class Body(object):
 			self.centered = False
 			self.center()
 
-    def movie(self,**kwargs):
+	def movie(self,**kwargs):
 		""" creates a geomview movie
 
 		Parameters
@@ -565,7 +575,7 @@ class Body(object):
 				kwargs['tag']=stk
 				self.geomfile(**kwargs)
 
-    def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
+	def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
 		""" scatter 3d plot
 		Parameters
 		----------
@@ -605,8 +615,7 @@ class Body(object):
 		return(fig,ax)
 
                     
-	#def show3(self,iframe=0,topos=True,tag=''):
-    def showg(self,frameId):
+	def showg(self,frameId):
 
 		for i in range(self.npoints):
 			self.g.pos[i] = (self.d[1, i, frameId], self.d[2, i, frameId])
@@ -616,7 +625,7 @@ class Body(object):
 		plt.show()
 
 
-    def show3(self,**kwargs):
+	def show3(self,**kwargs):
 		""" create geomfile for frame iframe
 
 		Parameters
@@ -650,83 +659,80 @@ class Body(object):
 		bdy = self.geomfile(**kwargs)
 		bdy.show3()
 
-    def geomfile(self,**kwargs):
-        """ create a geomview file from a body configuration
+	def geomfile(self,**kwargs):
+		""" create a geomview file from a body configuration
 
-        Parameters
-        ----------
+		Parameters
+		----------
 
-        iframe : int
-        frame id (useless if topos==True)
-        verbose : boolean
-        topos : boolean
-        frame id or topos
-        wire : boolean
-        body as a wire or cylinder
-        ccs : boolean
-        display cylinder coordinate system
-        cacs : boolean
-        display cylinder antenna coordinate system
-        acs : boolean
-        display antenna coordinate system
-        struc : boolean
-        displat structure layout
-        tag : string
-        filestruc : string
-        name of the Layout
+		iframe : int
+		frame id (useless if topos==True)
+		verbose : boolean
+		topos : boolean
+		frame id or topos
+		wire : boolean
+		body as a wire or cylinder
+		ccs : boolean
+		display cylinder coordinate system
+		cacs : boolean
+		display cylinder antenna coordinate system
+		acs : boolean
+		display antenna coordinate system
+		struc : boolean
+		displat structure layout
+		tag : string
+		filestruc : string
+		name of the Layout
 
-        Notes
-        -----
+		Notes
+		-----
 
-        This function creates either a 3d representation of the frame iframe
-        or if topos==True a representation of the current topos.
+		This function creates either a 3d representation of the frame iframe
+		or if topos==True a representation of the current topos.
+		"""
+		defaults = { 'iframe': 0,
+					'verbose':False,
+					'topos':False,
+					'tag':'',
+					'wire': False,
+					'ccs': False,
+					'lccs': [],
+					'dcs': False,
+					'ldcs': [],
+					'struc':False,
+					'pattern':False,
+					'velocity':False,
+					'filestruc':'DLR.off',
+					'fileant':'defant.vsh3',
+					'k':0 } 
 
-
-
-        """
-        defaults = { 'iframe': 0,
-                    'verbose':False,
-                    'topos':False,
-                    'tag':'',
-                    'wire': False,
-                    'ccs': False,
-                    'lccs': [],
-                    'dcs': False,
-                    'ldcs': [],
-                    'struc':False,
-                    'pattern':False,
-                    'velocity':False,
-                    'filestruc':'DLR.off',
-                    'fileant':'defant.vsh3',
-                    'k':0 } 
-
-        for key, value in defaults.items():
+		for key, value in defaults.items():
 			if key not in kwargs:
 				kwargs[key] = value
 
-        iframe = kwargs['iframe']
+		iframe = kwargs['iframe']
 
-        Ant = ant.Antenna(kwargs['fileant'])
-        Ant.Fsynth3()
+		Ant = ant.Antenna(kwargs['fileant'])
+		Ant.Fsynth3()
 
-        if kwargs['lccs']==[]:
-            lccs = np.arange(11)
-        else:
-            lccs = kwargs['lccs']
+		if kwargs['lccs']==[]:
+			lccs = np.arange(11)
+		else:
+			lccs = kwargs['lccs']
 
-        if not kwargs['wire']:
-            # load reference cylinder
-            #cyl = geu.Geomoff('cylinder')
-            cyl = geu.Geomoff('cylinder')
-            ptc = cyl.loadpt()
+		if not kwargs['wire']:
+			# load reference cylinder
+			#cyl = geu.Geomoff('cylinder')
+			cyl = geu.Geomoff('cylinder')
+			ptc = cyl.loadpt()
 
-        if not kwargs['topos']:
-            _filebody = str(iframe).zfill(4)+'body'
-        else:
-            if kwargs['tag']<>'':
-                _filebody = kwargs['tag']+'-body'
-            else:
-                _filebody = 'body'
+		if not kwargs['topos']:
+			_filebody = str(iframe).zfill(4)+'body'
+		else:
+			if kwargs['tag']<>'':
+				_filebody = kwargs['tag']+'-body'
+			else:
+				_filebody = 'body'
 
 
 		bodylist = geu.Geomlist(_filebody,clear=True)
@@ -739,7 +745,7 @@ class Body(object):
 			bodylist.append('{<'+filestruc+'}\n')
 		if kwargs['verbose']:
 			print ("LIST\n")
-		
+
 		dbody = {}
 		#~ for e in self.g.edges():
 			#~ e0 = e[0]
@@ -807,24 +813,24 @@ class Body(object):
 
 		# display antenna pattern
 
-        if kwargs['pattern']:
-            for key in self.dcs.keys():
-                Ant =  ant.Antenna(self.ant[key]['file'])
-                if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth3()
-                U = self.dcs[key]
-                _filepatt = kwargs['tag']+'patt-'+key
-                geo = geu.Geomoff(_filepatt)
-                V = Ant.SqG[kwargs['k'],:,:]
-                #T = U[:,1:]
-                Rab = self.ant[key]['T']
-                #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
-                Rbg = U[:,1:]
-                # combine rotation antenna -> body -> global
-                T = np.dot(Rbg,Rab)
-                #T = np.eye(3)
-                geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
-                bodylist.append('{<'+_filepatt+'.off'+"}\n")
+		if kwargs['pattern']:
+			for key in self.dcs.keys():
+				Ant =  ant.Antenna(self.ant[key]['file'])
+				if not hasattr(Ant,'SqG'):
+					Ant.Fsynth3()
+				U = self.dcs[key]
+				_filepatt = kwargs['tag']+'patt-'+key
+				geo = geu.Geomoff(_filepatt)
+				V = Ant.SqG[kwargs['k'],:,:]
+				#T = U[:,1:]
+				Rab = self.ant[key]['T']
+				#T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
+				Rbg = U[:,1:]
+				# combine rotation antenna -> body -> global
+				T = np.dot(Rbg,Rab)
+				#T = np.eye(3)
+				geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
+				bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
 
 		# wireframe body
@@ -850,7 +856,7 @@ class Body(object):
 		return(bodylist)
 
 
-    def setccs(self,frameId=0,topos=False):
+	def setccs(self,frameId=0,topos=False):
 		""" set cylinder coordinate system
 
 		Parameters
@@ -903,6 +909,7 @@ class Body(object):
 				# vtopos : mean topos velociy
 				vg = self.vtopos
 			pM = (pA+pB)/2.
+			
 			# create an orthonormal basis
 			# 1 st vector : vg normalized (blue)
 			# 2 nd vector : 3 x 1
@@ -940,7 +947,7 @@ class Body(object):
 			#~ self.ccs[k,:,:] = T
 		
 
-    def cylinder_basis_k(self, frameId):
+	def cylinder_basis_k(self, frameId):
 		"""
 
 		Parameters
@@ -962,7 +969,7 @@ class Body(object):
 			self.basisk[i, 3:6] = vk
 			self.basisk[i, 6:] = wk
 
-    def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
+	def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
 		"""
 		Parameters
 		----------
