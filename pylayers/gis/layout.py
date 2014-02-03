@@ -244,8 +244,6 @@ class Layout(object):
         self.display['inverse'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = "TA-Office.png"
-        #self.display['box'] = (-11.4, 19.525, -8.58, 23.41)
-        self.display['box'] = (-20, 20, -10, 10)
         self.display['layerset'] = self.sl.keys()
         self.name = {}
         for k in self.sl.keys():
@@ -2241,7 +2239,6 @@ class Layout(object):
                                    'overlay',
                                    'fileoverlay',
                                    'inverse',
-                                   'box',
                                    'alpha'),
                                   (self.filename,
                                    int(self.display['nodes']),
@@ -2256,7 +2253,6 @@ class Layout(object):
                                    int(self.display['overlay']),
                                    self.display['fileoverlay'],
                                    bool(self.display['inverse']),
-                                   str(self.display['box']),
                                    self.display['alpha']))
         if displaygui is not None:
             self.filename = displaygui[0]
@@ -2272,7 +2268,6 @@ class Layout(object):
             self.display['overlay'] = bool(eval(displaygui[10]))
             self.display['fileoverlay'] = displaygui[11]
             self.display['inverse'] = eval(displaygui[12])
-            self.display['box'] = eval(displaygui[13])
             self.display['alpha'] = eval(displaygui[14])
 
     def info_segment(self, s1):
@@ -3992,49 +3987,69 @@ class Layout(object):
 
         ax.axis('scaled')
 
-    def showGs(self,fig=[], ax=[], ndlist=[], edlist=[], show=False, furniture=False,
-               roomlist=[],axis=[],width=0,fGHz=[]):
+
+    def showGs(self,**kwargs):
         """ show structure graph Gs
 
         Parameters
         ----------
 
-        ax      : ax 
         ndlist  : np.array
             set of nodes to be displayed
         edlist  : np.array
             set of edges to be displayed
+        roomlist : list
+            default : []
         show    : boolean
             default True
         furniture : boolean
             default False
-        roomlist : list
-            default : []
+        width : 2
 
         display parameters are defined in  display dictionnary
 
         Returns
         -------
 
-        ax 
+        ax
 
         """
-#        if fig ==[]:
-#            fig = plt.gcf()
-#        if ax==[]:
-#            ax = fig.gca()
 
-        if fig == []:
-           fig = plt.gcf()
-        if not isinstance(ax, plt.Axes):
-            ax  = fig.add_subplot(111)
+
+        defaults = {'ndlist' : [],
+                    'edlist': [],
+                    'roomlist' : [],
+                    'axis' : [],
+                    'width': 2,
+                    'fGHz' : [],
+                    'show':False,
+                    'furniture':False}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        args = {}
+        for k in kwargs:
+            if k not in defaults:
+                args[k] = kwargs[k]
+
+        if 'fig' not in kwargs:
+           fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+
+        if 'ax' not in kwargs:
+            ax = fig.add_subplot(111)
+        else:
+            ax = kwargs['ax']
 
         if self.display['clear']:
             ax.cla()
 
         # display overlay image
         if self.display['overlay']:
-            imok = False 
+            imok = False
             if len(self.display['fileoverlay'].split('http:'))>1:
                 img_file = urllib.urlopen(self.display['fileoverlay'])
                 im = StringIO(img_file.read())
@@ -4045,16 +4060,17 @@ class Layout(object):
                     image = Image.open(basename+'/'+pstruc['DIRIMAGE']+'/'+self.display['fileoverlay'])
                     imok =True
             if imok:
-                if self.display['inverse']:    
-                    ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
-                else:                
-                    ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
-        if ndlist == []:
+                if self.display['inverse']:
+                    ax.imshow(image, extent=self.ax, alpha=self.display['alpha'])
+                else:
+                    ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+
+        if kwargs['ndlist'] == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
             ndlist = tn[u]
 
-        if edlist == []:
+        if kwargs['edlist'] == []:
             tn = self.Gs.node.keys()
             #u  = np.nonzero(tn > 0)[0]
             #edlist = tn[u]
@@ -4075,12 +4091,12 @@ class Layout(object):
             for nameslab in self.display['layers']:
                 self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
-                                font_size=font_size,width=width,fGHz=fGHz)
+                                font_size=font_size,width=kwargs['width'],fGHz=kwargs['fGHz'])
 
         if self.display['subseg']:
             dico = self.subseg()
             for k in dico.keys():
-                if fGHz==[]:
+                if kwargs['fGHz']==[]:
                     color = self.sl[k]['color']
                 else:
                     if (k<>'METAL') & (k<>'METALIC'):
@@ -4094,7 +4110,7 @@ class Layout(object):
                     edlist2.append(ts[0])
                     #edlist2.append(ts)
                 edlist3 = list(set(edlist2).intersection(set(edlist)))
-                #print k , color , edlist 
+                #print k , color , edlist
                 self.show_segment(edlist=edlist3, color=color, alpha=1.0,width=2)
 
         if self.display['scaled']:
@@ -4108,7 +4124,7 @@ class Layout(object):
             for loc, spine in ax.spines.iteritems():
                 spine.set_color('none')
 
-        if furniture:
+        if kwargs['furniture']:
             if 'lfur' in self.__dict__:
                 for fur1 in self.lfur:
                     if fur1.Matname == 'METAL':
@@ -4117,15 +4133,15 @@ class Layout(object):
                 print "Warning : no furniture file loaded"
 
 
-        for nr in roomlist:
+        for nr in kwargs['roomlist']:
             ncy = self.Gr.node[nr]['cycle']
             self.Gt.node[ncy]['polyg'].plot()
-        if axis==[]:
+        if kwargs['axis']==[]:
             ax.axis('scaled')
         else:
-            ax.axis(axis)
+            ax.axis(kwargs['axis'])
 
-        if show:
+        if kwargs['show']:
             plt.show()
 
         return fig,ax
@@ -6077,6 +6093,110 @@ class Layout(object):
         plt.axis('tight')
         plt.show()
 
+    def editorGtk(self):
+        """
+        """
+
+        import gtk
+        from matplotlib.figure import Figure
+        from matplotlib.backends.backend_gtkagg import FigureCanvasGTKAgg as FigureCanvas
+        from matplotlib.backends.backend_gtkagg import NavigationToolbar2GTKAgg as NavigationToolbar
+        from matplotlib.backend_bases import key_press_handler
+
+        win = gtk.Window()
+        win.show_all()
+
+
+        win = gtk.Window()
+        win.connect("destroy", lambda x: gtk.main_quit())
+        win.set_default_size(400,300)
+        win.set_title("Embedding in GTK")
+
+        vbox = gtk.VBox()
+        win.add(vbox)
+
+        fig = Figure()
+        ax = fig.add_subplot(111)
+
+        fig,ax = self.showG('s',fig=fig,ax=ax)
+
+        canvas = FigureCanvas(fig)  # a gtk.DrawingArea
+        canvas.show()
+        vbox.pack_start(canvas)
+        toolbar = NavigationToolbar(canvas, win)
+        vbox.pack_start(toolbar, False, False)
+
+
+        def on_key_event(event):
+            print('you pressed %s'%event.key)
+            key_press_handler(event, canvas, toolbar)
+
+        canvas.mpl_connect('key_press_event', on_key_event)
+
+        win.show_all()
+        gtk.main()
+
+    def editorTk(self):
+        """ invoke interactive layout graphical editor
+
+        Notes
+        -----
+
+        point edition
+
+            m  toggle point edition mode  (CP : Create Point)
+
+                lclic same x
+                rclic same y
+                cclic free point
+
+        segment edition
+
+            [0-f] - display one of the 16 first layers
+            x : save structure
+            o : toggle overlay
+
+        """
+
+        #import matplotlib
+        #matplotlib.use('TkAgg')
+
+        from matplotlib.backend_bases import key_press_handler
+        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+        from matplotlib.figure import Figure
+        import Tkinter as Tk
+
+        root = Tk.Tk()
+        root.wm_title('Pylayers Layout Editor')
+
+        fig = Figure()
+        ax  = fig.add_subplot(111)
+        #ax.plot(np.arange(10))
+
+        canvas = FigureCanvasTkAgg(fig,master=root)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=Tk.TOP,fill=Tk.BOTH,expand=1)
+
+        toolbar = NavigationToolbar2TkAgg(canvas,root)
+        toolbar.update()
+        canvas._tkcanvas.pack(side=Tk.TOP,fill=Tk.BOTH,expand=1)
+
+        button = Tk.Button(master=root,text='Quit',command=sys.exit)
+        button.pack(side=Tk.BOTTOM)
+
+        self.display['nodes']=True
+        self.display['ednodes']=True
+
+        select = SelectL(self,canvas)
+
+        #self.af.show(clear=True)
+
+        self.cid1 = canvas.mpl_connect('button_press_event', select.OnClick)
+        self.cid2 = canvas.mpl_connect('key_press_event', select.OnPress)
+        #ax.axis('tight')
+        canvas.show()
+        Tk.mainloop()
+
     def info(self):
         """ gives information about the Layout
         """
@@ -6087,7 +6207,7 @@ class Layout(object):
             print "filegeom : ", self.filegeom
         except:
             print "geomfile (.off) has no been generated"
-        
+
         self.boundary()
         print "boundaries ",self.ax
         print "number of Points :", self.Np

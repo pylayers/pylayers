@@ -4,7 +4,7 @@ from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 import shapely.geometry as sh
 import scipy.linalg as la
 import pdb
-import logging 
+import logging
 #! /usr/bin/python
 # geomutil.py
 """ functions related to geometry
@@ -102,7 +102,7 @@ class Geomview(object):
         self.filename = filename
         if clear:
             fd = open(self.filename,'w')
-            fd.close()           
+            fd.close()
 
     def show3(self):
         """
@@ -264,7 +264,7 @@ class GeomVect(Geomview):
         fo.write("2 2 2\n")   # 2 points per lines
         fo.write("1 1 1\n")   # 1 color per line
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0], pt[1], pt[2]))
-        fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 0], pt[1] + 
+        fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 0], pt[1] +
                                           M[1, 0], pt[2] + M[2, 0]))
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0], pt[1], pt[2]))
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 1], pt[1] +
@@ -277,7 +277,7 @@ class GeomVect(Geomview):
         fo.write("%6.3f %6.3f %6.3f  0.\n" % (col[2, 0], col[2, 1], col[2, 2]))
         #fo.write("{<}\n")
         fo.close()
-    
+
 
 
     def points(self, pt, colorname='blue'):
@@ -397,10 +397,10 @@ class Geomoff(Geomview):
     def __init__(self, _filename= 'geomoff'):
         _filename = _filename + '.off'
         Geomview.__init__(self, _filename)
- 
+
     def loadpt(self):
-        """ load points 
-            
+        """ load points
+
         """
         fo = open(self.filename,'r')
         lis = fo.readlines()
@@ -408,7 +408,7 @@ class Geomoff(Geomview):
         if typ<>'OFF':
             logging.critical('not an off file')
         nv = eval(nv)
-        nf = eval(nf) 
+        nf = eval(nf)
         ne = eval(ne)
         for k in range(nv):
             #x,y,z = lis[k+1].split(' ')
@@ -421,7 +421,7 @@ class Geomoff(Geomview):
 
     def savept(self,ptnew,_fileoff):
         """
-        """ 
+        """
         fo = open(self.filename,'r')
         lis = fo.readlines()
         typ,nv,nf,ne=lis[0].split(' ')
@@ -453,7 +453,7 @@ class Geomoff(Geomview):
         p    : nparray
                sequence of points
         poly : list
-               point numbers (index starting in 0) 
+               point numbers (index starting in 0)
 
         """
         fo = open(self.filename, 'w')
@@ -479,7 +479,7 @@ class Geomoff(Geomview):
         p    : nparray
                sequence of points
         poly : list
-               point numbers (index starting in 0) 
+               point numbers (index starting in 0)
 
         Examples
         --------
@@ -506,17 +506,17 @@ class Geomoff(Geomview):
         fo.close()
 
     def cylinder(self,r,l,nphi=20,nl=3,col=[1.,0.0,1.0],alpha=0.1):
-        """ create a cylinder 
+        """ create a cylinder
 
         Parameters
         ----------
 
         r : radius
-        l : length 
-        nphi : number of phi 
-        nl : number of l 
+        l : length
+        nphi : number of phi
+        nl : number of l
         col : list [r,g,b]
-        alpha : transparency 
+        alpha : transparency
 
         """
         tphi = np.linspace(0,2*np.pi,nphi,endpoint=False)
@@ -528,7 +528,7 @@ class Geomoff(Geomview):
         fo.write("OFF %d %d %d\n" % (nphi*nl+1, npoly,nedges))
         fo.write("0.000 0.000 0.000 \n")
         for z in tz:
-            for phi in tphi: 
+            for phi in tphi:
                x = r*np.cos(phi)
                y = r*np.sin(phi)
                fo.write("%6.3f %6.3f %6.3f \n" % (x, y, z))
@@ -610,7 +610,7 @@ class Geomoff(Geomview):
         --------
 
            >>> from pylayers.util.geomutil import *
-           >>> import numpy as np 
+           >>> import numpy as np
            >>> th = np.arange(0,np.pi,0.05)[:,np.newaxis]
            >>> ph = np.arange(0,2*np.pi,0.05)[np.newaxis,:]
            >>> E = 1.5*np.sin(th)*np.cos(0*ph)
@@ -621,12 +621,12 @@ class Geomoff(Geomview):
         """
 
         defaults = { 'po': np.array([0,0,0]),
-                     'T' : np.eye(3), 
-                     'minr' : 0.1, 
-                     'maxr' : 1 , 
-                     'tag' : 'Pat', 
+                     'T' : np.eye(3),
+                     'minr' : 0.1,
+                     'maxr' : 1 ,
+                     'tag' : 'Pat',
                      'ilog' : False}
-        
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
@@ -636,10 +636,10 @@ class Geomoff(Geomview):
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
         po = kwargs['po']
-        # T is an unitary matrix 
+        # T is an unitary matrix
         T  = kwargs['T']
-        assert (abs(la.det(T))>0.99)            
-        # retrieving dimensions             
+        assert (abs(la.det(T))>0.99)
+        # retrieving dimensions
         Nt = np.shape(theta)[0]
         Np = np.shape(phi)[1]
 
@@ -656,18 +656,18 @@ class Geomoff(Geomview):
         # x (Nt,Np)
         # y (Nt,Np)
         # z (Nt,Np)
-        x = Ry * np.sin(theta) * np.cos(phi) 
-        y = Ry * np.sin(theta) * np.sin(phi) 
-        z = Ry * np.cos(theta) 
-        
-        # p : Nt x Np x 3 
+        x = Ry * np.sin(theta) * np.cos(phi)
+        y = Ry * np.sin(theta) * np.sin(phi)
+        z = Ry * np.cos(theta)
+
+        # p : Nt x Np x 3
         p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
         #
-        # antenna cs -> glogal cs 
-        # q : Nt x Np x 3                    
-        q = np.einsum('ij,klj->kli',T,p)                   
+        # antenna cs -> glogal cs
+        # q : Nt x Np x 3
+        q = np.einsum('ij,klj->kli',T,p)
         #
-        # translation 
+        # translation
         #
         q[...,0]=q[...,0]+po[0]
         q[...,1]=q[...,1]+po[1]
@@ -687,7 +687,7 @@ class Geomoff(Geomview):
         fd.write('COFF\n')
         chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
         fd.write(chaine)
-        
+
         for ii in range(Nt):
             for jj in range(Np):
                 cpos = str(q[ii, jj,0]) + ' ' + str(q[ii, jj,1]) + ' ' + str(q[ii, jj,2])
@@ -827,7 +827,7 @@ def Centroid(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
     A = SignedArea(p)
     assert(A<>0)
     T = p[0, :] * np.hstack((p[1, 1::], p[1, 0:1])) - \
-        p[1, :] * np.hstack((p[0, 1::], p[0, 0:1])) 
+        p[1, :] * np.hstack((p[0, 1::], p[0, 0:1]))
     Cx = sum(T * (p[0, :] + np.hstack((p[0, 1::], p[0, 0:1])))) / (6 * A)
     Cy = sum(T * (p[1, :] + np.hstack((p[1, 1::], p[1, 0:1])))) / (6 * A)
     pc = np.array([Cx, Cy])
@@ -1019,17 +1019,17 @@ def pvecn(v1, v2):
     return(v4)
 
 def onb(A,B,v):
-    """ orthonormal basis from 2 points defining an axe and a vector 
+    """ orthonormal basis from 2 points defining an axe and a vector
 
     Parameters
     ----------
 
-    A : np.array 
+    A : np.array
         3 x n
     B : np.array
-        3 x n 
+        3 x n
     v : np.array
-        3 x n 
+        3 x n
 
     Returns
     -------
@@ -1072,7 +1072,7 @@ def onb(A,B,v):
 
     """
     #np.random.seed(0)
-    N = np.shape(A)[1] 
+    N = np.shape(A)[1]
     # modab 1xN
     modab = np.sqrt(np.sum((B-A)*(B-A),axis=0))
     # wn 3xN
@@ -1255,7 +1255,7 @@ def dptseg(p,pt,ph):
     ----------
     ps  : ndim x Np
           array of Np points
-    pt  : ndim x 1 
+    pt  : ndim x 1
           tail coordinates of segment
     ph  : ndim x 1
           head coordinates of segment
@@ -1263,14 +1263,14 @@ def dptseg(p,pt,ph):
     Returns
     -------
     d1 : 1 x Np
-        distance between pt and ortho projection of ps 
+        distance between pt and ortho projection of ps
     d2 : 1 x Np
-        distance between ph and ortho projection of ps 
-    h  : distance between ps and ortho projection of ps 
+        distance between ph and ortho projection of ps
+    h  : distance between ps and ortho projection of ps
 
     Examples
     --------
-    
+
     .. plot::
         :include-source:
         >>> import numpy as np
@@ -1382,7 +1382,7 @@ def ccw(a, b, c):
 
     """
     #return((c[1, :] - a[1, :]) * (b[0, :] - a[0, :]) > (b[1, :] - a[1, :]) * (c[0, :] - a[0, :]))
-    return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) > 
+    return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) >
            (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
 
 
@@ -1430,11 +1430,11 @@ def intersect(a, b, c, d):
         array([ True], dtype=bool)
         >>> intersect(A,B,C,D)[0]
         True
-    
+
     See Also
     --------
 
-    ccw : counter clock wise detection 
+    ccw : counter clock wise detection
 
     """
     return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
@@ -1444,7 +1444,7 @@ def intersect(a, b, c, d):
 def isaligned(a,b,c):
     #return abs(((b[0,:]-a[0,:])*(c[1,:]-a[1,:]) - (b[1,:]-a[1,:])*(c[0,:]-a[0,:])))<1e-8
     val = abs(((b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])))
-    cond = val<1e-2 
+    cond = val<1e-2
     #print val
     return cond
 
@@ -1500,8 +1500,8 @@ def isleftorequal(a,b,c):
 
 
 def affine(X,Y):
-    """ find affine transformation 
-    
+    """ find affine transformation
+
     Parameters
     ----------
 
@@ -1521,9 +1521,9 @@ def affine(X,Y):
     Notes
     -----
 
-    Given X and Y find the affine transformation 
+    Given X and Y find the affine transformation
 
-    Y = A X + B 
+    Y = A X + B
 
     """
 
@@ -1553,7 +1553,7 @@ def cylmap(Y,r=0.0625,l=0.5):
     Notes
     -----
 
-    Y = A X + B 
+    Y = A X + B
 
     """
     #X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
@@ -1565,16 +1565,19 @@ def cylmap(Y,r=0.0625,l=0.5):
     return(A,B)
 
 def mul3(A, B):
-    """
+    """  matrix multiplication
 
     Parameters
     ----------
+
     A :
     B :
 
     Returns
     -------
-    C
+
+    C :  A*B
+
     """
     sa = np.shape(A)
     sb = np.shape(B)
@@ -1582,7 +1585,7 @@ def mul3(A, B):
     lb = len(sb)
     if ((la == 3) & (lb == 3)):
         if((sa[1] == sb[0]) & (sa[2] == sb[2])):
-            C = zeros((sa[0], sb[1], sb[2]))
+            C = np.zeros((sa[0], sb[1], sb[2]))
             for i in range(sa[2]):
                 MA = A[:, :, i]
                 MB = B[:, :, i]
@@ -1593,7 +1596,7 @@ def mul3(A, B):
             print "wrong shape", sa, sb
     if ((la == 3) & (lb == 2)):
         if(sa[1] == sb[0]):
-            C = zeros((sa[0], sb[1], sa[2]))
+            C = np.zeros((sa[0], sb[1], sa[2]))
             for i in range(sa[2]):
                 MA = A[:, :, i]
                 P = np.dot(MA, B)
@@ -1604,7 +1607,7 @@ def mul3(A, B):
 
     if ((la == 2) & (lb == 3)):
         if(sa[1] == sb[0]):
-            C = zeros((sa[0], sb[1], sb[2]))
+            C = np.zeros((sa[0], sb[1], sb[2]))
             for i in range(sb[2]):
                 MB = B[:, :, i]
                 P = np.dot(A, MB)
@@ -1719,7 +1722,7 @@ def angledir(s):
     Notes
     -----
 
-    .. math:: 
+    .. math::
 
         \\theta = \\arccos{(\\frac{\\mathbf{s}}{\\hat{\mathbf{z}})}}
 
@@ -1730,7 +1733,7 @@ def angledir(s):
         :include-source:
 
         >>> import numpy as np
-        >>> s = np.array([[2,0,0],[0,2,0],[0,0,1],[1,1,1]])    
+        >>> s = np.array([[2,0,0],[0,2,0],[0,0,1],[1,1,1]])
         >>> angledir(s)*180/np.pi
         array([[ 90.        ,   0.        ],
                [ 90.        ,  90.        ],
@@ -1777,6 +1780,13 @@ def BTB_rx(a_g, T):
     T    :
         Rx rotation matrix     3 x 3
 
+    Returns
+    -------
+
+    R  :  ndarray (3x3)
+    al :  ndarray (r x 2)
+        angle expressed in local basis
+
     See Also
     --------
 
@@ -1793,13 +1803,13 @@ def BTB_rx(a_g, T):
     G = SphericalBasis(a_g)
     th_g = G[0, :, :]
     ph_g = G[1, :, :]
-    B_g = dstack((th_g, ph_g)).transpose((0, 2, 1))
+    B_g = np.dstack((th_g, ph_g)).transpose((0, 2, 1))
     s_l = np.dot(T.T, G[2, :, :]).T
     al = angledir(s_l)
     L = SphericalBasis(al)
     th_l = L[0, :, :]
     ph_l = L[1, :, :]
-    B_lT = dstack((th_l, ph_l)).transpose((2, 0, 1))
+    B_lT = np.dstack((th_l, ph_l)).transpose((2, 0, 1))
     R = mul3(B_lT, mul3(T.T, B_g))
 
     return R, al
@@ -1822,7 +1832,7 @@ def BTB_tx(a_g, T):
     th_g = G[0, :, :]
     ph_g = G[1, :, :]
 
-    B_gT = dstack((th_g, ph_g)).transpose((2, 0, 1))
+    B_gT = np.dstack((th_g, ph_g)).transpose((2, 0, 1))
 
     s_l = np.dot(T.T, G[2, :, :]).T
 
@@ -1831,7 +1841,7 @@ def BTB_tx(a_g, T):
     L = SphericalBasis(al)
     th_l = L[0, :, :]
     ph_l = L[1, :, :]
-    B_l = dstack((th_l, ph_l)).transpose((0, 2, 1))
+    B_l = np.dstack((th_l, ph_l)).transpose((0, 2, 1))
     R = mul3(B_gT, mul3(T, B_l))
 
     return R, al
@@ -2048,7 +2058,7 @@ class LineString(shg.LineString):
         .. plot::
             :include-source:
 
-            >>> from pylayers.util.geomutil import * 
+            >>> from pylayers.util.geomutil import *
             >>> import matplotlib.pyplot as plt
             >>> import numpy as np
             >>> l1 = np.array([[0,1,1,0],[0,0,1,1]])
@@ -2172,7 +2182,7 @@ class Polygon(shg.Polygon):
             self.vnodes = np.array(vnodes)
             # check if always True
             # very important fic for buildGv
-            # now vnodes starts always with <0 
+            # now vnodes starts always with <0
             if self.vnodes[0]>0:
                 self.vnodes = np.roll(self.vnodes,-1)
         else:
@@ -2207,7 +2217,7 @@ class Polygon(shg.Polygon):
 
         Examples
         --------
-        >>> from pylayers.util.geomutil import *    
+        >>> from pylayers.util.geomutil import *
         >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
         >>> P1 = Polygon(p1)
 
@@ -2240,7 +2250,7 @@ class Polygon(shg.Polygon):
         .. plot::
             :include-source:
 
-            >>> from pylayers.util.geomutil import * 
+            >>> from pylayers.util.geomutil import *
             >>> import matplotlib.pyplot as plt
             >>> import numpy as np
             >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
@@ -2290,7 +2300,7 @@ class Polygon(shg.Polygon):
                 color = kwargs['color'],
                 alpha=kwargs['alpha'],
                 ec = kwargs['edgecolor'])
-        
+
         if kwargs['show']:
             plt.show()
 
@@ -2438,7 +2448,7 @@ class Polygon(shg.Polygon):
         #
         # retrieve
         #  npt points label sequence
-        #  nseg segments label sequence 
+        #  nseg segments label sequence
         #
         # vnodes do not necessarily start with a point
         #
@@ -2448,7 +2458,7 @@ class Polygon(shg.Polygon):
         else:
             ipt = 2 * np.arange(Np) + 1
             iseg = 2 * np.arange(Np)
-        
+
         npt = self.vnodes[ipt]
         nseg = self.vnodes[iseg]
         #print "npt : ",npt
@@ -2489,7 +2499,7 @@ class Polygon(shg.Polygon):
         xr, yr = lring.xy
 
         #
-        # Degree 1 points : (should not exist anymore) 
+        # Degree 1 points : (should not exist anymore)
         #
         # Determine diffraction points
         #
@@ -2503,8 +2513,8 @@ class Polygon(shg.Polygon):
         #
         uconvex = np.nonzero(tcc == 1)[0] # convex point position
         uzero = np.nonzero(tcc == 0)[0]   # planar point (joining two parallel segment)
-        udiffdoor = np.intersect1d(uzero, udeg2)  # degree 2 paralell points are often doors and windows 
-        udiff = np.hstack((uconvex, udiffdoor)).astype('int') # diffracting point 
+        udiffdoor = np.intersect1d(uzero, udeg2)  # degree 2 paralell points are often doors and windows
+        udiff = np.hstack((uconvex, udiffdoor)).astype('int') # diffracting point
         #print "vnodes",self.vnodes
         #print "tcc : ",tcc
         #print "uzero : ",uzero
@@ -2540,7 +2550,7 @@ class Polygon(shg.Polygon):
         #
         # The following exploits definition of convexity.
         #
-        # Between all combinations of diffracting points 
+        # Between all combinations of diffracting points
         # create a segment and check whether it is fully included in the
         # polygon.
         # If verified then there is a visibility between the 2 points.
@@ -2555,18 +2565,18 @@ class Polygon(shg.Polygon):
         #
         #  2) Calculate edge-edge and node-edge visibility
         #
-        for nk in range(Np):   # loop on range of number of points 
-            ptk = p[:, nk]     # tail point 
+        for nk in range(Np):   # loop on range of number of points
+            ptk = p[:, nk]     # tail point
             phk = p[:, (nk + 1) % Np] # head point (%Np to get 0 as last point)
 
             # lnk : unitary vector on segment nk
             lk = phk - ptk
             nlk = np.sqrt(np.dot(lk, lk))
-            lnk = lk / nlk     
-            
-            # the epsilon is (1/1000) of the segment length 
+            lnk = lk / nlk
+
+            # the epsilon is (1/1000) of the segment length
             epsilonk = nlk / 1000.  # this can be dangerous (epsilon can be large)
-            
+
             # x--o----------------------o--x
             #    +eps                  -eps
             pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
@@ -2576,19 +2586,19 @@ class Polygon(shg.Polygon):
         # in any case no ray towark nk
         # if nk is convex no ray toward (nk-1)%Np
         #
-        # start from the two extremity of the segment 
+        # start from the two extremity of the segment
             for i, pcorner in enumerate([pcornert, pcornerh]):
                 #
-                #  if tail point 
-                #           remove nk segment 
+                #  if tail point
+                #           remove nk segment
                 #  and if the point is convex
-                #          remove previous segment 
+                #          remove previous segment
                 #
                 #  si point head
                 #
                 listpoint = range(Np)
-                listpoint.remove(nk)   # remove current point 
-                if i == 0:  # first iteration pcornert 
+                listpoint.remove(nk)   # remove current point
+                if i == 0:  # first iteration pcornert
                     if nk in uconvex:  # == 1
                         listpoint.remove((nk - 1) % Np)
                 if i == 1:  # second iteration pcornerh
@@ -2835,7 +2845,7 @@ class Polygon(shg.Polygon):
             We have Nx >= Nc
 
             If a point is common to two parallel segments, the cross product is = 0
-        
+
         See Also
         --------
 
@@ -2856,7 +2866,7 @@ class Polygon(shg.Polygon):
         n = Lr2n(p)
 
         tcc = np.zeros(Np)
-        
+
         #
         # cross product between two adjascent normals
         #
@@ -2871,7 +2881,7 @@ class Polygon(shg.Polygon):
         #
         # debug : print tcc
         #
-        # The purpose here is to remove flat transition 
+        # The purpose here is to remove flat transition
         #
         upos = np.nonzero(tcc > 1e-2)[0]
         uneg = np.nonzero(tcc < -1e-2)[0]
@@ -2907,9 +2917,9 @@ def plotPolygon(poly, color="#abcdef", alpha=0.8):
 
     Parameters
     ----------
-    poly  : shapely poligon 
+    poly  : shapely poligon
     color : defauld #abcdef"
-    alpha : float 
+    alpha : float
            transparency   (default 0.8)
     """
     fig = plt.gcf()
@@ -3361,16 +3371,16 @@ def mirror(p,pa,pb):
     pa : numpy.ndarray
         segment tail
     pb : numpy.ndarray
-        segment head 
+        segment head
 
     Returns
     -------
-    
+
     M : numpy.ndarray
 
     Examples
     --------
-    
+
     .. plot::
         :include-source:
         >>> from pylayers.util.geomutil import *
@@ -3379,7 +3389,7 @@ def mirror(p,pa,pb):
         >>> p = np.random.randn((2,1000))
         >>> pa  = np.array([0,0])
         >>> pb  = np.array([0,1])
-        >>> M = mirror(p,pa,pb) 
+        >>> M = mirror(p,pa,pb)
         >>> displot(pa,pb)
         >>> plot(p[0,:],p[1,:],'or',alpha=0.2)
         >>> plot(M[0,:],M[1,:],'ob',alpha=0.2)
@@ -3420,27 +3430,27 @@ def mirror(p,pa,pb):
 
 def distseg(a,b,c,d,alpha,beta):
     """ distance to segments
-    
+
     Parameters
     ----------
 
     a : (3xN) initial point segment 1
     b : (3xN) end point segment 1
     c : (3xN) starting point segment 2
-    d : (3xN) end point segment 2  
+    d : (3xN) end point segment 2
 
-    alpha : 
+    alpha :
     beta  :
 
     Returns
     -------
 
     f : square of the distance to the segment
- 
-    Examples 
+
+    Examples
     --------
-    
-    >>> import numpy as np 
+
+    >>> import numpy as np
     >>> np.random.seed(0)
     >>> a = np.random.rand(3,10)
     >>> b = np.random.rand(3,10)
@@ -3464,14 +3474,14 @@ def distseg(a,b,c,d,alpha,beta):
     ac = c-a
     cd = d-c
     ba = a-b
-    
+
     u0 = np.sum(ac*ac,axis=0)
     u4 = np.sum(ba*ba,axis=0)
     u5 = np.sum(cd*cd,axis=0)
     u1 = np.sum(ba*ac,axis=0)
     u2 = np.sum(cd*ac,axis=0)
     u3 = np.sum(cd*ba,axis=0)
-    
+
     f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
 
     # m = a - alpha*ba
@@ -3481,7 +3491,7 @@ def distseg(a,b,c,d,alpha,beta):
     return f
 
 def dmin3d(a,b,c,d):
-    """ evaluate the minimal distance between 2 set of segments 
+    """ evaluate the minimal distance between 2 set of segments
 
     Parameters
     ----------
@@ -3489,35 +3499,35 @@ def dmin3d(a,b,c,d):
     a : (3xN) initial point segment 1
     b : (3xN) end point segment 1
     c : (3xN) starting point segment 2
-    d : (3xN) end point segment 2  
+    d : (3xN) end point segment 2
 
     Returns
     -------
 
-    alpha : segment parameterization 
+    alpha : segment parameterization
     beta  : segment parameterization
-    dmin  : minimal distance between 2 segments 
+    dmin  : minimal distance between 2 segments
 
     Examples
     --------
 
     """
-    
+
     ac = c-a
     cd = d-c
     ba = a-b
-    
+
     u0 = np.sum(ac*ac,axis=0)
     u4 = np.sum(ba*ba,axis=0)
     u5 = np.sum(cd*cd,axis=0)
     u1 = np.sum(ba*ac,axis=0)
     u2 = np.sum(cd*ac,axis=0)
     u3 = np.sum(cd*ba,axis=0)
-       
+
     den = u4*u5-u3*u3
     alpha = (u2*u3-u1*u5)/(1.*den)
     beta = (u1*u3-u2*u4)/(1.*den)
-    dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5) 
+    dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5)
 
     return(alpha,beta,dmin)
 

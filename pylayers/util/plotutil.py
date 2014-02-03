@@ -386,10 +386,7 @@ def displot(pt, ph, arrow=False, **kwargs ):
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
-    defaults = {   'fig': [],
-                    'ax': [],
-                    
-                }
+    defaults = { 'arrow' : False } 
 
     for key, value in defaults.items():
         if key not in kwargs:
@@ -400,10 +397,15 @@ def displot(pt, ph, arrow=False, **kwargs ):
         if k not in defaults.keys():
             args[k]=kwargs[k]
 
-    if kwargs['fig']==[]:
+    if 'fig' not in kwargs:
         fig = plt.gcf()
-        if kwargs['ax']==[]:
-            ax  = fig.gca()
+    else:
+        fig = kwargs['fig'] 
+    
+    if 'ax' not in kwargs:
+        ax  = fig.gca()
+    else:
+        ax = kwargs['ax'] 
 
     Nseg = np.shape(pt)[1]
     pz = np.empty((2,))

@@ -23,7 +23,7 @@ S.rx.point(rx)
 Ctx = S.L.pt2cy(S.tx.position[:,0])
 Crx = S.L.pt2cy(S.rx.position[:,0])
 Si = Signatures(S.L,Ctx,Crx)
-print "Signature : run4" 
+print "Signature : run4"
 tic = time.time()
 Si.run4(cutoff=5,algo='old')
 toc = time.time()
