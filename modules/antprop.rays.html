@@ -138,19 +138,19 @@ for k in self:   # for all interaction group k</p>
 </table>
 <p class="rubric">Notes</p>
 <p>The Rays object is obtained from a signature.
-It is a container for a set of rays between a source 
+It is a container for a set of rays between a source
 and a target point defining a radio link.</p>
-<p>Once a Rays object has been obtained in 2D, it is transform 
-in 3D via the <strong>to3D</strong> method. This method has two parameters : 
-the height from floor to ceil, and the number N of 
+<p>Once a Rays object has been obtained in 2D, it is transform
+in 3D via the <strong>to3D</strong> method. This method has two parameters :
+the height from floor to ceil, and the number N of
 multiple reflections to take into account.</p>
-<p>Once the 3d rays have been calculated, the  
+<p>Once the 3d rays have been calculated, the 
 the local basis are evaluated along those rays. This is
 done through the <strong>locbas</strong> method</p>
 <p>Once the local basis have been calculated the different
 interactions along rays can be informed via the <strong>fillinter</strong>
 method.</p>
-<p>Once the interaction are informed the field along rays can 
+<p>Once the interaction are informed the field along rays can
 be evaluated via the <strong>eval</strong> method</p>
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.check_reciprocity">

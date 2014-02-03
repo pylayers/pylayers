@@ -913,13 +913,19 @@ N : int</p>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUsignal.energy">
-<tt class="descname">energy</tt><big>(</big><em>axis=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.energy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">energy</tt><big>(</big><em>axis=0</em>, <em>Friis=False</em>, <em>mode='mean'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate energy along given axis</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>axis</strong> : (default 0)</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>axis</strong> : (default 0)</p>
+<p><strong>Friis</strong> :  c/(4 pi fGHz)</p>
+<p><strong>mode</strong> : string</p>
+<blockquote class="last">
+<div><p>mean | center | integ</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>

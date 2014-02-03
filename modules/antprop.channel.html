@@ -119,9 +119,9 @@
 <p><strong>Ctp</strong> : FUsignal</p>
 <p><strong>Cpt</strong> : FUsignal</p>
 <p><strong>Cpp</strong> : FUsignal</p>
-<p><strong>tauk</strong> :</p>
-<p><strong>tang</strong> :</p>
-<p><strong>rang</strong> :</p>
+<p><strong>tauk</strong> : ndarray delays</p>
+<p><strong>tang</strong> : ndarray angles of departure</p>
+<p><strong>rang</strong> : ndarray angles of arrival</p>
 <p><strong>fGHz</strong> : np.array</p>
 <blockquote>
 <div><p>frequency array</p>
@@ -150,14 +150,21 @@
 </table>
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.Cg2Cl">
-<tt class="descname">Cg2Cl</tt><big>(</big><em>Tt</em>, <em>Tr</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.Cg2Cl" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Cg2Cl</tt><big>(</big><em>Tt=</em><span class="optional">[</span><span class="optional">]</span>, <em>Tr=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.Cg2Cl" title="Permalink to this definition">¶</a></dt>
 <dd><p>global reference frame to local reference frame</p>
+<p>If Tt and Tr are [] the global channel is  retrieved</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Tt</strong> : Tx rotation matrix 3x3</p>
+<blockquote>
+<div><p>default []</p>
+</div></blockquote>
 <p><strong>Tr</strong> : Rx rotation matrix 3x3</p>
+<blockquote>
+<div><p>default []</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Cl</strong> : Ctilde local</p>
@@ -168,6 +175,11 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.PLoss">
+<tt class="descname">PLoss</tt><big>(</big><em>sef</em>, <em>f</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.PLoss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.choose">
 <tt class="descname">choose</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.choose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.choose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Choose a field file in tud directory</p>
@@ -175,7 +187,7 @@
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.doadod">
-<tt class="descname">doadod</tt><big>(</big><em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x40c3e90&gt;</em>, <em>s=30</em>, <em>fontsize=12</em>, <em>phi=(0</em>, <em>360)</em>, <em>polar=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">doadod</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
 <dd><p>scatter plot of the DoA-DoD channel structure
 the energy is colorcoded over all couples of DoA-DoD</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -199,7 +211,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.energy">
-<tt class="descname">energy</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.energy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">energy</tt><big>(</big><em>mode='mean'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates energy on each channel</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -287,7 +299,7 @@ v en m/s (vitesse de changement de Rx)</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.prop2tran">
-<tt class="descname">prop2tran</tt><big>(</big><em>a='theta'</em>, <em>b='theta'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.prop2tran"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.prop2tran" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">prop2tran</tt><big>(</big><em>a='theta'</em>, <em>b='theta'</em>, <em>Ta=</em><span class="optional">[</span><span class="optional">]</span>, <em>Tb=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.prop2tran"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.prop2tran" title="Permalink to this definition">¶</a></dt>
 <dd><p>transform propagation channel into transmission channel</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -341,8 +353,8 @@ v en m/s (vitesse de changement de Rx)</p>
 <dd><p class="first last">tauk : (default)
 att  : theta Tx
 atp  : phi Tx
-art  : theta Rx 
-arp  : phi Rx 
+art  : theta Rx
+arp  : phi Rx
 energy</p>
 </dd>
 </dl>
@@ -416,7 +428,7 @@ receiver.</p>
 <dl class="method">
 <dt id="pylayers.antprop.channel.Tchannel.RSSI">
 <tt class="descname">RSSI</tt><big>(</big><em>ufreq=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.RSSI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.RSSI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute RSSI value from a 
+<dd><p>Compute RSSI value from a
 specific frequency of the transmission channel</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -548,7 +560,7 @@ w is apply on the overall CIR</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Tchannel.doadod">
-<tt class="descname">doadod</tt><big>(</big><em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x40c3e90&gt;</em>, <em>s=30</em>, <em>fontsize=12</em>, <em>phi=(0</em>, <em>360)</em>, <em>polar=False</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.doadod" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">doadod</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.doadod" title="Permalink to this definition">¶</a></dt>
 <dd><p>scatter plot of the DoA-DoD channel structure
 the energy is colorcoded over all couples of DoA-DoD</p>
 <table class="docutils field-list" frame="void" rules="none">

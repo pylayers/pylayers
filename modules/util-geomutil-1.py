@@ -1,4 +1,4 @@
-from pylayers.util.geomutil import * 
+from pylayers.util.geomutil import *
 import matplotlib.pyplot as plt
 import numpy as np
 l1 = np.array([[0,1,1,0],[0,0,1,1]])
