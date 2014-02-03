@@ -258,7 +258,8 @@ class Ctilde(object):
         """
         """
         pass
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),polar=False):
+
+    def doadod(self, **kwargs):
         """ doadod scatter plot
 
         Parameters
@@ -277,13 +278,35 @@ class Ctilde(object):
         the energy is colorcoded over all couples of DoA-DoD
 
         """
+        defaults = {'cmap' : plt.cm.hot_r,
+                    's': 30,
+                    'fontsize' : 12,
+                    'phi':(-180,180),
+                    'normalise':False,
+                    'polar':False,
+                    'mode':'center'}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        args = {}
+        for k in kwargs:
+            if k not in defaults:
+                args[k] = kwargs[k]
+
         dod = self.tang
         doa = self.rang
+
         # determine Energy in each channel
-        Ett, Epp, Etp, Ept = self.energy()
-        Etot = Ett+Epp+Etp+Ept
-        Emax = max(Etot)
-        Etot = Etot / Emax + 1e-7
+
+        Ett, Epp, Etp, Ept = self.energy(mode=kwargs['mode'])
+        Etot = Ett+Epp+Etp+Ept + 1e-15
+
+        if kwargs['normalise']:
+            Emax = max(Etot)
+            Etot = Etot / Emax
+
         Emax = max(10 * np.log10(Etot))
         Emin = min(10 * np.log10(Etot))
         #
@@ -292,37 +315,43 @@ class Ctilde(object):
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         al = 180. / np.pi
         col = 10 * np.log10(Etot)
+
         if len(col) != len(dod):
             print "len(col):", len(col)
             print "len(dod):", len(dod)
-        plt.subplot(121, polar=polar)
-        plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
-                    cmap=cmap, edgecolors='none')
+        plt.subplot(121, polar=kwargs['polar'])
+        plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
+                    s=kwargs['s'], c=col,
+                    cmap=kwargs['cmap'],
+                    edgecolors='none')
         # scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, phi[0], phi[1]))
+        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
         # plt.xticks(fontsize=20)
         # plt.yticks(fontsize=20)
         # a = plt.colorbar()
         # for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
         # a.set_label('dB')
-        plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
-        plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
+        plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+        plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
         # ylabel('$\phi_t(\degree)$',fontsize=18)
-        plt.title('DoD', fontsize=fontsize+2)
-        plt.subplot(122, polar=polar)
+        plt.title('DoD', fontsize=kwargs['fontsize']+2)
+        plt.subplot(122, polar=kwargs['polar'])
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
-        plt.axis((0, 180, phi[0], phi[1]))
+        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
         # plt.xticks(fontsize=20)
         # plt.yticks(fontsize=20)
         b = plt.colorbar()
-        b.set_label('dB')
+        if kwargs['normalise']:
+            b.set_label('dB')
+        else:
+            b.set_label('Path Loss (dB)')
         # for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
-        plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
-        plt.title('DoA', fontsize=fontsize+2)
-        plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
+        plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+        plt.title('DoA', fontsize=kwargs['fontsize']+2)
+        plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
         plt.axis
 
     def Cg2Cl(self, Tt=[], Tr=[]):
@@ -1032,7 +1061,8 @@ class Tchannel(bs.FUDAsignal):
 
 
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),norm=False,polar=False):
+    #def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),norm=False,polar=False):
+    def doadod(self,**kwargs):
         """ doadod scatter plot
 
         Parameters
@@ -1073,10 +1103,12 @@ class Tchannel(bs.FUDAsignal):
         doa = self.doa
 
         # determine Energy in each channel
+        #
+        # cette foonction n'est pas encore ecrite
         Etot = self.energy(axis=1,mode=kwargs['mode']) +1e-15
 
         # normalization
-        if kwargs['normalise']
+        if kwargs['normalise']:
             Emax = max(Etot)
             Etot = Etot / Emax
 
@@ -1097,8 +1129,12 @@ class Tchannel(bs.FUDAsignal):
             print "len(dod):", len(dod)
 
         plt.subplot(121, polar=polar)
-        plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=kwargs['s'], c=col,
-                    cmap=kwargs['cmap'], edgecolors='none')
+
+        plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
+                    s=kwargs['s'], c=col,
+                    cmap=kwargs['cmap'],
+                    edgecolors='none')
+
         # scatter(dod[:,0]*al,dod[:,1]*al,s=s)
         plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
         # plt.xticks(fontsize=20)
@@ -1107,26 +1143,26 @@ class Tchannel(bs.FUDAsignal):
         # for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
         # a.set_label('dB')
-        plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
-        plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
+        plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+        plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
         # ylabel('$\phi_t(\degree)$',fontsize=18)
-        plt.title('DoD', fontsize=fontsize+2)
-        plt.subplot(122, polar=polar)
+        plt.title('DoD', fontsize=kwargs['fontsize']+2)
+        plt.subplot(122, polar=kwargs['polar'])
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=kwargs['s'], c=col,
                     cmap=kwargs['cmap'], edgecolors='none')
         plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
         # plt.xticks(fontsize=20)
         # plt.yticks(fontsize=20)
         b = plt.colorbar()
-        if kwargs['normalise']
+        if kwargs['normalise']:
             b.set_label('dB')
         else:
             b.set_label('Path Loss (dB)')
         # for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
-        plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
+        plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
         plt.title('DoA', fontsize=fontsize+2)
-        plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
+        plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
         plt.axis
 
 
