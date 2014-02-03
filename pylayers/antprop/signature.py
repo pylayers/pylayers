@@ -4,7 +4,7 @@ Module : signature
 
 functions
 
-showsig 
+showsig
 
 """
 import doctest
@@ -1039,7 +1039,7 @@ class Signatures(dict):
         Parameters
         ----------
 
-        cutoff : int 
+        cutoff : int
             limit the exploration of all_simple_path
 
         Returns
@@ -1059,7 +1059,6 @@ class Signatures(dict):
         #metasig = metasig + nx.neighbors(self.L.Gt,self.target)
         #metasig = list(np.unique(np.array(metasig)))
         #metasig = metasig + [self.source] + [self.target]
-        
         # add cycles separated by air walls
         #lca=[]
         #for cy in metasig:
@@ -1072,7 +1071,7 @@ class Signatures(dict):
 
         # list of interaction source
         lis = self.L.Gt.node[self.source]['inter']
-        # list of interaction target 
+        # list of interaction target
         lit = self.L.Gt.node[self.target]['inter']
 
         # source
@@ -1109,9 +1108,9 @@ class Signatures(dict):
 
         #ndt = ndt1 + ndt2
         #ndr = ndr1 + ndr2
-        # list of interaction visible from source 
+        # list of interaction visible from source
         lis  = lisT + lisR
-        # list of interaction visible from target 
+        # list of interaction visible from target
         lit  = litT + litR
 
         #ntr = np.intersect1d(ndt, ndr)
@@ -1123,9 +1122,8 @@ class Signatures(dict):
         #    li = li + self.L.Gt.node[ms]['inter']
         #li = list(np.unique(np.array(li)))
         #
-        # dictionnary interaction:position 
+        # dictionnary interaction:position
         #dpos = {k:self.L.Gi.pos[k] for k in li}
-        
         # extracting sub graph of Gi corresponding to metasiganture
         #Gi = nx.subgraph(self.L.Gi,li)
         #Gi.pos = dpos
@@ -1154,7 +1152,7 @@ class Signatures(dict):
         pe = 0
         tic = time.time()
         tic0 = tic
-        #for interaction source  in list of source interaction 
+        #for interaction source  in list of source interaction
         for us,s in enumerate(lis):
             #for target interaction in list of target interaction
             for ut,t in enumerate(lit):
@@ -1166,7 +1164,7 @@ class Signatures(dict):
                         toc = time.time()
                         print '~%d ' % (ratio*10),
                         print '%',
-                        print '%6.3f %6.3f' % (toc-tic, toc-tic0) 
+                        print '%6.3f %6.3f' % (toc-tic, toc-tic0)
                         tic = toc
                 if (s != t):
                     #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
@@ -1180,12 +1178,12 @@ class Signatures(dict):
                 else:
                     #paths = [[nt]]
                     paths = [[s]]
-                ### supress the followinfg loops .
+                ### suppress the following loops .
                 for path in paths:
 
                     sigarr = np.array([],dtype=int).reshape(2, 0)
                     for interaction in path:
-
+                        print interaction + '->',
                         it = eval(interaction)
                         if type(it) == tuple:
                             if len(it)==2: #reflexion
@@ -1198,6 +1196,7 @@ class Signatures(dict):
                             sigarr = np.hstack((sigarr,
                                                 np.array([[it],[3]],dtype=int)))
                     #print sigarr
+                    print ''
                     try:
                         self[len(path)] = np.vstack((self[len(path)],sigarr))
                     except:

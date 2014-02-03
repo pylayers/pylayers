@@ -92,7 +92,7 @@ class Body(object):
 
     def __repr__(self):
         st = ''
-   
+
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):
@@ -153,7 +153,7 @@ class Body(object):
         keys = map(lambda x : eval(x),di['nodes'].keys())
         self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
 
-   
+
         self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
         for cyl in di['cylinder'].keys():
             t = di['cylinder'][cyl]['t']
@@ -164,12 +164,12 @@ class Body(object):
             # line index of sl corresponds to cylinder id from .ini file
             #
             self.sl[int(cyl),:] = np.array([t,h,r])
-   
+
         self.ncyl = len(di['cylinder'].values())
         self.dev={}
         for dev in di['device'].keys():
             self.dev[dev]=di['device'][dev]
-   
+
         return(di)
 
     def center(self):
@@ -449,7 +449,7 @@ class Body(object):
         The body is centered at the
 
         """
-   
+
 
         #if 'pg' in dir(self):
         # del self.pg
@@ -457,7 +457,7 @@ class Body(object):
         s, p, f, info = c3d.read_c3d(filename)
 
         self.mocapinfo = info
-   
+
         self.filename = filename
         if nframes<>-1:
             self.nframes = nframes
@@ -470,7 +470,7 @@ class Body(object):
         #
 
         CM_TO_M = 0.01
-   
+
         # duration of the motion capture snapshot
 
         self.Tmocap = self.nframes / info['VideoFrameRate']
@@ -499,7 +499,7 @@ class Body(object):
         self.d = f[0:nframes, ind, :].T
         if unit=='cm':
             self.d = self.d*CM_TO_M
-   
+
         #
         # Extension of cylinder
         #
@@ -809,7 +809,7 @@ class Body(object):
             bodylist.append('{<'+filestruc+'}\n')
         if kwargs['verbose']:
             print ("LIST\n")
-   
+
         dbody = {}
         for k in range(self.sl.shape[0]):
             # e0 : tail node of cylinder segment
@@ -858,7 +858,7 @@ class Body(object):
                     fileccs = kwargs['tag']+'ccs'+str(k)
                     geov = geu.GeomVect(fileccs)
                     pt = pA[:,0]+Rcyl*self.ccs[k,:,0]
-               
+
                     geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
                     bodylist.append('{<'+fileccs+'.vect'+"}\n")
 
@@ -868,7 +868,7 @@ class Body(object):
                 filedcs = kwargs['tag']+'dcs-'+key
                 U = self.dcs[key]
                 geoa = geu.GeomVect(filedcs)
-           
+
                 geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
                 bodylist.append('{<'+filedcs+'.vect'+"}\n")
 

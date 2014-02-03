@@ -23,9 +23,9 @@ class Ctilde(object):
     Cpt : FUsignal
     Cpp : FUsignal
 
-    tauk 
-    tang 
-    rang 
+    tauk : ndarray delays
+    tang : ndarray angles of departure
+    rang : ndarray angles of arrival
 
     fGHz : np.array
         frequency array
@@ -39,7 +39,7 @@ class Ctilde(object):
 
     choose
     load
-    mobility 
+    mobility
     doadod
     show
     energy
@@ -60,21 +60,21 @@ class Ctilde(object):
 
     def __repr__(self):
         s = 'Ctilde'+'\n---------\n'
-        if hasattr(self,'Cpp'):
-            s = s +str(np.shape(self.Cpp.y))+'\n'
-        if hasattr(self,'nray'):
-            s = s+ 'Nray : '+ str(self.nray)+'\n'
-            s = s+ 'fmin(GHz) : '+ str(self.Cpp.x[0])+'\n'
-            s = s+ 'fmax(GHz): '+ str(self.Cpp.x[-1])+'\n'
-            s = s+ 'Nfreq : '+ str(self.nfreq)+'\n'
-        s = s+ '\n methods :'+'\n---------\n'
-        s = s+ 'prop2tran(a=theta,b=phi)\n'
-        s = s+ 'energy()\n'
-        s = s+ 'doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
-        s = s+ 'mobility(v,dt)\n'
-        s = s+ 'show(mode=linear)\n'
-        s = s+ 'sort()\n'
-            
+        if hasattr(self, 'Cpp'):
+            s = s + str(np.shape(self.Cpp.y))+'\n'
+        if hasattr(self, 'nray'):
+            s = s + 'Nray : ' + str(self.nray)+'\n'
+            s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
+            s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
+            s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
+        s = s + '\n methods :'+'\n---------\n'
+        s = s + 'prop2tran(a=theta,b=phi)\n'
+        s = s + 'energy()\n'
+        s = s + 'doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
+        s = s + 'mobility(v,dt)\n'
+        s = s + 'show(mode=linear)\n'
+        s = s + 'sort()\n'
+
         return(s)
 
 
@@ -118,7 +118,7 @@ class Ctilde(object):
         try:
             fo = open(filefield, "rb")
         except:
-            raise NameError( "file "+ filefield+ " is unreachable")
+            raise NameError( "file " + filefield + " is unreachable")
 
         # decode filename (*.field file obtained from evalfield simulation)
         nray = stru.unpack('i', fo.read(4))[0]
@@ -134,7 +134,7 @@ class Ctilde(object):
         buf = fo.read()
         fo.close()
 
-        CMat = np.ndarray(shape=(n,8),buffer=buf)
+        CMat = np.ndarray(shape=(n, 8), buffer=buf)
         c11 = CMat[:, 0] + CMat[:, 1]*1j
         c12 = CMat[:, 2] + CMat[:, 3]*1j
         c21 = CMat[:, 4] + CMat[:, 5]*1j
@@ -193,7 +193,7 @@ class Ctilde(object):
             fo.close()
             # coorectif Bug evalfield
             tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
-            self.tang = tmp[0:nray, :]
+            self.tang = tmp[0:nray,:]
         try:
             fo = open(filerang, "rb")
         except:
@@ -206,7 +206,7 @@ class Ctilde(object):
             fo.close()
             # corectif Bug evalfield
             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
-            self.rang = tmp[0:nray, :]
+            self.rang = tmp[0:nray,:]
 
     def mobility(self, v, dt):
         """ Modify channel for uniform mobility
@@ -244,7 +244,7 @@ class Ctilde(object):
         rk_mod = abs(rk)
         sk_ch = rk / rk_mod
 
-        #cos_alph =dot(v/abs(v),sk_ch)
+        # cos_alph =dot(v/abs(v),sk_ch)
 
         cos_alph = (v * sk_ch) / abs(v)
         self.cos_alph = cos_alph
@@ -254,7 +254,7 @@ class Ctilde(object):
 
         return(tauk_ch)
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360),polar=False):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),polar=False):
         """ doadod scatter plot
 
         Parameters
@@ -276,7 +276,7 @@ class Ctilde(object):
         dod = self.tang
         doa = self.rang
         # determine Energy in each channel 
-        Ett,Epp,Etp,Ept = self.energy()
+        Ett, Epp, Etp, Ept = self.energy()
         Etot = Ett+Epp+Etp+Ept
         Emax = max(Etot)
         Etot = Etot / Emax + 1e-7
@@ -285,122 +285,157 @@ class Ctilde(object):
         #
         #
         #
-        #col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         al = 180. / np.pi
         col = 10 * np.log10(Etot)
         if len(col) != len(dod):
             print "len(col):", len(col)
             print "len(dod):", len(dod)
-        plt.subplot(121,polar=polar)
+        plt.subplot(121, polar=polar)
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
                     cmap=cmap, edgecolors='none')
-        #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
+        # scatter(dod[:,0]*al,dod[:,1]*al,s=s)
         plt.axis((0, 180, phi[0], phi[1]))
-        #plt.xticks(fontsize=20)
-        #plt.yticks(fontsize=20)
-        #a = plt.colorbar()
-        #for t in a.ax.get_yticklabels():
+        # plt.xticks(fontsize=20)
+        # plt.yticks(fontsize=20)
+        # a = plt.colorbar()
+        # for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
-        #a.set_label('dB')
+        # a.set_label('dB')
         plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
         plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
-        #ylabel('$\phi_t(\degree)$',fontsize=18)
-        plt.title('DoD',fontsize=fontsize+2)
-        plt.subplot(122,polar=polar)
+        # ylabel('$\phi_t(\degree)$',fontsize=18)
+        plt.title('DoD', fontsize=fontsize+2)
+        plt.subplot(122, polar=polar)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
         plt.axis((0, 180, phi[0], phi[1]))
-        #plt.xticks(fontsize=20)
-        #plt.yticks(fontsize=20)
+        # plt.xticks(fontsize=20)
+        # plt.yticks(fontsize=20)
         b = plt.colorbar()
         b.set_label('dB')
-        #for t in b.ax.get_yticklabels():
+        # for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
         plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
         plt.title('DoA', fontsize=fontsize+2)
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
         plt.axis
 
-    def Cg2Cl(self, Tt, Tr):
+    def Cg2Cl(self, Tt=[], Tr=[]):
         """ global reference frame to local reference frame
+
+        If Tt and Tr are [] the global channel is  retrieved
 
         Parameters
         ----------
 
         Tt  : Tx rotation matrix 3x3
+            default []
         Tr  : Rx rotation matrix 3x3
+            default []
 
         Returns
         -------
 
-        Cl : Ctilde local 
+        Cl : Ctilde local
 
         Examples
         --------
 
         """
-        import copy
-        
-        # get frequency axes    
-        fGHz = Cl.fGHz
+        # get frequency axes
 
-        self.Tt = Tt 
-        self.Tr = Tr 
-        
+        fGHz = self.fGHz
+
+        if (Tt <>[]) & (Tr<>[]):
+            self.Tt = Tt
+            self.Tr = Tr
+        else:
+            if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+                self.Tt = self.Tt.transpose()
+                self.Tr = self.Tr.transpose()
+            else:
+                return
+
         # get angular axes
         # Rt (2x2)
-        # Rr (2x2) 
-        Rt, tangl = geu.BTB_tx(self.tang, Tt)
-        Rr, rangl = geu.BTB_rx(self.rang, Tr)
+        # Rr (2x2)
+        #
+        # tang : r x 2
+        # rang : r x 2
+        #
+        # Rt : 2 x 2 x r
+        # Rr : 2 x 2 x r
+        #
+        # tangl : r x 2
+        # rangl : r x 2
+        #
+
+        Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
+        Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
+
+        #
+        # update direction of departure and arrival
+        #
 
         self.tang = tangl
         self.rang = rangl
 
-        uf = np.ones(VCg.nfreq)
-        r0 = np.outer(Rr[0, 0, :], uf)
-        r1 = np.outer(Rr[0, 1, :], uf)
+        #uf = np.ones(self.nfreq)
 
-        # print "shape r0 = ",np.shape(r0)
-        # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
-        # print "shape r1 = ",np.shape(r1)
-        # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
+        #
+        # r0 : r x 1(f)
+        #
 
-        t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-        t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+        #r0 = np.outer(Rr[0, 0,:], uf)
+        r0 = Rr[0,0,:][:,np.newaxis]
+        #r1 = np.outer(Rr[0, 1,:], uf)
+        r1 = Rr[0,1,:][:,np.newaxis]
 
-        r0 = np.outer(Rr[1, 0, :], uf)
-        r1 = np.outer(Rr[1, 1, :], uf)
+        t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
+        t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
-        t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-        t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+        #r0 = np.outer(Rr[1, 0,:], uf)
+        r0 = Rr[1, 0,:][:,np.newaxis]
+        #r1 = np.outer(Rr[1, 1,:], uf)
+        r1 = Rr[1, 1,:][:,np.newaxis]
 
-        r0 = np.outer(Rt[0, 0, :], uf)
-        r1 = np.outer(Rt[1, 0, :], uf)
+        t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
+        t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
+
+        #r0 = np.outer(Rt[0, 0,:], uf)
+        r0 = Rt[0,0,:][:,np.newaxis]
+        #r1 = np.outer(Rt[1, 0,:], uf)
+        r1 = Rt[1,0,:][:,np.newaxis]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
-        r0 = np.outer(Rt[0, 1, :], uf)
-        r1 = np.outer(Rt[1, 1, :], uf)
+        #r0 = np.outer(Rt[0, 1,:], uf)
+        r0 = Rt[0,1,:][:,np.newaxis]
+        #r1 = np.outer(Rt[1, 1,:], uf)
+        r1 = Rt[0,1,:][:,np.newaxis]
+
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
 
-        Cl.Ctt = bs.FUsignal(fGHz, Cttl)
-        Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
-        Cl.Cpt = bs.FUsignal(fGHz, Cptl)
-        Cl.Cpp = bs.FUsignal(fGHz, Cppl)
+        self.Ctt = bs.FUsignal(fGHz, Cttl)
+        self.Ctp = bs.FUsignal(fGHz, Ctpl)
+        self.Cpt = bs.FUsignal(fGHz, Cptl)
+        self.Cpp = bs.FUsignal(fGHz, Cppl)
 
-        return Cl
+
+        return self
 
 
     def show(self, **kwargs):
-        """ show the propagation channel 
-        
+        """ show the propagation channel
+
         Parameters
         ----------
-        
+
         typ   : 'm', 'l20' , 'r'
-         
+
         """
 
         defaults = {'typ': 'm',
@@ -416,35 +451,35 @@ class Ctilde(object):
             fig = kwargs['fig']
 
         ax1 = fig.add_subplot(221)
-        fig,ax1 = self.Ctt.imshow(fig=fig,ax=ax1,**kwargs)
+        fig, ax1 = self.Ctt.imshow(fig=fig,ax=ax1,**kwargs)
         ax1.set_xlabel('f (GHz)')
         ax1.set_title(u'$C_{\\theta\\theta}$')
 
         ax2 = fig.add_subplot(222)
-        fig,ax2 = self.Ctp.imshow(fig=fig,ax=ax2,**kwargs)
+        fig, ax2 = self.Ctp.imshow(fig=fig,ax=ax2,**kwargs)
         ax2.set_xlabel('f (GHz)')
         ax2.set_title(u'$C_{\\theta\phi}$')
 
         ax3 = fig.add_subplot(223)
-        fig,ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
+        fig, ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
         ax3.set_xlabel('f (GHz)')
         ax3.set_title(u'$C_{\phi\\theta}$')
         
         ax4 = fig.add_subplot(224)
-        fig,ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
+        fig, ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
         ax4.set_xlabel('f (GHz)')
         ax4.set_title(u'$C_{\phi\phi}$')
 
-        return fig,(ax1,ax2,ax3,ax4)
+        return fig, (ax1, ax2, ax3, ax4)
 
-    def check_reciprocity(self,C):
-        assert np.allclose(self.tauk,C.tauk)
+    def check_reciprocity(self, C):
+        assert np.allclose(self.tauk, C.tauk)
         for r in range(self.nray):
-            if np.allclose(self.Ctt.y[r,:],C.Ctt.y[r,:]):
+            if np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
                 print r
 
-        #assert np.allclose(self.tang,C.rang)
-        #assert np.allclose(self.rang,C.tang)
+        # assert np.allclose(self.tang,C.rang)
+        # assert np.allclose(self.rang,C.tang)
         
 
     def energy(self):
@@ -472,10 +507,10 @@ class Ctilde(object):
         ECtp = self.Ctp.energy(1)
         ECpt = self.Cpt.energy(1)
         ECpp = self.Cpp.energy(1)
-        #Eco = ECtt + ECpp
-        #Ecross = ECtp + ECpt
+        # Eco = ECtt + ECpp
+        # Ecross = ECtp + ECpt
 
-        return ECtt,ECpp,ECtp,ECpt
+        return ECtt, ECpp, ECtp, ECpt
 
     def sort(self,typ='tauk'):
         """ sort Ctilde with respect to typ (default tauk)
@@ -493,18 +528,18 @@ class Ctilde(object):
                 energy 
 
         """
-        if typ=='tauk':
+        if typ == 'tauk':
             u = np.argsort(self.tauk)
-        if typ=='att':
-            u = np.argsort(self.tang[:,0])
-        if typ=='atp':
-            u = np.argsort(self.tang[:,1])
-        if typ=='art':
-            u = np.argsort(self.rang[:,0])
-        if typ=='arp':
-            u = np.argsort(self.rang[:,1])
-        if typ=='energy':
-            Ett,Epp,Etp,Ept=self.energy()
+        if typ == 'att':
+            u = np.argsort(self.tang[:, 0])
+        if typ == 'atp':
+            u = np.argsort(self.tang[:, 1])
+        if typ == 'art':
+            u = np.argsort(self.rang[:, 0])
+        if typ == 'arp':
+            u = np.argsort(self.rang[:, 1])
+        if typ == 'energy':
+            Ett, Epp, Etp, Ept = self.energy()
             Etot = Ett+Epp+Etp+Ept 
             u = np.argsort(Etot)
 
@@ -512,10 +547,10 @@ class Ctilde(object):
         self.tang = self.tang[u,:]
         self.rang = self.rang[u,:]
 
-        self.Ctt.y = self.Ctt.y[u, :]
-        self.Cpp.y = self.Cpp.y[u, :]
-        self.Ctp.y = self.Ctp.y[u, :]
-        self.Cpt.y = self.Cpt.y[u, :]
+        self.Ctt.y = self.Ctt.y[u,:]
+        self.Cpp.y = self.Cpp.y[u,:]
+        self.Ctp.y = self.Ctp.y[u,:]
+        self.Cpt.y = self.Cpt.y[u,:]
 
     def prop2tran(self,a='theta',b='theta'):
         """ transform propagation channel into transmission channel
@@ -543,61 +578,61 @@ class Ctilde(object):
         nray  = self.nray
         sh = np.shape(self.Ctt.y)
 
-        if type(a)==str:
+        if type(a) == str:
 
-            if a=='theta':
-                Fat = np.ones((nray,nfreq))
-                Fap = np.zeros(nray*nfreq).reshape((nray,nfreq))
+            if a == 'theta':
+                Fat = np.ones((nray, nfreq))
+                Fap = np.zeros(nray*nfreq).reshape((nray, nfreq))
 
-            if a=='phi':
-                Fap = np.ones((nray,nfreq))
-                Fat = np.zeros(nray*nfreq).reshape((nray,nfreq))
-            Fat = bs.FUsignal(self.fGHz,Fat)
-            Fap = bs.FUsignal(self.fGHz,Fap)
+            if a == 'phi':
+                Fap = np.ones((nray, nfreq))
+                Fat = np.zeros(nray*nfreq).reshape((nray, nfreq))
+            Fat = bs.FUsignal(self.fGHz, Fat)
+            Fap = bs.FUsignal(self.fGHz, Fap)
 
         else:
             if not a.pattern :
-                Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
+                Fat, Fap = a.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
                 Fat = Fat.transpose()
                 Fap = Fap.transpose()
-                Fat = bs.FUsignal(a.fa,Fat)
-                Fap = bs.FUsignal(a.fa,Fap)
+                Fat = bs.FUsignal(a.fa, Fat)
+                Fap = bs.FUsignal(a.fa, Fap)
             else: 
-                Fat , Fap = a.Fpatt(self.rang[:, 0],self.rang[:,1],pattern=False)
-                Fat = bs.FUsignal(a.fa,Fat)
-                Fap = bs.FUsignal(a.fa,Fap)
+                Fat, Fap = a.Fpatt(self.rang[:, 0], self.rang[:, 1], pattern=False)
+                Fat = bs.FUsignal(a.fa, Fat)
+                Fap = bs.FUsignal(a.fa, Fap)
             
 
-        if type(b)==str:
+        if type(b) == str:
             
-            if b=='theta':
-                Fbt = np.ones((nray,nfreq))
-                Fbp = np.zeros(nray*nfreq).reshape((nray,nfreq))
-            if b=='phi':
-                Fbp = np.ones((nray,nfreq))
-                Fbt = np.zeros(nray*nfreq).reshape((nray,nfreq))
+            if b == 'theta':
+                Fbt = np.ones((nray, nfreq))
+                Fbp = np.zeros(nray*nfreq).reshape((nray, nfreq))
+            if b == 'phi':
+                Fbp = np.ones((nray, nfreq))
+                Fbt = np.zeros(nray*nfreq).reshape((nray, nfreq))
 
-            Fbt = bs.FUsignal(self.fGHz,Fbt)
-            Fbp = bs.FUsignal(self.fGHz,Fbp)
+            Fbt = bs.FUsignal(self.fGHz, Fbt)
+            Fbp = bs.FUsignal(self.fGHz, Fbp)
         else:
 
             if not b.pattern :
-                Fbt , Fbp = b.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
+                Fbt, Fbp = b.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
                 Fbt = Fbt.transpose()
                 Fbp = Fbp.transpose()
-                Fbt = bs.FUsignal(b.fa,Fbt)
-                Fbp = bs.FUsignal(b.fa,Fbp)
+                Fbt = bs.FUsignal(b.fa, Fbt)
+                Fbp = bs.FUsignal(b.fa, Fbp)
             else: 
-                Fbt , Fbp = b.Fpatt(self.rang[:, 0],self.rang[:,1],pattern=False)
-                Fbt = bs.FUsignal(b.fa,Fbt)
-                Fbp = bs.FUsignal(b.fa,Fbp)
+                Fbt, Fbp = b.Fpatt(self.rang[:, 0], self.rang[:, 1], pattern=False)
+                Fbt = bs.FUsignal(b.fa, Fbt)
+                Fbp = bs.FUsignal(b.fa, Fbp)
         # Ctt : r x f
         
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
-        H = Tchannel(alpha.x,alpha.y,self.tauk,self.tang,self.rang)
+        H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
         return(H)
 
     def vec2scal(self):
@@ -645,9 +680,9 @@ class Ctilde(object):
 
         """
 
-        Ftt, Ftp = At.Fsynth3(self.rang[:, 0], self.rang[:, 1],pattern=False)
+        Ftt, Ftp = At.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
 
-        Frt, Frp = Ar.Fsynth3(self.rang[:, 0], self.rang[:, 1],pattern=False)
+        Frt, Frp = Ar.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
 
         Ftt = Ftt.transpose()
         Ftp = Ftp.transpose()
@@ -709,7 +744,7 @@ class Tchannel(bs.FUDAsignal):
 
 
     """
-    def __init__(self,fGHz,alpha,tau,dod,doa):
+    def __init__(self, fGHz, alpha, tau, dod, doa):
         """
 
         Parameters
@@ -723,10 +758,10 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        bs.FUDAsignal.__init__(self,fGHz,alpha,tau,dod,doa)
+        bs.FUDAsignal.__init__(self, fGHz, alpha, tau, dod, doa)
     
     def __repr__(self):
-        st =''
+        st = ''
         st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
         st = st + 'shape  :'+str(np.shape(self.y))+"\n"
         st = st + 'tau :'+str(min(self.tau0))+' '+str(max(self.tau0))+"\n"
@@ -761,7 +796,7 @@ class Tchannel(bs.FUDAsignal):
         """
 
         U = self * W
-        V = bs.FUDAsignal(U.x, U.y, self.tau0,self.dod,self.doa)
+        V = bs.FUDAsignal(U.x, U.y, self.tau0, self.dod, self.doa)
 
         return(V)
 
@@ -824,7 +859,7 @@ class Tchannel(bs.FUDAsignal):
 
 
 
-        h = bs.FUDsignal(self.x,self.y,self.tau0)
+        h = bs.FUDsignal(self.x, self.y, self.tau0)
         htap = h.chantap(**kwargs)
         return htap
  
@@ -893,8 +928,8 @@ class Tchannel(bs.FUDAsignal):
     #     """
     #     dod = self.dod
     #     doa = self.doa
-    #     #
-    #     #col  = 1 - (10*np.log10(Etot)-Emin)/(Emax-Emin)
+    # 
+    # col  = 1 - (10*np.log10(Etot)-Emin)/(Emax-Emin)
     #     Etot = self.energy()
     #     Etot = Etot / max(Etot)
     #     al = 180 / np.pi
@@ -904,7 +939,7 @@ class Tchannel(bs.FUDAsignal):
     #     plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=15, c=col,
     #                 cmap=plt.cm.gray_r, edgecolors='none')
     #     a = colorbar()
-    #     #a.set_label('dB')
+    # a.set_label('dB')
     #     plt.xlabel("$\\theta_t(\degree)$", fontsize=18)
     #     plt.ylabel('$\phi_t(\degree)$', fontsize=18)
     #     title('DoD')
@@ -924,7 +959,7 @@ class Tchannel(bs.FUDAsignal):
         defaults = {
                     'fig': [],
                     'ax': [],
-                    'phi':(-180,180),
+                    'phi':(-180, 180),
                     'reverse' : False,
                     'cmap':plt.cm.hot_r,
                     's':30,
@@ -940,7 +975,7 @@ class Tchannel(bs.FUDAsignal):
 
                 
         
-        di = getattr(self,d,'doa')
+        di = getattr(self, d, 'doa')
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
@@ -952,7 +987,7 @@ class Tchannel(bs.FUDAsignal):
         reverse = kwargs.pop('reverse')  
 
 
-        if fig==[]:
+        if fig == []:
             fig = plt.gcf()
             
 
@@ -964,16 +999,16 @@ class Tchannel(bs.FUDAsignal):
         #
         #
         #
-        #col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         al = 180. / np.pi
         col = 10 * np.log10(Etot)
-        kwargs['c']=col
+        kwargs['c'] = col
 
         if len(col) != len(di):
             print "len(col):", len(col)
             print "len(di):", len(dir)
         if ax == []:
-            ax= fig.add_subplot(111,polar=polar)
+            ax = fig.add_subplot(111, polar=polar)
         if not reverse :
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * al, **kwargs)
             ax.axis((0, 180, phi[0], phi[1]))
@@ -985,14 +1020,14 @@ class Tchannel(bs.FUDAsignal):
             ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
             ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
 
-        ax.set_title(d,fontsize=fontsize+2)
+        ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
             fig.colorbar(scat)
-        return (fig,ax)
+        return (fig, ax)
 
 
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360),polar=False):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),polar=False):
         """ doadod scatter plot
 
         Parameters
@@ -1023,36 +1058,36 @@ class Tchannel(bs.FUDAsignal):
         #
         #
         #
-        #col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         al = 180. / np.pi
         col = 10 * np.log10(Etot)
         if len(col) != len(dod):
             print "len(col):", len(col)
             print "len(dod):", len(dod)
-        plt.subplot(121,polar=polar)
+        plt.subplot(121, polar=polar)
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
                     cmap=cmap, edgecolors='none')
-        #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
+        # scatter(dod[:,0]*al,dod[:,1]*al,s=s)
         plt.axis((0, 180, phi[0], phi[1]))
-        #plt.xticks(fontsize=20)
-        #plt.yticks(fontsize=20)
-        #a = plt.colorbar()
-        #for t in a.ax.get_yticklabels():
+        # plt.xticks(fontsize=20)
+        # plt.yticks(fontsize=20)
+        # a = plt.colorbar()
+        # for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
-        #a.set_label('dB')
+        # a.set_label('dB')
         plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
         plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
-        #ylabel('$\phi_t(\degree)$',fontsize=18)
-        plt.title('DoD',fontsize=fontsize+2)
-        plt.subplot(122,polar=polar)
+        # ylabel('$\phi_t(\degree)$',fontsize=18)
+        plt.title('DoD', fontsize=fontsize+2)
+        plt.subplot(122, polar=polar)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
         plt.axis((0, 180, phi[0], phi[1]))
-        #plt.xticks(fontsize=20)
-        #plt.yticks(fontsize=20)
+        # plt.xticks(fontsize=20)
+        # plt.yticks(fontsize=20)
         b = plt.colorbar()
         b.set_label('dB')
-        #for t in b.ax.get_yticklabels():
+        # for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
         plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
         plt.title('DoA', fontsize=fontsize+2)
@@ -1073,15 +1108,15 @@ class Tchannel(bs.FUDAsignal):
         W = w.ft()
         # Appliquer W
         Y = self.apply(W)
-        #r.require('graphics')
-        #r.postscript('fig.eps')
-        #r('par(mfrow=c(2,2))')
-        #Y.fig(Nray)
+        # r.require('graphics')
+        # r.postscript('fig.eps')
+        # r('par(mfrow=c(2,2))')
+        # Y.fig(Nray)
         y = Y.iftd(100, 0, 50, 0)
         y.fig(Nray)
-        #r.dev_off()
-        #os.system("gv fig.eps ")
-        #y.fidec()
+        # r.dev_off()
+        # os.system("gv fig.eps ")
+        # y.fidec()
         # Sur le FUsignal retourn
         # A gauche afficher le signal sur chaque rayon
         # A droite le meme signal decal
@@ -1103,7 +1138,7 @@ class Tchannel(bs.FUDAsignal):
 
         """
         # get the kth Ray  Transfer function
-        Hk = bs.FUDsignal(self.H.x, self.H.y[k, :])
+        Hk = bs.FUDsignal(self.H.x, self.H.y[k,:])
 
         dxh = Hk.dx()
         dxw = W.dx()
@@ -1153,7 +1188,7 @@ class Tchannel(bs.FUDAsignal):
 
         """
     
-        Tk = np.real(self.y[:,ufreq])
+        Tk = np.real(self.y[:, ufreq])
         return(20*np.log(np.sum(Tk**2)))
 
 def Cg2Cl(Cg, Tt, Tr):
@@ -1194,8 +1229,8 @@ def Cg2Cl(Cg, Tt, Tr):
     Cl.rang = rangl
 
     uf = np.ones(VCg.nfreq)
-    r0 = np.outer(Rr[0, 0, :], uf)
-    r1 = np.outer(Rr[0, 1, :], uf)
+    r0 = np.outer(Rr[0, 0,:], uf)
+    r1 = np.outer(Rr[0, 1,:], uf)
 
     # print "shape r0 = ",np.shape(r0)
     # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
@@ -1205,20 +1240,20 @@ def Cg2Cl(Cg, Tt, Tr):
     t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
     t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
 
-    r0 = np.outer(Rr[1, 0, :], uf)
-    r1 = np.outer(Rr[1, 1, :], uf)
+    r0 = np.outer(Rr[1, 0,:], uf)
+    r1 = np.outer(Rr[1, 1,:], uf)
 
     t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
     t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
 
-    r0 = np.outer(Rt[0, 0, :], uf)
-    r1 = np.outer(Rt[1, 0, :], uf)
+    r0 = np.outer(Rt[0, 0,:], uf)
+    r1 = np.outer(Rt[1, 0,:], uf)
 
     Cttl = t00 * r0 + t01 * r1
     Cptl = t10 * r0 + t11 * r1
 
-    r0 = np.outer(Rt[0, 1, :], uf)
-    r1 = np.outer(Rt[1, 1, :], uf)
+    r0 = np.outer(Rt[0, 1,:], uf)
+    r1 = np.outer(Rt[1, 1,:], uf)
     Ctpl = t00 * r0 + t01 * r1
     Cppl = t10 * r0 + t11 * r1
 

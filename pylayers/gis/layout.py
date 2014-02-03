@@ -244,8 +244,6 @@ class Layout(object):
         self.display['inverse'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = "TA-Office.png"
-        #self.display['box'] = (-11.4, 19.525, -8.58, 23.41)
-        self.display['box'] = (-20, 20, -10, 10)
         self.display['layerset'] = self.sl.keys()
         self.name = {}
         for k in self.sl.keys():
@@ -2241,7 +2239,6 @@ class Layout(object):
                                    'overlay',
                                    'fileoverlay',
                                    'inverse',
-                                   'box',
                                    'alpha'),
                                   (self.filename,
                                    int(self.display['nodes']),
@@ -2256,7 +2253,6 @@ class Layout(object):
                                    int(self.display['overlay']),
                                    self.display['fileoverlay'],
                                    bool(self.display['inverse']),
-                                   str(self.display['box']),
                                    self.display['alpha']))
         if displaygui is not None:
             self.filename = displaygui[0]
@@ -2272,7 +2268,6 @@ class Layout(object):
             self.display['overlay'] = bool(eval(displaygui[10]))
             self.display['fileoverlay'] = displaygui[11]
             self.display['inverse'] = eval(displaygui[12])
-            self.display['box'] = eval(displaygui[13])
             self.display['alpha'] = eval(displaygui[14])
 
     def info_segment(self, s1):
@@ -3999,17 +3994,17 @@ class Layout(object):
         Parameters
         ----------
 
-        ax      : ax
         ndlist  : np.array
             set of nodes to be displayed
         edlist  : np.array
             set of edges to be displayed
+        roomlist : list
+            default : []
         show    : boolean
             default True
         furniture : boolean
             default False
-        roomlist : list
-            default : []
+        width : 2
 
         display parameters are defined in  display dictionnary
 
@@ -4025,7 +4020,7 @@ class Layout(object):
                     'edlist': [],
                     'roomlist' : [],
                     'axis' : [],
-                    'width':40,
+                    'width': 2,
                     'fGHz' : [],
                     'show':False,
                     'furniture':False}
@@ -4066,9 +4061,10 @@ class Layout(object):
                     imok =True
             if imok:
                 if self.display['inverse']:
-                    ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
+                    ax.imshow(image, extent=self.ax, alpha=self.display['alpha'])
                 else:
-                    ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
+                    ax.imshow(image, extent=self.ax,alpha=self.display['alpha'],origin='lower')
+
         if kwargs['ndlist'] == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]

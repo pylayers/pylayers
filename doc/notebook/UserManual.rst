@@ -1599,8 +1599,16 @@ Channel variability due to different ``Layout`` constitutive materials
 .. image:: GIS-multisubsegments_files/GIS-multisubsegments_20_3.png
 
 
-Multi-wall model
-================
+Electromagnetic Simulation 
+==========================
+
+Mutliwall Model
+---------------
+
+The multiwall model is an adaptation of the Motley Keenan model. It determines
+the LOS attenuation between Tx and Rx in addoin to free space attenuation the
+losses in the crossed wall takin into account incidence angle, frequency,
+polarisation and constitutive properties of slabs.
 
 .. code-block:: python
 
@@ -1614,32 +1622,22 @@ Multi-wall model
     from pylayers.network.model import *
 
 
-The layout is loaded from an `ini` file. If graphs are not already created,
-they are built.
+The layout is loaded from an `ini` file. 
 
 .. code-block:: python
 
     L=Layout('TA-Office.ini')
 
-Defining a radio link
----------------------
-
 The 2 extremities of the radio link are coordinates in ``numpy.array``
-of transmitter and receiver.
-
--  A a radio node
-
--  B a radio node
+of transmitter and receiver. `A` and  `B` are radionodes at the two
+termination of the radio link.
 
 .. code-block:: python
 
     A=np.array((4,1)) # defining transmitter position 
     B=np.array((30,12)) # defining receiver position
 
-Ploting the scene
------------------
-
-The scene is plotted with the ``showG`` method of the Layout
+The scene is plotted with the ``showG`` method of the Layout. 
 
 .. code-block:: python
 
@@ -1659,26 +1657,14 @@ The scene is plotted with the ``showG`` method of the Layout
 
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_9_0.png
 
-
-Finding the intersection between the "direct" path and the walls
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The function ``angleonlink`` returns the list of intersected segments
 and the corresponding incidence angles (in radians) with respect to the
 segment normal.
 
 .. code-block:: python
 
-    %pdef L.angleonlink
-
-.. parsed-literal::
-
-     [0mL[0m[1;33m.[0m[0mangleonlink[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mp1[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m0[0m[1;33m,[0m [1;36m0[0m[1;33m][0m[1;33m)[0m[1;33m,[0m [0mp2[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m10[0m[1;33m,[0m  [1;36m3[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m
-     
-
-.. code-block:: python
-
     data=L.angleonlink(A,B)
+
 Computing the Multi-wall model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1706,11 +1692,18 @@ orthogonal and parallel polarization
     Excess delay orthogonal polarization  	 2.23113 ns
     Excess delay parallel polarization   	 2.12364 ns
 
+The Coverage class
+------------------
 
-Coverage class
-==============
 
-By extension, the multi-wall model can also be used to perform a full
+Sometimes it might be useful to get a fast estimate about losses in
+a given indoor environment. Ray tracing is generally time consuming
+and depending on the purpose of the study it could be relevant to
+proceed with a simpler approach while staying site-specific.
+``PyLayers`` provides such a tool which heavily relies on the core
+module ``slab.py``
+
+The multi-wall model can also be used to perform a full
 coverage of a Layout given a transmitter position.
 
 .. code-block:: python
@@ -1718,59 +1711,17 @@ coverage of a Layout given a transmitter position.
     C = Coverage()
     C.L  = L # set layout
     C.tx = A # set the transmitter
-.. code-block:: python
-
-    C.L
-
-
-
-.. parsed-literal::
-
-    
-    ----------------
-    TA-Office.ini
-    Image('/home/uguen/Bureau/P1/struc/images/DLR4991.png')
-    ----------------
-    
-    Number of points  : 71
-    Number of segments  : 87
-    Number of sub segments  : 16
-    Number of cycles  : 0
-    Number of rooms  : 0
-    degree 0 : []
-    degree 1 : []
-    degree 2 : 39
-    degree 3 : 32
-    
-    xrange :(0.0, 40.0)
-    yrange :(0.0, 15.0)
-    
-    Useful dictionnaries
-    ----------------
-    sl {slab name : slab dictionary}
-    name :  {slab :seglist} 
-    
-    Useful arrays
-    ----------------
-    tsg : get segment index in Gs from tahe
-    isss :  sub-segment index above Nsmax
-    tgs : get segment index in tahe from Gs
-    lsss : list of segments with sub-segment
-    sla : list of all slab names (Nsmax+Nss+1)
-    degree : degree of nodes 
-
-
 
 .. code-block:: python
 
     C.creategrid()
+
 The coverage is performed on grid. The boundaries can be specified in
 the coverage.ini file
 
 .. code-block:: python
 
     C.grid
-
 
 
 .. parsed-literal::
@@ -1784,10 +1735,6 @@ the coverage.ini file
            [  3.99900000e+01,   1.49900000e+01]])
 
 
-
-Compute the coverage
-~~~~~~~~~~~~~~~~~~~~
-
 .. code-block:: python
 
     t1=time.time()
@@ -1799,11 +1746,7 @@ Compute the coverage
 
     Coverage performed in  1.34146499634 s
 
-
-Coverage Map
-~~~~~~~~~~~~
-
-For Orthogonal polarization
+    For Orthogonal polarization
 
 .. code-block:: python
 
@@ -1814,9 +1757,7 @@ For Orthogonal polarization
     C.showEd(polar='o',fig=fig2)
 
 
-
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_26_0.png
-
 
 
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_26_1.png
@@ -1839,92 +1780,6 @@ For parallel polarization
 
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_28_1.png
 
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
-Coverage with a Multi Wall model
-================================
-
-    Sometimes it might be useful to get a fast estimate about losses in
-    a given indoor environment. Ray tracing is generally time consuming
-    and depending on the purpose of the study it could be relevant to
-    proceed with a simpler approach while staying site-specific.
-    ``PyLayers`` provides such a tool which heavily relies on the core
-    module ``slab.py``
 
 First let's import the ``coverage`` module
 
@@ -1989,14 +1844,13 @@ Below is an example of how the content of the file looks like
 
     # Create a Coverage object from coverag.ini file
     C = Coverage()
+
 The coverage object has a ``__repr__`` which summarizes the different
 parameters of the current coverage object
 
 .. code-block:: python
 
     C
-
-
 
 .. parsed-literal::
 
@@ -2030,7 +1884,6 @@ parameters of the current coverage object
     C.cover()
 
 Calculating Received Power Coverage
-===================================
 
 .. code-block:: python
 
@@ -2043,7 +1896,7 @@ Calculating Received Power Coverage
 .. image:: AP-coverage_files/AP-coverage_11_1.png
 
 
-Then, the coverage calculation is launched by calling the ``cover()``
+The coverage calculation is launched by calling the ``cover()``
 method
 
 The shadowing map coverage results can be displayed by invoquing various
@@ -2122,9 +1975,7 @@ The transmitter coordinates are :
     array([25,  5])
 
 
-
-This can be modified on the flight, and the coverage is updated
-accordingly
+This can be modified on the flight, and the coverage is updated accordingly
 
 .. code-block:: python
 
@@ -2143,89 +1994,10 @@ accordingly
 
 .. image:: AP-coverage_files/AP-coverage_21_1.png
 
-
-
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
 The excess delay due to crossing the wall can also be evaluted.
 
 Ray Signatures
-==============
+--------------
 
 .. code-block:: python
 
@@ -2335,84 +2107,9 @@ interactions.
     [ 3.43281369  0.44106546]
 
 
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
 
 Synthesis of Ultra Wide Band Waveforms
-======================================
+--------------------------------------
 
 Once the propagation channel has been evaluated. This is done in the
 ``pylayers.antprop.channel`` module. The received signal is evaluated in
@@ -2435,7 +2132,6 @@ electromagnetic simulation.
 
 
 Generation of a pulse of normalized energy
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 One possible manner to define an energy normalized short UWB pulse is
@@ -2478,7 +2174,6 @@ the pulse.
     ymax : 2.16154131873
 
 Verification of energy normalization in both domains
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 .. code-block:: python
@@ -2692,17 +2387,17 @@ The waveform associated with the simulation object is
 
 
 Above the waveform is a generic UWB waveform. The interested user can
-add easyly any other mathematical expression of UWB waveform for
+add easily any other mathematical expression of UWB waveform for
 investigation on pulse waveform modulation for example. The waveform can
-also comes from measurement. For now there are two version of this
+also comes from measurement. For now there are two versions of this
 waveform which has been used during the M1 measurement campaign. One is
 not compensated ``W1compensate`` for an extra short delay which can
-introduse a bias when interpretating the observed delay in terms of
+introduce a bias when interpreting the observed delay in terms of
 distance. The non compensated version is ``W1offset`` from the time
 origin about 0.7 ns.
 
 The waveform class should grow for incorporating more waveforms,
-especially waveforms compliants with the current IEEE 802.15.4a and IEEE
+especially waveforms compliant with the current IEEE 802.15.4a and IEEE
 802.15.6 standards.
 
 .. code-block:: python
@@ -2988,7 +2683,7 @@ Hermitian symetry enforcment
 ----------------------------
 
 If the number of point for the transmission channel and the waveform
-were the same the mathematical operation is an Hadamrd-Shur product
+were the same the mathematical operation is an Hadamard-Shur product
 between :math:`\mathbf{Y}` and :math:`\mathbf{W}`.
 
 :math:`\mathbf{Y} = \mathbf{S} \odot \mathbf{W}`
@@ -3008,6 +2703,7 @@ indexation either in time or in frequency domain.
     tau  = Y.tau0
     dod = Y.dod
     doa = Y.doa
+
 The transmission channel has a member data which is the time delay of
 each path in nano seconds. Notice that by default those delay are not
 sorted.
@@ -5309,83 +5005,6 @@ TDOA
     array([ 0.021,  4.987])
 
 
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
 .. code-block:: python
 
     import ConfigParser
@@ -5899,120 +5518,20 @@ Display messages during simulation
 
 .. code-block:: python
 
-    from IPython.display import FileLink
-    FileLink('Mobility.ipynb')
-
-
-
-.. raw:: html
-
-    Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of being generated, or you may have the incorrect path.
-
-
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
-.. code-block:: python
-
-    
-.. code-block:: python
-
-    from IPython.display import Image, HTML, Latex, YouTubeVideo
-    import numpy as np
-
-
-
-.. code-block:: python
-
-    #YouTubeVideo('1Qa6xLpU5-M')
-.. code-block:: python
-
     import pylayers.mobility.trajectory as traj
     from pylayers.mobility.body.body import *
     from pylayers.gis.layout import *
-trajectories can be imported from a simulnet simulation with the
-``importsn`` method
+
+trajectories can be imported from a simulnet simulation with the ``importsn`` method
 
 .. code-block:: python
 
     L=Layout('TA-Office.ini')
+
 .. code-block:: python
 
     t=traj.importsn()
+
 The 2 following trajectories have been calculated with
 ``pylayers.simul.simulnet``
 
@@ -6028,79 +5547,11 @@ The 2 following trajectories have been calculated with
 
 .. image:: MOB-mobility_files/MOB-mobility_7_0.png
 
-
-
 .. image:: SIM-workflow_files/SIM-workflow_4_0.png
 
 
-nbconvert Workflow.ipynb -o latex
-
-padflatex Workflow.tex
-
-This is a latex equation :math:`\sqrt{x}`
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
+Geomutil Class
+==============
 
 **Geomutil** is a module which gathers different geometrical functions
 used in other modeule of pylayers.
