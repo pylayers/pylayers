@@ -418,7 +418,7 @@ class Ctilde(object):
         #r0 = np.outer(Rt[0, 1,:], uf)
         r0 = Rt[0,1,:][:,np.newaxis]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[0,1,:][:,np.newaxis]
+        r1 = Rt[1,1,:][:,np.newaxis]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -448,7 +448,7 @@ class Ctilde(object):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-       
+
         if 'fig' not in kwargs:
             fig = plt.figure()
         else:
@@ -555,7 +555,7 @@ class Ctilde(object):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a='theta',b='theta'):
+    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[]):
         """ transform propagation channel into transmission channel
 
         Parameters
@@ -630,7 +630,9 @@ class Ctilde(object):
                 Fbt = bs.FUsignal(b.fa, Fbt)
                 Fbp = bs.FUsignal(b.fa, Fbp)
         # Ctt : r x f
-       
+        # Cg2cl should be applied here
+        #
+
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -666,14 +668,14 @@ class Ctilde(object):
 
     def vec2scalA(self, At, Ar, alpha=1.0):
         """
-       
+
         Parameters
         ----------
 
         At : transmitter antenna
         Ar : receiver antenna
         alpha : normalization factor
-   
+
         Notes
         -----
 
@@ -730,7 +732,7 @@ class Tchannel(bs.FUDAsignal):
         direction of arrival (rad)  [theta_r,phi_r]  nray x 2
     tauk :
         delay ray k in ns
-   
+
     Methods
     -------
 
@@ -762,7 +764,7 @@ class Tchannel(bs.FUDAsignal):
         """
 
         bs.FUDAsignal.__init__(self, fGHz, alpha, tau, dod, doa)
-   
+
     def __repr__(self):
         st = ''
         st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
@@ -849,7 +851,7 @@ class Tchannel(bs.FUDAsignal):
         fcGHz :
             WGHz  :
         Ntap  :
-       
+
         """
 
         defaults = {'fcGHz':4.5,
@@ -866,7 +868,7 @@ class Tchannel(bs.FUDAsignal):
         htap = h.chantap(**kwargs)
         return htap
 
-       
+
 
 
 
@@ -1030,7 +1032,7 @@ class Tchannel(bs.FUDAsignal):
 
 
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),polar=False):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),norm=False,polar=False):
         """ doadod scatter plot
 
         Parameters
@@ -1049,31 +1051,56 @@ class Tchannel(bs.FUDAsignal):
         the energy is colorcoded over all couples of DoA-DoD
 
         """
+
+        defaults = {'cmap' : plt.cm.hot_r,
+                    's': 30,
+                    'fontsize' : 12,
+                    'phi':(-180,180),
+                    'normalise':False,
+                    'polar':False,
+                    'mode':'center'}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        args = {}
+        for k in kwargs:
+            if k not in defaults:
+                args[k] = kwargs[k]
+
         dod = self.dod
         doa = self.doa
 
         # determine Energy in each channel
+        Etot = self.energy(axis=1,mode=kwargs['mode']) +1e-15
 
-        Etot = self.energy(axis=1)
-        Emax = max(Etot)
-        Etot = Etot / Emax + 1e-7
+        # normalization
+        if kwargs['normalise']
+            Emax = max(Etot)
+            Etot = Etot / Emax
+
         Emax = max(10 * np.log10(Etot))
         Emin = min(10 * np.log10(Etot))
 
+        #
+        #
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         #
 
         al = 180. / np.pi
         col = 10 * np.log10(Etot)
+
         if len(col) != len(dod):
             print "len(col):", len(col)
             print "len(dod):", len(dod)
+
         plt.subplot(121, polar=polar)
-        plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
-                    cmap=cmap, edgecolors='none')
+        plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=kwargs['s'], c=col,
+                    cmap=kwargs['cmap'], edgecolors='none')
         # scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, phi[0], phi[1]))
+        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
         # plt.xticks(fontsize=20)
         # plt.yticks(fontsize=20)
         # a = plt.colorbar()
@@ -1085,13 +1112,16 @@ class Tchannel(bs.FUDAsignal):
         # ylabel('$\phi_t(\degree)$',fontsize=18)
         plt.title('DoD', fontsize=fontsize+2)
         plt.subplot(122, polar=polar)
-        plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
-                    cmap=plt.cm.hot_r, edgecolors='none')
-        plt.axis((0, 180, phi[0], phi[1]))
+        plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=kwargs['s'], c=col,
+                    cmap=kwargs['cmap'], edgecolors='none')
+        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
         # plt.xticks(fontsize=20)
         # plt.yticks(fontsize=20)
         b = plt.colorbar()
-        b.set_label('dB')
+        if kwargs['normalise']
+            b.set_label('dB')
+        else:
+            b.set_label('Path Loss (dB)')
         # for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
         plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
@@ -1099,7 +1129,7 @@ class Tchannel(bs.FUDAsignal):
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
         plt.axis
 
-       
+
     def wavefig(self, w, Nray=5):
         """ display
 

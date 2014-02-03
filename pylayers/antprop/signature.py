@@ -1183,7 +1183,7 @@ class Signatures(dict):
 
                     sigarr = np.array([],dtype=int).reshape(2, 0)
                     for interaction in path:
-                        print interaction + '->',
+                        #print interaction + '->',
                         it = eval(interaction)
                         if type(it) == tuple:
                             if len(it)==2: #reflexion
@@ -1196,7 +1196,7 @@ class Signatures(dict):
                             sigarr = np.hstack((sigarr,
                                                 np.array([[it],[3]],dtype=int)))
                     #print sigarr
-                    print ''
+                    #print ''
                     try:
                         self[len(path)] = np.vstack((self[len(path)],sigarr))
                     except:
