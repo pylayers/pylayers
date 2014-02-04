@@ -88,6 +88,7 @@ class RadioNode(object):
         self.position = np.array([0, 0, 0]).reshape(3, 1)
         self.time = np.array([], dtype=float)
         self.orientation = np.eye(3).reshape(3, 3, 1)
+
         self.typ = typ
         self.N = 1
         self.name=name
@@ -607,21 +608,26 @@ class RadioNode(object):
         filename = self.filegeom.replace('.vect', '')
         filename = filename.replace('.off', '')
         try: 
+            
             gv = geo.Geomoff(filename)
             ant = self.A
-            if not hasattr(ant,'theta'):
-                if not ant.pattern:
-                    ant.Fsynth3()
-                else: 
-                   ant.Fpatt(pattern=True)
+            # if not hasattr(ant,'theta'):
+            if not ant.pattern:
+                ant.Fsynth3()
+            else: 
+                ant.Fpatt(pattern=True)
             V = ant.SqG[ant.nf/2,:,:]
             if not hasattr(self,'position'):
                 print "no position available"
-            gv.pattern(ant.theta,ant.phi,V,po=self.position,ilog=False,minr=0.01,maxr=1.)
+            T=self.orientation.reshape(3,3)
+            gv.pattern(ant.theta,ant.phi,V,po=self.position,T=T,ilog=False,minr=0.01,maxr=1.)
             self.filegeom=filename + '.off'
         except:
+            pdb.set_trace()
             if hasattr(self,'position'):
-                self.points(self.position, colorname)
+                pass
+            #    problem gv is not a geomvect    
+            #    gv.points(self.position, colorname)
             else :
                 print " no position available "
 

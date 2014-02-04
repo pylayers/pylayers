@@ -1,5 +1,5 @@
 #!/bin/bash 
-for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
+for i in *.ipynb;
 do 
 if [ -f  ${i%%.ipynb}.rst ]
 then 
