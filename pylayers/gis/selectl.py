@@ -663,6 +663,7 @@ class SelectL(object):
             racine, ext = os.path.splitext(self.L.filename)
             filename = racine + '.str2'
             fileini = racine + '.ini'
+
             # Commented because ss_ce not updated 
             #self.L.savestr2(filename)
 

@@ -7,6 +7,88 @@ from matplotlib import cm
 import doctest
 import pdb
 
+
+            
+def cformat(x,y,**kwargs):
+    """ complex format 
+
+    Parameters
+    ----------
+
+    x : ndarray   (,Nx)
+    y : ndarray (Ny,Nx)
+    
+    uy : ndarray()
+        select rows of y 
+
+    Returns
+    -------
+
+    xn 
+    yn 
+    ylabels
+
+    """
+    defaults = {'typ':['l20']}
+
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+
+    if 'uy' not in kwargs:
+        uy = np.arange(np.shape(y)[1])
+    else:
+        uy = kwargs['uy']
+
+    # radians to degree coefficient   
+    rtd = 180./np.pi
+    
+    t = kwargs['typ']
+
+    xn = x
+    if t=='m':
+        ylabels='Magnitude'
+        yn = np.abs(y[u,:])
+    if t=='v':
+        ylabels='Amplitude'
+        yn = y[u,:]
+    if t=='l10':
+        ylabels='Magnitude (dB)'
+        yn = 10*np.log10(np.abs(y[u,:]))
+    if t=='l20':
+        ylabels='Magnitude (dB)'
+        yn = 20*np.log10(np.abs(y[u,:]))
+    if t=='d':
+        ylabels='Phase (deg)'
+    if t=='r':
+        ylabels='Phase (rad)'
+        yn = np.angle(y[u,:])
+    if t=='du':
+        ylabels='Unwrapped Phase (deg)'
+        yn = p.unwrap(np.angle(y[u,:]))*rtd
+    if t=='ru':
+        ylabels='Unwrapped Phase (rad)'
+        yn = np.unwrap(np.angle(y[u,:]))
+    if t=='re':
+        ylabels='Real part'
+        yn = np.real(y[u,:])
+    if t=='im':
+        ylabels='Imaginary part'
+        yn = np.imag(y[u,:])
+    if t=='gdn':
+        ylabels='Group delay (ns)'
+        df  = x[1]-x[0]
+        xn  = x[0:-1]               
+        yn  = -np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
+    if t=='gdm':
+        ylabels='Group distance (m)'
+        df  = x[1]-x[0]
+        xn  = x[0:-1]               
+        yn = -0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
+    if 'ylabels'  in kwargs:
+        ylabels = kwargs['ylabels']
+
+    return(xn,yn,ylabels)                           
 def mulcplot(x,y,**kwargs):
     """ handling multiple complex variable plots
 
@@ -47,7 +129,7 @@ def mulcplot(x,y,**kwargs):
 
 
     """
-    defaults = {'types':['l20'],
+    defaults = {'typ':['l20'],
                 'titles':[''],
                 'labels':[''],
                 'xlabels':['time (ns)'],
@@ -77,7 +159,7 @@ def mulcplot(x,y,**kwargs):
     #
     if 'ylabels' not in kwargs:
         ylabels = []
-        for t in kwargs['types']:
+        for t in kwargs['typ']:
             if t=='m':
                 ylabels.append('Amplitude'),
             if t=='v':
@@ -109,7 +191,7 @@ def mulcplot(x,y,**kwargs):
     ax = kwargs['ax']
     nlin = kwargs['nlin']
     ncol = kwargs['ncol']
-    types = kwargs['types']
+    types = kwargs['typ']
     titles = kwargs['titles']
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
@@ -185,6 +267,7 @@ def mulcplot(x,y,**kwargs):
                     lablc = labels[l,c]
                 else:
                     lablc = labels[0]
+                
                 if types[0]=='v':
                         ax[l,c].plot(x,y[l,c,:],label=lablc,**args)
                 if types[0]=='r':
@@ -211,7 +294,6 @@ def mulcplot(x,y,**kwargs):
                 if types[0]=='gdm':
                     df  = x[1]-x[0]
                     ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
-                
                 if nxlabels>1:
                     ax[l,c].set_xlabel(xlabels[l,c])
                 else:

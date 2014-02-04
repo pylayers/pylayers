@@ -26,7 +26,7 @@ from pylayers.antprop.rays import Rays
 import copy
 import pickle
 import logging
-
+import time
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
@@ -631,37 +631,64 @@ class Signatures(dict):
 
         visited = [source]
         # stack is a list of iterators
-
-
         stack = [iter(G[source])]
+        # lawp = list of airwall position in visited
+        lawp = []
+
         # while the list of iterators is not void
-
-
+        # import ipdb
+        # ipdb.set_trace()    
         while stack: #
             # children is the last iterator of stack
 
             children = stack[-1]
             # next child
             child = next(children, None)
-            #print "child : ",child
-            #print "visited :",visited
+            # update number of useful segments
+            # if there is airwall in visited
+            # 
+            
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list length is less than cutoff 
+                try:
+                    lawp.pop()
+                except:
+                    pass
+
+            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
-                    stack.append(iter(G[visited[-1]][child]['output']))
+                    # only visit output nodes
+                    #pdb.set_trace()
+                    try:
+                        dintpro = G[visited[-1]][child]['output']
+                    except:
+                        dintpro ={}
+
+                    stack.append(iter(dintpro.keys()))
+                    #stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
+                    # check if child (current segment) is an airwall
+                    if self.L.di[child][0] in self.L.name['AIR']:
+                        lawp.append(1)
+                    else:
+                        lawp.append(0)
+
+
 
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
                     #print visited + [target]
                     yield visited + [target]
+
                 stack.pop()
                 visited.pop()
+                lawp.pop()
+
+
     # def propaths(self,G, source, target, cutoff=1, cutprob =0.5):
     #     """ seek all simple_path from source to target
 
@@ -1006,7 +1033,7 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
-    def run4(self,cutoff=2,cutprob=1e-9,algo='new'):
+    def run4(self,cutoff=2,algo='new',progress=False):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1123,12 +1150,24 @@ class Signatures(dict):
         #Gi = edgeout(self.L,Gi)
         #Gi = edgeout2(self.L,Gi)
         #pdb.set_trace()
-
+        lmax = len(lis)*len(lit)
+        pe = 0
+        tic = time.time()
+        tic0 = tic
         #for interaction source  in list of source interaction 
-        for s in lis:
+        for us,s in enumerate(lis):
             #for target interaction in list of target interaction
-            for t in lit:
+            for ut,t in enumerate(lit):
 
+                if progress :
+                    ratio = np.round((((us)*len(lis)+ut)/(1.*lmax))*10 )
+                    if ratio != pe:
+                        pe = ratio
+                        toc = time.time()
+                        print '~%d ' % (ratio*10),
+                        print '%',
+                        print '%6.3f %6.3f' % (toc-tic, toc-tic0) 
+                        tic = toc
                 if (s != t):
                     #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
                     #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
