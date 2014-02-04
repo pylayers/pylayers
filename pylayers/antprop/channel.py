@@ -58,6 +58,9 @@ class Ctilde(object):
         """
         self.fail = False
         self.islocal = False
+        self.Tt = np.eye(3)
+        self.Tr = np.eye(3)
+
     def __repr__(self):
         s = 'Ctilde'+'\n---------\n'
         if hasattr(self, 'Cpp'):
@@ -385,12 +388,10 @@ class Ctilde(object):
 
         # if rot matrices are passed
         if (Tt <>[]) & (Tr<>[]):
-
             if self.islocal:
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                    self.Tt = self.Tt.transpose()
-                    self.Tr = self.Tr.transpose()
-                    self.islocal = False    
+                    # run locbas to return to global basis
+                    self.locbas(b2g=True)   
                 else:
                     raise NameError('Channel has no self.Tt or self.Tr')
             self.Tt = Tt
@@ -398,16 +399,20 @@ class Ctilde(object):
             self.islocal = True    
 
         # if a return to gloabl is requested
-        elif b2g:
-            if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                self.Tt = self.Tt.transpose()
-                self.Tr = self.Tr.transpose()
-                self.islocal = False
+        elif b2g :
+            if self.islocal :
+                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+                    self.Tt = self.Tt.transpose()
+                    self.Tr = self.Tr.transpose()
+                    self.islocal = False
+                else :
+                    raise NameError ('self.Tt and self.Tr should exist')
             else:
                 print "nothing to do to return in global basis"
                 return self
+        # if Tt and Tr == []
         else :
-            raise NameError('2 rotation matrices (Tx and Rx) has to be passed')
+            return self
 
         # get angular axes
         # Rt (2x2)
