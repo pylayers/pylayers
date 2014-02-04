@@ -515,7 +515,7 @@ class Ctilde(object):
         # assert np.allclose(self.rang,C.tang)
 
 
-    def energy(self,mode='mean'):
+    def energy(self,mode='mean',Friis=True,sumray=False):
         """ Calculates energy on each channel
 
         Returns
@@ -532,17 +532,28 @@ class Ctilde(object):
 
         pylayers.signal.bsignal.FUsignal.energy
 
+        Notes
+        -----
 
 
         """
 
-        ECtt = self.Ctt.energy(axis=1,Friis=True,mode=mode)
-        ECtp = self.Ctp.energy(axis=1,Friis=True,mode=mode)
-        ECpt = self.Cpt.energy(axis=1,Friis=True,mode=mode)
-        ECpp = self.Cpp.energy(axis=1,Friis=True,mode=mode)
+        #
+        #  r x f
+        #  axis 0 : ray
+        #  axis 1 : frequency
+        #
+        ECtt = self.Ctt.energy(axis=1,Friis=Friis,mode=mode)
+        ECtp = self.Ctp.energy(axis=1,Friis=Friis,mode=mode)
+        ECpt = self.Cpt.energy(axis=1,Friis=Friis,mode=mode)
+        ECpp = self.Cpp.energy(axis=1,Friis=Friis,mode=mode)
+        if sumray:
+            ECtt = np.sum(ECtt,axis=0)
+            ECtp = np.sum(ECtp,axis=0)
+            ECpt = np.sum(ECpt,axis=0)
+            ECpp = np.sum(ECpp,axis=0)
 
         return ECtt, ECpp, ECtp, ECpt
-        #return MH,ECtt
 
     def sort(self,typ='tauk'):
         """ sort Ctilde with respect to typ (default tauk)
