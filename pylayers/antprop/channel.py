@@ -57,6 +57,9 @@ class Ctilde(object):
 
         """
         self.fail = False
+        self.islocal = False
+        self.Tt = np.eye(3)
+        self.Tr = np.eye(3)
 
     def __repr__(self):
         s = 'Ctilde'+'\n---------\n'
@@ -259,6 +262,96 @@ class Ctilde(object):
         """
         pass
 
+
+    def plotd (self, d='doa', **kwargs):
+        """plot direction of arrival/departure
+        """
+        defaults = {
+                    'fig': [],
+                    'ax': [],
+                    'phi':(-180, 180),
+                    'normalise':False,
+                    'reverse' : False,
+                    'cmap':plt.cm.hot_r,
+                    'mode':'center',
+                    's':30,
+                    'fontsize':12,
+                    'edgecolors':'none',
+                    'polar':False,
+                    'colorbar':False
+                    }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+
+        if d =='dod':
+            di = getattr(self, 'tang')
+        else :
+            di = getattr(self, 'rang')
+        
+
+
+        # remove non plt.scatter kwargs
+        phi = kwargs.pop('phi')
+        fontsize = kwargs.pop('fontsize')
+        polar = kwargs.pop('polar')
+        fig = kwargs.pop('fig')
+        ax = kwargs.pop('ax')
+        colorbar = kwargs.pop('colorbar')
+        reverse = kwargs.pop('reverse')
+        normalise = kwargs.pop('normalise')
+        mode =kwargs.pop('mode')
+
+        if fig == []:
+            fig = plt.gcf()
+
+
+        Ett, Epp, Etp, Ept = self.energy(mode=mode)
+        Etot = Ett+Epp+Etp+Ept + 1e-15
+
+        if normalise:
+            Emax = max(Etot)
+            Etot = Etot / Emax
+
+
+
+        #
+        #
+        #
+        # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        al = 180. / np.pi
+        col = 10 * np.log10(Etot)
+        kwargs['c'] = col
+
+        if len(col) != len(di):
+            print "len(col):", len(col)
+            print "len(di):", len(dir)
+        if ax == []:
+            ax = fig.add_subplot(111, polar=polar)
+        if not reverse :
+            scat = ax.scatter(di[:, 0] * al, di[:, 1] * al, **kwargs)
+            ax.axis((0, 180, phi[0], phi[1]))
+            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
+        else:
+            scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)
+            ax.axis((phi[0], phi[1], 0, 180))
+            ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
+            ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            
+
+        ax.set_title(d, fontsize=fontsize+2)
+        if colorbar:
+            b=fig.colorbar(scat)
+            if normalise:
+                b.set_label('dB')
+            else:
+                b.set_label('Path Loss (dB)')
+
+        return (fig, ax)
+
     def doadod(self, **kwargs):
         """ doadod scatter plot
 
@@ -281,6 +374,7 @@ class Ctilde(object):
         defaults = {'cmap' : plt.cm.hot_r,
                     's': 30,
                     'fontsize' : 12,
+                    'reverse' :False,
                     'phi':(-180,180),
                     'normalise':False,
                     'polar':False,
@@ -320,26 +414,43 @@ class Ctilde(object):
             print "len(col):", len(col)
             print "len(dod):", len(dod)
         plt.subplot(121, polar=kwargs['polar'])
-        plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
-                    s=kwargs['s'], c=col,
-                    cmap=kwargs['cmap'],
-                    edgecolors='none')
-        # scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
-        # plt.xticks(fontsize=20)
-        # plt.yticks(fontsize=20)
-        # a = plt.colorbar()
-        # for t in a.ax.get_yticklabels():
-        #    t.set_fontsize(18)
-        # a.set_label('dB')
-        plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
-        plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+        if kwargs['reverse']:
+            plt.scatter(dod[:, 1] * al, dod[:, 0] * al,
+                        s=kwargs['s'], c=col,
+                        cmap=kwargs['cmap'],
+                        edgecolors='none')
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],0,180))
+            plt.xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+            plt.ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+        else:
+            plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
+                        s=kwargs['s'], c=col,
+                        cmap=kwargs['cmap'],
+                        edgecolors='none')
+            plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+            plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
         # ylabel('$\phi_t(\degree)$',fontsize=18)
         plt.title('DoD', fontsize=kwargs['fontsize']+2)
+
+
         plt.subplot(122, polar=kwargs['polar'])
-        plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
-                    cmap=plt.cm.hot_r, edgecolors='none')
-        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+        if kwargs['reverse']:
+            plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
+                        cmap=plt.cm.hot_r, edgecolors='none')
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],0,180))
+            plt.xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+            
+        else :
+            plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
+                        cmap=plt.cm.hot_r, edgecolors='none')
+            plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+            plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+
+        plt.title('DoA', fontsize=kwargs['fontsize']+2)
+
         # plt.xticks(fontsize=20)
         # plt.yticks(fontsize=20)
         b = plt.colorbar()
@@ -349,12 +460,140 @@ class Ctilde(object):
             b.set_label('Path Loss (dB)')
         # for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
-        plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
-        plt.title('DoA', fontsize=kwargs['fontsize']+2)
-        plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+       
         plt.axis
 
-    def Cg2Cl(self, Tt=[], Tr=[]):
+
+    # Cannot manage the colorbar with this version
+    # def doadod(self, **kwargs):
+    #     """ doadod scatter plot
+
+    #     Parameters
+    #     -----------
+
+    #     cmap : color map
+    #     s    : float
+    #         size (default 30)
+    #     fontsize : integer
+    #         default 12
+
+    #     Summary
+    #     --------
+
+    #     scatter plot of the DoA-DoD channel structure
+    #     the energy is colorcoded over all couples of DoA-DoD
+
+    #     """
+    #     defaults = {'fig': [],
+    #                 'ax': [],
+    #                 'cmap' : plt.cm.hot_r,
+    #                 's': 30,
+    #                 'fontsize' : 12,
+    #                 'phi':(-180,180),
+    #                 'normalise':False,
+    #                 'polar':False,
+    #                 'reverse':False,
+    #                 'mode':'center'}
+
+    #     for k in defaults:
+    #         if k not in kwargs:
+    #             kwargs[k] = defaults[k]
+
+    #     args = {}
+    #     for k in kwargs:
+    #         if k not in defaults:
+    #             args[k] = kwargs[k]
+
+
+    #     fig =kwargs['fig']
+        
+    #     if fig == []:
+    #        fig = plt.gcf()
+
+    #     dod = self.tang
+    #     doa = self.rang
+
+    #     # determine Energy in each channel
+
+    #     Ett, Epp, Etp, Ept = self.energy(mode=kwargs['mode'])
+    #     Etot = Ett+Epp+Etp+Ept + 1e-15
+
+    #     if kwargs['normalise']:
+    #         Emax = max(Etot)
+    #         Etot = Etot / Emax
+
+    #     Emax = max(10 * np.log10(Etot))
+    #     Emin = min(10 * np.log10(Etot))
+    #     #
+    #     #
+    #     #
+    #     # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+    #     al = 180. / np.pi
+    #     col = 10 * np.log10(Etot)
+
+    #     if len(col) != len(dod):
+    #         print "len(col):", len(col)
+    #         print "len(dod):", len(dod)
+        
+    #     ax1=fig.add_subplot(121, polar=kwargs['polar'])
+    #     if kwargs['reverse']:
+    #         ax1.scatter(dod[:, 1] * al, dod[:, 0] * al,
+    #                     s=kwargs['s'], c=col,
+    #                     cmap=kwargs['cmap'],
+    #                     edgecolors='none')
+    #         ax1.axis((kwargs['phi'][0], kwargs['phi'][1],0, 180))
+    #         ax1.set_xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+    #         ax1.set_ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+            
+    #     else   :
+    #         ax1.scatter(dod[:, 0] * al, dod[:, 1] * al,
+    #                     s=kwargs['s'], c=col,
+    #                     cmap=kwargs['cmap'],
+    #                     edgecolors='none')
+    #         ax1.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+    #         ax1.set_xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+    #         ax1.set_ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+
+    #     # ylabel('$\phi_t(\degree)$',fontsize=18)
+    #     ax1.set_title('DoD', fontsize=kwargs['fontsize']+2)
+
+
+    #     ax2 = fig.add_subplot(122, polar=kwargs['polar'])
+    #     if kwargs['reverse'] :
+    #         scat = ax2.scatter(doa[:, 1] * al, doa[:, 0] * al, s=kwargs['s'], c=col,
+    #                     cmap=plt.cm.hot_r, edgecolors='none')
+    #         ax2.axis((kwargs['phi'][0], kwargs['phi'][1], 0, 180 ))
+    #         ax2.set_xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+    #         ax2.set_ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+            
+    #     else: 
+    #         scat = ax2.scatter(doa[:, 0] * al, doa[:, 1] * al, s=kwargs['s'], c=col,
+    #                     cmap=plt.cm.hot_r, edgecolors='none')
+    #         ax2.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+    #         ax2.set_xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+    #         ax2.set_ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+
+    #     ax2.set_title('DoA', fontsize=kwargs['fontsize']+2)
+
+    #     # plt.xticks(fontsize=20)
+    #     # plt.yticks(fontsize=20)
+        
+    #     # for t in b.ax.get_yticklabels():
+    #     #    t.set_fontsize(20)
+        
+        
+    #     fig.subplots_adjust(right=0.1)
+    #     cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+    #     b = fig.colorbar(scat, cax=cbar_ax)
+
+    #     if kwargs['normalise']:
+    #         b.set_label('dB')
+    #     else:
+    #         b.set_label('Path Loss (dB)')
+    #     fig.tight_layout()
+
+
+    def locbas(self, Tt=[], Tr=[],b2g=False):
         """ global reference frame to local reference frame
 
         If Tt and Tr are [] the global channel is  retrieved
@@ -366,11 +605,14 @@ class Ctilde(object):
             default []
         Tr  : Rx rotation matrix 3x3
             default []
+        b2g: bool
+            back to global reference frame
 
         Returns
         -------
 
-        Cl : Ctilde local
+        Cl : Ctilde local/global
+            depends on self.islocal boolean value
 
         Examples
         --------
@@ -380,15 +622,33 @@ class Ctilde(object):
 
         fGHz = self.fGHz
 
+        # if rot matrices are passed
         if (Tt <>[]) & (Tr<>[]):
+            if self.islocal:
+                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+                    # run locbas to return to global basis
+                    self.locbas(b2g=True)   
+                else:
+                    raise NameError('Channel has no self.Tt or self.Tr')
             self.Tt = Tt
             self.Tr = Tr
-        else:
-            if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
-                self.Tt = self.Tt.transpose()
-                self.Tr = self.Tr.transpose()
+            self.islocal = True    
+
+        # if a return to gloabl is requested
+        elif b2g :
+            if self.islocal :
+                if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+                    self.Tt = self.Tt.transpose()
+                    self.Tr = self.Tr.transpose()
+                    self.islocal = False
+                else :
+                    raise NameError ('self.Tt and self.Tr should exist')
             else:
-                return
+                print "nothing to do to return in global basis"
+                return self
+        # if Tt and Tr == []
+        else :
+            return self
 
         # get angular axes
         # Rt (2x2)
@@ -459,6 +719,113 @@ class Ctilde(object):
 
 
         return self
+
+
+    # def Cg2Cl(self, Tt=[], Tr=[]):
+    #     """ global reference frame to local reference frame
+
+    #     If Tt and Tr are [] the global channel is  retrieved
+
+    #     Parameters
+    #     ----------
+
+    #     Tt  : Tx rotation matrix 3x3
+    #         default []
+    #     Tr  : Rx rotation matrix 3x3
+    #         default []
+
+    #     Returns
+    #     -------
+
+    #     Cl : Ctilde local
+
+    #     Examples
+    #     --------
+
+    #     """
+    #     # get frequency axes
+
+    #     fGHz = self.fGHz
+
+    #     if (Tt <>[]) & (Tr<>[]):
+    #         self.Tt = Tt
+    #         self.Tr = Tr
+    #     else:
+    #         if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+    #             self.Tt = self.Tt.transpose()
+    #             self.Tr = self.Tr.transpose()
+    #         else:
+    #             return
+
+    #     # get angular axes
+    #     # Rt (2x2)
+    #     # Rr (2x2)
+    #     #
+    #     # tang : r x 2
+    #     # rang : r x 2
+    #     #
+    #     # Rt : 2 x 2 x r
+    #     # Rr : 2 x 2 x r
+    #     #
+    #     # tangl : r x 2
+    #     # rangl : r x 2
+    #     #
+
+    #     Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
+    #     Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
+
+    #     #
+    #     # update direction of departure and arrival
+    #     #
+
+    #     self.tang = tangl
+    #     self.rang = rangl
+
+    #     #uf = np.ones(self.nfreq)
+
+    #     #
+    #     # r0 : r x 1(f)
+    #     #
+
+    #     #r0 = np.outer(Rr[0, 0,:], uf)
+    #     r0 = Rr[0,0,:][:,np.newaxis]
+    #     #r1 = np.outer(Rr[0, 1,:], uf)
+    #     r1 = Rr[0,1,:][:,np.newaxis]
+
+    #     t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
+    #     t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
+
+    #     #r0 = np.outer(Rr[1, 0,:], uf)
+    #     r0 = Rr[1, 0,:][:,np.newaxis]
+    #     #r1 = np.outer(Rr[1, 1,:], uf)
+    #     r1 = Rr[1, 1,:][:,np.newaxis]
+
+    #     t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
+    #     t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
+
+    #     #r0 = np.outer(Rt[0, 0,:], uf)
+    #     r0 = Rt[0,0,:][:,np.newaxis]
+    #     #r1 = np.outer(Rt[1, 0,:], uf)
+    #     r1 = Rt[1,0,:][:,np.newaxis]
+
+    #     Cttl = t00 * r0 + t01 * r1
+    #     Cptl = t10 * r0 + t11 * r1
+
+    #     #r0 = np.outer(Rt[0, 1,:], uf)
+    #     r0 = Rt[0,1,:][:,np.newaxis]
+    #     #r1 = np.outer(Rt[1, 1,:], uf)
+    #     r1 = Rt[1,1,:][:,np.newaxis]
+
+    #     Ctpl = t00 * r0 + t01 * r1
+    #     Cppl = t10 * r0 + t11 * r1
+
+    #     self.Ctt = bs.FUsignal(fGHz, Cttl)
+    #     self.Ctp = bs.FUsignal(fGHz, Ctpl)
+    #     self.Cpt = bs.FUsignal(fGHz, Cptl)
+    #     self.Cpp = bs.FUsignal(fGHz, Cppl)
+
+
+    #     return self
 
 
     def show(self, **kwargs):
@@ -1005,6 +1372,7 @@ class Tchannel(bs.FUDAsignal):
                     'fig': [],
                     'ax': [],
                     'phi':(-180, 180),
+                    'normalise':False,
                     'reverse' : False,
                     'cmap':plt.cm.hot_r,
                     's':30,
@@ -1030,17 +1398,22 @@ class Tchannel(bs.FUDAsignal):
         ax = kwargs.pop('ax')
         colorbar = kwargs.pop('colorbar')
         reverse = kwargs.pop('reverse')
+        normalise = kwargs.pop('normalise')
 
 
         if fig == []:
             fig = plt.gcf()
 
 
-        Etot = self.energy(axis=1)
-        Emax = max(Etot)
-        Etot = Etot / Emax + 1e-7
+        Etot = self.energy(axis=1) + 1e-15
+
+        if normalise:
+            Emax = max(Etot)
+            Etot = Etot / Emax
+
         Emax = max(10 * np.log10(Etot))
         Emin = min(10 * np.log10(Etot))
+
         #
         #
         #
@@ -1062,12 +1435,18 @@ class Tchannel(bs.FUDAsignal):
         else:
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)
             ax.axis((phi[0], phi[1], 0, 180))
-            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
-            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
+            ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
+            ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            
 
         ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
-            fig.colorbar(scat)
+            b=fig.colorbar(scat)
+            if normalise:
+                b.set_label('dB')
+            else:
+                b.set_label('Path Loss (dB)')
+
         return (fig, ax)
 
 
@@ -1094,6 +1473,9 @@ class Tchannel(bs.FUDAsignal):
         if sumray:
             Etot = np.sum(Etot,axis=0)
         return Etot
+
+
+
 
     #def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0, 360),norm=False,polar=False):
     def doadod(self,**kwargs):
@@ -1161,7 +1543,7 @@ class Tchannel(bs.FUDAsignal):
             print "len(col):", len(col)
             print "len(dod):", len(dod)
 
-        plt.subplot(121, polar=polar)
+        plt.subplot(121, polar=kwargs['polar'])
 
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
                     s=kwargs['s'], c=col,
