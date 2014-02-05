@@ -290,7 +290,7 @@ class Ctilde(object):
             di = getattr(self, 'tang')
         else :
             di = getattr(self, 'rang')
-        
+
 
 
         # remove non plt.scatter kwargs
@@ -460,7 +460,7 @@ class Ctilde(object):
             b.set_label('Path Loss (dB)')
         # for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
-       
+
         plt.axis
 
 
@@ -1437,7 +1437,7 @@ class Tchannel(bs.FUDAsignal):
             ax.axis((phi[0], phi[1], 0, 180))
             ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
             ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
-            
+
 
         ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
@@ -1466,7 +1466,7 @@ class Tchannel(bs.FUDAsignal):
         """
         #
         #  r x f
-        #  axis 0 : ray
+        #  axis 1 : ray
         #  axis 1 : frequency
         #
         Etot = self.energy(axis=1,mode=mode,Friis=True)
