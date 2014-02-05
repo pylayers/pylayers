@@ -1153,8 +1153,7 @@ class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel
 
     The transmission channel TChannel is obtained through combination of the propagation
-    channel and the antenna transfer functions from both transmitter and
-    receiver.
+    channel and the antenna transfer functions from both transmitter and receiver.
 
     Members
     -------
@@ -1180,6 +1179,11 @@ class Tchannel(bs.FUDAsignal):
     wavefig(w,Nray)
     rayfig(w,Nray)
     RSSI(ufreq)
+
+    See Also
+    --------
+
+    pylayers.antprop.Ctilde.prop2tran
 
 
     """
@@ -1301,10 +1305,6 @@ class Tchannel(bs.FUDAsignal):
         h = bs.FUDsignal(self.x, self.y, self.tau0)
         htap = h.chantap(**kwargs)
         return htap
-
-
-
-
 
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )
@@ -1490,6 +1490,29 @@ class Tchannel(bs.FUDAsignal):
         return (fig, ax)
 
 
+    def energy(self,mode='mean',Friis=True,sumray=False):
+        """ calculates channel energy including antennas spatial filtering
+
+        Parameters
+        ----------
+
+        mode : string
+            center | mean | integ    (different manner to get the value)
+        Friis : boolean
+            apply the Frris coeff(2/(4p pi f)
+        sumray: boolean
+            ray energy cummulation indicator
+
+        """
+        #
+        #  r x f
+        #  axis 0 : ray
+        #  axis 1 : frequency
+        #
+        Etot = self.energy(axis=1,mode=mode,Friis=True)
+        if sumray:
+            Etot = np.sum(Etot,axis=0)
+        return Etot
 
 
 
@@ -1535,11 +1558,10 @@ class Tchannel(bs.FUDAsignal):
         the = (0,180)
         dod = self.dod
         doa = self.doa
-
+        #
         # determine Energy in each channel
         #
-        # cette foonction n'est pas encore ecrite
-        Etot = self.energy(axis=1,mode=kwargs['mode']) +1e-15
+        Etot = self.energy(mode=kwargs['mode']) +1e-15
 
         # normalization
         if kwargs['normalise']:
@@ -1628,9 +1650,11 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
+
         w      :  waveform
         Nray   :  int
             number of rays to be displayed
+
         """
         # Construire W
         W = w.ft()
@@ -1655,13 +1679,13 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
-       
+
         k : ray index
         W : waveform    (FUsignal)
 
         Notes
         -----
-       
+
         W is apply on k-th ray and the received signal is built in time domain
 
         """
@@ -1701,96 +1725,102 @@ class Tchannel(bs.FUDAsignal):
     def RSSI(self,ufreq=0) :
         """ Compute RSSI value from a
         specific frequency of the transmission channel
-   
+
         Parameters
         ----------
-       
+
         ufreq : int
             index in the frequency range
 
 
         Returns
         -------
-            RSSI: float
-                RSSI value
+
+        RSSI: float
+        RSSI value
+
+        Notes
+        -----
+
+        This function will be deprecated by energy function
 
         """
-   
+
         Tk = np.real(self.y[:, ufreq])
         return(20*np.log(np.sum(Tk**2)))
 
-def Cg2Cl(Cg, Tt, Tr):
-    """ global reference frame to local reference frame
-
-    Parameters
-    ----------
-
-    Cg  : Ctilde global
-    Tt  : Tx rotation matrix 3x3
-    Tr  : Rx rotation matrix 3x3
-
-    Returns
-    -------
-
-    Cl : Ctilde local
-
-    Examples
-    --------
-
-    """
-    import copy
-   
-    # don't loose the global channel
-    Cl = copy.deepcopy(Cg)
-   
-    # get frequency axes   
-    fGHz = Cl.fGHz
-   
-    # get angular axes
-
-    # Rt (2x2)
-    # Rr (2x2)
-    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
-    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
-
-    Cl.tang = tangl
-    Cl.rang = rangl
-
-    uf = np.ones(VCg.nfreq)
-    r0 = np.outer(Rr[0, 0,:], uf)
-    r1 = np.outer(Rr[0, 1,:], uf)
-
-    # print "shape r0 = ",np.shape(r0)
-    # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
-    # print "shape r1 = ",np.shape(r1)
-    # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
-
-    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-
-    r0 = np.outer(Rr[1, 0,:], uf)
-    r1 = np.outer(Rr[1, 1,:], uf)
-
-    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-
-    r0 = np.outer(Rt[0, 0,:], uf)
-    r1 = np.outer(Rt[1, 0,:], uf)
-
-    Cttl = t00 * r0 + t01 * r1
-    Cptl = t10 * r0 + t11 * r1
-
-    r0 = np.outer(Rt[0, 1,:], uf)
-    r1 = np.outer(Rt[1, 1,:], uf)
-    Ctpl = t00 * r0 + t01 * r1
-    Cppl = t10 * r0 + t11 * r1
-
-    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
-    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
-    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
-    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
-
-    return Cl
+#def Cg2Cl(Cg, Tt, Tr):
+#    """ global reference frame to local reference frame
+#
+#    Parameters
+#    ----------
+#
+#    Cg  : Ctilde global
+#    Tt  : Tx rotation matrix 3x3
+#    Tr  : Rx rotation matrix 3x3
+#
+#    Returns
+#    -------
+#
+#    Cl : Ctilde local
+#
+#    Examples
+#    --------
+#
+#    """
+#    import copy
+#   
+#    # don't loose the global channel
+#    Cl = copy.deepcopy(Cg)
+#   
+#    # get frequency axes   
+#    fGHz = Cl.fGHz
+#   
+#    # get angular axes
+#
+#    # Rt (2x2)
+#    # Rr (2x2)
+#    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
+#    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
+#
+#    Cl.tang = tangl
+#    Cl.rang = rangl
+#
+#    uf = np.ones(VCg.nfreq)
+#    r0 = np.outer(Rr[0, 0,:], uf)
+#    r1 = np.outer(Rr[0, 1,:], uf)
+#
+#    # print "shape r0 = ",np.shape(r0)
+#    # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
+#    # print "shape r1 = ",np.shape(r1)
+#    # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
+#
+#    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+#    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+#
+#    r0 = np.outer(Rr[1, 0,:], uf)
+#    r1 = np.outer(Rr[1, 1,:], uf)
+#
+#    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+#    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+#
+#    r0 = np.outer(Rt[0, 0,:], uf)
+#    r1 = np.outer(Rt[1, 0,:], uf)
+#
+#    Cttl = t00 * r0 + t01 * r1
+#    Cptl = t10 * r0 + t11 * r1
+#
+#    r0 = np.outer(Rt[0, 1,:], uf)
+#    r1 = np.outer(Rt[1, 1,:], uf)
+#    Ctpl = t00 * r0 + t01 * r1
+#    Cppl = t10 * r0 + t11 * r1
+#
+#    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
+#    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
+#    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
+#    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
+#
+#    return Cl
 
 
 if __name__ == "__main__":
