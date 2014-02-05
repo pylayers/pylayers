@@ -37,7 +37,7 @@ tEtt =[]
 tEpp =[]
 tEtp =[]
 tEpt =[]
-dist = np.arange(1,9,0.2)
+dist = np.arange(1,9,1)
 vx    = dist+759
 for x in vx:
     rx=array([x,1114,1.0])
@@ -61,7 +61,7 @@ for x in vx:
     tEpp.append(Epp)
     tEtp.append(Etp)
     tEpt.append(Ept)
-np.save('tEtt',np.array(tEtt))
-np.save('tEtp',np.array(tEtp))
-np.save('tEpt',np.array(tEpt))
-np.save('tEpp',np.array(tEpp))
+#np.save('tEtt',np.array(tEtt))
+#np.save('tEtp',np.array(tEtp))
+#np.save('tEpt',np.array(tEpt))
+#np.save('tEpp',np.array(tEpp))

@@ -288,13 +288,15 @@ class Ctilde(object):
 
         if d =='dod':
             di = getattr(self, 'tang')
-        else :
+        elif d == 'doa':
             di = getattr(self, 'rang')
-        
+        else :
+            raise AttributeError('d attribute can only be doa or dod')
 
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+        the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
         fig = kwargs.pop('fig')
@@ -321,10 +323,23 @@ class Ctilde(object):
         #
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-        al = 180. / np.pi
+        # WARNING polar plot require radian angles 
+        if polar :
+            al = 1.
+            phi=np.array(phi)
+            the=np.array(the)
+
+            phi[0] = phi[0]*np.pi/180
+            phi[1] = phi[1]*np.pi/180
+            the[0] = the[0]*np.pi/180
+            the[1] = the[1]*np.pi/180
+
+        else :
+            al = 180. / np.pi
+
+
         col = 10 * np.log10(Etot)
         kwargs['c'] = col
-
         if len(col) != len(di):
             print "len(col):", len(col)
             print "len(di):", len(dir)
@@ -332,12 +347,12 @@ class Ctilde(object):
             ax = fig.add_subplot(111, polar=polar)
         if not reverse :
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * al, **kwargs)
-            ax.axis((0, 180, phi[0], phi[1]))
+            ax.axis((the[0], the[1], phi[0], phi[1]))
             ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
             ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
         else:
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)
-            ax.axis((phi[0], phi[1], 0, 180))
+            ax.axis((phi[0], phi[1], the[0], the[1]))
             ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
             ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
             
@@ -389,6 +404,7 @@ class Ctilde(object):
             if k not in defaults:
                 args[k] = kwargs[k]
 
+        the = (0,180)
         dod = self.tang
         doa = self.rang
 
@@ -407,7 +423,18 @@ class Ctilde(object):
         #
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-        al = 180. / np.pi
+        # WARNING polar plot require radian angles 
+        if kwargs['polar'] :
+            al = 1.
+            phi=np.array(phi)
+            the=np.array(the)
+            phi[0] = phi[0]*np.pi/180
+            phi[1] = phi[1]*np.pi/180
+            the[0] = the[0]*np.pi/180
+            the[1] = the[1]*np.pi/180
+        else :
+            al = 180./np.pi
+
         col = 10 * np.log10(Etot)
 
         if len(col) != len(dod):
@@ -419,7 +446,7 @@ class Ctilde(object):
                         s=kwargs['s'], c=col,
                         cmap=kwargs['cmap'],
                         edgecolors='none')
-            plt.axis((kwargs['phi'][0], kwargs['phi'][1],0,180))
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
             plt.xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
             plt.ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
         else:
@@ -427,7 +454,7 @@ class Ctilde(object):
                         s=kwargs['s'], c=col,
                         cmap=kwargs['cmap'],
                         edgecolors='none')
-            plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
             plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
             plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
         # ylabel('$\phi_t(\degree)$',fontsize=18)
@@ -438,14 +465,14 @@ class Ctilde(object):
         if kwargs['reverse']:
             plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
                         cmap=plt.cm.hot_r, edgecolors='none')
-            plt.axis((kwargs['phi'][0], kwargs['phi'][1],0,180))
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
             plt.xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
             plt.ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
             
         else :
             plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                         cmap=plt.cm.hot_r, edgecolors='none')
-            plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
             plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
             plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
 
@@ -819,10 +846,12 @@ class Ctilde(object):
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
 
+
         self.Ctt = bs.FUsignal(fGHz, Cttl)
         self.Ctp = bs.FUsignal(fGHz, Ctpl)
         self.Cpt = bs.FUsignal(fGHz, Cptl)
         self.Cpp = bs.FUsignal(fGHz, Cppl)
+
 
 
         return self
@@ -1126,8 +1155,7 @@ class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel
 
     The transmission channel TChannel is obtained through combination of the propagation
-    channel and the antenna transfer functions from both transmitter and
-    receiver.
+    channel and the antenna transfer functions from both transmitter and receiver.
 
     Members
     -------
@@ -1153,6 +1181,11 @@ class Tchannel(bs.FUDAsignal):
     wavefig(w,Nray)
     rayfig(w,Nray)
     RSSI(ufreq)
+
+    See Also
+    --------
+
+    pylayers.antprop.Ctilde.prop2tran
 
 
     """
@@ -1275,10 +1308,6 @@ class Tchannel(bs.FUDAsignal):
         htap = h.chantap(**kwargs)
         return htap
 
-
-
-
-
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )
 
@@ -1392,6 +1421,7 @@ class Tchannel(bs.FUDAsignal):
 
         # remove non plt.scatter kwargs
         phi = kwargs.pop('phi')
+        the = (0,180)
         fontsize = kwargs.pop('fontsize')
         polar = kwargs.pop('polar')
         fig = kwargs.pop('fig')
@@ -1418,7 +1448,19 @@ class Tchannel(bs.FUDAsignal):
         #
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-        al = 180. / np.pi
+        # WARNING polar plot require radian angles 
+        if polar :
+            al = 1.
+            phi=np.array(phi)
+            the=np.array(the)            
+            phi[0] = phi[0]*np.pi/180
+            phi[1] = phi[1]*np.pi/180
+            the[0] = the[0]*np.pi/180
+            the[1] = the[1]*np.pi/180
+
+        else :
+            al = 180. / np.pi
+
         col = 10 * np.log10(Etot)
         kwargs['c'] = col
 
@@ -1429,12 +1471,12 @@ class Tchannel(bs.FUDAsignal):
             ax = fig.add_subplot(111, polar=polar)
         if not reverse :
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * al, **kwargs)
-            ax.axis((0, 180, phi[0], phi[1]))
+            ax.axis((the[0], the[1], phi[0], phi[1]))
             ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
             ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
         else:
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)
-            ax.axis((phi[0], phi[1], 0, 180))
+            ax.axis((phi[0], phi[1], the[0], the[1]))
             ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
             ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
             
@@ -1450,6 +1492,29 @@ class Tchannel(bs.FUDAsignal):
         return (fig, ax)
 
 
+    def energy(self,mode='mean',Friis=True,sumray=False):
+        """ calculates channel energy including antennas spatial filtering
+
+        Parameters
+        ----------
+
+        mode : string
+            center | mean | integ    (different manner to get the value)
+        Friis : boolean
+            apply the Frris coeff(2/(4p pi f)
+        sumray: boolean
+            ray energy cummulation indicator
+
+        """
+        #
+        #  r x f
+        #  axis 0 : ray
+        #  axis 1 : frequency
+        #
+        Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
+        if sumray:
+            Etot = np.sum(Etot,axis=0)
+        return Etot
 
 
 
@@ -1491,14 +1556,14 @@ class Tchannel(bs.FUDAsignal):
         for k in kwargs:
             if k not in defaults:
                 args[k] = kwargs[k]
-
+                
+        the = (0,180)
         dod = self.dod
         doa = self.doa
-
+        #
         # determine Energy in each channel
         #
-        # cette foonction n'est pas encore ecrite
-        Etot = self.energy(axis=1,mode=kwargs['mode']) +1e-15
+        Etot = self.energy(mode=kwargs['mode']) +1e-15
 
         # normalization
         if kwargs['normalise']:
@@ -1514,7 +1579,17 @@ class Tchannel(bs.FUDAsignal):
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         #
 
-        al = 180. / np.pi
+        if kwargs['polar'] :
+            al = 1.
+            phi=np.array(phi)
+            the=np.array(the)            
+            phi[0] = phi[0]*np.pi/180
+            phi[1] = phi[1]*np.pi/180
+            the[0] = the[0]*np.pi/180
+            the[1] = the[1]*np.pi/180
+        else :
+            al = 180./np.pi
+
         col = 10 * np.log10(Etot)
 
         if len(col) != len(dod):
@@ -1522,28 +1597,43 @@ class Tchannel(bs.FUDAsignal):
             print "len(dod):", len(dod)
 
         plt.subplot(121, polar=kwargs['polar'])
-
-        plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
-                    s=kwargs['s'], c=col,
-                    cmap=kwargs['cmap'],
-                    edgecolors='none')
-
-        # scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
-        # plt.xticks(fontsize=20)
-        # plt.yticks(fontsize=20)
-        # a = plt.colorbar()
-        # for t in a.ax.get_yticklabels():
-        #    t.set_fontsize(18)
-        # a.set_label('dB')
-        plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
-        plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+        if kwargs['reverse']:
+            plt.scatter(dod[:, 1] * al, dod[:, 0] * al,
+                        s=kwargs['s'], c=col,
+                        cmap=kwargs['cmap'],
+                        edgecolors='none')
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
+            plt.xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+            plt.ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+        else:
+            plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
+                        s=kwargs['s'], c=col,
+                        cmap=kwargs['cmap'],
+                        edgecolors='none')
+            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
+            plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
         # ylabel('$\phi_t(\degree)$',fontsize=18)
         plt.title('DoD', fontsize=kwargs['fontsize']+2)
+
+
         plt.subplot(122, polar=kwargs['polar'])
-        plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=kwargs['s'], c=col,
-                    cmap=kwargs['cmap'], edgecolors='none')
-        plt.axis((0, 180, kwargs['phi'][0], kwargs['phi'][1]))
+        if kwargs['reverse']:
+            plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
+                        cmap=plt.cm.hot_r, edgecolors='none')
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
+            plt.xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+            
+        else :
+            plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
+                        cmap=plt.cm.hot_r, edgecolors='none')
+            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
+            plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+
+        plt.title('DoA', fontsize=kwargs['fontsize']+2)
+
         # plt.xticks(fontsize=20)
         # plt.yticks(fontsize=20)
         b = plt.colorbar()
@@ -1556,7 +1646,7 @@ class Tchannel(bs.FUDAsignal):
         plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
         plt.title('DoA', fontsize=kwargs['fontsize']+2)
         plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
-        plt.axis
+
 
 
     def wavefig(self, w, Nray=5):
@@ -1564,9 +1654,11 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
+
         w      :  waveform
         Nray   :  int
             number of rays to be displayed
+
         """
         # Construire W
         W = w.ft()
@@ -1591,13 +1683,13 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
-       
+
         k : ray index
         W : waveform    (FUsignal)
 
         Notes
         -----
-       
+
         W is apply on k-th ray and the received signal is built in time domain
 
         """
@@ -1637,96 +1729,102 @@ class Tchannel(bs.FUDAsignal):
     def RSSI(self,ufreq=0) :
         """ Compute RSSI value from a
         specific frequency of the transmission channel
-   
+
         Parameters
         ----------
-       
+
         ufreq : int
             index in the frequency range
 
 
         Returns
         -------
-            RSSI: float
-                RSSI value
+
+        RSSI: float
+        RSSI value
+
+        Notes
+        -----
+
+        This function will be deprecated by energy function
 
         """
-   
+
         Tk = np.real(self.y[:, ufreq])
         return(20*np.log(np.sum(Tk**2)))
 
-def Cg2Cl(Cg, Tt, Tr):
-    """ global reference frame to local reference frame
-
-    Parameters
-    ----------
-
-    Cg  : Ctilde global
-    Tt  : Tx rotation matrix 3x3
-    Tr  : Rx rotation matrix 3x3
-
-    Returns
-    -------
-
-    Cl : Ctilde local
-
-    Examples
-    --------
-
-    """
-    import copy
-   
-    # don't loose the global channel
-    Cl = copy.deepcopy(Cg)
-   
-    # get frequency axes   
-    fGHz = Cl.fGHz
-   
-    # get angular axes
-
-    # Rt (2x2)
-    # Rr (2x2)
-    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
-    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
-
-    Cl.tang = tangl
-    Cl.rang = rangl
-
-    uf = np.ones(VCg.nfreq)
-    r0 = np.outer(Rr[0, 0,:], uf)
-    r1 = np.outer(Rr[0, 1,:], uf)
-
-    # print "shape r0 = ",np.shape(r0)
-    # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
-    # print "shape r1 = ",np.shape(r1)
-    # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
-
-    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-
-    r0 = np.outer(Rr[1, 0,:], uf)
-    r1 = np.outer(Rr[1, 1,:], uf)
-
-    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-
-    r0 = np.outer(Rt[0, 0,:], uf)
-    r1 = np.outer(Rt[1, 0,:], uf)
-
-    Cttl = t00 * r0 + t01 * r1
-    Cptl = t10 * r0 + t11 * r1
-
-    r0 = np.outer(Rt[0, 1,:], uf)
-    r1 = np.outer(Rt[1, 1,:], uf)
-    Ctpl = t00 * r0 + t01 * r1
-    Cppl = t10 * r0 + t11 * r1
-
-    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
-    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
-    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
-    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
-
-    return Cl
+#def Cg2Cl(Cg, Tt, Tr):
+#    """ global reference frame to local reference frame
+#
+#    Parameters
+#    ----------
+#
+#    Cg  : Ctilde global
+#    Tt  : Tx rotation matrix 3x3
+#    Tr  : Rx rotation matrix 3x3
+#
+#    Returns
+#    -------
+#
+#    Cl : Ctilde local
+#
+#    Examples
+#    --------
+#
+#    """
+#    import copy
+#   
+#    # don't loose the global channel
+#    Cl = copy.deepcopy(Cg)
+#   
+#    # get frequency axes   
+#    fGHz = Cl.fGHz
+#   
+#    # get angular axes
+#
+#    # Rt (2x2)
+#    # Rr (2x2)
+#    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
+#    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
+#
+#    Cl.tang = tangl
+#    Cl.rang = rangl
+#
+#    uf = np.ones(VCg.nfreq)
+#    r0 = np.outer(Rr[0, 0,:], uf)
+#    r1 = np.outer(Rr[0, 1,:], uf)
+#
+#    # print "shape r0 = ",np.shape(r0)
+#    # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
+#    # print "shape r1 = ",np.shape(r1)
+#    # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
+#
+#    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+#    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+#
+#    r0 = np.outer(Rr[1, 0,:], uf)
+#    r1 = np.outer(Rr[1, 1,:], uf)
+#
+#    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+#    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+#
+#    r0 = np.outer(Rt[0, 0,:], uf)
+#    r1 = np.outer(Rt[1, 0,:], uf)
+#
+#    Cttl = t00 * r0 + t01 * r1
+#    Cptl = t10 * r0 + t11 * r1
+#
+#    r0 = np.outer(Rt[0, 1,:], uf)
+#    r1 = np.outer(Rt[1, 1,:], uf)
+#    Ctpl = t00 * r0 + t01 * r1
+#    Cppl = t10 * r0 + t11 * r1
+#
+#    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
+#    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
+#    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
+#    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
+#
+#    return Cl
 
 
 if __name__ == "__main__":
