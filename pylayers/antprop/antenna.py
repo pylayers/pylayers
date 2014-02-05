@@ -31,6 +31,7 @@ import sys
 import pdb
 import numpy as np
 import scipy as sp
+import scipy.linalg as la
 import scipy.special as special
 from scipy import io
 import matplotlib.pylab as plt
@@ -90,7 +91,7 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', directory="ant", pattern=False, nf=104, ntheta=90, nphi=181):
+    def __init__(self, _filename='defant.vsh3', directory="ant", pattern=False, typ='Gauss', nf=104, ntheta=90, nphi=181):
         """
 
         Parameters
@@ -147,14 +148,29 @@ class Antenna(object):
                 self.loadmat(directory)
 
         else :
-            self.typ = 'Gauss'
-            self.p0 = 0
-            self.t0 = np.pi/2.
-            self.p3 = np.pi/6. # 30 degrees
-            self.t3 = np.pi/6. # 30 degrees
-            self.GdB  = 10. # gain
-            self.G  = pow(10.,self.GdB/10.) # gain
-            self.sqG = np.sqrt(self.G)
+            if typ == 'Gauss':
+                self.typ = typ
+                self.p0 = 0
+                self.t0 = np.pi/2.
+                self.p3 = np.pi/6. # 30 degrees
+                self.t3 = np.pi/6. # 30 degrees
+                self.GdB  = 10. # gain
+                self.G  = pow(10.,self.GdB/10.) # gain
+                self.sqG = np.sqrt(self.G)
+            elif typ == 'WirePlate':
+                self.typ = typ
+                self.p0 = 0
+                self.t0 = 5*np.pi/6.
+                self.GdB  = 5. # gain
+                self.G  = pow(10.,self.GdB/10.) # gain
+                self.sqG = np.sqrt(self.G)
+            elif typ == 'Omni':
+                self.typ = typ
+                self.GdB  = 0. # gain
+                self.G  = pow(10.,self.GdB/10.) # gain
+                self.sqG = np.sqrt(self.G)
+            else:
+                raise NameError('antenna typ is not known')
 
     def __repr__(self):
         st = ''
@@ -222,9 +238,52 @@ class Antenna(object):
                 Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
                 Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
        
-            
+        if self.typ == 'WirePlate':
 
+            uth1 = np.where(self.th < self.t0)[0]
+            uth2 = np.where(self.th >= self.t0)[0]
+            p = self.t0
+            q = np.pi/2.
+            A=np.array(([[3*p**2,2*p,1],[p**3,p**2,p],[q**3,q**2,q]]))
+            Y=np.array(([0,1,1/(1.*self.sqG)]))
+            self.poly = la.solve(A,Y)
+
+            argth1 = self.poly[0]*self.th[uth1]**3 \
+                     + self.poly[1]*self.th[uth1]**2 \
+                     + self.poly[2]*self.th[uth1] \
+
+            argth2 = -(1/(np.pi-self.t0)**2)*(self.th[uth2]-self.t0)**2+1
+            argth = np.hstack((argth1,argth2))
+
+            if pattern :
+                Fat = self.sqG * (argth[:,np.newaxis]) 
+                Fap = self.sqG * (argth[:,np.newaxis]) 
+                self.theta=self.th[:,np.newaxis]
+                self.phi=self.ph[np.newaxis,:]
+                self.SqG=np.ones((self.nf,self.ntheta,self.nphi))
+                self.SqG[:]=Fap
+            else:
+                Fat = self.sqG * argth
+                Fap = self.sqG * argth
+                Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+                Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+                     
+        if self.typ == 'Omni':
+
+            if pattern :
+
+                self.SqG = self.sqG * np.ones((self.nf,self.ntheta,self.nphi))
+                self.theta = self.th[:,np.newaxis]
+                self.phi = self.ph[np.newaxis,:]
+                
+                
+            else:
+                Fat = self.sqG * np.ones((len(self.th),self.nf))
+                Fap = self.sqG * np.zeros((len(self.th),self.nf))
+                
+        
         return (Fat,Fap)    
+
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
@@ -816,28 +875,28 @@ class Antenna(object):
                 itheta = np.arange(self.Nt)
                 iphi1 = ip
                 Np = self.Np
-                if mod(Np, 2) == 0:
-                    iphi2 = mod(ip + Np / 2, Np)
+                if np.mod(Np, 2) == 0:
+                    iphi2 = np.mod(ip + Np / 2, Np)
                 else:
-                    iphi2 = mod(ip + (Np - 1) / 2, Np)
+                    iphi2 = np.mod(ip + (Np - 1) / 2, Np)
 
-                u1 = nonzero((self.theta <= np.pi / 2) & (self.theta >= 0))
+                u1 = np.nonzero(([self.theta[:,0]] <= np.pi / 2) & ([self.theta[:,0]] >= 0))
                 u2 = np.arange(self.Nt)
-                u3 = nonzero((self.theta <= np.pi) & (
+                u3 = np.nonzero(([self.theta[:,0]] <= np.pi) & (
                     self.theta > np.pi / 2))
                 r1 = -GmindB + 20 * np.log10(
                     alpha * self.SqG[ik, u1[0], iphi1])
                 #r1  = self.SqG[k,u1[0],iphi1]
-                negr1 = nonzero(r1 < 0)
+                negr1 = np.nonzero(r1 < 0)
                 r1[negr1[0]] = 0
                 r2 = -GmindB + 20 * np.log10(alpha * self.SqG[ik, u2, iphi2])
                 #r2  = self.SqG[k,u2,iphi2]
-                negr2 = nonzero(r2 < 0)
+                negr2 = np.nonzero(r2 < 0)
                 r2[negr2[0]] = 0
                 r3 = -GmindB + 20 * np.log10(
                     alpha * self.SqG[ik, u3[0], iphi1])
                 #r3  = self.SqG[k,u3[0],iphi1]
-                negr3 = nonzero(r3 < 0)
+                negr3 = np.nonzero(r3 < 0)
                 r3[negr3[0]] = 0
                 r = np.hstack((r1[::-1], r2, r3[::-1], r1[-1]))
 
@@ -845,7 +904,7 @@ class Antenna(object):
             else:
                 iphi = np.arange(self.Np)
                 itheta = it
-                angle = self.phi[iphi]
+                angle = self.phi[0,iphi]
                 r = -GmindB + 20 * np.log10(self.SqG[ik, itheta, iphi])
 
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
@@ -900,8 +959,14 @@ class Antenna(object):
         # geo.pattern requires the following shapes  
         # theta (Ntx1)
         # phi (1xNp)
-        theta = self.theta[:,np.newaxis] 
-        phi = self.phi[np.newaxis,:]  
+        if len(np.shape(self.theta))==1:
+            theta = self.theta[:,np.newaxis] 
+        else: 
+            theta=self.theta
+        if len(np.shape(self.phi))==1:
+            phi = self.phi[np.newaxis,:]  
+        else: 
+            phi=self.phi
         geo.pattern(theta,phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
@@ -1510,6 +1575,8 @@ class Antenna(object):
 
         Nt = len(theta)
         Np = len(phi)
+        self.Nt = len(theta)
+        self.Np = len(phi)
 
         if pattern:
             self.theta = theta[:,np.newaxis]

@@ -1509,7 +1509,7 @@ class Tchannel(bs.FUDAsignal):
         #  axis 0 : ray
         #  axis 1 : frequency
         #
-        Etot = self.energy(axis=1,mode=mode,Friis=True)
+        Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
         if sumray:
             Etot = np.sum(Etot,axis=0)
         return Etot
