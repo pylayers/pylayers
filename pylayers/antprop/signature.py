@@ -686,7 +686,10 @@ class Signatures(dict):
 
                 stack.pop()
                 visited.pop()
-                lawp.pop()
+                try:
+                    lawp.pop()
+                except:
+                    pass
 
 
     # def propaths(self,G, source, target, cutoff=1, cutprob =0.5):
