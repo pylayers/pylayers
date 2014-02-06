@@ -218,6 +218,7 @@ def edgeout2(L,g):
                     #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                     #    plt.show()
                     #    pdb.set_trace()
+                
                 isegkeep = isegments[bs]     
                 output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
                 # keep all segment above nstr1 and in Cone if T 
