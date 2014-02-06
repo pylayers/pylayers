@@ -441,7 +441,6 @@ class Ctilde(object):
                     'edgecolors':'none',
                     'polar':False,
                     'mode':'mean'
-        
                     }
 
 
@@ -453,12 +452,62 @@ class Ctilde(object):
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
-        
-        kwargs['colorbar']=False
-        fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
-        kwargs['colorbar']=True
-        fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
-        return fig,ax
+        if len(col) != len(dod):
+            print "len(col):", len(col)
+            print "len(dod):", len(dod)
+        plt.subplot(121, polar=kwargs['polar'])
+        if kwargs['reverse']:
+            plt.scatter(dod[:, 1] * al, dod[:, 0] * al,
+                        s=kwargs['s'], c=col,
+                        cmap=kwargs['cmap'],
+                        edgecolors='none')
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
+            plt.xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+            plt.ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+        else:
+            plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
+                        s=kwargs['s'], c=col,
+                        cmap=kwargs['cmap'],
+                        edgecolors='none')
+            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
+            plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
+        # ylabel('$\phi_t(\degree)$',fontsize=18)
+        plt.title('DoD', fontsize=kwargs['fontsize']+2)
+
+
+        plt.subplot(122, polar=kwargs['polar'])
+        if kwargs['reverse']:
+            plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
+                        cmap=plt.cm.hot_r, edgecolors='none')
+            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
+            plt.xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+        else :
+            plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
+                        cmap=plt.cm.hot_r, edgecolors='none')
+            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
+            plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+            plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+
+        plt.title('DoA', fontsize=kwargs['fontsize']+2)
+
+        # plt.xticks(fontsize=20)
+        # plt.yticks(fontsize=20)
+        b = plt.colorbar()
+        if kwargs['normalise']:
+            b.set_label('dB')
+        else:
+            b.set_label('Path Loss (dB)')
+        # for t in b.ax.get_yticklabels():
+        #    t.set_fontsize(20)
+
+        plt.axis
+        #kwargs['colorbar']=False
+        #fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
+        #kwargs['colorbar']=True
+        #fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
+        #return fig,ax
 
 
     # def doadod(self, **kwargs):
@@ -1399,7 +1448,7 @@ class Tchannel(bs.FUDAsignal):
 
 
         Etot = self.energy(mode=mode) + 1e-15
-        
+
 
         if normalise:
             Emax = max(Etot)
@@ -1408,7 +1457,9 @@ class Tchannel(bs.FUDAsignal):
         #
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-        # WARNING polar plot require radian angles 
+        # WARNING polar plot require radian angles
+        #
+        #
         if polar :
             al = 1.
             alb = 180. / np.pi
@@ -1437,19 +1488,16 @@ class Tchannel(bs.FUDAsignal):
             print "len(di):", len(dir)
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
-      
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
             ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
             ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
-            
         else:
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
             ax.axis((the[0], the[1], phi[0], phi[1]))
             ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
             ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
-            
 
         ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
@@ -1468,7 +1516,6 @@ class Tchannel(bs.FUDAsignal):
         Parameters
         ----------
 
-                
         phi: tuple (-180, 180)
             phi angle
         normalise: bool
@@ -1540,7 +1587,7 @@ class Tchannel(bs.FUDAsignal):
         """
         #
         #  r x f
-        #  axis 0 : ray
+        #  axis 1 : ray
         #  axis 1 : frequency
         #
         Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
