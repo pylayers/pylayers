@@ -1927,6 +1927,8 @@ class Simul(object):
         if rays !=[]:
 
             kwargs['bdis']=False
+            kwargs['L']=self.L
+            kwargs['centered']=False
             fo.write("{<" + rays.show3(**kwargs) + "}")
 
         fo.close()

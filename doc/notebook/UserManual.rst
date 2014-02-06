@@ -30,12 +30,13 @@ France
 
 
 
-PyLayers Keywords
------------------
+Keywords
+--------
 
 -  Python scientific framework
+-  Computational Electromagnetism
+-  Site specific Channel Modeling    
 -  Ray Tracing
--  Electromagnetism
 -  Indoor Radio Propagation Modelling
 -  Impulse Radio Ultra Wide Band IR-UWB (IEEE 802.15.4a)
 -  Efficient handling of antenna patterns for UWB scenario
@@ -93,17 +94,17 @@ to fork the project on your own machine. Use PyLayers for your own
 needs, and if you wish provide feedback to the project with a **pull
 request**.
 
-How to install PyLayers ?
-=========================
+Installation 
+============
 
-PyLayers is developped on Linux platform. If you are working on a
-Windows platform and you are not familiar with the Python ecosystem, a
+PyLayers is developped on Linux platform but should also work on windows
+platform. If you are working on Windows and are not familiar with the Python ecosystem, a
 good idea is to install first
 `Anaconda <https://store.continuum.io/cshop/anaconda/>`__. It provides
 you most of the required dependencies.
 
 Dependencies
-~~~~~~~~~~~~
+------------
 
 ::
 
@@ -143,7 +144,7 @@ http://imposm.org/docs/imposm/latest/install.html#id1
     python setup.py install
 
 Setting of environment variables $BASENAME and $PYLAYERS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------
 
 ::
 
@@ -159,9 +160,545 @@ Setting of environment variables $BASENAME and $PYLAYERS
     export BASENAME=~/plproject
 
 Testing
-~~~~~~~
+-------
 
-make test-code
+:: 
+
+ make test-code
+
+Slabs and Materials
+===================
+
+Before introducing any model, lets start by introducing two major classes of
+the PyLayers platform on which is relying the electromagnetic field
+calculation. 
+
+A `Slab` is a set ol several layers of materials with specified thickness.
+Slabs are used to describe properties of the different constitutive
+elements of a building such as wall, windows ,...
+
+In practice when describing a specific building, it is necessary to
+specify a set of different slabs with different characteristics.
+
+The structure which gathers this set is ``SlabDB``. If no file argument
+is given, this structure is initialized with the default file:
+
+`slabDB.ini <https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini>`__
+
+This section illustrates some features of the ``pylayers.antprop.slab`` module.
+
+.. code-block:: python
+
+    from pylayers.antprop.slab import *
+    fig = plt.figure(figsize=(10,10))
+
+
+
+The Class ``SlabDB`` contains a dictionnary of all available Slab. This
+information is read in the file ``slabDB.ini`` of the current project
+pointed by environment variable ``$BASENAME``
+
+A ``__repr__`` method provides a visual indication of the thichness and
+materials of a ``Slab``
+
+.. code-block:: python
+
+    S = SlabDB()
+
+.. code-block:: python
+
+    S.keys()
+
+
+
+.. parsed-literal::
+
+    ['WINDOW_GLASS',
+     'PLASTERBOARD_7CM',
+     'WALL',
+     'AIR',
+     'WINDOW',
+     'METALIC',
+     'PLASTERBOARD_14CM',
+     'DOOR',
+     'FLOOR',
+     'METAL',
+     'PARTITION',
+     'CONCRETE_20CM3D',
+     'PLASTERBOARD_10CM',
+     'CEIL',
+     'CONCRETE_6CM3D',
+     'CONCRETE_15CM3D',
+     '3D_WINDOW_GLASS',
+     'WALLS',
+     'WOOD',
+     'CONCRETE_7CM3D',
+     'PILLAR',
+     'ABSORBENT']
+
+Defining a new Slab and a new Material
+--------------------------------------
+
+.. code-block:: python
+
+    S.mat.add(name='wall2',typ='reim',cval=2.6-0.026*1j,fGHz=4)
+    
+.. code-block:: python
+
+    S.add('slab2',['wall2'],[0.15])
+
+.. code-block:: python
+
+    S.mat['wall2']
+
+.. parsed-literal::
+
+    {'epr': array(2.6),
+     'epr2': array(-0.026),
+     'epsr': (2.6-0.026j),
+     'fGHz': 4,
+     'index': 11,
+     'mur': 1,
+     'n': (1.612-0.00806j),
+     'name': 'wall2',
+     'roughness': 0,
+     'sigma': 0.0057}
+
+
+
+.. code-block:: python
+
+    S['slab2']['lmatname']
+
+.. parsed-literal::
+
+    ['wall2']
+
+`ev` method is used to evaluate a Slab for a given range of frequencies and angles 
+
+.. code-block:: python
+
+    fGHz= np.arange(3,5,0.01)
+    theta = np.arange(0,np.pi/2,0.01)
+    S['slab2'].ev(fGHz,theta)
+
+`pcolor()` display the magnitude or phase of reflection ant transmission
+coefficients w.r.t angle anf frequency.
+
+.. code-block:: python
+
+    S['slab2'].pcolor()
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png
+
+.. code-block:: python
+
+    A=S['slab2']
+
+.. code-block:: python
+
+    R=A.R
+
+Slab Information
+----------------
+
+Each slab contains informations about the electromagnetic properties of its constitutive materials.
+
+
+Below is presented an example for a simple slab, constituted with a single material.
+The slab 'WOOD' is defined as a layer of 4cm 'WOOD' material.
+
+``lmatname`` list of material names
+
+.. code-block:: python
+
+    S['WOOD']['lmatname']
+
+.. parsed-literal::
+
+    ['WOOD']
+
+``lithickname`` list of slab thickness
+
+.. code-block:: python
+
+    S['WOOD']['lthick']
+
+.. parsed-literal::
+
+    [0.04]
+
+There is also a ``color`` attribute
+
+.. code-block:: python
+
+    S['WOOD']['color']
+
+
+
+.. parsed-literal::
+
+    'maroon'
+
+
+
+.. code-block:: python
+
+    S['WOOD']['linewidth']
+
+
+
+.. parsed-literal::
+
+    2
+
+
+
+Multi layers Slab, using different stacks of materials can be easily
+defined using the two lists **lmatname** and **lthick**.
+
+    Notice the adopted convention naming lists starting with letter 'l'
+    and dictionnaries starting with letter 'd'
+
+.. code-block:: python
+
+    S['3D_WINDOW_GLASS']['lmatname']
+
+
+
+.. parsed-literal::
+
+    ['GLASS', 'AIR', 'GLASS']
+
+
+
+.. code-block:: python
+
+    S['3D_WINDOW_GLASS']['lthick']
+
+
+
+.. parsed-literal::
+
+    [0.005, 0.005, 0.005]
+
+
+
+For each constitutive material of a slab, their electromagnetic
+properties can be obtained as:
+
+.. code-block:: python
+
+    S['3D_WINDOW_GLASS']['lmat']
+
+
+
+.. parsed-literal::
+
+    [{'epr': (3.79999995232+0j),
+      'index': 4,
+      'mur': (1+0j),
+      'name': 'GLASS',
+      'roughness': 0.0,
+      'sigma': 0.0},
+     {'epr': (1+0j),
+      'index': 1,
+      'mur': (1+0j),
+      'name': 'AIR',
+      'roughness': 0.0,
+      'sigma': 0.0},
+     {'epr': (3.79999995232+0j),
+      'index': 4,
+      'mur': (1+0j),
+      'name': 'GLASS',
+      'roughness': 0.0,
+      'sigma': 0.0}]
+
+
+
+Slab evaluation
+---------------
+
+Each Slab can be evaluated to obtain the Transmission and Reflexion
+coefficients for
+
+-  a given frequency range
+-  a given incidence angle range (:math:`0\le\theta<\frac{\pi}{2}`)
+
+.. code-block:: python
+
+    fGHz = np.arange(3,5,0.01)
+    theta = np.arange(0,pi/2,0.01)
+    
+    S['WOOD'].ev(fGHz,theta,compensate=True)
+    sR = np.shape(S['WOOD'].R) 
+    print '\nHere, slab is evaluted for',sR[0],'frequency(ies)', 'and',sR[1], 'angle(s)\n'
+
+.. parsed-literal::
+
+    
+    Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)
+    
+
+
+Transmission and Reflexion coefficients
+---------------------------------------
+
+Reflexion and transmission coefficient are computed for the given
+frequency range and theta range
+
+.. code-block:: python
+
+    ifreq=1
+    ithet=10
+    
+    print '\nReflection coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n R=',S['WOOD'].R[0,0]
+    print '\nTransmission coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n T=',S['WOOD'].T[0,0],'\n'
+
+
+.. parsed-literal::
+
+    
+    Reflection coefficient @ 3.01 GHz and theta= 0.1 :
+    
+     R= [[-0.39396205-0.17289585j  0.00000000+0.j        ]
+     [ 0.00000000+0.j          0.39396205+0.17289585j]]
+    
+    Transmission coefficient @ 3.01 GHz and theta= 0.1 :
+    
+     T= [[-0.17594898-0.86927604j -0.00000000+0.j        ]
+     [-0.00000000+0.j         -0.17594898-0.86927604j]] 
+    
+
+
+Ploting Coefficients
+~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    plotwrt (plot with respect to)
+         
+    Parameters
+    ----------
+
+     kv  : int
+        variable index
+     polar: string 
+            'po', # po | p | o   (parallel+ortho | parallel | ortogonal)
+     coeff: string 
+            'RT', # RT | R | T   (Reflexion & Transmission ) | Reflexion | Transmission 
+     var:  string 
+            'a',    # a | f       angle | frequency 
+     types : string 
+            'm' | 'r' | 'd' | 'l20'
+            mod   rad    deg   dB
+
+.. code-block:: python
+
+    fig,ax = S['WOOD'].plotwrt(var='f',coeff='R',polar='p')
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png
+
+
+with respect to angle
+
+.. code-block:: python
+
+    fig = plt.figure(figsize=(20,20))
+    fGHz= np.array([2.4])
+    S['WOOD'].ev(fGHz,theta)
+    fig,ax = S['WOOD'].plotwrt(var='a',coeff='R',fig=fig)
+    plt.tight_layout()
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png
+
+
+wrt to angle and frequency
+
+.. code-block:: python
+
+    plt.figure(figsize=(10,10))
+    fGHz= np.arange(0.7,5.2,0.1)
+    S['WOOD'].ev(fGHz,theta)
+    S['WOOD'].pcolor()
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png
+
+
+.. code-block:: python
+
+    theta = np.arange(0,np.pi/2,0.01)
+    fGHz = np.arange(0.1,10,0.2)
+    sl = SlabDB('matDB.ini','slabDB.ini')
+    mat   = sl.mat
+    lmat  = [mat['AIR'],mat['WOOD']]
+    II    = MatInterface(lmat,0,fGHz,theta)
+    II.RT()
+    fig,ax = II.plotwrt(var='a',kv=10,typ=['m'])
+    tight_layout()
+    air = mat['AIR']
+    brick  = mat['BRICK']
+    II  = MatInterface([air,brick],0,fGHz,theta)
+    II.RT()
+    fig,ax = II.plotwrt(var='f',color='k',typ=['m'])
+    tight_layout()
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png
+
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png
+
+
+.. code-block:: python
+
+    ## Adding new materials
+.. code-block:: python
+
+    sl.mat.add(name='TESS-p50',cval=3+0j,sigma=0.06,typ='epsr')
+    
+    sl.add(name='TESS-p50-5cm',lmatname=['TESS-p50'],lthick=[0.05])
+    sl.add(name='TESS-p50-10cm',lmatname=['TESS-p50'],lthick=[0.10])
+    sl.add(name='TESS-p50-15cm',lmatname=['TESS-p50'],lthick=[0.15])
+    fGHz=4
+    theta = np.arange(0,np.pi/2,0.01)
+    #figure(figsize=(8,8))
+    # These Tessereau page 50 
+    
+    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
+    
+    # by default var='a' and kv = 0 
+    
+    fig,ax = sl['TESS-p50-5cm'].plotwrt(color='k',labels=[''])
+    fig,ax = sl['TESS-p50-10cm'].plotwrt(color='k',labels=[''],linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt(color='k',labels=[''],linestyle='dashdot',fig=fig,ax=ax)
+    plt.tight_layout()
+
+.. parsed-literal::
+
+    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+      warnings.warn("No labeled objects found. "
+
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png
+
+
+Evaluation without phase compensation
+-------------------------------------
+
+.. code-block:: python
+
+    fGHz = np.arange(2,16,0.1)
+    theta = 0 
+    
+    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=False)
+    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=False)
+    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=False)
+        
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',typ=['ru'],labels=[''],color='k')
+    print ax
+    #fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
+    #fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashdot')
+    plt.tight_layout()
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png
+
+
+.. code-block:: python
+
+    
+    
+    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
+    
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['5cm compensated',''],color='r',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['10cm compensated',''],color='r',linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['15cm not compensated',''],color='r',linestyle='dashdot',fig=fig,ax=ax) 
+    
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',labels=[''],color='k')
+    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png
+
+
+Double Glass example from litterature [1] in sub TeraHertz D-band @ 120GHz
+--------------------------------------------------------------------------
+
+.. code-block:: python
+
+    sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
+    sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
+    sl.add('ConcreteJc',['ConcreteJc'],[0.049])
+    
+    theta = np.linspace(20,60,100)*np.pi/180
+    sl['ConcreteJc'].ev(120,theta)
+    fig,ax = sl['ConcreteJc'].plotwrt('a')
+    
+
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png
+
+
+.. code-block:: python
+
+    fGHz = np.linspace(110,135,50)
+    sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[0.0029,0.0102,0.0029])
+    sl['DoubleGlass'].ev(fGHz,theta)
+    sl['DoubleGlass'].pcolor(dB=True)
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png
+
+
+.. code-block:: python
+
+    plt.figure(figsize=(10,10))
+    sl['DoubleGlass'].ev(120,theta)
+    fig,ax = sl['DoubleGlass'].plotwrt('a',figsize=(10,10))
+    tight_layout()
+
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png
+
+
+.. code-block:: python
+
+    freq = np.linspace(110,135,50)
+    sl['DoubleGlass'].ev(freq,theta)
+    fig,ax = sl['DoubleGlass'].plotwrt('f',figsize=(10,10))  # @20°
+    tight_layout()
+
+
+.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png
+
+
+References
+----------
+
+[1]. `Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. "Reflection
+ant Transmission Properties of Building Materials in D-Band for Modeling
+Future mm-Wave Communication Systems" Antennas and Propagation (EuCAP),
+2010 Proceedings of the Fourth European Conference
+on <http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5505315&queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation>`__
+
+[2]. `R.Piesiewicz 'Terahertz characterization of building materials'
+Electronics .Letters Jan 2005 Vol 41
+N°18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`__
+
+
 
 The Layout class
 ================
@@ -187,7 +724,9 @@ See the following methods of the layout object
 -  ``saveosm()``
 
 Structure of a Layout
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
+
+
 
 A Layout is firstly described by a set of points (negative index) and a
 set of segments (positive index).
@@ -201,7 +740,8 @@ This rule allows to capture topological relations of the network which
 are exploited for further analysis.
 
 Subsegments
-~~~~~~~~~~~
+-----------
+
 
 To describe doors and windows, the concept of ``subsegment`` is
 introduced.
@@ -228,7 +768,8 @@ When appearing in a 3D ray a subsegment has a unique index
 different from the segment index.
 
 Layout file formats
-~~~~~~~~~~~~~~~~~~~
+-------------------
+
 
 The layout format has regularly evolved over time and is going to evolve
 again. Currently, the different recognized file extensions are the
@@ -247,14 +788,9 @@ following :
     from pylayers.gis.layout import *
     from pylayers.util.project import *
 
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x5263890>
-
-
 Reading an exiting Layout
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
+
 
 To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
@@ -473,9 +1009,9 @@ ray signatures.
 
 .. image:: GIS-editor_files/GIS-editor_33_0.png
 
-
 The display options dictionnary
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
+
 
 .. code-block:: python
 
@@ -560,66 +1096,25 @@ are exploited in ``showGs()`` vizualisation method.
      'visu': False}
 
 
-
-Layers
-^^^^^^
-
--  'layer' : list , []
--  'layerset',list, list of available layers
--  'layers', list , []
--  'activelayer', str , 'WINDOW\_GLASS'
-
--  'alpha', float , 0.5 , overlay transparency
--  'box', tuple , (-20,20,-10,10), (xmin xmax,ymin,ymax)
-
-Strings
-^^^^^^^
-
--  'title' : str , 'Init'
--  'fileoverlay' : str , 'TA-Office.png'
-
-Sizes
-^^^^^
-
--  'fontsize', float , 10
--  'ndsize', float , 10
--  'ndlblsize' : float 20
--  'edlblsize' : float , 20
-
-Booleans
-^^^^^^^^
-
--  'edlabel', boolean, False
--  'ticksoff',boolean, True
--  'scaled' : boolean , True
--  'subseg' : boolean , True
--  'nodes', boolean , True
--  'visu', boolean , False
--  'edges', boolean , True
--  'clear', boolean, False
--  'overlay', boolean , False
--  'thin', boolean , False , If True trace all segments with thickness 1
--  'ndlabel',boolean, If True display node labels
--  'ednodes', boolean, True
-
 Interactive editor
-~~~~~~~~~~~~~~~~~~
+------------------
 
-The command L.editor() launches an interactive editor. The state machine
-is implemented in module ``pylayers.gis.selectl.py``.
+
+The command `L.editor()` launches a simple Layout interactive editor. 
+The state machine is implemented in module ``pylayers.gis.selectl.py``.
 
 To have an idea of all available options, look in the
 ```pylayers.gis.SelectL`` <http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state>`__
 module
 
-All bug correction and ergonomic improvement of this editor is welcome.
+All ergonomic improvement of this editor is welcome.
 Just pull request your modifications.
 
 PyLayers comes along with a low level structure editor based on
 ``matplotlib`` which can be invoqued using the ``editor()`` method. This
-editor is more suited for modyfing constitutive properties of walls. In
-the future a dedicated plugin in ``JOSM`` could be a much better
-solution.
+editor is more suited for modyfing constitutive properties of walls. 
+
+An alternative editing solution is to use the open street map editor ``JOSM`` 
 
 There are two different modes of edition
 
@@ -640,7 +1135,8 @@ There are two different modes of edition
 **i** : to return to init state
 
 Image overlay
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
+
 
 It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
@@ -664,19 +1160,11 @@ a filename. In that case the file is stored in
 
 
 
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x53b7d50>,
-     <matplotlib.axes.AxesSubplot at 0x53b7cd0>)
-
-
-
-
 .. image:: GIS-editor_files/GIS-editor_53_1.png
 
-
 Scaling the figure overlay
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Before going further it is necessary :
 
@@ -718,8 +1206,9 @@ At that stage, it is possible to start creating points
         'x'  : save .str2 file
         'w'  : display all layers
 
-Vizualisation of the layout
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Visualisation of the layout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 .. code-block:: python
 
@@ -732,6 +1221,7 @@ Vizualisation of the layout
 
 
 .. image:: GIS-editor_files/GIS-editor_59_0.png
+   :scale: 50%
 
 
 Each node of :math:`\mathcal{G}_s` with a negative index is a point.
@@ -756,11 +1246,6 @@ Segment and sub-segments
     import pylayers.signal.waveform as wvf 
     from pylayers.simul.simulem import *
     import matplotlib.pyplot as plt 
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x3dff890>
 
 
 .. code-block:: python
@@ -937,11 +1422,6 @@ The :math:`\mathcal{G}_s` graph dictionnary has the following structure
     f,a = S.show()
 
 
-.. parsed-literal::
-
-    Warning : no furniture file loaded
-
-
 
 .. image:: GIS-multisubsegments_files/GIS-multisubsegments_9_1.png
 
@@ -1028,11 +1508,6 @@ Channel variability due to different ``Layout`` constitutive materials
     #cirair = evcir(r3d,wav)
     fig,ax = cirair.plot(typ=['v'],xmin=20,xmax=60)
     title = plt.title(str(layer))
-
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-      warnings.warn("No labeled objects found. "
 
 
 
@@ -1124,569 +1599,16 @@ Channel variability due to different ``Layout`` constitutive materials
 .. image:: GIS-multisubsegments_files/GIS-multisubsegments_20_3.png
 
 
-Slabs and Materials
-===================
+Electromagnetic Simulation 
+==========================
 
-
-
-A slab is a set ol several layers of materials with specified thickness.
-Slabs are used to describe properties of the different constitutive
-elements of a building such as wall, windows ,...
-
-In practice when describing a specific building, it is necessary to
-specify a set of different slabs with different characteristics.
-
-The structure which gathers this set is ``SlabDB``. If no file argument
-is given, this structure is initialized with the default file:
-`slabDB.ini <https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini>`__
-
-This section demonstates some features of the ``pylayers.antprop.slab``
-module.
-
-.. code-block:: python
-
-    from pylayers.antprop.slab import *
-    fig = plt.figure(figsize=(10,10))
-
-
-
-The Class ``SlabDB`` contains a dictionnary of all available Slab. This
-information is read in the file ``slabDB.ini`` of the current project
-pointed by environment variable ``$BASENAME``
-
-A ``__repr__`` method provides a visual indication of the thichness and
-materials of a ``Slab``
-
-.. code-block:: python
-
-    S = SlabDB()
-.. code-block:: python
-
-    S.keys()
-
-
-
-.. parsed-literal::
-
-    ['WINDOW_GLASS',
-     'PLASTERBOARD_7CM',
-     'WALL',
-     'AIR',
-     'WINDOW',
-     'METALIC',
-     'PLASTERBOARD_14CM',
-     'DOOR',
-     'FLOOR',
-     'METAL',
-     'PARTITION',
-     'CONCRETE_20CM3D',
-     'PLASTERBOARD_10CM',
-     'CEIL',
-     'CONCRETE_6CM3D',
-     'CONCRETE_15CM3D',
-     '3D_WINDOW_GLASS',
-     'WALLS',
-     'WOOD',
-     'CONCRETE_7CM3D',
-     'PILLAR',
-     'ABSORBENT']
-
-
-
-Defining a new Slab and a new Material
---------------------------------------
-
-.. code-block:: python
-
-    S.mat.add(name='wall2',typ='reim',cval=2.6-0.026*1j,fGHz=4)
-.. code-block:: python
-
-    S.add('slab2',['wall2'],[0.15])
-.. code-block:: python
-
-    S.mat['wall2']
-
-.. parsed-literal::
-
-    {'epr': array(2.6),
-     'epr2': array(-0.026),
-     'epsr': (2.6-0.026j),
-     'fGHz': 4,
-     'index': 11,
-     'mur': 1,
-     'n': (1.6124717046742498-0.0080621569744854828j),
-     'name': 'wall2',
-     'roughness': 0,
-     'sigma': 0.0057777777777777775}
-
-
-
-.. code-block:: python
-
-    S['slab2']['lmatname']
-
-
-
-.. parsed-literal::
-
-    ['wall2']
-
-
-
-.. code-block:: python
-
-    fGHz= np.arange(3,5,0.01)
-    theta = np.arange(0,np.pi/2,0.01)
-    S['slab2'].ev(fGHz,theta)
-.. code-block:: python
-
-    S['slab2'].ev
-
-
-
-.. parsed-literal::
-
-    <bound method Slab.ev of fGHz : [ 3.]:[ 4.99]:200
-    theta : [ 0.]:[ 1.57]:158
-    | wall2 | 
-    |---------------|
-    >
-
-
-
-.. code-block:: python
-
-    S['slab2'].pcolor()
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png
-
-
-.. code-block:: python
-
-    A=S['slab2']
-.. code-block:: python
-
-    R=A.R
-
-Slab Information
-----------------
-
-Each slab contains informations about the electromagnetic properties of its constitutive materials.
-
-
-Below is presented an example for a simple slab, constituted with a single material.
-The slab 'WOOD' is defined as a layer of 4cm 'WOOD' material.
-
-``lmatname`` list of material names
-
-.. code-block:: python
-
-    S['WOOD']['lmatname']
-
-.. parsed-literal::
-
-    ['WOOD']
-
-``lithickname`` list of slab thickness
-
-.. code-block:: python
-
-    S['WOOD']['lthick']
-
-.. parsed-literal::
-
-    [0.04]
-
-There is also a ``color`` attribute
-
-.. code-block:: python
-
-    S['WOOD']['color']
-
-
-
-.. parsed-literal::
-
-    'maroon'
-
-
-
-.. code-block:: python
-
-    S['WOOD']['linewidth']
-
-
-
-.. parsed-literal::
-
-    2
-
-
-
-Multi layers Slab, using different stacks of materials can be easily
-defined using the two lists **lmatname** and **lthick**.
-
-    Notice the adopted convention naming lists starting with letter 'l'
-    and dictionnaries starting with letter 'd'
-
-.. code-block:: python
-
-    S['3D_WINDOW_GLASS']['lmatname']
-
-
-
-.. parsed-literal::
-
-    ['GLASS', 'AIR', 'GLASS']
-
-
-
-.. code-block:: python
-
-    S['3D_WINDOW_GLASS']['lthick']
-
-
-
-.. parsed-literal::
-
-    [0.005, 0.005, 0.005]
-
-
-
-For each constitutive material of a slab, their electromagnetic
-properties can be obtained as:
-
-.. code-block:: python
-
-    S['3D_WINDOW_GLASS']['lmat']
-
-
-
-.. parsed-literal::
-
-    [{'epr': (3.79999995232+0j),
-      'index': 4,
-      'mur': (1+0j),
-      'name': 'GLASS',
-      'roughness': 0.0,
-      'sigma': 0.0},
-     {'epr': (1+0j),
-      'index': 1,
-      'mur': (1+0j),
-      'name': 'AIR',
-      'roughness': 0.0,
-      'sigma': 0.0},
-     {'epr': (3.79999995232+0j),
-      'index': 4,
-      'mur': (1+0j),
-      'name': 'GLASS',
-      'roughness': 0.0,
-      'sigma': 0.0}]
-
-
-
-Slab evaluation
+Mutliwall Model
 ---------------
 
-Each Slab can be evaluated to obtain the Transmission and Reflexion
-coefficients for
-
--  a given frequency range
--  a given incidence angle range (:math:`0\le\theta<\frac{\pi}{2}`)
-
-.. code-block:: python
-
-    fGHz = np.arange(3,5,0.01)
-    theta = np.arange(0,pi/2,0.01)
-    
-    S['WOOD'].ev(fGHz,theta,compensate=True)
-    sR = np.shape(S['WOOD'].R) 
-    print '\nHere, slab is evaluted for',sR[0],'frequency(ies)', 'and',sR[1], 'angle(s)\n'
-
-.. parsed-literal::
-
-    
-    Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)
-    
-
-
-Transmission and Reflexion coefficients
----------------------------------------
-
-Reflexion and transmission coefficient are computed for the given
-frequency range and theta range
-
-.. code-block:: python
-
-    ifreq=1
-    ithet=10
-    
-    print '\nReflection coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n R=',S['WOOD'].R[0,0]
-    print '\nTransmission coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n T=',S['WOOD'].T[0,0],'\n'
-
-
-.. parsed-literal::
-
-    
-    Reflection coefficient @ 3.01 GHz and theta= 0.1 :
-    
-     R= [[-0.39396205-0.17289585j  0.00000000+0.j        ]
-     [ 0.00000000+0.j          0.39396205+0.17289585j]]
-    
-    Transmission coefficient @ 3.01 GHz and theta= 0.1 :
-    
-     T= [[-0.17594898-0.86927604j -0.00000000+0.j        ]
-     [-0.00000000+0.j         -0.17594898-0.86927604j]] 
-    
-
-
-Ploting Coefficients
-~~~~~~~~~~~~~~~~~~~~
-
-::
-
-    plotwrt (plot with respect to)
-         
-    Parameters
-    ----------
-
-     kv  : int
-        variable index
-     polar: string 
-            'po', # po | p | o   (parallel+ortho | parallel | ortogonal)
-     coeff: string 
-            'RT', # RT | R | T   (Reflexion & Transmission ) | Reflexion | Transmission 
-     var:  string 
-            'a',    # a | f       angle | frequency 
-     types : string 
-            'm' | 'r' | 'd' | 'l20'
-            mod   rad    deg   dB
-
-.. code-block:: python
-
-    fig,ax = S['WOOD'].plotwrt(var='f',coeff='R',polar='p')
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png
-
-
-with respect to angle
-
-.. code-block:: python
-
-    fig = plt.figure(figsize=(20,20))
-    fGHz= np.array([2.4])
-    S['WOOD'].ev(fGHz,theta)
-    fig,ax = S['WOOD'].plotwrt(var='a',coeff='R',fig=fig)
-    plt.tight_layout()
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x7f54d8c6aa90>
-
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png
-
-
-wrt to angle and frequency
-
-.. code-block:: python
-
-    plt.figure(figsize=(10,10))
-    fGHz= np.arange(0.7,5.2,0.1)
-    S['WOOD'].ev(fGHz,theta)
-    S['WOOD'].pcolor()
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png
-
-
-.. code-block:: python
-
-    theta = np.arange(0,np.pi/2,0.01)
-    fGHz = np.arange(0.1,10,0.2)
-    sl = SlabDB('matDB.ini','slabDB.ini')
-    mat   = sl.mat
-    lmat  = [mat['AIR'],mat['WOOD']]
-    II    = MatInterface(lmat,0,fGHz,theta)
-    II.RT()
-    fig,ax = II.plotwrt(var='a',kv=10,typ=['m'])
-    tight_layout()
-    air = mat['AIR']
-    brick  = mat['BRICK']
-    II  = MatInterface([air,brick],0,fGHz,theta)
-    II.RT()
-    fig,ax = II.plotwrt(var='f',color='k',typ=['m'])
-    tight_layout()
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png
-
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png
-
-
-.. code-block:: python
-
-    ## Adding new materials
-.. code-block:: python
-
-    sl.mat.add(name='TESS-p50',cval=3+0j,sigma=0.06,typ='epsr')
-    
-    sl.add(name='TESS-p50-5cm',lmatname=['TESS-p50'],lthick=[0.05])
-    sl.add(name='TESS-p50-10cm',lmatname=['TESS-p50'],lthick=[0.10])
-    sl.add(name='TESS-p50-15cm',lmatname=['TESS-p50'],lthick=[0.15])
-    fGHz=4
-    theta = np.arange(0,np.pi/2,0.01)
-    #figure(figsize=(8,8))
-    # These Tessereau page 50 
-    
-    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
-    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
-    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
-    
-    # by default var='a' and kv = 0 
-    
-    fig,ax = sl['TESS-p50-5cm'].plotwrt(color='k',labels=[''])
-    fig,ax = sl['TESS-p50-10cm'].plotwrt(color='k',labels=[''],linestyle='dashed',fig=fig,ax=ax)
-    fig,ax = sl['TESS-p50-15cm'].plotwrt(color='k',labels=[''],linestyle='dashdot',fig=fig,ax=ax)
-    plt.tight_layout()
-
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-      warnings.warn("No labeled objects found. "
-
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png
-
-
-Evaluation without phase compensation
--------------------------------------
-
-.. code-block:: python
-
-    fGHz = np.arange(2,16,0.1)
-    theta = 0 
-    
-    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=False)
-    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=False)
-    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=False)
-        
-    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',typ=['ru'],labels=[''],color='k')
-    print ax
-    #fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
-    #fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashdot')
-    plt.tight_layout()
-
-.. parsed-literal::
-
-    [[<matplotlib.axes.AxesSubplot object at 0x7f54d85220d0>]
-     [<matplotlib.axes.AxesSubplot object at 0x5541a10>]]
-
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png
-
-
-.. code-block:: python
-
-    
-    
-    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
-    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
-    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
-    
-    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['5cm compensated',''],color='r',fig=fig,ax=ax)
-    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['10cm compensated',''],color='r',linestyle='dashed',fig=fig,ax=ax)
-    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['15cm not compensated',''],color='r',linestyle='dashdot',fig=fig,ax=ax) 
-    
-    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',labels=[''],color='k')
-    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
-    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png
-
-
-Double Glass example from litterature [1] in sub TeraHertz D-band @ 120GHz
---------------------------------------------------------------------------
-
-.. code-block:: python
-
-    sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
-    sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
-    sl.add('ConcreteJc',['ConcreteJc'],[0.049])
-    
-    theta = np.linspace(20,60,100)*np.pi/180
-    sl['ConcreteJc'].ev(120,theta)
-    fig,ax = sl['ConcreteJc'].plotwrt('a')
-    
-
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png
-
-
-.. code-block:: python
-
-    fGHz = np.linspace(110,135,50)
-    sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[0.0029,0.0102,0.0029])
-    sl['DoubleGlass'].ev(fGHz,theta)
-    sl['DoubleGlass'].pcolor(dB=True)
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png
-
-
-.. code-block:: python
-
-    plt.figure(figsize=(10,10))
-    sl['DoubleGlass'].ev(120,theta)
-    fig,ax = sl['DoubleGlass'].plotwrt('a',figsize=(10,10))
-    tight_layout()
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x7f54dffb4bd0>
-
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png
-
-
-.. code-block:: python
-
-    freq = np.linspace(110,135,50)
-    sl['DoubleGlass'].ev(freq,theta)
-    fig,ax = sl['DoubleGlass'].plotwrt('f',figsize=(10,10))  # @20°
-    tight_layout()
-
-
-.. image:: AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png
-
-
-References
-----------
-
-[1]. `Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. "Reflection
-ant Transmission Properties of Building Materials in D-Band for Modeling
-Future mm-Wave Communication Systems" Antennas and Propagation (EuCAP),
-2010 Proceedings of the Fourth European Conference
-on <http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5505315&queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation>`__
-
-[2]. `R.Piesiewicz 'Terahertz characterization of building materials'
-Electronics .Letters Jan 2005 Vol 41
-N°18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`__
-
-Multi-wall model
-================
+The multiwall model is an adaptation of the Motley Keenan model. It determines
+the LOS attenuation between Tx and Rx in addoin to free space attenuation the
+losses in the crossed wall takin into account incidence angle, frequency,
+polarisation and constitutive properties of slabs.
 
 .. code-block:: python
 
@@ -1700,35 +1622,22 @@ Multi-wall model
     from pylayers.network.model import *
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4066890>
-
-
-The layout is loaded from an ini file. If the graphs are not available,
-they are built.
+The layout is loaded from an `ini` file. 
 
 .. code-block:: python
 
     L=Layout('TA-Office.ini')
-Defining a radio link
----------------------
 
 The 2 extremities of the radio link are coordinates in ``numpy.array``
-of transmitter and receiver.
-
--  A a radio node
-
--  B a radio node
+of transmitter and receiver. `A` and  `B` are radionodes at the two
+termination of the radio link.
 
 .. code-block:: python
 
     A=np.array((4,1)) # defining transmitter position 
     B=np.array((30,12)) # defining receiver position
-Ploting the scene
------------------
 
-The scene is plotted with the ``showG`` method of the Layout
+The scene is plotted with the ``showG`` method of the Layout. 
 
 .. code-block:: python
 
@@ -1748,26 +1657,14 @@ The scene is plotted with the ``showG`` method of the Layout
 
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_9_0.png
 
-
-Finding the intersection between the "direct" path and the walls
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The function ``angleonlink`` returns the list of intersected segments
 and the corresponding incidence angles (in radians) with respect to the
 segment normal.
 
 .. code-block:: python
 
-    %pdef L.angleonlink
-
-.. parsed-literal::
-
-     [0mL[0m[1;33m.[0m[0mangleonlink[0m[1;33m([0m[0mself[0m[1;33m,[0m [0mp1[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m0[0m[1;33m,[0m [1;36m0[0m[1;33m][0m[1;33m)[0m[1;33m,[0m [0mp2[0m[1;33m=[0m[0marray[0m[1;33m([0m[1;33m[[0m[1;36m10[0m[1;33m,[0m  [1;36m3[0m[1;33m][0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m
-     
-
-.. code-block:: python
-
     data=L.angleonlink(A,B)
+
 Computing the Multi-wall model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1795,11 +1692,18 @@ orthogonal and parallel polarization
     Excess delay orthogonal polarization  	 2.23113 ns
     Excess delay parallel polarization   	 2.12364 ns
 
+The Coverage class
+------------------
 
-Coverage class
-==============
 
-By extension, the multi-wall model can also be used to perform a full
+Sometimes it might be useful to get a fast estimate about losses in
+a given indoor environment. Ray tracing is generally time consuming
+and depending on the purpose of the study it could be relevant to
+proceed with a simpler approach while staying site-specific.
+``PyLayers`` provides such a tool which heavily relies on the core
+module ``slab.py``
+
+The multi-wall model can also be used to perform a full
 coverage of a Layout given a transmitter position.
 
 .. code-block:: python
@@ -1807,59 +1711,17 @@ coverage of a Layout given a transmitter position.
     C = Coverage()
     C.L  = L # set layout
     C.tx = A # set the transmitter
-.. code-block:: python
-
-    C.L
-
-
-
-.. parsed-literal::
-
-    
-    ----------------
-    TA-Office.ini
-    Image('/home/uguen/Bureau/P1/struc/images/DLR4991.png')
-    ----------------
-    
-    Number of points  : 71
-    Number of segments  : 87
-    Number of sub segments  : 16
-    Number of cycles  : 0
-    Number of rooms  : 0
-    degree 0 : []
-    degree 1 : []
-    degree 2 : 39
-    degree 3 : 32
-    
-    xrange :(0.0, 40.0)
-    yrange :(0.0, 15.0)
-    
-    Useful dictionnaries
-    ----------------
-    sl {slab name : slab dictionary}
-    name :  {slab :seglist} 
-    
-    Useful arrays
-    ----------------
-    tsg : get segment index in Gs from tahe
-    isss :  sub-segment index above Nsmax
-    tgs : get segment index in tahe from Gs
-    lsss : list of segments with sub-segment
-    sla : list of all slab names (Nsmax+Nss+1)
-    degree : degree of nodes 
-
-
 
 .. code-block:: python
 
     C.creategrid()
+
 The coverage is performed on grid. The boundaries can be specified in
 the coverage.ini file
 
 .. code-block:: python
 
     C.grid
-
 
 
 .. parsed-literal::
@@ -1873,10 +1735,6 @@ the coverage.ini file
            [  3.99900000e+01,   1.49900000e+01]])
 
 
-
-Compute the coverage
-~~~~~~~~~~~~~~~~~~~~
-
 .. code-block:: python
 
     t1=time.time()
@@ -1888,11 +1746,7 @@ Compute the coverage
 
     Coverage performed in  1.34146499634 s
 
-
-Coverage Map
-~~~~~~~~~~~~
-
-For Orthogonal polarization
+    For Orthogonal polarization
 
 .. code-block:: python
 
@@ -1903,21 +1757,10 @@ For Orthogonal polarization
     C.showEd(polar='o',fig=fig2)
 
 
-
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_26_0.png
 
 
-
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_26_1.png
-
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x604ca90>,
-     <matplotlib.axes.AxesSubplot at 0x509af10>)
-
 
 
 For parallel polarization
@@ -1938,112 +1781,12 @@ For parallel polarization
 .. image:: AP-multiwallmodel_files/AP-multiwallmodel_28_1.png
 
 
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x5c6db50>,
-     <matplotlib.axes.AxesSubplot at 0x61c8bd0>)
-
-
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
-Coverage with a Multi Wall model
-================================
-
-    Sometimes it might be useful to get a fast estimate about losses in
-    a given indoor environment. Ray tracing is generally time consuming
-    and depending on the purpose of the study it could be relevant to
-    proceed with a simpler approach while staying site-specific.
-    ``PyLayers`` provides such a tool which heavily relies on the core
-    module ``slab.py``
-
 First let's import the ``coverage`` module
 
 .. code-block:: python
 
     from pylayers.antprop.coverage import *
     import time
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x47f1890>
 
 
 Instantiate a coverage object. By defaut, ``TA-Office.str`` layout
@@ -2101,14 +1844,13 @@ Below is an example of how the content of the file looks like
 
     # Create a Coverage object from coverag.ini file
     C = Coverage()
+
 The coverage object has a ``__repr__`` which summarizes the different
 parameters of the current coverage object
 
 .. code-block:: python
 
     C
-
-
 
 .. parsed-literal::
 
@@ -2140,8 +1882,8 @@ parameters of the current coverage object
 
     # evaluate coverage 
     C.cover()
+
 Calculating Received Power Coverage
-===================================
 
 .. code-block:: python
 
@@ -2151,18 +1893,10 @@ Calculating Received Power Coverage
 
 
 
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x51ee990>,
-     <matplotlib.axes.AxesSubplot at 0x522e550>)
-
-
-
-
 .. image:: AP-coverage_files/AP-coverage_11_1.png
 
 
-Then, the coverage calculation is launched by calling the ``cover()``
+The coverage calculation is launched by calling the ``cover()``
 method
 
 The shadowing map coverage results can be displayed by invoquing various
@@ -2182,12 +1916,6 @@ different frequencies
     C.showPower(figsize=(10,10))
     toc =time.time()
     print 'Elapsed time : {0:.2f} seconds'.format(toc-tic)
-
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/numpy/ma/core.py:3847: UserWarning: Warning: converting a masked element to nan.
-      warnings.warn("Warning: converting a masked element to nan.")
-
 
 
 .. image:: AP-coverage_files/AP-coverage_15_1.png
@@ -2247,9 +1975,7 @@ The transmitter coordinates are :
     array([25,  5])
 
 
-
-This can be modified on the flight, and the coverage is updated
-accordingly
+This can be modified on the flight, and the coverage is updated accordingly
 
 .. code-block:: python
 
@@ -2268,96 +1994,10 @@ accordingly
 
 .. image:: AP-coverage_files/AP-coverage_21_1.png
 
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x82f8f50>,
-     <matplotlib.axes.AxesSubplot at 0x62d47d0>)
-
-
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
 The excess delay due to crossing the wall can also be evaluted.
 
 Ray Signatures
-==============
+--------------
 
 .. code-block:: python
 
@@ -2365,12 +2005,6 @@ Ray Signatures
     from pylayers.gis.layout import *
     from pylayers.antprop.signature import *
     from pylayers.antprop.rays import *
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4de5890>
-
 
 .. code-block:: python
 
@@ -2380,6 +2014,7 @@ Ray Signatures
     except:
         L.build()
         L.dumpw()
+
 Showing the graph of rooms with 2 rooms separated by a DOOR segment
 
 .. code-block:: python
@@ -2472,81 +2107,6 @@ interactions.
     [ 3.43281369  0.44106546]
 
 
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
 
 Synthesis of Ultra Wide Band Waveforms
 --------------------------------------
@@ -2571,15 +2131,10 @@ electromagnetic simulation.
     from pylayers.simul.simulem import *
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x3c44890>
+Generation of a pulse of normalized energy
 
 
-Generation of an Impulse of normalized energy
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-One possible manner to define an energy normalized short UWB impulse is
+One possible manner to define an energy normalized short UWB pulse is
 as follows using ``bsignal.EnImpulse`` function.
 
 The default waveform is a gaussian windowing of a sine wave of frequency
@@ -2601,6 +2156,7 @@ the pulse.
     thresh = 10
     fe     = 100 
     ip     = EnImpulse([],fc,band,thresh,fe)
+
 .. code-block:: python
 
     ip.info()
@@ -2617,9 +2173,8 @@ the pulse.
     ymin : -1.89545539648
     ymax : 2.16154131873
 
-
 Verification of energy normalization in both domains
-----------------------------------------------------
+
 
 .. code-block:: python
 
@@ -2643,7 +2198,7 @@ Verification of energy normalization in both domains
 
 
 Calculation of UWB channel impulse response
--------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We choose to load a simple floor plan.
 
@@ -2832,17 +2387,17 @@ The waveform associated with the simulation object is
 
 
 Above the waveform is a generic UWB waveform. The interested user can
-add easyly any other mathematical expression of UWB waveform for
+add easily any other mathematical expression of UWB waveform for
 investigation on pulse waveform modulation for example. The waveform can
-also comes from measurement. For now there are two version of this
+also comes from measurement. For now there are two versions of this
 waveform which has been used during the M1 measurement campaign. One is
 not compensated ``W1compensate`` for an extra short delay which can
-introduse a bias when interpretating the observed delay in terms of
+introduce a bias when interpreting the observed delay in terms of
 distance. The non compensated version is ``W1offset`` from the time
 origin about 0.7 ns.
 
 The waveform class should grow for incorporating more waveforms,
-especially waveforms compliants with the current IEEE 802.15.4a and IEEE
+especially waveforms compliant with the current IEEE 802.15.4a and IEEE
 802.15.6 standards.
 
 .. code-block:: python
@@ -3093,12 +2648,6 @@ waveform with the channel impulse response to get the received waveform.
     plt.axis([15,90,-90,-20])
     plt.title(u'Received Waveform $r(t)$')
 
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-      warnings.warn("No labeled objects found. "
-
-
 
 
 .. parsed-literal::
@@ -3134,7 +2683,7 @@ Hermitian symetry enforcment
 ----------------------------
 
 If the number of point for the transmission channel and the waveform
-were the same the mathematical operation is an Hadamrd-Shur product
+were the same the mathematical operation is an Hadamard-Shur product
 between :math:`\mathbf{Y}` and :math:`\mathbf{W}`.
 
 :math:`\mathbf{Y} = \mathbf{S} \odot \mathbf{W}`
@@ -3154,6 +2703,7 @@ indexation either in time or in frequency domain.
     tau  = Y.tau0
     dod = Y.dod
     doa = Y.doa
+
 The transmission channel has a member data which is the time delay of
 each path in nano seconds. Notice that by default those delay are not
 sorted.
@@ -3299,11 +2849,6 @@ default configuration file named **default.ini** is loaded.
     import pylayers.signal.bsignal as bs
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x37c6890>
-
-
 A first step consists in loading a layout associated with the
 simulation. Here the ``WHERE1.ini`` layout is chosen along with the
 corresponding slabs and materials files ``matDB.ini`` and
@@ -3373,12 +2918,6 @@ method of the Simulation object
 .. code-block:: python
 
     fig,ax = S.show()
-
-.. parsed-literal::
-
-    Warning : no furniture file loaded
-
-
 
 .. image:: SIM-raytracing_files/SIM-raytracing_13_1.png
 
@@ -3596,14 +3135,6 @@ object has a ``show`` and ``show3`` method
 
 
 
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x8681f90>,
-     <matplotlib.axes.AxesSubplot at 0x862fc90>)
-
-
-
-
 .. image:: SIM-raytracing_files/SIM-raytracing_34_1.png
 
 
@@ -3635,21 +3166,7 @@ object has a ``show`` and ``show3`` method
      [339 339 335 335 283 335 334  13 335 335  12  12 330 331  12   5  12  30]
      [ 24 328 283  30 335 333 335  12 283 333 335 334  12   8 335  12  23  21]
      [328  24 335  12  12 342 328  30 335  11  23 335  30 342  12 335 335  30]]
-    6: [[140 140]
-     [ 38  32]
-     [135  37]
-     [ 30 135]
-     [333  30]
-     [ 30 333]]
-    7: [[  5 330]
-     [140 140]
-     [135  38]
-     [337 135]
-     [ 46  30]
-     [319 333]
-     [335  30]]
-
-
+    ...
 
 
 .. code-block:: python
@@ -3917,19 +3434,6 @@ waveform to the transmission channel.
     plt.title('with antenna')
     #plt.axis((0,180,-0.1,0.1))
 
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-      warnings.warn("No labeled objects found. "
-
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x605f810>
-
-
 
 
 .. image:: SIM-raytracing_files/SIM-raytracing_66_2.png
@@ -3955,11 +3459,6 @@ there is a default configuration file named **default.ini**.
     from pylayers.measures.mesuwb import *
     import pylayers.util.pyutil as pyu
     import pylayers.signal.bsignal as bs
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4234890>
 
 
 A first step consists in loading a layout associated with the
@@ -3988,14 +3487,6 @@ If not already available, the layout associated graphs are built.
 .. code-block:: python
 
     S.L.showG('i',figsize=(20,20))
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x49be910>,
-     <matplotlib.axes.AxesSubplot at 0x423fb10>)
-
 
 
 
@@ -4087,11 +3578,6 @@ method of the Simulation object
 .. code-block:: python
 
     fig,ax = S.show()
-
-.. parsed-literal::
-
-    Warning : no furniture file loaded
-
 
 
 .. image:: SIM-where1_files/SIM-where1_15_1.png
@@ -4263,28 +3749,12 @@ The representaion of a signature obje
 
 
 
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0xa9c1590>,
-     <matplotlib.axes.AxesSubplot at 0x7fd83411d8d0>)
-
-
-
-
 .. image:: SIM-where1_files/SIM-where1_30_1.png
 
 
 .. code-block:: python
 
     r2d.show(S.L,figsize=(20,10))
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0xa5e13d0>,
-     <matplotlib.axes.AxesSubplot at 0xa9c1050>)
-
 
 
 
@@ -4560,20 +4030,6 @@ Apply waveform
     ciro.plot(typ='v')
     title(u'received waveform without antenna $\\theta\\theta$')
 
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-      warnings.warn("No labeled objects found. "
-
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x1081a150>
-
-
-
 
 .. image:: SIM-where1_files/SIM-where1_42_2.png
 
@@ -4736,11 +4192,6 @@ Example of a trajectory synthesis in DLR WHERE2 environment
     import matplotlib.pyplot as plt 
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4559890>
-
-
 This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
 run a full simulation and returns a list of channel impulse response.
@@ -4894,20 +4345,6 @@ Looking what is does
     S.L.display['title']='Trajectory to be simulated'
     S.show(s=20)
 
-.. parsed-literal::
-
-    Warning : no furniture file loaded
-
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x7fa00d80ac90>,
-     <matplotlib.axes.AxesSubplot at 0x7fa00d80ac10>)
-
-
-
 
 .. image:: SIM-trajectory_files/SIM-trajectory_15_2.png
 
@@ -4983,22 +4420,6 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
     tcir[1][10].plot(typ=['v'])
 
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-      warnings.warn("No labeled objects found. "
-
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x7fa00d8698d0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7fa00d8417d0>]], dtype=object))
-
-
-
-
 .. image:: SIM-trajectory_files/SIM-trajectory_26_2.png
 
 
@@ -5009,19 +4430,6 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
     xlabel('Delay (ns)')
     ylabel('Level (V)')
     title('Received Waveform')
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x7fa00f6d9610>
-
-
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x7f9ffc354110>
 
 
 
@@ -5060,11 +4468,6 @@ coordinates. Otherwise a singularity problem arises.
 
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4fca890>
-
-
 .. code-block:: python
 
     c = 0.2997924583
@@ -5090,14 +4493,6 @@ coordinates. Otherwise a singularity problem arises.
 
 
 
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x516cf10>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x5180090>)
-
-
-
-
 .. image:: LOC-algebraic_files/LOC-algebraic_4_2.png
 
 
@@ -5107,14 +4502,6 @@ coordinates. Otherwise a singularity problem arises.
 .. code-block:: python
 
     Alg.plot()
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x516ce50>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x519a950>)
-
 
 
 
@@ -5157,10 +4544,6 @@ coordinates. Otherwise a singularity problem arises.
     from pylayers.location.algebraic.algebraic import *
     from pylayers.util.geomutil import dist
 
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x45e7890>
 
 
 Example of TDOA
@@ -5336,11 +4719,6 @@ Robust Geometric Positioning Algorithm
     
     import matplotlib.pyplot as plt
 
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x47c4890>
 
 
 Let's define 4 anchors in the plane.
@@ -5627,92 +5005,11 @@ TDOA
     array([ 0.021,  4.987])
 
 
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
 .. code-block:: python
 
     import ConfigParser
     import pylayers.util.pyutil as pyu
 
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4575890>
 
 
 Network Simulation Configuration
@@ -6221,124 +5518,20 @@ Display messages during simulation
 
 .. code-block:: python
 
-    from IPython.display import FileLink
-    FileLink('Mobility.ipynb')
-
-
-
-.. raw:: html
-
-    Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of being generated, or you may have the incorrect path.
-
-
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
-.. code-block:: python
-
-    
-.. code-block:: python
-
-    from IPython.display import Image, HTML, Latex, YouTubeVideo
-    import numpy as np
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x55c3890>
-
-
-.. code-block:: python
-
-    #YouTubeVideo('1Qa6xLpU5-M')
-.. code-block:: python
-
     import pylayers.mobility.trajectory as traj
     from pylayers.mobility.body.body import *
     from pylayers.gis.layout import *
-trajectories can be imported from a simulnet simulation with the
-``importsn`` method
+
+trajectories can be imported from a simulnet simulation with the ``importsn`` method
 
 .. code-block:: python
 
     L=Layout('TA-Office.ini')
+
 .. code-block:: python
 
     t=traj.importsn()
+
 The 2 following trajectories have been calculated with
 ``pylayers.simul.simulnet``
 
@@ -6354,87 +5547,11 @@ The 2 following trajectories have been calculated with
 
 .. image:: MOB-mobility_files/MOB-mobility_7_0.png
 
-
-
 .. image:: SIM-workflow_files/SIM-workflow_4_0.png
 
 
-nbconvert Workflow.ipynb -o latex
-
-padflatex Workflow.tex
-
-This is a latex equation :math:`\sqrt{x}`
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x3d66890>
-
+Geomutil Class
+==============
 
 **Geomutil** is a module which gathers different geometrical functions
 used in other modeule of pylayers.
@@ -6446,6 +5563,7 @@ The importation is done as below. The geoutil alias is *geu*
     from pylayers.util.geomutil import *
     from pylayers.util.plotutil import *
     import shapely.geometry as shg
+
 Class Polygon
 =============
 

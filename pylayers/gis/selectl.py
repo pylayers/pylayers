@@ -107,7 +107,7 @@ class SelectL(object):
         self.L.display['clear'] = clear
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
-        fig,ax = self.L.showGs(fig,ax,axis=axis)
+        fig,ax = self.L.showGs(fig=fig,ax=ax,axis=axis)
         return(fig,ax)
 
     def OnPress(self,event,verbose=True):
@@ -413,7 +413,6 @@ class SelectL(object):
             self.L.show3()
             return
 
-        
         # Choose layers to visualized
         #
         if self.evt == 'l':
@@ -436,7 +435,7 @@ class SelectL(object):
         # 'g' toggle segment nodes dislay
         #
         if self.evt=='g':
-            self.L.display['ednodes'] = not self.L.display['ednodes'] 
+            self.L.display['ednodes'] = not self.L.display['ednodes']
             print self.L.display['ednodes']
             self.update_state()
             return

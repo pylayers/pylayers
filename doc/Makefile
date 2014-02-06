@@ -40,7 +40,10 @@ help:
 # suppress .git 
 #clean:    
 #	-rm -Rf $(BUILDDIR)/*
-
+docx: 
+	$(SPHINXBUILD) -b docx $(ALLSPHINXOPTS) $(BUILDDIR)/docx
+	@echo
+	@echo "Build finished. The docx is in $(BUILDDIR)/docx."
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo

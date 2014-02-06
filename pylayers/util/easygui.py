@@ -1,11 +1,13 @@
 """
-@version: 0.95(2010-06-12)
+@version: 0.96(2010-08-29)
+
 @note:
+ABOUT EASYGUI
+
 EasyGui provides an easy-to-use interface for simple GUI interaction
 with a user.  It does not require the programmer to know anything about
 tkinter, frames, widgets, callbacks or lambda.  All GUI interactions are
 invoked by simple function calls that return results.
-
 
 @note:
 WARNING about using EasyGui with IDLE
@@ -17,24 +19,90 @@ two may conflict, with unpredictable results. If you find that you have
 problems, try running your EasyGui program outside of IDLE.
 
 Note that EasyGui requires Tk release 8.0 or greater.
+
+@note:
+LICENSE INFORMATION
+
+EasyGui version 0.96
+
+Copyright (c) 2010, Stephen Raymond Ferg
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice,
+       this list of conditions and the following disclaimer. 
+    
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation and/or
+       other materials provided with the distribution. 
+    
+    3. The name of the author may not be used to endorse or promote products derived
+       from this software without specific prior written permission. 
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+@note:
+ABOUT THE EASYGUI LICENSE
+
+This license is what is generally known as the "modified BSD license",
+aka "revised BSD", "new BSD", "3-clause BSD".
+See http://www.opensource.org/licenses/bsd-license.php
+
+This license is GPL-compatible.
+See http://en.wikipedia.org/wiki/License_compatibility
+See http://www.gnu.org/licenses/license-list.html#GPLCompatibleLicenses
+
+The BSD License is less restrictive than GPL.
+It allows software released under the license to be incorporated into proprietary products. 
+Works based on the software may be released under a proprietary license or as closed source software.
+http://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22New_BSD_License.22.29
+
 """
 egversion = __doc__.split()[1]
 
-__all__ = ['ynbox', 'ccbox', 'boolbox', 'indexbox', 'msgbox', 'buttonbox',
-           'floatbox','offsetbox','pointbox','integerbox', 'multenterbox', 'enterbox',
-           'exceptionbox','choicebox',
-           'codebox', 'textbox', 'diropenbox', 'fileopenbox', 'filesavebox', 
-           'passwordbox', 'multpasswordbox', 'multchoicebox', 'abouteasygui',
-           'egversion', 'egdemo', 'EgStore'
-           ]
+__all__ = ['ynbox'
+    , 'ccbox'
+    , 'boolbox'
+    , 'indexbox'
+    , 'msgbox'
+    , 'buttonbox'
+    , 'integerbox'
+    , 'multenterbox'
+    , 'enterbox'
+    , 'exceptionbox'
+    , 'choicebox'
+    , 'codebox'
+    , 'textbox'
+    , 'diropenbox'
+    , 'fileopenbox'
+    , 'filesavebox'
+    , 'passwordbox'
+    , 'multpasswordbox'
+    , 'multchoicebox'
+    , 'abouteasygui'
+    , 'egversion'
+    , 'egdemo'
+    , 'EgStore'
+    ]
 
-import sys
-import os
+import sys, os
 import string
-import types
 import pickle
 import traceback
-import numpy as np
+
 
 #--------------------------------------------------
 # check python version and take appropriate action
@@ -54,6 +122,8 @@ else:
     # use an alternative implementation or warn the user
     ...
 """
+
+
 if sys.hexversion >= 0x020600F0:
     runningPython26 = True
 else:
@@ -64,6 +134,14 @@ if sys.hexversion >= 0x030000F0:
 else:
     runningPython3 = False
 
+try:
+    from PIL import Image   as PILImage
+    from PIL import ImageTk as PILImageTk
+    PILisLoaded = True
+except:
+    PILisLoaded = False
+
+
 if runningPython3:
     from tkinter import *
     import tkinter.filedialog as tk_FileDialog
@@ -73,12 +151,10 @@ else:
     import tkFileDialog as tk_FileDialog
     from StringIO import StringIO
 
-
 def write(*args):
     args = [str(arg) for arg in args]
     args = " ".join(args)
     sys.stdout.write(args)
-
 
 def writeln(*args):
     write(*args)
@@ -87,8 +163,8 @@ def writeln(*args):
 say = writeln
 
 
-if TkVersion < 8.0:
-    stars = "*" * 75
+if TkVersion < 8.0 :
+    stars = "*"*75
     writeln("""\n\n\n""" + stars + """
 You are running Tk version: """ + str(TkVersion) + """
 You must be using Tk version 8.0 or greater to use EasyGui.
@@ -96,18 +172,17 @@ Terminating.
 """ + stars + """\n\n\n""")
     sys.exit(0)
 
-
 def dq(s):
     return '"%s"' % s
 
 rootWindowPosition = "+300+200"
 
 PROPORTIONAL_FONT_FAMILY = ("MS", "Sans", "Serif")
-MONOSPACE_FONT_FAMILY = ("Courier")
+MONOSPACE_FONT_FAMILY    = ("Courier")
 
-PROPORTIONAL_FONT_SIZE = 10
-MONOSPACE_FONT_SIZE = 9  # a little smaller, because it it more legible at a smaller size
-TEXT_ENTRY_FONT_SIZE = 12  # a little larger makes it easier to see
+PROPORTIONAL_FONT_SIZE  = 10
+MONOSPACE_FONT_SIZE     =  9  #a little smaller, because it it more legible at a smaller size
+TEXT_ENTRY_FONT_SIZE    = 12  # a little larger makes it easier to see
 
 #STANDARD_SELECTION_EVENTS = ["Return", "Button-1"]
 STANDARD_SELECTION_EVENTS = ["Return", "Button-1", "space"]
@@ -119,7 +194,7 @@ __replyButtonText = None
 __choiceboxResults = None
 __firstWidget = None
 __enterboxText = None
-__enterboxDefaultText = ""
+__enterboxDefaultText=""
 __multenterboxText = ""
 choiceboxChoices = None
 choiceboxWidget = None
@@ -135,10 +210,11 @@ ImageErrorMsg = (
 #-----------------------------------------------------------------------
 # ynbox
 #-----------------------------------------------------------------------
-
-
-def ynbox(msg="Shall I continue?", title=" ", choices=("Yes", "No"), image=None
-          ):
+def ynbox(msg="Shall I continue?"
+    , title=" "
+    , choices=("Yes", "No")
+    , image=None
+    ):
     """
     Display a msgbox with choices of Yes and No.
 
@@ -165,8 +241,11 @@ def ynbox(msg="Shall I continue?", title=" ", choices=("Yes", "No"), image=None
 #-----------------------------------------------------------------------
 # ccbox
 #-----------------------------------------------------------------------
-def ccbox(msg="Shall I continue?", title=" ", choices=("Continue", "Cancel"), image=None
-          ):
+def ccbox(msg="Shall I continue?"
+    , title=" "
+    , choices=("Continue", "Cancel")
+    , image=None
+    ):
     """
     Display a msgbox with choices of Continue and Cancel.
 
@@ -196,8 +275,11 @@ def ccbox(msg="Shall I continue?", title=" ", choices=("Continue", "Cancel"), im
 #-----------------------------------------------------------------------
 # boolbox
 #-----------------------------------------------------------------------
-def boolbox(msg="Shall I continue?", title=" ", choices=("Yes", "No"), image=None
-            ):
+def boolbox(msg="Shall I continue?"
+    , title=" "
+    , choices=("Yes","No")
+    , image=None
+    ):
     """
     Display a boolean msgbox.
 
@@ -210,17 +292,18 @@ def boolbox(msg="Shall I continue?", title=" ", choices=("Yes", "No"), image=Non
             returns 0
     """
     reply = buttonbox(msg=msg, choices=choices, title=title, image=image)
-    if reply == choices[0]:
-        return 1
-    else:
-        return 0
+    if reply == choices[0]: return 1
+    else: return 0
 
 
 #-----------------------------------------------------------------------
 # indexbox
 #-----------------------------------------------------------------------
-def indexbox(msg="Shall I continue?", title=" ", choices=("Yes", "No"), image=None
-             ):
+def indexbox(msg="Shall I continue?"
+    , title=" "
+    , choices=("Yes","No")
+    , image=None
+    ):
     """
     Display a buttonbox with the specified choices.
     Return the index of the choice selected.
@@ -229,8 +312,7 @@ def indexbox(msg="Shall I continue?", title=" ", choices=("Yes", "No"), image=No
     index = -1
     for choice in choices:
         index = index + 1
-        if reply == choice:
-            return index
+        if reply == choice: return index
     raise AssertionError(
         "There is a program logic error in the EasyGui code for indexbox.")
 
@@ -238,22 +320,24 @@ def indexbox(msg="Shall I continue?", title=" ", choices=("Yes", "No"), image=No
 #-----------------------------------------------------------------------
 # msgbox
 #-----------------------------------------------------------------------
-def msgbox(msg="(Your message goes here)", title=" ", ok_button="OK", image=None, root=None):
+def msgbox(msg="(Your message goes here)", title=" ", ok_button="OK",image=None,root=None):
     """
     Display a messagebox
     """
-    if not isinstance(ok_button, type("OK")):
-        raise AssertionError(
-            "The 'ok_button' argument to msgbox must be a string.")
+    if type(ok_button) != type("OK"):
+        raise AssertionError("The 'ok_button' argument to msgbox must be a string.")
 
-    return buttonbox(msg=msg, title=title, choices=[ok_button], image=image, root=root)
+    return buttonbox(msg=msg, title=title, choices=[ok_button], image=image,root=root)
 
 
 #-------------------------------------------------------------------
 # buttonbox
 #-------------------------------------------------------------------
-def buttonbox(msg="", title=" ", choices=("Button1", "Button2", "Button3"), image=None, root=None
-              ):
+def buttonbox(msg="",title=" "
+    ,choices=("Button1", "Button2", "Button3")
+    , image=None
+    , root=None
+    ):
     """
     Display a msg, a title, and a set of buttons.
     The buttons are defined by the members of the choices list.
@@ -264,6 +348,7 @@ def buttonbox(msg="", title=" ", choices=("Button1", "Button2", "Button3"), imag
     @arg choices: a list or tuple of the choices to be displayed
     """
     global boxRoot, __replyButtonText, __widgetTexts, buttonsFrame
+
 
     # Initialize __replyButtonText to the first choice.
     # This is what will be used if the window is closed by the close button.
@@ -277,7 +362,7 @@ def buttonbox(msg="", title=" ", choices=("Button1", "Button2", "Button3"), imag
         boxRoot = Tk()
         boxRoot.withdraw()
 
-    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose)
+    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose )
     boxRoot.title(title)
     boxRoot.iconname('Dialog')
     boxRoot.geometry(rootWindowPosition)
@@ -288,43 +373,39 @@ def buttonbox(msg="", title=" ", choices=("Button1", "Button2", "Button3"), imag
     messageFrame.pack(side=TOP, fill=BOTH)
 
     # ------------- define the imageFrame ---------------------------------
-
     tk_Image = None
     if image:
         imageFilename = os.path.normpath(image)
-        junk, ext = os.path.splitext(imageFilename)
+        junk,ext = os.path.splitext(imageFilename)
 
         if os.path.exists(imageFilename):
             if ext.lower() in [".gif", ".pgm", ".ppm"]:
-                tk_Image = PhotoImage(file=imageFilename)
+                tk_Image = PhotoImage(master=boxRoot, file=imageFilename)
             else:
-                try:
-                    import PIL
-                    PILisLoaded = True
-                except:
-                    PILisLoaded = False
-
                 if PILisLoaded:
                     try:
-                        pil_Image = PIL.Image.open(imageFilename)
-                        tk_Image = PIL.ImageTk.PhotoImage(pil_Image)
-                    except Exception, e:
+                        pil_Image = PILImage.open(imageFilename)
+                        tk_Image = PILImageTk.PhotoImage(pil_Image, master=boxRoot)
+                    except:
                         msg += ImageErrorMsg % (imageFilename,
-                                                "The Python Imaging Library could not convert this file to a displayable image."
-                                                + "\n" + str(e))
-                else:
+                            "\nThe Python Imaging Library (PIL) could not convert this file to a displayable image."
+                            "\n\nPIL reports:\n" + exception_format())
+
+                else:  # PIL is not loaded
                     msg += ImageErrorMsg % (imageFilename,
-                                            "You may need to install the Python Imaging Library "
-                                            "(http://www.pythonware.com/products/pil/)"
-                                            " to display " + ext + " image files.")
+                    "\nI could not import the Python Imaging Library (PIL) to display the image.\n\n"
+                    "You may need to install PIL\n"
+                    "(http://www.pythonware.com/products/pil/)\n"
+                    "to display " + ext + " image files.")
+
         else:
-            msg += ImageErrorMsg % (imageFilename, "Image file not found.")
+            msg += ImageErrorMsg % (imageFilename, "\nImage file not found.")
 
     if tk_Image:
         imageFrame = Frame(master=boxRoot)
         imageFrame.pack(side=TOP, fill=BOTH)
-        label = Label(imageFrame, image=tk_Image)
-        label.image = tk_Image  # keep a reference!
+        label = Label(imageFrame,image=tk_Image)
+        label.image = tk_Image # keep a reference!
         label.pack(side=TOP, expand=YES, fill=X, padx='1m', pady='1m')
 
     # ------------- define the buttonsFrame ---------------------------------
@@ -333,8 +414,7 @@ def buttonbox(msg="", title=" ", choices=("Button1", "Button2", "Button3"), imag
 
     # -------------------- place the widgets in the frames -----------------------
     messageWidget = Message(messageFrame, text=msg, width=400)
-    messageWidget.configure(
-        font=(PROPORTIONAL_FONT_FAMILY, PROPORTIONAL_FONT_SIZE))
+    messageWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
     messageWidget.pack(side=TOP, expand=YES, fill=X, padx='3m', pady='3m')
 
     __put_buttons_in_buttonframe(choices)
@@ -346,56 +426,22 @@ def buttonbox(msg="", title=" ", choices=("Button1", "Button2", "Button3"), imag
     boxRoot.deiconify()
     boxRoot.mainloop()
     boxRoot.destroy()
-    if root:
-        root.deiconify()
+    if root: root.deiconify()
     return __replyButtonText
 
 
-def floatbox(text1='Enter float', text2=''):
-    """
-    GUI for points
-            npt is a number of points (default : npt=1)
-    """
-    point = multenterbox(text1, text2,('value'), ('0'))
-    value = eval(point[0])
-    return value
-
-def offsetbox(text1='Enter offset values', text2='',default=('0','0')):
-    """
-    GUI for points
-            npt is a number of points (default : npt=1)
-    """
-    point = multenterbox(text1, text2,('x', 'y'), default)
-    offx = eval(point[0])
-    offy = eval(point[1])
-    return (offx, offy)
-
-def pointbox(pt, npt=1, text1='Enter point coordinates', text2=''):
-    """
-    GUI for points
-            npt is a number of points (default : npt=1)
-    """
-
-    if (npt == 1):
-        point = multenterbox(text1, text2,
-                             ('x', 'y', 'z'), (str(pt[0]), str(pt[1]), str(pt[2])))
-    else:
-        point = multenterbox(text1, text2,
-                             ('x', 'y', 'z', 'npt'), (str(pt[0]), str(pt[1]), str(pt[2]), str(npt)))
-        npt = eval(point[3])
-
-    px = eval(point[0])
-    py = eval(point[1])
-    pz = eval(point[2])
-    pt = np.array([px, py, pz])
-    return (pt, npt)
 #-------------------------------------------------------------------
 # integerbox
 #-------------------------------------------------------------------
-
-
-def integerbox(msg="", title=" ", default="", lowerbound=0, upperbound=99, image=None, root=None, **invalidKeywordArguments
-               ):
+def integerbox(msg=""
+    , title=" "
+    , default=""
+    , lowerbound=0
+    , upperbound=99
+    , image = None
+    , root  = None
+    , **invalidKeywordArguments
+    ):
     """
     Show a box in which a user can enter an integer.
 
@@ -427,47 +473,46 @@ def integerbox(msg="", title=" ", default="", lowerbound=0, upperbound=99, image
             + "Use 'upperbound' instead.\n\n")
 
     if default != "":
-        if not isinstance(default, type(1)):
+        if type(default) != type(1):
             raise AssertionError(
                 "integerbox received a non-integer value for "
-                + "default of " + dq(str(default)), "Error")
+                + "default of " + dq(str(default)) , "Error")
 
-    if not isinstance(lowerbound, type(1)):
+    if type(lowerbound) != type(1):
         raise AssertionError(
             "integerbox received a non-integer value for "
-            + "lowerbound of " + dq(str(lowerbound)), "Error")
+            + "lowerbound of " + dq(str(lowerbound)) , "Error")
 
-    if not isinstance(upperbound, type(1)):
+    if type(upperbound) != type(1):
         raise AssertionError(
             "integerbox received a non-integer value for "
-            + "upperbound of " + dq(str(upperbound)), "Error")
+            + "upperbound of " + dq(str(upperbound)) , "Error")
 
     if msg == "":
         msg = ("Enter an integer between " + str(lowerbound)
-               + " and "
-               + str(upperbound)
-               )
+            + " and "
+            + str(upperbound)
+            )
 
-    while True:
+    while 1:
         reply = enterbox(msg, title, str(default), image=image, root=root)
-        if reply is None:
-            return None
+        if reply == None: return None
 
         try:
             reply = int(reply)
         except:
-            msgbox("The value that you entered:\n\t%s\nis not an integer." %
-                   dq(str(reply)), "Error")
+            msgbox ("The value that you entered:\n\t%s\nis not an integer." % dq(str(reply))
+                    , "Error")
             continue
 
         if reply < lowerbound:
-            msgbox("The value that you entered is less than the lower bound of "
-                   + str(lowerbound) + ".", "Error")
+            msgbox ("The value that you entered is less than the lower bound of "
+                + str(lowerbound) + ".", "Error")
             continue
 
         if reply > upperbound:
-            msgbox("The value that you entered is greater than the upper bound of "
-                   + str(upperbound) + ".", "Error")
+            msgbox ("The value that you entered is greater than the upper bound of "
+                + str(upperbound) + ".", "Error")
             continue
 
         # reply has passed all validation checks.
@@ -477,10 +522,11 @@ def integerbox(msg="", title=" ", default="", lowerbound=0, upperbound=99, image
 #-------------------------------------------------------------------
 # multenterbox
 #-------------------------------------------------------------------
-
-
-def multenterbox(msg="Fill in values for the fields.", title=" ", fields=(), values=()
-                 ):
+def multenterbox(msg="Fill in values for the fields."
+    , title=" "
+    , fields=()
+    , values=()
+    ):
     r"""
     Show screen with multiple data entry fields.
 
@@ -521,14 +567,17 @@ def multenterbox(msg="Fill in values for the fields.", title=" ", fields=(), val
     @arg fields: a list of fieldnames.
     @arg values:  a list of field values
     """
-    return __multfillablebox(msg, title, fields, values, None)
+    return __multfillablebox(msg,title,fields,values,None)
 
 
 #-----------------------------------------------------------------------
 # multpasswordbox
 #-----------------------------------------------------------------------
-def multpasswordbox(msg="Fill in values for the fields.", title=" ", fields=tuple(), values=tuple()
-                    ):
+def multpasswordbox(msg="Fill in values for the fields."
+    , title=" "
+    , fields=tuple()
+    ,values=tuple()
+    ):
     r"""
     Same interface as multenterbox.  But in multpassword box,
     the last of the fields is assumed to be a password, and
@@ -551,28 +600,23 @@ def multpasswordbox(msg="Fill in values for the fields.", title=" ", fields=tupl
             errmsg = ""
             for i in range(len(fieldNames)):
                 if fieldValues[i].strip() == "":
-                    errmsg = errmsg + ('"%s" is a required field.\n\n' %
-                        fieldNames[i])
+                    errmsg = errmsg + ('"%s" is a required field.\n\n' % fieldNames[i])
                 if errmsg == "": break # no problems found
-            fieldValues = multpasswordbox(
-                errmsg, title, fieldNames, fieldValues)
+            fieldValues = multpasswordbox(errmsg, title, fieldNames, fieldValues)
 
         writeln("Reply was: %s" % str(fieldValues))
     """
-    return __multfillablebox(msg, title, fields, values, "*")
-
+    return __multfillablebox(msg,title,fields,values,"*")
 
 def bindArrows(widget):
     widget.bind("<Down>", tabRight)
-    widget.bind("<Up>", tabLeft)
+    widget.bind("<Up>"  , tabLeft)
 
-    widget.bind("<Right>", tabRight)
-    widget.bind("<Left>", tabLeft)
-
+    widget.bind("<Right>",tabRight)
+    widget.bind("<Left>" , tabLeft)
 
 def tabRight(event):
     boxRoot.event_generate("<Tab>")
-
 
 def tabLeft(event):
     boxRoot.event_generate("<Shift-Tab>")
@@ -580,22 +624,22 @@ def tabLeft(event):
 #-----------------------------------------------------------------------
 # __multfillablebox
 #-----------------------------------------------------------------------
-
-
-def __multfillablebox(msg="Fill in values for the fields.", title=" ", fields=(), values=(), mask = None
-                      ):
+def __multfillablebox(msg="Fill in values for the fields."
+    , title=" "
+    , fields=()
+    , values=()
+    , mask = None
+    ):
     global boxRoot, __multenterboxText, __multenterboxDefaultText, cancelButton, entryWidget, okButton
 
     choices = ["OK", "Cancel"]
-    if len(fields) == 0:
-        return None
+    if len(fields) == 0: return None
 
     fields = list(fields[:])  # convert possible tuples to a list
     values = list(values[:])  # convert possible tuples to a list
 
-    if   len(values) == len(fields):
-        pass
-    elif len(values) > len(fields):
+    if   len(values) == len(fields): pass
+    elif len(values) >  len(fields):
         fields = fields[0:len(values)]
     else:
         while len(values) < len(fields):
@@ -603,7 +647,7 @@ def __multfillablebox(msg="Fill in values for the fields.", title=" ", fields=()
 
     boxRoot = Tk()
 
-    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose)
+    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose )
     boxRoot.title(title)
     boxRoot.iconname('Dialog')
     boxRoot.geometry(rootWindowPosition)
@@ -615,8 +659,7 @@ def __multfillablebox(msg="Fill in values for the fields.", title=" ", fields=()
 
     #-------------------- the msg widget ----------------------------
     messageWidget = Message(messageFrame, width="4.5i", text=msg)
-    messageWidget.configure(
-        font=(PROPORTIONAL_FONT_FAMILY, PROPORTIONAL_FONT_SIZE))
+    messageWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
     messageWidget.pack(side=RIGHT, expand=1, fill=BOTH, padx='3m', pady='3m')
 
     global entryWidgets
@@ -625,7 +668,7 @@ def __multfillablebox(msg="Fill in values for the fields.", title=" ", fields=()
     lastWidgetIndex = len(fields) - 1
 
     for widgetIndex in range(len(fields)):
-        argFieldName = fields[widgetIndex]
+        argFieldName  = fields[widgetIndex]
         argFieldValue = values[widgetIndex]
         entryFrame = Frame(master=boxRoot)
         entryFrame.pack(side=TOP, fill=BOTH)
@@ -634,10 +677,9 @@ def __multfillablebox(msg="Fill in values for the fields.", title=" ", fields=()
         labelWidget = Label(entryFrame, text=argFieldName)
         labelWidget.pack(side=LEFT)
 
-        entryWidget = Entry(entryFrame, width=40, highlightthickness=2)
+        entryWidget = Entry(entryFrame, width=40,highlightthickness=2)
         entryWidgets.append(entryWidget)
-        entryWidget.configure(
-            font=(PROPORTIONAL_FONT_FAMILY, TEXT_ENTRY_FONT_SIZE))
+        entryWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,TEXT_ENTRY_FONT_SIZE))
         entryWidget.pack(side=RIGHT, padx="3m")
 
         bindArrows(entryWidget)
@@ -652,7 +694,7 @@ def __multfillablebox(msg="Fill in values for the fields.", title=" ", fields=()
                 entryWidgets[widgetIndex].configure(show=mask)
 
         # put text into the entryWidget
-        entryWidgets[widgetIndex].insert(0, argFieldValue)
+        entryWidgets[widgetIndex].insert(0,argFieldValue)
         widgetIndex += 1
 
     # ------------------ ok button -------------------------------
@@ -661,26 +703,26 @@ def __multfillablebox(msg="Fill in values for the fields.", title=" ", fields=()
 
     okButton = Button(buttonsFrame, takefocus=1, text="OK")
     bindArrows(okButton)
-    okButton.pack(
-        expand=1, side=LEFT, padx='3m', pady='3m', ipadx='2m', ipady='1m')
+    okButton.pack(expand=1, side=LEFT, padx='3m', pady='3m', ipadx='2m', ipady='1m')
 
     # for the commandButton, bind activation events to the activation event handler
-    commandButton = okButton
+    commandButton  = okButton
     handler = __multenterboxGetText
     for selectionEvent in STANDARD_SELECTION_EVENTS:
         commandButton.bind("<%s>" % selectionEvent, handler)
 
+
     # ------------------ cancel button -------------------------------
     cancelButton = Button(buttonsFrame, takefocus=1, text="Cancel")
     bindArrows(cancelButton)
-    cancelButton.pack(expand=1, side=RIGHT, padx='3m', pady='3m',
-                      ipadx='2m', ipady='1m')
+    cancelButton.pack(expand=1, side=RIGHT, padx='3m', pady='3m', ipadx='2m', ipady='1m')
 
     # for the commandButton, bind activation events to the activation event handler
-    commandButton = cancelButton
+    commandButton  = cancelButton
     handler = __multenterboxCancel
     for selectionEvent in STANDARD_SELECTION_EVENTS:
         commandButton.bind("<%s>" % selectionEvent, handler)
+
 
     # ------------------- time for action! -----------------
     entryWidgets[0].focus_force()    # put the focus on the entryWidget
@@ -712,8 +754,13 @@ def __multenterboxCancel(event):
 #-------------------------------------------------------------------
 # enterbox
 #-------------------------------------------------------------------
-def enterbox(msg="Enter something.", title=" ", default="", strip=True, image=None, root=None
-             ):
+def enterbox(msg="Enter something."
+    , title=" "
+    , default=""
+    , strip=True
+    , image=None
+    , root=None
+    ):
     """
     Show a box in which a user can enter some text.
 
@@ -732,25 +779,33 @@ def enterbox(msg="Enter something.", title=" ", default="", strip=True, image=No
         else:
             ...
     """
-    result = __fillablebox(
-        msg, title, default=default, mask=None, image=image, root=root)
+    result = __fillablebox(msg, title, default=default, mask=None,image=image,root=root)
     if result and strip:
         result = result.strip()
     return result
 
 
-def passwordbox(msg="Enter your password.", title=" ", default="", image=None, root=None
-                ):
+def passwordbox(msg="Enter your password."
+    , title=" "
+    , default=""
+    , image=None
+    , root=None
+    ):
     """
     Show a box in which a user can enter a password.
     The text is masked with asterisks, so the password is not displayed.
     Returns the text that the user entered, or None if he cancels the operation.
     """
-    return __fillablebox(msg, title, default, mask="*", image=image, root=root)
+    return __fillablebox(msg, title, default, mask="*",image=image,root=root)
 
 
-def __fillablebox(msg, title="", default="", mask=None, image=None, root=None
-                  ):
+def __fillablebox(msg
+    , title=""
+    , default=""
+    , mask=None
+    , image=None
+    , root=None
+    ):
     """
     Show a box in which a user can enter some text.
     You may optionally specify some default text, which will appear in the
@@ -761,12 +816,10 @@ def __fillablebox(msg, title="", default="", mask=None, image=None, root=None
     global boxRoot, __enterboxText, __enterboxDefaultText
     global cancelButton, entryWidget, okButton
 
-    if title is None:
-        title == ""
-    if default is None:
-        default = ""
+    if title == None: title == ""
+    if default == None: default = ""
     __enterboxDefaultText = default
-    __enterboxText = __enterboxDefaultText
+    __enterboxText        = __enterboxDefaultText
 
     if root:
         root.withdraw()
@@ -776,36 +829,56 @@ def __fillablebox(msg, title="", default="", mask=None, image=None, root=None
         boxRoot = Tk()
         boxRoot.withdraw()
 
-    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose)
+    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose )
     boxRoot.title(title)
     boxRoot.iconname('Dialog')
     boxRoot.geometry(rootWindowPosition)
     boxRoot.bind("<Escape>", __enterboxCancel)
 
-    if image:
-        image = os.path.normpath(image)
-        junk, ext = os.path.splitext(image)
-        if ext.lower() == ".gif":
-            if os.path.exists(image):
-                pass
-            else:
-                msg += ImageErrorMsg % (image, "Image file not found.")
-                image = None
-        else:
-            msg += ImageErrorMsg % (image, "Image file is not a .gif file.")
-            image = None
     # ------------- define the messageFrame ---------------------------------
     messageFrame = Frame(master=boxRoot)
     messageFrame.pack(side=TOP, fill=BOTH)
 
     # ------------- define the imageFrame ---------------------------------
+    tk_Image = None
     if image:
+        imageFilename = os.path.normpath(image)
+        junk,ext = os.path.splitext(imageFilename)
+
+        if os.path.exists(imageFilename):
+            if ext.lower() in [".gif", ".pgm", ".ppm"]:
+                tk_Image = PhotoImage(master=boxRoot, file=imageFilename)
+            else:
+                if PILisLoaded:
+                    try:
+                        pil_Image = PILImage.open(imageFilename)
+                        tk_Image = PILImageTk.PhotoImage(pil_Image, master=boxRoot)
+                    except:
+                        msg += ImageErrorMsg % (imageFilename,
+                            "\nThe Python Imaging Library (PIL) could not convert this file to a displayable image."
+                            "\n\nPIL reports:\n" + exception_format())
+
+                else:  # PIL is not loaded
+                    msg += ImageErrorMsg % (imageFilename,
+                    "\nI could not import the Python Imaging Library (PIL) to display the image.\n\n"
+                    "You may need to install PIL\n"
+                    "(http://www.pythonware.com/products/pil/)\n"
+                    "to display " + ext + " image files.")
+
+        else:
+            msg += ImageErrorMsg % (imageFilename, "\nImage file not found.")
+
+    if tk_Image:
         imageFrame = Frame(master=boxRoot)
         imageFrame.pack(side=TOP, fill=BOTH)
-        image = PhotoImage(file=image)
-        label = Label(imageFrame, image=image)
-        label.image = image  # keep a reference!
+        label = Label(imageFrame,image=tk_Image)
+        label.image = tk_Image # keep a reference!
         label.pack(side=TOP, expand=YES, fill=X, padx='1m', pady='1m')
+
+    # ------------- define the buttonsFrame ---------------------------------
+    buttonsFrame = Frame(master=boxRoot)
+    buttonsFrame.pack(side=TOP, fill=BOTH)
+
 
     # ------------- define the entryFrame ---------------------------------
     entryFrame = Frame(master=boxRoot)
@@ -816,44 +889,42 @@ def __fillablebox(msg, title="", default="", mask=None, image=None, root=None
     buttonsFrame.pack(side=TOP, fill=BOTH)
 
     #-------------------- the msg widget ----------------------------
-    messageWidget = Message(messageFrame, width="4.5i", text=msg)
-    messageWidget.configure(
-        font=(PROPORTIONAL_FONT_FAMILY, PROPORTIONAL_FONT_SIZE))
+    #messageWidget = Message(messageFrame, width="4.5i", text=msg)
+    messageWidget = Message(messageFrame,  text=msg)
+    messageWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
     messageWidget.pack(side=RIGHT, expand=1, fill=BOTH, padx='3m', pady='3m')
 
     # --------- entryWidget ----------------------------------------------
     entryWidget = Entry(entryFrame, width=40)
     bindArrows(entryWidget)
-    entryWidget.configure(
-        font=(PROPORTIONAL_FONT_FAMILY, TEXT_ENTRY_FONT_SIZE))
+    entryWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,TEXT_ENTRY_FONT_SIZE))
     if mask:
         entryWidget.configure(show=mask)
     entryWidget.pack(side=LEFT, padx="3m")
     entryWidget.bind("<Return>", __enterboxGetText)
     entryWidget.bind("<Escape>", __enterboxCancel)
     # put text into the entryWidget
-    entryWidget.insert(0, __enterboxDefaultText)
+    entryWidget.insert(0,__enterboxDefaultText)
 
     # ------------------ ok button -------------------------------
     okButton = Button(buttonsFrame, takefocus=1, text="OK")
     bindArrows(okButton)
-    okButton.pack(
-        expand=1, side=LEFT, padx='3m', pady='3m', ipadx='2m', ipady='1m')
+    okButton.pack(expand=1, side=LEFT, padx='3m', pady='3m', ipadx='2m', ipady='1m')
 
     # for the commandButton, bind activation events to the activation event handler
-    commandButton = okButton
+    commandButton  = okButton
     handler = __enterboxGetText
     for selectionEvent in STANDARD_SELECTION_EVENTS:
         commandButton.bind("<%s>" % selectionEvent, handler)
 
+
     # ------------------ cancel button -------------------------------
     cancelButton = Button(buttonsFrame, takefocus=1, text="Cancel")
     bindArrows(cancelButton)
-    cancelButton.pack(expand=1, side=RIGHT, padx='3m', pady='3m',
-                      ipadx='2m', ipady='1m')
+    cancelButton.pack(expand=1, side=RIGHT, padx='3m', pady='3m', ipadx='2m', ipady='1m')
 
     # for the commandButton, bind activation events to the activation event handler
-    commandButton = cancelButton
+    commandButton  = cancelButton
     handler = __enterboxCancel
     for selectionEvent in STANDARD_SELECTION_EVENTS:
         commandButton.bind("<%s>" % selectionEvent, handler)
@@ -864,29 +935,30 @@ def __fillablebox(msg, title="", default="", mask=None, image=None, root=None
     boxRoot.mainloop()  # run it!
 
     # -------- after the run has completed ----------------------------------
-    if root:
-        root.deiconify()
+    if root: root.deiconify()
     boxRoot.destroy()  # button_click didn't destroy boxRoot, so we do it now
     return __enterboxText
 
 
 def __enterboxGetText(event):
     global __enterboxText
+    
     __enterboxText = entryWidget.get()
     boxRoot.quit()
 
 
 def __enterboxRestore(event):
     global entryWidget
-    entryWidget.delete(0, len(entryWidget.get()))
+    
+    entryWidget.delete(0,len(entryWidget.get()))
     entryWidget.insert(0, __enterboxDefaultText)
 
 
 def __enterboxCancel(event):
     global __enterboxText
+    
     __enterboxText = None
     boxRoot.quit()
-
 
 def denyWindowManagerClose():
     """ don't allow WindowManager close
@@ -897,11 +969,15 @@ def denyWindowManagerClose():
     x.destroy()
 
 
+
 #-------------------------------------------------------------------
 # multchoicebox
 #-------------------------------------------------------------------
-def multchoicebox(msg="Pick as many items as you like.", title=" ", choices=(), **kwargs
-                  ):
+def multchoicebox(msg="Pick as many items as you like."
+    , title=" "
+    , choices=()
+    , **kwargs
+    ):
     """
     Present the user with a list of choices.
     allow him to select multiple items and return them in a list.
@@ -912,8 +988,7 @@ def multchoicebox(msg="Pick as many items as you like.", title=" ", choices=(), 
     @arg title: the window title
     @arg choices: a list or tuple of the choices to be displayed
     """
-    if len(choices) == 0:
-        choices = ["Program logic error - no choices were specified."]
+    if len(choices) == 0: choices = ["Program logic error - no choices were specified."]
 
     global __choiceboxMultipleSelect
     __choiceboxMultipleSelect = 1
@@ -923,8 +998,10 @@ def multchoicebox(msg="Pick as many items as you like.", title=" ", choices=(), 
 #-----------------------------------------------------------------------
 # choicebox
 #-----------------------------------------------------------------------
-def choicebox(msg="Pick something.", title=" ", choices=()
-              ):
+def choicebox(msg="Pick something."
+    , title=" "
+    , choices=()
+    ):
     """
     Present the user with a list of choices.
     return the choice that he selects.
@@ -934,19 +1011,20 @@ def choicebox(msg="Pick something.", title=" ", choices=()
     @arg title: the window title
     @arg choices: a list or tuple of the choices to be displayed
     """
-    if len(choices) == 0:
-        choices = ["Program logic error - no choices were specified."]
+    if len(choices) == 0: choices = ["Program logic error - no choices were specified."]
 
     global __choiceboxMultipleSelect
     __choiceboxMultipleSelect = 0
-    return __choicebox(msg, title, choices)
+    return __choicebox(msg,title,choices)
 
 
 #-----------------------------------------------------------------------
 # __choicebox
 #-----------------------------------------------------------------------
-def __choicebox(msg, title, choices
-                ):
+def __choicebox(msg
+    , title
+    , choices
+    ):
     """
     internal routine to support choicebox() and multchoicebox()
     """
@@ -970,27 +1048,26 @@ def __choicebox(msg, title, choices
     lines_to_show = min(len(choices), 20)
     lines_to_show = 20
 
-    if title is None:
-        title = ""
+    if title == None: title = ""
 
     # Initialize __choiceboxResults
     # This is the value that will be returned if the user clicks the close icon
     __choiceboxResults = None
 
     boxRoot = Tk()
-    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose)
-    screen_width = boxRoot.winfo_screenwidth()
+    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose )
+    screen_width  = boxRoot.winfo_screenwidth()
     screen_height = boxRoot.winfo_screenheight()
-    root_width = int((screen_width * 0.8))
-    root_height = int((screen_height * 0.5))
-    root_xpos = int((screen_width * 0.1))
-    root_ypos = int((screen_height * 0.05))
+    root_width    = int((screen_width * 0.8))
+    root_height   = int((screen_height * 0.5))
+    root_xpos     = int((screen_width * 0.1))
+    root_ypos     = int((screen_height * 0.05))
 
     boxRoot.title(title)
     boxRoot.iconname('Dialog')
     rootWindowPosition = "+0+0"
     boxRoot.geometry(rootWindowPosition)
-    boxRoot.expand = NO
+    boxRoot.expand=NO
     boxRoot.minsize(root_width, root_height)
     rootWindowPosition = "+" + str(root_xpos) + "+" + str(root_ypos)
     boxRoot.geometry(rootWindowPosition)
@@ -1013,41 +1090,39 @@ def __choicebox(msg, title, choices
     # -------------------------- put the widgets in the frames ------------------------------
 
     # ---------- put a msg widget in the msg frame-------------------
-    messageWidget = Message(
-        messageFrame, anchor=NW, text=msg, width=int(root_width * 0.9))
-    messageWidget.configure(
-        font=(PROPORTIONAL_FONT_FAMILY, PROPORTIONAL_FONT_SIZE))
+    messageWidget = Message(messageFrame, anchor=NW, text=msg, width=int(root_width * 0.9))
+    messageWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
     messageWidget.pack(side=LEFT, expand=YES, fill=BOTH, padx='1m', pady='1m')
 
     # --------  put the choiceboxWidget in the choiceboxFrame ---------------------------
-    choiceboxWidget = Listbox(choiceboxFrame, height=lines_to_show, borderwidth="1m", relief="flat", bg="white"
-                              )
+    choiceboxWidget = Listbox(choiceboxFrame
+        , height=lines_to_show
+        , borderwidth="1m"
+        , relief="flat"
+        , bg="white"
+        )
 
     if __choiceboxMultipleSelect:
         choiceboxWidget.configure(selectmode=MULTIPLE)
 
-    choiceboxWidget.configure(
-        font=(PROPORTIONAL_FONT_FAMILY, PROPORTIONAL_FONT_SIZE))
+    choiceboxWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
 
     # add a vertical scrollbar to the frame
-    rightScrollbar = Scrollbar(
-        choiceboxFrame, orient=VERTICAL, command=choiceboxWidget.yview)
-    choiceboxWidget.configure(yscrollcommand=rightScrollbar.set)
+    rightScrollbar = Scrollbar(choiceboxFrame, orient=VERTICAL, command=choiceboxWidget.yview)
+    choiceboxWidget.configure(yscrollcommand = rightScrollbar.set)
 
     # add a horizontal scrollbar to the frame
-    bottomScrollbar = Scrollbar(
-        choiceboxFrame, orient=HORIZONTAL, command=choiceboxWidget.xview)
-    choiceboxWidget.configure(xscrollcommand=bottomScrollbar.set)
+    bottomScrollbar = Scrollbar(choiceboxFrame, orient=HORIZONTAL, command=choiceboxWidget.xview)
+    choiceboxWidget.configure(xscrollcommand = bottomScrollbar.set)
 
     # pack the Listbox and the scrollbars.  Note that although we must define
     # the textArea first, we must pack it last, so that the bottomScrollbar will
     # be located properly.
 
-    bottomScrollbar.pack(side=BOTTOM, fill=X)
-    rightScrollbar.pack(side=RIGHT, fill=Y)
+    bottomScrollbar.pack(side=BOTTOM, fill = X)
+    rightScrollbar.pack(side=RIGHT, fill = Y)
 
-    choiceboxWidget.pack(
-        side=LEFT, padx="1m", pady="1m", expand=YES, fill=BOTH)
+    choiceboxWidget.pack(side=LEFT, padx="1m", pady="1m", expand=YES, fill=BOTH)
 
     #---------------------------------------------------
     # sort the choices
@@ -1055,19 +1130,17 @@ def __choicebox(msg, title, choices
     # put the choices into the choiceboxWidget
     #---------------------------------------------------
     for index in range(len(choices)):
-        choices[index] == str(choices[index])
+        choices[index] = str(choices[index])
 
     if runningPython3:
         choices.sort(key=str.lower)
     else:
-        choices.sort(lambda x, y: cmp(x.lower(), y.lower()))
-            # case-insensitive sort
+        choices.sort( lambda x,y: cmp(x.lower(),    y.lower())) # case-insensitive sort
 
     lastInserted = None
     choiceboxChoices = []
     for choice in choices:
-        if choice == lastInserted:
-            pass
+        if choice == lastInserted: pass
         else:
             choiceboxWidget.insert(END, choice)
             choiceboxChoices.append(choice)
@@ -1077,14 +1150,12 @@ def __choicebox(msg, title, choices
 
     # put the buttons in the buttonsFrame
     if len(choices) > 0:
-        okButton = Button(
-            buttonsFrame, takefocus=YES, text="OK", height=1, width=6)
+        okButton = Button(buttonsFrame, takefocus=YES, text="OK", height=1, width=6)
         bindArrows(okButton)
-        okButton.pack(expand=NO, side=TOP, padx='2m', pady='1m',
-                      ipady="1m", ipadx="2m")
+        okButton.pack(expand=NO, side=TOP,  padx='2m', pady='1m', ipady="1m", ipadx="2m")
 
         # for the commandButton, bind activation events to the activation event handler
-        commandButton = okButton
+        commandButton  = okButton
         handler = __choiceboxGetChoice
         for selectionEvent in STANDARD_SELECTION_EVENTS:
             commandButton.bind("<%s>" % selectionEvent, handler)
@@ -1097,37 +1168,33 @@ def __choicebox(msg, title, choices
         choiceboxWidget.bind("<Return>", __choiceboxCancel)
         choiceboxWidget.bind("<Double-Button-1>", __choiceboxCancel)
 
-    cancelButton = Button(
-        buttonsFrame, takefocus=YES, text="Cancel", height=1, width=6)
+    cancelButton = Button(buttonsFrame, takefocus=YES, text="Cancel", height=1, width=6)
     bindArrows(cancelButton)
-    cancelButton.pack(expand=NO, side=BOTTOM, padx='2m', pady='1m',
-                      ipady="1m", ipadx="2m")
+    cancelButton.pack(expand=NO, side=BOTTOM, padx='2m', pady='1m', ipady="1m", ipadx="2m")
 
     # for the commandButton, bind activation events to the activation event handler
-    commandButton = cancelButton
+    commandButton  = cancelButton
     handler = __choiceboxCancel
     for selectionEvent in STANDARD_SELECTION_EVENTS:
         commandButton.bind("<%s>" % selectionEvent, handler)
+
 
     # add special buttons for multiple select features
     if len(choices) > 0 and __choiceboxMultipleSelect:
         selectionButtonsFrame = Frame(messageFrame)
         selectionButtonsFrame.pack(side=RIGHT, fill=Y, expand=NO)
 
-        selectAllButton = Button(selectionButtonsFrame,
-                                 text="Select All", height=1, width=6)
+        selectAllButton = Button(selectionButtonsFrame, text="Select All", height=1, width=6)
         bindArrows(selectAllButton)
 
-        selectAllButton.bind("<Button-1>", __choiceboxSelectAll)
-        selectAllButton.pack(expand=NO, side=TOP, padx='2m',
-                             pady='1m', ipady="1m", ipadx="2m")
+        selectAllButton.bind("<Button-1>",__choiceboxSelectAll)
+        selectAllButton.pack(expand=NO, side=TOP,  padx='2m', pady='1m', ipady="1m", ipadx="2m")
 
-        clearAllButton = Button(selectionButtonsFrame,
-                                text="Clear All", height=1, width=6)
+        clearAllButton = Button(selectionButtonsFrame, text="Clear All", height=1, width=6)
         bindArrows(clearAllButton)
-        clearAllButton.bind("<Button-1>", __choiceboxClearAll)
-        clearAllButton.pack(expand=NO, side=TOP, padx='2m',
-                            pady='1m', ipady="1m", ipadx="2m")
+        clearAllButton.bind("<Button-1>",__choiceboxClearAll)
+        clearAllButton.pack(expand=NO, side=TOP,  padx='2m', pady='1m', ipady="1m", ipadx="2m")
+
 
     # -------------------- bind some keyboard events ----------------------------
     boxRoot.bind("<Escape>", __choiceboxCancel)
@@ -1146,10 +1213,9 @@ def __choicebox(msg, title, choices
 
 def __choiceboxGetChoice(event):
     global boxRoot, __choiceboxResults, choiceboxWidget
-
+    
     if __choiceboxMultipleSelect:
-        __choiceboxResults = [choiceboxWidget.get(
-            index) for index in choiceboxWidget.curselection()]
+        __choiceboxResults = [choiceboxWidget.get(index) for index in choiceboxWidget.curselection()]
 
     else:
         choice_index = choiceboxWidget.curselection()
@@ -1162,17 +1228,19 @@ def __choiceboxGetChoice(event):
 
 def __choiceboxSelectAll(event):
     global choiceboxWidget, choiceboxChoices
-    choiceboxWidget.selection_set(0, len(choiceboxChoices) - 1)
-
+    
+    choiceboxWidget.selection_set(0, len(choiceboxChoices)-1)
 
 def __choiceboxClearAll(event):
     global choiceboxWidget, choiceboxChoices
-    choiceboxWidget.selection_clear(0, len(choiceboxChoices) - 1)
+    
+    choiceboxWidget.selection_clear(0, len(choiceboxChoices)-1)
+
 
 
 def __choiceboxCancel(event):
     global boxRoot, __choiceboxResults
-
+    
     __choiceboxResults = None
     boxRoot.quit()
 
@@ -1193,7 +1261,7 @@ def KeyboardListener(event):
             choiceboxWidget.selection_clear(0, 'end')
 
             ## start from previous selection +1
-            for n in range(start_n + 1, len(choiceboxChoices)):
+            for n in range(start_n+1, len(choiceboxChoices)):
                 item = choiceboxChoices[n]
                 if item[0].lower() == key.lower():
                     choiceboxWidget.selection_set(first=n)
@@ -1204,7 +1272,7 @@ def KeyboardListener(event):
                 for n in range(len(choiceboxChoices)):
                     item = choiceboxChoices[n]
                     if item[0].lower() == key.lower():
-                        choiceboxWidget.selection_set(first=n)
+                        choiceboxWidget.selection_set(first = n)
                         choiceboxWidget.see(n)
                         return
 
@@ -1213,38 +1281,35 @@ def KeyboardListener(event):
                     item = choiceboxChoices[n]
                     if item[0].lower() > key.lower():
                         if n > 0:
-                            choiceboxWidget.selection_set(first=(n - 1))
+                            choiceboxWidget.selection_set(first = (n-1))
                         else:
-                            choiceboxWidget.selection_set(first=0)
+                            choiceboxWidget.selection_set(first = 0)
                         choiceboxWidget.see(n)
                         return
 
                 # still no match (nothing was greater than the key)
                 # we set the selection to the first item in the list
-                lastIndex = len(choiceboxChoices) - 1
-                choiceboxWidget.selection_set(first=lastIndex)
+                lastIndex = len(choiceboxChoices)-1
+                choiceboxWidget.selection_set(first = lastIndex)
                 choiceboxWidget.see(lastIndex)
                 return
 
 #-----------------------------------------------------------------------
 # exception_format
 #-----------------------------------------------------------------------
-
-
 def exception_format():
     """
     Convert exception info into a string suitable for display.
     """
     return "".join(traceback.format_exception(
-           sys.exc_info()[0], sys.exc_info(
-               )[1], sys.exc_info()[2]
+           sys.exc_info()[0]
+        ,  sys.exc_info()[1]
+        ,  sys.exc_info()[2]
         ))
 
 #-----------------------------------------------------------------------
 # exceptionbox
 #-----------------------------------------------------------------------
-
-
 def exceptionbox(msg=None, title=None):
     """
     Display a box that gives information about
@@ -1256,9 +1321,8 @@ def exceptionbox(msg=None, title=None):
     Note that you do not need to (and cannot) pass an exception object
     as an argument.  The latest exception will automatically be used.
     """
-    if title is None:
-        title = "Error Report"
-    if msg is None:
+    if title == None: title = "Error Report"
+    if msg == None:
         msg = "An error (exception) has occurred in the program."
 
     codebox(msg, title, exception_format())
@@ -1267,9 +1331,10 @@ def exceptionbox(msg=None, title=None):
 # codebox
 #-------------------------------------------------------------------
 
-
-def codebox(msg="", title=" ", text=""
-            ):
+def codebox(msg=""
+    , title=" "
+    , text=""
+    ):
     """
     Display some text in a monospaced font, with no line wrapping.
     This function is suitable for displaying code and text that is
@@ -1278,15 +1343,16 @@ def codebox(msg="", title=" ", text=""
     The text parameter should be a string, or a list or tuple of lines to be
     displayed in the textbox.
     """
-    return textbox(msg, title, text, codebox=1)
+    return textbox(msg, title, text, codebox=1 )
 
 #-------------------------------------------------------------------
 # textbox
 #-------------------------------------------------------------------
-
-
-def textbox(msg="", title=" ", text="", codebox=0
-            ):
+def textbox(msg=""
+    , title=" "
+    , text=""
+    , codebox=0
+    ):
     """
     Display some text in a proportional font with line wrapping at word breaks.
     This function is suitable for displaying general written text.
@@ -1295,19 +1361,18 @@ def textbox(msg="", title=" ", text="", codebox=0
     displayed in the textbox.
     """
 
-    if msg is None:
-        msg = ""
-    if title is None:
-        title = ""
+    if msg == None: msg = ""
+    if title == None: title = ""
 
     global boxRoot, __replyButtonText, __widgetTexts, buttonsFrame
     global rootWindowPosition
     choices = ["OK"]
     __replyButtonText = choices[0]
 
+
     boxRoot = Tk()
 
-    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose)
+    boxRoot.protocol('WM_DELETE_WINDOW', denyWindowManagerClose )
 
     screen_width = boxRoot.winfo_screenwidth()
     screen_height = boxRoot.winfo_screenheight()
@@ -1320,7 +1385,7 @@ def textbox(msg="", title=" ", text="", codebox=0
     boxRoot.iconname('Dialog')
     rootWindowPosition = "+0+0"
     boxRoot.geometry(rootWindowPosition)
-    boxRoot.expand = NO
+    boxRoot.expand=NO
     boxRoot.minsize(root_width, root_height)
     rootWindowPosition = "+" + str(root_xpos) + "+" + str(root_ypos)
     boxRoot.geometry(rootWindowPosition)
@@ -1331,7 +1396,7 @@ def textbox(msg="", title=" ", text="", codebox=0
     # ----  put frames in the window -----------------------------------
     # we pack the textboxFrame first, so it will expand first
     textboxFrame = Frame(mainframe, borderwidth=3)
-    textboxFrame.pack(side=BOTTOM, fill=BOTH, expand=YES)
+    textboxFrame.pack(side=BOTTOM , fill=BOTH, expand=YES)
 
     message_and_buttonsFrame = Frame(mainframe)
     message_and_buttonsFrame.pack(side=TOP, fill=X, expand=NO)
@@ -1347,39 +1412,41 @@ def textbox(msg="", title=" ", text="", codebox=0
     # put a textArea in the top frame
     if codebox:
         character_width = int((root_width * 0.6) / MONOSPACE_FONT_SIZE)
-        textArea = Text(textboxFrame, height=25,
-                        width=character_width, padx="2m", pady="1m")
+        textArea = Text(textboxFrame,height=25,width=character_width, padx="2m", pady="1m")
         textArea.configure(wrap=NONE)
         textArea.configure(font=(MONOSPACE_FONT_FAMILY, MONOSPACE_FONT_SIZE))
 
     else:
         character_width = int((root_width * 0.6) / MONOSPACE_FONT_SIZE)
         textArea = Text(
-            textboxFrame, height=25, width=character_width, padx="2m", pady="1m"
-        )
+            textboxFrame
+            , height=25
+            , width=character_width
+            , padx="2m"
+            , pady="1m"
+            )
         textArea.configure(wrap=WORD)
-        textArea.configure(
-            font=(PROPORTIONAL_FONT_FAMILY, PROPORTIONAL_FONT_SIZE))
+        textArea.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
+
 
     # some simple keybindings for scrolling
-    mainframe.bind("<Next>", textArea.yview_scroll(1, PAGES))
-    mainframe.bind("<Prior>", textArea.yview_scroll(-1, PAGES))
+    mainframe.bind("<Next>" , textArea.yview_scroll( 1,PAGES))
+    mainframe.bind("<Prior>", textArea.yview_scroll(-1,PAGES))
 
-    mainframe.bind("<Right>", textArea.xview_scroll(1, PAGES))
-    mainframe.bind("<Left>", textArea.xview_scroll(-1, PAGES))
+    mainframe.bind("<Right>", textArea.xview_scroll( 1,PAGES))
+    mainframe.bind("<Left>" , textArea.xview_scroll(-1,PAGES))
 
-    mainframe.bind("<Down>", textArea.yview_scroll(1, UNITS))
-    mainframe.bind("<Up>", textArea.yview_scroll(-1, UNITS))
+    mainframe.bind("<Down>", textArea.yview_scroll( 1,UNITS))
+    mainframe.bind("<Up>"  , textArea.yview_scroll(-1,UNITS))
+
 
     # add a vertical scrollbar to the frame
-    rightScrollbar = Scrollbar(
-        textboxFrame, orient=VERTICAL, command=textArea.yview)
-    textArea.configure(yscrollcommand=rightScrollbar.set)
+    rightScrollbar = Scrollbar(textboxFrame, orient=VERTICAL, command=textArea.yview)
+    textArea.configure(yscrollcommand = rightScrollbar.set)
 
     # add a horizontal scrollbar to the frame
-    bottomScrollbar = Scrollbar(
-        textboxFrame, orient=HORIZONTAL, command=textArea.xview)
-    textArea.configure(xscrollcommand=bottomScrollbar.set)
+    bottomScrollbar = Scrollbar(textboxFrame, orient=HORIZONTAL, command=textArea.xview)
+    textArea.configure(xscrollcommand = bottomScrollbar.set)
 
     # pack the textArea and the scrollbars.  Note that although we must define
     # the textArea first, we must pack it last, so that the bottomScrollbar will
@@ -1394,38 +1461,34 @@ def textbox(msg="", title=" ", text="", codebox=0
 
     textArea.pack(side=LEFT, fill=BOTH, expand=YES)
 
+
     # ---------- put a msg widget in the msg frame-------------------
-    messageWidget = Message(
-        messageFrame, anchor=NW, text=msg, width=int(root_width * 0.9))
-    messageWidget.configure(
-        font=(PROPORTIONAL_FONT_FAMILY, PROPORTIONAL_FONT_SIZE))
+    messageWidget = Message(messageFrame, anchor=NW, text=msg, width=int(root_width * 0.9))
+    messageWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
     messageWidget.pack(side=LEFT, expand=YES, fill=BOTH, padx='1m', pady='1m')
 
     # put the buttons in the buttonsFrame
-    okButton = Button(
-        buttonsFrame, takefocus=YES, text="OK", height=1, width=6)
-    okButton.pack(expand=NO, side=TOP, padx='2m', pady='1m',
-                  ipady="1m", ipadx="2m")
+    okButton = Button(buttonsFrame, takefocus=YES, text="OK", height=1, width=6)
+    okButton.pack(expand=NO, side=TOP,  padx='2m', pady='1m', ipady="1m", ipadx="2m")
 
     # for the commandButton, bind activation events to the activation event handler
-    commandButton = okButton
+    commandButton  = okButton
     handler = __textboxOK
-    for selectionEvent in ["Return", "Button-1", "Escape"]:
+    for selectionEvent in ["Return","Button-1","Escape"]:
         commandButton.bind("<%s>" % selectionEvent, handler)
+
 
     # ----------------- the action begins ----------------------------------------
     try:
         # load the text into the textArea
-        if isinstance(text, type("abc")):
-            pass
+        if type(text) == type("abc"): pass
         else:
             try:
                 text = "".join(text)  # convert a list or a tuple to a string
             except:
-                msgbox("Exception when trying to convert " +
-                       str(type(text)) + " to text in textArea")
+                msgbox("Exception when trying to convert "+ str(type(text)) + " to text in textArea")
                 sys.exit(16)
-        textArea.insert(END, text, "normal")
+        textArea.insert(END,text, "normal")
 
     except:
         msgbox("Exception when trying to load the textArea.")
@@ -1440,25 +1503,26 @@ def textbox(msg="", title=" ", text="", codebox=0
     boxRoot.mainloop()
 
     # this line MUST go before the line that destroys boxRoot
-    areaText = textArea.get(0.0, END)
+    areaText = textArea.get(0.0,END)
     boxRoot.destroy()
-    return areaText  # return __replyButtonText
+    return areaText # return __replyButtonText
 
 #-------------------------------------------------------------------
 # __textboxOK
 #-------------------------------------------------------------------
-
-
 def __textboxOK(event):
     global boxRoot
     boxRoot.quit()
 
 
+
 #-------------------------------------------------------------------
 # diropenbox
 #-------------------------------------------------------------------
-def diropenbox(msg=None, title=None, default=None
-               ):
+def diropenbox(msg=None
+    , title=None
+    , default=None
+    ):
     """
     A dialog to get a directory name.
     Note that the msg argument, if specified, is ignored.
@@ -1468,100 +1532,87 @@ def diropenbox(msg=None, title=None, default=None
     If the "default" argument specifies a directory name, and that
     directory exists, then the dialog box will start with that directory.
     """
-    title = getFileDialogTitle(msg, title)
-    boxRoot = Tk()
-    boxRoot.withdraw()
-    if not default:
-        default = None
+    title=getFileDialogTitle(msg,title)
+    localRoot = Tk()
+    localRoot.withdraw()
+    if not default: default = None
     f = tk_FileDialog.askdirectory(
-        parent=boxRoot, title=title, initialdir=default, initialfile=None
+          parent=localRoot
+        , title=title
+        , initialdir=default
+        , initialfile=None
         )
-    boxRoot.destroy()
-    if not f:
-        return None
+    localRoot.destroy()
+    if not f: return None
     return os.path.normpath(f)
+
 
 
 #-------------------------------------------------------------------
 # getFileDialogTitle
 #-------------------------------------------------------------------
-def getFileDialogTitle(msg, title
-                       ):
-    if msg and title:
-        return "%s - %s" % (title, msg)
-    if msg and not title:
-        return str(msg)
-    if title and not msg:
-        return str(title)
-    return None  # no message and no title
+def getFileDialogTitle(msg
+    , title
+    ):
+    if msg and title: return "%s - %s" % (title,msg)
+    if msg and not title: return str(msg)
+    if title and not msg: return str(title)
+    return None # no message and no title
 
 #-------------------------------------------------------------------
 # class FileTypeObject for use with fileopenbox
 #-------------------------------------------------------------------
-
-
 class FileTypeObject:
-    def __init__(self, filemask):
+    def __init__(self,filemask):
         if len(filemask) == 0:
             raise AssertionError('Filetype argument is empty.')
 
         self.masks = []
 
-        if isinstance(filemask, type("abc")):  # a string
+        if type(filemask) == type("abc"):  # a string
             self.initializeFromString(filemask)
 
-        elif isinstance(filemask, type([])):  # a list
+        elif type(filemask) == type([]): # a list
             if len(filemask) < 2:
                 raise AssertionError('Invalid filemask.\n'
-                                     + 'List contains less than 2 members: "%s"' % filemask)
+                +'List contains less than 2 members: "%s"' % filemask)
             else:
-                self.name = filemask[-1]
-                self.masks = list(filemask[:-1])
+                self.name  = filemask[-1]
+                self.masks = list(filemask[:-1] )
         else:
             raise AssertionError('Invalid filemask: "%s"' % filemask)
 
-    def __eq__(self, other):
-        if self.name == other.name:
-            return True
+    def __eq__(self,other):
+        if self.name == other.name: return True
         return False
 
-    def add(self, other):
+    def add(self,other):
         for mask in other.masks:
-            if mask in self.masks:
-                pass
-            else:
-                self.masks.append(mask)
+            if mask in self.masks: pass
+            else: self.masks.append(mask)
 
     def toTuple(self):
-        return (self.name, tuple(self.masks))
+        return (self.name,tuple(self.masks))
 
     def isAll(self):
-        if self.name == "All files":
-            return True
+        if self.name == "All files": return True
         return False
 
     def initializeFromString(self, filemask):
         # remove everything except the extension from the filemask
         self.ext = os.path.splitext(filemask)[1]
-        if self.ext == "":
-            self.ext = ".*"
-        if self.ext == ".":
-            self.ext = ".*"
+        if self.ext == "" : self.ext = ".*"
+        if self.ext == ".": self.ext = ".*"
         self.name = self.getName()
         self.masks = ["*" + self.ext]
 
     def getName(self):
         e = self.ext
-        if e == ".*":
-            return "All files"
-        if e == ".txt":
-            return "Text files"
-        if e == ".py":
-            return "Python files"
-        if e == ".pyc":
-            return "Python files"
-        if e == ".xls":
-            return "Excel files"
+        if e == ".*"  : return "All files"
+        if e == ".txt": return "Text files"
+        if e == ".py" : return "Python files"
+        if e == ".pyc" : return "Python files"
+        if e == ".xls": return "Excel files"
         if e.startswith("."):
             return e[1:].upper() + " files"
         return e.upper() + " files"
@@ -1570,8 +1621,11 @@ class FileTypeObject:
 #-------------------------------------------------------------------
 # fileopenbox
 #-------------------------------------------------------------------
-def fileopenbox(msg=None, title=None, default="*", filetypes=None
-                ):
+def fileopenbox(msg=None
+    , title=None
+    , default="*"
+    , filetypes=None
+    ):
     """
     A dialog to get a file name.
 
@@ -1628,11 +1682,10 @@ def fileopenbox(msg=None, title=None, default="*", filetypes=None
     @arg default: filepath with wildcards
     @arg filetypes: filemasks that a user can choose, e.g. "*.txt"
     """
-    boxRoot = Tk()
-    boxRoot.withdraw()
+    localRoot = Tk()
+    localRoot.withdraw()
 
-    initialbase, initialfile, initialdir, filetypes = fileboxSetup(
-        default, filetypes)
+    initialbase, initialfile, initialdir, filetypes = fileboxSetup(default,filetypes)
 
     #------------------------------------------------------------
     # if initialfile contains no wildcards; we don't want an
@@ -1645,21 +1698,27 @@ def fileopenbox(msg=None, title=None, default="*", filetypes=None
     elif initialbase == "*":
         initialfile = None
 
-    f = tk_FileDialog.askopenfilename(parent=boxRoot, title=getFileDialogTitle(msg, title), initialdir=initialdir, initialfile=initialfile, filetypes=filetypes
-                                      )
+    f = tk_FileDialog.askopenfilename(parent=localRoot
+        , title=getFileDialogTitle(msg,title)
+        , initialdir=initialdir
+        , initialfile=initialfile
+        , filetypes=filetypes
+        )
 
-    boxRoot.destroy()
+    localRoot.destroy()
 
-    if not f:
-        return None
+    if not f: return None
     return os.path.normpath(f)
 
 
 #-------------------------------------------------------------------
 # filesavebox
 #-------------------------------------------------------------------
-def filesavebox(msg=None, title=None, default="", filetypes=None
-                ):
+def filesavebox(msg=None
+    , title=None
+    , default=""
+    , filetypes=None
+    ):
     """
     A file to get the name of a file to save.
     Returns the name of a file, or None if user chose to cancel.
@@ -1672,17 +1731,19 @@ def filesavebox(msg=None, title=None, default="", filetypes=None
     fileopenbox.
     """
 
-    boxRoot = Tk()
-    boxRoot.withdraw()
+    localRoot = Tk()
+    localRoot.withdraw()
 
-    initialbase, initialfile, initialdir, filetypes = fileboxSetup(
-        default, filetypes)
+    initialbase, initialfile, initialdir, filetypes = fileboxSetup(default,filetypes)
 
-    f = tk_FileDialog.asksaveasfilename(parent=boxRoot, title=getFileDialogTitle(msg, title), initialfile=initialfile, initialdir=initialdir, filetypes=filetypes
-                                        )
-    boxRoot.destroy()
-    if not f:
-        return None
+    f = tk_FileDialog.asksaveasfilename(parent=localRoot
+        , title=getFileDialogTitle(msg,title)
+        , initialfile=initialfile
+        , initialdir=initialdir
+        , filetypes=filetypes
+        )
+    localRoot.destroy()
+    if not f: return None
     return os.path.normpath(f)
 
 
@@ -1691,32 +1752,28 @@ def filesavebox(msg=None, title=None, default="", filetypes=None
 # fileboxSetup
 #
 #-------------------------------------------------------------------
-def fileboxSetup(default, filetypes):
-    if not default:
-        default = os.path.join(".", "*")
+def fileboxSetup(default,filetypes):
+    if not default: default = os.path.join(".","*")
     initialdir, initialfile = os.path.split(default)
-    if not initialdir:
-        initialdir = "."
-    if not initialfile:
-        initialfile = "*"
+    if not initialdir : initialdir  = "."
+    if not initialfile: initialfile = "*"
     initialbase, initialext = os.path.splitext(initialfile)
     initialFileTypeObject = FileTypeObject(initialfile)
 
     allFileTypeObject = FileTypeObject("*")
     ALL_filetypes_was_specified = False
 
-    if not filetypes:
-        filetypes = []
+    if not filetypes: filetypes= []
     filetypeObjects = []
 
     for filemask in filetypes:
         fto = FileTypeObject(filemask)
 
         if fto.isAll():
-            ALL_filetypes_was_specified = True  # remember this
+            ALL_filetypes_was_specified = True # remember this
 
         if fto == initialFileTypeObject:
-            initialFileTypeObject.add(fto)  # add fto to initialFileTypeObject
+            initialFileTypeObject.add(fto) # add fto to initialFileTypeObject
         else:
             filetypeObjects.append(fto)
 
@@ -1728,7 +1785,7 @@ def fileboxSetup(default, filetypes):
     elif allFileTypeObject == initialFileTypeObject:
         pass
     else:
-        filetypeObjects.insert(0, allFileTypeObject)
+        filetypeObjects.insert(0,allFileTypeObject)
     #------------------------------------------------------------------
     # Make sure that the list includes the initialFileTypeObject
     # in the position in the list that will make it the default.
@@ -1743,7 +1800,7 @@ def fileboxSetup(default, filetypes):
         if runningPython26:
             filetypeObjects.append(initialFileTypeObject)
         else:
-            filetypeObjects.insert(0, initialFileTypeObject)
+            filetypeObjects.insert(0,initialFileTypeObject)
 
     filetypes = [fto.toTuple() for fto in filetypeObjects]
 
@@ -1754,14 +1811,13 @@ def fileboxSetup(default, filetypes):
 #-------------------------------------------------------------------
 # These routines are used by several other functions in the EasyGui module.
 
-
 def __buttonEvent(event):
     """
     Handle an event that is generated by a person clicking a button.
     """
     global  boxRoot, __widgetTexts, __replyButtonText
     __replyButtonText = __widgetTexts[event.widget]
-    boxRoot.quit()  # quit the main loop
+    boxRoot.quit() # quit the main loop
 
 
 def __put_buttons_in_buttonframe(choices):
@@ -1777,8 +1833,7 @@ def __put_buttons_in_buttonframe(choices):
     for buttonText in choices:
         tempButton = Button(buttonsFrame, takefocus=1, text=buttonText)
         bindArrows(tempButton)
-        tempButton.pack(expand=YES, side=LEFT, padx='1m',
-                        pady='1m', ipadx='2m', ipady='1m')
+        tempButton.pack(expand=YES, side=LEFT, padx='1m', pady='1m', ipadx='2m', ipady='1m')
 
         # remember the text associated with this widget
         __widgetTexts[tempButton] = buttonText
@@ -1789,7 +1844,7 @@ def __put_buttons_in_buttonframe(choices):
             i = 1
 
         # for the commandButton, bind activation events to the activation event handler
-        commandButton = tempButton
+        commandButton  = tempButton
         handler = __buttonEvent
         for selectionEvent in STANDARD_SELECTION_EVENTS:
             commandButton.bind("<%s>" % selectionEvent, handler)
@@ -1799,8 +1854,6 @@ def __put_buttons_in_buttonframe(choices):
 #     class EgStore
 #
 #-----------------------------------------------------------------------
-
-
 class EgStore:
     r"""
 A class to support persistent storage.
@@ -1814,7 +1867,7 @@ of user settings for an EasyGui application.
 # define a class named Settings as a subclass of EgStore
 #-----------------------------------------------------------------------
 class Settings(EgStore):
-
+::
     def __init__(self, filename):  # filename is required
         #-------------------------------------------------
         # Specify default/initial values for variables that
@@ -1828,8 +1881,7 @@ class Settings(EgStore):
         # the last two statements in  __init__
         #-------------------------------------------------
         self.filename = filename  # this is required
-        self.restore()
-            # restore values from the storage file if possible
+        self.restore()            # restore values from the storage file if possible
 
 
 
@@ -1862,6 +1914,7 @@ settings.store()
 
 """
     def __init__(self, filename):  # obtaining filename is required
+        self.filename = None
         raise NotImplementedError()
 
     def restore(self):
@@ -1894,19 +1947,17 @@ settings.store()
         Where possible, those attributes will have values recovered
         from the pickled object.
         """
-        if not os.path.exists(self.filename):
-            return self
-        if not os.path.isfile(self.filename):
-            return self
+        if not os.path.exists(self.filename): return self
+        if not os.path.isfile(self.filename): return self
 
         try:
-            f = open(self.filename, "rb")
+            f = open(self.filename,"rb")
             unpickledObject = pickle.load(f)
             f.close()
 
             for key in list(self.__dict__.keys()):
                 default = self.__dict__[key]
-                self.__dict__[key] = unpickledObject.__dict__.get(key, default)
+                self.__dict__[key] = unpickledObject.__dict__.get(key,default)
         except:
             pass
 
@@ -1921,6 +1972,7 @@ settings.store()
         f = open(self.filename, "wb")
         pickle.dump(self, f)
         f.close()
+
 
     def kill(self):
         """
@@ -1946,8 +1998,10 @@ settings.store()
         for key in keys:
             value = self.__dict__[key]
             key = key.ljust(longest_key_length)
-            lines.append("%s : %s\n" % (key, repr(value)))
+            lines.append("%s : %s\n" % (key,repr(value))  )
         return "".join(lines)  # return a string showing the attributes
+
+
 
 
 #-----------------------------------------------------------------------
@@ -1963,14 +2017,15 @@ def egdemo():
     writeln("\n" * 100)
 
     intro_message = ("Pick the kind of box that you wish to demo.\n"
-                     + "\n * Python version " + sys.version
-                     + "\n * EasyGui version " + egversion
-                     + "\n * Tk version " + str(TkVersion)
-                     )
+    + "\n * Python version " + sys.version
+    + "\n * EasyGui version " + egversion
+    + "\n * Tk version " + str(TkVersion)
+    )
 
     #========================================== END DEMONSTRATION DATA
 
-    while True:  # do forever
+
+    while 1: # do forever
         choices = [
             "msgbox",
             "buttonbox",
@@ -1995,12 +2050,12 @@ def egdemo():
             "diropenbox",
             "About EasyGui",
             " Help"
-        ]
-        choice = choicebox(msg=intro_message,
-                           title="EasyGui " + egversion, choices=choices)
+            ]
+        choice = choicebox(msg=intro_message
+            , title="EasyGui " + egversion
+            , choices=choices)
 
-        if not choice:
-            return
+        if not choice: return
 
         reply = choice.split()
 
@@ -2039,8 +2094,7 @@ def egdemo():
 
             message = "Enter the name of your best friend."\
                       "\n(Result will NOT be stripped.)"
-            reply = enterbox(message, "Love!",
-                             "     Suzy Smith     ", strip=False)
+            reply = enterbox(message, "Love!", "     Suzy Smith     ",strip=False)
             writeln("Reply was: %s" % repr(reply))
 
             reply = enterbox("Enter the name of your worst enemy:", "Hate!")
@@ -2049,12 +2103,12 @@ def egdemo():
         elif reply[0] == "enterbox(image)":
             image = "python_and_check_logo.gif"
             message = "What kind of snake is this?"
-            reply = enterbox(message, "Quiz", image=image)
+            reply = enterbox(message, "Quiz",image=image)
             writeln("Reply was: %s" % repr(reply))
 
         elif reply[0] == "exceptionbox":
             try:
-                thisWillCauseADivideByZeroException = 1 / 0
+                thisWillCauseADivideByZeroException = 1/0
             except:
                 exceptionbox()
 
@@ -2068,52 +2122,45 @@ def egdemo():
             reply = integerbox(
                 "Enter a number between 0 and 99",
                 "Demo: integerbox WITHOUT a default value"
-            )
+                )
             writeln("Reply was: %s" % repr(reply))
 
-        elif reply[0] == "diropenbox":
-            _demo_diropenbox()
-        elif reply[0] == "fileopenbox":
-            _demo_fileopenbox()
-        elif reply[0] == "filesavebox":
-            _demo_filesavebox()
+        elif reply[0] == "diropenbox" : _demo_diropenbox()
+        elif reply[0] == "fileopenbox": _demo_fileopenbox()
+        elif reply[0] == "filesavebox": _demo_filesavebox()
 
         elif reply[0] == "indexbox":
             title = reply[0]
-            msg = "Demo of " + reply[0]
+            msg   =  "Demo of " + reply[0]
             choices = ["Choice1", "Choice2", "Choice3", "Choice4"]
             reply = indexbox(msg, title, choices)
             writeln("Reply was: %s" % repr(reply))
 
         elif reply[0] == "passwordbox":
             reply = passwordbox("Demo of password box WITHOUT default"
-                                + "\n\nEnter your secret password", "Member Logon")
+                + "\n\nEnter your secret password", "Member Logon")
             writeln("Reply was: %s" % str(reply))
 
             reply = passwordbox("Demo of password box WITH default"
-                                + "\n\nEnter your secret password", "Member Logon", "alfie")
+                + "\n\nEnter your secret password", "Member Logon", "alfie")
             writeln("Reply was: %s" % str(reply))
 
         elif reply[0] == "multenterbox":
             msg = "Enter your personal information"
             title = "Credit Card Application"
-            fieldNames = ["Name", "Street Address", "City", "State", "ZipCode"]
+            fieldNames = ["Name","Street Address","City","State","ZipCode"]
             fieldValues = []  # we start with blanks for the values
-            fieldValues = multenterbox(msg, title, fieldNames)
+            fieldValues = multenterbox(msg,title, fieldNames)
 
             # make sure that none of the fields was left blank
-            while True:
-                if fieldValues is None:
-                    break
+            while 1:
+                if fieldValues == None: break
                 errmsg = ""
                 for i in range(len(fieldNames)):
                     if fieldValues[i].strip() == "":
-                        errmsg = errmsg + ('"%s" is a required field.\n\n' %
-                                           fieldNames[i])
-                if errmsg == "":
-                    break  # no problems found
-                fieldValues = multenterbox(
-                    errmsg, title, fieldNames, fieldValues)
+                        errmsg = errmsg + ('"%s" is a required field.\n\n' % fieldNames[i])
+                if errmsg == "": break # no problems found
+                fieldValues = multenterbox(errmsg, title, fieldNames, fieldValues)
 
             writeln("Reply was: %s" % str(fieldValues))
 
@@ -2122,21 +2169,17 @@ def egdemo():
             title = "Demo of multpasswordbox"
             fieldNames = ["Server ID", "User ID", "Password"]
             fieldValues = []  # we start with blanks for the values
-            fieldValues = multpasswordbox(msg, title, fieldNames)
+            fieldValues = multpasswordbox(msg,title, fieldNames)
 
             # make sure that none of the fields was left blank
-            while True:
-                if fieldValues is None:
-                    break
+            while 1:
+                if fieldValues == None: break
                 errmsg = ""
                 for i in range(len(fieldNames)):
                     if fieldValues[i].strip() == "":
-                        errmsg = errmsg + ('"%s" is a required field.\n\n' %
-                                           fieldNames[i])
-                if errmsg == "":
-                    break  # no problems found
-                fieldValues = multpasswordbox(
-                    errmsg, title, fieldNames, fieldValues)
+                        errmsg = errmsg + ('"%s" is a required field.\n\n' % fieldNames[i])
+                if errmsg == "": break # no problems found
+                fieldValues = multpasswordbox(errmsg, title, fieldNames, fieldValues)
 
             writeln("Reply was: %s" % str(fieldValues))
 
@@ -2150,16 +2193,16 @@ def egdemo():
 
         elif reply[0] == "ccbox":
             title = "Demo of ccbox"
-            reply = ccbox(msg, title)
+            reply = ccbox(msg,title)
             writeln("Reply was: %s" % repr(reply))
 
         elif reply[0] == "choicebox":
             title = "Demo of choicebox"
-            longchoice = "This is an example of a very long option which you may or may not wish to choose." * 2
-            listChoices = ["nnn", "ddd", "eee", "fff", "aaa", longchoice, "aaa", "bbb", "ccc", "ggg", "hhh", "iii", "jjj", "kkk", "LLL", "mmm", "nnn", "ooo", "ppp", "qqq", "rrr", "sss", "ttt", "uuu", "vvv"]
+            longchoice = "This is an example of a very long option which you may or may not wish to choose."*2
+            listChoices = ["nnn", "ddd", "eee", "fff", "aaa", longchoice
+                    , "aaa", "bbb", "ccc", "ggg", "hhh", "iii", "jjj", "kkk", "LLL", "mmm" , "nnn", "ooo", "ppp", "qqq", "rrr", "sss", "ttt", "uuu", "vvv"]
 
-            msg = "Pick something. " + ("A wrapable sentence of text ?! " *
-                                        30) + "\nA separate line of text." * 6
+            msg = "Pick something. " + ("A wrapable sentence of text ?! "*30) + "\nA separate line of text."*6
             reply = choicebox(msg=msg, choices=listChoices)
             writeln("Reply was: %s" % repr(reply))
 
@@ -2172,36 +2215,34 @@ def egdemo():
             writeln("Reply was: %s" % repr(reply))
 
         elif reply[0] == "multchoicebox":
-            listChoices = ["aaa", "bbb", "ccc", "ggg", "hhh", "iii", "jjj", "kkk", "LLL", "mmm", "nnn", "ooo", "ppp", "qqq", "rrr", "sss", "ttt", "uuu", "vvv"]
+            listChoices = ["aaa", "bbb", "ccc", "ggg", "hhh", "iii", "jjj", "kkk"
+                , "LLL", "mmm" , "nnn", "ooo", "ppp", "qqq"
+                , "rrr", "sss", "ttt", "uuu", "vvv"]
 
             msg = "Pick as many choices as you wish."
-            reply = multchoicebox(msg, "Demo of multchoicebox", listChoices)
+            reply = multchoicebox(msg,"Demo of multchoicebox", listChoices)
             writeln("Reply was: %s" % repr(reply))
 
-        elif reply[0] == "textbox":
-            _demo_textbox(reply[0])
-        elif reply[0] == "codebox":
-            _demo_codebox(reply[0])
+        elif reply[0] == "textbox": _demo_textbox(reply[0])
+        elif reply[0] == "codebox": _demo_codebox(reply[0])
 
         else:
-            msgbox("Choice\n\n" + choice +
-                   "\n\nis not recognized", "Program Logic Error")
+            msgbox("Choice\n\n" + choice + "\n\nis not recognized", "Program Logic Error")
             return
 
 
 def _demo_textbox(reply):
-    text_snippet = ((
-                    """It was the best of times, and it was the worst of times.  The rich ate cake, and the poor had cake recommended to them, but wished only for enough cash to buy bread.  The time was ripe for revolution! """
-                    * 5) + "\n\n") * 10
+    text_snippet = ((\
+"""It was the best of times, and it was the worst of times.  The rich ate cake, and the poor had cake recommended to them, but wished only for enough cash to buy bread.  The time was ripe for revolution! """ \
+*5)+"\n\n")*10
     title = "Demo of textbox"
     msg = "Here is some sample text. " * 16
-    reply = textbox(msg, "Text Sample", text_snippet)
+    reply = textbox(msg, title, text_snippet)
     writeln("Reply was: %s" % str(reply))
 
-
 def _demo_codebox(reply):
-    code_snippet = ("dafsdfa dasflkj pp[oadsij asdfp;ij asdfpjkop asdfpok asdfpok asdfpok" * 3) + "\n" +\
-        """# here is some dummy Python code
+    code_snippet = ("dafsdfa dasflkj pp[oadsij asdfp;ij asdfpjkop asdfpok asdfpok asdfpok"*3) +"\n"+\
+"""# here is some dummy Python code
 for someItem in myListOfStuff:
     do something(someItem)
     do something()
@@ -2209,32 +2250,25 @@ for someItem in myListOfStuff:
     if somethingElse(someItem):
         doSomethingEvenMoreInteresting()
 
-""" * 16
+"""*16
     msg = "Here is some sample code. " * 16
     reply = codebox(msg, "Code Sample", code_snippet)
     writeln("Reply was: %s" % repr(reply))
 
 
 def _demo_buttonbox_with_image():
-    image = "python_and_check_logo.gif"
 
-    msg = "Pretty nice, huh!"
-    reply = msgbox(msg, image=image, ok_button="Wow!")
-    writeln("Reply was: %s" % repr(reply))
+    msg   = "Do you like this picture?\nIt is "  
+    choices = ["Yes","No","No opinion"]
 
-    msg = "Do you like this picture?"
-    choices = ["Yes", "No", "No opinion"]
+    for image in [
+        "python_and_check_logo.gif"
+        ,"python_and_check_logo.jpg"
+        ,"python_and_check_logo.png"
+        ,"zzzzz.gif"]:
 
-    reply = buttonbox(msg, image=image, choices=choices)
-    writeln("Reply was: %s" % repr(reply))
-
-    image = os.path.normpath("python_and_check_logo.png")
-    reply = buttonbox(msg, image=image, choices=choices)
-    writeln("Reply was: %s" % repr(reply))
-
-    image = os.path.normpath("zzzzz.gif")
-    reply = buttonbox(msg, image=image, choices=choices)
-    writeln("Reply was: %s" % repr(reply))
+        reply=buttonbox(msg + image,image=image,choices=choices)
+        writeln("Reply was: %s" % repr(reply))
 
 
 def _demo_help():
@@ -2242,17 +2276,15 @@ def _demo_help():
     sys.stdout = capturedOutput = StringIO()
     help("easygui")
     sys.stdout = savedStdout   # restore the sys.stdout file object
-    codebox("EasyGui Help", text=capturedOutput.getvalue())
-
+    codebox("EasyGui Help",text=capturedOutput.getvalue())
 
 def _demo_filesavebox():
     filename = "myNewFile.txt"
     title = "File SaveAs"
-    msg = "Save file as:"
+    msg ="Save file as:"
 
-    f = filesavebox(msg, title, default=filename)
+    f = filesavebox(msg,title,default=filename)
     writeln("You chose to save file: %s" % f)
-
 
 def _demo_diropenbox():
     title = "Demo of diropenbox"
@@ -2260,24 +2292,23 @@ def _demo_diropenbox():
     d = diropenbox(msg, title)
     writeln("You chose directory...: %s" % d)
 
-    d = diropenbox(msg, title, default="./")
+    d = diropenbox(msg, title,default="./")
     writeln("You chose directory...: %s" % d)
 
-    d = diropenbox(msg, title, default="c:/")
+    d = diropenbox(msg, title,default="c:/")
     writeln("You chose directory...: %s" % d)
 
 
 def _demo_fileopenbox():
-    msg = "Python files"
+    msg  = "Python files"
     title = "Open files"
-    default = "*.py"
-    f = fileopenbox(msg, title, default=default)
+    default="*.py"
+    f = fileopenbox(msg,title,default=default)
     writeln("You chose to open file: %s" % f)
 
-    default = "./*.gif"
-    filetypes = ["*.jpg", ["*.zip", "*.tgs", "*.gz", "Archive files"],
-                 ["*.htm", "*.html", "HTML files"]]
-    f = fileopenbox(msg, title, default=default, filetypes=filetypes)
+    default="./*.gif"
+    filetypes = ["*.jpg",["*.zip","*.tgs","*.gz", "Archive files"],["*.htm", "*.html","HTML files"]]
+    f = fileopenbox(msg,title,default=default,filetypes=filetypes)
     writeln("You chose to open file: %s" % f)
 
     """#deadcode -- testing ----------------------------------------
@@ -2302,6 +2333,31 @@ def _dummy():
     pass
 
 EASYGUI_ABOUT_INFORMATION = '''
+========================================================================
+0.96(2010-08-29)
+========================================================================
+This version fixes some problems with version independence.
+
+BUG FIXES
+------------------------------------------------------
+ * A statement with Python 2.x-style exception-handling syntax raised
+   a syntax error when running under Python 3.x.
+   Thanks to David Williams for reporting this problem.
+
+ * Under some circumstances, PIL was unable to display non-gif images
+   that it should have been able to display.
+   The cause appears to be non-version-independent import syntax.
+   PIL modules are now imported with a version-independent syntax.
+   Thanks to Horst Jens for reporting this problem.
+
+LICENSE CHANGE
+------------------------------------------------------
+Starting with this version, EasyGui is licensed under what is generally known as
+the "modified BSD license" (aka "revised BSD", "new BSD", "3-clause BSD").
+This license is GPL-compatible but less restrictive than GPL.
+Earlier versions were licensed under the Creative Commons Attribution License 2.0.
+
+
 ========================================================================
 0.95(2010-06-12)
 ========================================================================
@@ -2403,14 +2459,13 @@ BUG FIXES
 
 '''
 
-
 def abouteasygui():
     """
     shows the easygui revision history
     """
-    codebox("About EasyGui\n" + egversion, "EasyGui",
-            EASYGUI_ABOUT_INFORMATION)
+    codebox("About EasyGui\n"+egversion,"EasyGui",EASYGUI_ABOUT_INFORMATION)
     return None
+
 
 
 if __name__ == '__main__':
@@ -2425,6 +2480,7 @@ if __name__ == '__main__':
         messageWidget.pack(side=TOP, expand=YES, fill=X, padx='3m', pady='3m')
         messageWidget = Message(root, text=msg, width=1000)
         messageWidget.pack(side=TOP, expand=YES, fill=X, padx='3m', pady='3m')
+
 
         msgbox("this is a test of passing in boxRoot", root=root)
         msgbox("this is a second test of passing in boxRoot", root=root)
