@@ -90,7 +90,7 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', pattern = False, directory="ant", nf=104, ntheta=90, nphi=181):
+    def __init__(self, _filename='defant.vsh3', directory="ant", pattern=False, nf=104, ntheta=90, nphi=181):
         """
 
         Parameters
@@ -212,12 +212,18 @@ class Antenna(object):
             if pattern :
                 Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
                 Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+                self.theta=self.th[:,np.newaxis]
+                self.phi=self.ph[np.newaxis,:]
+                self.SqG=np.ones((self.nf,self.ntheta,self.nphi))
+                self.SqG[:]=Fap
             else:
                 Fat = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
                 Fap = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
                 Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
                 Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
-                
+       
+            
+
         return (Fat,Fap)    
 
     def loadmat(self, directory="ant"):
@@ -1449,7 +1455,6 @@ class Antenna(object):
         return Fth, Fph
 
 
-
     def Fsynth3(self, theta = [], phi=[], pattern=True):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
@@ -1492,7 +1497,6 @@ class Antenna(object):
         once the V,W function
 
         """
-
         typ = self._filename.split('.')[1]
         if typ not in ['sh3','vsh3']:
             # temporary what to do if originbal file is not sh3 or vsh3 ? 
@@ -1551,8 +1555,6 @@ class Antenna(object):
                 Fph = Fph.reshape(Nf, Nt, Np)
 
                 
-
-            
         if typ == 'sh3':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3

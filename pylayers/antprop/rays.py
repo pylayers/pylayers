@@ -1353,9 +1353,8 @@ class Rays(dict):
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
 
-                #ray2nbi = np.ones((nbray))
+                # ray2nbi = np.ones((nbray))
 
-                
                 #try:
                 #    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
                 #except:
@@ -1545,7 +1544,6 @@ class Rays(dict):
                 #
                 # reshape error can be tricky to debug. 
                 #
-                #
                 # f , r , l , 2 , 2
                 A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
                 # get the corresponding unitary matrix B 
@@ -1657,7 +1655,7 @@ class Rays(dict):
                 self.dis[ir] = self[l]['dis']
         #
         # true LOS when no interaction
-        # 
+        #
         if self.los:
             Ct[:,0, :, :]= np.eye(2,2)[np.newaxis,np.newaxis,:,:]
             #self[0]['dis'] = self[0]['si'][0]
@@ -1678,7 +1676,7 @@ class Rays(dict):
 
 
         #
-        # Construction of the Ctilde channel 
+        # Construction of the Ctilde channel
         #
         Cn = Ctilde()
         Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
@@ -1693,7 +1691,7 @@ class Rays(dict):
         Cn.tang = aod.T
         # r x 2
         Cn.rang = aoa.T
-        # add aoa and aod 
+        # add aoa and aod
 
         self.evaluated = True
         return(Cn)
@@ -1707,7 +1705,7 @@ class Rays(dict):
 
         r : integer
             ray index
-        
+
         Notes
         -----
 
@@ -1793,7 +1791,7 @@ class Rays(dict):
         ----------
 
         ni : int
-        nr : int 
+        nr : int
 
         Returns
         -------
@@ -1803,7 +1801,7 @@ class Rays(dict):
         Notes
         -----
 
-        Signature of a ray is store as a member 
+        Signature of a ray is store as a member
 
         r[nint]['sig']
 
@@ -1824,7 +1822,7 @@ class Rays(dict):
         Parameters
         ----------
 
-        ray : 
+        ray :
         block : int
             interaction block
         bdis : Boolean
@@ -1869,7 +1867,6 @@ class Rays(dict):
         #
         # Ajout des bases locales
         #
-        
 
 
         fo = open(filename_list, "w")

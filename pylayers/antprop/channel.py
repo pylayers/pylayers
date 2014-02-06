@@ -343,6 +343,7 @@ class Ctilde(object):
         
         # get frequency axes    
         fGHz = Cl.fGHz
+
         self.Tt = Tt 
         self.Tr = Tr 
         
@@ -759,7 +760,6 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        #H = self.H
         U = self * W
         V = bs.FUDAsignal(U.x, U.y, self.tau0,self.dod,self.doa)
 
@@ -918,6 +918,80 @@ class Tchannel(bs.FUDAsignal):
     #     plt.ylabel("$\phi_r (\degree)$", fontsize=18)
     #     plt.show()
     # def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360),polar=False):
+    def plotd (self, d='doa', **kwargs):
+        """plot direction of arrival/departure
+        """
+        defaults = {
+                    'fig': [],
+                    'ax': [],
+                    'phi':(-180,180),
+                    'reverse' : False,
+                    'cmap':plt.cm.hot_r,
+                    's':30,
+                    'fontsize':12,
+                    'edgecolors':'none',
+                    'polar':False,
+                    'colorbar':False
+                    }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+                
+        
+        di = getattr(self,d,'doa')
+
+        # remove non plt.scatter kwargs
+        phi = kwargs.pop('phi')
+        fontsize = kwargs.pop('fontsize')
+        polar = kwargs.pop('polar')
+        fig = kwargs.pop('fig')
+        ax = kwargs.pop('ax')  
+        colorbar = kwargs.pop('colorbar')  
+        reverse = kwargs.pop('reverse')  
+
+
+        if fig==[]:
+            fig = plt.gcf()
+            
+
+        Etot = self.energy(axis=1)
+        Emax = max(Etot)
+        Etot = Etot / Emax + 1e-7
+        Emax = max(10 * np.log10(Etot))
+        Emin = min(10 * np.log10(Etot))
+        #
+        #
+        #
+        #col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        al = 180. / np.pi
+        col = 10 * np.log10(Etot)
+        kwargs['c']=col
+
+        if len(col) != len(di):
+            print "len(col):", len(col)
+            print "len(di):", len(dir)
+        if ax == []:
+            ax= fig.add_subplot(111,polar=polar)
+        if not reverse :
+            scat = ax.scatter(di[:, 0] * al, di[:, 1] * al, **kwargs)
+            ax.axis((0, 180, phi[0], phi[1]))
+            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
+        else: 
+            scat = ax.scatter(di[:, 1] * al, di[:, 0] * al, **kwargs)   
+            ax.axis((phi[0], phi[1], 0, 180))
+            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
+
+        ax.set_title(d,fontsize=fontsize+2)
+        if colorbar:
+            fig.colorbar(scat)
+        return (fig,ax)
+
+
+
     def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360),polar=False):
         """ doadod scatter plot
 
