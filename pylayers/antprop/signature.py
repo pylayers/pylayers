@@ -1036,7 +1036,7 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
-    def run4(self,cutoff=2,algo='new',progress=False):
+    def run4(self,cutoff=2,algo='old',progress=False):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
