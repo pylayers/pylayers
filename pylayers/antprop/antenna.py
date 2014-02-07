@@ -1,5 +1,6 @@
 # -*- coding:Utf-8 -*-
 """
+
 This module handles antennas in pylayers
 
 To instantiate an antenna object :
@@ -125,8 +126,8 @@ class Antenna(object):
 
         """
         self.nf = nf
-        self.ntheta = ntheta
-        self.nphi = nphi
+        self.Nt = ntheta
+        self.Np = nphi
         self.pattern = pattern
         if not pattern :
             typ = _filename.split('.')[1]
@@ -150,8 +151,8 @@ class Antenna(object):
         else :
             if typ == 'Gauss':
                 self.typ = typ
-                self.p0 = 3*np.pi/4
-                self.t0 = 0
+                self.p0 = 0.
+                self.t0 = np.pi/2.
                 self.p3 = np.pi/6. # 30 degrees
                 self.t3 = np.pi/6. # 30 degrees
                 self.G  = 16/(self.t3*self.p3) # gain 16/\theta^{2} 
@@ -210,8 +211,8 @@ class Antenna(object):
 
 
         if (th == []) and (ph == []):
-            self.th = np.linspace(0,np.pi,self.ntheta)
-            self.ph = np.linspace(0,2*np.pi,self.nphi,endpoint=False)
+            self.th = np.linspace(0,np.pi,self.Nt)
+            self.ph = np.linspace(0,2*np.pi,self.Np,endpoint=False)
         else :
             self.th = th
             self.ph = ph
@@ -230,7 +231,7 @@ class Antenna(object):
                 Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
                 self.theta=self.th[:,np.newaxis]
                 self.phi=self.ph[np.newaxis,:]
-                self.SqG=np.ones((self.nf,self.ntheta,self.nphi))
+                self.SqG=np.ones((self.nf,self.Nt,self.Np))
                 self.SqG[:]=Fap
             else:
                 Fat = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
@@ -260,7 +261,7 @@ class Antenna(object):
                 Fap = self.sqG * (argth[:,np.newaxis])
                 self.theta=self.th[:,np.newaxis]
                 self.phi=self.ph[np.newaxis,:]
-                self.SqG=np.ones((self.nf,self.ntheta,self.nphi))
+                self.SqG=np.ones((self.nf,self.Nt,self.Np))
                 self.SqG[:]=Fap
             else:
                 Fat = self.sqG * argth
@@ -271,7 +272,7 @@ class Antenna(object):
 
             if pattern :
 
-                self.SqG = self.sqG * np.ones((self.nf,self.ntheta,self.nphi))
+                self.SqG = self.sqG * np.ones((self.nf,self.Nt,self.Np))
                 self.theta = self.th[:,np.newaxis]
                 self.phi = self.ph[np.newaxis,:]
 
@@ -810,19 +811,11 @@ class Antenna(object):
         Parameters
         ----------
 
-        k : list of int
-            frequency index  (default 0)
-        it : int
-            theta index      (default 0)
-        ip : int
-            phi index        (default -1)
-        GmaxdB :
-            Max Gain (dB)
-        dyn    :
-            dynamic number of 5dB step
-        alpha  : float
-            default 0.1
-
+        'fGHz' : frequzncy
+        phd : phi in degrees
+        thd : theta in degrees
+        'GmaxdB':  max gain to be displayed 
+        
         Returns
         -------
 
@@ -892,12 +885,12 @@ class Antenna(object):
 
         for f in kwargs['fGHz']:
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
-            chaine = 'f = ' + str(self.fa[ik]) + ' GHz'
+            chaine = 'f = %3.2f GHz' %(self.fa[ik])
             # all theta
             if 'phd' in kwargs:
-                itheta = np.arange(self.ntheta)
+                itheta = np.arange(self.Nt)
                 iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
-                Np = self.nphi
+                Np = self.Np
 
                 if np.mod(Np, 2) == 0:
                     iphi2 = np.mod(iphi1 + Np / 2, Np)
@@ -908,7 +901,7 @@ class Antenna(object):
                 u1 = np.where((self.theta[:,0] <= np.pi / 2) &
                               (self.theta[:,0] >= 0))[0]
                 #   0:Nt-1
-                u2 = np.arange(self.ntheta)
+                u2 = np.arange(self.Nt)
                 #   pi/2 < theta < pi
                 u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
                                                               > np.pi / 2))[0]
@@ -931,16 +924,16 @@ class Antenna(object):
                 rline2, rtext2 = plt.thetagrids(a1, a2)
 
                 angle = np.linspace(0, 2 * np.pi, len(r), endpoint=True)
-                plt.title(u'V plane $\\theta$ (degrees)')
+              #  plt.title(u'V plane $\\theta$ (degrees)')
 
             if 'thd' in kwargs:
-                iphi = np.arange(self.nphi)
+                iphi = np.arange(self.Np)
                 itheta = np.where(abs(self.theta[:,0]-kwargs['thd']*dtr)<dtheta)[0][0]
                 angle = self.phi[0,iphi]
                 r = -GmindB + 20 * np.log10(self.SqG[ik, itheta, iphi])
                 neg = np.nonzero(r < 0)
                 r[neg] = 0
-                plt.title(u'H plane - $\phi$ degrees')
+               # plt.title(u'H plane - $\phi$ degrees')
                 a1 = np.arange(0, 360, 30)
                 a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
                 rline2, rtext2 = plt.thetagrids(a1, a2)
@@ -948,7 +941,8 @@ class Antenna(object):
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             rline1, rtext1 = plt.rgrids(t1, t2)
             cpt = cpt + 1
-        ax.legend()
+        if kwargs['legend']:
+            ax.legend()
         return(fig,ax)
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
@@ -1608,9 +1602,10 @@ class Antenna(object):
 
         Nf = len(self.fa)
         if theta==[]:
-            theta=np.linspace(0,np.pi,47)
+            theta=np.linspace(0,np.pi,45)
+
         if phi == []:
-            phi= np.linspace(0,2*np.pi,47)
+            phi= np.linspace(0,2*np.pi,90)
 
         Nt = len(theta)
         Np = len(phi)

@@ -1689,11 +1689,14 @@ class Rays(dict):
         Cn.fGHz = self.I.fGHz
         # r x 2
         Cn.tang = aod.T
+        Cn.tangl = aod.T
         # r x 2
         Cn.rang = aoa.T
+        Cn.rangl = aoa.T
         # add aoa and aod
 
         self.evaluated = True
+
         return(Cn)
 
 
@@ -1966,7 +1969,7 @@ class Rays(dict):
                 for j in rlist:
                     ray = np.hstack((pTx,np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
                     # ray = rays[i]['pt'][:,:,j]
-                    col = np.array([2, 0, 1])
+                    col = np.array([0, 0, 0])
                     # print ray
                     fileray = self.show3d(ray=ray, bdis=False,
                                           bstruc=False, col=col, id=k)
