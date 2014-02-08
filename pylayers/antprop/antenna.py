@@ -154,8 +154,8 @@ class Antenna(object):
                 self.t0 = 0
                 self.p3 = np.pi/6. # 30 degrees
                 self.t3 = np.pi/6. # 30 degrees
-                self.G  = 16/(self.t3*self.p3) # gain 16/\theta^{2} 
-                self.GdB  =10*np.log10(self.G) 
+                self.G  = 16/(self.t3*self.p3) # gain 16/\theta^{2}
+                self.GdB  =10*np.log10(self.G)
                 self.sqG = np.sqrt(self.G)
             elif typ == 'WirePlate':
                 self.typ = typ
@@ -204,7 +204,7 @@ class Antenna(object):
         """
         """
 
-        assert self.pattern , 'not a pattern antenna' 
+        assert self.pattern , 'not a pattern antenna'
 
         self.fa = np.linspace(2,10,self.nf)
 
@@ -248,7 +248,7 @@ class Antenna(object):
             Y=np.array(([0,1,1/(1.*self.sqG)]))
             self.poly = la.solve(A,Y)
 
-            argth1 = np.abs(self.poly[0]*self.th[uth1]**3 
+            argth1 = np.abs(self.poly[0]*self.th[uth1]**3
                      + self.poly[1]*self.th[uth1]**2
                              + self.poly[2]*self.th[uth1])
 
@@ -358,7 +358,7 @@ class Antenna(object):
         nphi : float
                number of phi
 
-        
+       
         """
         _filetrx = self._filename
         filename = pyu.getlong(_filetrx, directory)
@@ -429,7 +429,7 @@ class Antenna(object):
         self.Nf = 104
 
     def pattern(self,theta=[],phi=[],typ='s3'):
-        """ return multidimensionnal radiation patterns 
+        """ return multidimensionnal radiation patterns
 
         Parameters
         ----------
@@ -601,7 +601,7 @@ class Antenna(object):
     #
     # Trx header structure
     #
-    # fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay 
+    # fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
     # 0     1   2   3       4       5       6        7        8       9
     # 1     10  121 0       6.19    72      0        3.14     37      0
     #
@@ -803,7 +803,6 @@ class Antenna(object):
         except:
             print "No vsh coefficient calculated yet"
 
-    #def polar(self, k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1,fig=[],ax=[]):
     def polar(self,**kwargs):
         """ antenna polar plot
 
@@ -838,7 +837,8 @@ class Antenna(object):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('defant.trx')
-            >>> fig,ax = A.polar(k=[0,10,50])
+            >>> fig,ax = A.polar(fGHz=[2,3,4],phd=0)
+            >>> fig,ax = A.polar(fGHz=[2,3,4],thd=90)
 
         """
 
@@ -964,7 +964,7 @@ class Antenna(object):
             'Gain' | 'Ftheta' | 'Fphi'
         mode : string
             'linear'| 'not implemented'
-        silent : boolean 
+        silent : boolean
             True    | False
 
         Examples
@@ -989,22 +989,22 @@ class Antenna(object):
 
         if po ==[]:
             po = np.array([0, 0, 0])
-        if T ==[]:    
+        if T ==[]:   
             T = np.eye(3)
-        
-        _filename = 'antbody' 
+       
+        _filename = 'antbody'
 
         geo = geu.Geomoff(_filename)
-        # geo.pattern requires the following shapes  
+        # geo.pattern requires the following shapes 
         # theta (Ntx1)
         # phi (1xNp)
         if len(np.shape(self.theta))==1:
-            theta = self.theta[:,np.newaxis] 
-        else: 
+            theta = self.theta[:,np.newaxis]
+        else:
             theta=self.theta
         if len(np.shape(self.phi))==1:
-            phi = self.phi[np.newaxis,:]  
-        else: 
+            phi = self.phi[np.newaxis,:] 
+        else:
             phi=self.phi
         geo.pattern(theta,phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
@@ -1014,7 +1014,7 @@ class Antenna(object):
             geo.show3()
 
     def plot3d(self, k=0, typ='Gain', col=True):
-        """ show in matplotlib 
+        """ show in matplotlib
 
         k : frequency index
 
@@ -1282,13 +1282,13 @@ class Antenna(object):
         V = np.expand_dims(V,0)
         W = np.expand_dims(V,0)
         #
-        #   k : frequency axis 
-        #   l : coeff l 
-        #   m  
+        #   k : frequency axis
+        #   l : coeff l
+        #   m 
         Fth = np.eisum('klm,kilm->ki',Br,np.real(V.T)) - \
               np.eisum('klm,kilm->ki',Bi,np.imag(V.T)) + \
               np.eisum('klm,kilm->ki',Ci,np.real(W.T)) + \
-              np.eisum('klm,kilm->ki',Cr,np.imag(W.T)) 
+              np.eisum('klm,kilm->ki',Cr,np.imag(W.T))
 
         Fph = -np.eisum('klm,kilm->ki',Cr,np.real(V.T)) + \
               np.eisum('klm,kilm->ki',Ci,np.imag(V.T)) + \
@@ -1318,7 +1318,7 @@ class Antenna(object):
 
         Parameters
         ----------
-         
+        
         phi
 
         Notes
@@ -1342,7 +1342,7 @@ class Antenna(object):
         Bi = self.C.Bi.s2 # Nf x K2
         Cr = self.C.Cr.s2 # Nf x K2
         Ci = self.C.Ci.s2 # Nf x K2
-        
+       
         Nf = np.shape(self.C.Br.s2)[0]
         K2 = np.shape(self.C.Br.s2)[1]
 
@@ -1366,7 +1366,7 @@ class Antenna(object):
         V, W = VW2(l, m, x, phi, Pmm1n, Pmp1n)  # K2 x Ndir
 
         # Fth , Fph are Nf x Ndir
-        
+       
         tEBr = []
         tEBi = []
         tECr = []
@@ -1421,7 +1421,7 @@ class Antenna(object):
         Parameters
         ----------
 
-        theta : 1 x Nt 
+        theta : 1 x Nt
         phi   : 1 x Np
 
         Notes
@@ -1466,8 +1466,8 @@ class Antenna(object):
 
         # Fth , Fph are Nf x Ndir
         Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
-              np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))        
-   
+              np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))       
+  
         Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
               np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
@@ -1484,9 +1484,9 @@ class Antenna(object):
         Parameters
         ----------
 
-        theta : array 1 x Nt 
-        phi : 
-        pattern : boolean 
+        theta : array 1 x Nt
+        phi :
+        pattern : boolean
 
 
         Notes
@@ -1501,7 +1501,7 @@ class Antenna(object):
         Nt = len(theta)
         Np = len(phi)
         if typ =='vsh' :
-            
+           
             if pattern:
                 theta = np.kron(theta, np.ones(Np))
                 phi = np.kron(np.ones(Nt),phi)
@@ -1543,7 +1543,7 @@ class Antenna(object):
         else:
             Nf = len(self.fa)
             Nt = len(theta)
-            Np = len(phi)                  
+            Np = len(phi) 
             cx = self.S.Cx.s2
             cy = self.S.Cy.s2
             cz = self.S.Cz.s2
@@ -1552,9 +1552,9 @@ class Antenna(object):
             Ex = np.dot(cx,Y).reshape(Nf,Nt,Np)
             Ey = np.dot(cy,Y).reshape(Nf,Nt,Np)
             Ez = np.dot(cz,Y).reshape(Nf,Nt,Np)
-            
-            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True ) 
-            
+
+            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True )
+
 
         return Fth, Fph
 
@@ -1569,7 +1569,7 @@ class Antenna(object):
 
         theta : ndarray (1xNdir if not pattern)  (1xNtheta if pattern)
         phi   : ndarray (1xNdir if not pattter)  (1xNphi if pattern)
-        
+
         pattern : boolean
             if True theta and phi are reorganized for building the pattern
 
@@ -1603,7 +1603,7 @@ class Antenna(object):
         """
         typ = self._filename.split('.')[1]
         if typ not in ['sh3','vsh3']:
-            # temporary what to do if originbal file is not sh3 or vsh3 ? 
+            # temporary what to do if originbal file is not sh3 or vsh3 ?
             typ = 'vsh3'
 
         Nf = len(self.fa)
@@ -1619,13 +1619,13 @@ class Antenna(object):
 
         if pattern:
             self.theta = theta[:,np.newaxis]
-            self.phi = phi[np.newaxis,:] 
+            self.phi = phi[np.newaxis,:]
             theta = np.kron(theta, np.ones(Np))
             phi = np.kron(np.ones(Nt),phi)
-                         
-        
-        if typ =='vsh3':        
-            
+                        
+       
+        if typ =='vsh3':       
+           
 
             nray = len(theta)
 
@@ -1654,13 +1654,13 @@ class Antenna(object):
                 np.dot(Ci, np.imag(V.T)) + \
                 np.dot(Bi, np.real(W.T)) + \
                 np.dot(Br, np.imag(W.T))
-            
+
             if pattern:
-                
+
                 Fth = Fth.reshape(Nf, Nt, Np)
                 Fph = Fph.reshape(Nf, Nt, Np)
 
-                
+
         if typ == 'sh3':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3
@@ -1670,37 +1670,37 @@ class Antenna(object):
             Y ,indx = SSHFunc2(lmax, theta,phi)
             k = self.S.Cx.k2[:,0]
             if pattern :
-                    
+
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
-                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True ) 
+                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True )
                 Fth = Fth.reshape(Nf,Nt,Np)
                 Fph = Fph.reshape(Nf,Nt,Np)
-                
+
 
             else:
-                     
+
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
-                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)       
-            
+                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)
+
             self.Fphi = Fph
             self.Ftheta = Fth
             G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
             self.SqG = np.sqrt(G)
-                
+
 
         if pattern :
             self.Fphi = Fph
             self.Ftheta = Fth
             G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
-            self.SqG = np.sqrt(G)   
+            self.SqG = np.sqrt(G)  
 
 
         return Fth, Fph
-            
+           
 
     def movie_vsh(self, mode='linear'):
         """
@@ -1859,7 +1859,7 @@ class Antenna(object):
         # create sh2 file
         typ = self._filename.split('.')[1]
         self.typ = typ
-    
+   
         _filesh2 = self._filename.replace('.'+ typ, '.sh2')
         filesh2 = pyu.getlong(_filesh2, pstruc['DIRANT'])
         if os.path.isfile(filesh2):
@@ -1870,39 +1870,39 @@ class Antenna(object):
             coeff['fmin'] = self.fa[0]
             coeff['fmax'] = self.fa[-1]
 
-            
+           
             coeff['Cx.ind'] = self.S.Cx.ind2
             coeff['Cy.ind'] = self.S.Cy.ind2
             coeff['Cz.ind'] = self.S.Cz.ind2
-            coeff['Cx.lmax']= self.S.Cx.lmax           
-            coeff['Cy.lmax']= self.S.Cy.lmax           
-            coeff['Cz.lmax']= self.S.Cz.lmax           
+            coeff['Cx.lmax']= self.S.Cx.lmax          
+            coeff['Cy.lmax']= self.S.Cy.lmax          
+            coeff['Cz.lmax']= self.S.Cz.lmax          
 
             coeff['Cx.s2'] = self.S.Cx.s2
             coeff['Cy.s2'] = self.S.Cy.s2
             coeff['Cz.s2'] = self.S.Cz.s2
             io.savemat(filesh2, coeff, appendmat=False)
-            
+           
     def savesh3(self):
-        
-        """ 
+       
+        """
         save antenna in sh3 format
 
         Create a .sh3 antenna file
 
 
         """
-        
-        
+       
+       
         # create sh3 file
         typ = self._filename.split('.')[1]
-        self.typ = typ    
+        self.typ = typ   
         _filesh3 = self._filename.replace('.'+ typ, '.sh3')
         filesh3 = pyu.getlong(_filesh3, pstruc['DIRANT'])
         if os.path.isfile(filesh3):
             print filesh3, ' already exist'
 
-       
+      
         else:
             print 'create ', filesh3, ' file'
 
@@ -1912,20 +1912,20 @@ class Antenna(object):
             coeff['Cx.ind'] = self.S.Cx.ind3
             coeff['Cy.ind'] = self.S.Cy.ind3
             coeff['Cz.ind'] = self.S.Cz.ind3
-            
+           
             coeff['Cx.k'] = self.S.Cx.k2
             coeff['Cy.k'] = self.S.Cy.k2
             coeff['Cz.k'] = self.S.Cz.k2
-            
+           
 
-            coeff['Cx.lmax']= self.S.Cx.lmax           
-            coeff['Cy.lmax']= self.S.Cy.lmax           
-            coeff['Cz.lmax']= self.S.Cz.lmax 
+            coeff['Cx.lmax']= self.S.Cx.lmax          
+            coeff['Cy.lmax']= self.S.Cy.lmax          
+            coeff['Cz.lmax']= self.S.Cz.lmax
 
             coeff['Cx.s3'] = self.S.Cx.s3
             coeff['Cy.s3'] = self.S.Cy.s3
             coeff['Cz.s3'] = self.S.Cz.s3
-         
+        
 
             io.savemat(filesh3, coeff, appendmat=False)
 
@@ -1951,9 +1951,9 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
-            # .. Warning    
-            # Warning modification take only one dimension for k 
-            # if the .vsh3 format evolve it may not work anymore 
+            # .. Warning
+            # Warning modification take only one dimension for k
+            # if the .vsh3 format evolve it may not work anymore
             #
             Br = VCoeff('s3', fmin, fmax, coeff['Br.s3'],
                          coeff['Br.ind'], coeff['Br.k'][0])
@@ -1991,55 +1991,55 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
-            # .. Warning    
-            # Warning modification takes only one dimension for k 
-            # if the .sh3 format evolve it may not work anymore 
+            # .. Warning
+            # Warning modification takes only one dimension for k
+            # if the .sh3 format evolve it may not work anymore
             #
 
-                      
+
             if type(coeff['Cx.lmax']) == float:
                 lmax = coeff['Cx.lmax']
             else:
                 lmax = coeff['Cx.lmax'][0][0]
             Cx = SCoeff(typ = 's3',
                         fmin = fmin ,
-                        fmax = fmax , 
+                        fmax = fmax ,
                         lmax = lmax,
                         data = coeff['Cx.s3'],
                         ind =  coeff['Cx.ind'],
                         k =  coeff['Cx.k'])
 
-                        
-            Cy = SCoeff(typ= 's3', 
+
+            Cy = SCoeff(typ= 's3',
                         fmin = fmin ,
-                        fmax = fmax , 
+                        fmax = fmax ,
                         lmax = lmax,
                         data = coeff['Cy.s3'],
                         ind =  coeff['Cy.ind'],
                         k =  coeff['Cy.k'])
 
-                        
-                         
-            Cz = SCoeff(typ = 's3', 
+
+
+            Cz = SCoeff(typ = 's3',
                         fmin = fmin ,
-                        fmax = fmax , 
+                        fmax = fmax ,
                         data = coeff['Cz.s3'],
 
                         lmax = lmax,
                         ind =  coeff['Cz.ind'],
                         k =  coeff['Cz.k'])
 
-            
+
             if not 'S' in self.__dict__.keys():
                 self.S = SSHCoeff(Cx, Cy,Cz)
             else:
                 self.S.sets3(Cx,Cy,Cz)
-                    
+
             Nf = np.shape(Cx.s3)[0]
             self.fa = np.linspace(fmin, fmax, Nf)
         else:
             print _filesh3, ' does not exist'
-            
+
     def savevsh2(self):
         """
 
@@ -2070,14 +2070,16 @@ class Antenna(object):
             coeff['Ci.s2'] = self.C.Ci.s2
 
             io.savemat(filevsh2, coeff, appendmat=False)
-	
 
-            
+
+
     def loadsh2(self):
-        
+        """ load  spherical harmonics coefficient n shape  2
+
+        """
         _filesh2 = self._filename.split('.')[0]+'.sh2'
         filesh2 = pyu.getlong(_filesh2, pstruc['DIRANT'])
-        
+
         if os.path.isfile(filesh2):
             coeff = io.loadmat(filesh2, appendmat=False)
             #
@@ -2091,41 +2093,41 @@ class Antenna(object):
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
 
-                
+
             if type(coeff['Cx.lmax']) == float:
                 lmax = coeff['Cx.lmax']
             else:
                 lmax = coeff['Cx.lmax'][0][0]
-                
-                
-            Cx = SCoeff(typ='s2', 
-                        fmin=fmin, 
+
+
+            Cx = SCoeff(typ='s2',
+                        fmin=fmin,
                         fmax=fmax,
                         lmax = lmax,
-                        data=coeff['Cx.s2'], 
+                        data=coeff['Cx.s2'],
                         ind=coeff['Cx.ind'])
-                        
-            Cy = SCoeff(typ='s2', 
-                        fmin=fmin, 
+
+            Cy = SCoeff(typ='s2',
+                        fmin=fmin,
                         fmax=fmax,
                         lmax = lmax,
-                        data=coeff['Cy.s2'], 
+                        data=coeff['Cy.s2'],
                         ind=coeff['Cy.ind'])
-            Cz = SCoeff(typ='s2', 
-                        fmin=fmin, 
+            Cz = SCoeff(typ='s2',
+                        fmin=fmin,
                         fmax=fmax,
                         lmax = lmax,
-                        data=coeff['Cz.s2'], 
+                        data=coeff['Cz.s2'],
                         ind=coeff['Cz.ind'])
-                         
+
 
             self.S = SSHCoeff(Cx, Cy,Cz)
             Nf = np.shape(Cx.s2)[0]
             self.fa = np.linspace(fmin, fmax, Nf)
         else:
             print _filesh2, ' does not exist'
-        
-            
+
+
 
     def loadvsh2(self):
         """
