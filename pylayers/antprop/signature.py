@@ -602,7 +602,7 @@ class Signatures(dict):
                 stack.pop()
                 visited.pop()
 
-    def propaths(self,G, source, target, cutoff=1):
+    def propaths(self,G, source, target, cutoff=1,bt=False):
         """ seek all simple_path from source to target
 
         Parameters
@@ -614,6 +614,8 @@ class Signatures(dict):
         target : tuple
             interaction (node of Gi)
         cutoff : int
+        bt : bool 
+            allow backtrace (visite nodes already visited)
 
         Notes
         -----
@@ -660,8 +662,9 @@ class Signatures(dict):
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
-                elif child not in visited: # else visit other node
-                    # only visit output nodes
+
+                elif (child not in visited) or (bt): # else visit other node
+                    # only visit output nodes except if bt
                     #pdb.set_trace()
                     try:
                         dintpro = G[visited[-1]][child]['output']
@@ -1036,7 +1039,7 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
-    def run4(self,cutoff=2,algo='new',progress=False):
+    def run4(self,cutoff=2,algo='old',bt=False,progress=False):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1044,6 +1047,11 @@ class Signatures(dict):
 
         cutoff : int
             limit the exploration of all_simple_path
+        bt : bool
+            backtrace (allow visit already visited nodes in simple path algorithm)
+        progress : bool
+            display the time passed in the loop
+
 
         Returns
         -------
@@ -1175,7 +1183,7 @@ class Signatures(dict):
                     if algo=='new':
                         paths = list(self.procone(self.L,Gi,source=s,target=t,cutoff=cutoff))
                     else:
-                        paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+                        paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff,bt=bt))
 
                     #paths = [nx.shortest_path(Gi,source=s,target=t)]
                 else:

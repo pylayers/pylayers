@@ -80,7 +80,6 @@ class Ctilde(object):
 
         return(s)
 
-
     def choose(self):
         """ Choose a field file in tud directory
         """
@@ -275,7 +274,7 @@ class Ctilde(object):
         ax : plt.axis    
         phi: tuple (-180, 180)
             phi angle
-        normalise: bool
+        normalize: bool
             energy normalized
         reverse : bool
             inverse theta and phi represenation
@@ -288,22 +287,24 @@ class Ctilde(object):
             scatter dot size
         fontsize: float
         edgecolors: bool
-        colorbar bool
+        colorbar: bool
+        title : bool
 
         """
         defaults = {
                     'fig': [],
                     'ax': [],
                     'phi':(-180, 180),
-                    'normalise':False,
-                    'reverse' : False,
+                    'normalize':False,
+                    'reverse' : True,
                     'cmap':plt.cm.hot_r,
                     'mode':'center',
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
-                    'colorbar':False
+                    'colorbar':False,
+                    'title' : False
                     }
 
         for key, value in defaults.items():
@@ -328,17 +329,17 @@ class Ctilde(object):
         ax = kwargs.pop('ax')
         colorbar = kwargs.pop('colorbar')
         reverse = kwargs.pop('reverse')
-        normalise = kwargs.pop('normalise')
-        mode =kwargs.pop('mode')
-
+        normalize = kwargs.pop('normalize')
+        mode = kwargs.pop('mode')
+        title = kwargs.pop('title')
         if fig == []:
-            fig = plt.gcf()
+            fig = plt.figure()
 
 
         Ett, Epp, Etp, Ept = self.energy(mode=mode)
         Etot = Ett+Epp+Etp+Ept + 1e-15
 
-        if normalise:
+        if normalize:
             Emax = max(Etot)
             Etot = Etot / Emax
         #
@@ -378,20 +379,20 @@ class Ctilde(object):
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
-            ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
-            ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
+            ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
             
         else:
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
             ax.axis((the[0], the[1], phi[0], phi[1]))
-            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
-            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
+            ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
+            ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
             
-
-        ax.set_title(d, fontsize=fontsize+2)
+        if title:
+            ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
             b=fig.colorbar(scat)
-            if normalise:
+            if normalize:
                 b.set_label('dB')
             else:
                 b.set_label('Path Loss (dB)')
@@ -407,7 +408,7 @@ class Ctilde(object):
                 
         phi: tuple (-180, 180)
             phi angle
-        normalise: bool
+        normalize: bool
             energy normalized
         reverse : bool
             inverse theta and phi represenation
@@ -432,8 +433,8 @@ class Ctilde(object):
         """
         defaults = {
                     'phi':(-180, 180),
-                    'normalise':False,
-                    'reverse' : False,
+                    'normalize':False,
+                    'reverse' : True,
                     'cmap':plt.cm.hot_r,
                     'mode':'center',
                     's':30,
@@ -452,62 +453,11 @@ class Ctilde(object):
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
-        if len(col) != len(dod):
-            print "len(col):", len(col)
-            print "len(dod):", len(dod)
-        plt.subplot(121, polar=kwargs['polar'])
-        if kwargs['reverse']:
-            plt.scatter(dod[:, 1] * al, dod[:, 0] * al,
-                        s=kwargs['s'], c=col,
-                        cmap=kwargs['cmap'],
-                        edgecolors='none')
-            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-            plt.xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
-            plt.ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
-        else:
-            plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
-                        s=kwargs['s'], c=col,
-                        cmap=kwargs['cmap'],
-                        edgecolors='none')
-            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-            plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
-            plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
-        # ylabel('$\phi_t(\degree)$',fontsize=18)
-        plt.title('DoD', fontsize=kwargs['fontsize']+2)
-
-
-        plt.subplot(122, polar=kwargs['polar'])
-        if kwargs['reverse']:
-            plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
-                        cmap=plt.cm.hot_r, edgecolors='none')
-            plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-            plt.xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
-            plt.ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
-        else :
-            plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
-                        cmap=plt.cm.hot_r, edgecolors='none')
-            plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-            plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
-            plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
-
-        plt.title('DoA', fontsize=kwargs['fontsize']+2)
-
-        # plt.xticks(fontsize=20)
-        # plt.yticks(fontsize=20)
-        b = plt.colorbar()
-        if kwargs['normalise']:
-            b.set_label('dB')
-        else:
-            b.set_label('Path Loss (dB)')
-        # for t in b.ax.get_yticklabels():
-        #    t.set_fontsize(20)
-
-        plt.axis
-        #kwargs['colorbar']=False
-        #fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
-        #kwargs['colorbar']=True
-        #fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
-        #return fig,ax
+        kwargs['colorbar']=False
+        fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
+        kwargs['colorbar']=True
+        fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
+        return fig,ax
 
 
     # def doadod(self, **kwargs):
@@ -534,7 +484,7 @@ class Ctilde(object):
     #                 'fontsize' : 12,
     #                 'reverse' :False,
     #                 'phi':(-180,180),
-    #                 'normalise':False,
+    #                 'normalize':False,
     #                 'polar':False,
     #                 'mode':'center'}
 
@@ -556,7 +506,7 @@ class Ctilde(object):
     #     Ett, Epp, Etp, Ept = self.energy(mode=kwargs['mode'])
     #     Etot = Ett+Epp+Etp+Ept + 1e-15
 
-    #     if kwargs['normalise']:
+    #     if kwargs['normalize']:
     #         Emax = max(Etot)
     #         Etot = Etot / Emax
 
@@ -590,17 +540,17 @@ class Ctilde(object):
     #                     cmap=kwargs['cmap'],
     #                     edgecolors='none')
     #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+    #         plt.xlabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
+    #         plt.ylabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
     #     else:
     #         plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
     #                     s=kwargs['s'], c=col,
     #                     cmap=kwargs['cmap'],
     #                     edgecolors='none')
     #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
-    #     # ylabel('$\phi_t(\degree)$',fontsize=18)
+    #         plt.xlabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
+    #         plt.ylabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
+    #     # ylabel('$\phi_t(^{\circ})$',fontsize=18)
     #     plt.title('DoD', fontsize=kwargs['fontsize']+2)
 
 
@@ -609,22 +559,22 @@ class Ctilde(object):
     #         plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
     #                     cmap=plt.cm.hot_r, edgecolors='none')
     #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+    #         plt.xlabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
+    #         plt.ylabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
             
     #     else :
     #         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
     #                     cmap=plt.cm.hot_r, edgecolors='none')
     #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+    #         plt.xlabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
+    #         plt.ylabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
 
     #     plt.title('DoA', fontsize=kwargs['fontsize']+2)
 
     #     # plt.xticks(fontsize=20)
     #     # plt.yticks(fontsize=20)
     #     b = plt.colorbar()
-    #     if kwargs['normalise']:
+    #     if kwargs['normalize']:
     #         b.set_label('dB')
     #     else:
     #         b.set_label('Path Loss (dB)')
@@ -714,8 +664,8 @@ class Ctilde(object):
         # update direction of departure and arrival
         #
 
-        self.tang = tangl
-        self.rang = rangl
+        self.tangl = tangl
+        self.rangl = rangl
 
         #uf = np.ones(self.nfreq)
 
@@ -1047,13 +997,13 @@ class Ctilde(object):
 
         else:
             if not a.pattern :
-                Fat, Fap = a.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
+                Fat, Fap = a.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fat = Fat.transpose()
                 Fap = Fap.transpose()
                 Fat = bs.FUsignal(a.fa, Fat)
                 Fap = bs.FUsignal(a.fa, Fap)
             else:
-                Fat, Fap = a.Fpatt(self.rang[:, 0], self.rang[:, 1], pattern=False)
+                Fat, Fap = a.Fpatt(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fat = bs.FUsignal(a.fa, Fat)
                 Fap = bs.FUsignal(a.fa, Fap)
 
@@ -1072,13 +1022,13 @@ class Ctilde(object):
         else:
 
             if not b.pattern :
-                Fbt, Fbp = b.Fsynth3(self.rang[:, 0], self.rang[:, 1], pattern=False)
+                Fbt, Fbp = b.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fbt = Fbt.transpose()
                 Fbp = Fbp.transpose()
                 Fbt = bs.FUsignal(b.fa, Fbt)
                 Fbp = bs.FUsignal(b.fa, Fbp)
             else:
-                Fbt, Fbp = b.Fpatt(self.rang[:, 0], self.rang[:, 1], pattern=False)
+                Fbt, Fbp = b.Fpatt(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fbt = bs.FUsignal(b.fa, Fbt)
                 Fbp = bs.FUsignal(b.fa, Fbp)
         # Ctt : r x f
@@ -1392,7 +1342,7 @@ class Tchannel(bs.FUDAsignal):
         ax : plt.axis    
         phi: tuple (-180, 180)
             phi angle
-        normalise: bool
+        normalize: bool
             energy normalized
         reverse : bool
             inverse theta and phi represenation
@@ -1405,22 +1355,24 @@ class Tchannel(bs.FUDAsignal):
             scatter dot size
         fontsize: float
         edgecolors: bool
-        colorbar bool
+        colorbar: bool
+        title : bool
 
         """
         defaults = {
                     'fig': [],
                     'ax': [],
                     'phi':(-180, 180),
-                    'normalise':False,
-                    'reverse' : False,
+                    'normalize':False,
+                    'reverse' : True,
                     'cmap':plt.cm.hot_r,
                     'mode':'center',
                     's':30,
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
-                    'colorbar':False
+                    'colorbar':False,
+                    'title':False
                     }
 
         for key, value in defaults.items():
@@ -1440,17 +1392,18 @@ class Tchannel(bs.FUDAsignal):
         ax = kwargs.pop('ax')
         colorbar = kwargs.pop('colorbar')
         reverse = kwargs.pop('reverse')
-        normalise = kwargs.pop('normalise')
+        normalize = kwargs.pop('normalize')
         mode =kwargs.pop('mode')
+        title =kwargs.pop('title')
 
         if fig == []:
-            fig = plt.gcf()
+            fig = plt.figure()
 
 
         Etot = self.energy(mode=mode) + 1e-15
 
 
-        if normalise:
+        if normalize:
             Emax = max(Etot)
             Etot = Etot / Emax
         #
@@ -1491,23 +1444,173 @@ class Tchannel(bs.FUDAsignal):
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
-            ax.set_xlabel('$\phi(\degree)$', fontsize=fontsize)
-            ax.set_ylabel("$\\theta_t(\degree)$", fontsize=fontsize)
+            #ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
+            #ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
         else:
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
             ax.axis((the[0], the[1], phi[0], phi[1]))
-            ax.set_xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
-            ax.set_ylabel('$\phi(\degree)$', fontsize=fontsize)
+            #ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
+            #ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
 
-        ax.set_title(d, fontsize=fontsize+2)
+        if title:
+            ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
             b=fig.colorbar(scat)
-            if normalise:
+            if normalize:
                 b.set_label('dB')
             else:
                 b.set_label('Path Loss (dB)')
 
         return (fig, ax)
+
+
+    def plotad(self,a='phi', **kwargs):
+        """plot angular delays
+
+         Parameters
+        ----------
+
+        d: 'doa' | 'dod'        
+            display direction of departure | arrival
+        typ : 'ns' | 'm'
+            display delays in nano seconds ( ns) or meter (m)
+        fig : plt.figure
+        ax : plt.axis    
+        a : str 
+            angle 'theta' | 'phi'
+        normalize: bool
+            energy normalized
+        reverse : bool
+            inverse theta and phi represenation
+        polar : bool
+            polar representation
+        cmap: matplotlib.cmap
+        mode: 'center' | 'mean' | 'in'
+            see bsignal.energy
+        s : float
+            scatter dot size
+        fontsize: float
+        edgecolors: bool
+        colorbar: bool
+        titel : bool
+        'clipval': float
+            remove values below clipval in dB 
+        """
+        defaults = {
+                    'fig': [],
+                    'ax': [],
+                    'normalize':False,
+                    'cmap':plt.cm.hot_r,
+                    'mode':'center',
+                    's':30,
+                    'fontsize':12,
+                    'edgecolors':'none',
+                    'polar':False,
+                    'colorbar':False,
+                    'taumin':[],
+                    'taumax':[],
+                    'typ':'m',
+                    'title':False,
+                    'clipval': -2500
+                    }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+
+
+        
+
+        # remove non plt.scatter kwargs
+
+        fontsize = kwargs.pop('fontsize')
+        polar = kwargs.pop('polar')
+        fig = kwargs.pop('fig')
+        ax = kwargs.pop('ax')
+        colorbar = kwargs.pop('colorbar')
+        normalize = kwargs.pop('normalize')
+        mode =kwargs.pop('mode')
+        dmin = kwargs.pop('taumin')
+        dmax = kwargs.pop('taumax')
+        title = kwargs.pop('title')
+        typ = kwargs.pop('typ')
+        clipval = kwargs.pop('clipval')
+
+        if fig == []:
+            fig = plt.figure()
+
+
+        di = self.doa
+
+        if a == 'theta':
+            ang = np.array((0,180))
+        else :
+            ang = np.array((-180,180))
+
+        delay = self.tau0
+        if typ =='m':
+            delay = delay*0.3
+
+        if dmin == []:
+            dmin = min(delay)
+        if dmax == []:
+            dmax= max(delay)
+
+        
+
+
+        Etot = self.energy(mode=mode) + 1e-15
+
+
+        if normalize:
+            Emax = max(Etot)
+            Etot = Etot / Emax
+        #
+        #
+        #
+        # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        # WARNING polar plot require radian angles
+        #
+        #
+        if polar :
+            al = 1.
+
+        else :
+            al = 180. / np.pi
+
+
+        col = 10 * np.log10(Etot)
+        cv = np.where(col >= clipval)[0]
+        kwargs['c'] = col[cv]
+        if len(col) != len(di):
+            print "len(col):", len(col)
+            print "len(di):", len(dir)
+        if ax == []:
+            ax = fig.add_subplot(111, polar=polar)
+        if a == 'phi':
+            scat = ax.scatter(di[cv, 1] * al, delay[cv], **kwargs)
+            ax.axis((ang[0], ang[1], dmin, dmax))
+            #ax.set_xlabel(r"$\phi(^{\circ})$", fontsize=fontsize)
+            #ax.set_ylabel("r$\tau(ns)$", fontsize=fontsize)
+        elif a == 'theta':
+            scat = ax.scatter(di[cv, 0] * al, delay[cv], **kwargs)
+            ax.axis((ang[0], ang[1], dmin,dmax))
+            #ax.set_xlabel(r"$\\theta_t(^{\circ})$", fontsize=fontsize)
+            #ax.set_ylabel(r'$\tau(ns)$', fontsize=fontsize)
+        if title :
+            ax.set_title('DoA vs delay (ns)', fontsize=fontsize+2)
+        if colorbar:
+            b=fig.colorbar(scat)
+            if normalize:
+                b.set_label('dB')
+            else:
+                b.set_label('Path Loss (dB)')
+
+        return (fig, ax)
+
+
+
 
 
     def doadod(self, **kwargs):
@@ -1518,7 +1621,7 @@ class Tchannel(bs.FUDAsignal):
 
         phi: tuple (-180, 180)
             phi angle
-        normalise: bool
+        normalize: bool
             energy normalized
         reverse : bool
             inverse theta and phi represenation
@@ -1543,8 +1646,8 @@ class Tchannel(bs.FUDAsignal):
         """
         defaults = {
                     'phi':(-180, 180),
-                    'normalise':False,
-                    'reverse' : False,
+                    'normalize':False,
+                    'reverse' : True,
                     'cmap':plt.cm.hot_r,
                     'mode':'center',
                     's':30,
@@ -1623,7 +1726,7 @@ class Tchannel(bs.FUDAsignal):
     #                 's': 30,
     #                 'fontsize' : 12,
     #                 'phi':(-180,180),
-    #                 'normalise':False,
+    #                 'normalize':False,
     #                 'polar':False,
     #                 'mode':'center'}
 
@@ -1645,7 +1748,7 @@ class Tchannel(bs.FUDAsignal):
     #     Etot = self.energy(mode=kwargs['mode']) +1e-15
 
     #     # normalization
-    #     if kwargs['normalise']:
+    #     if kwargs['normalize']:
     #         Emax = max(Etot)
     #         Etot = Etot / Emax
 
@@ -1682,17 +1785,17 @@ class Tchannel(bs.FUDAsignal):
     #                     cmap=kwargs['cmap'],
     #                     edgecolors='none')
     #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
+    #         plt.xlabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
+    #         plt.ylabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
     #     else:
     #         plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
     #                     s=kwargs['s'], c=col,
     #                     cmap=kwargs['cmap'],
     #                     edgecolors='none')
     #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_t(\degree)$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel('$\phi(\degree)$', fontsize=kwargs['fontsize'])
-    #     # ylabel('$\phi_t(\degree)$',fontsize=18)
+    #         plt.xlabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
+    #         plt.ylabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
+    #     # ylabel('$\phi_t(^{\circ})$',fontsize=18)
     #     plt.title('DoD', fontsize=kwargs['fontsize']+2)
 
 
@@ -1701,30 +1804,30 @@ class Tchannel(bs.FUDAsignal):
     #         plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
     #                     cmap=plt.cm.hot_r, edgecolors='none')
     #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+    #         plt.xlabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
+    #         plt.ylabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
             
     #     else :
     #         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
     #                     cmap=plt.cm.hot_r, edgecolors='none')
     #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+    #         plt.xlabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
+    #         plt.ylabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
 
     #     plt.title('DoA', fontsize=kwargs['fontsize']+2)
 
     #     # plt.xticks(fontsize=20)
     #     # plt.yticks(fontsize=20)
     #     b = plt.colorbar()
-    #     if kwargs['normalise']:
+    #     if kwargs['normalize']:
     #         b.set_label('dB')
     #     else:
     #         b.set_label('Path Loss (dB)')
     #     # for t in b.ax.get_yticklabels():
     #     #    t.set_fontsize(20)
-    #     plt.xlabel("$\\theta_r(\degree)$", fontsize=kwargs['fontsize'])
+    #     plt.xlabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
     #     plt.title('DoA', fontsize=kwargs['fontsize']+2)
-    #     plt.ylabel("$\phi_r (\degree)$", fontsize=kwargs['fontsize'])
+    #     plt.ylabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
 
 
 
