@@ -840,6 +840,7 @@ class Antenna(object):
         defaults = {'fGHz' : np.array([4]),
                     'dyn' : 8 ,
                     'phd' : 0,
+                    'legend':True,
                     'GmaxdB':5,
                     'topos':False}
 
