@@ -1131,16 +1131,18 @@ class Antenna(object):
         filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
         fd = open(filename, "w")
         fd.write("LIST\n")
+
         Nt = self.Nt
         Np = self.Np
         N = 10
         plth = np.arange(0, Nt, St)
         plph = np.arange(0, Np, Sp)
+
         for m in plph:
             for n in plth:
-                theta = self.theta[n]
+                theta = self.theta[n,0]
                 #print "m,theta= :",m,theta*180/np.pi
-                phi = self.phi[m]
+                phi = self.phi[0,m]
                 #print "n,phi=:",n,phi*180/np.pi
                 B = geu.vec_sph(theta, phi)
                 p = R * np.array((np.cos(phi) * np.sin(theta),
