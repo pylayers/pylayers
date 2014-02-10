@@ -876,16 +876,13 @@ class Signatures(dict):
                         brin.append(child)
                         s = Signature(brin)
                         s.evf(L)
-                        ta,he = s.unfold()
                         cn = cone.Cone()
+                        ta,he = s.unfold()
                         segchild = np.vstack((ta[:,-1],he[:,-1])).T
                         segvm1 = np.vstack((ta[:,-2],he[:,-2])).T
                         cn.from2segs(segchild,segvm1)
-                        typ,proba = cn.belong_seg(ta[:,:-2],he[:,:-2])
-                        #fig,ax = plu.displot(ta,he)
-                        #fig,ax = cn.show(fig=fig,ax=ax)
-                        #plt.show()
-                        #pdb.set_trace()
+                        typ,proba = cn.belong_seg(ta[:,:-2],he[:,:-2],proba=False)
+
                         if (typ==0).any(): 
                         # child no valid (do nothing)
                             visited.pop()
@@ -1494,15 +1491,16 @@ class Signatures(dict):
         pe = 0
         tic = time.time()
         tic0 = tic
-
         #for interaction source  in list of source interaction
         for us,s in enumerate(lis):
             #for target interaction in list of target interaction
-            for ut,t in enumerate(lit):
 
+            for ut,t in enumerate(lit):
+                
                 if progress :
-                    ratio = np.round((((us)*len(lis)+ut)/(1.*lmax))*10 )
-                    if ratio != pe:
+
+                    ratio = np.round((((us)*len(lit)+ut)/(1.*lmax))*10 )
+                    if ratio > pe:
                         pe = ratio
                         toc = time.time()
                         print '~%d ' % (ratio*10),
@@ -1514,10 +1512,24 @@ class Signatures(dict):
                         dout= self.procone2(self.L,Gi,dout=dout, source=s,target=t,cutoff=cutoff)
                     else :
                         dout = self.propaths2(Gi,di=self.L.di,dout=dout,source=s,target=t,cutoff=cutoff,bt=bt)
-
+                else:
+                    try:
+                        dout[1].append(self.L.di[s])
+                    except:
+                        dout[1]=[]
+                        dout[1].append(self.L.di[s])
+ 
         for k in dout.keys():
             adout=np.array((dout[k]))
             shad = np.shape(adout)
+            # manage the case of signatures with only 1 interaction
+            if k == 1:
+                adout=adout.reshape(shad[0],1,shad[1])
+                shad=np.shape(adout)
+            # rehape (rays * 2 , interaction)
+            # the 2 dimension comes from the signature definition : 
+            # 1st row = segment index
+            # 2nd row = tyep of interaction
             self[k] = adout.swapaxes(1,2).reshape(shad[0]*shad[2],shad[1])
 
 
