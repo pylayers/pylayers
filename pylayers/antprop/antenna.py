@@ -28,6 +28,7 @@ The antenna can be represented in various formats
 """
 import doctest
 import os
+import glob
 import re
 import sys
 import pdb
@@ -229,6 +230,42 @@ class Antenna(object):
             st = st + 'sqrt G :' + str(self.sqG) + '\n'
 
         return(st)
+
+    def ls(self, typ='vsh3'):
+        """ list the available file in dirant
+
+        Parameters
+        ----------
+
+        typ : string optional
+            {'mat'|'trx'|'vsh3'|'sh3'}
+
+        Returns
+        -------
+
+        lfile_s : list
+            sorted list of all the .str file of strdir
+
+        """
+
+        if typ=='vsh3':
+            pathname = pstruc['DIRANT'] + '/*.' + typ
+        if typ=='sh3':
+            pathname = pstruc['DIRANT'] + '/*.' + typ
+        if typ=='mat':
+            pathname = pstruc['DIRANT'] + '/*.' + typ
+        if typ=='trx':
+            pathname = pstruc['DIRANT'] + '/*.' + typ
+
+        lfile_l = glob.glob(basename+'/'+pathname)
+        lfile_s = []
+        for fi in lfile_l:
+            fis = pyu.getshort(fi)
+            lfile_s.append(fis)
+        lfile_s.sort()
+
+        return lfile_s
+
 
 
     def Fpatt(self,th=[],ph=[],pattern=True):
@@ -907,10 +944,14 @@ class Antenna(object):
 
         if 'fig' not in kwargs:
             fig = plt.figure(figsize=(8, 8))
+        else:
+            fig = kwargs['fig']
 
         if 'ax' not in kwargs:
             #ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
             ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True )
+        else:
+            ax = kwargs['ax']
 
         rc('grid', color='#316931', linewidth=1, linestyle='-')
         rc('xtick', labelsize=15)

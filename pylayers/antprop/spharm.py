@@ -165,28 +165,28 @@ def index_vsh(L, M):
     return(t)
 
 class VectorCoeff(object):
-	
-	def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
+    
+    def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
                  ind=np.array([]), k=np.array([])):
 
-		self.s1 = np.array([])
-		self.s4 = np.array([])
-		self.s3 = np.array([])
-		self.fmin = fmin
-		self.fmax = fmax
+        self.s1 = np.array([])
+        self.s4 = np.array([])
+        self.s3 = np.array([])
+        self.fmin = fmin
+        self.fmax = fmax
 
-		if typ == 's1':
-			self.inits1(data,ind)
-	
-	def inits1(self, data, ind):
-		
-		sh = np.shape(data)
-		self.s1 = data
-		self.ind_s1 = ind
-		self.Nf = sh[0]
+        if typ == 's1':
+            self.inits1(data,ind)
+    
+    def inits1(self, data, ind):
+        
+        sh = np.shape(data)
+        self.s1 = data
+        self.ind_s1 = ind
+        self.Nf = sh[0]
 
 class SSHCoeff(object):
-	
+    
     def __init__(self, Cx,Cy,Cz):
         """
 
@@ -204,7 +204,7 @@ class SSHCoeff(object):
         self.Cz = Cz
         
   
-		   
+           
     def s2tos3(self, threshold=1e-5):
         
 
@@ -265,7 +265,7 @@ class SSHCoeff(object):
         self.Cz.ind3 = Cz.ind3
         self.Cz.s3 = Cz.s3
         self.Cz.k2 = Cz.k2
-        
+
 
 class SCoeff(object):
     """ Scalar Spherical Harmonics Coefficient
@@ -313,38 +313,38 @@ class SCoeff(object):
             #~ if key not in kwargs:
                 #~ kwargs[key] = value
 
-        
-        
+
+
         self.fmin = fmin
         self.fmax = fmax
         self.lmax = lmax
-        	
+
         if typ == 's2':
-			self.s2 = np.array([])
-			self.inits2(data,ind)
+            self.s2 = np.array([])
+            self.inits2(data,ind)
         if typ == 's3':
-			self.s3 = np.array([])
-			self.inits3(data, ind, k)
+            self.s3 = np.array([])
+            self.inits3(data, ind, k)
 
     def __repr__(self):
 
-		st = "Nf   : " +  str(self.Nf) + "\n"
-		st = st +  "fmin (GHz) : "+  str(self.fmin) + "\n"
-		st = st +  "fmax (GHz) : "+  str(self.fmax) + "\n"
-   
-		if 's2' in self.__dict__.keys():
-			sh2 = np.shape(self.s2)
-			if sh2[0] != 0:
-				st = st + "NCoeff s2  : " + str(len(self.ind2))+ "\n"
-				
-		if 's3' in self.__dict__.keys():
-			sh3 = np.shape(self.s3)
-			if sh3[0] != 0:
-				st = st + "Ncoeff s3 : " + str(len(self.ind3))+ "\n"
-        
-        
+        st = "Nf   : " +  str(self.Nf) + "\n"
+        st = st +  "fmin (GHz) : "+  str(self.fmin) + "\n"
+        st = st +  "fmax (GHz) : "+  str(self.fmax) + "\n"
 
-		return(st)
+        if 's2' in self.__dict__.keys():
+            sh2 = np.shape(self.s2)
+            if sh2[0] != 0:
+                st = st + "NCoeff s2  : " + str(len(self.ind2))+ "\n"
+
+        if 's3' in self.__dict__.keys():
+            sh3 = np.shape(self.s3)
+            if sh3[0] != 0:
+                st = st + "Ncoeff s3 : " + str(len(self.ind3))+ "\n"
+
+
+
+        return(st)
 
     def inits2(self, data,ind):
         """ initialize shape 2 format
@@ -579,13 +579,13 @@ class SCoeff(object):
 
         Parameters
         ----------
-        typ :  string 
+        typ :  string
             default ('s1')
             's1'  shape 1  (Nf , N , M )
             's2'  shape 2  (Nf , N*M   )
             's3'  shape 3  (Nf , K )  T ( K x 2 )
 
-        k  : integer 
+        k  : integer
             frequency index default 0
 
         N, M = maximal value for degree, mode respectively
@@ -668,7 +668,7 @@ class SCoeff(object):
                 #echelle=[str(0), str(-10), str(-20), str(-30), str(-40), str(-50)]
         if (typ == 's2') | (typ =='s3') :
 
-            echelle = [str(0), str(-seuildb + 40), str(-seuildb + 30), 
+            echelle = [str(0), str(-seuildb + 40), str(-seuildb + 30),
                        str(-seuildb + 20), str(-seuildb + 10), str(-seuildb)]
             cbar = plt.colorbar(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1])
             cbar.ax.set_yticklabels(echelle)
@@ -1231,7 +1231,7 @@ class VSHCoeff(object):
             {'s1','s2','s3'}
         k  : int
             frequency index
-        kmax : int 
+        kmax : int
             maximum of the unfolded coefficient axes
         N  : int
         M  : int
