@@ -11,7 +11,9 @@ import pdb as pdb
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 import pylayers.util.geomutil as geu
+import pylayers.mobility.body.DeuxSeg as seg
 import doctest
+import itertools as itt
 
 def ChangeBasis(u0, v0, w0, v1):
     """
@@ -360,7 +362,7 @@ class Body(object):
 
 
 
-    def setdcs(self):
+    def setdcs(self, topos = True, frameId =0):
         """ set device coordinate system (dcs) from a topos
 
         This method evaluates the set of all dcs.
@@ -416,8 +418,15 @@ class Body(object):
             kta = self.sl[int(Id),0]
             khe = self.sl[int(Id),1]
             Rcyl = self.sl[int(Id),2]
-            pta = np.array(self.topos[:,kta])
-            phe = np.array(self.topos[:,khe])
+
+            if topos == True :				
+                pta = np.array(self.topos[:,kta])
+                phe = np.array(self.topos[:,khe])    
+            else:
+                pta = np.array(self.d[:,kta, frameId])
+                phe = np.array(self.d[:,khe, frameId])
+				
+
             vl = phe - pta
             lmax = np.sqrt(np.dot(vl,vl))
 
@@ -998,6 +1007,54 @@ class Body(object):
             #~ # 3 rd vector : PA-PB normalized
             #~ T = geu.onb(pA,pB,vg)
             #~ self.ccs[k,:,:] = T
+
+            
+    def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):
+
+        intersect = np.zeros((self.ncyl,1))
+        for k in range (self.ncyl):
+            if k not in cyl:
+                
+                if topos  == True:
+                    kta  = self.sl[k,0]
+                    khe  = self.sl[k,1]
+                    C = self.topos[:,kta]
+                    D = self.topos[:,khe]
+                else:
+                    kta  = self.sl[k,0]
+                    khe  = self.sl[k,1]
+                    C = self.d[:,kta,frameId]
+                    D = self.d[:,khe,frameId]
+
+                alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+                if alpha < 0:
+                    alpha = 0
+                if alpha > 1 :
+                    alpha  = 1
+                if beta < 0:
+                    beta = 0
+                if beta > 1:
+                    beta = 1
+                dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+
+                if dmin  < self.sl[k,2]:
+                    intersect[k]=1
+           
+        return intersect
+        
+    def body_link(self, topos = True,frameId = 0):
+        
+        self.links = list(itt.combinations(self.dev.keys(),2))
+        n_link = len(self.links)
+        link_vis = np.ndarray(shape = (n_link))
+        for k,link in enumerate(self.links):
+            A = self.dcs[link[0]][:,0]
+            B = self.dcs[link[1]][:,0]
+            inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])
+            
+            link_vis[k] =  sum(inter)
+        return link_vis
+
 
     def cylinder_basis_k(self, frameId):
         """
