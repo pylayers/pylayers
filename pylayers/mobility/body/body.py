@@ -419,13 +419,13 @@ class Body(object):
             khe = self.sl[int(Id),1]
             Rcyl = self.sl[int(Id),2]
 
-            if topos == True :				
+            if topos == True :
                 pta = np.array(self.topos[:,kta])
-                phe = np.array(self.topos[:,khe])    
+                phe = np.array(self.topos[:,khe])
             else:
                 pta = np.array(self.d[:,kta, frameId])
                 phe = np.array(self.d[:,khe, frameId])
-				
+
 
             vl = phe - pta
             lmax = np.sqrt(np.dot(vl,vl))
@@ -1008,13 +1008,32 @@ class Body(object):
             #~ T = geu.onb(pA,pB,vg)
             #~ self.ccs[k,:,:] = T
 
-            
+
     def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):
+        """
+
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+        Returns
+        -------
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
 
         intersect = np.zeros((self.ncyl,1))
         for k in range (self.ncyl):
             if k not in cyl:
-                
+
                 if topos  == True:
                     kta  = self.sl[k,0]
                     khe  = self.sl[k,1]
@@ -1039,19 +1058,39 @@ class Body(object):
 
                 if dmin  < self.sl[k,2]:
                     intersect[k]=1
-           
+
         return intersect
-        
+
     def body_link(self, topos = True,frameId = 0):
-        
+        """
+
+        Parameters
+        ----------
+        topos :  boolean
+            default True
+        frameId : int
+            used in case topos == False. Indicates the frame Id.
+
+        Returns
+        -------
+
+        link_vis : np.array (,nlinks)
+            number of intersected cylinder on the link
+
+        links is a list of couple of strings inticating the different links
+        between devices.
+
+        """
+
         self.links = list(itt.combinations(self.dev.keys(),2))
         n_link = len(self.links)
         link_vis = np.ndarray(shape = (n_link))
+
         for k,link in enumerate(self.links):
             A = self.dcs[link[0]][:,0]
             B = self.dcs[link[1]][:,0]
             inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])
-            
+
             link_vis[k] =  sum(inter)
         return link_vis
 
@@ -1080,6 +1119,7 @@ class Body(object):
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
         """
+
         Parameters
         ----------
 
