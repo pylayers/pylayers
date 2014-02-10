@@ -1444,13 +1444,13 @@ class Tchannel(bs.FUDAsignal):
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
-            #ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
-            #ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
+            ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
+            ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
         else:
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
             ax.axis((the[0], the[1], phi[0], phi[1]))
-            #ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
-            #ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
+            ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
+            ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
 
         if title:
             ax.set_title(d, fontsize=fontsize+2)
@@ -1591,13 +1591,13 @@ class Tchannel(bs.FUDAsignal):
         if a == 'phi':
             scat = ax.scatter(di[cv, 1] * al, delay[cv], **kwargs)
             ax.axis((ang[0], ang[1], dmin, dmax))
-            #ax.set_xlabel(r"$\phi(^{\circ})$", fontsize=fontsize)
-            #ax.set_ylabel("r$\tau(ns)$", fontsize=fontsize)
+            ax.set_xlabel(r"$\phi(^{\circ})$", fontsize=fontsize)
+            ax.set_ylabel("r$\tau(ns)$", fontsize=fontsize)
         elif a == 'theta':
             scat = ax.scatter(di[cv, 0] * al, delay[cv], **kwargs)
             ax.axis((ang[0], ang[1], dmin,dmax))
-            #ax.set_xlabel(r"$\\theta_t(^{\circ})$", fontsize=fontsize)
-            #ax.set_ylabel(r'$\tau(ns)$', fontsize=fontsize)
+            ax.set_xlabel(r"$\\theta_t(^{\circ})$", fontsize=fontsize)
+            ax.set_ylabel(r'$\tau(ns)$', fontsize=fontsize)
         if title :
             ax.set_title('DoA vs delay (ns)', fontsize=fontsize+2)
         if colorbar:
