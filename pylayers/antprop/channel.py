@@ -561,7 +561,6 @@ class Ctilde(object):
     #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
     #         plt.xlabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
     #         plt.ylabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
-            
     #     else :
     #         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
     #                     cmap=plt.cm.hot_r, edgecolors='none')
@@ -580,7 +579,6 @@ class Ctilde(object):
     #         b.set_label('Path Loss (dB)')
     #     # for t in b.ax.get_yticklabels():
     #     #    t.set_fontsize(20)
-       
     #     plt.axis
 
 
@@ -620,12 +618,12 @@ class Ctilde(object):
             if self.islocal:
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
                     # run locbas to return to global basis
-                    self.locbas(b2g=True)   
+                    self.locbas(b2g=True)
                 else:
                     raise NameError('Channel has no self.Tt or self.Tr')
             self.Tt = Tt
             self.Tr = Tr
-            self.islocal = True    
+            self.islocal = True
 
         # if a return to gloabl is requested
         elif b2g :
@@ -996,7 +994,7 @@ class Ctilde(object):
             Fap = bs.FUsignal(self.fGHz, Fap)
 
         else:
-            if not a.pattern :
+            if a.isfromfile :
                 Fat, Fap = a.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fat = Fat.transpose()
                 Fap = Fap.transpose()
