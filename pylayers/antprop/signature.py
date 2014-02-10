@@ -556,12 +556,12 @@ class Signatures(dict):
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list length is less than cutoff 
-                if child == target:  # if child is the target point - YIELD A SIGNATURE 
+            elif len(visited) < cutoff: # if visited list length is less than cutoff
+                if child == target:  # if child is the target point - YIELD A SIGNATURE
                     #print visited + [target]
                     yield visited + [target] # output signature
-                else:    
-                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
+                else:
+                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD
                     # getting signature until last point
                     diff  = np.where(np.array(visited)<0)[0]
                     if len(diff)==0:
@@ -585,7 +585,7 @@ class Signatures(dict):
                         #fig,ax = cn.show(fig=fig,ax=ax)
                         #plt.show()
                         #pdb.set_trace()
-                        if (typ==0).any(): 
+                        if (typ==0).any():
                         # child no valid (do nothing)
                             visited.pop()
                         else:
@@ -609,10 +609,10 @@ class Signatures(dict):
         ----------
 
         G : networkx Graph Gi
-        source : tuple 
-            interaction (node of Gi) 
-        target : tuple 
-            interaction (node of Gi) 
+        source : tuple
+            interaction (node of Gi)
+        target : tuple
+            interaction (node of Gi)
         cutoff : int
         bt : bool 
             allow backtrace (visite nodes already visited)
@@ -620,7 +620,7 @@ class Signatures(dict):
         Notes
         -----
 
-        adapted from all_simple_path of networkx 
+        adapted from all_simple_path of networkx
 
         1- Determine all nodes connected to Gi 
 
@@ -639,7 +639,7 @@ class Signatures(dict):
 
         # while the list of iterators is not void
         # import ipdb
-        # ipdb.set_trace()    
+        # ipdb.set_trace()
         while stack: #
             # children is the last iterator of stack
 
@@ -648,8 +648,8 @@ class Signatures(dict):
             child = next(children, None)
             # update number of useful segments
             # if there is airwall in visited
-            # 
-            
+            #
+
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
@@ -658,7 +658,7 @@ class Signatures(dict):
                 except:
                     pass
 
-            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
+            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
