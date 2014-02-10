@@ -994,7 +994,7 @@ class Ctilde(object):
             Fap = bs.FUsignal(self.fGHz, Fap)
 
         else:
-            if a.isfromfile :
+            if a.fromfile :
                 Fat, Fap = a.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fat = Fat.transpose()
                 Fap = Fap.transpose()
@@ -1019,7 +1019,7 @@ class Ctilde(object):
             Fbp = bs.FUsignal(self.fGHz, Fbp)
         else:
 
-            if not b.pattern :
+            if b.fromfile :
                 Fbt, Fbp = b.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
                 Fbt = Fbt.transpose()
                 Fbp = Fbp.transpose()
