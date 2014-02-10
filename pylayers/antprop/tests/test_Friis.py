@@ -1,4 +1,5 @@
 from pylayers.antprop.rays import *
+from pylayers.antprop.antenna import *
 from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
 import pylayers.signal.bsignal as bs
@@ -37,8 +38,11 @@ tEtt =[]
 tEpp =[]
 tEtp =[]
 tEpt =[]
+tsc =[]
 dist = np.arange(1,9,1)
 vx    = dist+759
+A = Antenna('def.vsh3')
+A.Fsynth3(fGHz)
 for x in vx:
     rx=array([x,1114,1.0])
     print "Rx :",rx
@@ -57,10 +61,14 @@ for x in vx:
     r3d1.fillinter(S.L)
     C1 = r3d1.eval(fGHz)
     Ett,Epp,Etp,Ept = C1.energy(sumray=True,Friis=True)
+    #sc=C1.prop2tran(a='theta',b='theta')
+    sc=C1.prop2tran(a=A,b=A)
+    sc.energy(sumray=True,Friis=True)
     tEtt.append(Ett)
     tEpp.append(Epp)
     tEtp.append(Etp)
     tEpt.append(Ept)
+    tsc.append(Esc)
 #np.save('tEtt',np.array(tEtt))
 #np.save('tEtp',np.array(tEtp))
 #np.save('tEpt',np.array(tEpt))

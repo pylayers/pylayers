@@ -218,6 +218,7 @@ def edgeout2(L,g):
                     #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                     #    plt.show()
                     #    pdb.set_trace()
+                
                 isegkeep = isegments[bs]     
                 output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
                 # keep all segment above nstr1 and in Cone if T 
@@ -556,12 +557,12 @@ class Signatures(dict):
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list length is less than cutoff 
-                if child == target:  # if child is the target point - YIELD A SIGNATURE 
+            elif len(visited) < cutoff: # if visited list length is less than cutoff
+                if child == target:  # if child is the target point - YIELD A SIGNATURE
                     #print visited + [target]
                     yield visited + [target] # output signature
-                else:    
-                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
+                else:
+                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD
                     # getting signature until last point
                     diff  = np.where(np.array(visited)<0)[0]
                     if len(diff)==0:
@@ -585,7 +586,7 @@ class Signatures(dict):
                         #fig,ax = cn.show(fig=fig,ax=ax)
                         #plt.show()
                         #pdb.set_trace()
-                        if (typ==0).any(): 
+                        if (typ==0).any():
                         # child no valid (do nothing)
                             visited.pop()
                         else:
@@ -602,18 +603,116 @@ class Signatures(dict):
                 stack.pop()
                 visited.pop()
 
-    def propaths(self,G, source, target, cutoff=1):
+    def propaths(self,G, source, target, cutoff=1,bt=False):
         """ seek all simple_path from source to target
 
         Parameters
         ----------
 
         G : networkx Graph Gi
+        source : tuple
+            interaction (node of Gi)
+        target : tuple
+            interaction (node of Gi)
+        cutoff : int
+        bt : bool 
+            allow backtrace (visite nodes already visited)
+
+        Notes
+        -----
+
+        adapted from all_simple_path of networkx
+
+        1- Determine all nodes connected to Gi 
+
+        """
+        #print "source :",source
+        #print "target :",target
+
+        if cutoff < 1:
+            return
+
+        visited = [source]
+        # stack is a list of iterators
+        stack = [iter(G[source])]
+        # lawp = list of airwall position in visited
+        lawp = []
+
+        # while the list of iterators is not void
+        # import ipdb
+        # ipdb.set_trace()
+        while stack: #
+            # children is the last iterator of stack
+
+            children = stack[-1]
+            # next child
+            child = next(children, None)
+            # update number of useful segments
+            # if there is airwall in visited
+            #
+
+            if child is None  : # if no more child
+                stack.pop()   # remove last iterator
+                visited.pop() # remove from visited list
+                try:
+                    lawp.pop()
+                except:
+                    pass
+
+            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
+                if child == target:  # if child is the target point
+                    #print visited + [target]
+                    yield visited + [target] # output signature
+
+                elif (child not in visited) or (bt): # else visit other node
+                    # only visit output nodes except if bt
+                    #pdb.set_trace()
+                    try:
+                        dintpro = G[visited[-1]][child]['output']
+                    except:
+                        dintpro ={}
+
+                    stack.append(iter(dintpro.keys()))
+                    #stack.append(iter(G[visited[-1]][child]['output']))
+                    visited.append(child)
+                    # check if child (current segment) is an airwall
+                    if self.L.di[child][0] in self.L.name['AIR']:
+                        lawp.append(1)
+                    else:
+                        lawp.append(0)
+
+
+
+            else: #len(visited) == cutoff (visited list is too long)
+                if child == target or target in children:
+                    #print visited + [target]
+                    yield visited + [target]
+
+                stack.pop()
+                visited.pop()
+                try:
+                    lawp.pop()
+                except:
+                    pass
+
+    def propaths2(self,G, di,  source, target,dout={}, cutoff=1,bt=False):
+        """ seek all simple_path from source to target
+
+        Parameters
+        ----------
+
+        G : networkx Graph Gi
+        di : dictionnary that map tuple to signature 
+            see Layout.di
+        dout : dictionnary
+            ouput dictionnary
         source : tuple 
             interaction (node of Gi) 
         target : tuple 
             interaction (node of Gi) 
         cutoff : int
+        bt : bool 
+            allow backtrace (visite nodes already visited)
 
         Notes
         -----
@@ -659,9 +758,16 @@ class Signatures(dict):
             elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
                 if child == target:  # if child is the target point
                     #print visited + [target]
-                    yield visited + [target] # output signature
-                elif child not in visited: # else visit other node
-                    # only visit output nodes
+                    path = visited + [target]
+                    try:
+                        dout[len(path)].append([di[p] for p in path])   
+                    except:
+                        dout[len(path)]=[]
+                        dout[len(path)].append([di[p] for p in path])   
+                    #yield visited + [target] # output signature
+
+                elif (child not in visited) or (bt): # else visit other node
+                    # only visit output nodes except if bt
                     #pdb.set_trace()
                     try:
                         dintpro = G[visited[-1]][child]['output']
@@ -681,13 +787,126 @@ class Signatures(dict):
 
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
+                    path = visited + [target]
+                    try:
+                        dout[len(path)].append([di[p] for p in path])   
+                    except:
+                        dout[len(path)]=[]
+                        dout[len(path)].append([di[p] for p in path])   
                     #print visited + [target]
-                    yield visited + [target]
+                    #yield visited + [target]
 
                 stack.pop()
                 visited.pop()
-                lawp.pop()
+                try:
+                    lawp.pop()
+                except:
+                    pass
+        return dout
 
+
+
+    def procone2(self,L, G, source, target,dout={}, cutoff=1):
+        """ seek all simple_path from source to target looking backward
+
+        Parameters
+        ----------
+        
+        L : Layout
+        G : networkx Graph Gi
+        dout : dictionnary
+            ouput dictionnary
+        source : tuple 
+            interaction (node of Gi) 
+        target : tuple 
+            interaction (node of Gi) 
+        cutoff : int
+
+        Notes
+        -----
+
+        adapted from all_simple_path of networkx 
+
+        1- Determine all nodes connected to Gi 
+
+        """
+        #print "source :",source
+        #print "target :",target
+
+        if cutoff < 1:
+            return
+
+        visited = [source]
+
+        # stack is a list of iterators
+        stack = [iter(G[source])]
+
+        # while the list of iterators is not void
+        while stack: #
+            # children is the last iterator of stack
+            children = stack[-1]
+            # next child
+            child = next(children, None)
+            #print "child : ",child
+            #print "visited :",visited
+            if child is None  : # if no more child
+                stack.pop()   # remove last iterator
+                visited.pop() # remove from visited list
+            elif len(visited) < cutoff: # if visited list length is less than cutoff 
+                if child == target:  # if child is the target point - YIELD A SIGNATURE 
+                    #print visited + [target]
+                    #yield visited + [target] # output signature
+                    path = visited + [target]
+                    try:
+                        dout[len(path)].append([L.di[p] for p in path])   
+                    except:
+                        dout[len(path)]=[]
+                        dout[len(path)].append([L.di[p] for p in path])   
+                else:    
+                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
+                    # getting signature until last point
+                    diff  = np.where(np.array(visited)<0)[0]
+                    if len(diff)==0:
+                        brin = visited
+                    else:
+                        brin = visited[diff[-1]:]
+                    # looking backward with a cone
+                    if len(brin)>2:
+                        # warning visited is also appended visited[-2] is the
+                        # last node
+                        brin.append(child)
+                        s = Signature(brin)
+                        s.evf(L)
+                        cn = cone.Cone()
+                        ta,he = s.unfold()
+                        segchild = np.vstack((ta[:,-1],he[:,-1])).T
+                        segvm1 = np.vstack((ta[:,-2],he[:,-2])).T
+                        cn.from2segs(segchild,segvm1)
+                        typ,proba = cn.belong_seg(ta[:,:-2],he[:,:-2],proba=False)
+
+                        if (typ==0).any(): 
+                        # child no valid (do nothing)
+                            visited.pop()
+                        else:
+                        # child valid (append child to visited and go forward)
+                            stack.append(iter(G[visited[-2]][child]['output']))
+                    else:
+                        stack.append(iter(G[visited[-1]][child]['output']))
+                        visited.append(child)
+
+            else: #len(visited) == cutoff (visited list is too long)
+                if child == target or target in children:
+                    #print visited + [target]
+                    #yield visited + [target]
+                    path = visited + [target]
+                    try:
+                        dout[len(path)].append([L.di[p] for p in path])   
+                    except:
+                        dout[len(path)]=[]
+                        dout[len(path)].append([L.di[p] for p in path])   
+                stack.pop()
+                visited.pop()
+        return dout
 
     # def propaths(self,G, source, target, cutoff=1, cutprob =0.5):
     #     """ seek all simple_path from source to target
@@ -1033,7 +1252,7 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
-    def run4(self,cutoff=2,algo='new',progress=False):
+    def run4(self,cutoff=2,algo='old',bt=False,progress=False):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1041,6 +1260,11 @@ class Signatures(dict):
 
         cutoff : int
             limit the exploration of all_simple_path
+        bt : bool
+            backtrace (allow visit already visited nodes in simple path algorithm)
+        progress : bool
+            display the time passed in the loop
+
 
         Returns
         -------
@@ -1172,7 +1396,7 @@ class Signatures(dict):
                     if algo=='new':
                         paths = list(self.procone(self.L,Gi,source=s,target=t,cutoff=cutoff))
                     else:
-                        paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+                        paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff,bt=bt))
 
                     #paths = [nx.shortest_path(Gi,source=s,target=t)]
                 else:
@@ -1201,6 +1425,114 @@ class Signatures(dict):
                         self[len(path)] = np.vstack((self[len(path)],sigarr))
                     except:
                         self[len(path)] = sigarr
+
+
+    def run5(self,cutoff=2,algo='old',bt=False,progress=False):
+        """ get signatures (in one list of arrays) between tx and rx
+
+        Parameters
+        ----------
+
+        cutoff : int
+            limit the exploration of all_simple_path
+        bt : bool
+            backtrace (allow visit already visited nodes in simple path algorithm)
+        progress : bool
+            display the time passed in the loop
+
+
+        Returns
+        -------
+
+        sigslist :  numpy.ndarray
+
+        """
+
+        self.cutoff   = cutoff
+        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+
+        # list of interaction source
+        lis = self.L.Gt.node[self.source]['inter']
+        # list of interaction target
+        lit = self.L.Gt.node[self.target]['inter']
+
+        # source
+
+        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
+        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
+
+        # target
+   
+        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
+        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
+
+        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
+        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
+
+        # list of interaction visible from source
+        lis  = lisT + lisR
+        # list of interaction visible from target
+        lit  = litT + litR
+
+
+        Gi = self.L.Gi
+        Gi.pos = self.L.Gi.pos
+#       
+        # TODO : This has to be changed for handling diffraction
+        # 
+        # remove diffractions from Gi
+        Gi = gidl(Gi)
+
+        #initilaize dout dictionnary
+        dout={}
+        
+
+        # progresss stuff...
+        lmax = len(lis)*len(lit)
+        pe = 0
+        tic = time.time()
+        tic0 = tic
+        #for interaction source  in list of source interaction
+        for us,s in enumerate(lis):
+            #for target interaction in list of target interaction
+
+            for ut,t in enumerate(lit):
+                
+                if progress :
+
+                    ratio = np.round((((us)*len(lit)+ut)/(1.*lmax))*10 )
+                    if ratio > pe:
+                        pe = ratio
+                        toc = time.time()
+                        print '~%d ' % (ratio*10),
+                        print '%',
+                        print '%6.3f %6.3f' % (toc-tic, toc-tic0)
+                        tic = toc
+                if (s != t):
+                    if algo=='new':
+                        dout= self.procone2(self.L,Gi,dout=dout, source=s,target=t,cutoff=cutoff)
+                    else :
+                        dout = self.propaths2(Gi,di=self.L.di,dout=dout,source=s,target=t,cutoff=cutoff,bt=bt)
+                else:
+                    try:
+                        dout[1].append(self.L.di[s])
+                    except:
+                        dout[1]=[]
+                        dout[1].append(self.L.di[s])
+ 
+        for k in dout.keys():
+            adout=np.array((dout[k]))
+            shad = np.shape(adout)
+            # manage the case of signatures with only 1 interaction
+            if k == 1:
+                adout=adout.reshape(shad[0],1,shad[1])
+                shad=np.shape(adout)
+            # rehape (rays * 2 , interaction)
+            # the 2 dimension comes from the signature definition : 
+            # 1st row = segment index
+            # 2nd row = tyep of interaction
+            self[k] = adout.swapaxes(1,2).reshape(shad[0]*shad[2],shad[1])
+
 
     def run2(self,cutoff=1,dcut=2):
         """ get signatures (in one list of arrays) between tx and rx

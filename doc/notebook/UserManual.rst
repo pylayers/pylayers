@@ -2620,6 +2620,7 @@ If a realistic antenna is applied it gives
 .. code-block:: python
 
     sca = C.prop2tran(S.tx.A,S.rx.A)
+
 Calculate UWB Channel Impulse Response
 --------------------------------------
 
@@ -3236,7 +3237,8 @@ Below ``ni`` is the number of interactions
 
 
 
-Calulating the Propagation Channel
+
+Calculating the Propagation Channel
 ----------------------------------
 
 The propagation channel is a ``Ctilde`` object. This object can be

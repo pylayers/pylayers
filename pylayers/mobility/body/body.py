@@ -11,7 +11,9 @@ import pdb as pdb
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 import pylayers.util.geomutil as geu
+import pylayers.mobility.body.DeuxSeg as seg
 import doctest
+import itertools as itt
 
 def ChangeBasis(u0, v0, w0, v1):
     """
@@ -87,6 +89,7 @@ class Body(object):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
+        self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
         self.loadC3D(filename=_filemocap,centered=True)
 
@@ -274,7 +277,7 @@ class Body(object):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj,t=0):
+    def settopos(self,traj,t=0,cs=False):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -358,9 +361,19 @@ class Body(object):
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
 
+        # if asked for calculation of coordinates systems
+        if cs:
+            # calculate cylinder coordinate system 
+            self.setccs(topos=True)
+            # calculate device coordinate system 
+            self.setdcs(topos=True)
+            # calculate antenna coordinate system 
+            self.setacs()
 
 
-    def setdcs(self):
+
+
+    def setdcs(self, topos = True, frameId =0):
         """ set device coordinate system (dcs) from a topos
 
         This method evaluates the set of all dcs.
@@ -368,6 +381,14 @@ class Body(object):
         the body.
 
         If N is the number of antenna an dcs is an MDA of size 3x4xN
+
+        Parameters
+        ----------
+
+        topos : boolean
+                default : True
+        frameId : int
+                default 0 
 
         Returns
         -------
@@ -416,8 +437,15 @@ class Body(object):
             kta = self.sl[int(Id),0]
             khe = self.sl[int(Id),1]
             Rcyl = self.sl[int(Id),2]
-            pta = np.array(self.topos[:,kta])
-            phe = np.array(self.topos[:,khe])
+
+            if topos == True :
+                pta = np.array(self.topos[:,kta])
+                phe = np.array(self.topos[:,khe])
+            else:
+                pta = np.array(self.d[:,kta, frameId])
+                phe = np.array(self.d[:,khe, frameId])
+
+
             vl = phe - pta
             lmax = np.sqrt(np.dot(vl,vl))
 
@@ -431,6 +459,19 @@ class Body(object):
             CCSr = np.dot(CCS,Rot)
             neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
             self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
+
+    def setacs(self):
+        """ set antenna coordinate system (dcs) from a topos or a set of frames
+
+        """
+
+        self.acs = {}
+        for dev in self.dev.keys():
+            Rab = self.dev[dev]['T']
+            U = self.dcs[dev]
+            # extract only orthonormal basis
+            Rbg = U[:,1:]
+            self.acs[dev]  = np.dot(Rbg,Rab)
 
     def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
         """ load nframes of motion capture C3D file
@@ -875,6 +916,7 @@ class Body(object):
         # display antenna pattern
 
         if kwargs['pattern']:
+            self.setacs()
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.dev[key]['file'])
                 if not hasattr(Ant,'SqG'):
@@ -884,12 +926,13 @@ class Body(object):
                 geo = geu.Geomoff(_filepatt)
                 V = Ant.SqG[kwargs['k'],:,:]
                 #T = U[:,1:]
-                Rab = self.dev[key]['T']
+                #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
-                Rbg = U[:,1:]
+                #Rbg = U[:,1:]
                 # combine rotation antenna -> body -> global
-                T = np.dot(Rbg,Rab)
+                #T = np.dot(Rbg,Rab)
                 #T = np.eye(3)
+                T  = self.acs[key]
                 geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
@@ -999,6 +1042,93 @@ class Body(object):
             #~ T = geu.onb(pA,pB,vg)
             #~ self.ccs[k,:,:] = T
 
+
+    def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):
+        """
+
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+        Returns
+        -------
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
+
+        intersect = np.zeros((self.ncyl,1))
+        for k in range (self.ncyl):
+            if k not in cyl:
+
+                if topos  == True:
+                    kta  = self.sl[k,0]
+                    khe  = self.sl[k,1]
+                    C = self.topos[:,kta]
+                    D = self.topos[:,khe]
+                else:
+                    kta  = self.sl[k,0]
+                    khe  = self.sl[k,1]
+                    C = self.d[:,kta,frameId]
+                    D = self.d[:,khe,frameId]
+
+                alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+                if alpha < 0:
+                    alpha = 0
+                if alpha > 1 :
+                    alpha  = 1
+                if beta < 0:
+                    beta = 0
+                if beta > 1:
+                    beta = 1
+                dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+
+                if dmin  < self.sl[k,2]:
+                    intersect[k]=1
+
+        return intersect
+
+    def body_link(self, topos = True,frameId = 0):
+        """
+
+        Parameters
+        ----------
+        topos :  boolean
+            default True
+        frameId : int
+            used in case topos == False. Indicates the frame Id.
+
+        Returns
+        -------
+
+        link_vis : np.array (,nlinks)
+            number of intersected cylinder on the link
+
+        links is a list of couple of strings inticating the different links
+        between devices.
+
+        """
+
+        self.links = list(itt.combinations(self.dev.keys(),2))
+        n_link = len(self.links)
+        link_vis = np.ndarray(shape = (n_link))
+
+        for k,link in enumerate(self.links):
+            A = self.dcs[link[0]][:,0]
+            B = self.dcs[link[1]][:,0]
+            inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])
+
+            link_vis[k] =  sum(inter)
+        return link_vis
+
+
     def cylinder_basis_k(self, frameId):
         """
 
@@ -1023,6 +1153,7 @@ class Body(object):
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
         """
+
         Parameters
         ----------
 
@@ -1173,11 +1304,11 @@ if __name__ == '__main__':
     bd = Body(_filemocap='walk.c3d')
     lt = tr.importsn()
     #traj = tr.Trajectory()
-    bd.settopos(lt[0],0.3)
-    bd.setccs(topos=True)
-    bd.setdcs()
+    bd.settopos(lt[0],0.3,cs=True)
+    #bd.setccs(topos=True)
+    #bd.setdcs()
     #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
-    #bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=False)
+    bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=True)
     bd.show()
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
