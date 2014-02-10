@@ -106,7 +106,7 @@ class RadioNode(object):
                 os.remove(fileini)
             except:
                 pass
-            
+
         prefix = _fileini.replace('.ini','')
         prefix = prefix.replace('.spa','')
         self.fileini = prefix + '.ini'

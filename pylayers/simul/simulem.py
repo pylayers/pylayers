@@ -680,7 +680,7 @@ class Simul(object):
         self.config.add_section("frequency")
         self.config.add_section("waveform")
         self.config.add_section("output")
-       
+
         self.dout = {}
         self.dlch = {}
         self.dtra = {}
@@ -691,7 +691,7 @@ class Simul(object):
         self.dfield = {}
         self.dcir = {}
         self.output = {}
- 
+
         #if os.path.isfile(pyu.getlong(_filesimul,'ini')):
         self.filematini = "matDB.ini"
         self.fileslabini = "slabDB.ini"
@@ -875,7 +875,7 @@ class Simul(object):
 
         Parameters
         ----------
-        
+ 
         verbose : boolean
             Verbose mode on/off
 
@@ -987,9 +987,9 @@ class Simul(object):
             pass
         self.config.write(fd)
         fd.close()
-        # save tx 
+        # save tx
         self.tx.save()
-        # save rx 
+        # save rx
         self.rx.save()
         # save slab and mat file
         # --
@@ -998,7 +998,7 @@ class Simul(object):
         # --
         # fix bug #189
         #   slab is a member of S.L not of S anymore
-        #   mat is a member of S.L.sl not of S.slab 
+        #   mat is a member of S.L.sl not of S.slab
         try:
             self.L.sl.save(self.fileslabini)
         except:
@@ -1149,7 +1149,7 @@ class Simul(object):
                                     mustexist=0)
         pyu.unzipd(dirname,zipfileName)
         root.withdraw()
-        print "Current project loaded in", dirname 
+        print "Current project loaded in", dirname
 
     def choose(self):
         """
@@ -1895,6 +1895,15 @@ class Simul(object):
 
     def show3(self,rays=[],**kwargs):
         """ geomview display of the simulation configuration
+
+        Parameters
+        ----------
+
+        centered : boolean
+            center the scene if True
+        bdis  : boolean
+            display local basis
+
         """
         try:
             self.tx.save()
@@ -1925,7 +1934,6 @@ class Simul(object):
         fo.write(stst)
         fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
         if rays !=[]:
-
             kwargs['bdis']=False
             kwargs['L']=self.L
             kwargs['centered']=False

@@ -89,6 +89,7 @@ class Body(object):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
+        self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
         self.loadC3D(filename=_filemocap,centered=True)
 
@@ -276,7 +277,7 @@ class Body(object):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj,t=0):
+    def settopos(self,traj,t=0,cs=False):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -360,6 +361,16 @@ class Body(object):
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
 
+        # if asked for calculation of coordinates systems
+        if cs:
+            # calculate cylinder coordinate system 
+            self.setccs(topos=True)
+            # calculate device coordinate system 
+            self.setdcs(topos=True)
+            # calculate antenna coordinate system 
+            self.setacs()
+
+
 
 
     def setdcs(self, topos = True, frameId =0):
@@ -370,6 +381,14 @@ class Body(object):
         the body.
 
         If N is the number of antenna an dcs is an MDA of size 3x4xN
+
+        Parameters
+        ----------
+
+        topos : boolean
+                default : True
+        frameId : int
+                default 0 
 
         Returns
         -------
@@ -440,6 +459,19 @@ class Body(object):
             CCSr = np.dot(CCS,Rot)
             neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
             self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
+
+    def setacs(self):
+        """ set antenna coordinate system (dcs) from a topos or a set of frames
+
+        """
+
+        self.acs = {}
+        for dev in self.dev.keys():
+            Rab = self.dev[dev]['T']
+            U = self.dcs[dev]
+            # extract only orthonormal basis
+            Rbg = U[:,1:]
+            self.acs[dev]  = np.dot(Rbg,Rab)
 
     def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
         """ load nframes of motion capture C3D file
@@ -884,6 +916,7 @@ class Body(object):
         # display antenna pattern
 
         if kwargs['pattern']:
+            self.setacs()
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.dev[key]['file'])
                 if not hasattr(Ant,'SqG'):
@@ -893,12 +926,13 @@ class Body(object):
                 geo = geu.Geomoff(_filepatt)
                 V = Ant.SqG[kwargs['k'],:,:]
                 #T = U[:,1:]
-                Rab = self.dev[key]['T']
+                #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
-                Rbg = U[:,1:]
+                #Rbg = U[:,1:]
                 # combine rotation antenna -> body -> global
-                T = np.dot(Rbg,Rab)
+                #T = np.dot(Rbg,Rab)
                 #T = np.eye(3)
+                T  = self.acs[key]
                 geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
@@ -1270,11 +1304,11 @@ if __name__ == '__main__':
     bd = Body(_filemocap='walk.c3d')
     lt = tr.importsn()
     #traj = tr.Trajectory()
-    bd.settopos(lt[0],0.3)
-    bd.setccs(topos=True)
-    bd.setdcs()
+    bd.settopos(lt[0],0.3,cs=True)
+    #bd.setccs(topos=True)
+    #bd.setdcs()
     #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
-    #bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=False)
+    bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=True)
     bd.show()
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
