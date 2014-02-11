@@ -1119,13 +1119,14 @@ def ellipse(fd, p, vth, vph, Eth, Eph, N):
 
      Parameters
      ----------
-       fd    : file descriptor
-       p     : ellipse center
-       vth   : unitary vector along theta
-       vph   : unitary vector along phi
-       Eth   : complex
-       Eph   : complex
-       N     : descretization step
+
+     fd    : file descriptor
+     p     : ellipse center
+     vth   : unitary vector along theta
+     vph   : unitary vector along phi
+     Eth   : complex
+     Eph   : complex
+     N     : descretization step
 
     """
 
@@ -1169,11 +1170,9 @@ def ellipse(fd, p, vth, vph, Eth, Eph, N):
     fd.write("\n")
     for i in range(N - 1):
         fd.write("%6.3f %6.3f %6.3f\n" % (pc[0, i], pc[1, i], pc[2, i]))
-        fd.write("%6.3f %6.3f %6.3f\n" % (pc[0, i + 1], pc[1, i +
-                                                           1], pc[2, i + 1]))
+        fd.write("%6.3f %6.3f %6.3f\n" % (pc[0, i + 1], pc[1, i + 1], pc[2, i + 1]))
         fd.write("\n")
-    fd.write("%6.3f %6.3f %6.3f\n" % (pc[0, N - 1], pc[1, N - 1], pc[2,
-                                                                     N - 1]))
+    fd.write("%6.3f %6.3f %6.3f\n" % (pc[0, N - 1], pc[1, N - 1], pc[2, N - 1]))
     fd.write("%6.3f %6.3f %6.3f\n" % (pc[0, 0], pc[1, 0], pc[2, 0]))
     fd.write("\n")
     for i in range(N):

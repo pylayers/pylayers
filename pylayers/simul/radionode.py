@@ -106,7 +106,7 @@ class RadioNode(object):
                 os.remove(fileini)
             except:
                 pass
-            
+
         prefix = _fileini.replace('.ini','')
         prefix = prefix.replace('.spa','')
         self.fileini = prefix + '.ini'
@@ -623,7 +623,7 @@ class RadioNode(object):
             gv.pattern(ant.theta,ant.phi,V,po=self.position,T=T,ilog=False,minr=0.01,maxr=1.)
             self.filegeom=filename + '.off'
         except:
-            pdb.set_trace()
+            #pdb.set_trace()
             if hasattr(self,'position'):
                 pass
             #    problem gv is not a geomvect    

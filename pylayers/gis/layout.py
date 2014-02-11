@@ -294,10 +294,9 @@ class Layout(object):
             st = st + "sla : list of all slab names (Nsmax+Nss+1)" +"\n"
         if hasattr(self,'degree'):
             st = st + "degree : degree of nodes " +"\n"
-            
 
-        return(st) 
 
+        return(st)
     def ls(self, typ='ini'):
         """ list the available file in dirstruc
 
@@ -348,6 +347,7 @@ class Layout(object):
         lfile_s.sort()
 
         return lfile_s
+
 
     def delete(self):
         """ delete Layout graphs
