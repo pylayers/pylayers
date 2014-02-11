@@ -1236,7 +1236,7 @@ def Global_Trajectory(cycle, traj):
 if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()
-    bd = Body(_filemocap='walk.c3d')
+    bd = Body(_filebody='Alex.ini')
     lt = tr.importsn()
     #traj = tr.Trajectory()
     bd.settopos(lt[0],0.3)
