@@ -10,7 +10,10 @@ import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
 from pylayers.antprop.raysc import GrRay3D
 from pylayers.util.project import *
-
+try:
+    import h5py
+except:
+    print 'h5py is not installed: Ctilde(object cannot be saved)'
 
 class Ctilde(object):
     """ container for the 4 components of the polarimetric ray channel
@@ -89,6 +92,112 @@ class Ctilde(object):
                                        title="Please choose a .field file",
                                        initialdir=tuddir)
         self.load(filefield, transpose=False)
+
+
+    def save5(self,Lfilename,idx,a,b):
+        """ save Ctilde object in hdf5 format
+
+        Parameters
+        ----------
+
+        Lfilename  : string
+            Layout filename
+        idx : int
+            file identifier number
+        a : np.ndarray
+            postion of point a (transmitter)
+        b : np.ndarray
+            postion of point b (receiver)
+        
+
+        """
+
+        Lfilename=Lfilename.split('.')[0]
+        _filename= Lfilename +'_' + str(idx).zfill(5) + '.hdf5'
+        filename=pyu.getlong(_filename,pstruc['DIRCT'])
+
+        # save channel in global basis
+        if self.islocal:
+            self.locbas(b2g=Truew)
+
+        f=h5py.File(filename,'w')
+        f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
+        f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+        f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
+        f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
+        f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
+
+        f.create_dataset('fGHz',shape=np.shape(self.fGHz),data=self.fGHz)
+
+
+        f.create_dataset('Ctt_y',shape=np.shape(self.Ctt.y),data=self.Ctt.y)
+        f.create_dataset('Cpp_y',shape=np.shape(self.Cpp.y),data=self.Cpp.y)
+        f.create_dataset('Cpt_y',shape=np.shape(self.Cpt.y),data=self.Cpt.y)
+        f.create_dataset('Ctp_y',shape=np.shape(self.Ctp.y),data=self.Ctp.y)
+
+        f.create_dataset('Tx',shape=np.shape(a),data=a)
+        f.create_dataset('Rx',shape=np.shape(b),data=b)
+
+        f.close()
+
+
+
+
+
+
+    def load5(self,Lfilename,idx):
+        """ load Ctilde object in hdf5 format
+
+        Parameters
+        ----------
+
+        Lfilename  : string
+            Layout filename
+        idx : int
+            file identifier number
+        
+
+        Returns
+        -------
+
+        (Layout filename , Tx position, Rx position)
+
+        """
+
+        _Lfilename=Lfilename.split('.')[0]
+        _filename= _Lfilename +'_' + str(idx).zfill(5) + '.hdf5'
+        filename=pyu.getlong(_filename,pstruc['DIRCT'])
+
+        f=h5py.File(filename,'r')
+
+        self.fGHz = f['fGHz'][:]
+        self.tang = f['tang'][:]
+        self.rang = f['rang'][:]
+        self.tauk = f['tauk'][:]
+
+        self.Tt = f['Tt'][:]
+        self.Tr = f['Tr'][:]
+
+        Ctt = f['Ctt_y'][:]
+        Cpp = f['Cpp_y'][:]
+        Ctp = f['Ctp_y'][:]
+        Cpt = f['Cpt_y'][:]
+
+        self.Ctt = bs.FUsignal(self.fGHz, Ctt)
+        self.Ctp = bs.FUsignal(self.fGHz, Ctp)
+        self.Cpt = bs.FUsignal(self.fGHz, Cpt)
+        self.Cpp = bs.FUsignal(self.fGHz, Cpp)
+        tx = f['Tx'][:]
+        rx = f['Rx'][:]
+
+
+        self.nfreq = len(self.fGHz)
+        self.nray = np.shape(self.Cpp.y)[0]
+
+        f.close()
+
+
+        return (Lfilename ,tx,rx)
 
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
@@ -624,6 +733,7 @@ class Ctilde(object):
             self.Tt = Tt
             self.Tr = Tr
             self.islocal = True
+            
 
         # if a return to gloabl is requested
         elif b2g :
@@ -655,9 +765,9 @@ class Ctilde(object):
         # rangl : r x 2
         #
 
+
         Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
         Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
-
         #
         # update direction of departure and arrival
         #
@@ -707,6 +817,7 @@ class Ctilde(object):
         self.Ctp = bs.FUsignal(fGHz, Ctpl)
         self.Cpt = bs.FUsignal(fGHz, Cptl)
         self.Cpp = bs.FUsignal(fGHz, Cppl)
+
 
 
         return self
