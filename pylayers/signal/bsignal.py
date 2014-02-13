@@ -4,7 +4,7 @@
 Module Bsignal
 
 Summary
-=======
+======m
 
 Bsignal
 Usignal
@@ -30,6 +30,8 @@ from pylayers.util.pyutil import *
 from pylayers.util.plotutil import *
 import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin
+from sklearn import mixture
+import scipy.stats as st
 
 
 class Bsignal(object):
@@ -2776,7 +2778,7 @@ class FUsignal(FBsignal, Usignal):
     plotri   : plot real part and imaginary part
     plotdB   : plot modulus in dB
     get      : get k th ray
-    chantap  : calculates channel taps
+    tap      : calculates channel taps
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
@@ -3395,7 +3397,7 @@ class FUsignal(FBsignal, Usignal):
         return(V)
 
 
-    def chantap(self,**kwargs):
+    def tap(self,**kwargs):
         """ calculate channel tap
 
         Parameters
@@ -3403,7 +3405,7 @@ class FUsignal(FBsignal, Usignal):
 
         fcGHz : float
             center frequency GHz
-        WGHz :  float  
+        WGHz :  float
             bandwidth GHz
         Ntap :  number of taps
         baseband : boolean
@@ -3417,7 +3419,7 @@ class FUsignal(FBsignal, Usignal):
 
         """
         defaults = { 'fcGHz':4.5,
-                    'WGHz':1,
+                    'WMHz':1,
                     'Ntap':100,
                     'baseband':True}
 
@@ -3426,7 +3428,7 @@ class FUsignal(FBsignal, Usignal):
                 kwargs[key] = value
 
         fcGHz=kwargs['fcGHz']
-        WGHz=kwargs['WGHz']
+        WGHz=kwargs['WMHz']
         Ntap=kwargs['Ntap']
         # yb : tau x f x 1
         if baseband:
@@ -3438,7 +3440,7 @@ class FUsignal(FBsignal, Usignal):
         # l : tau x 1 x 1
         tau = self.tau0[:,np.newaxis,np.newaxis]
         # S : tau x f x tap (form 2.34 [Tse])
-        S   = np.sinc(l-tau*WGHz)
+        S   = np.sinc(l-tau*WMHz/1000.)
         # sum over tau : htap : f x tap
         htap = np.sum(yb*S,axis=0)
         # sum over frequency axis : htapi : tap
@@ -3737,6 +3739,104 @@ class FUDAsignal(FUDsignal):
         s = FUDsignal.__repr__(self)
         return(s)
 
+    def tap(self,**kwargs):
+        """
+        """
+        defaults = {'fcGHz':4.5,
+                    'WMHz':1,
+                    'Ntap':10,
+                    'Ns':8,
+                    'Nm':10,
+                    'Va':1,   #meter/s
+                    'Vb':1}   #meter/s
+
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        fcGHz=kwargs['fcGHz']
+        WMHz=kwargs['WMHz']
+        Ntap=kwargs['Ntap']
+        Ns=kwargs['Ns']
+        Va = kwargs['Va']
+        Vb = kwargs['Vb']
+
+        lam = 0.3/fcGHz
+        lamo2 = lam/2.
+        fmaHz = (Va/0.3)*fcGHz
+        fmbHz = (Vb/0.3)*fcGHz
+        # Coherence Time
+        Tca = 9/(14*np.pi*fmaHz)
+        Tcb = 9/(14*np.pi*fmbHz)
+        Tc  = 9/(14*np.pi*(fmaHz+fmbHz))
+
+        # DoD DoA
+
+        theta_a = self.dod[:,0]
+        phi_a = self.dod[:,1]
+        theta_b = self.doa[:,0]
+        phi_b = self.doa[:,1]
+
+        ska = np.array([np.cos(theta_a)*np.cos(phi_a),np.cos(theta_a)*np.sin(phi_a),np.sin(theta_a)])
+        skb = np.array([np.cos(theta_b)*np.cos(phi_b),np.cos(theta_b)*np.sin(phi_b),np.sin(theta_b)])
+
+        # Monte Carlo
+        Ns = 8
+        # ua x va x ub x vb x m x tap
+        ua = np.linspace(0,1,Ns)[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        va = np.linspace(0,1,Ns)[np.newaxis,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        ub = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,:,np.newaxis,np.newaxis,np.newaxis]
+        vb = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis,np.newaxis]
+
+        # uniform sampling over the sphere
+        tha = np.arccos(2*va-1)
+        pha = 2*np.pi*ua
+        thb = np.arccos(2*vb-1)
+        phb = 2*np.pi*ub
+
+        vax = np.cos(tha)*np.cos(pha)
+        vay = np.cos(tha)*np.sin(pha)
+        vaz = np.sin(tha)*np.cos(pha*0)
+
+        vaxy = np.concatenate([vax[np.newaxis,np.newaxis,np.newaxis,...],vay[np.newaxis,np.newaxis,np.newaxis,...]])
+        va = np.concatenate([vaxy,vaz[np.newaxis,np.newaxis,np.newaxis,...]])
+
+        vbx = np.cos(thb)*np.cos(phb)
+        vby = np.cos(thb)*np.sin(phb)
+        vbz = np.sin(thb)*np.cos(phb*0)
+
+        vbxy = np.concatenate([vbx[np.newaxis,np.newaxis,np.newaxis,...],vby[np.newaxis,np.newaxis,np.newaxis,...]])
+
+        # 3 x r x f x ua x va x ub x vb x m x tap
+        vb = np.concatenate([vbxy,vbz[np.newaxis,np.newaxis,np.newaxis,...]])
+
+        # beta : r x f x ua x va x ub x vb x m x tap
+        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
+        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
+        mmax = 10000
+        Nm = 100
+
+        # m discrete time axis
+        # r x f x ua x va x ub x vb x m x tap
+        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
+        # r x f x ua x va x ub x vb x m x tap
+        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
+        # l : r x f x ua x va x ub x vb x m x tap
+        tau = self.tau0[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+
+        ba  = betaa*Va*m/(0.3*WMHz*1e6)
+        bb  = betab*Vb*m/(0.3*WMHz*1e6)
+        tau2 = tau + ba + bb
+
+        # S : r x f x ua x va x ub x vb x m x tap (form 2.34 [D. Tse])
+        S   = np.sinc(l-tau2*WMHz/1000.)
+        # sum over r :  f x ua x va x ub x vb x m x tap
+        htap = sum(S*self.y[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+               *exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
+
+        htap.reshape(Nf,Ns**4,Nm,Ntap)
+        return(htap)
 
 class FHsignal(FUsignal):
     """
@@ -3957,7 +4057,6 @@ class EnImpulse(TUsignal):
         """
         pass
 
-class MaskImpulse(TUsignal):
     """
     MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
 
@@ -3999,7 +4098,7 @@ class MaskImpulse(TUsignal):
         #alpha  = 1./(2*np.sqrt(abs(thresh)*np.log(10)/20))
         alpha = 1. / (2 * np.sqrt(abs(thresh) * np.log(10) / 10))
         tau = 1 / (alpha * band * np.pi * np.sqrt(2))
-        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(pi))
+        A = np.sqrt(2 * R * Tp * 10 ** (Pm / 10)) / (tau * np.sqrt(np.pi))
         if len(x) == 0:
             te = 1.0 / fe
             Tw = 10. / band
@@ -4008,7 +4107,7 @@ class MaskImpulse(TUsignal):
             Tww = 2 * te * Ni
             x = np.linspace(-0.5 * Tww, 0.5 * Tww, 2 * Ni + 1)
 
-        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * pi * fc * x)
+        y = A * np.exp(-(x / tau) ** 2) * np.cos(2 * np.pi * fc * x)
         self.x = x
         self.y = y
 
