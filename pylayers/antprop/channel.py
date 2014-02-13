@@ -125,7 +125,10 @@ class Ctilde(object):
         f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
         f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
         f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
+        f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
+
         f.create_dataset('fGHz',shape=np.shape(self.fGHz),data=self.fGHz)
+
 
         f.create_dataset('Ctt_y',shape=np.shape(self.Ctt.y),data=self.Ctt.y)
         f.create_dataset('Cpp_y',shape=np.shape(self.Cpp.y),data=self.Cpp.y)
@@ -158,7 +161,7 @@ class Ctilde(object):
         -------
 
         (Layout filename , Tx position, Rx position)
-        
+
         """
 
         _Lfilename=Lfilename.split('.')[0]
@@ -170,6 +173,8 @@ class Ctilde(object):
         self.fGHz = f['fGHz'][:]
         self.tang = f['tang'][:]
         self.rang = f['rang'][:]
+        self.tauk = f['tauk'][:]
+
         self.Tt = f['Tt'][:]
         self.Tr = f['Tr'][:]
 
@@ -179,11 +184,15 @@ class Ctilde(object):
         Cpt = f['Cpt_y'][:]
 
         self.Ctt = bs.FUsignal(self.fGHz, Ctt)
-        self.Ctp = bs.FUsignal(self.fGHz, Cpp)
-        self.Cpt = bs.FUsignal(self.fGHz, Ctp)
+        self.Ctp = bs.FUsignal(self.fGHz, Ctp)
+        self.Cpt = bs.FUsignal(self.fGHz, Cpt)
         self.Cpp = bs.FUsignal(self.fGHz, Cpp)
         tx = f['Tx'][:]
         rx = f['Rx'][:]
+
+
+        self.nfreq = len(self.fGHz)
+        self.nray = np.shape(self.Cpp.y)[0]
 
         f.close()
 
@@ -724,6 +733,7 @@ class Ctilde(object):
             self.Tt = Tt
             self.Tr = Tr
             self.islocal = True
+            
 
         # if a return to gloabl is requested
         elif b2g :
@@ -755,9 +765,9 @@ class Ctilde(object):
         # rangl : r x 2
         #
 
+
         Rt, tangl = geu.BTB_tx(self.tang, self.Tt)
         Rr, rangl = geu.BTB_rx(self.rang, self.Tr)
-
         #
         # update direction of departure and arrival
         #
@@ -807,6 +817,7 @@ class Ctilde(object):
         self.Ctp = bs.FUsignal(fGHz, Ctpl)
         self.Cpt = bs.FUsignal(fGHz, Cptl)
         self.Cpp = bs.FUsignal(fGHz, Cppl)
+
 
 
         return self
