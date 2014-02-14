@@ -3191,7 +3191,7 @@ class FUsignal(FBsignal, Usignal):
         df = self.dx()
         U = self.y
         N = len(f)
-        Nl = np.ceil(f[0] / df)
+        Nl = np.int(np.ceil(f[0] / df))
 
         ndim = U.ndim
         #
@@ -3488,39 +3488,6 @@ class FUDsignal(FUsignal):
         s = FUsignal.__repr__(self)
         return(s)
 
-    def cut(self,threshold=0.99):
-        """ cut the signal at an Energy threshold level
-
-        threshold : float
-        """
-        self.sort(typ='energy')
-        E = self.eprfl()
-        cumE = np.cumsum(E)/sum(E)
-        v = np.where(cumE<threshold)[0]
-        self.tau0 = self.tau0[v]
-        self.y = self.y[v,:]
-
-    def sort(self,typ='tau'):
-        """ sort FUD signal
-
-        Parameters
-        ----------
-
-        typ  : string
-            which parameter to sort '
-                tau : (default)
-                energy
-
-        """
-        if typ == 'tau':
-            u = np.argsort(self.tau0)
-        if typ == 'energy':
-            E = self.eprfl()
-            u = np.argsort(E)[::-1]
-
-        self.tau0 = self.tau0[u]
-        self.y = self.y[u,:]
-
     def minphas(self):
         """ construct a minimal phase FUsignal
 
@@ -3533,6 +3500,7 @@ class FUDsignal(FUsignal):
         - Compensation of phase slope to obtain minimal phase
 
         """
+
         f = self.x
         phase = np.unwrap(np.angle(self.y))
         dphi = phase[:, -1] - phase[:, 0]
@@ -3778,6 +3746,46 @@ class FUDAsignal(FUDsignal):
     def __repr__(self):
         s = FUDsignal.__repr__(self)
         return(s)
+
+    def cut(self,threshold=0.99):
+        """ cut the signal at an Energy threshold level
+
+        threshold : float
+        """
+        self.sort(typ='energy')
+        E = self.eprfl()
+        cumE = np.cumsum(E)/sum(E)
+        v = np.where(cumE<threshold)[0]
+        self.tau0 = self.tau0[v]
+        self.doa = self.doa[v]
+        self.dod = self.dod[v]
+        self.y = self.y[v,:]
+
+    def sort(self,typ='tau'):
+        """ sort FUD signal
+
+        Parameters
+        ----------
+
+        typ  : string
+            which parameter to sort '
+                tau : (default)
+                energy
+
+        """
+
+        if typ == 'tau':
+            u = np.argsort(self.tau0)
+
+        if typ == 'energy':
+            E = self.eprfl()
+            u = np.argsort(E)[::-1]
+
+        self.tau0 = self.tau0[u]
+        self.doa = self.doa[u]
+        self.dod = self.dod[u]
+        self.y = self.y[u,:]
+
 
     def tap(self,**kwargs):
         """
