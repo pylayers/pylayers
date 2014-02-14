@@ -67,7 +67,7 @@ class Cone(object):
         self.pcone = self.angle/(1.0*np.pi)
 
 
-    def belong_seg(self,pta,phe,proba=True):
+    def belong_seg(self,pta,phe,prob=True):
         """ test if segment belong to cone
 
         Parameters
@@ -123,7 +123,7 @@ class Cone(object):
         # segment candidate for being above segment 1 (,Nseg)
         boup = blta & blhe  
         # type of segment 
-        if proba:
+        if prob:
             proba = np.zeros(np.shape(pta)[1])
         else :
             proba =[]
@@ -144,13 +144,13 @@ class Cone(object):
         # boin = (~((btaol&bheol)|(btaor&bheor)))&boup
         # full interception (proba to reach = 1) 
         bfull = ((btaol&bheor)|(btaor&bheol))&boup
-        if proba :
+        if prob :
             proba[bfull] = 1
         typ[bfull] = 1
 
         #he.v
         btalhein  = (btaol & ~bheol & ~bheor)&boup
-        if proba:
+        if prob:
             v2  = phe[:,btalhein]-self.apex.reshape(2,1)
             vn2 = v2/np.sqrt(np.sum(v2*v2,axis=0))
             pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
@@ -159,7 +159,7 @@ class Cone(object):
 
         #ta.v
         bheltain  = (bheol & ~btaol & ~btaor)&boup
-        if proba:
+        if prob:
             v3  = pta[:,bheltain]-self.apex.reshape(2,1)
             vn3 = v3/np.sqrt(np.sum(v3*v3,axis=0))
             pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
@@ -168,7 +168,7 @@ class Cone(object):
 
         #ta.u
         bhertain  = (bheor & ~btaol & ~btaor)&boup
-        if proba:
+        if prob:
             v4  = pta[:,bhertain]-self.apex.reshape(2,1)
             vn4 = v4/np.sqrt(np.sum(v4*v4,axis=0))
             pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
@@ -177,7 +177,7 @@ class Cone(object):
 
         #he.u
         btarhein  = (btaor & ~bheol & ~bheor)&boup
-        if proba:
+        if prob:
             v5  = phe[:,btarhein]-self.apex.reshape(2,1)
             vn5 = v5/np.sqrt(np.sum(v5*v5,axis=0))
             pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
@@ -186,7 +186,7 @@ class Cone(object):
 
         #ta.he
         btainhein  = (~btaol & ~btaor & ~bheol & ~bheor)&boup
-        if proba:
+        if prob:
             va  = pta[:,btainhein]-self.apex.reshape(2,1)
             vb  = phe[:,btainhein]-self.apex.reshape(2,1)
             vna = va/np.sqrt(np.sum(va*va,axis=0))
