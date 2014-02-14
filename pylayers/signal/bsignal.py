@@ -29,7 +29,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from pylayers.util.pyutil import *
 from pylayers.util.plotutil import *
 import scipy.io as ios
-from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin
+from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
 from sklearn import mixture
 import scipy.stats as st
 
@@ -1107,7 +1107,7 @@ class TBsignal(Bsignal):
 #                kwargs['ylabel']=['Voltage (dBmV)']
 #            if kwargs['type']=='v':
 #                plt.ylabel('Voltage (mV)')
-       
+
         fig,ax = Bsignal.plot(self,**kwargs)
 
         return(fig,ax)
@@ -3759,9 +3759,14 @@ class FUDAsignal(FUDsignal):
         WMHz=kwargs['WMHz']
         Ntap=kwargs['Ntap']
         Ns=kwargs['Ns']
+        Nm=kwargs['Nm']
         Va = kwargs['Va']
         Vb = kwargs['Vb']
+        Nf = len(self.x)
 
+        mmax = 0.3*WMHz*1e6/(2*fGHz*(Va+Vb))
+        print "mmax : ", mmax
+        print  Nf*Nm*Ntap*Ns**4
         lam = 0.3/fcGHz
         lamo2 = lam/2.
         fmaHz = (Va/0.3)*fcGHz
@@ -3782,12 +3787,16 @@ class FUDAsignal(FUDsignal):
         skb = np.array([np.cos(theta_b)*np.cos(phi_b),np.cos(theta_b)*np.sin(phi_b),np.sin(theta_b)])
 
         # Monte Carlo
-        Ns = 8
+        Ns = 5
         # ua x va x ub x vb x m x tap
-        ua = np.linspace(0,1,Ns)[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-        va = np.linspace(0,1,Ns)[np.newaxis,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-        ub = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,:,np.newaxis,np.newaxis,np.newaxis]
-        vb = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis,np.newaxis]
+        #ua = np.linspace(0,1,Ns)[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        #va = np.linspace(0,1,Ns)[np.newaxis,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        #ub = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,:,np.newaxis,np.newaxis,np.newaxis]
+        #vb = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis,np.newaxis]
+        ua = np.random.rand(Ns)[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        va = np.random.rand(Ns)[np.newaxis,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        ub = np.random.rand(Ns)[np.newaxis,np.newaxis,:,np.newaxis,np.newaxis,np.newaxis]
+        vb = np.random.rand(Ns)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis,np.newaxis]
 
         # uniform sampling over the sphere
         tha = np.arccos(2*va-1)
@@ -3814,8 +3823,7 @@ class FUDAsignal(FUDsignal):
         # beta : r x f x ua x va x ub x vb x m x tap
         betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
         betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
-        mmax = 10000
-        Nm = 100
+
 
         # m discrete time axis
         # r x f x ua x va x ub x vb x m x tap
@@ -3828,15 +3836,17 @@ class FUDAsignal(FUDsignal):
         ba  = betaa*Va*m/(0.3*WMHz*1e6)
         bb  = betab*Vb*m/(0.3*WMHz*1e6)
         tau2 = tau + ba + bb
-
         # S : r x f x ua x va x ub x vb x m x tap (form 2.34 [D. Tse])
         S   = np.sinc(l-tau2*WMHz/1000.)
         # sum over r :  f x ua x va x ub x vb x m x tap
-        htap = sum(S*self.y[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-               *exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
+        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+               *np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
 
-        htap.reshape(Nf,Ns**4,Nm,Ntap)
-        return(htap)
+        htap  = htap.reshape(Nf,Ns**4,Nm,Ntap)
+        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))
+        Er_htap = np.sum(htap,axis=1)
+        corrtap = correlate(Er_htap[0,:,0]*conj(Er_htap[0,:,0]))
+        return(htap,Et_htap,Er_htap,corrtap)
 
 class FHsignal(FUsignal):
     """
