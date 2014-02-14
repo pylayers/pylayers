@@ -3744,7 +3744,7 @@ class FUDAsignal(FUDsignal):
         """
         defaults = {'fcGHz':4.5,
                     'WMHz':1,
-                    'Ntap':10,
+                    'Ntap':3,
                     'Ns':8,
                     'Nm':10,
                     'Va':1,   #meter/s
@@ -3764,7 +3764,7 @@ class FUDAsignal(FUDsignal):
         Vb = kwargs['Vb']
         Nf = len(self.x)
 
-        mmax = 0.3*WMHz*1e6/(2*fGHz*(Va+Vb))
+        mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
         print "mmax : ", mmax
         print  Nf*Nm*Ntap*Ns**4
         lam = 0.3/fcGHz
@@ -3845,7 +3845,7 @@ class FUDAsignal(FUDsignal):
         htap  = htap.reshape(Nf,Ns**4,Nm,Ntap)
         Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))
         Er_htap = np.sum(htap,axis=1)
-        corrtap = correlate(Er_htap[0,:,0]*conj(Er_htap[0,:,0]))
+        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
         return(htap,Et_htap,Er_htap,corrtap)
 
 class FHsignal(FUsignal):
