@@ -4,7 +4,7 @@
 Module Bsignal
 
 Summary
-======m
+=======
 
 Bsignal
 Usignal
@@ -929,11 +929,18 @@ class Usignal(Bsignal):
         A = Usignal(self.x, abs(self.y))
         return(A)
 
+    def eprfl(self,axis=1):
+        """ Energy profile
+        """
+        eprfl = np.real(np.sum(self.y * np.conj(self.y),axis=axis))
+        return eprfl
+
     def energy(self):
-        """ calculate the energy of an  Usignal
+        """ calculate the energy of an Usignal
 
         Returns
         -------
+
         energy : float
 
         """
@@ -3481,6 +3488,27 @@ class FUDsignal(FUsignal):
         s = FUsignal.__repr__(self)
         return(s)
 
+    def sort(self,typ='tau'):
+        """ sort FUD signal
+
+        Parameters
+        ----------
+
+        typ  : string
+            which parameter to sort '
+                tau : (default)
+                energy
+
+        """
+        if typ == 'tau':
+            u = np.argsort(self.tau0)
+        if typ == 'energy':
+            E = self.eprfl()
+            u = np.argsort(E)[::-1]
+
+        self.tau0 = self.tau0[u]
+        self.y = self.y[u,:]
+
     def minphas(self):
         """ construct a minimal phase FUsignal
 
@@ -3589,7 +3617,7 @@ class FUDsignal(FUsignal):
             return r
 
     def ftau(self, Nz=0, k=0, ffts=0):
-        """ time superposition  
+        """ time superposition
 
         Parameters
         ----------
@@ -3610,13 +3638,13 @@ class FUDsignal(FUsignal):
         si.translate(tau[k])
         r = r + si
         return r
-       
+
     def cir(self,fGHzmin=0,fGHzmax=1000):
         """
         """
         u = (self.x>fGHzmin) & (self.y<fGHzmax)
         cir = sum(self.y)
-       
+
 
     def plot3d(self,fig=[],ax=[]):
         """
@@ -3641,19 +3669,19 @@ class FUDsignal(FUsignal):
         if fig==[]:
             fig = plt.figure()
 
-        if ax == []:   
+        if ax == []:
             ax  = fig.add_subplot(111, projection = '3d')
 
         for k,f in enumerate(self.x):
             for i,j in zip(self.tau0,abs(self.y[:,k])):
                 ax.plot([i,i],[f,f],[0,j],color= 'k')
-                                  
+
         ax.set_xlabel('Delay (ns)')
         ax.set_xlim3d(0,max(self.tau0))
 
         ax.set_ylabel('Frequency (fGHz)')
         ax.set_ylim3d(self.x[0],self.x[-1])
-       
+
         powermin = abs(self.y).min()
         powermax = abs(self.y).max()
         ax.set_zlabel('Power (linear)')
@@ -3668,7 +3696,7 @@ class FUDsignal(FUsignal):
 
         df : float
             frequency step (default 0.01)
-      
+
         Notes
         -----
 
