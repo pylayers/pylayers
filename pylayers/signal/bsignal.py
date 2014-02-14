@@ -3488,6 +3488,18 @@ class FUDsignal(FUsignal):
         s = FUsignal.__repr__(self)
         return(s)
 
+    def cut(self,threshold=0.99):
+        """ cut the signal at an Energy threshold level
+
+        threshold : float
+        """
+        self.sort(typ='energy')
+        E = self.eprfl()
+        cumE = np.cumsum(E)/sum(E)
+        v = np.where(cumE<threshold)[0]
+        self.tau0 = self.tau0[v]
+        self.y = self.y[v,:]
+
     def sort(self,typ='tau'):
         """ sort FUD signal
 
