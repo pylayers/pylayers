@@ -67,7 +67,7 @@ class Cone(object):
         self.pcone = self.angle/(1.0*np.pi)
 
 
-    def belong_seg(self,pta,phe):
+    def belong_seg(self,pta,phe,proba=True):
         """ test if segment belong to cone
 
         Parameters
@@ -123,7 +123,10 @@ class Cone(object):
         # segment candidate for being above segment 1 (,Nseg)
         boup = blta & blhe  
         # type of segment 
-        proba = np.zeros(np.shape(pta)[1])
+        if proba:
+            proba = np.zeros(np.shape(pta)[1])
+        else :
+            proba =[]
         typ   = np.zeros(np.shape(pta)[1])
         # is tail out ? bo1 | bo2  
         # btaol : boolean tail out left 
@@ -141,51 +144,57 @@ class Cone(object):
         # boin = (~((btaol&bheol)|(btaor&bheor)))&boup
         # full interception (proba to reach = 1) 
         bfull = ((btaol&bheor)|(btaor&bheol))&boup
-
-        proba[bfull] = 1
+        if proba :
+            proba[bfull] = 1
         typ[bfull] = 1
 
         #he.v
         btalhein  = (btaol & ~bheol & ~bheor)&boup
-        v2  = phe[:,btalhein]-self.apex.reshape(2,1)
-        vn2 = v2/np.sqrt(np.sum(v2*v2,axis=0))
-        pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
-        proba[btalhein] = pr2
+        if proba:
+            v2  = phe[:,btalhein]-self.apex.reshape(2,1)
+            vn2 = v2/np.sqrt(np.sum(v2*v2,axis=0))
+            pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
+            proba[btalhein] = pr2
         typ[btalhein] = 2
 
         #ta.v
         bheltain  = (bheol & ~btaol & ~btaor)&boup
-        v3  = pta[:,bheltain]-self.apex.reshape(2,1)
-        vn3 = v3/np.sqrt(np.sum(v3*v3,axis=0))
-        pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
-        proba[bheltain] = pr3
+        if proba:
+            v3  = pta[:,bheltain]-self.apex.reshape(2,1)
+            vn3 = v3/np.sqrt(np.sum(v3*v3,axis=0))
+            pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
+            proba[bheltain] = pr3
         typ[bheltain] = 3
 
         #ta.u
         bhertain  = (bheor & ~btaol & ~btaor)&boup
-        v4  = pta[:,bhertain]-self.apex.reshape(2,1)
-        vn4 = v4/np.sqrt(np.sum(v4*v4,axis=0))
-        pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
-        proba[bhertain] = pr4
+        if proba:
+            v4  = pta[:,bhertain]-self.apex.reshape(2,1)
+            vn4 = v4/np.sqrt(np.sum(v4*v4,axis=0))
+            pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
+            proba[bhertain] = pr4
         typ[bhertain] = 4
 
         #he.u
         btarhein  = (btaor & ~bheol & ~bheor)&boup
-        v5  = phe[:,btarhein]-self.apex.reshape(2,1)
-        vn5 = v5/np.sqrt(np.sum(v5*v5,axis=0))
-        pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
-        proba[btarhein] = pr5
+        if proba:
+            v5  = phe[:,btarhein]-self.apex.reshape(2,1)
+            vn5 = v5/np.sqrt(np.sum(v5*v5,axis=0))
+            pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
+            proba[btarhein] = pr5
         typ[btarhein] = 5
 
         #ta.he
         btainhein  = (~btaol & ~btaor & ~bheol & ~bheor)&boup
-        va  = pta[:,btainhein]-self.apex.reshape(2,1)
-        vb  = phe[:,btainhein]-self.apex.reshape(2,1)
-        vna = va/np.sqrt(np.sum(va*va,axis=0))
-        vnb = vb/np.sqrt(np.sum(vb*vb,axis=0))
-        pr6 = np.arccos(np.sum(vna*vnb,axis=0))/np.arccos(self.dot)
-        proba[btainhein] = pr6
+        if proba:
+            va  = pta[:,btainhein]-self.apex.reshape(2,1)
+            vb  = phe[:,btainhein]-self.apex.reshape(2,1)
+            vna = va/np.sqrt(np.sum(va*va,axis=0))
+            vnb = vb/np.sqrt(np.sum(vb*vb,axis=0))
+            pr6 = np.arccos(np.sum(vna*vnb,axis=0))/np.arccos(self.dot)
+            proba[btainhein] = pr6
         typ[btainhein] = 6
+
         return(typ,proba)
 
     def aboveseg(self):
