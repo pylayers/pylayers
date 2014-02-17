@@ -15,7 +15,7 @@ from pylayers.util.utilnet import conv_vecarr
 import matplotlib.pylab as plt
 #from pylayers.util.pymysqldb import Database 
 import pylayers.util.pyutil as pyu
-
+import pandas as pd
 import pdb
 
 def truncate(self, max):
@@ -185,7 +185,8 @@ class Person(Process):
         self.net=net
         self.wait=wait
         self.save=save
-
+        self.df = pd.DataFrame(columns=['t','x','y','vx','vy','ax','ay'])
+    
 
 
         if 'mysql' in self.save:
@@ -249,10 +250,21 @@ class Person(Process):
                 self.world.update_boid(self)
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
-                if len(self.save)!=0:
-                    p=conv_vecarr(self.position)
-                    v=conv_vecarr(self.velocity)
-                    a=conv_vecarr(self.acceleration)
+                
+                # if len(self.save)!=0:
+                p=conv_vecarr(self.position).reshape(2,1)
+                v=conv_vecarr(self.velocity).reshape(2,1)
+                a=conv_vecarr(self.acceleration).reshape(2,1)
+                self.df = self.df.append(pd.DataFrame({'t':pd.Timestamp(self.sim.now(),unit='s'),
+                'id':self.ID,    
+                'x':p[0],
+                'y':p[1],
+                'vx':v[0],
+                'vy':v[1],
+                'ax':a[0],
+                'ay':a[1]},
+                columns=['t','id','x','y','vx','vy','ax','ay']))
+
                 if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
                 if 'txt' in self.save:
