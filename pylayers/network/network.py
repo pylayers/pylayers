@@ -976,7 +976,7 @@ class Network(nx.MultiDiGraph):
         pos = np.array(nx.get_node_attributes(self,'p').values())
         pos = np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
         pos = pos.reshape((1,len(self.nodes())*3))
-        filecsv = pyu.getlong(filename,'save_data')+'.csv'
+        filecsv = pyu.getlong(filename,pstruc['DIRNETSAVE'])+'.csv'
         #file=open('../save_data/' +filename +'.csv','a')
         file = open(filecsv,'a')
         file.write(str(S.now()) +',')
@@ -1504,7 +1504,7 @@ class PNetwork(Process):
             for i in inode:
                 entete = entete +',x'+str(i) +',y'+str(i)+',z'+str(i)
             entete=entete +'\n'
-            filecsv = pyu.getlong(self.filename,'save_data')+'.csv'
+            filecsv = pyu.getlong(self.filename,pstruc['DIRNETSAVE'])+'.csv'
             #file=open('../save_data/' +self.filename +'.csv','w')
             file = open(filecsv,'w')
             file.write(entete)
