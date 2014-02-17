@@ -31,6 +31,7 @@ from SimPy.SimulationRT import SimulationRT, Process, hold
 import numpy as np
 import scipy as sp
 import networkx as nx
+import pandas as pd
 import random
 from random import seed
 
@@ -100,6 +101,7 @@ class Simul(SimulationRT): # Sympy 2
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
+
 
         self.verbose = str2bool(self.sim_opt['verbose'])
         if str2bool(self.net_opt['ipython_nb_show']):
@@ -213,6 +215,7 @@ class Simul(SimulationRT): # Sympy 2
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
                             L=self.L,
+                            network=str2bool(self.net_opt['network']),
                             net=self.net,
                             epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
                             sens=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
@@ -222,10 +225,7 @@ class Simul(SimulationRT): # Sympy 2
                             gcom=self.gcom,
                             comm_mode=eval(self.net_opt['communication_mode']),
                             sim=self))
-#                            
-            if self.lAg[i].type == 'ag':
-                self.activate(self.lAg[i].meca,
-                              self.lAg[i].meca.move(), 0.0)
+
 
     def create_EMS(self):
         """
@@ -243,25 +243,25 @@ class Simul(SimulationRT): # Sympy 2
 
         self.create_agent()
         # create network
+        if str2bool(self.net_opt['network']):
+            self.net.create()
 
-        self.net.create()
-
-        # create All Personnal networks
-        for n in self.net.nodes():
-            self.net.node[n]['PN'].get_RAT()
-            self.net.node[n]['PN'].get_SubNet()
-        self.gcom.create()
+            # create All Personnal networks
+            for n in self.net.nodes():
+                self.net.node[n]['PN'].get_RAT()
+                self.net.node[n]['PN'].get_SubNet()
+            self.gcom.create()
 
 
-       # create Process Network
-        self.Pnet = PNetwork(net=self.net,
-                             net_updt_time=float(self.net_opt['network_update_time']),
-                             L=self.L,
-                             sim=self,
-                             show_sg=str2bool(self.net_opt['show_sg']),
-                             disp_inf=str2bool(self.net_opt['dispinfo']),
-                             save=eval(self.save_opt['save']))
-        self.activate(self.Pnet, self.Pnet.run(), 0.0)
+           # create Process Network
+            self.Pnet = PNetwork(net=self.net,
+                                 net_updt_time=float(self.net_opt['network_update_time']),
+                                 L=self.L,
+                                 sim=self,
+                                 show_sg=str2bool(self.net_opt['show_sg']),
+                                 disp_inf=str2bool(self.net_opt['dispinfo']),
+                                 save=eval(self.save_opt['save']))
+            self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):
         """ Create visual Tk process
@@ -338,11 +338,17 @@ class Simul(SimulationRT): # Sympy 2
         self.simulate(until=float(self.sim_opt['duration']),
                       real_time=True,
                       rel_speed=float(self.sim_opt['speedratio']))
-#        self.simulate(until=float(self.sim_opt['duration']))
-        if self.save_opt['savep']:
+        if str2bool(self.save_opt['savep']):
             print 'Processing save results, please wait'
             self.save.mat_export()
 
+
+        if str2bool(self.save_opt['savepd']):
+            filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
+            layfile = self.L.filename.split('.')[0]
+            store = pd.HDFStore(filename+'_'+layfile+'.h5')
+            [store.append(a.ID,a.meca.df) for a in self.lAg if a.type != 'ap']    
+            store.close()
 
 if __name__ == '__main__':
 

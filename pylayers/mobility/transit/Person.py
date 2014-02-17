@@ -15,7 +15,7 @@ from pylayers.util.utilnet import conv_vecarr
 import matplotlib.pylab as plt
 #from pylayers.util.pymysqldb import Database 
 import pylayers.util.pyutil as pyu
-
+import pandas as pd
 import pdb
 
 def truncate(self, max):
@@ -185,7 +185,8 @@ class Person(Process):
         self.net=net
         self.wait=wait
         self.save=save
-
+        self.df = pd.DataFrame(columns=['t','x','y','vx','vy','ax','ay'])
+    
 
 
         if 'mysql' in self.save:
@@ -220,8 +221,8 @@ class Person(Process):
 
         while True:
             if self.moving:
-                if self.ID == 0:
-                    print 'meca update @',self.sim.now()
+                if self.sim.verbose:
+                    print 'meca: updt ag ' + self.ID + ' @ ',self.sim.now()
 
                 while self.cancelled:
                     yield passivate, self
@@ -249,10 +250,20 @@ class Person(Process):
                 self.world.update_boid(self)
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
-                if len(self.save)!=0:
-                    p=conv_vecarr(self.position)
-                    v=conv_vecarr(self.velocity)
-                    a=conv_vecarr(self.acceleration)
+                # if len(self.save)!=0:
+                p=conv_vecarr(self.position).reshape(2,1)
+                v=conv_vecarr(self.velocity).reshape(2,1)
+                a=conv_vecarr(self.acceleration).reshape(2,1)
+                self.df = self.df.append(pd.DataFrame({'t':pd.to_datetime(self.sim.now(),unit='s'),
+                'id':self.ID,    
+                'x':p[0],
+                'y':p[1],
+                'vx':v[0],
+                'vy':v[1],
+                'ax':a[0],
+                'ay':a[1]},
+                columns=['t','id','x','y','vx','vy','ax','ay']))
+
                 if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
                 if 'txt' in self.save:
@@ -291,34 +302,12 @@ class Person(Process):
                         wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
                             self.waypoints.append(vec3(tup)  ) 
-                    #nextroom = adjroom[k]
-                    #    print "room : ",self.roomId
-                    #    print "nextroom : ",self.nextroomId
-                    #p_nextroom = self.L.Gr.pos[self.nextroomId]
-                    #setdoors1  = self.L.Gr.node[self.roomId]['doors']
-                    #setdoors2  = self.L.Gr.node[nextroom]['doors']
-                    #doorId     = np.intersect1d(setdoors1,setdoors2)[0]
-                    #
-                    # coord door
-                    #
-                    #unode = self.L.Gs.neighbors(doorId)    
-                    #p1    = self.L.Gs.pos[unode[0]]
-                    #p2    = self.L.Gs.pos[unode[1]]
-                    #print p1
-                    #print p2
-                    #pdoor = (np.array(p1)+np.array(p2))/2
+
                         self.destination = self.waypoints[0]
-                    #waittime = uniform(0,10)
+                    
+                        if self.sim.verbose:
+                            print 'meca: ag ' + self.ID + ' wait ' + str(self.wait*self.interval) 
 
-                    #if self.manager:
-                    #    if self.manager(self, *self.manager_args):
-                    #    yield hold , self , waittime
-                    #else:
-                    #    yield hold, self , waittime 
-
-#                        self.wait=abs(gauss(50,50))
-#                        self.wait=abs(gauss(1,1))
-                        print 'wait',self.wait*self.interval    
                         yield hold, self, self.wait 
 
                     else:    

@@ -362,8 +362,8 @@ class Antenna(object):
                 self.evaluated = True
 
             else:
-                Fat = self.sqG * np.ones((len(self.th),self.nf))
-                Fap = self.sqG * np.zeros((len(self.th),self.nf))
+                Fat = self.sqG * np.ones((len(self.th),self.Nf))
+                Fap = self.sqG * np.zeros((len(self.th),self.Nf))
 
 
         return (Fat,Fap)
