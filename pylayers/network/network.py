@@ -91,7 +91,7 @@ class Node(nx.MultiGraph):
         # Personnal Network init
         self.ID=ID
         self.PN = Network(owner=self.ID,PN=True)
-        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
+        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,epwr=epwr,sens=sens,type=type))
         # Network init
         self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,sens=sens,type=type))
         self.p    = self.node[self.ID]['p']
@@ -673,12 +673,12 @@ class Network(nx.MultiDiGraph):
         # value    : list : [LDP value , LDP standard deviation] 
         # method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
 
-
         p=nx.get_node_attributes(self.SubNet[RAT],'p')
         epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr')
         sens=nx.get_node_attributes(self.SubNet[RAT],'sens')
         e=self.link[RAT]#self.SubNet[RAT].edges()
         re=self.relink[RAT] # reverse link aka other direction of link
+
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
         lD=[{'Pr':lp[i],'TOA':lt[np.mod(i,len(e))] ,'d':d[np.mod(i,len(e))],'vis':v[i]} for i in range(len(d))]
         self.update_LDPs(iter(e+re),RAT,lD)
