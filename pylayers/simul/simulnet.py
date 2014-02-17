@@ -213,6 +213,7 @@ class Simul(SimulationRT): # Sympy 2
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
                             L=self.L,
+                            network=str2bool(self.net_opt['network']),
                             net=self.net,
                             epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
                             sens=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
@@ -243,25 +244,25 @@ class Simul(SimulationRT): # Sympy 2
 
         self.create_agent()
         # create network
+        if str2bool(self.net_opt['network']):
+            self.net.create()
 
-        self.net.create()
-
-        # create All Personnal networks
-        for n in self.net.nodes():
-            self.net.node[n]['PN'].get_RAT()
-            self.net.node[n]['PN'].get_SubNet()
-        self.gcom.create()
+            # create All Personnal networks
+            for n in self.net.nodes():
+                self.net.node[n]['PN'].get_RAT()
+                self.net.node[n]['PN'].get_SubNet()
+            self.gcom.create()
 
 
-       # create Process Network
-        self.Pnet = PNetwork(net=self.net,
-                             net_updt_time=float(self.net_opt['network_update_time']),
-                             L=self.L,
-                             sim=self,
-                             show_sg=str2bool(self.net_opt['show_sg']),
-                             disp_inf=str2bool(self.net_opt['dispinfo']),
-                             save=eval(self.save_opt['save']))
-        self.activate(self.Pnet, self.Pnet.run(), 0.0)
+           # create Process Network
+            self.Pnet = PNetwork(net=self.net,
+                                 net_updt_time=float(self.net_opt['network_update_time']),
+                                 L=self.L,
+                                 sim=self,
+                                 show_sg=str2bool(self.net_opt['show_sg']),
+                                 disp_inf=str2bool(self.net_opt['dispinfo']),
+                                 save=eval(self.save_opt['save']))
+            self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):
         """ Create visual Tk process
@@ -339,7 +340,7 @@ class Simul(SimulationRT): # Sympy 2
                       real_time=True,
                       rel_speed=float(self.sim_opt['speedratio']))
 #        self.simulate(until=float(self.sim_opt['duration']))
-        if self.save_opt['savep']:
+        if str2bool(self.save_opt['savep']):
             print 'Processing save results, please wait'
             self.save.mat_export()
 
