@@ -86,6 +86,7 @@ class Agent(object):
                     'loc_updt': 0.5,
                     'loc_method': ['geo'],
                     'L': Layout(),
+                    'network':True,
                     'net': Network(),
                     'RAT': ['rat1'],
                     'world': world(),
@@ -162,7 +163,7 @@ class Agent(object):
 
             ## Communication init
 
-            if args['comm_mode'] == 'synchro':
+            if args['comm_mode'] == 'synchro' and  args['network']:
                 ## The TOA requests are made every refreshTOA time ( can be modified in agent.ini)
                 ## This Mode will be deprecated in future version
                 self.rxr = RX(net=self.net, ID=self.ID,
@@ -174,7 +175,7 @@ class Agent(object):
                 self.sim.activate(self.rxt, self.rxt.refresh_TOA(), 0.0)
 
 
-            elif args['comm_mode'] == 'autonomous':
+            elif args['comm_mode'] == 'autonomous' and  args['network']:
                 ## The requests are made by node only when they are in visibility of pairs.
 
                 # self.rxr only manage a refresh RSS process
@@ -208,7 +209,7 @@ class Agent(object):
 
             self.PN = self.net.node[self.ID]['PN']
             self.PN.node[self.ID]['pe'] = self.net.node[self.ID]['p']
-            if args['comm_mode'] == 'autonomous':
+            if args['comm_mode'] == 'autonomous' and  args['network']:
                 self.rx = RX(net=self.net, ID=self.ID,
                               gcom=self.gcom, sim=self.sim)
                 self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
@@ -230,7 +231,7 @@ class Agent(object):
 
         if 'txt' in args['save']:
             pyu.writenode(self)
-        if  self.type != 'ap':
+        if  self.type != 'ap' and args['loc'] :
 
             self.loc = Localization(net=self.net, ID=self.ID,
                                     method=args['loc_method'])
@@ -238,8 +239,8 @@ class Agent(object):
                                       loc_updt_time=args['loc_updt'],
                                       tx=self.tx,
                                       sim=args['sim'])
-            if args['loc'] :
-                self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+            
+            self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
       s = 'General Agent info \n********************\n'
