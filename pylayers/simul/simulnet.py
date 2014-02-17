@@ -31,6 +31,7 @@ from SimPy.SimulationRT import SimulationRT, Process, hold
 import numpy as np
 import scipy as sp
 import networkx as nx
+import pandas as pd
 import random
 from random import seed
 
@@ -100,6 +101,7 @@ class Simul(SimulationRT): # Sympy 2
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
+
 
         self.verbose = str2bool(self.sim_opt['verbose'])
         if str2bool(self.net_opt['ipython_nb_show']):
@@ -223,10 +225,7 @@ class Simul(SimulationRT): # Sympy 2
                             gcom=self.gcom,
                             comm_mode=eval(self.net_opt['communication_mode']),
                             sim=self))
-#                            
-            if self.lAg[i].type == 'ag':
-                self.activate(self.lAg[i].meca,
-                              self.lAg[i].meca.move(), 0.0)
+
 
     def create_EMS(self):
         """
@@ -339,11 +338,17 @@ class Simul(SimulationRT): # Sympy 2
         self.simulate(until=float(self.sim_opt['duration']),
                       real_time=True,
                       rel_speed=float(self.sim_opt['speedratio']))
-#        self.simulate(until=float(self.sim_opt['duration']))
         if str2bool(self.save_opt['savep']):
             print 'Processing save results, please wait'
             self.save.mat_export()
 
+
+        if str2bool(self.save_opt['savepd']):
+            filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
+            layfile = self.L.filename.split('.')[0]
+            store = pd.HDFStore(filename+'_'+layfile+'.h5')
+            [store.append(a.ID,a.meca.df) for a in self.lAg if a.type != 'ap']    
+            store.close()
 
 if __name__ == '__main__':
 
