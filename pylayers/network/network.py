@@ -91,7 +91,7 @@ class Node(nx.MultiGraph):
         # Personnal Network init
         self.ID=ID
         self.PN = Network(owner=self.ID,PN=True)
-        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
+        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,epwr=epwr,sens=sens,type=type))
         # Network init
         self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,sens=sens,type=type))
         self.p    = self.node[self.ID]['p']
@@ -673,12 +673,12 @@ class Network(nx.MultiDiGraph):
         # value    : list : [LDP value , LDP standard deviation] 
         # method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
 
-
         p=nx.get_node_attributes(self.SubNet[RAT],'p')
         epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr')
         sens=nx.get_node_attributes(self.SubNet[RAT],'sens')
         e=self.link[RAT]#self.SubNet[RAT].edges()
         re=self.relink[RAT] # reverse link aka other direction of link
+
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
         lD=[{'Pr':lp[i],'TOA':lt[np.mod(i,len(e))] ,'d':d[np.mod(i,len(e))],'vis':v[i]} for i in range(len(d))]
         self.update_LDPs(iter(e+re),RAT,lD)
@@ -976,7 +976,7 @@ class Network(nx.MultiDiGraph):
         pos = np.array(nx.get_node_attributes(self,'p').values())
         pos = np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
         pos = pos.reshape((1,len(self.nodes())*3))
-        filecsv = pyu.getlong(filename,'save_data')+'.csv'
+        filecsv = pyu.getlong(filename,pstruc['DIRNETSAVE'])+'.csv'
         #file=open('../save_data/' +filename +'.csv','a')
         file = open(filecsv,'a')
         file.write(str(S.now()) +',')
@@ -1504,7 +1504,7 @@ class PNetwork(Process):
             for i in inode:
                 entete = entete +',x'+str(i) +',y'+str(i)+',z'+str(i)
             entete=entete +'\n'
-            filecsv = pyu.getlong(self.filename,'save_data')+'.csv'
+            filecsv = pyu.getlong(self.filename,pstruc['DIRNETSAVE'])+'.csv'
             #file=open('../save_data/' +self.filename +'.csv','w')
             file = open(filecsv,'w')
             file.write(entete)

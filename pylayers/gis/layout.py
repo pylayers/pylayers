@@ -183,7 +183,7 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filename='defstr3.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
 
 
         mat = sb.MatDB()
@@ -540,7 +540,10 @@ class Layout(object):
 
         degpnt = degpnt - nairwall
 
-        degmax = max(degpnt)
+        try:
+            degmax = max(degpnt)
+        except:
+            degmax = 1
 
         self.degree = {}
         for deg in range(degmax+1):

@@ -86,13 +86,14 @@ class Agent(object):
                     'loc_updt': 0.5,
                     'loc_method': ['geo'],
                     'L': Layout(),
+                    'network':True,
                     'net': Network(),
                     'RAT': ['rat1'],
                     'world': world(),
                     'save': [],
                     'sim': Simulation(),
-                    'epwr':{'rat1':0},
-                    'sens': {'rat1':0},
+                    'epwr':{},
+                    'sens': {},
                     'dcond': {},
                     'gcom': Gcom(),
                     'comm_mode':'autonomous'}
@@ -111,8 +112,15 @@ class Agent(object):
         self.gcom = args['gcom']
         self.sim = args['sim']
         self.RAT = args['RAT']
-        self.epwr = args['epwr']
-        self.sens = sens=args['sens']
+        if args['epwr'] == {}:
+            self.epwr = {x: 0 for x in self.RAT}
+        else:
+            self.epwr = args['epwr']
+
+        if args['sens'] == {}:
+            self.sens = {x: -180 for x in self.RAT}
+        else:
+            self.sens = sens=args['sens']
 
 
         try:
@@ -144,11 +152,10 @@ class Agent(object):
             self.meca.behaviors = [Seek(), Containment(),\
                                    Separation(), InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
-
             ## Network init
             self.node = Node(ID=self.ID, p=conv_vecarr(self.meca.position),
                              t=self.sim.now(), RAT=args['RAT'],
-                             epwr=args['epwr'], sens=args['sens'], type=self.type)
+                             epwr=self.epwr, sens=self.sens, type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
 
             self.sim.activate(self.meca, self.meca.move(), 0.0)
@@ -156,7 +163,7 @@ class Agent(object):
 
             ## Communication init
 
-            if args['comm_mode'] == 'synchro':
+            if args['comm_mode'] == 'synchro' and  args['network']:
                 ## The TOA requests are made every refreshTOA time ( can be modified in agent.ini)
                 ## This Mode will be deprecated in future version
                 self.rxr = RX(net=self.net, ID=self.ID,
@@ -168,7 +175,7 @@ class Agent(object):
                 self.sim.activate(self.rxt, self.rxt.refresh_TOA(), 0.0)
 
 
-            elif args['comm_mode'] == 'autonomous':
+            elif args['comm_mode'] == 'autonomous' and  args['network']:
                 ## The requests are made by node only when they are in visibility of pairs.
 
                 # self.rxr only manage a refresh RSS process
@@ -192,17 +199,17 @@ class Agent(object):
             if args['roomId'] == -1:
                 self.node = Node(ID=self.ID, p=self.args['pos'],
                                  t=self.sim.now(), RAT=args['RAT'],
-                                 epwr=args['epwr'], sens=args['sens'], type=self.type)
+                                 epwr=self.epwr, sens=self.sens, type=self.type)
             else:
                 pp = np.array(args['L'].Gr.pos[self.args['roomId']])
                 self.node = Node(ID=self.ID, p=pp, t=self.sim.now(), RAT=args['RAT'],
-                                 epwr=args['epwr'], sens=args['sens'], type=self.type)
+                                 epwr=self.epwr, sens=self.sens, type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim = args['sim']
 
             self.PN = self.net.node[self.ID]['PN']
             self.PN.node[self.ID]['pe'] = self.net.node[self.ID]['p']
-            if args['comm_mode'] == 'autonomous':
+            if args['comm_mode'] == 'autonomous' and  args['network']:
                 self.rx = RX(net=self.net, ID=self.ID,
                               gcom=self.gcom, sim=self.sim)
                 self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
@@ -224,7 +231,7 @@ class Agent(object):
 
         if 'txt' in args['save']:
             pyu.writenode(self)
-        if  self.type != 'ap':
+        if  self.type != 'ap' and args['loc'] :
 
             self.loc = Localization(net=self.net, ID=self.ID,
                                     method=args['loc_method'])
@@ -232,27 +239,36 @@ class Agent(object):
                                       loc_updt_time=args['loc_updt'],
                                       tx=self.tx,
                                       sim=args['sim'])
-            if args['loc'] :
-                self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+            
+            self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
-      s = 'General Agent info \n********************\n'
-      s = s + 'name : ' + self.name + '\n'
-      s = s + 'ID: '  + self.ID + '\n'
-      s = s + 'type: '  + self.type 
-
-      s = s + '\n\n More Agent information about:'
-      s = s + '\n+ Mecanichal => self.meca'
-      s = s + '\n+ Network => self.net'
-      s = s + '\n+ Personnal Network => self.PN'
-      s = s + '\n+ Localization => self.loc\n\n'
-      
-
-      s = s+ self.PN.__repr__() + '\n\n'
-      if self.type != 'ap':
-        s = s+ self.meca.__repr__() + '\n\n'
-        s = s+ self.loc.__repr__() + '\n\n'
+        s = 'General Agent info \n********************\n'
+        s = s + 'name : ' + self.name + '\n'
+        s = s + 'ID: '  + self.ID + '\n'
+        s = s + 'type: '  + self.type 
 
       
-      return s
+        s = s + '\n\n More Agent information about:'
+        s = s + '\n+ Mecanichal => self.meca'
+
+        s = s + '\n+ Network => self.net'
+        s = s + '\n+ Personnal Network => self.PN'
+        s = s + '\n+ Localization => self.loc\n\n'
+
+        try :
+            s = s+ self.PN.__repr__() + '\n\n'
+        except: 
+            s = s + 'No network simulated'
+
+        if self.type != 'ap':
+            s = s+ self.meca.__repr__() + '\n\n'
+            try :
+                s = s+ self.loc.__repr__() + '\n\n'
+            except:
+                s = s+ 'no localization simulated'
+
+
+
+        return s
 
