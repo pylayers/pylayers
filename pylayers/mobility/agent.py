@@ -243,23 +243,32 @@ class Agent(object):
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
-      s = 'General Agent info \n********************\n'
-      s = s + 'name : ' + self.name + '\n'
-      s = s + 'ID: '  + self.ID + '\n'
-      s = s + 'type: '  + self.type 
-
-      s = s + '\n\n More Agent information about:'
-      s = s + '\n+ Mecanichal => self.meca'
-      s = s + '\n+ Network => self.net'
-      s = s + '\n+ Personnal Network => self.PN'
-      s = s + '\n+ Localization => self.loc\n\n'
-      
-
-      s = s+ self.PN.__repr__() + '\n\n'
-      if self.type != 'ap':
-        s = s+ self.meca.__repr__() + '\n\n'
-        s = s+ self.loc.__repr__() + '\n\n'
+        s = 'General Agent info \n********************\n'
+        s = s + 'name : ' + self.name + '\n'
+        s = s + 'ID: '  + self.ID + '\n'
+        s = s + 'type: '  + self.type 
 
       
-      return s
+        s = s + '\n\n More Agent information about:'
+        s = s + '\n+ Mecanichal => self.meca'
+
+        s = s + '\n+ Network => self.net'
+        s = s + '\n+ Personnal Network => self.PN'
+        s = s + '\n+ Localization => self.loc\n\n'
+
+        try :
+            s = s+ self.PN.__repr__() + '\n\n'
+        except: 
+            s = s + 'No network simulated'
+
+        if self.type != 'ap':
+            s = s+ self.meca.__repr__() + '\n\n'
+            try :
+                s = s+ self.loc.__repr__() + '\n\n'
+            except:
+                s = s+ 'no localization simulated'
+
+
+
+        return s
 
