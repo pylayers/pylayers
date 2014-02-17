@@ -91,8 +91,8 @@ class Agent(object):
                     'world': world(),
                     'save': [],
                     'sim': Simulation(),
-                    'epwr':{'rat1':0},
-                    'sens': {'rat1':0},
+                    'epwr':{},
+                    'sens': {},
                     'dcond': {},
                     'gcom': Gcom(),
                     'comm_mode':'autonomous'}
@@ -111,8 +111,15 @@ class Agent(object):
         self.gcom = args['gcom']
         self.sim = args['sim']
         self.RAT = args['RAT']
-        self.epwr = args['epwr']
-        self.sens = sens=args['sens']
+        if args['epwr'] == {}:
+            self.epwr = {x: 0 for x in self.RAT}
+        else:
+            self.epwr = args['epwr']
+
+        if args['sens'] == {}:
+            self.sens = {x: -180 for x in self.RAT}
+        else:
+            self.sens = sens=args['sens']
 
 
         try:
@@ -144,11 +151,10 @@ class Agent(object):
             self.meca.behaviors = [Seek(), Containment(),\
                                    Separation(), InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
-
             ## Network init
             self.node = Node(ID=self.ID, p=conv_vecarr(self.meca.position),
                              t=self.sim.now(), RAT=args['RAT'],
-                             epwr=args['epwr'], sens=args['sens'], type=self.type)
+                             epwr=self.epwr, sens=self.sens, type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
 
             self.sim.activate(self.meca, self.meca.move(), 0.0)
@@ -192,11 +198,11 @@ class Agent(object):
             if args['roomId'] == -1:
                 self.node = Node(ID=self.ID, p=self.args['pos'],
                                  t=self.sim.now(), RAT=args['RAT'],
-                                 epwr=args['epwr'], sens=args['sens'], type=self.type)
+                                 epwr=self.epwr, sens=self.sens, type=self.type)
             else:
                 pp = np.array(args['L'].Gr.pos[self.args['roomId']])
                 self.node = Node(ID=self.ID, p=pp, t=self.sim.now(), RAT=args['RAT'],
-                                 epwr=args['epwr'], sens=args['sens'], type=self.type)
+                                 epwr=self.epwr, sens=self.sens, type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim = args['sim']
 
