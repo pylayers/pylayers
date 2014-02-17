@@ -94,7 +94,8 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', directory="ant", fromfile=True, typ='Gauss', nf=104, ntheta=90, nphi=181):
+    def __init__(self, _filename='defant.vsh3', directory="ant",
+                 fromfile=True, typ='Gauss', nf=104, ntheta=90, nphi=181,p0=0):
         """
 
         Parameters
@@ -156,7 +157,7 @@ class Antenna(object):
         else :
             if typ == 'Gauss':
                 self.typ = typ
-                self.p0 = 0.
+                self.p0 = p0
                 self.t0 = np.pi/2.
                 self.p3 = np.pi/6. # 30 degrees
                 self.t3 = np.pi/6. # 30 degrees

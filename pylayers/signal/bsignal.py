@@ -3786,17 +3786,61 @@ class FUDAsignal(FUDsignal):
         self.dod = self.dod[u]
         self.y = self.y[u,:]
 
+    def showtap(self,**kwargs):
+        """ showtap
+        """
+
+        # f x s  x m x tap
+
+        htap = self.tap(**kwargs)
+        # sum over time m
+        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+        # sum over s
+        Er_htap = np.sum(htap,axis=1)/Ns
+        corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
 
     def tap(self,**kwargs):
+        """ calculate channel tap
+
+        Parameters
+        ----------
+
+        fcGHz : float
+            center frequency
+        WMHz : floar
+            bandwidth
+        Ntap : int
+            number of taps (related to bandwith)
+            as the bandwith increases the potential number of taps increases
+        Ns : int
+            number of spatial realizations
+        Nm : int
+            number of time samples
+            the channel is sample along a distance of half a wavelength
+        Va : velocity of link termination a
+        Vb : velocity of link termination b
+        theta_va : float
+            theta velocity termination a (in radians)
+        phi_va  :
+            phi  velocity termination a (in radians)
+        theta_vb:
+            theta velocity termination b (in radians)
+        phi_vb  :
+            phi velocity termination b (in radians)
+
         """
-        """
+
         defaults = {'fcGHz':4.5,
                     'WMHz':1,
                     'Ntap':3,
                     'Ns':8,
                     'Nm':10,
-                    'Va':1,   #meter/s
-                    'Vb':1}   #meter/s
+                    'Va':1,  #meter/s
+                    'Vb':1,  #meter/s
+                    'theta_va':0,
+                    'phi_va':0,
+                    'theta_vb':0,
+                    'phi_vb':0 }
 
 
         for key, value in defaults.items():
@@ -3810,11 +3854,15 @@ class FUDAsignal(FUDsignal):
         Nm=kwargs['Nm']
         Va = kwargs['Va']
         Vb = kwargs['Vb']
+        # direction of link termination velocity vectors
+        theta_va = kwargs['theta_va']
+        theta_vb = kwargs['theta_vb']
+        phi_va = kwargs['phi_va']
+        phi_vb = kwargs['phi_vb']
+
         Nf = len(self.x)
 
         mmax = 0.3*WMHz*1e6/(2*fcGHz*(Va+Vb))
-        print "mmax : ", mmax
-        print  Nf*Nm*Ntap*Ns**4
         lam = 0.3/fcGHz
         lamo2 = lam/2.
         fmaHz = (Va/0.3)*fcGHz
@@ -3831,20 +3879,22 @@ class FUDAsignal(FUDsignal):
         theta_b = self.doa[:,0]
         phi_b = self.doa[:,1]
 
+        # 3 x r
         ska = np.array([np.cos(theta_a)*np.cos(phi_a),np.cos(theta_a)*np.sin(phi_a),np.sin(theta_a)])
         skb = np.array([np.cos(theta_b)*np.cos(phi_b),np.cos(theta_b)*np.sin(phi_b),np.sin(theta_b)])
 
-        # Monte Carlo
-        Ns = 5
-        # ua x va x ub x vb x m x tap
-        #ua = np.linspace(0,1,Ns)[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-        #va = np.linspace(0,1,Ns)[np.newaxis,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-        #ub = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,:,np.newaxis,np.newaxis,np.newaxis]
-        #vb = np.linspace(0,1,Ns)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis,np.newaxis]
-        ua = np.random.rand(Ns)[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-        va = np.random.rand(Ns)[np.newaxis,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-        ub = np.random.rand(Ns)[np.newaxis,np.newaxis,:,np.newaxis,np.newaxis,np.newaxis]
-        vb = np.random.rand(Ns)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis,np.newaxis]
+        # Monte Carlo for spatial realization
+        # s x m x tap
+        ua0 = (np.cos(theta_va)+1)/2
+        va0 =  phi_va/(2*np.pi)
+        ub0 = (np.cos(theta_vb)+1)/2
+        vb0 =  phi_vb/(2*np.pi)
+        # standard deviation of  velocity vector orientation is inversely
+        # proportional to velocity magnitude
+        ua = (((1/(Va+0.1))*np.random.rand(Ns)+ua0)%1)[:,np.newaxis,np.newaxis]
+        va = (((1/(Va+0.1))*np.random.rand(Ns)+va0)%1)[:,np.newaxis,np.newaxis]
+        ub = (((1/(Vb+0.1))*np.random.rand(Ns)+ub0)%1)[:,np.newaxis,np.newaxis]
+        vb = (((1/(Vb+0.1))*np.random.rand(Ns)+vb0)%1)[:,np.newaxis,np.newaxis]
 
         # uniform sampling over the sphere
         tha = np.arccos(2*va-1)
@@ -3865,34 +3915,34 @@ class FUDAsignal(FUDsignal):
 
         vbxy = np.concatenate([vbx[np.newaxis,np.newaxis,np.newaxis,...],vby[np.newaxis,np.newaxis,np.newaxis,...]])
 
-        # 3 x r x f x ua x va x ub x vb x m x tap
+        # 3 x r x f x s x m x tap
         vb = np.concatenate([vbxy,vbz[np.newaxis,np.newaxis,np.newaxis,...]])
 
-        # beta : r x f x ua x va x ub x vb x m x tap
-        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
-        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
+        # beta : r x f x s x m x tap
+        betaa = np.sum(ska[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*va,axis=0)
+        betab = np.sum(skb[:,:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]*vb,axis=0)
 
 
         # m discrete time axis
-        # r x f x ua x va x ub x vb x m x tap
-        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
-        # r x f x ua x va x ub x vb x m x tap
-        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
-        # l : r x f x ua x va x ub x vb x m x tap
-        tau = self.tau0[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        # r x f x s x m x tap
+        m = np.linspace(0,mmax,Nm)[np.newaxis,np.newaxis,np.newaxis,:,np.newaxis]
+        # r x f x s x m x tap
+        l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
+        # l : r x f x s x m x tap
+        tau = self.tau0[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
 
         ba  = betaa*Va*m/(0.3*WMHz*1e6)
         bb  = betab*Vb*m/(0.3*WMHz*1e6)
         tau2 = tau + ba + bb
-        # S : r x f x ua x va x ub x vb x m x tap (form 2.34 [D. Tse])
+        # S : r x f x s x m x tap (form 2.34 [D. Tse])
         S   = np.sinc(l-tau2*WMHz/1000.)
-        # sum over r :  f x ua x va x ub x vb x m x tap
-        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
-               *np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
+        # sum over r :  f x s  x m x tap
+        htap = np.sum(S*self.y[...,np.newaxis,np.newaxis,np.newaxis]*np.exp(-2*1j*np.pi*fcGHz*tau2),axis=0)
 
-        htap  = htap.reshape(Nf,Ns**4,Nm,Ntap)
-        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))
-        Er_htap = np.sum(htap,axis=1)
+        # f x s  x m x tap
+        htap  = htap.reshape(Nf,Ns,Nm,Ntap)
+        Et_htap = np.sqrt(np.sum(htap*np.conj(htap),axis=2))/Nm
+        Er_htap = np.sum(htap,axis=1)/Ns
         corrtap = correlate(Er_htap[0,:,0],np.conj(Er_htap[0,:,0]))
         return(htap,Et_htap,Er_htap,corrtap)
 
