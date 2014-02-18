@@ -251,7 +251,7 @@ def importsn(_filename='pos.csv'):
     """ 
     ****DEPRECATED
     import simulnet csv file
-    
+
     ****DEPRECATED
     
     Parameters
