@@ -76,10 +76,13 @@ class Agent(object):
         defaults = {'ID': '0',
                     'name': 'johndoe',
                     'type': 'ag',
+                    'color':'k',
+                    'pdshow':False,
                     'pos': np.array([]),
                     'roomId': -1,
                     'froom':[],
                     'wait':[],
+                    'seed':0,
                     'cdest':'random',
                     'meca_updt': 0.1,
                     'loc': False,
@@ -138,17 +141,21 @@ class Agent(object):
         if self.type == 'ag':
             # mechanical init
             self.meca = Person(ID=self.ID,
+                               color=args['color'],
+                               pdshow=args['pdshow'],
                                 roomId=args['roomId'],
                                 L=args['L'],
                                 net=self.net,
                                 interval=args['meca_updt'],
                                 wld=args['world'],
                                 sim=args['sim'],
+                                seed=args['seed'],
                                 moving=True,
                                 froom=args['froom'],
                                 wait=args['wait'],
                                 cdest=args['cdest'],
-                                save=args['save'])
+                                save=args['save']
+                                )
             self.meca.behaviors = [Seek(), Containment(),\
                                    Separation(), InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
