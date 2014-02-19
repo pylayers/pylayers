@@ -254,7 +254,7 @@ class Person(Process):
                 p=conv_vecarr(self.position).reshape(2,1)
                 v=conv_vecarr(self.velocity).reshape(2,1)
                 a=conv_vecarr(self.acceleration).reshape(2,1)
-                self.df = self.df.append(pd.DataFrame({'t':pd.to_datetime(self.sim.now(),unit='s'),
+                self.df = self.df.append(pd.DataFrame({'t':pd.Timestamp(self.sim.now(),unit='s'),
                 'id':self.ID,    
                 'x':p[0],
                 'y':p[1],
@@ -302,9 +302,18 @@ class Person(Process):
                         wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
                             self.waypoints.append(vec3(tup)  ) 
-
-                        self.destination = self.waypoints[0]
                     
+                        self.destination = self.waypoints[0]
+                    #waittime = uniform(0,10)
+
+                    #if self.manager:
+                    #    if self.manager(self, *self.manager_args):
+                    #    yield hold , self , waittime
+                    #else:
+                    #    yield hold, self , waittime 
+
+#                        self.wait=abs(gauss(50,50))
+#                        self.wait=abs(gauss(1,1))
                         if self.sim.verbose:
                             print 'meca: ag ' + self.ID + ' wait ' + str(self.wait*self.interval) 
 

@@ -4,7 +4,9 @@ import pdb
 import matplotlib.pyplot as plt 
 import pylayers.util.pyutil as pyu
 from matplotlib.path import Path 
+from pylayers.util.project import *
 import pandas as pd 
+import copy
 import doctest
 
 
@@ -32,12 +34,73 @@ class Trajectory(pd.DataFrame):
 
 
     """
-    def __init__(self,t=[],pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000),np.zeros(1000))).T,unit='s'):
+    def __init__(self, df = {}):
         """ initialization 
         """
-        npt = np.shape(pt)[0]
-        if t ==[]:
-            t = np.linspace(0,10,npt)
+        super(Trajectory,self).__init__(df)  
+        self.has_values=self.update()
+
+  
+
+    def __repr__(self):
+        try:
+            dtot = self['s'].values[-1]
+            T = self.tmax-self.tmin
+            st = ''
+            st = st+'t (s) : '+ str(self.tmin)+':'+str(self.tmax)+'\n'
+            st = st+'d (m) : '+ str(dtot)+'\n'
+            st = st+'Vmoy (m/s) : '+ str(dtot/T)+'\n'
+        except:
+            st = 'void Trajectory'
+        return(st)
+
+    def update(self):
+        """ update class member data
+
+        Returns
+        -------
+
+        bool :
+            True if Trajectroy has values, False otherwise 
+
+        """
+        if len(self.values) != 0:
+            N = len(self.index) 
+            self.tmin = self.index.min().value*1e-9
+            self.tmax = self.index.max().value*1e-9
+            self.ts = (self.index[1].value*1e-9)-(self.index[0].value*1e-9)
+
+            self.ttime = self.tmax-self.tmin
+            self.dtot = self['s'].values[-1]
+            self.meansp = self.dtot/self.ttime
+            return True
+        else :
+            return False
+
+
+    def generate(self,t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s'):
+        """
+        Generate a trajectroy from a numpy array
+
+        Parameters
+        ----------
+
+        pt : np.ndarray:
+            (npt x x x y) 
+            with 
+                npt : number of samples
+                x : x values 
+                y : y values 
+        t = np.ndarray
+            (1 x npt)
+
+        unit : str
+            time unity ('s'|'ns',...)
+
+        """
+
+
+        npt = len(t)
         td = pd.to_datetime(t,unit=unit)
         # velocity vector
         v = pt[1:,:]-pt[0:-1,:]
@@ -45,45 +108,24 @@ class Trajectory(pd.DataFrame):
         a = v[1:,:]-v[0:-1,:]
         # 
         d = np.sqrt(np.sum(v*v,axis=1))
-        s = np.cumsum(d)
+        s = np.cumsum(d)/len(d)
         s[-1] = 0 
         s = np.roll(s,1)
-        pd.DataFrame.__init__(self,{'t':td[:-2],
-                                    'x':pt[:-2,0],
-                                    'y':pt[:-2,1],
-                                    'z':pt[:-2,2],
-                                    'vx':v[:-1,0],
-                                    'vy':v[:-1,1],
-                                    'vz':v[:-1,2],
-                                    'ax':a[:,0],
-                                    'ay':a[:,1],
-                                    'az':a[:,2],
-                                    's'
-                                    :s[:-1]},columns=['t','x','y','z','vx','vy','vz','ax','ay','az','s'])
+        
+        df = {'x':pt[:-2,0],
+            'y':pt[:-2,1],
+            'z':pt[:-2,2],
+            'vx':v[:-1,0],
+            'vy':v[:-1,1],
+            'vz':v[:-1,2],
+            'ax':a[:,0],
+            'ay':a[:,1],
+            'az':a[:,2],
+            's':s[:-1]}
+        super(Trajectory,self).__init__(df,columns=['x','y','z','vx','vy','vz','ax','ay','az','s'],index=td[:-2])  
+        self.update()
 
-        N = len(t) 
-        self.tmin = t[0]
-        self.tmax = t[N-2]
-        self.ts = t[1]-t[0]
-        #self.tmin = t[0].second + t[0].microsecond/1e6
-        #self.tmax = t[N-2].second + t[N-2].microsecond/1e6
-        self.ttime = self.tmax-self.tmin
-        self.dtot = self['s'].values[-1]
-        self.meansp = self.dtot/self.ttime
 
-        #if np.shape(pt)[1]>2:
-        #    self['z'] = pt[:,2]
-
-    def __repr__(self):
-
-        dtot = self['s'].values[-1]
-        T = self.tmax-self.tmin
-        st = ''
-        st = st+'t (s) : '+ str(self.tmin)+':'+str(self.tmax)+'\n'
-        st = st+'d (m) : '+ str(dtot)+'\n'
-        st = st+'Vmoy (m/s) : '+ str(dtot/T)+'\n'
-        return(st)
-    
 
     def rescale(self,speedkmph=3):
         """ same length but specified speed 
@@ -103,8 +145,9 @@ class Trajectory(pd.DataFrame):
         speedms = speedkmph/3.6
         factor  = speedms/self.meansp
         newtime = self.time()/factor
-        pt = self.space()
-        t = Trajectory(t=newtime,pt=pt)
+        pt = self.space(ndim=3)
+        t = copy.copy(self)
+        t.generate(t=newtime,pt=pt)
         return(t)
 
         
@@ -152,7 +195,7 @@ class Trajectory(pd.DataFrame):
            time in 10**-unit  s
 
         """
-        lt = self['t']
+        lt = self.index
         t  = np.array(map(lambda x : x.value,lt))
         conv = 10**(unit-9)
         t = t * conv
@@ -196,7 +239,7 @@ class Trajectory(pd.DataFrame):
         ax.plot(self['x'],self['y'])
         for k in np.linspace(0,len(self),Nlabels,endpoint=False):
             k = int(k)
-            ax.text(self['x'][k],self['y'][k],str(self['t'][k].strftime("%M:%S")))
+            ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
             ax.plot(self['x'][k],self['y'][k],'*r')
 
         plt.xlabel('x (meters)')
@@ -205,7 +248,11 @@ class Trajectory(pd.DataFrame):
         return fig,ax 
 
 def importsn(_filename='pos.csv'):
-    """ import simulnet csv file
+    """ 
+    ****DEPRECATED
+    import simulnet csv file
+
+    ****DEPRECATED
     
     Parameters
     ----------
@@ -219,7 +266,7 @@ def importsn(_filename='pos.csv'):
     lt : list of trajectory
 
     """
-    filename = pyu.getlong(_filename,'save_data')
+    filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
     dt = pd.read_csv(filename)
     dtk = dt.keys()
     N = len(dtk)
@@ -232,6 +279,52 @@ def importsn(_filename='pos.csv'):
         pt = np.vstack((x,y,z))
         lt.append(Trajectory(dt['time'].values,pt=pt.T,unit='s'))
     return(lt)    
+
+def importh5(_filename='simulnet_def_str.h5'):
+
+    """ import simulnet h5 file
+    
+    Parameters
+    ----------
+
+    filename : string 
+        default simulnet + Layout_filename . h5
+
+    Returns
+    -------
+
+    lt : list of trajectory
+
+    """
+    filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+    fil = pd.HDFStore(filename)
+
+    lt = []
+
+    for k in fil.keys():
+        df = fil[k]
+        df = df.set_index('t')
+        v=np.array((df.vx.values,df.vy.values))
+        d = np.sqrt(np.sum(v*v,axis=0))
+        s = np.cumsum(d)/len(d)
+        df['s'] = s
+        lt.append(Trajectory(df))
+    fil.close()
+    return lt   
+
+#     dt = pd.read_csv(filename)
+#     dtk = dt.keys()
+#     N = len(dtk)
+#     Ntraj = (N-1)/3
+#     lt = []
+#     for it in range(Ntraj):
+#         x = dt[dtk[3*it+1]].values
+#         y = dt[dtk[3*it+2]].values
+#         z = np.zeros(len(x)) 
+#         pt = np.vstack((x,y,z))
+#         lt.append(Trajectory(dt['time'].values,pt=pt.T,unit='s'))
+#     return(lt)   
+
 
 if __name__ == '__main__':
     plt.ion()
