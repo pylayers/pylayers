@@ -13,9 +13,10 @@ from pylayers.network.network import Network
 from pylayers.util.utilnet import conv_vecarr
 
 import matplotlib.pylab as plt
+import pandas as pd
 #from pylayers.util.pymysqldb import Database 
 import pylayers.util.pyutil as pyu
-import pandas as pd
+
 import pdb
 
 def truncate(self, max):
@@ -173,7 +174,7 @@ class Person(Process):
 
 
         # from Helbing, et al "Self-organizing pedestrian movement"
-        self.max_speed = 1.2#normalvariate(1.0, 0.26)
+        self.max_speed = 0.8#1.2#normalvariate(1.0, 0.26)
         self.desired_speed = self.max_speed
         self.radius = normalvariate(self.average_radius, 0.025) / 2
         self.intersection = vec3()
@@ -184,9 +185,9 @@ class Person(Process):
         self.cancelled = 0
         self.net=net
         self.wait=wait
-        self.save=save
         self.df = pd.DataFrame(columns=['t','x','y','vx','vy','ax','ay'])
-    
+        self.save=save
+
 
 
         if 'mysql' in self.save:
@@ -218,7 +219,7 @@ class Person(Process):
         """ Move the Agent
 
         """
-
+        self.L.showGs()
         while True:
             if self.moving:
                 if self.sim.verbose:
@@ -250,7 +251,7 @@ class Person(Process):
                 self.world.update_boid(self)
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
-                # if len(self.save)!=0:
+
                 p=conv_vecarr(self.position).reshape(2,1)
                 v=conv_vecarr(self.velocity).reshape(2,1)
                 a=conv_vecarr(self.acceleration).reshape(2,1)
@@ -263,6 +264,8 @@ class Person(Process):
                 'ax':a[0],
                 'ay':a[1]},
                 columns=['t','id','x','y','vx','vy','ax','ay']))
+                plt.scatter(self.df['x'],self.df['y'],c='k',s=1)
+                plt.draw()
 
                 if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
@@ -302,7 +305,22 @@ class Person(Process):
                         wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
                             self.waypoints.append(vec3(tup)  ) 
-                    
+                    #nextroom = adjroom[k]
+                    #    print "room : ",self.roomId
+                    #    print "nextroom : ",self.nextroomId
+                    #p_nextroom = self.L.Gr.pos[self.nextroomId]
+                    #setdoors1  = self.L.Gr.node[self.roomId]['doors']
+                    #setdoors2  = self.L.Gr.node[nextroom]['doors']
+                    #doorId     = np.intersect1d(setdoors1,setdoors2)[0]
+                    #
+                    # coord door
+                    #
+                    #unode = self.L.Gs.neighbors(doorId)    
+                    #p1    = self.L.Gs.pos[unode[0]]
+                    #p2    = self.L.Gs.pos[unode[1]]
+                    #print p1
+                    #print p2
+                    #pdoor = (np.array(p1)+np.array(p2))/2
                         self.destination = self.waypoints[0]
                     #waittime = uniform(0,10)
 
@@ -316,7 +334,6 @@ class Person(Process):
 #                        self.wait=abs(gauss(1,1))
                         if self.sim.verbose:
                             print 'meca: ag ' + self.ID + ' wait ' + str(self.wait*self.interval) 
-
                         yield hold, self, self.wait 
 
                     else:    
