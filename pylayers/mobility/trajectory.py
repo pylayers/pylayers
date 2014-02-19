@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pylayers.util.pyutil as pyu
 from matplotlib.path import Path 
 from pylayers.util.project import *
+from pylayers.gis.layout import Layout
 import pandas as pd 
 import copy
 import doctest
@@ -108,7 +109,7 @@ class Trajectory(pd.DataFrame):
         a = v[1:,:]-v[0:-1,:]
         # 
         d = np.sqrt(np.sum(v*v,axis=1))
-        s = np.cumsum(d)/len(d)
+        s = np.cumsum(d)
         s[-1] = 0 
         s = np.roll(s,1)
         
@@ -201,7 +202,7 @@ class Trajectory(pd.DataFrame):
         t = t * conv
         return (t)
 
-    def plot(self,fig=[],ax=[],Nlabels=5):
+    def plot(self,fig=[],ax=[],Nlabels=5,typ='plot',L=[]):
         """ plot trajectory
 
         Parameters
@@ -210,6 +211,8 @@ class Trajectory(pd.DataFrame):
         fig 
         ax 
         Nlabels : int 
+        typ : 'plot'|'scatter'
+        L : pylayers.gis.layout.Layout object to be displayed
         
         Examples
         --------
@@ -236,9 +239,17 @@ class Trajectory(pd.DataFrame):
         if ax == []:
             ax = plt.gca()
 
-        ax.plot(self['x'],self['y'])
+        if L!=[]:
+            if isinstance(L,Layout):
+                fig,ax=L.showGs(fig=fig,ax=ax)
+
+        if typ == 'plot':
+            ax.plot(self['x'],self['y'])
+        elif typ == 'scatter':
+            ax.scatter(self['x'],self['y'])
         for k in np.linspace(0,len(self),Nlabels,endpoint=False):
             k = int(k)
+
             ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
             ax.plot(self['x'][k],self['y'][k],'*r')
 
@@ -306,7 +317,7 @@ def importh5(_filename='simulnet_def_str.h5'):
         df = df.set_index('t')
         v=np.array((df.vx.values,df.vy.values))
         d = np.sqrt(np.sum(v*v,axis=0))
-        s = np.cumsum(d)/len(d)
+        s = np.cumsum(d)
         df['s'] = s
         lt.append(Trajectory(df))
     fil.close()
