@@ -48,6 +48,8 @@ from mpl_toolkits.mplot3d import axes3d
 from matplotlib import rc
 from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
+import pandas as pd
+
 
 class Antenna(object):
     """ Antenna
@@ -136,23 +138,28 @@ class Antenna(object):
         self.evaluated = False
 
         if fromfile:
-            typ = _filename.split('.')[1]
-            self.typ = typ
-            self._filename = _filename
-            if typ == 'vsh3':
-                self.loadvsh3()
-            if typ == 'vsh2':
-                self.loadvsh2()
-            if typ == 'sh3':
-                self.loadsh3()
-            if typ == 'sh2':
-                self.loadsh2()
-            if typ == 'trx1':
-                self.load_trx(directory, nf, ntheta, nphi)
-            if typ == 'trx':
-                self.loadtrx(directory)
-            if typ == 'mat':
-                self.loadmat(directory)
+            if isinstance(_filename,str):
+                typ = _filename.split('.')[1]
+                self.typ = typ
+                self._filename = _filename
+                if typ == 'vsh3':
+                    self.loadvsh3()
+                if typ == 'vsh2':
+                    self.loadvsh2()
+                if typ == 'sh3':
+                    self.loadsh3()
+                if typ == 'sh2':
+                    self.loadsh2()
+                if typ == 'trx1':
+                    self.load_trx(directory, nf, ntheta, nphi)
+                if typ == 'trx':
+                    self.loadtrx(directory)
+                if typ == 'mat':
+                    self.loadmat(directory)
+            elif isinstance(_filename,list):
+                self._filename = _filename
+                self.typ='hfss'
+                self.loadhfss(_filename, self.Nt, self.Np)
 
         else :
             if typ == 'Gauss':
@@ -187,8 +194,13 @@ class Antenna(object):
         rtd = 180./np.pi
         st = ''
         if self.fromfile:
-            st = st + 'FileName : ' + self._filename+'\n'
-            st = st + '-----------------------\n'
+            if isinstance(self._filename,str):
+                st = st + 'FileName : ' + self._filename+'\n'
+                st = st + '-----------------------\n'
+            else:
+                for i in range(len(self._filename)):
+                    st = st + 'FileName : ' + self._filename[i]+'\n'
+                st = st + '-----------------------\n'
         #st = st + 'file type : ' + self.typ+'\n'
         if 'fa' in self.__dict__:
             st = st + "fmin : %4.2f" % (self.fa[0]) + "GHz\n"
@@ -658,6 +670,53 @@ class Antenna(object):
         errel =( (errTh + errPh) / (mvTh2 + mvPh2))
 
         return(errelTh, errelPh, errel)
+
+
+    def loadhfss(self,lfa = [], Nt=72,Np=37):
+        """
+
+        """
+
+        # lfa : list file antenna
+        self.Nf = len(lfa)
+        fGHz=[]
+        lacsv=[]
+        Fphi = np.empty((self.Nf,self.Nt,self.Np))
+        Ftheta = np.empty((self.Nf,self.Nt,self.Np))
+        SqG = np.empty((self.Nf,self.Nt,self.Np))
+
+        for i in range (len(lfa)):
+
+
+            
+            fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
+            lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio']))
+            th=lacsv[i].th.reshape(72,37)
+            ph=lacsv[i].ph.reshape(72,37)
+            Greal = lacsv[i].abs_grlz.reshape(72,37)
+
+            th_dB = lacsv[i].th_absdB.reshape(72,37)
+            ph_dB = lacsv[i].ph_absdB.reshape(72,37)
+
+            th_lin = pow(10,th_dB/20.)
+            ph_lin = pow(10,ph_dB/20.)
+
+            
+            #th_phase = lacsv[i].th_phase.reshape(72,37)*np.pi/180.
+            #ph_phase = lacsv[i].ph_phase.reshape(72,37)*np.pi/180.
+            #axratio=lacsv[i].ax_ratio.reshape(72,37)
+            Fphi[i,:,:] = ph_dB.swapaxes(1,0)
+            Ftheta[i,:,:] = th_dB.swapaxes(1,0)
+            SqG[i,:,:] = Greal.swapaxes(1,0)
+
+        self.fa = np.array(fGHz)
+        self.theta = th[0,:].reshape(Nt,1)
+        self.phi = ph[:,0].reshape(1,Np)
+        self.Fphi=Fphi
+        self.Ftheta=Ftheta
+        self.SqG=SqG
+
+          
 
     def loadtrx(self,directory):
         """ load trx file (SATIMO Near Field Chamber raw data)

@@ -8,7 +8,115 @@ from pylayers.util.project import *
 from pylayers.gis.layout import Layout
 import pandas as pd 
 import copy
+import time
 import doctest
+from matplotlib.widgets import Slider,CheckButtons
+
+
+
+
+# class Trajectories(list):
+#     """  Define a list of trajectory
+
+
+#     """
+#     def __init__(self):
+#         """ initialization 
+#         """
+#         super(list,self).__init__()  
+        
+
+
+
+#     def importh5(self,_filename='simulnet_TA-Office.h5'):
+
+#         """ import simulnet h5 file
+        
+#         Parameters
+#         ----------
+
+#         filename : string 
+#             default simulnet + Layout_filename . h5
+
+#         Returns
+#         -------
+
+#         lt : list of trajectory
+
+#         """
+
+#         self.Lfilename = _filename.split('_')[1].split('.')[0] +'.ini'
+#         filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+#         fil = pd.HDFStore(filename)
+
+        
+
+#         for k in fil.keys():
+#             df = fil[k]
+#             df = df.set_index('t')
+#             v=np.array((df.vx.values,df.vy.values))
+#             d = np.sqrt(np.sum(v*v,axis=0))
+#             s = np.cumsum(d)
+#             df['s'] = s
+#             self.append(Trajectory(df))
+#         fil.close()
+
+
+
+#     def show(self):
+#         """
+#             interactive show of trajectories
+#         """
+
+
+#         fig, ax = plt.subplots()
+#         fig.subplots_adjust(bottom=0.2, left=0.2)
+
+#         t = np.arange(0, len(self[0].index), self[0].ts)
+#         L=Layout(self.Lfilename)
+#         fig,ax = L.showG('s',fig=fig,ax=ax)
+
+
+#         valinit=0
+#         lines=[]
+#         labels=[]
+#         colors = "bgrcmykw"
+
+#         for iT,T in enumerate(self):
+#             lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
+#             labels.append('node' + T.id[0])
+
+#         time=self[0].time()       
+
+#         # init boolean value for visible in checkbutton    
+#         blabels=[False]*len(labels)
+
+        
+                
+            
+#         # slider 
+#         slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
+#         slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax, valinit=valinit, color='#AAAAAA')
+#         slider.on_changed(on_change)
+
+#         # choose
+#         rax = plt.axes([0.02, 0.4, 0.13, 0.2], aspect='equal')
+#         # check (ax.object, name of the object , bool value for the obsject)
+#         check = CheckButtons(rax, labels, tuple(blabels))
+#         check.on_clicked(func)
+
+#     def on_change(val,fig,ax):
+#         print val
+#         pval=np.where(val>time)[0]
+#         ax.set_title(str(D[0].index[pval[-1]].time())[:11].ljust(12),loc='left')
+#         for iT,T in enumerate(D):
+#             lines[iT].set_xdata(T['x'][pval])
+#             lines[iT].set_ydata(T['y'][pval])
+
+#     def func(label):
+#         i = labels.index(label)
+#         lines[i].set_visible(not lines[i].get_visible())
+#         fig.canvas.draw()
 
 
 class Trajectory(pd.DataFrame):
@@ -228,7 +336,8 @@ class Trajectory(pd.DataFrame):
             >>> y = 3*t*np.sin(t) 
             >>> z = 0*t
             >>> pt =np.vstack((x,y,z)).T
-            >>> traj = Trajectory(t,pt)
+            >>> traj = Trajectory()
+            >>> traj.generate(t,pt)
             >>> f,a = traj.plot()
             >>> plt.show()
 
@@ -247,6 +356,7 @@ class Trajectory(pd.DataFrame):
             ax.plot(self['x'],self['y'])
         elif typ == 'scatter':
             ax.scatter(self['x'],self['y'])
+        
         for k in np.linspace(0,len(self),Nlabels,endpoint=False):
             k = int(k)
 
@@ -257,6 +367,70 @@ class Trajectory(pd.DataFrame):
         plt.ylabel('y (meters)')
 
         return fig,ax 
+
+    def replay(self,fig=[],ax=[],Nlabels=5,typ='plot',L=[],speed=1,**kwargs):
+        """
+            replay a trajectory
+
+        Parameters
+        ----------
+
+        fig 
+        ax 
+        Nlabels : int 
+        typ : 'plot'|'scatter'
+        L : pylayers.gis.layout.Layout object to be displayed
+        speed : speed ratio 
+
+        """
+
+        plt.ion()
+        if fig==[]:
+            fig = plt.gcf()
+        if ax == []:
+            ax = plt.gca()
+
+        limkwargs = copy.copy(kwargs)
+        if 'c' in kwargs :
+            limkwargs.pop('c')
+        if 'color'in kwargs:
+            limkwargs.pop('c')
+        limkwargs['marker']='*'
+        limkwargs['s']=20
+
+        if ('m' or 'marker') not in kwargs:
+            kwargs['marker']='o'
+        if ('c' or 'color') not in kwargs:
+            kwargs['color']='b'
+
+        
+        if L!=[]:
+            if isinstance(L,Layout):
+                fig,ax=L.showGs(fig=fig,ax=ax,**kwargs)
+
+        labels = np.linspace(0,len(self),Nlabels,endpoint=True).tolist()
+
+        for ik,k in enumerate(self.index):
+            time.sleep(1/(1.*speed))
+            ax.scatter(self['x'][ik],self['y'][ik],**kwargs)
+            plt.title(str(self.index[ik].time())[:11].ljust(12),loc='left')
+
+            if ik > labels[0]:
+                ax.text(self['x'][ik],self['y'][ik],str(self.index[ik].strftime("%M:%S")))
+                ax.scatter(self['x'][ik],self['y'][ik],**limkwargs)
+                labels.pop(0)
+            plt.draw()
+
+  
+        plt.ioff()
+        # for k in :
+        #     k = int(k)
+        #     ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
+        #     ax.plot(self['x'][k],self['y'][k],'*r')
+        #     plt.draw()
+        
+
+
 
 def importsn(_filename='pos.csv'):
     """ 
@@ -291,37 +465,38 @@ def importsn(_filename='pos.csv'):
         lt.append(Trajectory(dt['time'].values,pt=pt.T,unit='s'))
     return(lt)    
 
-def importh5(_filename='simulnet_def_str.h5'):
+def importh5(self,_filename='simulnet_TA-Office.h5'):
 
-    """ import simulnet h5 file
-    
-    Parameters
-    ----------
+        """ import simulnet h5 file
+        
+        Parameters
+        ----------
 
-    filename : string 
-        default simulnet + Layout_filename . h5
+        filename : string 
+            default simulnet + Layout_filename . h5
 
-    Returns
-    -------
+        Returns
+        -------
 
-    lt : list of trajectory
+        lt : list of trajectory
 
-    """
-    filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
-    fil = pd.HDFStore(filename)
+        """
 
-    lt = []
+        filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+        fil = pd.HDFStore(filename)
 
-    for k in fil.keys():
-        df = fil[k]
-        df = df.set_index('t')
-        v=np.array((df.vx.values,df.vy.values))
-        d = np.sqrt(np.sum(v*v,axis=0))
-        s = np.cumsum(d)
-        df['s'] = s
-        lt.append(Trajectory(df))
-    fil.close()
-    return lt   
+        lt=[]
+
+        for k in fil.keys():
+            df = fil[k]
+            df = df.set_index('t')
+            v=np.array((df.vx.values,df.vy.values))
+            d = np.sqrt(np.sum(v*v,axis=0))
+            s = np.cumsum(d)
+            df['s'] = s
+            lt.append(Trajectory(df))
+        fil.close()
+        return lt
 
 #     dt = pd.read_csv(filename)
 #     dtk = dt.keys()

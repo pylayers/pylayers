@@ -2393,7 +2393,10 @@ class Layout(object):
                     de1['transition']]
         #de1v    = de1.values()
         if gui:
-            data = multenterbox(message, title, tuple(de1k), tuple(de1v))
+            data0 = choicebox('chose slab',title,self.sl.keys())
+            data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
+            data = [data0]+data1
+            #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
             i = 0
             self.name[de1['name']].remove(e1)
             for k in de1k:
