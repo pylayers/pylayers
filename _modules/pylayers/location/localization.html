@@ -116,6 +116,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cla</span> <span class="o">=</span> <span class="n">CLA</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">=</span><span class="n">algloc</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Localization information</span><span class="se">\n</span><span class="s">*************************</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Node ID: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Localization methods: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s"> CLA:</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+        <span class="k">return</span> <span class="n">s</span>
+
 <span class="c">#    def get_const(self, RAT=None, LDP=None):</span>
 <span class="c">#        &quot;&quot;&quot; get constraints</span>
 <span class="c">#</span>
@@ -251,11 +261,11 @@
             <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
-        <span class="c">############&quot;&quot; FOR DEBUG</span>
-        <span class="n">prss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">type</span><span class="p">)</span><span class="o">==</span><span class="s">&#39;RSS&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">c</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">prss</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">usable</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+        <span class="c"># ############&quot;&quot; FOR DEBUG</span>
+        <span class="c"># prss=np.where(np.array(self.cla.type)==&#39;RSS&#39;)[0]</span>
+        <span class="c"># for x in range(len(self.cla.c)):</span>
+        <span class="c">#     if x in prss:</span>
+        <span class="c">#         self.cla.usable[x]=False</span>
 
 </div>
 <div class="viewcode-block" id="Localization.savep"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.savep">[docs]</a>    <span class="k">def</span> <span class="nf">savep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe&#39;</span><span class="p">):</span>
@@ -339,7 +349,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">loc_updt_time</span> <span class="o">=</span> <span class="n">loc_updt_time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">sim</span>
-
 
 
 

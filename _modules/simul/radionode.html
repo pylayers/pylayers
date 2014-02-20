@@ -161,6 +161,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">name</span>
@@ -178,7 +179,7 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fileini</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">pass</span>
-            
+
         <span class="n">prefix</span> <span class="o">=</span> <span class="n">_fileini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.spa&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span>
@@ -266,7 +267,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="mi">1</span>
 </div>
     <span class="k">def</span> <span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])):</span>
@@ -642,6 +643,7 @@
 <span class="sd">        .vect : geomview format</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="n">_filespa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filespa</span>
         <span class="n">_fileini</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span>
         <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileini</span><span class="p">,</span> <span class="s">&#39;ini&#39;</span><span class="p">)</span>
@@ -676,13 +678,31 @@
             <span class="n">colorname</span> <span class="o">=</span> <span class="s">&#39;blue&#39;</span>
 
         <span class="c"># save points in GeomVect container</span>
-
         <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.vect&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">gv</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">GeomVect</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">gv</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">colorname</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.off&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span> 
+            
+            <span class="n">gv</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geomoff</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">ant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span>
+            <span class="c"># if not hasattr(ant,&#39;theta&#39;):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ant</span><span class="o">.</span><span class="n">pattern</span><span class="p">:</span>
+                <span class="n">ant</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="n">ant</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">V</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ant</span><span class="o">.</span><span class="n">nf</span><span class="o">/</span><span class="mi">2</span><span class="p">,:,:]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;position&#39;</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&quot;no position available&quot;</span>
+            <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">gv</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">ant</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">ant</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span><span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">minr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">maxr</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">=</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&quot; no position available &quot;</span>
+            <span class="c">#pdb.set_trace()</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;position&#39;</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="c">#    problem gv is not a geomvect    </span>
+            <span class="c">#    gv.points(self.position, colorname)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot; no position available &quot;</span>
 
         <span class="k">if</span> <span class="n">_filespa</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;spa&#39;</span><span class="p">:</span>
             <span class="n">fi_spa</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filespa</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>

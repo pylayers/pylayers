@@ -76,17 +76,19 @@
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="c">#from math import *</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">normalvariate</span><span class="p">,</span><span class="n">uniform</span>
+<span class="c">#from random import normalvariate,uniform</span>
 <span class="kn">from</span> <span class="nn">pylayers.mobility.transit.vec3</span> <span class="kn">import</span> <span class="n">vec3</span>
 <span class="kn">from</span> <span class="nn">pylayers.mobility.transit.World</span> <span class="kn">import</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">pylayers.mobility.transit.SteeringBehavior</span> <span class="kn">import</span> <span class="n">default_steering_mind</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span><span class="p">,</span><span class="n">gauss</span><span class="p">,</span><span class="n">sample</span>
+<span class="c"># from random import uniform,gauss,sample,seed</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="n">Network</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">conv_vecarr</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="c">#from pylayers.util.pymysqldb import Database </span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 
@@ -176,8 +178,9 @@
     <span class="n">average_radius</span>   <span class="o">=</span> <span class="mf">0.6</span>
     <span class="n">npers</span>        <span class="o">=</span> <span class="mi">0</span>
     <span class="c">#GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span><span class="n">roomId</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="p">[],</span> <span class="n">net</span><span class="o">=</span><span class="n">Network</span><span class="p">(),</span>
-        <span class="n">wld</span> <span class="o">=</span> <span class="n">world</span><span class="p">(),</span><span class="n">sim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">moving</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">froom</span><span class="o">=</span><span class="p">[],</span><span class="n">wait</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">cdest</span><span class="o">=</span><span class="s">&#39;random&#39;</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span><span class="n">roomId</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="p">[],</span> <span class="n">net</span><span class="o">=</span><span class="n">Network</span><span class="p">(),</span>
+        <span class="n">wld</span> <span class="o">=</span> <span class="n">world</span><span class="p">(),</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">moving</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">froom</span><span class="o">=</span><span class="p">[],</span><span class="n">wait</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">cdest</span><span class="o">=</span><span class="s">&#39;random&#39;</span><span class="p">,</span>
+        <span class="n">save</span><span class="o">=</span><span class="p">[],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">pdshow</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Class Person</span>
 <span class="sd">            inherits of Simpy.SimulationRT</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -189,6 +192,8 @@
         <span class="n">Person</span><span class="o">.</span><span class="n">npers</span> <span class="o">+=</span><span class="mi">1</span>
         <span class="n">Process</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Person_ID&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">),</span><span class="n">sim</span><span class="o">=</span><span class="n">sim</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">=</span><span class="n">ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="o">=</span><span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pdshow</span><span class="o">=</span><span class="n">pdshow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">world</span> <span class="o">=</span> <span class="n">wld</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="n">interval</span>
@@ -196,15 +201,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">manager_args</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="o">=</span><span class="n">moving</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span>    <span class="o">=</span> <span class="n">roomId</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">roomId</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span>   <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span> 
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span>    <span class="o">=</span> <span class="n">roomId</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">forbidroomId</span> <span class="o">=</span> <span class="n">froom</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">=</span> <span class="n">cdest</span> <span class="c"># choose tdestination type</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;random&#39;</span><span class="p">:</span>
-            <span class="c"># self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c"># self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span> 
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)&#39;</span><span class="p">)</span>
             <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">forbidroomId</span><span class="p">):</span> <span class="c"># or (self.nextroomId in self.sim.roomlist): # test destination different de l&#39;arrive</span>
-                <span class="c"># self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c"># self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c">#self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;file&#39;</span><span class="p">:</span>
            <span class="n">cfg</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -238,9 +253,10 @@
 
 
         <span class="c"># from Helbing, et al &quot;Self-organizing pedestrian movement&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span> <span class="o">=</span> <span class="mf">1.2</span><span class="c">#normalvariate(1.0, 0.26)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">desired_speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">normalvariate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_radius</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">maxspeed</span> <span class="o">=</span> <span class="mf">0.8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span> <span class="o">=</span> <span class="n">maxspeed</span><span class="c">#random.normalvariate(maxspeed, 0.1)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desired_speed</span> <span class="o">=</span> <span class="n">maxspeed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_radius</span><span class="c">#random.normalvariate(self.average_radius, 0.025) / 2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">intersection</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">False</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="bp">False</span> 
@@ -249,6 +265,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cancelled</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">=</span><span class="n">net</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="n">wait</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;vx&#39;</span><span class="p">,</span><span class="s">&#39;vy&#39;</span><span class="p">,</span><span class="s">&#39;ax&#39;</span><span class="p">,</span><span class="s">&#39;ay&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">=</span><span class="n">save</span>
 
 
@@ -282,11 +299,13 @@
         <span class="sd">&quot;&quot;&quot; Move the Agent</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdshow</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">print</span> <span class="s">&#39;meca update @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;meca: updt ag &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s">&#39; @ &#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
                 <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">cancelled</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="n">passivate</span><span class="p">,</span> <span class="bp">self</span>
@@ -314,10 +333,23 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">update_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
-                    <span class="n">p</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
-                    <span class="n">v</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">)</span>
-                    <span class="n">a</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acceleration</span><span class="p">)</span>
+
+                <span class="n">p</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">v</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">a</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acceleration</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s">&#39;t&#39;</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span><span class="n">unit</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">),</span>
+                <span class="s">&#39;id&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>    
+                <span class="s">&#39;x&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s">&#39;y&#39;</span><span class="p">:</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s">&#39;vx&#39;</span><span class="p">:</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s">&#39;vy&#39;</span><span class="p">:</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s">&#39;ax&#39;</span><span class="p">:</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s">&#39;ay&#39;</span><span class="p">:</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]},</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;vx&#39;</span><span class="p">,</span><span class="s">&#39;vy&#39;</span><span class="p">,</span><span class="s">&#39;ax&#39;</span><span class="p">,</span><span class="s">&#39;ay&#39;</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pdshow</span><span class="p">:</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
                 <span class="k">if</span> <span class="s">&#39;mysql&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">writemeca</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span><span class="n">p</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
                 <span class="k">if</span> <span class="s">&#39;txt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
@@ -338,14 +370,14 @@
                     <span class="c">#adjroom  = self.L.Gr.neighbors(self.roomId)</span>
                     <span class="c">#Nadjroom = len(adjroom)</span>
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;random&#39;</span><span class="p">:</span>
-                            <span class="c"># self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="c"># self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                             <span class="c"># test 1 ) next != actualroom</span>
                             <span class="c">#      2 ) nextroom != fordiden room</span>
                             <span class="c">#      3 ) room not share without another agent</span>
                             <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">forbidroomId</span><span class="p">):</span><span class="c"># or (self.nextroomId in self.sim.roomlist):</span>
-                                <span class="c"># self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="c"># self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;file&#39;</span><span class="p">:</span>
                            <span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="o">+</span><span class="mi">1</span>
                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_room</span><span class="p">:</span>
@@ -373,7 +405,7 @@
                     <span class="c">#print p2</span>
                     <span class="c">#pdoor = (np.array(p1)+np.array(p2))/2</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="c">#waittime = uniform(0,10)</span>
+                    <span class="c">#waittime = random.uniform(0,10)</span>
 
                     <span class="c">#if self.manager:</span>
                     <span class="c">#    if self.manager(self, *self.manager_args):</span>
@@ -381,9 +413,10 @@
                     <span class="c">#else:</span>
                     <span class="c">#    yield hold, self , waittime </span>
 
-<span class="c">#                        self.wait=abs(gauss(50,50))</span>
-<span class="c">#                        self.wait=abs(gauss(1,1))</span>
-                        <span class="k">print</span> <span class="s">&#39;wait&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">interval</span>    
+<span class="c">#                        self.wait=abs(random.gauss(50,50))</span>
+<span class="c">#                        self.wait=abs(random.gauss(1,1))</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                            <span class="k">print</span> <span class="s">&#39;meca: ag &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s">&#39; wait &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">)</span><span class="c">#*self.interval) </span>
                         <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wait</span> 
 
                     <span class="k">else</span><span class="p">:</span>    

@@ -101,7 +101,10 @@ electromagnetic simulation.</p>
 <span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3c44890&gt;</pre>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+  warnings.warn(msg, UserWarning)</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x36ecdd0&gt;</pre>
 </div>
 <div class="section" id="generation-of-an-impulse-of-normalized-energy">
 <h2>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h2>
@@ -195,7 +198,7 @@ name       :
 type       :  tx
 fileini    :  radiotx.ini
 filespa    :  radiotx.spa
-filegeom   :  radiotx.off
+filegeom   :  radiotx.vect
 fileant    :  defant.vsh3
 filestr    :  defstr.str2
 None
@@ -208,7 +211,7 @@ name       :
 type       :  rx
 fileini    :  radiorx.ini
 filespa    :  radiorx.spa
-filegeom   :  radiorx.off
+filegeom   :  radiorx.vect
 fileant    :  defant.vsh3
 filestr    :  defstr.str2
 None</pre>
@@ -274,10 +277,10 @@ None</pre>
   <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
   <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
 </pre></div>
@@ -477,8 +480,8 @@ during the <strong>FP7 project WHERE1</strong> measurement campaign M1.</p>
 </div>
 <div class="highlight-python"><pre>freq :2.0 9.99 800
 shape  :(315, 800)
-tau :26.7186992365 105.599656025
-dist :8.01560977094 31.6798968075</pre>
+tau :26.7186992365 99.5048504397
+dist :8.01560977094 29.8514551319</pre>
 </div>
 <p>The antenna radiation pattern is stored in a very compact way thanks to
 Vector Spherical Harmonics decomposition. The following gives
@@ -508,7 +511,7 @@ waveform with the channel impulse response to get the received waveform.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>
-        <span class="o">-</span><span class="mf">2.06305673e-12</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.85965052e-13</span><span class="p">,</span>   <span class="mf">6.80134567e-13</span><span class="p">])</span>
+         <span class="mf">1.58498226e-13</span><span class="p">,</span>   <span class="mf">2.67900782e-15</span><span class="p">,</span>   <span class="mf">4.14172693e-16</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
@@ -519,7 +522,7 @@ waveform with the channel impulse response to get the received waveform.</p>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4cc2750&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f8c8cccff10&gt;</pre>
 </div>
 <img alt="./PHY-signal_files/PHY-signal_53_2.png" src="./PHY-signal_files/PHY-signal_53_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
@@ -528,7 +531,7 @@ waveform with the channel impulse response to get the received waveform.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">u&#39;Received Waveform $r(t)$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f6c579f1e90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4e9f990&gt;</pre>
 </div>
 <img alt="./PHY-signal_files/PHY-signal_54_1.png" src="./PHY-signal_files/PHY-signal_54_1.png" />
 </div>
@@ -625,7 +628,7 @@ padding of 500 points</p>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x51fb750&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x52af750&gt;</pre>
 </div>
 <img alt="./PHY-signal_files/PHY-signal_70_1.png" src="./PHY-signal_files/PHY-signal_70_1.png" />
 <p>The ray channel has been applied to the UWB waveform. Notice the small

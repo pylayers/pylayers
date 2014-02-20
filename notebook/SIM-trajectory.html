@@ -95,7 +95,10 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4559890&gt;</pre>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+  warnings.warn(msg, UserWarning)</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3c7bdd0&gt;</pre>
 </div>
 <p>This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
@@ -209,7 +212,7 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fa00e25bcd0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x53f6fd0&gt;]</pre>
 </div>
 <img alt="./SIM-trajectory_files/SIM-trajectory_11_1.png" src="./SIM-trajectory_files/SIM-trajectory_11_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
@@ -230,8 +233,8 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 </div>
 <div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fa00d80ac90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fa00d80ac10&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5190550&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7ff890c0db10&gt;)</pre>
 </div>
 <img alt="./SIM-trajectory_files/SIM-trajectory_15_2.png" src="./SIM-trajectory_files/SIM-trajectory_15_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
@@ -265,6 +268,19 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
         <span class="n">ttcir</span><span class="o">=</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>---------------------------------------------------------------------------
+IOError                                   Traceback (most recent call last)
+
+&lt;ipython-input-13-e0e0469d8408&gt; in &lt;module&gt;()
+      1 #del tcir
+----&gt; 2 file=open("tcir5.pickle","r")
+      3 tcir=pickle.load(file)
+      4 file.close()
+      5 #
+
+
+IOError: [Errno 2] No such file or directory: 'tcir5.pickle'</pre>
+</div>
 </div>
 <div class="section" id="aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">
 <h2>Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
@@ -280,20 +296,9 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_25_1.png" src="./SIM-trajectory_files/SIM-trajectory_25_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
-</div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fa00d8698d0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fa00d8417d0&gt;]], dtype=object))</pre>
-</div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_26_2.png" src="./SIM-trajectory_files/SIM-trajectory_26_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -301,20 +306,12 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fa00f6d9610&gt;</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f9ffc354110&gt;</pre>
-</div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_27_2.png" src="./SIM-trajectory_files/SIM-trajectory_27_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x553bd50&gt;</pre>
-</div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_28_1.png" src="./SIM-trajectory_files/SIM-trajectory_28_1.png" />
 </div>
 </div>
 

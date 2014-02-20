@@ -753,7 +753,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&quot;frequency&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&quot;output&quot;</span><span class="p">)</span>
-       
+
         <span class="bp">self</span><span class="o">.</span><span class="n">dout</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dlch</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dtra</span> <span class="o">=</span> <span class="p">{}</span>
@@ -764,7 +764,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dfield</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dcir</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
- 
+
         <span class="c">#if os.path.isfile(pyu.getlong(_filesimul,&#39;ini&#39;)):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filematini</span> <span class="o">=</span> <span class="s">&quot;matDB.ini&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fileslabini</span> <span class="o">=</span> <span class="s">&quot;slabDB.ini&quot;</span>
@@ -948,7 +948,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+<span class="sd"> </span>
 <span class="sd">        verbose : boolean</span>
 <span class="sd">            Verbose mode on/off</span>
 
@@ -1060,10 +1060,26 @@
             <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c"># save tx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="c"># save rx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileslabini</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">slab</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filematini</span><span class="p">)</span>
+        <span class="c"># save slab and mat file</span>
+        <span class="c"># --</span>
+        <span class="c"># self.slab.save(self.fileslabini)</span>
+        <span class="c"># self.slab.mat.save(self.filematini)</span>
+        <span class="c"># --</span>
+        <span class="c"># fix bug #189</span>
+        <span class="c">#   slab is a member of S.L not of S anymore</span>
+        <span class="c">#   mat is a member of S.L.sl not of S.slab</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileslabini</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filematini</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
 
 <span class="c">#    def saveold(self):</span>
 <span class="c">#        &quot;&quot;&quot; save simulation file</span>
@@ -1206,7 +1222,7 @@
                                     <span class="n">mustexist</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">pyu</span><span class="o">.</span><span class="n">unzipd</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span><span class="n">zipfileName</span><span class="p">)</span>
         <span class="n">root</span><span class="o">.</span><span class="n">withdraw</span><span class="p">()</span>
-        <span class="k">print</span> <span class="s">&quot;Current project loaded in&quot;</span><span class="p">,</span> <span class="n">dirname</span> 
+        <span class="k">print</span> <span class="s">&quot;Current project loaded in&quot;</span><span class="p">,</span> <span class="n">dirname</span>
 </div>
 <div class="viewcode-block" id="Simul.choose"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1416,6 +1432,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        _filestruc : string</span>
 <span class="sd">            short file name of the Layout object</span>
 <span class="sd">        _filematini   : string</span>
@@ -1431,7 +1448,6 @@
 <span class="sd">        &gt;&gt;&gt; S.layout(&#39;defstr.str&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span> <span class="o">=</span> <span class="n">_filestruc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filematini</span> <span class="o">=</span> <span class="n">_filematini</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fileslabini</span> <span class="o">=</span> <span class="n">_fileslabini</span>
@@ -1564,6 +1580,55 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">tEo</span><span class="p">),</span> <span class="s">&#39;xb&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">td</span><span class="p">,</span> <span class="n">tEa</span><span class="p">,</span> <span class="n">tEo</span>
+</div>
+<div class="viewcode-block" id="Simul.evalcir"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.evalcir">[docs]</a>    <span class="k">def</span> <span class="nf">evalcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;new&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        S </span>
+<span class="sd">        tx</span>
+<span class="sd">        rx</span>
+<span class="sd">        wav</span>
+<span class="sd">        cutoff</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">crxp</span> <span class="o">=-</span><span class="mi">1</span>
+        <span class="n">ctxp</span> <span class="o">=-</span><span class="mi">1</span>
+        <span class="n">tcir</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">tx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span> 
+        <span class="n">Ntx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
+        <span class="n">Nrx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c">#for kt in range(1,Ntx-1):</span>
+        <span class="c">#print kt+1</span>
+        <span class="n">kt</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kt</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kt</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kt</span><span class="p">]])</span>
+        <span class="k">for</span> <span class="n">kr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrx</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                <span class="k">print</span> <span class="n">kr</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kr</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kr</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kr</span><span class="p">]])</span>
+            <span class="n">ctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">crx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ctx</span><span class="o">&lt;&gt;</span><span class="n">ctxp</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">crx</span><span class="o">&lt;&gt;</span><span class="n">crxp</span><span class="p">):</span>
+                <span class="n">Si</span>  <span class="o">=</span> <span class="n">signature</span><span class="o">.</span><span class="n">Signatures</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+                <span class="n">ctxp</span> <span class="o">=</span> <span class="n">ctx</span>
+                <span class="n">crxp</span> <span class="o">=</span> <span class="n">crx</span>
+                <span class="n">Si</span><span class="o">.</span><span class="n">run4</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="n">algo</span><span class="p">)</span>
+            <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+            <span class="c">#r2d.show(S.L)</span>
+
+            <span class="n">r3d</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+            <span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+            <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>   
+            <span class="n">Ct</span>  <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="n">sca</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+            <span class="n">cir</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+            <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="p">][</span><span class="n">kr</span><span class="p">]</span> <span class="o">=</span> <span class="n">cir</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">tcir</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Simul.loadcir"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.loadcir">[docs]</a>    <span class="k">def</span> <span class="nf">loadcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1901,8 +1966,17 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.show3"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.show3"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the simulation configuration</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        centered : boolean</span>
+<span class="sd">            center the scene if True</span>
+<span class="sd">        bdis  : boolean</span>
+<span class="sd">            display local basis</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
@@ -1932,7 +2006,15 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">strx</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">stst</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&lt;/usr/share/geomview/geom/xyz.vect}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rays</span> <span class="o">!=</span><span class="p">[]:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;bdis&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;L&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;centered&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="n">rays</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;}&quot;</span><span class="p">)</span>
+
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
         <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
 </div>
@@ -2343,12 +2425,12 @@
             <span class="n">D</span><span class="p">[</span><span class="s">&#39;Rx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rx</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lsig</span><span class="p">:</span>
-                <span class="n">Si</span>  <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+                <span class="n">Si</span>  <span class="o">=</span> <span class="n">signature</span><span class="o">.</span><span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
                 <span class="c">#</span>
                 <span class="c"># Change the run number depending on</span>
                 <span class="c"># the algorithm used for signature determination</span>
                 <span class="c">#</span>
-                <span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+                <span class="n">Si</span><span class="o">.</span><span class="n">run4</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
                 <span class="c"># keep track and save signature</span>
                 <span class="n">_filesir</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;-sig-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">((</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">))</span>
                 <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filesig</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
@@ -2666,7 +2748,7 @@
 
 </div></div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="c">#plt.ion()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 

@@ -72,7 +72,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x55c3890&gt;</pre>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+  warnings.warn(msg, UserWarning)</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5423dd0&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#YouTubeVideo(&#39;1Qa6xLpU5-M&#39;)</span>
 </pre></div>
@@ -82,25 +85,352 @@
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>trajectories can be imported from a simulnet simulation with the
-<tt class="docutils literal"><span class="pre">importsn</span></tt> method</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
+<p>trajectories can be generated using simulnet.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">S</span><span class="o">=</span><span class="n">Simul</span><span class="p">()</span>
+<span class="c"># set simulation duration</span>
+<span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">10</span>
+
+<span class="c"># turn off network simulation</span>
+<span class="n">S</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+
+<span class="c"># run mechanical simulation</span>
+<span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">t</span><span class="o">=</span><span class="n">traj</span><span class="o">.</span><span class="n">importsn</span><span class="p">()</span>
+<div class="highlight-python"><pre>Layout graphs are loaded from  /home/uguen/Bureau/P1 /struc/ini
+meca: updt ag 1 @  0
+refresh RSS node 1  @ 0
+meca: updt ag 2 @  0
+refresh RSS node 2  @ 0
+network updated @ 0
+network updated @ 0.1
+network updated @ 0.2
+refresh RSS node 1  @ 0.3
+network updated @ 0.3
+refresh RSS node 2  @ 0.4
+network updated @ 0.4
+network updated @ 0.5
+refresh RSS node 1  @ 0.6
+network updated @ 0.6
+network updated @ 0.7
+network updated @ 0.8
+refresh RSS node 2  @ 0.8
+refresh RSS node 1  @ 0.9
+network updated @ 0.9
+network updated @ 1.0
+meca: updt ag 1 @  1.0
+meca: updt ag 2 @  1.0
+network updated @ 1.1
+refresh RSS node 1  @ 1.2
+network updated @ 1.2
+refresh RSS node 2  @ 1.2
+network updated @ 1.3
+network updated @ 1.4
+localization request communication from node 1 @ 1.5
+communication requested by node  1
+communication requested by node  1
+localization request communication from node 2 @ 1.5
+communication requested by node  2
+communication requested by node  2
+refresh RSS node 1  @ 1.5
+network updated @ 1.5
+refresh RSS node 2  @ 1.6
+network updated @ 1.6
+network updated @ 1.7
+refresh RSS node 1  @ 1.8
+network updated @ 1.8
+network updated @ 1.9
+meca: updt ag 1 @  2.0
+meca: updt ag 2 @  2.0
+refresh RSS node 2  @ 2.0
+network updated @ 2.0
+refresh RSS node 1  @ 2.1
+network updated @ 2.1
+network updated @ 2.2
+network updated @ 2.3
+refresh RSS node 2  @ 2.4
+refresh RSS node 1  @ 2.4
+network updated @ 2.4
+localization request communication from node 1 @ 2.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 2.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 2.5
+network updated @ 2.6
+refresh RSS node 1  @ 2.7
+network updated @ 2.7
+refresh RSS node 2  @ 2.8
+network updated @ 2.8
+network updated @ 2.9
+refresh RSS node 1  @ 3.0
+meca: updt ag 1 @  3.0
+meca: updt ag 1 @  3.0
+meca: updt ag 2 @  3.0
+meca: updt ag 2 @  3.0
+network updated @ 3.0
+network updated @ 3.1
+refresh RSS node 2  @ 3.2
+network updated @ 3.2
+refresh RSS node 1  @ 3.3
+network updated @ 3.3
+network updated @ 3.4
+localization request communication from node 1 @ 3.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 3.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 3.5
+refresh RSS node 1  @ 3.6
+refresh RSS node 2  @ 3.6
+network updated @ 3.6
+network updated @ 3.7
+network updated @ 3.8
+refresh RSS node 1  @ 3.9
+network updated @ 3.9
+refresh RSS node 2  @ 4.0
+meca: updt ag 1 @  4.0
+meca: updt ag 2 @  4.0
+network updated @ 4.0
+network updated @ 4.1
+refresh RSS node 1  @ 4.2
+network updated @ 4.2
+network updated @ 4.3
+refresh RSS node 2  @ 4.4
+network updated @ 4.4
+refresh RSS node 1  @ 4.5
+localization request communication from node 1 @ 4.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 4.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 4.5
+network updated @ 4.6
+network updated @ 4.7
+refresh RSS node 1  @ 4.8
+network updated @ 4.8
+refresh RSS node 2  @ 4.8
+network updated @ 4.9
+network updated @ 5.0
+meca: updt ag 1 @  5.0
+meca: updt ag 2 @  5.0
+network updated @ 5.1
+refresh RSS node 1  @ 5.1
+network updated @ 5.2
+refresh RSS node 2  @ 5.2
+network updated @ 5.3
+network updated @ 5.4
+refresh RSS node 1  @ 5.4
+network updated @ 5.5
+localization request communication from node 1 @ 5.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 5.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 5.6
+refresh RSS node 2  @ 5.6
+network updated @ 5.7
+refresh RSS node 1  @ 5.7
+network updated @ 5.8
+network updated @ 5.9
+network updated @ 6.0
+refresh RSS node 1  @ 6.0
+meca: updt ag 1 @  6.0
+meca: updt ag 2 @  6.0
+refresh RSS node 2  @ 6.0
+network updated @ 6.1
+network updated @ 6.2
+network updated @ 6.3
+refresh RSS node 1  @ 6.3
+network updated @ 6.4
+refresh RSS node 2  @ 6.4
+network updated @ 6.5
+localization request communication from node 1 @ 6.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 6.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 6.6
+refresh RSS node 1  @ 6.6
+network updated @ 6.7
+network updated @ 6.8
+refresh RSS node 2  @ 6.8
+network updated @ 6.9
+refresh RSS node 1  @ 6.9
+network updated @ 7.0
+meca: updt ag 1 @  7.0
+meca: updt ag 2 @  7.0
+network updated @ 7.1
+network updated @ 7.2
+refresh RSS node 1  @ 7.2
+refresh RSS node 2  @ 7.2
+network updated @ 7.3
+network updated @ 7.4
+network updated @ 7.5
+refresh RSS node 1  @ 7.5
+localization request communication from node 1 @ 7.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 7.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 7.6
+refresh RSS node 2  @ 7.6
+network updated @ 7.7
+network updated @ 7.8
+refresh RSS node 1  @ 7.8
+network updated @ 7.9
+network updated @ 8.0
+meca: updt ag 1 @  8.0
+meca: updt ag 2 @  8.0
+refresh RSS node 2  @ 8.0
+network updated @ 8.1
+refresh RSS node 1  @ 8.1
+network updated @ 8.2
+network updated @ 8.3
+network updated @ 8.4
+refresh RSS node 1  @ 8.4
+refresh RSS node 2  @ 8.4
+network updated @ 8.5
+localization request communication from node 1 @ 8.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 8.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 8.6
+network updated @ 8.7
+refresh RSS node 1  @ 8.7
+network updated @ 8.8
+refresh RSS node 2  @ 8.8
+network updated @ 8.9
+network updated @ 9.0
+meca: updt ag 1 @  9.0
+meca: updt ag 2 @  9.0
+refresh RSS node 1  @ 9.0
+network updated @ 9.1
+network updated @ 9.2
+refresh RSS node 2  @ 9.2
+network updated @ 9.3
+refresh RSS node 1  @ 9.3
+network updated @ 9.4
+network updated @ 9.5
+localization request communication from node 1 @ 9.5
+communication requested by node  1
+communication requested by node  1
+Done request from 1 to 2 on rat rat1
+localization request communication from node 2 @ 9.5
+communication requested by node  2
+communication requested by node  2
+Done request from 2 to 1 on rat rat1
+network updated @ 9.6
+refresh RSS node 1  @ 9.6
+refresh RSS node 2  @ 9.6
+network updated @ 9.7
+network updated @ 9.8
+network updated @ 9.9
+refresh RSS node 1  @ 9.9
+network updated @ 10.0
+meca: updt ag 1 @  10.0
+meca: updt ag 2 @  10.0</pre>
+</div>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:528: DeprecationWarning: openFile() is pending deprecation, use open_file() instead. You may use the pt2to3 tool to update your source code.
+  self._handle = tables.openFile(self._path, self._mode, **kwargs)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1044: DeprecationWarning: getNode() is pending deprecation, use get_node() instead. You may use the pt2to3 tool to update your source code.
+  return self._handle.getNode(self.root, key)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1044: DeprecationWarning: getNode() is pending deprecation, use get_node() instead. You may use the pt2to3 tool to update your source code.
+  return self._handle.getNode(self.root, key)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1251: DeprecationWarning: createGroup() is pending deprecation, use create_group() instead. You may use the pt2to3 tool to update your source code.
+  group = self._handle.createGroup(path, p)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:3592: DeprecationWarning: createTable() is pending deprecation, use create_table() instead. You may use the pt2to3 tool to update your source code.
+  table = self._handle.createTable(self.group, **options)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:3032: DeprecationWarning: createIndex() is pending deprecation, use create_index() instead. You may use the pt2to3 tool to update your source code.
+  v.createIndex(**kw)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1044: DeprecationWarning: getNode() is pending deprecation, use get_node() instead. You may use the pt2to3 tool to update your source code.
+  return self._handle.getNode(self.root, key)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1044: DeprecationWarning: getNode() is pending deprecation, use get_node() instead. You may use the pt2to3 tool to update your source code.
+  return self._handle.getNode(self.root, key)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1251: DeprecationWarning: createGroup() is pending deprecation, use create_group() instead. You may use the pt2to3 tool to update your source code.
+  group = self._handle.createGroup(path, p)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:3592: DeprecationWarning: createTable() is pending deprecation, use create_table() instead. You may use the pt2to3 tool to update your source code.
+  table = self._handle.createTable(self.group, **options)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:3032: DeprecationWarning: createIndex() is pending deprecation, use create_index() instead. You may use the pt2to3 tool to update your source code.
+  v.createIndex(**kw)</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x690ff50&gt;</pre>
+</div>
+<img alt="./MOB-mobility_files/MOB-mobility_4_3.png" src="./MOB-mobility_files/MOB-mobility_4_3.png" />
+<img alt="./MOB-mobility_files/MOB-mobility_4_4.png" src="./MOB-mobility_files/MOB-mobility_4_4.png" />
+<p>trajectories can be imported from a simulnet simulation with the
+<tt class="docutils literal"><span class="pre">importh5</span></tt> method</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">str1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">])</span>
+<span class="n">str2</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c"># the save filename is composed of simulation filename and layout filename</span>
+<span class="n">save_filename</span> <span class="o">=</span> <span class="n">str1</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">str2</span> <span class="o">+</span><span class="s">&#39;.h5&#39;</span>
+
+<span class="n">list_traj</span> <span class="o">=</span> <span class="n">importh5</span><span class="p">(</span><span class="n">save_filename</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:528: DeprecationWarning: openFile() is pending deprecation, use open_file() instead. You may use the pt2to3 tool to update your source code.
+  self._handle = tables.openFile(self._path, self._mode, **kwargs)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1031: DeprecationWarning: walkNodes() is pending deprecation, use walk_nodes() instead. You may use the pt2to3 tool to update your source code.
+  g for g in self._handle.walkNodes()
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1044: DeprecationWarning: getNode() is pending deprecation, use get_node() instead. You may use the pt2to3 tool to update your source code.
+  return self._handle.getNode(self.root, key)
+/usr/local/lib/python2.7/dist-packages/pandas/io/pytables.py:1044: DeprecationWarning: getNode() is pending deprecation, use get_node() instead. You may use the pt2to3 tool to update your source code.
+  return self._handle.getNode(self.root, key)</pre>
 </div>
 <p>The 2 following trajectories have been calculated with
 <tt class="docutils literal"><span class="pre">pylayers.simul.simulnet</span></tt></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">c</span>
+<span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">list_traj</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./MOB-mobility_files/MOB-mobility_7_0.png" src="./MOB-mobility_files/MOB-mobility_7_0.png" />
+<div class="highlight-python"><pre>---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-7-4eff773e6024&gt; in &lt;module&gt;()
+----&gt; 1 c
+      2 f=plt.figure(figsize=(20,20))
+      3 f,a = S.L.showGs(fig=f)
+      4 for nodes in list_traj:
+      5     f,a = nodes.plot(fig=f,ax=a)
+
+
+NameError: name 'c' is not defined</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">importsn</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
 
 
           </div>

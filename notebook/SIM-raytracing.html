@@ -96,7 +96,10 @@ default configuration file named <strong>default.ini</strong> is loaded.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x37c6890&gt;</pre>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+  warnings.warn(msg, UserWarning)</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3b78dd0&gt;</pre>
 </div>
 <p>A first step consists in loading a layout associated with the
 simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
@@ -865,8 +868,8 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
 <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x8681f90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x862fc90&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3b78d90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7c17150&gt;)</pre>
 </div>
 <img alt="./SIM-raytracing_files/SIM-raytracing_34_1.png" src="./SIM-raytracing_files/SIM-raytracing_34_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span>
@@ -1050,7 +1053,10 @@ The colorbar corresponds to the total energy of the path.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_56_0.png" src="./SIM-raytracing_files/SIM-raytracing_56_0.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3b84fd0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x944e110&gt;)</pre>
+</div>
+<img alt="./SIM-raytracing_files/SIM-raytracing_56_1.png" src="./SIM-raytracing_files/SIM-raytracing_56_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1107,7 +1113,7 @@ waveform to the transmission channel.</p>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x605f810&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x942db10&gt;</pre>
 </div>
 <img alt="./SIM-raytracing_files/SIM-raytracing_66_2.png" src="./SIM-raytracing_files/SIM-raytracing_66_2.png" />
 <img alt="./SIM-raytracing_files/SIM-raytracing_66_3.png" src="./SIM-raytracing_files/SIM-raytracing_66_3.png" />

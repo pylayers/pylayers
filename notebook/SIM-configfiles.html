@@ -88,7 +88,10 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4575890&gt;</pre>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+  warnings.warn(msg, UserWarning)</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4a77dd0&gt;</pre>
 </div>
 <div class="section" id="network-simulation-configuration">
 <h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
@@ -117,9 +120,13 @@ dbname = test
 dumpdb =True
 
 [Save]
+; deprecated save option
 save=[]
 ;save=['csv','mysql','matlab','pyray','txt','ini']
-savep=True
+; save format using Save class..to be deprecatred soon
+savep=False
+; pandas save format . only record mechanical. To be upgraded soon
+savepd=True
 
 [Layout]
 filename = TA-Office.ini
@@ -133,13 +140,16 @@ the_world_scale      = 20
 
 [Mechanics]
 ; update time for agent movement
-mecanic_update_time = 0.1
+mecanic_update_time = 1
 ; select how agnt choose destiantion
 ;'random' ; file
 choose_destination = 'random'
-
+; experimental show for debug purpose
+pdshow=True
 
 [Network]
+; simulate the network
+network=True
 ; refresh TOA regulary 'synchro 'or with distance 'autionomous'
 Communication_mode='autonomous'
 ; update time for refreshing network
@@ -166,10 +176,12 @@ method = ['alg']
 
 
 [Simulation]
+; simulation filename for savepd
+filename = 'simulnet'
 ; Simulation duration
 duration = 10.0
-; speed ratio
-speedratio = 1.
+; speed ratio ag
+speedratio = 50.
 ; time for refreshing tk plot ( obsolete)
 show_interval = 0.5
 ; show scene using tk renderer ( obsolete)
@@ -206,14 +218,14 @@ verbose = True</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;save&#39;</span><span class="p">:</span> <span class="s">&#39;[]&#39;</span><span class="p">,</span> <span class="s">&#39;savep&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;save&#39;</span><span class="p">:</span> <span class="s">&#39;[]&#39;</span><span class="p">,</span> <span class="s">&#39;savep&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span> <span class="s">&#39;savepd&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The <tt class="docutils literal"><span class="pre">savep</span></tt> boolean enable/disable saving of the simulation.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))[</span><span class="s">&#39;savep&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
 </pre></div>
 </div>
 <p>The log file which contains all traces from the dynamic are in
@@ -262,6 +274,7 @@ verbose = True</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;communication_mode&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;autonomous&#39;&quot;</span><span class="p">,</span>
  <span class="s">&#39;dispinfo&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
  <span class="s">&#39;ipython_nb_show&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
+ <span class="s">&#39;network&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">,</span>
  <span class="s">&#39;network_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;0.1&#39;</span><span class="p">,</span>
  <span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
  <span class="s">&#39;show_sg&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
@@ -317,7 +330,9 @@ periodically refreshed at the network_update_time</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;choose_destination&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;random&#39;&quot;</span><span class="p">,</span> <span class="s">&#39;mecanic_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;0.1&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;choose_destination&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;random&#39;&quot;</span><span class="p">,</span>
+ <span class="s">&#39;mecanic_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
+ <span class="s">&#39;pdshow&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Setup how agent choose their target:</p>
@@ -336,7 +351,7 @@ periodically refreshed at the network_update_time</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))[</span><span class="s">&#39;mecanic_update_time&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;0.1&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;1&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -383,10 +398,11 @@ periodically refreshed at the network_update_time</li>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;duration&#39;</span><span class="p">:</span> <span class="s">&#39;10.0&#39;</span><span class="p">,</span>
+ <span class="s">&#39;filename&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;simulnet&#39;&quot;</span><span class="p">,</span>
  <span class="s">&#39;seed&#39;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
  <span class="s">&#39;show_interval&#39;</span><span class="p">:</span> <span class="s">&#39;0.5&#39;</span><span class="p">,</span>
  <span class="s">&#39;showtk&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
- <span class="s">&#39;speedratio&#39;</span><span class="p">:</span> <span class="s">&#39;1.&#39;</span><span class="p">,</span>
+ <span class="s">&#39;speedratio&#39;</span><span class="p">:</span> <span class="s">&#39;50.&#39;</span><span class="p">,</span>
  <span class="s">&#39;verbose&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
