@@ -96,23 +96,28 @@ class Body(object):
     def __repr__(self):
         st = ''
 
+        st = "My name is : "+self.name + '\n\n'
+
+        for k in self.dev.keys():
+            st = st + 'I have a '+k+' device on cylinder '+ str(self.dev[k]['cyl'])+'\n'
+
+        if 'topos' not in dir(self):
+            st = st+ 'I am nowhere yet\n\n'
+        else :
+            st = 'My centroid position is \n'+ str(self.centroid)+"\n"
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):
             st = st +'nframes : ' + str(self.nframes) +'\n'
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
-        if 'mocapinfo' in dir(self):
-            st = st + str(self.mocapinfo)+'\n'
+        #if 'mocapinfo' in dir(self):
+        #    st = st + str(self.mocapinfo)+'\n'
         if 'tmocap' in dir(self):
             st = st + 'Mocap Duration : ' + str(self.Tmocap)+'\n'
         if 'vmocap' in dir(self):
             st = st + 'Mocap Speed : ' + str(self.vmocap)+'\n'
 
-        if 'topos' in dir(self):
-            st = st + 'topos : True'+'\n'
-        else:
-            st = st + 'topos : False'+'\n'
         return(st)
 
 
@@ -224,12 +229,13 @@ class Body(object):
         Returns
         -------
 
-        kf
-        kt
+        kf  : frame integer index
+        kt  : trajectory integer index
         vsn : normalized speed vector along motion capture trajectory (source)
         wsn : planar vector orthogonal to vsn
         vtn : normalized speed vector along motion trajectory (target)
         wtn : planar vector orthogonal to wtn
+
         """
         # t should be in the trajectory time range
         assert ((t>=traj.tmin) & (t<=traj.tmax)),'posvel: t not in trajectory time range'
@@ -332,6 +338,9 @@ class Body(object):
         #
         # pta : target translation
         # ptb = pta+vtn : a point in the direction of trajectory
+        #
+        # kt : trajectory integer index  
+        # kf : frame integer index  
 
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
 
@@ -342,6 +351,8 @@ class Body(object):
         pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
+
+        self.centroid = pta
 
         X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
         Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T

@@ -331,16 +331,16 @@ def importh5(_filename='simulnet_def_str.h5'):
 #     for it in range(Ntraj):
 #         x = dt[dtk[3*it+1]].values
 #         y = dt[dtk[3*it+2]].values
-#         z = np.zeros(len(x)) 
+#         z = np.zeros(len(x))
 #         pt = np.vstack((x,y,z))
 #         lt.append(Trajectory(dt['time'].values,pt=pt.T,unit='s'))
-#     return(lt)   
+#     return(lt)
 
 
 if __name__ == '__main__':
     plt.ion()
     doctest.testmod()
-    
 
 
-   
+
+
