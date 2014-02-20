@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Antennas &mdash; PyLayers</title>
+    <title>antenna &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -60,7 +60,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Antennas</a><ul>
+<li><a class="reference internal" href="#">antenna</a><ul>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
@@ -94,7 +94,7 @@
           <div class="body">
             
   <div class="section" id="module-pylayers.antprop.antenna">
-<span id="antennas"></span><span id="antenna"></span><h1>Antennas<a class="headerlink" href="#module-pylayers.antprop.antenna" title="Permalink to this headline">¶</a></h1>
+<span id="antenna"></span><h1>antenna<a class="headerlink" href="#module-pylayers.antprop.antenna" title="Permalink to this headline">¶</a></h1>
 <p>This module handles antennas in pylayers</p>
 <p>To instantiate an antenna object :</p>
 <p>typ indicates the antenna file format to read</p>
@@ -106,10 +106,13 @@
 </div>
 <p>The antenna can be represented in various formats</p>
 <p>.vsh2
-.vsh3</p>
+.vsh3
+.sh2
+.sh3
+.mat</p>
 <dl class="class">
 <dt id="pylayers.antprop.antenna.Antenna">
-<em class="property">class </em><tt class="descclassname">pylayers.antprop.antenna.</tt><tt class="descname">Antenna</tt><big>(</big><em>_filename='defant.vsh3'</em>, <em>directory='ant'</em>, <em>pattern=False</em>, <em>nf=104</em>, <em>ntheta=90</em>, <em>nphi=181</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.antenna.</tt><tt class="descname">Antenna</tt><big>(</big><em>_filename='defant.vsh3'</em>, <em>directory='ant'</em>, <em>fromfile=True</em>, <em>typ='Gauss'</em>, <em>nf=104</em>, <em>ntheta=90</em>, <em>nphi=181</em>, <em>p0=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna" title="Permalink to this definition">¶</a></dt>
 <dd><p>Antenna</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -148,8 +151,30 @@ bcp     : near filed chamber</p>
 </table>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fpatt">
-<tt class="descname">Fpatt</tt><big>(</big><em>th=</em><span class="optional">[</span><span class="optional">]</span>, <em>ph=</em><span class="optional">[</span><span class="optional">]</span>, <em>pattern=True</em><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fpatt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">Fpatt</tt><big>(</big><em>th=</em><span class="optional">[</span><span class="optional">]</span>, <em>ph=</em><span class="optional">[</span><span class="optional">]</span>, <em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fpatt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fpatt" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>th  :</strong> :</p>
+<p><strong>ph  :</strong> :</p>
+<p><strong>pattern</strong> : boolean</p>
+<blockquote>
+<div><p>default True</p>
+</div></blockquote>
+<p><strong>if pattern</strong> :</p>
+<blockquote>
+<div><p>The pattern is generated from self.Nt and self.Np nimber of points</p>
+</div></blockquote>
+<p><strong>else:</strong> :</p>
+<blockquote class="last">
+<div><p>phi and theta have same length (typically ray direction)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fsynth1">
@@ -180,8 +205,15 @@ bcp     : near filed chamber</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : array 1 x Nt</p>
-<p><strong>phi :</strong> :</p>
-<p class="last"><strong>pattern</strong> : boolean</p>
+<p><strong>phi</strong> : array 1 x Np</p>
+<p><strong>pattern</strong> : boolean</p>
+<blockquote>
+<div><p>default False</p>
+</div></blockquote>
+<p><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><p>{vsh | ssh}</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -429,6 +461,11 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadhfss">
+<tt class="descname">loadhfss</tt><big>(</big><em>lfa=</em><span class="optional">[</span><span class="optional">]</span>, <em>Nt=72</em>, <em>Np=37</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadhfss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadhfss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.loadmat">
 <tt class="descname">loadmat</tt><big>(</big><em>directory='ant'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadmat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadmat" title="Permalink to this definition">¶</a></dt>
 <dd><p>load an antenna stored in a mat file</p>
@@ -458,6 +495,12 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <div class="figure">
 <img alt="../_images/antprop-antenna-2.png" src="../_images/antprop-antenna-2.png" />
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.loadsh2">
+<tt class="descname">loadsh2</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadsh2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadsh2" title="Permalink to this definition">¶</a></dt>
+<dd><p>load  spherical harmonics coefficient in shape  2</p>
 </dd></dl>
 
 <dl class="method">
@@ -510,6 +553,30 @@ the vsh coefficients in shape 2</p>
 <dt id="pylayers.antprop.antenna.Antenna.loadvsh3_old">
 <tt class="descname">loadvsh3_old</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadvsh3_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadvsh3_old" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load antenna vsh coefficients in shape 3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.ls">
+<tt class="descname">ls</tt><big>(</big><em>typ='vsh3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.ls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.ls" title="Permalink to this definition">¶</a></dt>
+<dd><p>list the available file in dirant</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
+<blockquote>
+<div><p>{&#8216;mat&#8217;|&#8217;trx&#8217;|&#8217;vsh3&#8217;|&#8217;sh3&#8217;}</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>lfile_s</strong> : list</p>
+<blockquote class="last">
+<div><p>sorted list of all the .str file of strdir</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -576,8 +643,12 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <div><p>1xNt</p>
 </div></blockquote>
 <p><strong>phi</strong> : array</p>
-<blockquote class="last">
+<blockquote>
 <div><p>1xNp</p>
+</div></blockquote>
+<p><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><p>{s1|s2|s3}</p>
 </div></blockquote>
 </td>
 </tr>
@@ -588,15 +659,23 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.plot3d">
 <tt class="descname">plot3d</tt><big>(</big><em>k=0</em>, <em>typ='Gain'</em>, <em>col=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.plot3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.plot3d" title="Permalink to this definition">¶</a></dt>
-<dd><p>show in matplotlib</p>
-<p>k : frequency index</p>
-<dl class="docutils">
-<dt>typ = &#8216;Gain&#8217;</dt>
-<dd>= &#8216;Ftheta&#8217;
-= &#8216;Fphi&#8217;</dd>
-</dl>
-<p>if col  -&gt; color coded plot3D
-else    -&gt; simple plot3D</p>
+<dd><p>show 3D pattern in matplotlib</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
+<p><strong>typ = &#8216;Gain&#8217;</strong> :</p>
+<blockquote>
+<div><p>= &#8216;Ftheta&#8217;
+= &#8216;Fphi&#8217;</p>
+</div></blockquote>
+<p><strong>if col  -&gt; color coded plot3D</strong> :</p>
+<p class="last"><strong>else    -&gt; simple plot3D</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -617,7 +696,6 @@ else    -&gt; simple plot3D</p>
 <dt id="pylayers.antprop.antenna.Antenna.pol3d">
 <tt class="descname">pol3d</tt><big>(</big><em>k=0</em>, <em>R=50</em>, <em>St=1</em>, <em>Sp=1</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.pol3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pol3d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display polarisation diagram  in 3D</p>
-<p>pol3d(k=0,R=1,St=1,Sp=1,silent=False):</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -652,36 +730,16 @@ else    -&gt; simple plot3D</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.polar">
-<tt class="descname">polar</tt><big>(</big><em>k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1, fig=[], ax=[]</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.polar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.polar" title="Permalink to this definition">¶</a></dt>
-<dd><p>polar plot</p>
+<tt class="descname">polar</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.polar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.polar" title="Permalink to this definition">¶</a></dt>
+<dd><p>antenna 2D polar plot</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : list of int</p>
-<blockquote>
-<div><p>frequency index  (default 0)</p>
-</div></blockquote>
-<p><strong>it</strong> : int</p>
-<blockquote>
-<div><p>theta index      (default 0)</p>
-</div></blockquote>
-<p><strong>ip</strong> : int</p>
-<blockquote>
-<div><p>phi index        (default -1)</p>
-</div></blockquote>
-<p><strong>GmaxdB :</strong> :</p>
-<blockquote>
-<div><p>Max Gain (dB)</p>
-</div></blockquote>
-<p><strong>dyn    :</strong> :</p>
-<blockquote>
-<div><p>dynamic number of 5dB step</p>
-</div></blockquote>
-<p><strong>alpha</strong> : float</p>
-<blockquote>
-<div><p>default 0.1</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>&#8216;fGHz&#8217;</strong> : frequzncy</p>
+<p><strong>phd</strong> : phi in degrees</p>
+<p><strong>thd</strong> : theta in degrees</p>
+<p><strong>&#8216;GmaxdB&#8217;:  max gain to be displayed</strong> :</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
@@ -694,13 +752,11 @@ else    -&gt; simple plot3D</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.trx&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/antprop-antenna-3.py">Source code</a>, <a class="reference external" href="../modules/antprop-antenna-3.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-3.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/antprop-antenna-3.png" src="../_images/antprop-antenna-3.png" />
-</div>
+<p>(<a class="reference external" href="../modules/antprop-antenna-3.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="method">
@@ -799,13 +855,22 @@ else    -&gt; simple plot3D</p>
 <dt>plot VSH transform vsh basis in 3D plot</dt>
 <dd>(V in fig1 and W in fig2)</dd>
 </dl>
-<p>n,m   : integer values (m&lt;=n)
-theta : ndarray
-phi   : ndarray
-sf    : boolean</p>
-<blockquote>
-<div>if sf : plotted figures are saved in a <a href="#id1"><span class="problematic" id="id2">*</span></a>.png file
-else  : plotted figures aren&#8217;t saved</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n,m</strong> : integer values (m&lt;=n)</p>
+<p><strong>theta</strong> : ndarray</p>
+<p><strong>phi</strong> : ndarray</p>
+<p><strong>sf</strong> : boolean</p>
+<blockquote class="last">
+<div><p>if sf : plotted figures are saved in a <a href="#id1"><span class="problematic" id="id2">*</span></a>.png file
+else  : plotted figures aren&#8217;t saved</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span>  <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>

@@ -1,8 +1,5 @@
-.. _antenna:
-
-
-Antennas 
---------
+antenna
+=======
 
 .. automodule:: pylayers.antprop.antenna
     :members:
