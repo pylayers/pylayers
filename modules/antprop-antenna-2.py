@@ -1,8 +1,7 @@
-import matplotlib.pyplot as plt
 from pylayers.antprop.antenna import *
-A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
-pol1 = plt.polar(A.phi,abs(A.Ftheta[10,45,:]),'b')
-pol2 = plt.polar(A.phi,abs(A.Ftheta[20,45,:]),'r')
-pol3 = plt.polar(A.phi,abs(A.Ftheta[30,45,:]),'g')
-txt = plt.title('S1R1 antenna : st loadmat')
-plt.show()
+import numpy as np
+import matplotlib.pylab as plt
+A = Antenna('defant.vsh3')
+theta = np.linspace(0,np.pi,70)
+phi = np.linspace(0,2*np.pi,180)
+F = A.Fsynth3(theta,phi,pattern=True)
