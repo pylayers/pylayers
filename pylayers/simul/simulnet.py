@@ -92,7 +92,7 @@ class Simul(SimulationRT): # Sympy 2
         #sympy.RealtimeEnvironment.__init__(self)  #simpy 3
         self.initialize()
         self.config = ConfigParser.ConfigParser()
-        filename = pyu.getlong('simulnet.ini','ini')
+        filename = pyu.getlong('simulnet.ini',pstruc['DIRSIMUL'])
         self.config.read(filename)
         self.sim_opt = dict(self.config.items('Simulation'))
         self.lay_opt = dict(self.config.items('Layout'))
@@ -101,6 +101,7 @@ class Simul(SimulationRT): # Sympy 2
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
+        self.seed = eval(self.sim_opt['seed'])
 
 
         self.verbose = str2bool(self.sim_opt['verbose'])
@@ -150,6 +151,7 @@ class Simul(SimulationRT): # Sympy 2
                                scale=float(self.lay_opt['the_world_scale']))
 
         _filename = self.lay_opt['filename']
+
         self.L = Layout(_filename)
 
 
@@ -205,6 +207,8 @@ class Simul(SimulationRT): # Sympy 2
                             ID=ag_opt['id'],
                             name=ag_opt['name'],
                             type=ag_opt['type'],
+                            color=eval(ag_opt['color']),
+                            pdshow=str2bool(self.meca_opt['pdshow']),
                             pos=np.array(eval(ag_opt['pos'])),
                             roomId=int(ag_opt['roomid']),
                             froom=eval(ag_opt['froom']),
@@ -224,7 +228,8 @@ class Simul(SimulationRT): # Sympy 2
                             save=eval(self.save_opt['save']),
                             gcom=self.gcom,
                             comm_mode=eval(self.net_opt['communication_mode']),
-                            sim=self))
+                            sim=self,
+                            seed=self.seed))
 
 
     def create_EMS(self):
@@ -334,10 +339,13 @@ class Simul(SimulationRT): # Sympy 2
         """ Run simulation
         """
 
-        seed(eval(self.sim_opt['seed']))
+        seed(self.seed)
         self.simulate(until=float(self.sim_opt['duration']),
                       real_time=True,
                       rel_speed=float(self.sim_opt['speedratio']))
+        self.the_world._boids={}
+
+
         if str2bool(self.save_opt['savep']):
             print 'Processing save results, please wait'
             self.save.mat_export()
@@ -346,12 +354,11 @@ class Simul(SimulationRT): # Sympy 2
         if str2bool(self.save_opt['savepd']):
             filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
             layfile = self.L.filename.split('.')[0]
-            store = pd.HDFStore(filename+'_'+layfile+'.h5')
-            [store.append(a.ID,a.meca.df) for a in self.lAg if a.type != 'ap']    
+            store = pd.HDFStore(filename+'_'+layfile+'.h5','w')
+            [store.append(a.ID,a.meca.df.convert_objects()) for a in self.lAg if a.type != 'ap']    
             store.close()
 
 if __name__ == '__main__':
 
     S = Simul()
     S.runsimul()
-

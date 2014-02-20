@@ -108,7 +108,7 @@ class Ctilde(object):
             postion of point a (transmitter)
         b : np.ndarray
             postion of point b (receiver)
-        
+
 
         """
 
@@ -155,7 +155,7 @@ class Ctilde(object):
             Layout filename
         idx : int
             file identifier number
-        
+
 
         Returns
         -------
@@ -1148,7 +1148,6 @@ class Ctilde(object):
         #t2 = self.Ctp * Fat + self.Cpp * Fap
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
-
         alpha = t1 * Fbt + t2 * Fbp
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)

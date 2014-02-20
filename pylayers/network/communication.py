@@ -587,12 +587,11 @@ class Gcom(nx.MultiDiGraph):
         self.dec={}
         self.devt={}
     def load_dec_file(self):
-
         self.config     = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
         nodes=self.config.sections()
-
         ntype=nx.get_node_attributes(self.net,'type')
+        
         for n in self:
             try:
                 if ntype[n]=='ag':
@@ -602,7 +601,18 @@ class Gcom(nx.MultiDiGraph):
                     self.dec[n]['action']=eval(dict(self.config.items(n))['action'])
                     self.dec[n]['rule']=eval(dict(self.config.items(n))['rule'])
             except:
-                raise NameError('no decision in communcation.ini for node' +n)
+                nconfig     = ConfigParser.ConfigParser()
+                nconfig.add_section(n)
+                nconfig.set(n,'rat',[self.net.node[n]['RAT'][0]])
+                nconfig.set(n,'rule',['always'])
+                nconfig.set(n,'action',['range'])
+                fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
+                fd = open(fileini, "a")
+                nconfig.write(fd)
+                fd.close() 
+                print ('Warning: Communication of node '+n + 'set with default values')
+
+                
 
 
 
