@@ -8,6 +8,7 @@ from pylayers.util.project import *
 from pylayers.gis.layout import Layout
 import pandas as pd 
 import copy
+import time
 import doctest
 
 
@@ -247,6 +248,7 @@ class Trajectory(pd.DataFrame):
             ax.plot(self['x'],self['y'])
         elif typ == 'scatter':
             ax.scatter(self['x'],self['y'])
+        
         for k in np.linspace(0,len(self),Nlabels,endpoint=False):
             k = int(k)
 
@@ -257,6 +259,70 @@ class Trajectory(pd.DataFrame):
         plt.ylabel('y (meters)')
 
         return fig,ax 
+
+    def replay(self,fig=[],ax=[],Nlabels=5,typ='plot',L=[],speed=1,**kwargs):
+        """
+            replay a trajectory
+
+        Parameters
+        ----------
+
+        fig 
+        ax 
+        Nlabels : int 
+        typ : 'plot'|'scatter'
+        L : pylayers.gis.layout.Layout object to be displayed
+        speed : speed ratio 
+
+        """
+
+        plt.ion()
+        if fig==[]:
+            fig = plt.gcf()
+        if ax == []:
+            ax = plt.gca()
+
+        limkwargs = copy.copy(kwargs)
+        if 'c' in kwargs :
+            limkwargs.pop('c')
+        if 'color'in kwargs:
+            limkwargs.pop('c')
+        limkwargs['marker']='*'
+        limkwargs['s']=20
+
+        if ('m' or 'marker') not in kwargs:
+            kwargs['marker']='o'
+        if ('c' or 'color') not in kwargs:
+            kwargs['color']='b'
+
+        
+        if L!=[]:
+            if isinstance(L,Layout):
+                fig,ax=L.showGs(fig=fig,ax=ax,**kwargs)
+
+        labels = np.linspace(0,len(self),Nlabels,endpoint=True).tolist()
+
+        for ik,k in enumerate(self.index):
+            time.sleep(1/(1.*speed))
+            ax.scatter(self['x'][ik],self['y'][ik],**kwargs)
+            plt.title(str(self.index[ik].time())[:11].ljust(12),loc='left')
+
+            if ik > labels[0]:
+                ax.text(self['x'][ik],self['y'][ik],str(self.index[ik].strftime("%M:%S")))
+                ax.scatter(self['x'][ik],self['y'][ik],**limkwargs)
+                labels.pop(0)
+            plt.draw()
+
+  
+        plt.ioff()
+        # for k in :
+        #     k = int(k)
+        #     ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
+        #     ax.plot(self['x'][k],self['y'][k],'*r')
+        #     plt.draw()
+        
+
+
 
 def importsn(_filename='pos.csv'):
     """ 
