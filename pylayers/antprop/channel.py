@@ -108,7 +108,7 @@ class Ctilde(object):
             postion of point a (transmitter)
         b : np.ndarray
             postion of point b (receiver)
-        
+
 
         """
 
@@ -118,7 +118,7 @@ class Ctilde(object):
 
         # save channel in global basis
         if self.islocal:
-            self.locbas(b2g=Truew)
+            self.locbas(b2g=True)
 
         f=h5py.File(filename,'w')
         f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
@@ -155,7 +155,7 @@ class Ctilde(object):
             Layout filename
         idx : int
             file identifier number
-        
+
 
         Returns
         -------
@@ -1144,6 +1144,9 @@ class Ctilde(object):
         # Cg2cl should be applied here
         #
 
+
+        #t1 = self.Ctt * Fat + self.Cpt * Fap
+        #t2 = self.Ctp * Fat + self.Cpp * Fap
         t1 = self.Ctt * Fat + self.Ctp * Fap
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp

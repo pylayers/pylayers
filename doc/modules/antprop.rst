@@ -27,4 +27,3 @@ propagation channel description.
    antprop.multiwall.rst
 
    antprop.coverage.rst
-

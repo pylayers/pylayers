@@ -31,6 +31,7 @@ from SimPy.SimulationRT import SimulationRT, Process, hold
 import numpy as np
 import scipy as sp
 import networkx as nx
+import pandas as pd
 import random
 from random import seed
 
@@ -91,7 +92,7 @@ class Simul(SimulationRT): # Sympy 2
         #sympy.RealtimeEnvironment.__init__(self)  #simpy 3
         self.initialize()
         self.config = ConfigParser.ConfigParser()
-        filename = pyu.getlong('simulnet.ini','ini')
+        filename = pyu.getlong('simulnet.ini',pstruc['DIRSIMUL'])
         self.config.read(filename)
         self.sim_opt = dict(self.config.items('Simulation'))
         self.lay_opt = dict(self.config.items('Layout'))
@@ -100,6 +101,8 @@ class Simul(SimulationRT): # Sympy 2
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
+        self.seed = eval(self.sim_opt['seed'])
+
 
         self.verbose = str2bool(self.sim_opt['verbose'])
         if str2bool(self.net_opt['ipython_nb_show']):
@@ -148,6 +151,7 @@ class Simul(SimulationRT): # Sympy 2
                                scale=float(self.lay_opt['the_world_scale']))
 
         _filename = self.lay_opt['filename']
+
         self.L = Layout(_filename)
 
 
@@ -203,6 +207,8 @@ class Simul(SimulationRT): # Sympy 2
                             ID=ag_opt['id'],
                             name=ag_opt['name'],
                             type=ag_opt['type'],
+                            color=eval(ag_opt['color']),
+                            pdshow=str2bool(self.meca_opt['pdshow']),
                             pos=np.array(eval(ag_opt['pos'])),
                             roomId=int(ag_opt['roomid']),
                             froom=eval(ag_opt['froom']),
@@ -213,6 +219,7 @@ class Simul(SimulationRT): # Sympy 2
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
                             L=self.L,
+                            network=str2bool(self.net_opt['network']),
                             net=self.net,
                             epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
                             sens=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
@@ -221,11 +228,9 @@ class Simul(SimulationRT): # Sympy 2
                             save=eval(self.save_opt['save']),
                             gcom=self.gcom,
                             comm_mode=eval(self.net_opt['communication_mode']),
-                            sim=self))
-#                            
-            if self.lAg[i].type == 'ag':
-                self.activate(self.lAg[i].meca,
-                              self.lAg[i].meca.move(), 0.0)
+                            sim=self,
+                            seed=self.seed))
+
 
     def create_EMS(self):
         """
@@ -243,25 +248,25 @@ class Simul(SimulationRT): # Sympy 2
 
         self.create_agent()
         # create network
+        if str2bool(self.net_opt['network']):
+            self.net.create()
 
-        self.net.create()
-
-        # create All Personnal networks
-        for n in self.net.nodes():
-            self.net.node[n]['PN'].get_RAT()
-            self.net.node[n]['PN'].get_SubNet()
-        self.gcom.create()
+            # create All Personnal networks
+            for n in self.net.nodes():
+                self.net.node[n]['PN'].get_RAT()
+                self.net.node[n]['PN'].get_SubNet()
+            self.gcom.create()
 
 
-       # create Process Network
-        self.Pnet = PNetwork(net=self.net,
-                             net_updt_time=float(self.net_opt['network_update_time']),
-                             L=self.L,
-                             sim=self,
-                             show_sg=str2bool(self.net_opt['show_sg']),
-                             disp_inf=str2bool(self.net_opt['dispinfo']),
-                             save=eval(self.save_opt['save']))
-        self.activate(self.Pnet, self.Pnet.run(), 0.0)
+           # create Process Network
+            self.Pnet = PNetwork(net=self.net,
+                                 net_updt_time=float(self.net_opt['network_update_time']),
+                                 L=self.L,
+                                 sim=self,
+                                 show_sg=str2bool(self.net_opt['show_sg']),
+                                 disp_inf=str2bool(self.net_opt['dispinfo']),
+                                 save=eval(self.save_opt['save']))
+            self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):
         """ Create visual Tk process
@@ -334,18 +339,26 @@ class Simul(SimulationRT): # Sympy 2
         """ Run simulation
         """
 
-        seed(eval(self.sim_opt['seed']))
+        seed(self.seed)
         self.simulate(until=float(self.sim_opt['duration']),
                       real_time=True,
                       rel_speed=float(self.sim_opt['speedratio']))
-#        self.simulate(until=float(self.sim_opt['duration']))
-        if self.save_opt['savep']:
+        self.the_world._boids={}
+
+
+        if str2bool(self.save_opt['savep']):
             print 'Processing save results, please wait'
             self.save.mat_export()
 
+
+        if str2bool(self.save_opt['savepd']):
+            filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
+            layfile = self.L.filename.split('.')[0]
+            store = pd.HDFStore(filename+'_'+layfile+'.h5','w')
+            [store.append(a.ID,a.meca.df.convert_objects()) for a in self.lAg if a.type != 'ap']    
+            store.close()
 
 if __name__ == '__main__':
 
     S = Simul()
     S.runsimul()
-

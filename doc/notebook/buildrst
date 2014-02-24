@@ -13,7 +13,7 @@ do
            echo "${i%%.ipynb}.rst already exists"
     else
             # regenerate out put cell 
-           echo "run notebook",$i 
+           echo $i 
            runipy -o $i --pylab >>log 2>> log-err
     fi
     # if command successful

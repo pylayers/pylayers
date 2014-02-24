@@ -2,17 +2,19 @@ from SimPy.SimulationRT import Process,Simulation,hold
 import ConfigParser
 import datetime
 #from math import *
-from random import normalvariate,uniform
+#from random import normalvariate,uniform
 from pylayers.mobility.transit.vec3 import vec3
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.SteeringBehavior import default_steering_mind
-from random import uniform,gauss,sample
+# from random import uniform,gauss,sample,seed
+import random
 import numpy as np
 
 from pylayers.network.network import Network
 from pylayers.util.utilnet import conv_vecarr
 
 import matplotlib.pylab as plt
+import pandas as pd
 #from pylayers.util.pymysqldb import Database 
 import pylayers.util.pyutil as pyu
 
@@ -103,7 +105,8 @@ class Person(Process):
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
     def __init__(self, ID = 0, interval=0.05,roomId=-1, L=[], net=Network(),
-        wld = world(),sim=None,moving=True,froom=[],wait=1.0,cdest='random',save=[]):
+        wld = world(),seed=0,sim=None,moving=True,froom=[],wait=1.0,cdest='random',
+        save=[],color='k',pdshow=False):
         """ Class Person
             inherits of Simpy.SimulationRT
             """
@@ -115,6 +118,8 @@ class Person(Process):
         Person.npers +=1
         Process.__init__(self,name='Person_ID'+str(ID),sim=sim)
         self.ID=ID
+        self.color=color
+        self.pdshow=pdshow
         self.L = L 
         self.world = wld
         self.interval = interval
@@ -122,9 +127,10 @@ class Person(Process):
         self.manager_args = []
         self.waypoints = []
         self.moving=moving
+        random.seed(seed)
         if roomId < 0:
             try :
-                self.roomId   = sample(self.L.Gr.nodes(),1)[0]
+                self.roomId   = random.sample(self.L.Gr.nodes(),1)[0]
             except: 
                 raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
         else:
@@ -132,14 +138,14 @@ class Person(Process):
         self.forbidroomId = froom 
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
-            # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+            # self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))
             try :
-                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+                self.nextroomId   = random.sample(self.L.Gr.nodes(),1)[0]
             except: 
                 raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId): # or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
-                # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+                # self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))
+                self.nextroomId   = random.sample(self.L.Gr.nodes(),1)[0]
             #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         elif self.cdest == 'file':
            cfg = ConfigParser.ConfigParser()
@@ -173,9 +179,10 @@ class Person(Process):
 
 
         # from Helbing, et al "Self-organizing pedestrian movement"
-        self.max_speed = 1.2#normalvariate(1.0, 0.26)
-        self.desired_speed = self.max_speed
-        self.radius = normalvariate(self.average_radius, 0.025) / 2
+        maxspeed = 0.8
+        self.max_speed = maxspeed#random.normalvariate(maxspeed, 0.1)
+        self.desired_speed = maxspeed
+        self.radius = self.average_radius#random.normalvariate(self.average_radius, 0.025) / 2
         self.intersection = vec3()
         self.arrived = False 
         self.endpoint = False 
@@ -184,6 +191,7 @@ class Person(Process):
         self.cancelled = 0
         self.net=net
         self.wait=wait
+        self.df = pd.DataFrame(columns=['t','x','y','vx','vy','ax','ay'])
         self.save=save
 
 
@@ -217,11 +225,13 @@ class Person(Process):
         """ Move the Agent
 
         """
+        if self.pdshow:
+            self.L.showGs(figsize=(20,20))
 
         while True:
             if self.moving:
-                if self.ID == 0:
-                    print 'meca update @',self.sim.now()
+                if self.sim.verbose:
+                    print 'meca: updt ag ' + self.ID + ' @ ',self.sim.now()
 
                 while self.cancelled:
                     yield passivate, self
@@ -249,10 +259,23 @@ class Person(Process):
                 self.world.update_boid(self)
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
-                if len(self.save)!=0:
-                    p=conv_vecarr(self.position)
-                    v=conv_vecarr(self.velocity)
-                    a=conv_vecarr(self.acceleration)
+
+                p=conv_vecarr(self.position).reshape(2,1)
+                v=conv_vecarr(self.velocity).reshape(2,1)
+                a=conv_vecarr(self.acceleration).reshape(2,1)
+                self.df = self.df.append(pd.DataFrame({'t':pd.Timestamp(self.sim.now(),unit='s'),
+                'id':self.ID,    
+                'x':p[0],
+                'y':p[1],
+                'vx':v[0],
+                'vy':v[1],
+                'ax':a[0],
+                'ay':a[1]},
+                columns=['t','id','x','y','vx','vy','ax','ay']))
+                if self.pdshow:
+                    plt.scatter(self.df['x'].tail(1),self.df['y'].tail(1),c=self.color,s=4,alpha=0.3)
+                    plt.draw()
+
                 if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
                 if 'txt' in self.save:
@@ -273,14 +296,14 @@ class Person(Process):
                     #adjroom  = self.L.Gr.neighbors(self.roomId)
                     #Nadjroom = len(adjroom)
                         if self.cdest == 'random':
-                            # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-                            self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+                            # self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))
+                            self.nextroomId   = random.sample(self.L.Gr.nodes(),1)[0]
                             # test 1 ) next != actualroom
                             #      2 ) nextroom != fordiden room
                             #      3 ) room not share without another agent
                             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId):# or (self.nextroomId in self.sim.roomlist):
-                                # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-                                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+                                # self.nextroomId   = int(np.floor(random.uniform(0,self.L.Gr.size())))
+                                self.nextroomId   = random.sample(self.L.Gr.nodes(),1)[0]
                         elif self.cdest == 'file':
                            self.room_counter=self.room_counter+1
                            if self.room_counter >= self.nb_room:
@@ -308,7 +331,7 @@ class Person(Process):
                     #print p2
                     #pdoor = (np.array(p1)+np.array(p2))/2
                         self.destination = self.waypoints[0]
-                    #waittime = uniform(0,10)
+                    #waittime = random.uniform(0,10)
 
                     #if self.manager:
                     #    if self.manager(self, *self.manager_args):
@@ -316,9 +339,10 @@ class Person(Process):
                     #else:
                     #    yield hold, self , waittime 
 
-#                        self.wait=abs(gauss(50,50))
-#                        self.wait=abs(gauss(1,1))
-                        print 'wait',self.wait*self.interval    
+#                        self.wait=abs(random.gauss(50,50))
+#                        self.wait=abs(random.gauss(1,1))
+                        if self.sim.verbose:
+                            print 'meca: ag ' + self.ID + ' wait ' + str(self.wait)#*self.interval) 
                         yield hold, self, self.wait 
 
                     else:    

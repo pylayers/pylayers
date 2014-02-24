@@ -183,7 +183,7 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filename='defstr3.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
 
 
         mat = sb.MatDB()
@@ -540,7 +540,10 @@ class Layout(object):
 
         degpnt = degpnt - nairwall
 
-        degmax = max(degpnt)
+        try:
+            degmax = max(degpnt)
+        except:
+            degmax = 1
 
         self.degree = {}
         for deg in range(degmax+1):
@@ -2390,7 +2393,10 @@ class Layout(object):
                     de1['transition']]
         #de1v    = de1.values()
         if gui:
-            data = multenterbox(message, title, tuple(de1k), tuple(de1v))
+            data0 = choicebox('chose slab',title,self.sl.keys())
+            data1 = multenterbox('attribute for ' + data0, title, tuple(de1k[1:]), tuple(de1v[1:]))
+            data = [data0]+data1
+            #data = multenterbox(message, title, tuple(de1k), tuple(de1v))
             i = 0
             self.name[de1['name']].remove(e1)
             for k in de1k:

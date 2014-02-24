@@ -96,23 +96,40 @@ class Body(object):
     def __repr__(self):
         st = ''
 
+        st = "My name is : " + self.name + '\n\n'
+
+        for k in self.dev.keys():
+            st = st + 'I have a '+self.dev[k]['name']+' device '
+            side = str(self.dev[k]['cyl'])[-1]
+            if side=='l':
+                st = st+'on the left '
+            if side=='r':
+                st = st+'on the right '
+            if side=='u':
+                st = st+'on the upper part of '
+            if side=='b':
+                st = st+'on the lower part of '
+            st = st + str(self.dev[k]['cyl'])[0:-1]+'\n'
+
+
+
+        if 'topos' not in dir(self):
+            st = st+ 'I am nowhere yet\n\n'
+        else :
+            st = 'My centroid position is \n'+ str(self.centroid)+"\n"
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):
             st = st +'nframes : ' + str(self.nframes) +'\n'
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
-        if 'mocapinfo' in dir(self):
-            st = st + str(self.mocapinfo)+'\n'
+        #if 'mocapinfo' in dir(self):
+        #    st = st + str(self.mocapinfo)+'\n'
         if 'tmocap' in dir(self):
             st = st + 'Mocap Duration : ' + str(self.Tmocap)+'\n'
         if 'vmocap' in dir(self):
             st = st + 'Mocap Speed : ' + str(self.vmocap)+'\n'
 
-        if 'topos' in dir(self):
-            st = st + 'topos : True'+'\n'
-        else:
-            st = st + 'topos : False'+'\n'
         return(st)
 
 
@@ -145,13 +162,10 @@ class Body(object):
             di[section] = {}
             options = config.options(section)
             for option in options:
-                try:
-                    if section=='nodes':
-                        di[section][option] = config.get(section,option)
-                    else:
-                        di[section][option] = eval(config.get(section,option))
-                except:
-                    print section,option
+                if section=='nodes':
+                    di[section][option] = config.get(section,option)
+                else:
+                    di[section][option] = eval(config.get(section,option))
 
         keys = map(lambda x : eval(x),di['nodes'].keys())
         self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
@@ -162,11 +176,13 @@ class Body(object):
             t = di['cylinder'][cyl]['t']
             h = di['cylinder'][cyl]['h']
             r = di['cylinder'][cyl]['r']
+            i = di['cylinder'][cyl]['i']
+            #pdb.set_trace()
             #
             # sl : segment list of the body
             # line index of sl corresponds to cylinder id from .ini file
             #
-            self.sl[int(cyl),:] = np.array([t,h,r])
+            self.sl[i,:] = np.array([t,h,r])
 
         self.ncyl = len(di['cylinder'].values())
         self.dev={}
@@ -224,12 +240,13 @@ class Body(object):
         Returns
         -------
 
-        kf
-        kt
+        kf  : frame integer index
+        kt  : trajectory integer index
         vsn : normalized speed vector along motion capture trajectory (source)
         wsn : planar vector orthogonal to vsn
         vtn : normalized speed vector along motion trajectory (target)
         wtn : planar vector orthogonal to wtn
+
         """
         # t should be in the trajectory time range
         assert ((t>=traj.tmin) & (t<=traj.tmax)),'posvel: t not in trajectory time range'
@@ -297,20 +314,23 @@ class Body(object):
 
         Examples
         --------
+        
+        .. plot::
+            :include-source:
 
-        >>> import numpy as np
-        >>> import pylayers.mobility.trajectory as tr
-        >>> import matplotlib.pyplot as plt
-        >>> time = np.arange(0,10,0.1)
-        >>> v = 4000/3600.
-        >>> x = v*time
-        >>> y = np.zeros(len(time))
-        >>> traj = tr.Trajectory()
-        >>> bc = Body()
-        >>> bc.settopos(traj,2.3)
-        >>> nx.draw(bc.g,bc.g.pos)
-        >>> axe = plt.axis('scaled')
-        >>> plt.show()
+            >>> import numpy as np
+            >>> import pylayers.mobility.trajectory as tr
+            >>> import matplotlib.pyplot as plt
+            >>> time = np.arange(0,10,0.1)
+            >>> v = 4000/3600.
+            >>> x = v*time
+            >>> y = np.zeros(len(time))
+            >>> traj = tr.Trajectory()
+            >>> bc = Body()
+            >>> bc.settopos(traj,2.3)
+            >>> nx.draw(bc.g,bc.g.pos)
+            >>> axe = plt.axis('scaled')
+            >>> plt.show()
 
         Notes
         -----
@@ -332,6 +352,9 @@ class Body(object):
         #
         # pta : target translation
         # ptb = pta+vtn : a point in the direction of trajectory
+        #
+        # kt : trajectory integer index  
+        # kf : frame integer index  
 
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
 
@@ -342,6 +365,8 @@ class Body(object):
         pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
+
+        self.centroid = pta
 
         X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
         Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T

@@ -3,13 +3,10 @@
 
 This module handles antennas in pylayers
 
-To instantiate an antenna object :
-
 .. python::
 
-    A = Antenna(_filename,directory,nf,ntheta,nphi)
+    A = Antenna(_filename,directory,nf,ntheta,nphi,fromfile=True)
 
-typ indicates the antenna file format to read
 
 Examples
 --------
@@ -48,6 +45,8 @@ from mpl_toolkits.mplot3d import axes3d
 from matplotlib import rc
 from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
+import pandas as pd
+
 
 class Antenna(object):
     """ Antenna
@@ -94,7 +93,9 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', directory="ant", fromfile=True, typ='Gauss', nf=104, ntheta=90, nphi=181, p0 = 0):
+
+
+    def __init__(self,typ='S2R2.sh3',**kwargs):
         """
 
         Parameters
@@ -127,48 +128,80 @@ class Antenna(object):
          A = Antenna('my_antenna.mat')
 
         """
-        self.Nf = nf
-        self.Nt = ntheta
-        self.Np = nphi
 
-        self.fromfile = fromfile
+
+        defaults = { 'directory': 'ant',
+                    'nf':104,
+                    'ntheta':90,
+                    'nphi':181,
+                    'p0':0,
+                    't0':np.pi/2.,
+                    'p3':np.pi/6.,
+                    't3':np.pi/6.}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        self.Nf = kwargs['nf']
+        self.Nt = kwargs['ntheta']
+        self.Np = kwargs['nphi']
+
+        if isinstance(typ,str):
+            AntennaName,Extension = os.path.splitext(typ)
+            self.typ = Extension[1:]
+
+
+            if self.typ=='':
+                self.fromfile = False
+            else:
+                self.fromfile = True
+        else:
+            self.fromfile = True
+
+
         self.evaluated = False
 
-        if fromfile:
-            typ = _filename.split('.')[1]
-            self.typ = typ
-            self._filename = _filename
-            if typ == 'vsh3':
-                self.loadvsh3()
-            if typ == 'vsh2':
-                self.loadvsh2()
-            if typ == 'sh3':
-                self.loadsh3()
-            if typ == 'sh2':
-                self.loadsh2()
-            if typ == 'trx1':
-                self.load_trx(directory, nf, ntheta, nphi)
-            if typ == 'trx':
-                self.loadtrx(directory)
-            if typ == 'mat':
-                self.loadmat(directory)
+        if self.fromfile:
+            if isinstance(typ,str):
+                self._filename = typ
+                if self.typ == 'vsh3':
+                    self.loadvsh3()
+                if self.typ == 'vsh2':
+                    self.loadvsh2()
+                if self.typ == 'sh3':
+                    self.loadsh3()
+                if self.typ == 'sh2':
+
+                    self.loadsh2()
+                if self.typ == 'trx1':
+                    self.load_trx(kwargs['directory'], self.Nf, self.Nt, self.Np)
+                if self.typ == 'trx':
+                    self.loadtrx(kwargs['directory'])
+                if self.typ == 'mat':
+                    self.loadmat(kwargs['directory'])
+            elif isinstance(typ,list):
+                self._filename = typ
+                self.typ='hfss'
+                self.loadhfss(typ, self.Nt, self.Np)
 
         else :
             if typ == 'Gauss':
                 self.typ = typ
-                self.p0 = p0
-                self.t0 = np.pi/2.
-                self.p3 = np.pi/6. # 30 degrees
-                self.t3 = np.pi/6. # 30 degrees
+
+                self.p0 = kwargs['p0']
+                self.t0 = kwargs['t0']#np.pi/2.
+                self.p3 = kwargs['p3']#np.pi/6. # 30 degrees
+                self.t3 = kwargs['t3']#np.pi/6. # 30 degrees
                 self.G  = 16/(self.t3*self.p3) # gain 16/\theta^{2}
                 self.GdB  =10*np.log10(self.G)
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
             elif typ == 'WirePlate':
                 self.typ = typ
-                self.p0 = 0
-                self.t0 = 5*np.pi/6.
-                self.GdB  = 5. # gain
+                self.p0 = kwargs['p0']
+                self.t0 = kwargs['t0'] # 5*np.pi/6.
+                self.GdB = 5. # gain
                 self.G  = pow(10.,self.GdB/10.) # gain
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
@@ -186,14 +219,20 @@ class Antenna(object):
         rtd = 180./np.pi
         st = ''
         if self.fromfile:
-            st = st + 'FileName : ' + self._filename+'\n'
-            st = st + '-----------------------\n'
+            if isinstance(self._filename,str):
+                st = st + 'FileName : ' + self._filename+'\n'
+                st = st + '-----------------------\n'
+            else:
+                for i in range(len(self._filename)):
+                    st = st + 'FileName : ' + self._filename[i]+'\n'
+                st = st + '-----------------------\n'
         #st = st + 'file type : ' + self.typ+'\n'
         if 'fa' in self.__dict__:
             st = st + "fmin : %4.2f" % (self.fa[0]) + "GHz\n"
             st = st + "fmax : %4.2f" % (self.fa[-1]) + "GHz\n"
             st = st + "step : %4.2f" % (1000*(self.fa[1]-self.fa[0])) + "MHz\n"
             st = st + "Nf : %d" % (len(self.fa)) +"\n"
+
 
         if self.evaluated:
             st = st + '-----------------------\n'
@@ -206,6 +245,8 @@ class Antenna(object):
             st = st + "   f = %4.2f GHz \n" % (self.fa[u[0]])
             st = st + "   theta = %4.2f (degrees) \n" % (self.theta[u[1],0]*rtd)
             st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[0,u[2]]*rtd)
+        else:
+            st = st + 'Not evaluated'
 
 
         if self.typ == 'mat':
@@ -269,7 +310,7 @@ class Antenna(object):
 
 
     def Fpatt(self,th=[],ph=[],pattern=True):
-        """
+        """  generate antenna pattern
 
         Parameters
         ----------
@@ -280,9 +321,22 @@ class Antenna(object):
             default True
 
         if pattern
-            The pattern is generated from self.Nt and self.Np nimber of points
+            The pattern is generated from self.Nt and self.Np points
         else:
-            phi and theta have same length (typically ray direction)
+            phi and theta have the same length (typically ray direction)
+
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.antenna  import *
+            >>> A = Antenna(typ='Gauss')
+            >>> A.Fpatt()
+            >>> f,a = A.polar()
+            >>> plt.show()
 
         """
 
@@ -367,8 +421,9 @@ class Antenna(object):
                 Fat = self.sqG * np.ones((len(self.th),self.Nf))
                 Fap = self.sqG * np.zeros((len(self.th),self.Nf))
 
-
-        return (Fat,Fap)
+        # TODO create 2 separate functions
+        if not pattern:
+            return (Fat,Fap)
 
 
     def loadmat(self, directory="ant"):
@@ -659,6 +714,53 @@ class Antenna(object):
         errel =( (errTh + errPh) / (mvTh2 + mvPh2))
 
         return(errelTh, errelPh, errel)
+
+
+    def loadhfss(self,lfa = [], Nt=72,Np=37):
+        """
+
+        """
+
+        # lfa : list file antenna
+        self.Nf = len(lfa)
+        fGHz=[]
+        lacsv=[]
+        Fphi = np.empty((self.Nf,self.Nt,self.Np))
+        Ftheta = np.empty((self.Nf,self.Nt,self.Np))
+        SqG = np.empty((self.Nf,self.Nt,self.Np))
+
+        for i in range (len(lfa)):
+
+
+            
+            fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
+            lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio']))
+            th=lacsv[i].th.reshape(72,37)
+            ph=lacsv[i].ph.reshape(72,37)
+            Greal = lacsv[i].abs_grlz.reshape(72,37)
+
+            th_dB = lacsv[i].th_absdB.reshape(72,37)
+            ph_dB = lacsv[i].ph_absdB.reshape(72,37)
+
+            th_lin = pow(10,th_dB/20.)
+            ph_lin = pow(10,ph_dB/20.)
+
+            
+            #th_phase = lacsv[i].th_phase.reshape(72,37)*np.pi/180.
+            #ph_phase = lacsv[i].ph_phase.reshape(72,37)*np.pi/180.
+            #axratio=lacsv[i].ax_ratio.reshape(72,37)
+            Fphi[i,:,:] = ph_lin.swapaxes(1,0)
+            Ftheta[i,:,:] = th_lin.swapaxes(1,0)
+            SqG[i,:,:] = Greal.swapaxes(1,0)
+
+        self.fa = np.array(fGHz)
+        self.theta = th[0,:].reshape(Nt,1)
+        self.phi = ph[:,0].reshape(1,Np)
+        self.Fphi=Fphi
+        self.Ftheta=Ftheta
+        self.SqG=SqG
+
+          
 
     def loadtrx(self,directory):
         """ load trx file (SATIMO Near Field Chamber raw data)
@@ -1698,7 +1800,7 @@ class Antenna(object):
 
         """
 
-        typ = self._filename.split('.')[1]
+        typ = self.typ#self._filename.split('.')[1]
 
         assert typ in ['sh3','vsh3'], "Error wrong file type"
 
@@ -1793,10 +1895,17 @@ class Antenna(object):
             self.Ftheta = Fth
             G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
             self.SqG = np.sqrt(G)
-            self.evaluated = True
 
+        self.evaluated = True
 
-        return Fth, Fph
+        if typ == 'hfss':
+            scipy.interpolate.griddata()
+
+            Fth = self.Ftheta
+            Fph = self.Fphi
+        # TODO create 2 different functions for pattern and not pattern
+        if not pattern:
+            return Fth, Fph
 
 
     def movie_vsh(self, mode='linear'):
