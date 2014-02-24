@@ -1103,7 +1103,7 @@ class Body(object):
                     if alpha <> 0:
                         mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
                  
-        return intersect, mu
+        return intersect
         
 
     def body_link(self, topos = True,frameId = 0):

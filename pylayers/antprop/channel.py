@@ -1106,13 +1106,13 @@ class Ctilde(object):
 
         else:
             if a.fromfile :
-                Fat, Fap = a.Fsynth3(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
+                Fat, Fap = a.Fsynth3(self.tangl[:, 0], self.tangl[:, 1], pattern=False)
                 Fat = Fat.transpose()
                 Fap = Fap.transpose()
                 Fat = bs.FUsignal(a.fa, Fat)
                 Fap = bs.FUsignal(a.fa, Fap)
             else:
-                Fat, Fap = a.Fpatt(self.rangl[:, 0], self.rangl[:, 1], pattern=False)
+                Fat, Fap = a.Fpatt(self.tangl[:, 0], self.tangl[:, 1], pattern=False)
                 Fat = bs.FUsignal(a.fa, Fat)
                 Fap = bs.FUsignal(a.fa, Fap)
 
@@ -1144,8 +1144,8 @@ class Ctilde(object):
         # Cg2cl should be applied here
         #
 
-        t1 = self.Ctt * Fat + self.Cpt * Fap
-        t2 = self.Ctp * Fat + self.Cpp * Fap
+        t1 = self.Ctt * Fat + self.Ctp * Fap
+        t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)

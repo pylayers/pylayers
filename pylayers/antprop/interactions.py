@@ -781,7 +781,7 @@ class IntT(Inter):
             return(self.A)
 
         else:
-            print 'no T interaction to evaluate'
+            #print 'no T interaction to evaluate'
             return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
 
 
