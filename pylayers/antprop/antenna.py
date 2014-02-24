@@ -731,8 +731,8 @@ class Antenna(object):
             
             fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
             lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio']))
-            th=lacsv[i].th.reshape(72,37)
-            ph=lacsv[i].ph.reshape(72,37)
+            th=lacsv[i].th.reshape(72,37)*np.pi/180.
+            ph=lacsv[i].ph.reshape(72,37)*np.pi/180.
             Greal = lacsv[i].abs_grlz.reshape(72,37)
 
             th_dB = lacsv[i].th_absdB.reshape(72,37)
