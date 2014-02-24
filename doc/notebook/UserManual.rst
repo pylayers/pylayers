@@ -2141,7 +2141,7 @@ The default waveform is a gaussian windowing of a sine wave of frequency
 :math:`f_c`. The normalization term depends on the exponential scaling
 factor :math:`\tau`.
 
-:math:`p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}`
+:math:`p(t)= \sqrt{\frac{2\sqrt{2}}{\tau\sqrt{\pi}}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}`
 
 :math:`\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}`
 

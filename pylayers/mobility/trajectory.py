@@ -130,26 +130,26 @@ class Trajectory(pd.DataFrame):
     tmin : float
     tmax : float
     tttimr :
-    dtot : 
+    dtot :
     meansp :
 
     Methods
     -------
-    
-    time 
+
+    time
     space
     rescale
-    plot 
+    plot
 
 
     """
     def __init__(self, df = {}):
-        """ initialization 
+        """ initialization
         """
-        super(Trajectory,self).__init__(df)  
+        super(Trajectory,self).__init__(df)
         self.has_values=self.update()
 
-  
+
 
     def __repr__(self):
         try:
@@ -170,11 +170,11 @@ class Trajectory(pd.DataFrame):
         -------
 
         bool :
-            True if Trajectroy has values, False otherwise 
+            True if Trajectroy has values, False otherwise
 
         """
         if len(self.values) != 0:
-            N = len(self.index) 
+            N = len(self.index)
             self.tmin = self.index.min().value*1e-9
             self.tmax = self.index.max().value*1e-9
             self.ts = (self.index[1].value*1e-9)-(self.index[0].value*1e-9)
@@ -238,10 +238,10 @@ class Trajectory(pd.DataFrame):
 
     def rescale(self,speedkmph=3):
         """ same length but specified speed 
-       
+
         Parameters
         ----------
-        
+
         speedkmph : float 
             targeted mean speed in km/h
 
@@ -259,28 +259,29 @@ class Trajectory(pd.DataFrame):
         t.generate(t=newtime,pt=pt)
         return(t)
 
-        
+
     def distance(self,tk):
-        """
+        """ recover distance at time tk
         """
         t = self.time()
-        u = np.where((t>tk-self.ts/2.)&(t<=tk+self.ts/2.))[0][0]
-        return(self['s'][u])             
-                     
+        u = np.where((t>=tk-self.ts/2.)&(t<=tk+self.ts/2.))[0][0]
+
+        return(self['s'][u])
+
     def space(self,ndim=2):
-        """ extract space information 
+        """ extract space information
 
         Parameters
         ----------
 
-        ndim : int 
+        ndim : int
             number of dimensions (default 2)
 
         Returns
         -------
 
         pt : nd.array()
-        
+
         """
         if ndim==2:                     
             pt = np.vstack((self['x'].values,self['y'].values)).T

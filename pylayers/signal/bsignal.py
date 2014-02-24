@@ -110,7 +110,7 @@ class Bsignal(object):
 
         Parameters
         ----------
-       
+
         filename : string
 
         Examples
@@ -196,11 +196,8 @@ class Bsignal(object):
         >>> from pylayers.signal import *
         >>> import matplotlib.pyplot as plt
         >>> si = Bsignal()
-        >>> si.setx(np.arange(100))
-        >>> def f1(x):
-        >>>     y = (-1)**x
-        >>>     return(y)
-        >>> si.sety(f1)
+        >>> si.x= np.arange(100)
+        >>> si.y= np.arange(100)
         >>> si.stem()
         >>> plt.show()
 
@@ -303,12 +300,12 @@ class Bsignal(object):
         if t=='gdm':
             ylabels='Group distance (m)'
             df  = self.x[1]-self.x[0]
-            xn  = self.x[0:-1]              
+            xn  = self.x[0:-1]
             yn = -0.3*np.diff(np.unwrap(np.angle(self.y[l,c,:])))/(2*np.pi*df)
         if 'ylabels'  in kwargs:
             ylabels = kwargs['ylabels']
 
-        return(xn,yn,ylabels)                          
+        return(xn,yn,ylabels)
 
     def imshow(self,**kwargs):
         """ imshow of y matrix
@@ -327,9 +324,9 @@ class Bsignal(object):
 
         Examples
         --------
-       
 
-        >>> f = arange(100)
+
+        >>> f = np.arange(100)
         >>> y = np.random.randn(50,100)+1j*np.random.randn(50,100)
         >>> F = FUsignal(f,y)
 
@@ -347,7 +344,7 @@ class Bsignal(object):
 
         if not kwargs.has_key('fig'):
             fig = plt.figure()
-        else:   
+        else:
             fig = kwargs['fig']
 
         if not kwargs.has_key('ax'):
@@ -2939,8 +2936,6 @@ class FUsignal(FBsignal, Usignal):
 
         >>> e   = EnImpulse()
         >>> En1 = e.energy()
-        >>> E   = e.esd()
-        >>> En2 = E.energy()
         >>> assert((En1>0.99) & (En1<1.01))
 
         """
@@ -3640,7 +3635,6 @@ class FUDsignal(FUsignal):
         >>> alpha = np.random.rand(N,len(fGHz))
         >>> s = FUDsignal(x=fGHz,y=alpha,tau0=tau0)
         >>> s.plot3d()
-        >>> s.show()
 
         """
         Ntau = np.shape(self.y)[0]
@@ -4131,8 +4125,9 @@ class EnImpulse(TUsignal):
         """
     def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, fe=20):
         TUsignal.__init__(self)
-        Tp = (2 / (band * np.pi)) * np.sqrt(abs(thresh) * np.log(10) / 20)
-        coeff = np.sqrt(2 * np.sqrt(2) / (Tp * np.sqrt(np.pi)))
+        Tp = (2 / (band * np.pi)) * np.sqrt(abs(thresh) * np.log(10) /20.)
+        coeff = np.sqrt(2 * np.sqrt(2)/ (Tp * np.sqrt(np.pi)))
+
         if len(x) == 0:
             te = 1.0 / fe
             Tww = 10 * Tp
@@ -4165,6 +4160,7 @@ class EnImpulse(TUsignal):
         """
         pass
 
+class MaskImpulse(TUsignal):
     """
     MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)
 

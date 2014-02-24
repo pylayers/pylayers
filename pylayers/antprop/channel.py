@@ -118,7 +118,7 @@ class Ctilde(object):
 
         # save channel in global basis
         if self.islocal:
-            self.locbas(b2g=Truew)
+            self.locbas(b2g=True)
 
         f=h5py.File(filename,'w')
         f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
