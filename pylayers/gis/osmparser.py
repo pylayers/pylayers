@@ -13,8 +13,8 @@ import pdb
 
 # classes that handle the OSM data file format.
 class Way(object):
-    """ 
-    
+    """
+
     A Way is a polyline or a Polycon (if closed)
 
     typ : 0 Polygon
@@ -28,7 +28,7 @@ class Way(object):
         p = np.zeros((2, N))
         self.valid = True
         for k, nid in enumerate(refs):
-            try: 
+            try:
                 p[0, k] = coords.xy[nid][0]
                 p[1, k] = coords.xy[nid][1]
             except:
@@ -45,7 +45,7 @@ class Way(object):
 
     def __repr__(self):
         st = ''
-        st = st + str(self.tags) + ':' + str(self.refs) 
+        st = st + str(self.tags) + ':' + str(self.refs)
         return(st)
 
     def show(self,fig=[],ax=[]):
@@ -56,6 +56,9 @@ class Way(object):
 
 class Coords(object):
     """
+
+    A Coords is a point
+
     """
     cpt = 0
     latlon = {}
@@ -68,12 +71,12 @@ class Coords(object):
     def __repr__(self):
         st = ''
         for k in self.xy:
-            st = st + str(k)+ ':' + str(self.xy[k])+'\n' 
+            st = st + str(k)+ ':' + str(self.xy[k])+'\n'
         st = st+ 'Ncoords = '+ str(len(self.xy))+'\n'
         return(st)
 
     def clean(self):
-        self.cpt = 0 
+        self.cpt = 0
         self.latlon={}
         self.xy = {}
         self.minlon =1000
@@ -95,8 +98,8 @@ class Coords(object):
         self.boundary=np.array([self.minlat,self.minlon,self.maxlat,self.maxlon])
 
     def cartesian(self):
-        """ Convert Latitude/Longitude in cartesian 
-        
+        """ Convert Latitude/Longitude in cartesian
+
         Returns
         -------
 
@@ -106,7 +109,7 @@ class Coords(object):
         Notes
         -----
 
-        The transformation is centered on the mean of latitude and longitude 
+        The transformation is centered on the mean of latitude and longitude
 
         """
         bd = self.boundary
@@ -120,11 +123,14 @@ class Coords(object):
         for id in self.latlon:
             x, y = m(self.latlon[id][0], self.latlon[id][1])
             self.xy[id]  = np.array([x,y])
-        
+
         return(m)
 
 class Nodes(object):
     """
+
+    osm Nodes container
+
     """
 
     node = {}
@@ -141,7 +147,7 @@ class Nodes(object):
             lat = coords[1]
             self.cpt += 1
 
-    def clean(self):       
+    def clean(self):
         self.node= {}
         self.cpt = 0
 
@@ -153,7 +159,7 @@ class Ways(object):
 
     w
     way
-    cpt 
+    cpt
 
     Methods
     -------
@@ -168,8 +174,8 @@ class Ways(object):
     cpt = 0
 
     def ways(self, ways):
-        """ 
-            general callback function 
+        """
+            general callback function
         """
         for osmid, tags, refs in ways:
                 self.w[osmid] = (refs,tags)
@@ -181,17 +187,17 @@ class Ways(object):
         self.cpt = 0
 
     def building(self, ways):
-        """ 
-            building callback function 
+        """
+            building callback function
         """
         for osmid, tags, refs in ways:
             if 'building' in tags:
                 self.w[osmid] = (refs,tags)
                 self.cpt += 1
-    
+
     def eval(self,coords):
         """
-            convert into a Way object 
+            convert into a Way object
         """
         for osmid in self.w:
             refs = self.w[osmid][0]
@@ -199,7 +205,7 @@ class Ways(object):
             away =  Way(refs,tags,coords)
             if away.valid:
                 self.way[osmid] = away
-    
+
     def show(self,fig=[],ax=[],typ=2):
         """ show all way
 
@@ -262,13 +268,14 @@ class Relations(object):
                 self.relation[osmid]['tags']=tags
                 self.relation[osmid]['members']=member
                 self.cpt = self.cpt+1
-    def clean(self):       
+    def clean(self):
         self.relation= {}
         self.cpt = 0
 
 class FloorPlan(nx.DiGraph):
     """
-    FloorPlan class
+
+    FloorPlan class derived from nx.DigGraph
 
     """
 
@@ -284,7 +291,7 @@ class FloorPlan(nx.DiGraph):
 
         st = str(self.rootid)+'\n'
         levels = nx.neighbors(self,self.rootid)
-        st = st + '---'+'\n' 
+        st = st + '---'+'\n'
         for l in levels:
             nw = len(nx.neighbors(self,l))
             st = st + str(l)+' : '+ str(nw) + '\n'
@@ -294,8 +301,8 @@ class FloorPlan(nx.DiGraph):
 
     def build(self,typ,eid):
         """
-        
-        Notes : recursive construction 
+
+        Notes : recursive construction
 
         """
         if typ=='relation':
