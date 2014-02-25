@@ -218,7 +218,7 @@ def ssh(A, dsf=1, L= 20):
     # compute the spherical harmonics fucntions at the order L
     Y,ssh_index  = SSHFunc(L,th,ph)
     # Compute the pseudo inverse of Y
-    Ypinv = np.linalg.pinv(Y)
+    Ypinv = sp.linalg.pinv(Y)
 
     # convert the field from spherical to cartesian coordinates system
     Ex, Ey,Ez =SphereToCart (th, ph, Etheta, Ephi, True)
