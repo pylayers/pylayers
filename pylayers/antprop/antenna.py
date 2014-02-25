@@ -179,7 +179,7 @@ class Antenna(object):
                     self.loadtrx(kwargs['directory'])
                 if self.typ == 'mat':
                     self.loadmat(kwargs['directory'])
-            elif isinstance(_filename,list):
+            elif isinstance(typ,list):
                 self._filename = typ
                 self.typ='hfss'
                 self.loadhfss(typ, self.Nt, self.Np)
@@ -731,8 +731,8 @@ class Antenna(object):
             
             fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
             lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio']))
-            th=lacsv[i].th.reshape(72,37)
-            ph=lacsv[i].ph.reshape(72,37)
+            th=lacsv[i].th.reshape(72,37)*np.pi/180.
+            ph=lacsv[i].ph.reshape(72,37)*np.pi/180.
             Greal = lacsv[i].abs_grlz.reshape(72,37)
 
             th_dB = lacsv[i].th_absdB.reshape(72,37)
@@ -745,8 +745,8 @@ class Antenna(object):
             #th_phase = lacsv[i].th_phase.reshape(72,37)*np.pi/180.
             #ph_phase = lacsv[i].ph_phase.reshape(72,37)*np.pi/180.
             #axratio=lacsv[i].ax_ratio.reshape(72,37)
-            Fphi[i,:,:] = ph_dB.swapaxes(1,0)
-            Ftheta[i,:,:] = th_dB.swapaxes(1,0)
+            Fphi[i,:,:] = ph_lin.swapaxes(1,0)
+            Ftheta[i,:,:] = th_lin.swapaxes(1,0)
             SqG[i,:,:] = Greal.swapaxes(1,0)
 
         self.fa = np.array(fGHz)
@@ -1796,7 +1796,7 @@ class Antenna(object):
 
         """
 
-        typ = self._filename.split('.')[1]
+        typ = self.typ#self._filename.split('.')[1]
 
         assert typ in ['sh3','vsh3'], "Error wrong file type"
 
@@ -1894,6 +1894,11 @@ class Antenna(object):
 
         self.evaluated = True
 
+        if typ == 'hfss':
+            scipy.interpolate.griddata()
+
+            Fth = self.Ftheta
+            Fph = self.Fphi
         # TODO create 2 different functions for pattern and not pattern
         if not pattern:
             return Fth, Fph
