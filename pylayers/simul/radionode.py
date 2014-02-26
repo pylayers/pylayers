@@ -608,15 +608,16 @@ class RadioNode(object):
         filename = self.filegeom.replace('.vect', '')
         filename = filename.replace('.off', '')
         try: 
-            
+
             gv = geo.Geomoff(filename)
             ant = self.A
             # if not hasattr(ant,'theta'):
-            if not ant.pattern:
-                ant.Fsynth3()
+            if ant.fromfile:
+                ant.Fsynth3(pattern=True)
             else: 
                 ant.Fpatt(pattern=True)
-            V = ant.SqG[ant.nf/2,:,:]
+            V = ant.SqG[ant.Nf/2,:,:]
+ 
             if not hasattr(self,'position'):
                 print "no position available"
             T=self.orientation.reshape(3,3)

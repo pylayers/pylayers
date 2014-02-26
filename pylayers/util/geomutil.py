@@ -682,7 +682,7 @@ class Geomoff(Geomview):
         colmap = plt.get_cmap()
         Ncol = colmap.N
         cmap = colmap(np.arange(Ncol))
-        g = np.round(U * (Ncol - 1))
+        g = np.round(U * (Ncol - 1)).astype(int)
         fd = open(self.filename, 'w')
         fd.write('COFF\n')
         chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
@@ -693,6 +693,7 @@ class Geomoff(Geomview):
                 cpos = str(q[ii, jj,0]) + ' ' + str(q[ii, jj,1]) + ' ' + str(q[ii, jj,2])
                 cpos = cpos.replace(',', '.')
                 ik = g[ii, jj]
+                
                 ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
                     ' ' + str(cmap[ik, 2])
                 ccol = ccol.replace(',', '.')
