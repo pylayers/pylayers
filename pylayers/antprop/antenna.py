@@ -97,6 +97,7 @@ class Antenna(object):
 
     """
 
+
     def __init__(self,typ='S2R2.sh3',**kwargs):
         """
 
@@ -190,6 +191,7 @@ class Antenna(object):
         else :
             if typ == 'Gauss':
                 self.typ = typ
+
                 self.p0 = kwargs['p0']
                 self.t0 = kwargs['t0']#np.pi/2.
                 self.p3 = kwargs['p3']#np.pi/6. # 30 degrees
@@ -415,6 +417,8 @@ class Antenna(object):
                 self.theta = self.th[:,np.newaxis]
                 self.phi = self.ph[np.newaxis,:]
                 self.evaluated = True
+                Fat = self.sqG 
+                Fap = self.sqG 
 
             else:
                 Fat = self.sqG * np.ones((len(self.th),self.Nf))
@@ -752,6 +756,7 @@ class Antenna(object):
             Ftheta[i,:,:] = th_lin.swapaxes(1,0)
             SqG[i,:,:] = Greal.swapaxes(1,0)
 
+        
         self.fa = np.array(fGHz)
         self.theta = th[0,:].reshape(Nt,1)
         self.phi = ph[:,0].reshape(1,Np)
@@ -2278,7 +2283,7 @@ class Antenna(object):
         else:
             print _filesh3, ' does not exist'
 
-    def savevsh2(self):
+    def savevsh2(self, filename = ''):
         """
 
         Create a .vsh2 antenna file
@@ -2286,8 +2291,10 @@ class Antenna(object):
         """
 
         # create vsh2 file
-
-        _filevsh2 = self._filename.replace('.trx', '.vsh2')
+        if filename == '':
+            _filevsh2 = self._filename.replace('.trx', '.vsh2')
+            
+        _filevsh2  = filename 
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
