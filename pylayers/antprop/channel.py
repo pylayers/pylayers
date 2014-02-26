@@ -1703,14 +1703,20 @@ class Tchannel(bs.FUDAsignal):
             scat = ax.scatter(di[cv, 1] * al, delay[cv], **kwargs)
             ax.axis((ang[0], ang[1], dmin, dmax))
             ax.set_xlabel(r"$\phi(^{\circ})$", fontsize=fontsize)
-            ax.set_ylabel("r$\tau(ns)$", fontsize=fontsize)
+            if typ == 'm' :
+                ax.set_ylabel("distance (m)", fontsize=fontsize-2)
+            else :
+                ax.set_ylabel(r"$\phi(^{\circ})$", fontsize=fontsize-2)
         elif a == 'theta':
             scat = ax.scatter(di[cv, 0] * al, delay[cv], **kwargs)
             ax.axis((ang[0], ang[1], dmin,dmax))
             ax.set_xlabel(r"$\\theta_t(^{\circ})$", fontsize=fontsize)
-            ax.set_ylabel(r'$\tau(ns)$', fontsize=fontsize)
-        if title :
-            ax.set_title('DoA vs delay (ns)', fontsize=fontsize+2)
+            if typ == 'm' :
+                ax.set_ylabel("distance (m)", fontsize=fontsize-2)
+            else :
+                ax.set_ylabel(r"$\phi(^{\circ})$", fontsize=fontsize-2)        
+            if title :
+                ax.set_title('DoA vs delay (ns)', fontsize=fontsize+2)
         if colorbar:
             b=fig.colorbar(scat)
             if normalize:
