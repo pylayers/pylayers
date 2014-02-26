@@ -46,7 +46,10 @@ from matplotlib import rc
 from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
 import pandas as pd
-
+try:
+    import mayavi.mlab as myv
+except:
+    print 'mayavi not installed'
 
 class Antenna(object):
     """ Antenna
@@ -732,21 +735,19 @@ class Antenna(object):
         for i in range (len(lfa)):
 
 
-            
             fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
-            lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio']))
+            lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio'],index_col=False))
+            th=lacsv[i].th.reshape(Np,Nt)*np.pi/180.
+            ph=lacsv[i].ph.reshape(Np,Nt)*np.pi/180.
+            Greal = lacsv[i].abs_grlz.reshape(Np,Nt)
 
-            th=lacsv[i].th.reshape(72,37)
-            ph=lacsv[i].ph.reshape(72,37)
-            Greal = lacsv[i].abs_grlz.reshape(72,37)
-
-            th_dB = lacsv[i].th_absdB.reshape(72,37)
-            ph_dB = lacsv[i].ph_absdB.reshape(72,37)
+            th_dB = lacsv[i].th_absdB.reshape(Np,Nt)
+            ph_dB = lacsv[i].ph_absdB.reshape(Np,Nt)
 
             th_lin = pow(10,th_dB/20.)
             ph_lin = pow(10,ph_dB/20.)
 
-            
+
             #th_phase = lacsv[i].th_phase.reshape(72,37)*np.pi/180.
             #ph_phase = lacsv[i].ph_phase.reshape(72,37)*np.pi/180.
             #axratio=lacsv[i].ax_ratio.reshape(72,37)
@@ -754,7 +755,7 @@ class Antenna(object):
             Ftheta[i,:,:] = th_lin.swapaxes(1,0)
             SqG[i,:,:] = Greal.swapaxes(1,0)
 
-        
+
         self.fa = np.array(fGHz)
         self.theta = th[0,:].reshape(Nt,1)
         self.phi = ph[:,0].reshape(1,Np)
@@ -762,7 +763,7 @@ class Antenna(object):
         self.Ftheta=Ftheta
         self.SqG=SqG
 
-          
+
 
     def loadtrx(self,directory):
         """ load trx file (SATIMO Near Field Chamber raw data)
@@ -1144,6 +1145,38 @@ class Antenna(object):
         if kwargs['legend']:
             ax.legend()
         return(fig,ax)
+
+    def _show3(self,fGHz=[],title=True,colorbar=True):
+        """ show3 mayavi
+
+        fGHz : float
+            frequency 
+        title : bool
+            display title
+        colorbar :
+            display colorbar
+        """
+
+        if fGHz == []:
+            k = len(self.fa)/2
+        else :
+            k = np.where(fGHz>self.fa)[0]
+
+        r = self.SqG[k,:,:]
+        phi = self.phi
+        th = self.theta
+
+        
+        x = r * np.sin(phi) * np.cos(th)
+        y = r * np.cos(phi)
+        z = r * np.sin(phi) * np.sin(th)
+
+        myv.mesh(x, y, z)
+        if colorbar :
+            myv.colorbar()
+        if title:
+            myv.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
+
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
         """ show3 geomview
@@ -2244,8 +2277,8 @@ class Antenna(object):
             else:
                 self.S.sets3(Cx,Cy,Cz)
 
-            Nf = np.shape(Cx.s3)[0]
-            self.fa = np.linspace(fmin, fmax, Nf)
+            self.Nf = np.shape(Cx.s3)[0]
+            self.fa = np.linspace(fmin, fmax, self.Nf)
         else:
             print _filesh3, ' does not exist'
 
