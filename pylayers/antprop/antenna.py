@@ -735,6 +735,7 @@ class Antenna(object):
             
             fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
             lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio']))
+
             th=lacsv[i].th.reshape(72,37)
             ph=lacsv[i].ph.reshape(72,37)
             Greal = lacsv[i].abs_grlz.reshape(72,37)
@@ -753,6 +754,7 @@ class Antenna(object):
             Ftheta[i,:,:] = th_lin.swapaxes(1,0)
             SqG[i,:,:] = Greal.swapaxes(1,0)
 
+        
         self.fa = np.array(fGHz)
         self.theta = th[0,:].reshape(Nt,1)
         self.phi = ph[:,0].reshape(1,Np)
@@ -2247,7 +2249,7 @@ class Antenna(object):
         else:
             print _filesh3, ' does not exist'
 
-    def savevsh2(self):
+    def savevsh2(self, filename = ''):
         """
 
         Create a .vsh2 antenna file
@@ -2255,8 +2257,10 @@ class Antenna(object):
         """
 
         # create vsh2 file
-
-        _filevsh2 = self._filename.replace('.trx', '.vsh2')
+        if filename == '':
+            _filevsh2 = self._filename.replace('.trx', '.vsh2')
+            
+        _filevsh2  = filename 
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
