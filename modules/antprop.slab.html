@@ -122,7 +122,7 @@ o : axis = 2 orhogonal axis</p>
 <tt class="descname">RT</tt><big>(</big><em>metalic=False</em>, <em>RT='RT'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.RT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.RT" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Reflection and Transmission matrix</p>
 <div class="math">
-<p><img src="../_images/math/bf55b0fcce0907a58d78344a6ca1a17eac01d8f4.png" alt=""/></p>
+<p><img src="../_images/math/b606edea521a130e1064a48a5147e4930dc8b55c.png" alt=""/></p>
 </div><p>R = matrix(R_o &amp; 0\0 &amp; R_p)
 T = matrix(T_o &amp; 0\0 &amp; T_p)</p>
 <p class="rubric">Notes</p>
@@ -219,7 +219,7 @@ T : np.array (f , th , 2, 2)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">Include-source :</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"></td>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -379,8 +379,8 @@ iv) THZ</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&#39;Jacob.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -570,7 +570,7 @@ between lines.</p>
 </pre></div>
 </div>
 <div class="math">
-<p><img src="../_images/math/bf55b0fcce0907a58d78344a6ca1a17eac01d8f4.png" alt=""/></p>
+<p><img src="../_images/math/b606edea521a130e1064a48a5147e4930dc8b55c.png" alt=""/></p>
 </div><p>I_p = left| begin{array}{cc} frac{1}{T_p} &amp; frac{R_p}{T_p} \ frac{R_p}{T_p} &amp; frac{1}{T_p} end{array}right|</p>
 <p>I_o = left| begin{array}{cc} frac{1}{T_o} &amp; frac{R_o}{T_o} \ frac{R_o}{T_o} &amp; frac{1}{T_o} end{array}right|</p>
 <p>MatIinterface fix the np.pi/2 NaN problem</p>
@@ -951,11 +951,11 @@ EUCAP 2010</p>
 <p>Exemple from paper <a class="reference external" href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&amp;arnumber=4554974&amp;url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974">&#8220;[Kiani2007] Glass Characterization for Designing
 Frequency Selective Surfaces to Improve Transmission through Energy saving
 glass windows  Kiani 2007&#8221;</a>
-The surface impedance is <img class="math" src="../_images/math/0a17504d2da9d0f164d4a108d552f40f004b4834.png" alt="R = 4 \Omega"/>, the thicknesss is <img class="math" src="../_images/math/110f8c1fc80d71487f8d58a6c68d13ecac8d1eed.png" alt="d = 100 nm"/></p>
+The surface impedance is <img class="math" src="../_images/math/1cc1f717f12cb2d8b9d8f1ab350c9092e3d32f4e.png" alt="R = 4 \Omega"/>, the thicknesss is <img class="math" src="../_images/math/e7fd625f68aa1f65c98c6a274218ada86615fe07.png" alt="d = 100 nm"/></p>
 <p><a class="reference external" href="http://www.pilkington.com/spectrum2/default.aspx?country_code=FR">Pilkington Spectrum OnLine applet</a></p>
 <p><a class="reference external" href="http://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=530536&amp;fileOId=624944">Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz</a></p>
 <div class="math">
-<p><img src="../_images/math/e1b00224ccfb95114c1818a147accb2cd959da25.png" alt="\sigma =  \frac{1}{Rd} = 2.5 10^{6} S/m"/></p>
+<p><img src="../_images/math/a12f398e710ecba953916c4436acda5a39e0275e.png" alt="\sigma =  \frac{1}{Rd} = 2.5 10^{6} S/m"/></p>
 </div><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -1118,7 +1118,8 @@ The surface impedance is <img class="math" src="../_images/math/0a17504d2da9d0f1
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>epr1</strong> : ..math:</p>
-<div class="highlight-python"><pre>**sigma** : float</pre>
+<div class="highlight-python"><div class="highlight"><pre>**sigma** : float
+</pre></div>
 </div>
 <p><strong>conductivity (S/m)</strong> :</p>
 <p class="last"><strong>delta :</strong> :</p>
@@ -1157,7 +1158,7 @@ The surface impedance is <img class="math" src="../_images/math/0a17504d2da9d0f1
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

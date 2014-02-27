@@ -78,11 +78,15 @@
 <h1>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h1>
 <p>Import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module</p>
 <p>In[1]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+</div>
 <p>Instantiate a coverage object. By defaut, <tt class="docutils literal"><span class="pre">TA-Office.str</span></tt> layout
 strucure is loaded.</p>
 <p>This information can be modified in the <strong>coverage.ini</strong> file in the
 project directory:</p>
-<div class="highlight-python"><pre>[pl_model]
+<div class="highlight-python"><div class="highlight"><pre>[pl_model]
     sigrss = 3.0
     f = 3.0
     rssnp = 2.64
@@ -111,7 +115,12 @@ project directory:</p>
     noisefactordb = 13
 
 [show]
-    show = True</pre>
+    show = True
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;TA-Office.str&#39;</span>
 </pre></div>
@@ -127,28 +136,69 @@ loaded from the project directory.</li>
 layout complexity)</strong> and stored into the project directory for the
 next execution.</li>
 </ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">try</span> <span class="p">:</span>
+    <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>Then, the coverage calculation can be launched in calling the <tt class="docutils literal"><span class="pre">cover</span></tt>
 method</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>The coverage results can be displayed by invoquing various functions.</p>
 <ul class="simple">
 <li>showLoss : display the path loss</li>
 <li>showPower : display the received power</li>
 </ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">()</span>
+</pre></div>
+</div>
 <img alt="manual/Coverage_files/Coverage_fig_00.png" src="manual/Coverage_files/Coverage_fig_00.png" />
 <p>The transmitter coordinates are :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">tx</span>
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span>  <span class="mi">10</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>This can be modified on the flight, and the coverage is updated</p>
+<div class="code python highlight-python"><div class="highlight"><pre>C.tx = np.array((30,12))
+
+%timeit
+C.cover()
+
+C.showLoss(polarization=&#39;o&#39;)
+C.showPower(polarization=&#39;o&#39;)
+C.showLoss(polarization=&#39;p&#39;)
+C.showPower(polarization=&#39;p&#39;)
+</pre></div>
+</div>
 <img alt="manual/Coverage_files/Coverage_fig_01.png" src="manual/Coverage_files/Coverage_fig_01.png" />
 <img alt="manual/Coverage_files/Coverage_fig_02.png" src="manual/Coverage_files/Coverage_fig_02.png" />
 <img alt="manual/Coverage_files/Coverage_fig_03.png" src="manual/Coverage_files/Coverage_fig_03.png" />
 <img alt="manual/Coverage_files/Coverage_fig_04.png" src="manual/Coverage_files/Coverage_fig_04.png" />
-<div class="highlight-python"><pre>All coverage calculated in 6.88 seconds</pre>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">39</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="n">finish</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&#39;All coverage calculated in </span><span class="si">%1.2f</span><span class="s"> seconds&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">finish</span><span class="o">-</span><span class="n">start</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">showLoss</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>All coverage calculated in 6.88 seconds
+</pre></div>
 </div>
 <img alt="manual/Coverage_files/Coverage_fig_05.png" src="manual/Coverage_files/Coverage_fig_05.png" />
 <img alt="manual/Coverage_files/Coverage_fig_06.png" src="manual/Coverage_files/Coverage_fig_06.png" />
 <p>The excess delay due to crossing the wall can also be evaluted.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">()</span>
+</pre></div>
+</div>
 <img alt="manual/Coverage_files/Coverage_fig_07.png" src="manual/Coverage_files/Coverage_fig_07.png" />
 </div>
 
@@ -171,7 +221,7 @@ method</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

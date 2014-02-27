@@ -105,7 +105,7 @@ is default file is created.</p>
 <div class="section" id="structure-of-the-simulation-description-file">
 <h3>structure of the simulation description file<a class="headerlink" href="#structure-of-the-simulation-description-file" title="Permalink to this headline">¶</a></h3>
 <p>Below is presented an example a <cite>default.ini</cite> simulation file</p>
-<div class="highlight-python"><pre>[files]
+<div class="highlight-python"><div class="highlight"><pre>[files]
 mat = matDB.ini
 tx = radiotx.ini
 slab = slabDB.ini
@@ -136,10 +136,11 @@ num = -1
 nrmax = 500
 
 [output]
-1 = default1.ini</pre>
+1 = default1.ini
+</pre></div>
 </div>
 <p>This file is composed of independant sections which are respectively</p>
-<div class="highlight-python"><pre>[files]
+<div class="highlight-python"><div class="highlight"><pre>[files]
         This section contains the short name of the required input file
         for high level commands
 [launching]
@@ -153,7 +154,8 @@ nrmax = 500
 [tud]
         ray filtering parameters
 [output]
-        already calculated output files</pre>
+        already calculated output files
+</pre></div>
 </div>
 </div>
 <div class="section" id="output-section">
@@ -232,7 +234,7 @@ project.</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

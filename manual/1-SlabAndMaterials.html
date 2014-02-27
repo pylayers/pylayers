@@ -84,30 +84,44 @@
   <p>This section explains some features of the class <strong>Layout</strong>. Layout are
 handled by the module <strong>pylayers.gis.layout</strong></p>
 <p>In[72]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span>  <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
 <div class="section" id="layout-ploting">
 <h1>Layout ploting<a class="headerlink" href="#layout-ploting" title="Permalink to this headline">¶</a></h1>
 <p>The layout ploting exploits vizualization functions of networkx. The
 method <strong>showG</strong> allows to display the different graphs which constitute the
-layout. The different option for ploting a graph are <img class="math" src="../_images/math/380563156beb92b82d5c515bdcb64a2e8a48174d.png" alt="$\in$"/> {&#8216;s&#8217;,&#8217;t&#8217;,&#8217;i&#8217;,&#8217;r&#8217;,&#8217;v&#8217;}</p>
+layout. The different option for ploting a graph are <img class="math" src="../_images/math/35f04d584e2ada21788f557f4ad6990a15f378cc.png" alt="$\in$"/> {&#8216;s&#8217;,&#8217;t&#8217;,&#8217;i&#8217;,&#8217;r&#8217;,&#8217;v&#8217;}</p>
 <p>In[73]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.str&#39;</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Out[73]:</p>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xac4a02c&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0xa848aec&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xac4a02c&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xa848aec&gt;)
+</pre></div>
 </div>
 <img alt="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_00.png" src="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_00.png" />
 <div class="section" id="slab-name">
 <h2>Slab name<a class="headerlink" href="#slab-name" title="Permalink to this headline">¶</a></h2>
-<p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
-<p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
+<p>Each node of <img class="math" src="../_images/math/ac5778af0c99a888d1caf35ced67c4bf53a59bbf.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
+<p>Each node of <img class="math" src="../_images/math/ac5778af0c99a888d1caf35ced67c4bf53a59bbf.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
 to a segment (Wall,door,window,...).</p>
 <p>Each edge has a <strong>name</strong> attribute, which contains the name entry of its
 constitutive Slab.</p>
 <p>In[74]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">20</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[74]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;PARTITION&#39;</span>
 </pre></div>
 </div>
-<p>In the example above the node +20 of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> is a
+<p>In the example above the node +20 of <img class="math" src="../_images/math/ac5778af0c99a888d1caf35ced67c4bf53a59bbf.png" alt="$\mathcal{G}_s$"/> is a
 segment of nature &#8216;PARTITION&#8217;.</p>
 <p>&#8216;PARTITION&#8217; is a key entry of the Slab dictionnary.</p>
 </div>
@@ -117,6 +131,9 @@ segment of nature &#8216;PARTITION&#8217;.</p>
 <p>The layout L has a <strong>sl</strong> (slab dictionnary) attribute. Inside are
 placed all the available slabs for building the layout.</p>
 <p>In[75]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>Out[75]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
  <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
@@ -150,11 +167,17 @@ materials and on electromagnetic propreties.</p>
 <p>Below an example for a simple slab, constituted with a single material.
 The slab &#8216;WOOD&#8217; is made of material &#8216;WOOD&#8217;</p>
 <p>In[76]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[76]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>In[77]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;thickness&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[77]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -167,49 +190,67 @@ limitation.</p>
 i.e meters.</p>
 <p>Ignore the existence of this attribute, use &#8216;lthick&#8217; attribute instead.</p>
 <p>In[78]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[78]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mf">0.04</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>In[79]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[79]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;maroon&#39;</span>
 </pre></div>
 </div>
 <p>In[80]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[80]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">2</span>
 </pre></div>
 </div>
 <p>More complex Slab, using different stacks of materials can be considered</p>
 <p>In[81]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[81]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;GLASS&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;GLASS&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>In[82]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[82]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>For each material, the electromagnetic propreties can be listed.</p>
 <p>In[83]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmat&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Out[83]:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
- <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
- <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}]</span>
@@ -222,10 +263,19 @@ i.e meters.</p>
 coefficients for</p>
 <ul class="simple">
 <li>a given frequency range</li>
-<li>a given incidence angle range (<img class="math" src="../_images/math/77375b78a9e3285bb5338b7abdda4ac01b7d0d59.png" alt="$0\le\theta&lt;\frac{\pi}{2}$"/>)</li>
+<li>a given incidence angle range (<img class="math" src="../_images/math/491768176d6dc126ffdde0f4d6625c0f78d9de14.png" alt="$0\le\theta&lt;\frac{\pi}{2}$"/>)</li>
 </ul>
 <p>In[84]:</p>
-<div class="highlight-python"><pre>Here, we have evluated the slab for 80 frequency(ies) and 158 angle(s)</pre>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Here, we have evluated the slab for&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;frequency(ies)&#39;</span><span class="p">,</span> <span class="s">&#39;and&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;angle(s)</span><span class="se">\n</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Here, we have evluated the slab for 80 frequency(ies) and 158 angle(s)
+</pre></div>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficient">
@@ -233,7 +283,14 @@ coefficients for</p>
 <p>From the evaluation reflexion and tramsmission coeffcient are computed
 for the given frequency range and theta range</p>
 <p>In[85]:</p>
-<div class="highlight-python"><pre>Reflection coefficient @ 1.05 GHz and theta= 0.1 :
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">ithet</span><span class="o">=</span><span class="mi">10</span>
+
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Reflection coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> R=&#39;</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Transmission coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> T=&#39;</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Reflection coefficient @ 1.05 GHz and theta= 0.1 :
 
  R= [[-0.46812931-0.06286165j  0.00000000+0.j        ]
  [ 0.00000000+0.j          0.46812931+0.06286165j]]
@@ -241,7 +298,8 @@ for the given frequency range and theta range</p>
 Transmission coefficient @ 1.05 GHz and theta= 0.1 :
 
  T= [[ 0.72738249-0.48850885j  0.00000000+0.j        ]
- [ 0.00000000+0.j          0.72738249-0.48850885j]]</pre>
+ [ 0.00000000+0.j          0.72738249-0.48850885j]]
+</pre></div>
 </div>
 </div>
 <div class="section" id="ploting-coefficients">
@@ -250,11 +308,27 @@ Transmission coefficient @ 1.05 GHz and theta= 0.1 :
 <div>with respect to  frequency</div></blockquote>
 <hr class="docutils" />
 <p>In[86]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;mod&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;phase&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <img alt="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_01.png" src="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_01.png" />
 <img alt="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_02.png" src="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_02.png" />
 <p>In[87]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
+</pre></div>
+</div>
 <img alt="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_03.png" src="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_03.png" />
 <p>In[91]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
+</pre></div>
+</div>
 <img alt="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_04.png" src="manual/1__Slab_and_Materials_files/1__Slab_and_Materials_fig_04.png" />
 </div>
 
@@ -277,7 +351,7 @@ Transmission coefficient @ 1.05 GHz and theta= 0.1 :
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

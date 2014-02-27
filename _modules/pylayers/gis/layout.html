@@ -128,6 +128,13 @@
 <span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.graphutil</span> <span class="kn">as</span> <span class="nn">gph</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
+    <span class="kn">from</span> <span class="nn">mayavi.sources.vtk_data_source</span> <span class="kn">import</span> <span class="n">VTKDataSource</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
+
 <span class="c">#</span>
 <span class="c">#</span>
 
@@ -568,6 +575,7 @@
 <span class="sd">        self.dca</span>
 <span class="sd">        self.lsss : list of subsegments</span>
 
+<span class="sd">        assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
 
@@ -577,6 +585,12 @@
 
         <span class="n">useg</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">nodes</span><span class="p">)</span>
         <span class="n">upnt</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upnt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">upnt</span><span class="p">))</span>
+        <span class="n">utmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">upnt</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upnt</span><span class="p">))))</span>
+        <span class="n">mutmp</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">utmp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iupnt</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">mutmp</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iupnt</span><span class="p">[</span><span class="n">utmp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="n">utmp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+        
 
         <span class="c"># degree of segment nodes</span>
         <span class="n">degseg</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">x</span><span class="p">),</span><span class="n">useg</span><span class="p">)</span>
@@ -637,6 +651,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">upnt</span><span class="p">])</span>  
         <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">upnt</span><span class="p">])</span> 
+        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">ntail</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="n">useg</span><span class="p">)</span>  
         <span class="n">nhead</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span><span class="n">useg</span><span class="p">)</span>    
@@ -6660,6 +6677,179 @@
         <span class="n">fos</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">pg</span> 
 </div>
+<div class="viewcode-block" id="Layout.mayafile"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.mayafile">[docs]</a>    <span class="k">def</span> <span class="nf">mayafile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; create a .off geomview file </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        centered : Boolean</span>
+<span class="sd">            if True the layout is centered around its center of gravity</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        The `.off` file can be vizualized through the show3 method</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; pg = L.geomfile()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="c"># calculate center of gravity</span>
+        <span class="k">if</span> <span class="n">centered</span><span class="p">:</span>
+            <span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="c">#en  = self.Ns # number of segments</span>
+        <span class="n">en</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">en</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;wrong number of segment consistency problem in layout&quot;</span><span class="p">)</span>
+        <span class="c">#cen = self.Nss</span>
+        <span class="c"># d : dictionnary of layout sub segments</span>
+        <span class="c">#</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subseg</span><span class="p">()</span>
+        <span class="n">cen</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+            <span class="n">lss</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">cen</span> <span class="o">=</span> <span class="n">cen</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">lss</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cen</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nss</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;wrong number of subsegment consistency problem in layout&quot;</span><span class="p">)</span>
+
+        <span class="n">sl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span>
+<span class="c">#</span>
+<span class="c">#        Create a polygon for each segment and subsegment</span>
+<span class="c">#</span>
+        <span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+        <span class="n">P2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+        <span class="n">P3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+        <span class="n">P4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+
+        <span class="n">ik</span>   <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dikn</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># segment</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="s">&#39;AIR&#39;</span><span class="p">:</span>
+                    <span class="n">nebr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">n1</span> <span class="o">=</span> <span class="n">nebr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">n2</span> <span class="o">=</span> <span class="n">nebr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">P1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
+                    <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    
+                    <span class="n">P2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
+                    <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+                    <span class="n">P3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
+                    <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+                    <span class="n">P4</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
+                    <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    
+                    <span class="n">dikn</span><span class="p">[</span><span class="n">ik</span><span class="p">]</span><span class="o">=</span><span class="n">i</span>
+                    <span class="n">ik</span> <span class="o">=</span> <span class="n">ik</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">en</span> <span class="o">=</span> <span class="n">en</span><span class="o">-</span><span class="mi">1</span>
+
+        
+        <span class="c"># d = self.subseg()</span>
+        <span class="c"># k : ss_name v: seg number </span>
+        <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">subseg</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#pdb.set_trace()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">subseg</span><span class="p">[</span><span class="n">cpt</span><span class="p">]</span> <span class="o">=</span> <span class="n">ids</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">cpt</span> <span class="o">=</span> <span class="n">cpt</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">nebr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">n1</span> <span class="o">=</span> <span class="n">nebr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">n2</span> <span class="o">=</span> <span class="n">nebr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c">#print ik,n1,n2</span>
+
+                <span class="n">P1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
+                <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ids</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">order</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c">#print P1[:,ik]</span>
+
+                <span class="n">P2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
+                <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ids</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">order</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c">#print P2[:,ik]</span>
+
+                <span class="n">P3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span> 
+                <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ids</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">order</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c">#print P3[:,ik]</span>
+
+                <span class="n">P4</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
+                <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ids</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">order</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c">#print P4[:,ik]</span>
+
+                <span class="n">dikn</span><span class="p">[</span><span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+                <span class="n">ik</span> <span class="o">=</span> <span class="n">ik</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">npt</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
+
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">P1</span><span class="p">,</span><span class="n">P2</span><span class="p">))</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">P3</span><span class="p">))</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">P4</span><span class="p">))</span>
+        <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">boxes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">npt</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npt</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">b</span>
+        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
+        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
+        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
+
+
+        
+<span class="c">#         _filename,ext = os.path.splitext(self.filename)</span>
+<span class="c">#         _filegeom = _filename+&#39;.off&#39;</span>
+<span class="c">#         self.filegeom=_filegeom</span>
+<span class="c">#         filegeom = pyu.getlong(_filegeom, pstruc[&#39;DIRGEOM&#39;])</span>
+<span class="c">#         fos = open(filegeom, &quot;w&quot;)</span>
+<span class="c">#         fos.write(&quot;OFF\n&quot;)</span>
+<span class="c">#         fos.write(&quot;%d %d \n\n&quot; % (npt + 1, en + cen))</span>
+<span class="c">#         fos.write(&quot;0.000 0.000 0.000\n&quot;)</span>
+<span class="c">#         for i in range(en + cen):</span>
+<span class="c">#             fos.write(&quot;%6.3f %6.3f %6.3f \n&quot; % (P1[0, i], P1[1, i], P1[2, i]))</span>
+<span class="c">#             fos.write(&quot;%6.3f %6.3f %6.3f \n&quot; % (P2[0, i], P2[1, i], P2[2, i]))</span>
+<span class="c">#             fos.write(&quot;%6.3f %6.3f %6.3f \n&quot; % (P3[0, i], P3[1, i], P3[2, i]))</span>
+<span class="c">#             fos.write(&quot;%6.3f %6.3f %6.3f \n&quot; % (P4[0, i], P4[1, i], P4[2, i]))</span>
+
+        <span class="n">cold</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">coldict</span><span class="p">()</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">cen</span><span class="o">+</span><span class="n">en</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">):</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">en</span><span class="p">:</span>
+                <span class="n">ne</span> <span class="o">=</span> <span class="n">dikn</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ne</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ne</span> <span class="o">=</span> <span class="n">dikn</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="n">dikn</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ne</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">][</span><span class="n">order</span><span class="p">]</span>
+
+            <span class="n">colname</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+            <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span>
+            <span class="n">color</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
+
+
+
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">tvtk</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">polys</span><span class="o">=</span><span class="n">boxes</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;scalars&#39;</span>
+
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">surf</span><span class="p">),</span>
+                                        <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
+
+</div>
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
@@ -7065,7 +7255,7 @@
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

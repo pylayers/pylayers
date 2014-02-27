@@ -110,13 +110,13 @@
 .mat</p>
 <dl class="class">
 <dt id="pylayers.antprop.antenna.Antenna">
-<em class="property">class </em><tt class="descclassname">pylayers.antprop.antenna.</tt><tt class="descname">Antenna</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.antenna.</tt><tt class="descname">Antenna</tt><big>(</big><em>typ='S2R2.sh3'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna" title="Permalink to this definition">¶</a></dt>
 <dd><p>Antenna</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>name</strong> : Antenna name</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>name</strong> : Antenna name</p>
 <p><strong>Nf</strong> : number of frequency</p>
 <p><strong>Nt</strong> : number of theta</p>
 <p><strong>Np</strong> : number of phi</p>
@@ -130,7 +130,7 @@
 <p><strong>C</strong> : VSH Coefficients</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>info</strong> : Display information about antenna</p>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>info</strong> : Display information about antenna</p>
 <p><strong>vsh</strong> : calculates Vector Spherical Harmonics</p>
 <p><strong>show3</strong> : Geomview diagram</p>
 <p><strong>plot3d</strong> : 3D diagram plotting using matplotlib toolkit</p>
@@ -149,13 +149,13 @@ bcp     : near filed chamber</p>
 </table>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fpatt">
-<tt class="descname">Fpatt</tt><big>(</big><em>th=</em><span class="optional">[</span><span class="optional">]</span>, <em>ph=</em><span class="optional">[</span><span class="optional">]</span>, <em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fpatt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fpatt" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Fpatt</tt><big>(</big><em>th=</em>, <span class="optional">[</span><span class="optional">]</span><em>ph=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fpatt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fpatt" title="Permalink to this definition">¶</a></dt>
 <dd><p>generate antenna pattern</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>th  :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>th  :</strong> :</p>
 <p><strong>ph  :</strong> :</p>
 <p><strong>pattern</strong> : boolean</p>
 <blockquote>
@@ -195,7 +195,7 @@ bcp     : near filed chamber</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : ndarray (1xNdir)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : ndarray (1xNdir)</p>
 <p><strong>phi</strong> : ndarray (1xNdir)</p>
 <p><strong>k</strong> : int</p>
 <blockquote class="last">
@@ -215,7 +215,7 @@ bcp     : near filed chamber</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : array 1 x Nt</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : array 1 x Nt</p>
 <p><strong>phi</strong> : array 1 x Np</p>
 <p><strong>pattern</strong> : boolean</p>
 <blockquote>
@@ -243,7 +243,7 @@ theta and phi arrays needs to have the same size</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : 1 x Nt</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : 1 x Nt</p>
 <p class="last"><strong>phi</strong> : 1 x Np</p>
 </td>
 </tr>
@@ -263,7 +263,7 @@ theta and phi arrays needs to have the same size</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>phi</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>phi</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -275,14 +275,14 @@ theta and phi arrays needs to have the same size</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fsynth3">
-<tt class="descname">Fsynth3</tt><big>(</big><em>theta=</em><span class="optional">[</span><span class="optional">]</span>, <em>phi=</em><span class="optional">[</span><span class="optional">]</span>, <em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Fsynth3</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
 <dd><p>synthesis of a complex antenna pattern from VSH coefficients (shape 3)</p>
 <p>Ndir is the number of directions</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : ndarray (1xNdir if not pattern)  (1xNtheta if pattern)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : ndarray (1xNdir if not pattern)  (1xNtheta if pattern)</p>
 <p><strong>phi</strong> : ndarray (1xNdir if not pattter)  (1xNphi if pattern)</p>
 <p><strong>pattern</strong> : boolean</p>
 <blockquote>
@@ -290,7 +290,7 @@ theta and phi arrays needs to have the same size</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>if pattern:</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>if pattern:</strong> :</p>
 <blockquote>
 <div><p>Fth   : ndarray (Ntheta x Nphi)
 Fph   : ndarray (Ntheta x Nphi)</p>
@@ -327,7 +327,7 @@ once the V,W function</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Fx</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Fx</strong> :</p>
 <p><strong>Fy</strong> :</p>
 <p><strong>Fz</strong> :</p>
 <p class="last"><strong>ith</strong> : theta index</p>
@@ -345,7 +345,7 @@ once the V,W function</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>kf</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kf</strong> : int</p>
 <blockquote class="last">
 <div><p>frequency index default 0</p>
 </div></blockquote>
@@ -378,7 +378,7 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>kf</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kf</strong> : integer</p>
 <blockquote>
 <div><p>frequency index. If k=-1 integration over all frequency</p>
 </div></blockquote>
@@ -386,13 +386,13 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <p><strong>typ :</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>errelTh</strong> : float</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>errelTh</strong> : float</p>
 <blockquote>
-<div><p>relative error on <img class="math" src="../_images/math/c255f4656c31b105603e8faa0b9800ece705c3bf.png" alt="F_{\theta}"/></p>
+<div><p>relative error on <img class="math" src="../_images/math/0e31c8f84652d7ba21ff8bca08a0e4d8e14bccc5.png" alt="F_{\theta}"/></p>
 </div></blockquote>
 <p><strong>errelPh</strong> : float</p>
 <blockquote>
-<div><p>relative error on <img class="math" src="../_images/math/1cc0ec67a40834eb68e1633e66724c95c1e4f0e3.png" alt="F_{\phi}"/></p>
+<div><p>relative error on <img class="math" src="../_images/math/25ec171b8cd2533076b18a6196dd5f139999b5bb.png" alt="F_{\phi}"/></p>
 </div></blockquote>
 <p class="last"><strong>errel</strong> : float</p>
 </td>
@@ -401,7 +401,7 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 </table>
 <p class="rubric">Notes</p>
 <div class="math">
-<p><img src="../_images/math/3b925f21ced5547d8a2d0a6e8cd124a8032cae1a.png" alt="\epsilon_r^{\theta} =
+<p><img src="../_images/math/b6322b0bcc107b3a9d49d628e1bff10ca4132aff.png" alt="\epsilon_r^{\theta} =
 \frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta)(\phi)|^2}
      {|F_{\theta}(\theta,\phi)|^2}
 
@@ -418,13 +418,13 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>delayCandidates</strong> : ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delayCandidates</strong> : ndarray</p>
 <blockquote>
 <div><p>default np.arange(-10,10,0.001)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>electricalDelay</strong> : float</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>electricalDelay</strong> : float</p>
 <p><strong>Author</strong> : Troels Pedersen (Aalborg University)</p>
 <blockquote class="last">
 <div><p>B.Uguen</p>
@@ -449,7 +449,7 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>directory</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> : str</p>
 <blockquote>
 <div><p>directory where is located the trx file (default : ant)</p>
 </div></blockquote>
@@ -473,7 +473,7 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.loadhfss">
-<tt class="descname">loadhfss</tt><big>(</big><em>lfa=</em><span class="optional">[</span><span class="optional">]</span>, <em>Nt=72</em>, <em>Np=37</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadhfss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadhfss" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">loadhfss</tt><big>(</big><em>lfa=</em>, <span class="optional">[</span><span class="optional">]</span><em>Nt=72</em>, <em>Np=37</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadhfss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadhfss" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -484,7 +484,7 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>directory</strong> : str , optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> : str , optional</p>
 <blockquote class="last">
 <div><p>default &#8216;ant&#8217;</p>
 </div></blockquote>
@@ -526,7 +526,7 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>directory</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> :</p>
 <p><strong>self._filename: short name of the antenna file</strong> :</p>
 <p><strong>the file is seek in the $BASENAME/ant directory</strong> :</p>
 <p><strong>.. todo:</strong> :</p>
@@ -571,13 +571,13 @@ the vsh coefficients in shape 2</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
 <blockquote>
 <div><p>{&#8216;mat&#8217;|&#8217;trx&#8217;|&#8217;vsh3&#8217;|&#8217;sh3&#8217;}</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>lfile_s</strong> : list</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lfile_s</strong> : list</p>
 <blockquote class="last">
 <div><p>sorted list of all the .str file of strdir</p>
 </div></blockquote>
@@ -598,7 +598,7 @@ in order to obtain a reconstruction maximal error =  emax</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>emax</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>emax</strong> : float</p>
 <blockquote class="last">
 <div><p>error default 0.05</p>
 </div></blockquote>
@@ -621,7 +621,7 @@ in order to obtain a reconstruction maximal error =  emax</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Fth</strong> : np.array</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Fth</strong> : np.array</p>
 <p><strong>Fph</strong> : np.array</p>
 <p class="last"><strong>N</strong> : int</p>
 </td>
@@ -640,13 +640,13 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.pattern">
-<tt class="descname">pattern</tt><big>(</big><em>theta=</em><span class="optional">[</span><span class="optional">]</span>, <em>phi=</em><span class="optional">[</span><span class="optional">]</span>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pattern" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pattern</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>return multidimensionnal radiation patterns</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : array</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : array</p>
 <blockquote>
 <div><p>1xNt</p>
 </div></blockquote>
@@ -672,7 +672,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
 <p><strong>typ = &#8216;Gain&#8217;</strong> :</p>
 <blockquote>
 <div><p>= &#8216;Ftheta&#8217;
@@ -694,7 +694,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>ith</strong> : theta index</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ith</strong> : theta index</td>
 </tr>
 </tbody>
 </table>
@@ -708,7 +708,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : int</p>
 <blockquote>
 <div><p>frequency index</p>
 </div></blockquote>
@@ -744,13 +744,13 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>&#8216;fGHz&#8217;</strong> : frequzncy</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>&#8216;fGHz&#8217;</strong> : frequzncy</p>
 <p><strong>phd</strong> : phi in degrees</p>
 <p><strong>thd</strong> : theta in degrees</p>
 <p><strong>&#8216;GmaxdB&#8217;:  max gain to be displayed</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
 <p class="last"><strong>ax</strong> :</p>
 </td>
 </tr>
@@ -819,13 +819,13 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.show3">
-<tt class="descname">show3</tt><big>(</big><em>k=0</em>, <em>po=</em><span class="optional">[</span><span class="optional">]</span>, <em>T=</em><span class="optional">[</span><span class="optional">]</span>, <em>typ='Gain'</em>, <em>mode='linear'</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.show3" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show3</tt><big>(</big><em>k=0</em>, <em>po=</em>, <span class="optional">[</span><span class="optional">]</span><em>T=</em>, <span class="optional">[</span><span class="optional">]</span><em>typ='Gain'</em>, <em>mode='linear'</em>, <em>silent=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.show3" title="Permalink to this definition">¶</a></dt>
 <dd><p>show3 geomview</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
 <p><strong>po</strong> : poition of the antenna</p>
 <p><strong>T</strong> : GCS of the antenna</p>
 <p><strong>typ</strong> : string</p>
@@ -864,7 +864,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
 <p><strong>A</strong> : Antenna</p>
 <p><strong>ph</strong> : phi base      (1 x Np)</p>
 <p><strong>th</strong> : theta base    (1 x Nt)</p>
@@ -891,7 +891,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n,m</strong> : integer values (m&lt;=n)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n,m</strong> : integer values (m&lt;=n)</p>
 <p><strong>theta</strong> : ndarray</p>
 <p><strong>phi</strong> : ndarray</p>
 <p><strong>sf</strong> : boolean</p>
@@ -949,7 +949,7 @@ else  : plotted figures aren&#8217;t saved</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>F</strong> : ndarray (Nf,Nt,Np)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>F</strong> : ndarray (Nf,Nt,Np)</p>
 <p><strong>theta</strong> : ndarray (1xNt)</p>
 <blockquote>
 <div><p>angle</p>
@@ -1027,7 +1027,7 @@ len(phi) must be equal with shape(F)[2]</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

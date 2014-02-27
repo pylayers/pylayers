@@ -252,7 +252,7 @@ France</p>
 <p>This documentation is generated automatically with sphinx from the
 PyLayers source code files on github
 (<a class="reference external" href="https://github.com/pylayers/pylayers">https://github.com/pylayers/pylayers</a>).</p>
-<p>The collection of .s in the doc directory is used as a
+<p>The collection of notebooks in the doc directory is used as a
 complementary battery of tests using
 <a class="reference external" href="https://pypi.python.org/pypi/runipy">runipy</a>, it is used to track
 regressions and broken functionalities as it happens on a regular basis
@@ -269,7 +269,7 @@ the necessary continuous improvement of the PyLayers platform.</p>
 improved, please do not hesitate to provide a feed back on the <a class="reference external" href="https://github.com/pylayers/pylayers/issues?milestone=1&amp;state=open">issues
 page of the
 project</a></p>
-<p>If you find any bug, please keep preciously track of it in a .
+<p>If you find any bug, please keep preciously track of it in a notebook
 and <tt class="docutils literal"><span class="pre">gist</span></tt> it and send the link on the issues page.</p>
 <p>PyLayers&#8217;s developers are not experts in computer science,
 but they are keen to learn more simple and efficient (== pythonic)
@@ -290,7 +290,7 @@ good idea is to install first
 you most of the required dependencies.</p>
 <div class="section" id="dependencies">
 <h2>3.1. Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><pre>Before to install pylayers you need to install the following dependencies
+<div class="highlight-python"><div class="highlight"><pre>Before to install pylayers you need to install the following dependencies
 
 
 numpy&gt;=1.6.1
@@ -306,23 +306,26 @@ pyintervall&gt;=1.0
 pandas &gt;=0.12.0
 
 The installation of matplotlib basemap requires installation of libraries GEOS
-and PROJ4. The installation procedure is well described in</pre>
+and PROJ4. The installation procedure is well described in
+</pre></div>
 </div>
 <p><a class="reference external" href="http://matplotlib.org/basemap/users/installing.html">http://matplotlib.org/basemap/users/installing.html</a></p>
-<div class="highlight-python"><pre>For supporting the osm format PyLayers is relying on imposm. The installation
+<div class="highlight-python"><div class="highlight"><pre>For supporting the osm format PyLayers is relying on imposm. The installation
 of imposm is not straighforward it requires to install first Tokyo-Cabinet
 and Google-Protobuf library. PyLayers can work without imposm you need to
-comment the only import to the module in pylayers/gis/osmparser.py.</pre>
+comment the only import to the module in pylayers/gis/osmparser.py.
+</pre></div>
 </div>
 <p><a class="reference external" href="http://imposm.org/docs/imposm/latest/install.html#id1">http://imposm.org/docs/imposm/latest/install.html#id1</a></p>
-<div class="highlight-python"><pre>Most of these dependencies are handled in the setup.py script.
+<div class="highlight-python"><div class="highlight"><pre>Most of these dependencies are handled in the setup.py script.
 
-python setup.py install</pre>
+python setup.py install
+</pre></div>
 </div>
 </div>
 <div class="section" id="setting-of-environment-variables-basename-and-pylayers">
 <h2>3.2. Setting of environment variables $BASENAME and $PYLAYERS<a class="headerlink" href="#setting-of-environment-variables-basename-and-pylayers" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><pre>It is required to define the two enviroment variables $PYLAYERS and $BASENAME
+<div class="highlight-python"><div class="highlight"><pre>It is required to define the two enviroment variables $PYLAYERS and $BASENAME
 
 in your .bashrc add those 2 lines
 
@@ -331,12 +334,14 @@ in your .bashrc add those 2 lines
 for example if you install PyLyers in your home directory
 
 export PYLAYERS=~/pylayers
-export BASENAME=~/plproject</pre>
+export BASENAME=~/plproject
+</pre></div>
 </div>
 </div>
 <div class="section" id="testing">
 <h2>3.3. Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><pre>make test-code</pre>
+<div class="highlight-python"><div class="highlight"><pre>make test-code
+</pre></div>
 </div>
 </div>
 </div>
@@ -395,7 +400,7 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 </div>
 <div class="section" id="defining-a-new-slab-and-a-new-material">
 <h2>4.1. Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;wall2&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;reim&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;wall2&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;reim&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;slab2&#39;</span><span class="p">,[</span><span class="s">&#39;wall2&#39;</span><span class="p">],[</span><span class="mf">0.15</span><span class="p">])</span>
@@ -406,11 +411,11 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">(</span><span class="mf">2.6</span><span class="p">),</span>
  <span class="s">&#39;epr2&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">0.026</span><span class="p">),</span>
- <span class="s">&#39;epsr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="n">j</span><span class="p">),</span>
+ <span class="s">&#39;epsr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026j</span><span class="p">),</span>
  <span class="s">&#39;fGHz&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
  <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
- <span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.612</span><span class="o">-</span><span class="mf">0.00806</span><span class="n">j</span><span class="p">),</span>
+ <span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.612</span><span class="o">-</span><span class="mf">0.00806j</span><span class="p">),</span>
  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;wall2&#39;</span><span class="p">,</span>
  <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
  <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0057</span><span class="p">}</span>
@@ -433,7 +438,7 @@ coefficients w.r.t angle anf frequency.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -495,21 +500,21 @@ properties can be obtained as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmat&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
- <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
- <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}]</span>
@@ -522,7 +527,7 @@ properties can be obtained as:</p>
 coefficients for</p>
 <ul class="simple">
 <li>a given frequency range</li>
-<li>a given incidence angle range (<img class="math" src="../_images/math/cc252e43022d2dfe51620c5ed140b7db3d8a0968.png" alt="0\le\theta&lt;\frac{\pi}{2}"/>)</li>
+<li>a given incidence angle range (<img class="math" src="../_images/math/c8ecea85ef2986cea055fbac1cc3ee95d1ca2537.png" alt="0\le\theta&lt;\frac{\pi}{2}"/>)</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
@@ -532,7 +537,8 @@ coefficients for</p>
 <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Here, slab is evaluted for&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;frequency(ies)&#39;</span><span class="p">,</span> <span class="s">&#39;and&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;angle(s)</span><span class="se">\n</span><span class="s">&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)</pre>
+<div class="highlight-python"><div class="highlight"><pre>Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)
+</pre></div>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficients">
@@ -546,7 +552,7 @@ frequency range and theta range</p>
 <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Transmission coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> T=&#39;</span><span class="p">,</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Reflection coefficient @ 3.01 GHz and theta= 0.1 :
+<div class="highlight-python"><div class="highlight"><pre>Reflection coefficient @ 3.01 GHz and theta= 0.1 :
 
  R= [[-0.39396205-0.17289585j  0.00000000+0.j        ]
  [ 0.00000000+0.j          0.39396205+0.17289585j]]
@@ -554,11 +560,12 @@ frequency range and theta range</p>
 Transmission coefficient @ 3.01 GHz and theta= 0.1 :
 
  T= [[-0.17594898-0.86927604j -0.00000000+0.j        ]
- [-0.00000000+0.j         -0.17594898-0.86927604j]]</pre>
+ [-0.00000000+0.j         -0.17594898-0.86927604j]]
+</pre></div>
 </div>
 <div class="section" id="ploting-coefficients">
 <h3>4.4.1. Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>plotwrt (plot with respect to)
+<div class="highlight-python"><div class="highlight"><pre>plotwrt (plot with respect to)
 
 Parameters
 ----------
@@ -566,19 +573,20 @@ Parameters
  kv  : int
     variable index
  polar: string
-        'po', # po | p | o   (parallel+ortho | parallel | ortogonal)
+        &#39;po&#39;, # po | p | o   (parallel+ortho | parallel | ortogonal)
  coeff: string
-        'RT', # RT | R | T   (Reflexion &amp; Transmission ) | Reflexion | Transmission
+        &#39;RT&#39;, # RT | R | T   (Reflexion &amp; Transmission ) | Reflexion | Transmission
  var:  string
-        'a',    # a | f       angle | frequency
+        &#39;a&#39;,    # a | f       angle | frequency
  types : string
-        'm' | 'r' | 'd' | 'l20'
-        mod   rad    deg   dB</pre>
+        &#39;m&#39; | &#39;r&#39; | &#39;d&#39; | &#39;l20&#39;
+        mod   rad    deg   dB
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;R&#39;</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png" />
 <p>with respect to angle</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
@@ -587,7 +595,7 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png" />
 <p>wrt to angle and frequency</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
@@ -595,7 +603,7 @@ Parameters
 <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
@@ -613,12 +621,12 @@ Parameters
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png" />
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">## Adding new materials</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mi">3</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mi">3</span><span class="o">+</span><span class="mi">0j</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
 
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">])</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.10</span><span class="p">])</span>
@@ -640,10 +648,11 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
+<div class="highlight-python"><div class="highlight"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
+  warnings.warn(&quot;No labeled objects found. &quot;
+</pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png" />
 </div>
 </div>
 <div class="section" id="evaluation-without-phase-compensation">
@@ -662,7 +671,7 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -676,7 +685,7 @@ Parameters
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" />
 </div>
 <div class="section" id="double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">
 <h2>4.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz<a class="headerlink" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz" title="Permalink to this headline">¶</a></h2>
@@ -689,28 +698,28 @@ Parameters
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">,[</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;GlassJc&#39;</span><span class="p">],[</span><span class="mf">0.0029</span><span class="p">,</span><span class="mf">0.0102</span><span class="p">,</span><span class="mf">0.0029</span><span class="p">])</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>  <span class="c"># @20°</span>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" />
+<img alt="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" src="notebook/AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" />
 </div>
 <div class="section" id="references">
 <h2>4.7. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -744,7 +753,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 <h2>5.1. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>A Layout is firstly described by a set of points (negative index) and a
 set of segments (positive index).</p>
-<p>Both points and segments are nodes of the <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> graph.</p>
+<p>Both points and segments are nodes of the <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
 <p>It is required to respect a strict non overlapping rule. <strong>No segments
 can recover partially or totally an other segment</strong>.</p>
 <p>This rule allows to capture topological relations of the network which
@@ -840,48 +849,51 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 </pre></div>
 </div>
 <p>The structure of the <tt class="docutils literal"><span class="pre">.osm</span></tt> file is shown below</p>
-<div class="highlight-python"><pre>%%bash
+<div class="highlight-python"><div class="highlight"><pre>%%bash
 
     cd $BASENAME/struc
-    ls *.osm</pre>
+    ls *.osm
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">DLR</span><span class="o">.</span><span class="n">osm</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>%%bash
+<div class="highlight-python"><div class="highlight"><pre>%%bash
     cd $BASENAME/struc
     head DLR.osm
-    echo '---'
-    tail -17 DLR.osm</pre>
+    echo &#39;---&#39;
+    tail -17 DLR.osm
+</pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
-&lt;osm version='0.6' upload='false' generator='PyLayers'&gt;
-&lt;node id='-212' action='modify' visible='true' lat='47.0100855114' lon='-1.98980710934' /&gt;
-&lt;node id='-210' action='modify' visible='true' lat='47.0100789151' lon='-1.9897910381' /&gt;
-&lt;node id='-208' action='modify' visible='true' lat='47.0100738861' lon='-1.98977878545' /&gt;
-&lt;node id='-206' action='modify' visible='true' lat='47.0100616861' lon='-1.98982814281' /&gt;
-&lt;node id='-204' action='modify' visible='true' lat='47.0101583649' lon='-1.98982436917' /&gt;
-&lt;node id='-202' action='modify' visible='true' lat='47.0101656174' lon='-1.98981796656' /&gt;
-&lt;node id='-200' action='modify' visible='true' lat='47.0101843662' lon='-1.98977935424' /&gt;
-&lt;node id='-198' action='modify' visible='true' lat='47.0101791636' lon='-1.98982426816' /&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;osm version=&#39;0.6&#39; upload=&#39;false&#39; generator=&#39;PyLayers&#39;&gt;
+&lt;node id=&#39;-212&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100855114&#39; lon=&#39;-1.98980710934&#39; /&gt;
+&lt;node id=&#39;-210&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100789151&#39; lon=&#39;-1.9897910381&#39; /&gt;
+&lt;node id=&#39;-208&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100738861&#39; lon=&#39;-1.98977878545&#39; /&gt;
+&lt;node id=&#39;-206&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100616861&#39; lon=&#39;-1.98982814281&#39; /&gt;
+&lt;node id=&#39;-204&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101583649&#39; lon=&#39;-1.98982436917&#39; /&gt;
+&lt;node id=&#39;-202&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101656174&#39; lon=&#39;-1.98981796656&#39; /&gt;
+&lt;node id=&#39;-200&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101843662&#39; lon=&#39;-1.98977935424&#39; /&gt;
+&lt;node id=&#39;-198&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101791636&#39; lon=&#39;-1.98982426816&#39; /&gt;
 ---
-&lt;tag k='transition' v='False' /&gt;
+&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
 &lt;/way&gt;
-&lt;way id='-10000123' action='modify' visible='true'&gt;
-&lt;nd ref='-200' /&gt;
-&lt;nd ref='-100' /&gt;
-&lt;tag k='name' v='WALL' /&gt;
-&lt;tag k='z' v="('0.0', '3.0')" /&gt;
-&lt;tag k='transition' v='False' /&gt;
+&lt;way id=&#39;-10000123&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
+&lt;nd ref=&#39;-200&#39; /&gt;
+&lt;nd ref=&#39;-100&#39; /&gt;
+&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
+&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
+&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
 &lt;/way&gt;
-&lt;way id='-10000124' action='modify' visible='true'&gt;
-&lt;nd ref='-166' /&gt;
-&lt;nd ref='-188' /&gt;
-&lt;tag k='name' v='WALL' /&gt;
-&lt;tag k='z' v="('0.0', '3.0')" /&gt;
-&lt;tag k='transition' v='False' /&gt;
+&lt;way id=&#39;-10000124&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
+&lt;nd ref=&#39;-166&#39; /&gt;
+&lt;nd ref=&#39;-188&#39; /&gt;
+&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
+&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
+&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
 &lt;/way&gt;
-&lt;/osm&gt;</pre>
+&lt;/osm&gt;
+</pre></div>
 </div>
 <p>To read a new layout in osm format :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.osm&#39;</span><span class="p">)</span>
@@ -890,11 +902,11 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_20_0.png" src="./GIS-editor_files/GIS-editor_20_0.png" />
+<img alt="notebook/GIS-editor_files/GIS-editor_20_0.png" src="notebook/GIS-editor_files/GIS-editor_20_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>filestr :  DLR.osm
+<div class="highlight-python"><div class="highlight"><pre>filestr :  DLR.osm
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
@@ -906,32 +918,33 @@ Gs Nodes :  229
 Gs Edges :  248
 Gt Nodes :  0
 Gt Edges :  0
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
 Gr Nodes    : 0
 Gr Edges    : 0
-Nc  = Gr.node[nroom]['cycles']</pre>
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
+</pre></div>
 </div>
 <p>The different graphs associated with the layout are then built</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The topological graph <img class="math" src="../_images/math/d09e016d19aaa1364e31dffd743f8db063419ec1.png" alt="\mathcal{G}_t"/> or graph of non overlapping
+<p>The topological graph <img class="math" src="../_images/math/81225d898fa4a260a2c7eb990cc0e37b3d34ab5f.png" alt="\mathcal{G}_t"/> or graph of non overlapping
 cycles.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_25_0.png" src="./GIS-editor_files/GIS-editor_25_0.png" />
-<p>The graph of room <img class="math" src="../_images/math/b5eff55f8ed4e5e817f0be899b354c715da26192.png" alt="\mathcal{G}_r"/>. Two rooms which share at least
+<img alt="notebook/GIS-editor_files/GIS-editor_25_0.png" src="notebook/GIS-editor_files/GIS-editor_25_0.png" />
+<p>The graph of room <img class="math" src="../_images/math/7adf94bbad41196d6e46a083c8fa572339f33f2f.png" alt="\mathcal{G}_r"/>. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_27_0.png" src="./GIS-editor_files/GIS-editor_27_0.png" />
-<p>The graph of waypath <img class="math" src="../_images/math/fb6c51febbf5936878821cf7f6d25450c2531f61.png" alt="\mathcal{G}_w"/>. This graph is used for agent
+<img alt="notebook/GIS-editor_files/GIS-editor_27_0.png" src="notebook/GIS-editor_files/GIS-editor_27_0.png" />
+<p>The graph of waypath <img class="math" src="../_images/math/a7abe4ad210aa755e26fe5019ee06b8dee65bd62.png" alt="\mathcal{G}_w"/>. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
 yet</p>
@@ -939,14 +952,14 @@ yet</p>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_29_0.png" src="./GIS-editor_files/GIS-editor_29_0.png" />
-<p>The graph of visibility <img class="math" src="../_images/math/2734dadd677c194791acb2128007de35d2383fcc.png" alt="\mathcal{G_v}"/></p>
+<img alt="notebook/GIS-editor_files/GIS-editor_29_0.png" src="notebook/GIS-editor_files/GIS-editor_29_0.png" />
+<p>The graph of visibility <img class="math" src="../_images/math/2019da1c9a58643ae395b7177603bf14a9346d5a.png" alt="\mathcal{G_v}"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_31_0.png" src="./GIS-editor_files/GIS-editor_31_0.png" />
-<p>The graph of interactions <img class="math" src="../_images/math/f7c6dfbc6b2e94bb65357fd159c519c967ebedf8.png" alt="\mathcal{G}_i"/> used to determine the
+<img alt="notebook/GIS-editor_files/GIS-editor_31_0.png" src="notebook/GIS-editor_files/GIS-editor_31_0.png" />
+<p>The graph of interactions <img class="math" src="../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> used to determine the
 ray signatures.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -954,14 +967,14 @@ ray signatures.</p>
 <span class="n">b</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_33_0.png" src="./GIS-editor_files/GIS-editor_33_0.png" />
+<img alt="notebook/GIS-editor_files/GIS-editor_33_0.png" src="notebook/GIS-editor_files/GIS-editor_33_0.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
 <h2>5.5. The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>filestr :  DLR.osm
+<div class="highlight-python"><div class="highlight"><pre>filestr :  DLR.osm
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
@@ -973,11 +986,12 @@ Gs Nodes :  229
 Gs Edges :  248
 Gt Nodes :  20
 Gt Edges :  48
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
 Gr Nodes    : 16
 Gr Edges    : 16
-Nc  = Gr.node[nroom]['cycles']</pre>
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
+</pre></div>
 </div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
 display options are specified in the display dictionnary. Those options
@@ -1084,7 +1098,7 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_53_1.png" src="./GIS-editor_files/GIS-editor_53_1.png" />
+<img alt="notebook/GIS-editor_files/GIS-editor_53_1.png" src="notebook/GIS-editor_files/GIS-editor_53_1.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h3>5.6.2. Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
@@ -1109,20 +1123,21 @@ meters) between the two points.</li>
 <p>In that sequence of operation it is useful to rescale the figure with
 &#8216;r&#8217;.</p>
 <p>At that stage, it is possible to start creating points</p>
-<div class="highlight-python"><pre>'b'  : selct a segment
-'l'  : select activelayer
-'i'  : back to init state
-'e'  : edit segment
-'t'  : translate  structure
-'h'  : add subsegment
-'d'  : delete subsegment
-'r'  : refresh
-'o'  : toggle overlay
-'m'  : toggle mode (point or segment)
-'z'  : change display parameters
-'q'  : quit interactive mode
-'x'  : save .str2 file
-'w'  : display all layers</pre>
+<div class="highlight-python"><div class="highlight"><pre>&#39;b&#39;  : selct a segment
+&#39;l&#39;  : select activelayer
+&#39;i&#39;  : back to init state
+&#39;e&#39;  : edit segment
+&#39;t&#39;  : translate  structure
+&#39;h&#39;  : add subsegment
+&#39;d&#39;  : delete subsegment
+&#39;r&#39;  : refresh
+&#39;o&#39;  : toggle overlay
+&#39;m&#39;  : toggle mode (point or segment)
+&#39;z&#39;  : change display parameters
+&#39;q&#39;  : quit interactive mode
+&#39;x&#39;  : save .str2 file
+&#39;w&#39;  : display all layers
+</pre></div>
 </div>
 </div>
 <div class="section" id="visualisation-of-the-layout">
@@ -1135,9 +1150,9 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="./GIS-editor_files/GIS-editor_59_0.png"><img alt="./GIS-editor_files/GIS-editor_59_0.png" src="./GIS-editor_files/GIS-editor_59_0.png" /></a>
-<p>Each node of <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> with a negative index is a point.</p>
-<p>Each node of <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> with a positive index corresponds to
+<a class="reference internal image-reference" href="notebook/GIS-editor_files/GIS-editor_59_0.png"><img alt="notebook/GIS-editor_files/GIS-editor_59_0.png" src="notebook/GIS-editor_files/GIS-editor_59_0.png" /></a>
+<p>Each node of <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a negative index is a point.</p>
+<p>Each node of <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a positive index corresponds to
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 <p><a class="reference external" href="MultiSubsegments.ipynb">Multi Subsegments</a></p>
@@ -1168,10 +1183,11 @@ attribute of the subsegment can be changed with the method <tt class="docutils l
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>structure saved in  defstr3.str2
-structure saved in  defstr3.ini</pre>
+<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
+structure saved in  defstr3.ini
+</pre></div>
 </div>
-<p>The <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> graph dictionnary has the following structure</p>
+<p>The <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph dictionnary has the following structure</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
@@ -1244,7 +1260,7 @@ structure saved in  defstr3.ini</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>default.ini
+<div class="highlight-python"><div class="highlight"><pre>default.ini
 ------------------------------------------
 Layout Info :
 filestr :  defstr3.ini
@@ -1259,11 +1275,11 @@ Gs Nodes :  17
 Gs Edges :  18
 Gt Nodes :  2
 Gt Edges :  1
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
 Gr Nodes    : 2
 Gr Edges    : 1
-Nc  = Gr.node[nroom]['cycles']
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
 None
 Tx Info :
 npos       :  2
@@ -1290,7 +1306,8 @@ filespa    :  radiorx.spa
 filegeom   :  radiorx.vect
 fileant    :  defant.vsh3
 filestr    :  defstr.str2
-None</pre>
+None
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -1308,13 +1325,13 @@ None</pre>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_10_0.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_10_0.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_10_0.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_10_0.png" />
 <p>The different steps are :</p>
 <ul class="simple">
 <li>determine the signatures</li>
@@ -1338,7 +1355,7 @@ None</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 6 : [1 2 3 4 5 6]
@@ -1364,7 +1381,8 @@ None</pre>
  312 313 314 315 316 317 318 319]
 -----
 ni : 1864
-nl : 4048</pre>
+nl : 4048
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
@@ -1380,7 +1398,7 @@ nl : 4048</pre>
 <span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">type</span><span class="p">(</span><span class="n">cirair</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1400,9 +1418,10 @@ nl : 4048</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fe8029fb310&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fe8029fb310&gt;
+</pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_18_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_18_1.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_18_1.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_18_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
@@ -1417,7 +1436,7 @@ nl : 4048</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_19_0.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_19_0.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_19_0.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_19_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#fig2=plt.figure()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
@@ -1431,9 +1450,9 @@ nl : 4048</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_20_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_20_1.png" />
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_20_2.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_20_2.png" />
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_20_1.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_20_1.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_20_2.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_20_2.png" />
+<img alt="notebook/GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" src="notebook/GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" />
 </div>
 </div>
 <div class="section" id="electromagnetic-simulation">
@@ -1480,7 +1499,7 @@ termination of the radio link.</p>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" />
+<img alt="notebook/AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" src="notebook/AP-multiwallmodel_files/AP-multiwallmodel_9_0.png" />
 <p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
 and the corresponding incidence angles (in radians) with respect to the
 segment normal.</p>
@@ -1504,10 +1523,11 @@ orthogonal and parallel polarization</p>
 <span class="k">print</span> <span class="s">&#39;Excess delay parallel polarization   </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">Edp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Losses orthogonal polarization       27.7333 dB
+<div class="highlight-python"><div class="highlight"><pre>Losses orthogonal polarization       27.7333 dB
 Losses parallel polarization         16.0573  dB
 Excess delay orthogonal polarization         2.23113 ns
-Excess delay parallel polarization           2.12364 ns</pre>
+Excess delay parallel polarization           2.12364 ns
+</pre></div>
 </div>
 </div>
 </div>
@@ -1549,9 +1569,10 @@ the coverage.ini file</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Coverage performed in  1.34146499634 s
+<div class="highlight-python"><div class="highlight"><pre>Coverage performed in  1.34146499634 s
 
-For Orthogonal polarization</pre>
+For Orthogonal polarization
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig1</span><span class="p">)</span>
@@ -1560,8 +1581,8 @@ For Orthogonal polarization</pre>
 <span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-multiwallmodel_files/AP-multiwallmodel_26_0.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_26_0.png" />
-<img alt="./AP-multiwallmodel_files/AP-multiwallmodel_26_1.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_26_1.png" />
+<img alt="notebook/AP-multiwallmodel_files/AP-multiwallmodel_26_0.png" src="notebook/AP-multiwallmodel_files/AP-multiwallmodel_26_0.png" />
+<img alt="notebook/AP-multiwallmodel_files/AP-multiwallmodel_26_1.png" src="notebook/AP-multiwallmodel_files/AP-multiwallmodel_26_1.png" />
 <p>For parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig1</span><span class="p">)</span>
@@ -1570,8 +1591,8 @@ For Orthogonal polarization</pre>
 <span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" />
-<img alt="./AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" src="./AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" />
+<img alt="notebook/AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" src="notebook/AP-multiwallmodel_files/AP-multiwallmodel_28_0.png" />
+<img alt="notebook/AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" src="notebook/AP-multiwallmodel_files/AP-multiwallmodel_28_1.png" />
 <p>First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -1582,9 +1603,10 @@ strucure is loaded.</p>
 <p>This information can be modified in the <strong>coverage.ini</strong> file in the
 project directory.</p>
 <p>Below is an example of how the content of the file looks like</p>
-<div class="highlight-python"><pre>!cat $BASENAME/ini/coverage.ini</pre>
+<div class="highlight-python"><div class="highlight"><pre>!cat $BASENAME/ini/coverage.ini
+</pre></div>
 </div>
-<div class="highlight-python"><pre>[pl_model]
+<div class="highlight-python"><div class="highlight"><pre>[pl_model]
 sigrss = 3.0
 fGHz = 3.0
 rssnp = 2.64
@@ -1618,7 +1640,8 @@ temperaturek = 300
 noisefactordb = 13
 
 [show]
-show = True</pre>
+show = True
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Create a Coverage object from coverag.ini file</span>
 <span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
@@ -1629,7 +1652,7 @@ parameters of the current coverage object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Layout file : TA-Office.ini
+<div class="highlight-python"><div class="highlight"><pre>Layout file : TA-Office.ini
 
 -----Tx------
 tx (coord) : [25  5]
@@ -1649,7 +1672,8 @@ full grid : True
 boundary (xmin,ymin,xmax,ymax) : [20, 0, 30, 20]
 
 ---- PL Model------
-plm : {'fghz': '3.0', 'rssnp': '2.64', 'd0': '1.0', 'sigrss': '3.0'}</pre>
+plm : {&#39;fghz&#39;: &#39;3.0&#39;, &#39;rssnp&#39;: &#39;2.64&#39;, &#39;d0&#39;: &#39;1.0&#39;, &#39;sigrss&#39;: &#39;3.0&#39;}
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># evaluate coverage</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
@@ -1661,7 +1685,7 @@ plm : {'fghz': '3.0', 'rssnp': '2.64', 'd0': '1.0', 'sigrss': '3.0'}</pre>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-coverage_files/AP-coverage_11_1.png" src="./AP-coverage_files/AP-coverage_11_1.png" />
+<img alt="notebook/AP-coverage_files/AP-coverage_11_1.png" src="notebook/AP-coverage_files/AP-coverage_11_1.png" />
 <p>The coverage calculation is launched by calling the <tt class="docutils literal"><span class="pre">cover()</span></tt>
 method</p>
 <p>The shadowing map coverage results can be displayed by invoquing various
@@ -1680,8 +1704,9 @@ different frequencies</p>
 <span class="k">print</span> <span class="s">&#39;Elapsed time : {0:.2f} seconds&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-coverage_files/AP-coverage_15_1.png" src="./AP-coverage_files/AP-coverage_15_1.png" />
-<div class="highlight-python"><pre>Elapsed time : 1.07 seconds</pre>
+<img alt="notebook/AP-coverage_files/AP-coverage_15_1.png" src="notebook/AP-coverage_files/AP-coverage_15_1.png" />
+<div class="highlight-python"><div class="highlight"><pre>Elapsed time : 1.07 seconds
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span>
 <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -1691,8 +1716,9 @@ different frequencies</p>
 <span class="k">print</span> <span class="s">&#39;Elapsed time : {0:.2f} seconds&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-coverage_files/AP-coverage_16_0.png" src="./AP-coverage_files/AP-coverage_16_0.png" />
-<div class="highlight-python"><pre>Elapsed time : 1.07 seconds</pre>
+<img alt="notebook/AP-coverage_files/AP-coverage_16_0.png" src="notebook/AP-coverage_files/AP-coverage_16_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>Elapsed time : 1.07 seconds
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span>
 <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -1702,8 +1728,9 @@ different frequencies</p>
 <span class="k">print</span> <span class="s">&#39;Elapsed time : {0:.2f} seconds&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-coverage_files/AP-coverage_17_0.png" src="./AP-coverage_files/AP-coverage_17_0.png" />
-<div class="highlight-python"><pre>Elapsed time : 1.07 seconds</pre>
+<img alt="notebook/AP-coverage_files/AP-coverage_17_0.png" src="notebook/AP-coverage_files/AP-coverage_17_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>Elapsed time : 1.07 seconds
+</pre></div>
 </div>
 <p>The transmitter coordinates are :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">tx</span>
@@ -1722,8 +1749,8 @@ different frequencies</p>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="./AP-coverage_files/AP-coverage_21_0.png" src="./AP-coverage_files/AP-coverage_21_0.png" />
-<img alt="./AP-coverage_files/AP-coverage_21_1.png" src="./AP-coverage_files/AP-coverage_21_1.png" />
+<img alt="notebook/AP-coverage_files/AP-coverage_21_0.png" src="notebook/AP-coverage_files/AP-coverage_21_0.png" />
+<img alt="notebook/AP-coverage_files/AP-coverage_21_1.png" src="notebook/AP-coverage_files/AP-coverage_21_1.png" />
 <p>The excess delay due to crossing the wall can also be evaluted.</p>
 </div>
 <div class="section" id="ray-signatures">
@@ -1747,13 +1774,13 @@ different frequencies</p>
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-signatures_files/AP-signatures_4_0.png" src="./AP-signatures_files/AP-signatures_4_0.png" />
+<img alt="notebook/AP-signatures_files/AP-signatures_4_0.png" src="notebook/AP-signatures_files/AP-signatures_4_0.png" />
 <p>The graph of interactions is shown below.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-signatures_files/AP-signatures_6_0.png" src="./AP-signatures_files/AP-signatures_6_0.png" />
+<img alt="notebook/AP-signatures_files/AP-signatures_6_0.png" src="notebook/AP-signatures_files/AP-signatures_6_0.png" />
 <p>All the interactions of a given cycle are stored as meta information in
 nodes of <tt class="docutils literal"><span class="pre">Gt</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;inter&#39;</span><span class="p">]</span>
@@ -1801,8 +1828,9 @@ interactions.</p>
 <span class="k">print</span> <span class="n">prx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[ 8.35174751  0.30020702]
-[ 3.43281369  0.44106546]</pre>
+<div class="highlight-python"><div class="highlight"><pre>[ 8.35174751  0.30020702]
+[ 3.43281369  0.44106546]
+</pre></div>
 </div>
 </div>
 <div class="section" id="synthesis-of-ultra-wide-band-waveforms">
@@ -1828,12 +1856,12 @@ electromagnetic simulation.</p>
 <p>One possible manner to define an energy normalized short UWB pulse is
 as follows using <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt> function.</p>
 <p>The default waveform is a gaussian windowing of a sine wave of frequency
-<img class="math" src="../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/>. The normalization term depends on the exponential scaling
-factor <img class="math" src="../_images/math/1dc1c0119a604b91be9142370dc3159b6a9bbcb9.png" alt="\tau"/>.</p>
-<p><img class="math" src="../_images/math/523071a2adaf59d5b8f2302edf9be50a1da58a07.png" alt="p(t)= \sqrt{\frac{2\sqrt{2}}{\tau\sqrt{\pi}}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/></p>
-<p><img class="math" src="../_images/math/491345c98120d863f6e2ba488e86c55a33595d9a.png" alt="\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}"/></p>
-<p>where <img class="math" src="../_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/> is the desired bandwidth defined at <img class="math" src="../_images/math/29353fe0f6571b3f689f9bb4d39e7a764faae01e.png" alt="\gamma_{dB}"/>
-below the spectrum maximum and <img class="math" src="../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/> is the central frequency of
+<img class="math" src="../_images/math/95dca2acb17190fe4abb62b64ba7d7f8f7a7c4a1.png" alt="f_c"/>. The normalization term depends on the exponential scaling
+factor <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
+<p><img class="math" src="../_images/math/f8c9e4a5086b54ee44a0a1fe273d411209fdd85f.png" alt="p(t)= \sqrt{\frac{2\sqrt{2}}{\tau\sqrt{\pi}}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/></p>
+<p><img class="math" src="../_images/math/bfb0ffe4c8088040feab4e798714f8b9a6329e41.png" alt="\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}"/></p>
+<p>where <img class="math" src="../_images/math/83956e92fcc80dee17fce864543216939a3c9da7.png" alt="B"/> is the desired bandwidth defined at <img class="math" src="../_images/math/188795ebfe88db0394a818814d3f11796cf7c8e1.png" alt="\gamma_{dB}"/>
+below the spectrum maximum and <img class="math" src="../_images/math/95dca2acb17190fe4abb62b64ba7d7f8f7a7c4a1.png" alt="f_c"/> is the central frequency of
 the pulse.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
 <span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
@@ -1845,7 +1873,7 @@ the pulse.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ip</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>TUsignal
+<div class="highlight-python"><div class="highlight"><pre>TUsignal
 --------
 shx :  (343,)
 shy :  (343,)
@@ -1853,21 +1881,24 @@ dx :   0.01
 xmin : -1.71
 xmax : 1.71
 ymin : -1.89545539648
-ymax : 2.16154131873</pre>
+ymax : 2.16154131873
+</pre></div>
 </div>
 <p>Verification of energy normalization in both domains</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">E1</span><span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
 <span class="k">print</span> <span class="s">&quot;Integration in time&quot;</span><span class="p">,</span><span class="n">E1</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Integration in time 1.0</pre>
+<div class="highlight-python"><div class="highlight"><pre>Integration in time 1.0
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">P</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
 <span class="n">E2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">P</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
 <span class="k">print</span> <span class="s">&quot;Integration in frequency domain &quot;</span><span class="p">,</span><span class="n">E2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Integration in frequency domain  1.0</pre>
+<div class="highlight-python"><div class="highlight"><pre>Integration in frequency domain  1.0
+</pre></div>
 </div>
 <div class="section" id="calculation-of-uwb-channel-impulse-response">
 <h3>6.4.1. Calculation of UWB channel impulse response<a class="headerlink" href="#calculation-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h3>
@@ -1881,7 +1912,7 @@ simulation informations.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>default.ini
+<div class="highlight-python"><div class="highlight"><pre>default.ini
 ------------------------------------------
 Layout Info :
 filestr :  defstr3.ini
@@ -1896,11 +1927,11 @@ Gs Nodes :  17
 Gs Edges :  18
 Gt Nodes :  0
 Gt Edges :  0
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
 Gr Nodes    : 0
 Gr Edges    : 0
-Nc  = Gr.node[nroom]['cycles']
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
 None
 Tx Info :
 npos       :  1
@@ -1927,7 +1958,8 @@ filespa    :  radiorx.spa
 filegeom   :  radiorx.off
 fileant    :  defant.vsh3
 filestr    :  defstr.str2
-None</pre>
+None
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
@@ -2003,14 +2035,15 @@ None</pre>
 <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>fcGHz  :  4.493
+<div class="highlight-python"><div class="highlight"><pre>fcGHz  :  4.493
 typ  :  generic
 feGHz  :  100
 Np  :  3000
 twns  :  30
 te  :  0.01
 threshdB  :  3
-bandGHz  :  0.499</pre>
+bandGHz  :  0.499
+</pre></div>
 </div>
 <p>The waveform associated with the simulation object is</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span>
@@ -2029,7 +2062,7 @@ bandGHz  :  0.499</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_18_0.png" src="./PHY-signal_files/PHY-signal_18_0.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_18_0.png" src="notebook/PHY-signal_files/PHY-signal_18_0.png" />
 <p>Above the waveform is a generic UWB waveform. The interested user can
 add easily any other mathematical expression of UWB waveform for
 investigation on pulse waveform modulation for example. The waveform can
@@ -2046,12 +2079,12 @@ especially waveforms compliant with the current IEEE 802.15.4a and IEEE
 <span class="n">wavmeasured</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_20_0.png" src="./PHY-signal_files/PHY-signal_20_0.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_20_0.png" src="notebook/PHY-signal_files/PHY-signal_20_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wavmeasured</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1offset&#39;</span><span class="p">)</span>
 <span class="n">wavmeasured</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_21_0.png" src="./PHY-signal_files/PHY-signal_21_0.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_21_0.png" src="notebook/PHY-signal_files/PHY-signal_21_0.png" />
 <p>Here the time domain waveform is measured and the anticausal part of the
 signal is artificially set to 0.</p>
 <p>To handle properly the time domain wavefom in PyLayers, it is required
@@ -2066,8 +2099,9 @@ representation.</p>
 <span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;class 'pylayers.signal.bsignal.FUsignal'&gt;
-&lt;class 'pylayers.signal.bsignal.EnImpulse'&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;class &#39;pylayers.signal.bsignal.FUsignal&#39;&gt;
+&lt;class &#39;pylayers.signal.bsignal.EnImpulse&#39;&gt;
+</pre></div>
 </div>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">FUsignal</span></tt> Frequency domain uniformly sampled base signal</li>
@@ -2093,9 +2127,9 @@ channel.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>----------------
+<div class="highlight-python"><div class="highlight"><pre>----------------
 defstr3.ini
-Image('/home/uguen/Bureau/P1/struc/images/TA-Office.png')
+Image(&#39;/home/uguen/Bureau/P1/struc/images/TA-Office.png&#39;)
 ----------------
 
 Number of points  : 8
@@ -2124,7 +2158,8 @@ isss :  sub-segment index above Nsmax
 tgs : get segment index in tahe from Gs
 lsss : list of segments with sub-segment
 sla : list of all slab names (Nsmax+Nss+1)
-degree : degree of nodes</pre>
+degree : degree of nodes
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span>
 </pre></div>
@@ -2163,7 +2198,7 @@ chararcteristics</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Evaluate the propagation channel <img class="math" src="../_images/math/87014c4cc01fa3b85528899e96ea01ad3676c1eb.png" alt="\tilde{\mathbf{C}}"/>. Here the
+<p>Evaluate the propagation channel <img class="math" src="../_images/math/7fed00592d88a5822533d0da9b1d49ba438495cf.png" alt="\tilde{\mathbf{C}}"/>. Here the
 meaning of tilde is that the complex value of the channel do not include
 the phase term due to delay along the ray.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
@@ -2172,13 +2207,14 @@ the phase term due to delay along the ray.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;class 'pylayers.antprop.channel.Ctilde'&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;class &#39;pylayers.antprop.channel.Ctilde&#39;&gt;
+</pre></div>
 </div>
 </div>
 <div class="section" id="construction-of-the-transmission-channel">
 <h2>6.6. Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <p>The transmission channel is obtained from the combination of the
-propagation channel <img class="math" src="../_images/math/87014c4cc01fa3b85528899e96ea01ad3676c1eb.png" alt="\tilde{\mathbf{C}}"/> and the vector antenna
+propagation channel <img class="math" src="../_images/math/7fed00592d88a5822533d0da9b1d49ba438495cf.png" alt="\tilde{\mathbf{C}}"/> and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
 the <tt class="docutils literal"><span class="pre">prop2tran</span></tt> method of the <tt class="docutils literal"><span class="pre">Ctilde</span></tt> class.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
@@ -2192,10 +2228,11 @@ during the <strong>FP7 project WHERE1</strong> measurement campaign M1.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>freq :2.0 9.99 800
+<div class="highlight-python"><div class="highlight"><pre>freq :2.0 9.99 800
 shape  :(315, 800)
 tau :26.7186992365 105.599656025
-dist :8.01560977094 31.6798968075</pre>
+dist :8.01560977094 31.6798968075
+</pre></div>
 </div>
 <p>The antenna radiation pattern is stored in a very compact way thanks to
 Vector Spherical Harmonics decomposition. The following gives
@@ -2203,9 +2240,10 @@ information about the content of the antenna object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>defant.vsh3
+<div class="highlight-python"><div class="highlight"><pre>defant.vsh3
 type :  vsh3
-No vsh coefficient calculated yet</pre>
+No vsh coefficient calculated yet
+</pre></div>
 </div>
 <p>The figure below plot on a same graph all the tansfer function in
 modulus and phase of the ray transfer function.</p>
@@ -2233,25 +2271,27 @@ waveform with the channel impulse response to get the received waveform.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">u&#39;Received Waveform $r(t)$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4cc2750&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x4cc2750&gt;
+</pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_53_2.png" src="./PHY-signal_files/PHY-signal_53_2.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_53_2.png" src="notebook/PHY-signal_files/PHY-signal_53_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="o">-</span><span class="mf">0.3</span>
           <span class="p">,</span><span class="mf">0.3</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">u&#39;Received Waveform $r(t)$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f6c579f1e90&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f6c579f1e90&gt;
+</pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_54_1.png" src="./PHY-signal_files/PHY-signal_54_1.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_54_1.png" src="notebook/PHY-signal_files/PHY-signal_54_1.png" />
 </div>
 <div class="section" id="hermitian-symetry-enforcment">
 <h2>6.8. Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
 <p>If the number of point for the transmission channel and the waveform
 were the same the mathematical operation is an Hadamard-Shur product
-between <img class="math" src="../_images/math/669fb203c2329b8b404de01e7a228bd7c8ca1461.png" alt="\mathbf{Y}"/> and <img class="math" src="../_images/math/3d297b08b2be3554447c92b5982773d47c0de100.png" alt="\mathbf{W}"/>.</p>
-<p><img class="math" src="../_images/math/fbf1075a3606b9534a58cd9bfadac1148e9692ed.png" alt="\mathbf{Y} = \mathbf{S} \odot \mathbf{W}"/></p>
+between <img class="math" src="../_images/math/b9ba21151f0486a8aefcd00ceb7fc544a392fe87.png" alt="\mathbf{Y}"/> and <img class="math" src="../_images/math/ca91977bed6ab8abdd8a746b43d45990814104c3.png" alt="\mathbf{W}"/>.</p>
+<p><img class="math" src="../_images/math/488d42ed0bffda1e62ae523f4ae48840e784ee14.png" alt="\mathbf{Y} = \mathbf{S} \odot \mathbf{W}"/></p>
 <p>In practice this is what is done after a resampling of the time base
 with a reinterpolated time step.</p>
 <p>The process which consists in going from time domain to frequency domain
@@ -2271,20 +2311,21 @@ sorted.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;tau =&#39;</span><span class="p">,</span> <span class="n">tau</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>tau = [ 26.71869924  27.93842436  29.10708199  29.64889324  30.03048589
+<div class="highlight-python"><div class="highlight"><pre>tau = [ 26.71869924  27.93842436  29.10708199  29.64889324  30.03048589
   30.075433    36.72255959  30.75261837  31.12068041  31.1640552
   31.81807982  32.17395555  32.21591227  32.36081306  32.66533294
-  33.05244038  34.35921355  37.6193175   37.86521462  38.49519081]</pre>
+  33.05244038  34.35921355  37.6193175   37.86521462  38.49519081]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">h</span> <span class="o">=</span> <span class="n">hist</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_61_0.png" src="./PHY-signal_files/PHY-signal_61_0.png" />
-<p>Direction of arrival <img class="math" src="../_images/math/0fb87eb0cf3e969835cb7339bcb3a1d1a38dc50b.png" alt="(\theta_r,\phi_r)"/> in radians</p>
+<img alt="notebook/PHY-signal_files/PHY-signal_61_0.png" src="notebook/PHY-signal_files/PHY-signal_61_0.png" />
+<p>Direction of arrival <img class="math" src="../_images/math/c829c5487ab14d5d372685e546553269bfa74177.png" alt="(\theta_r,\phi_r)"/> in radians</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;doa = &quot;</span><span class="p">,</span> <span class="n">doa</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,:]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>doa =  [[ 1.8736812  -3.14159265]
+<div class="highlight-python"><div class="highlight"><pre>doa =  [[ 1.8736812  -3.14159265]
  [ 1.15838589 -3.14159265]
  [ 1.62703943  2.69865609]
  [ 1.62632401 -3.14087348]
@@ -2292,7 +2333,8 @@ sorted.</p>
  [ 1.61619728  0.01122758]
  [ 1.84520693  2.69865609]
  [ 1.84187905 -3.14087348]
- [ 1.84149225 -2.65738656]]</pre>
+ [ 1.84149225 -2.65738656]]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
 <span class="n">ht</span> <span class="o">=</span> <span class="n">hist</span><span class="p">(</span><span class="n">doa</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="mi">20</span><span class="p">)</span>
@@ -2313,7 +2355,7 @@ sorted.</p>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_64_0.png" src="./PHY-signal_files/PHY-signal_64_0.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_64_0.png" src="notebook/PHY-signal_files/PHY-signal_64_0.png" />
 <p>symHz force the Hermitian symetry of Y with as an argument here a zero
 padding of 500 points</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">UH</span>   <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
@@ -2339,9 +2381,10 @@ padding of 500 points</p>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x51fb750&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x51fb750&gt;
+</pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_70_1.png" src="./PHY-signal_files/PHY-signal_70_1.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_70_1.png" src="notebook/PHY-signal_files/PHY-signal_70_1.png" />
 <p>The ray channel has been applied to the UWB waveform. Notice the small
 delay introduced by dielectrics material crossing.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="mf">0.0012</span><span class="o">+</span><span class="mf">0.0034</span><span class="p">)</span>
@@ -2353,7 +2396,7 @@ delay introduced by dielectrics material crossing.</p>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./PHY-signal_files/PHY-signal_72_0.png" src="./PHY-signal_files/PHY-signal_72_0.png" />
+<img alt="notebook/PHY-signal_files/PHY-signal_72_0.png" src="notebook/PHY-signal_files/PHY-signal_72_0.png" />
 </div>
 </div>
 <div class="section" id="example-of-an-uwb-channel-ray-tracing-simulation">
@@ -2403,20 +2446,21 @@ dictionnary member of the Layout object.which allows to configure the
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_7_0.png" src="./SIM-raytracing_files/SIM-raytracing_7_0.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_7_0.png" src="notebook/SIM-raytracing_files/SIM-raytracing_7_0.png" />
 <div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
 <h2>7.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation are stored
 in <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
 RadioNode which offers different methods for specifying nodes positions.
 The stucture of this <strong>.ini</strong> file presented below. The node Id is
-associated with the 3 coordinates <img class="math" src="../_images/math/accc80fdf164cef264f56a82b6f9f6add320fe05.png" alt="x,y,z"/> separated by white
+associated with the 3 coordinates <img class="math" src="../_images/math/975c0f20e558a0b09286b055b142fe433bb84f93.png" alt="x,y,z"/> separated by white
 spaces.</p>
-<div class="highlight-python"><pre>[coordinates]
+<div class="highlight-python"><div class="highlight"><pre>[coordinates]
 1 = -12.2724 7.76319999993 1.2
 2 = -18.7747 15.1779999998 1.2
 3 = -4.14179999998 8.86029999983 1.2
-4 = -9.09139999998 15.1899000001 1.2</pre>
+4 = -9.09139999998 15.1899000001 1.2
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1tx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
@@ -2427,15 +2471,16 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_13_1.png" src="./SIM-raytracing_files/SIM-raytracing_13_1.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_13_1.png" src="notebook/SIM-raytracing_files/SIM-raytracing_13_1.png" />
 <p>The different object of the simulation cans be accessed to obtain
 different information. Below the number of transmitter and receiver.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;number of Tx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>number of Tx : 302
-number of rx : 4</pre>
+<div class="highlight-python"><div class="highlight"><pre>number of Tx : 302
+number of rx : 4
+</pre></div>
 </div>
 <p>The decomposition of the layout in a set of disjoint cycles is
 represented below. Not all cycles are rooms.</p>
@@ -2447,7 +2492,7 @@ represented below. Not all cycles are rooms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_17_1.png" src="./SIM-raytracing_files/SIM-raytracing_17_1.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_17_1.png" src="notebook/SIM-raytracing_files/SIM-raytracing_17_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
@@ -2455,7 +2500,7 @@ represented below. Not all cycles are rooms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_18_1.png" src="./SIM-raytracing_files/SIM-raytracing_18_1.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_18_1.png" src="notebook/SIM-raytracing_files/SIM-raytracing_18_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">istup</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">==</span><span class="nb">tuple</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="n">cy5</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">,</span><span class="n">istup</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">cy5</span>
@@ -2521,8 +2566,9 @@ point to cycle function.</p>
 <span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>tx point belongs to cycle  5
-rx point belongs to cycle  4</pre>
+<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  5
+rx point belongs to cycle  4
+</pre></div>
 </div>
 <p>Then the signature between cycle 5 and cycle 4 can be calculated. This
 is done by instantiating a Signature object with a given layout and the
@@ -2538,7 +2584,7 @@ number of signatures for each number of interactions.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Signatures
+<div class="highlight-python"><div class="highlight"><pre>Signatures
 ----------
 from cycle : 5 to cycle 4
 1 : 1
@@ -2552,7 +2598,8 @@ from cycle : 5 to cycle 4
   12  12  12]
    [1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2]
 
-...</pre>
+...
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#Si.run4(cutoff=5)</span>
 </pre></div>
@@ -2573,11 +2620,11 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
 <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_34_1.png" src="./SIM-raytracing_files/SIM-raytracing_34_1.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_34_1.png" src="notebook/SIM-raytracing_files/SIM-raytracing_34_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>N2Drays : 42
+<div class="highlight-python"><div class="highlight"><pre>N2Drays : 42
 from 24395 signatures
 #Rays/#Sig: 0.00172166427547
 pTx : [-24.867   12.3097   1.2   ]
@@ -2597,7 +2644,8 @@ pRx : [-18.7747  15.178    1.2   ]
  [339 339 335 335 283 335 334  13 335 335  12  12 330 331  12   5  12  30]
  [ 24 328 283  30 335 333 335  12 283 333 335 334  12   8 335  12  23  21]
  [328  24 335  12  12 342 328  30 335  11  23 335  30 342  12 335 335  30]]
-...</pre>
+...
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># r2d.show3(strucname=&#39;WHERE1&#39;)</span>
 </pre></div>
@@ -2620,7 +2668,7 @@ the reflection on ceil and floor.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -2640,7 +2688,8 @@ the reflection on ceil and floor.</p>
 9 / 4 : [206 207 208 209]
 -----
 ni : 1147
-nl : 2504</pre>
+nl : 2504
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">18</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="mi">13</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
 </pre></div>
@@ -2690,14 +2739,15 @@ with a frequency array as argument.</p>
 <span class="k">print</span> <span class="s">&quot;Nf : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>fmin :  2.0
+<div class="highlight-python"><div class="highlight"><pre>fmin :  2.0
 fmax :  11.0
-Nf :  181</pre>
+Nf :  181
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -2717,7 +2767,8 @@ Nf :  181</pre>
 9 / 4 : [206 207 208 209]
 -----
 ni : 1147
-nl : 2504</pre>
+nl : 2504
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ectt</span><span class="p">,</span><span class="n">Ecpp</span><span class="p">,</span><span class="n">Ectp</span><span class="p">,</span><span class="n">Ecpt</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
@@ -2737,22 +2788,23 @@ nl : 2504</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_54_1.png" src="./SIM-raytracing_files/SIM-raytracing_54_1.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_54_1.png" src="notebook/SIM-raytracing_files/SIM-raytracing_54_1.png" />
 <p>The multipath doa/dod diagram can be obtained via the method <tt class="docutils literal"><span class="pre">doadod</span></tt>.
 The colorbar corresponds to the total energy of the path.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_56_0.png" src="./SIM-raytracing_files/SIM-raytracing_56_0.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_56_0.png" src="notebook/SIM-raytracing_files/SIM-raytracing_56_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Nfreq  : 181
+<div class="highlight-python"><div class="highlight"><pre>Nfreq  : 181
 Nray : 210
 shape Ctt : (210, 181)
 shape Ctp : (210, 181)
 shape Cpt : (210, 181)
-shape Cpp : (210, 181)</pre>
+shape Cpp : (210, 181)
+</pre></div>
 </div>
 </div>
 <div class="section" id="apply-waveform">
@@ -2771,13 +2823,14 @@ array as it is illustrated below.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">mesdir</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/home/uguen/data/WHERE1/measures</pre>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/data/WHERE1/measures
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;generic&#39;</span><span class="p">,</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_63_0.png" src="./SIM-raytracing_files/SIM-raytracing_63_0.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_63_0.png" src="notebook/SIM-raytracing_files/SIM-raytracing_63_0.png" />
 <p>Finally, the received UWB waveform can be synthesize in applyng the
 waveform to the transmission channel.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
@@ -2797,8 +2850,8 @@ waveform to the transmission channel.</p>
 <span class="c">#plt.axis((0,180,-0.1,0.1))</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_66_2.png" src="./SIM-raytracing_files/SIM-raytracing_66_2.png" />
-<img alt="./SIM-raytracing_files/SIM-raytracing_66_3.png" src="./SIM-raytracing_files/SIM-raytracing_66_3.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_66_2.png" src="notebook/SIM-raytracing_files/SIM-raytracing_66_2.png" />
+<img alt="notebook/SIM-raytracing_files/SIM-raytracing_66_3.png" src="notebook/SIM-raytracing_files/SIM-raytracing_66_3.png" />
 </div>
 </div>
 <div class="section" id="simulation-creation">
@@ -2837,23 +2890,24 @@ simulation object <strong>S</strong>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_5_1.png" src="./SIM-where1_files/SIM-where1_5_1.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_5_1.png" src="notebook/SIM-where1_files/SIM-where1_5_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGi</span><span class="p">(</span><span class="n">en</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>int0 :  (309, 15, 46)
+<div class="highlight-python"><div class="highlight"><pre>int0 :  (309, 15, 46)
 int1 :  (202, 46, 59)
- output  {'(137, 59, 58)': 0.64242282168494413, '(230, 59, 67)': 0.35757717831506564, '(230, 59)': 0.35757717831506564}
+ output  {&#39;(137, 59, 58)&#39;: 0.64242282168494413, &#39;(230, 59, 67)&#39;: 0.35757717831506564, &#39;(230, 59)&#39;: 0.35757717831506564}
  Sum pR :  0.357577178315
  Sum pT :  0.642422821685
-lseg [137 230]</pre>
+lseg [137 230]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">31.123950000000001</span><span class="p">,</span> <span class="mf">34.74295</span><span class="p">,</span> <span class="mf">3.6289500000000001</span><span class="p">,</span> <span class="mf">17.468049999999998</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_6_2.png" src="./SIM-where1_files/SIM-where1_6_2.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_6_2.png" src="notebook/SIM-where1_files/SIM-where1_6_2.png" />
 <p>The layout display is fully parameterized via the embedded <strong>display</strong>
 dictionnary member of the Layout object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
@@ -2864,7 +2918,7 @@ dictionnary member of the Layout object.</p>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_8_0.png" src="./SIM-where1_files/SIM-where1_8_0.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_8_0.png" src="notebook/SIM-where1_files/SIM-where1_8_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -2877,13 +2931,14 @@ dictionnary member of the Layout object.</p>
 perform are stotred in <strong>.ini</strong> files. Transmitter and Receiver are
 instances of the class <tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for
 specifying nodes positions. The stucture of this <strong>.ini</strong> file presented
-below. The node Id is associated with the 3 coordinates <img class="math" src="../_images/math/accc80fdf164cef264f56a82b6f9f6add320fe05.png" alt="x,y,z"/>
+below. The node Id is associated with the 3 coordinates <img class="math" src="../_images/math/975c0f20e558a0b09286b055b142fe433bb84f93.png" alt="x,y,z"/>
 separated by white spaces.</p>
-<div class="highlight-python"><pre>[coordinates]
+<div class="highlight-python"><div class="highlight"><pre>[coordinates]
 1 = -12.2724 7.76319999993 1.2
 2 = -18.7747 15.1779999998 1.2
 3 = -4.14179999998 8.86029999983 1.2
-4 = -9.09139999998 15.1899000001 1.2</pre>
+4 = -9.09139999998 15.1899000001 1.2
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1tx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
@@ -2894,7 +2949,7 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_15_1.png" src="./SIM-where1_files/SIM-where1_15_1.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_15_1.png" src="notebook/SIM-where1_files/SIM-where1_15_1.png" />
 <p>Select Tx and Rx positions</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
 <span class="mi">10</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
@@ -2943,8 +2998,9 @@ method of the Simulation object</p>
 <span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>number of Tx : 302
-number of rx : 4</pre>
+<div class="highlight-python"><div class="highlight"><pre>number of Tx : 302
+number of rx : 4
+</pre></div>
 </div>
 <p>Choose measurement points</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Chose used points here</span>
@@ -2972,22 +3028,24 @@ number of rx : 4</pre>
     <span class="k">print</span> <span class="s">&#39;Rxs OK&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[-24.867   12.3097   1.2   ] [-24.867   12.3097   1.2   ]
+<div class="highlight-python"><div class="highlight"><pre>[-24.867   12.3097   1.2   ] [-24.867   12.3097   1.2   ]
 [-18.7747  15.178    1.2   ] [-18.7747  15.178    1.2   ]
 Txs OK
-Rxs OK</pre>
+Rxs OK
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_21_0.png" src="./SIM-where1_files/SIM-where1_21_0.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_21_0.png" src="notebook/SIM-where1_files/SIM-where1_21_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;tx&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x7fd83411d910&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7fd83411d910&gt;
+</pre></div>
 </div>
 </div>
 <div class="section" id="signatures-rays-and-channel">
@@ -3004,8 +3062,9 @@ point to cycle function.</p>
 <span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>tx point belongs to cycle  5
-rx point belongs to cycle  4</pre>
+<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  5
+rx point belongs to cycle  4
+</pre></div>
 </div>
 <p>Then the signature between cycle 5 and cycle 4 can be calculated. This
 is done by instantiating a Signature object with a given layout and the
@@ -3025,17 +3084,17 @@ is done by instantiating a Signature object with a given layout and the
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_30_1.png" src="./SIM-where1_files/SIM-where1_30_1.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_30_1.png" src="notebook/SIM-where1_files/SIM-where1_30_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_31_1.png" src="./SIM-where1_files/SIM-where1_31_1.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_31_1.png" src="notebook/SIM-where1_files/SIM-where1_31_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -3047,12 +3106,13 @@ is done by instantiating a Signature object with a given layout and the
 6 / 18 : [ 87  88  89  90  91  92  93  94  95  96  97  98  99 100 101 102 103 104]
 -----
 ni : 461
-nl : 1027</pre>
+nl : 1027
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -3064,7 +3124,8 @@ nl : 1027</pre>
 6 / 18 : [ 87  88  89  90  91  92  93  94  95  96  97  98  99 100 101 102 103 104]
 -----
 ni : 461
-nl : 1027</pre>
+nl : 1027
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">freq</span><span class="p">()</span>
 </pre></div>
@@ -3256,7 +3317,7 @@ nl : 1027</pre>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_40_0.png" src="./SIM-where1_files/SIM-where1_40_0.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_40_0.png" src="notebook/SIM-where1_files/SIM-where1_40_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ciro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 <span class="n">cira</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 </pre></div>
@@ -3265,14 +3326,15 @@ nl : 1027</pre>
 <span class="n">title</span><span class="p">(</span><span class="s">u&#39;received waveform without antenna $</span><span class="se">\\</span><span class="s">theta</span><span class="se">\\</span><span class="s">theta$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_42_2.png" src="./SIM-where1_files/SIM-where1_42_2.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_42_2.png" src="notebook/SIM-where1_files/SIM-where1_42_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;received waveform with antenna&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0xfe125d0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xfe125d0&gt;
+</pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_43_1.png" src="./SIM-where1_files/SIM-where1_43_1.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_43_1.png" src="notebook/SIM-where1_files/SIM-where1_43_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#dchan={i:&#39;ch&#39;+str(i) for i in range(1,5)}</span>
 <span class="n">dchan</span><span class="o">=</span><span class="p">{}</span>
 <span class="n">dchan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;ch3&#39;</span>
@@ -3299,7 +3361,7 @@ nl : 1027</pre>
 <span class="c">#ciro.plot()</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_45_0.png" src="./SIM-where1_files/SIM-where1_45_0.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_45_0.png" src="notebook/SIM-where1_files/SIM-where1_45_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">tx</span><span class="o">-</span><span class="n">rx</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
 
@@ -3307,8 +3369,9 @@ nl : 1027</pre>
 <span class="k">print</span> <span class="s">&#39;simulated first path delay&#39;</span><span class="p">,</span><span class="n">r3d</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>real delay between tx and rx 22.4680672606
-simulated first path delay 22.4680672606</pre>
+<div class="highlight-python"><div class="highlight"><pre>real delay between tx and rx 22.4680672606
+simulated first path delay 22.4680672606
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">delays</span>
 </pre></div>
@@ -3345,7 +3408,7 @@ simulated first path delay 22.4680672606</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>-------------------------
+<div class="highlight-python"><div class="highlight"><pre>-------------------------
 Informations of ray # 0
 -------------------------
 
@@ -3365,12 +3428,13 @@ interaction # 0 type: T
  [ 0.00000000+0.j          0.34443500+0.50490218j]]
 rotation matrix# [0] type: B
 [[ 0.99533359  0.09649373]
- [-0.09649373  0.99533359]]</pre>
+ [-0.09649373  0.99533359]]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_49_0.png" src="./SIM-where1_files/SIM-where1_49_0.png" />
+<img alt="notebook/SIM-where1_files/SIM-where1_49_0.png" src="notebook/SIM-where1_files/SIM-where1_49_0.png" />
 </div>
 <div class="section" id="example-of-a-trajectory-synthesis-in-dlr-where2-environment">
 <h2>8.4. Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h2>
@@ -3460,7 +3524,7 @@ run a full simulation and returns a list of channel impulse response.</p>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_6_0.png" src="./SIM-trajectory_files/SIM-trajectory_6_0.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_6_0.png" src="notebook/SIM-trajectory_files/SIM-trajectory_6_0.png" />
 <p>We have a list of static Anchor Nodes. Those values correspond to the
 actual anchor nodes coordinates of the WHERE2 project DLR measurement
 campaign.</p>
@@ -3500,9 +3564,10 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fa00e25bcd0&gt;]</pre>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7fa00e25bcd0&gt;]
+</pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_11_1.png" src="./SIM-trajectory_files/SIM-trajectory_11_1.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_11_1.png" src="notebook/SIM-trajectory_files/SIM-trajectory_11_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
 <p><tt class="docutils literal"><span class="pre">linevect</span></tt> function allows to define a linear trajectory from <tt class="docutils literal"><span class="pre">ptt</span></tt>
 along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.</p>
@@ -3519,13 +3584,13 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_15_2.png" src="./SIM-trajectory_files/SIM-trajectory_15_2.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_15_2.png" src="notebook/SIM-trajectory_files/SIM-trajectory_15_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_17_0.png" src="./SIM-trajectory_files/SIM-trajectory_17_0.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_17_0.png" src="notebook/SIM-trajectory_files/SIM-trajectory_17_0.png" />
 <p>running the simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#tcir = evalcir(S,wav,cutoff=4)</span>
 </pre></div>
@@ -3566,11 +3631,11 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_25_1.png" src="./SIM-trajectory_files/SIM-trajectory_25_1.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_25_1.png" src="notebook/SIM-trajectory_files/SIM-trajectory_25_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_26_2.png" src="./SIM-trajectory_files/SIM-trajectory_26_2.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_26_2.png" src="notebook/SIM-trajectory_files/SIM-trajectory_26_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -3578,16 +3643,17 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_27_2.png" src="./SIM-trajectory_files/SIM-trajectory_27_2.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_27_2.png" src="notebook/SIM-trajectory_files/SIM-trajectory_27_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x553bd50&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x553bd50&gt;
+</pre></div>
 </div>
-<img alt="./SIM-trajectory_files/SIM-trajectory_28_1.png" src="./SIM-trajectory_files/SIM-trajectory_28_1.png" />
+<img alt="notebook/SIM-trajectory_files/SIM-trajectory_28_1.png" src="notebook/SIM-trajectory_files/SIM-trajectory_28_1.png" />
 </div>
 </div>
 <div class="section" id="algebraic-localization-class">
@@ -3618,14 +3684,14 @@ coordinates. Otherwise a singularity problem arises.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;TOA_std&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="s">&#39;TOA&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.41421356</span><span class="p">,</span>  <span class="mf">1.41421356</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">])}</span>
 </pre></div>
 </div>
-<img alt="./LOC-algebraic_files/LOC-algebraic_4_2.png" src="./LOC-algebraic_files/LOC-algebraic_4_2.png" />
+<img alt="notebook/LOC-algebraic_files/LOC-algebraic_4_2.png" src="notebook/LOC-algebraic_files/LOC-algebraic_4_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pest</span> <span class="o">=</span> <span class="n">Alg</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Alg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./LOC-algebraic_files/LOC-algebraic_6_1.png" src="./LOC-algebraic_files/LOC-algebraic_6_1.png" />
+<img alt="notebook/LOC-algebraic_files/LOC-algebraic_6_1.png" src="notebook/LOC-algebraic_files/LOC-algebraic_6_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pest</span>
 </pre></div>
 </div>
@@ -3636,10 +3702,11 @@ coordinates. Otherwise a singularity problem arises.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Alg</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Nodes : {'BN': array([[0],
-       [0]]), 'RN_TOA': array([[-1,  1,  0],
+<div class="highlight-python"><div class="highlight"><pre>Nodes : {&#39;BN&#39;: array([[0],
+       [0]]), &#39;RN_TOA&#39;: array([[-1,  1,  0],
        [-1, -1,  1]])}
-LDPs :{'TOA_std': array([1, 1, 1]), 'TOA': array([ 1.41421356,  1.41421356,  1.        ])}</pre>
+LDPs :{&#39;TOA_std&#39;: array([1, 1, 1]), &#39;TOA&#39;: array([ 1.41421356,  1.41421356,  1.        ])}
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>
 </pre></div>
@@ -3696,7 +3763,7 @@ blue star is the blind node.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
-<img alt="./LOC-localization_files/LOC-localization_8_1.png" src="./LOC-localization_files/LOC-localization_8_1.png" />
+<img alt="notebook/LOC-localization_files/LOC-localization_8_1.png" src="notebook/LOC-localization_files/LOC-localization_8_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOA</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">dr1</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr1</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">dr2</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr2</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
@@ -3711,9 +3778,10 @@ blue star is the blind node.</p>
 <span class="k">print</span> <span class="n">tdoa2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[-0.03790822  0.42014538 -0.03437296 -1.50605018  0.        ]
+<div class="highlight-python"><div class="highlight"><pre>[-0.03790822  0.42014538 -0.03437296 -1.50605018  0.        ]
 [ 0.80490184  1.26295544  0.8084371  -0.66324012  0.84281006]
-[-0.03790822  0.42014538 -0.03437296 -1.50605018  0.        ]</pre>
+[-0.03790822  0.42014538 -0.03437296 -1.50605018  0.        ]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">node</span><span class="o">=</span><span class="p">{}</span>
 <span class="n">nodes</span><span class="p">[</span><span class="s">&#39;BN&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">BN</span>
@@ -3730,11 +3798,12 @@ blue star is the blind node.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Nodes :  {'RN_TDOA': array([[ 0.4184779 ,  0.46323775,  0.76936267,  0.03841692,  0.20877339],
-       [ 0.86098336,  0.99099928,  0.10115537,  0.30007228,  0.9133354 ]]), 'BN': array([[ 0.2],
-       [ 0.3]]), 'RNr_TDOA': array([[ 0.20877339],
+<div class="highlight-python"><div class="highlight"><pre>Nodes :  {&#39;RN_TDOA&#39;: array([[ 0.4184779 ,  0.46323775,  0.76936267,  0.03841692,  0.20877339],
+       [ 0.86098336,  0.99099928,  0.10115537,  0.30007228,  0.9133354 ]]), &#39;BN&#39;: array([[ 0.2],
+       [ 0.3]]), &#39;RNr_TDOA&#39;: array([[ 0.20877339],
        [ 0.9133354 ]])}
-Location dependent parameters :  {'TDOA': array([-0.03790822,  0.42014538, -0.03437296, -1.50605018,  0.        ]), 'TDOA_std': array([ 1.,  1.,  1.,  1.,  1.])}</pre>
+Location dependent parameters :  {&#39;TDOA&#39;: array([-0.03790822,  0.42014538, -0.03437296, -1.50605018,  0.        ]), &#39;TDOA_std&#39;: array([ 1.,  1.,  1.,  1.,  1.])}
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
 </pre></div>
@@ -3789,10 +3858,11 @@ blue</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x48dab50&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x48dab50&gt;
+</pre></div>
 </div>
-<img alt="./LOC-rgpa_files/LOC-rgpa_5_1.png" src="./LOC-rgpa_files/LOC-rgpa_5_1.png" />
-<p>The euclidian distance betwenn blind node <img class="math" src="../_images/math/36f73fc1312ee0349b3f3a0f3bd9eb5504339011.png" alt="p"/> and anchors ans the
+<img alt="notebook/LOC-rgpa_files/LOC-rgpa_5_1.png" src="notebook/LOC-rgpa_files/LOC-rgpa_5_1.png" />
+<p>The euclidian distance betwenn blind node <img class="math" src="../_images/math/3eca8557203e86160952e1c0f735f7417f3285b1.png" alt="p"/> and anchors ans the
 corresponding Time of flight are evaluated.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -3810,10 +3880,11 @@ corresponding Time of flight are evaluated.</p>
 <span class="k">print</span> <span class="s">&#39;distance p-4=&#39;</span><span class="p">,</span><span class="n">d4</span><span class="p">,</span> <span class="s">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa4</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>distance p-1= 5.0 / toa1= 16.6666666667
+<div class="highlight-python"><div class="highlight"><pre>distance p-1= 5.0 / toa1= 16.6666666667
 distance p-2= 14.1421356237 / toa2= 47.1404520791
 distance p-3= 23.5372045919 / toa3= 78.4573486396
-distance p-4= 18.0277563773 / toa3= 60.0925212577</pre>
+distance p-4= 18.0277563773 / toa3= 60.0925212577
+</pre></div>
 </div>
 </div>
 </div>
@@ -3844,21 +3915,22 @@ the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">c</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
+<div class="highlight-python"><div class="highlight"><pre>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
     0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,
  node | peer   |type | rat  | p              | value    | std  | runable| usable|
     1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,
  node | peer   |type | rat  | p              | value    | std  | runable| usable|
     2 |        |TOA  |      | [ 5 28]        | [ 78.457]| [ 1.]|       1|      1|,
  node | peer   |type | rat  | p              | value    | std  | runable| usable|
-    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]</pre>
+    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]
+</pre></div>
 </div>
 <p>Get information on the cla :</p>
 <ul class="simple">
 <li>type : TOA / RSS</li>
 <li>p : Position of the origin of the constraint</li>
 <li>value : power ( RSS ) / time in ns ( TOA)</li>
-<li>std : standard deviation <img class="math" src="../_images/math/741fb9098efcb98055f467f87630a5d0ca599b6b.png" alt="\sigma^2"/> of value</li>
+<li>std : standard deviation <img class="math" src="../_images/math/93c29bfedc993de115781b4fbb7e3a8b9e8d6b51.png" alt="\sigma^2"/> of value</li>
 <li>runable : does the constraint has a position p ?</li>
 <li>obsolete : does the value has been obtained recently ?</li>
 <li>usuable : runbale AND NOT obsolete</li>
@@ -3867,14 +3939,15 @@ the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>type , p              , value, std  , runable, usable, obsolete, evaluated
+<div class="highlight-python"><div class="highlight"><pre>type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
 type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0
 type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [ 5 28]        , [ 78.457], [ 1.],       1,      1,        0,         0
 type , p              , value, std  , runable, usable, obsolete, evaluated
-TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0</pre>
+TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0
+</pre></div>
 </div>
 <p>Update the CLA</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
@@ -3944,7 +4017,7 @@ with the above model</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>TDOA 2.0
+<div class="highlight-python"><div class="highlight"><pre>TDOA 2.0
 TDOA 2.0
 TDOA 2.0
 TDOA 1.5
@@ -3955,7 +4028,8 @@ TDOA 1.375
 TDOA 1.375
 TDOA 1.375
 TDOA 1.375
-TDOA 1.375</pre>
+TDOA 1.375
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
 </pre></div>
@@ -3987,9 +4061,10 @@ topology of the mobile network.</p>
 level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simulation are described.</p>
 <p>The configuration file is <tt class="docutils literal"><span class="pre">simulnet.ini</span></tt></p>
 <p>This file is located in <tt class="docutils literal"><span class="pre">$BASENAME/ini</span></tt></p>
-<div class="highlight-python"><pre>!cat $BASENAME/ini/simulnet.ini</pre>
+<div class="highlight-python"><div class="highlight"><pre>!cat $BASENAME/ini/simulnet.ini
+</pre></div>
 </div>
-<div class="highlight-python"><pre>[Mysql]
+<div class="highlight-python"><div class="highlight"><pre>[Mysql]
 host = localhost
 user = root
 passwd = sqlsql
@@ -3998,7 +4073,7 @@ dumpdb =True
 
 [Save]
 save=[]
-;save=['csv','mysql','matlab','pyray','txt','ini']
+;save=[&#39;csv&#39;,&#39;mysql&#39;,&#39;matlab&#39;,&#39;pyray&#39;,&#39;txt&#39;,&#39;ini&#39;]
 savep=True
 
 [Layout]
@@ -4015,18 +4090,18 @@ the_world_scale      = 20
 ; update time for agent movement
 mecanic_update_time = 0.1
 ; select how agnt choose destiantion
-;'random' ; file
-choose_destination = 'random'
+;&#39;random&#39; ; file
+choose_destination = &#39;random&#39;
 
 
 [Network]
-; refresh TOA regulary 'synchro 'or with distance 'autionomous'
-Communication_mode='autonomous'
+; refresh TOA regulary &#39;synchro &#39;or with distance &#39;autionomous&#39;
+Communication_mode=&#39;autonomous&#39;
 ; update time for refreshing network
 network_update_time = 0.1
 ; show nodes moving &amp; radio link
 show = False
-; show in ipython .
+; show in ipython notebook
 ipython_nb_show = False
 ; show signature ( not fully functionnal)
 show_sg = False
@@ -4040,8 +4115,8 @@ dispinfo = False
 localization = True
 ; time to refresh localization
 localization_update_time = 1.0
-; list of used methods method = ['alg','geo']
-method = ['alg']
+; list of used methods method = [&#39;alg&#39;,&#39;geo&#39;]
+method = [&#39;alg&#39;]
 
 
 
@@ -4057,7 +4132,8 @@ showtk   = False
 ; choose seed for random mobiliity
 seed = 1
 ; verbose output
-verbose = True</pre>
+verbose = True
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Cp</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
 <span class="n">Cp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
@@ -4098,7 +4174,8 @@ verbose = True</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ls</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">Bureau</span><span class="o">/</span><span class="n">P1</span><span class="o">/</span><span class="n">netsave</span><span class="o">/</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>ls: impossible d'accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type</pre>
+<div class="highlight-python"><div class="highlight"><pre>ls: impossible d&#39;accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type
+</pre></div>
 </div>
 <div class="section" id="layout">
 <h2>11.1. Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
@@ -4180,7 +4257,7 @@ periodically refreshed at the network_update_time</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
 </pre></div>
 </div>
-<p>Vizualization of the simulation inside ipython .</p>
+<p>Vizualization of the simulation inside ipython notebook</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))[</span><span class="s">&#39;ipython_nb_show&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -4310,8 +4387,8 @@ periodically refreshed at the network_update_time</li>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./MOB-mobility_files/MOB-mobility_7_0.png" src="./MOB-mobility_files/MOB-mobility_7_0.png" />
-<img alt="./SIM-workflow_files/SIM-workflow_4_0.png" src="./SIM-workflow_files/SIM-workflow_4_0.png" />
+<img alt="notebook/MOB-mobility_files/MOB-mobility_7_0.png" src="notebook/MOB-mobility_files/MOB-mobility_7_0.png" />
+<img alt="notebook/SIM-workflow_files/SIM-workflow_4_0.png" src="notebook/SIM-workflow_files/SIM-workflow_4_0.png" />
 </div>
 </div>
 <div class="section" id="geomutil-class">
@@ -4354,7 +4431,7 @@ to initialize a Polygon with different object
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">poly3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./MISC-geomutil_files/MISC-geomutil_8_0.png" src="./MISC-geomutil_files/MISC-geomutil_8_0.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_8_0.png" src="notebook/MISC-geomutil_files/MISC-geomutil_8_0.png" />
 </div>
 <div class="section" id="buildgv">
 <h2>13.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
@@ -4373,7 +4450,7 @@ environement.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./MISC-geomutil_files/MISC-geomutil_11_1.png" src="./MISC-geomutil_files/MISC-geomutil_11_1.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_11_1.png" src="notebook/MISC-geomutil_files/MISC-geomutil_11_1.png" />
 </div>
 </div>
 <div class="section" id="geomview-classes">
@@ -4450,8 +4527,8 @@ environement.</p>
 <h2>14.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="angledir">
 <h3>14.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
-<p>angledir converts a 3D vector into the 2 spherical angle <img class="math" src="../_images/math/52e8ed7a3ba22130ad3984eb2cd413406475a689.png" alt="\theta"/>,
-<img class="math" src="../_images/math/2c175f60eecef1de7560c3bdea495d69f26f719d.png" alt="\phi"/> expressed in radians</p>
+<p>angledir converts a 3D vector into the 2 spherical angle <img class="math" src="../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/>,
+<img class="math" src="../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/> expressed in radians</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
 <span class="n">angledir</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">pi</span>
 </pre></div>
@@ -4478,7 +4555,7 @@ environement.</p>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./MISC-geomutil_files/MISC-geomutil_36_0.png" src="./MISC-geomutil_files/MISC-geomutil_36_0.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_36_0.png" src="notebook/MISC-geomutil_files/MISC-geomutil_36_0.png" />
 </div>
 <div class="section" id="dptseg-p-pt-ph">
 <h3>14.2.3. dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
@@ -4492,7 +4569,8 @@ environement.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span><span class="n">h</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[[ -1.   1.   3.   4.  11.]] [[ 11.   9.   7.   6.  -1.]] [ 8.  1.  2.  3.  3.]</pre>
+<div class="highlight-python"><div class="highlight"><pre>[[ -1.   1.   3.   4.  11.]] [[ 11.   9.   7.   6.  -1.]] [ 8.  1.  2.  3.  3.]
+</pre></div>
 </div>
 </div>
 <div class="section" id="displot">
@@ -4505,7 +4583,7 @@ environement.</p>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./MISC-geomutil_files/MISC-geomutil_42_0.png" src="./MISC-geomutil_files/MISC-geomutil_42_0.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_42_0.png" src="notebook/MISC-geomutil_files/MISC-geomutil_42_0.png" />
 </div>
 <div class="section" id="ptonseg-pta-phe-pt">
 <h3>14.2.5. ptonseg(pta,phe,pt)<a class="headerlink" href="#ptonseg-pta-phe-pt" title="Permalink to this headline">¶</a></h3>
@@ -4517,7 +4595,8 @@ environement.</p>
 <span class="k">print</span> <span class="n">p</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[ 9.  0.]</pre>
+<div class="highlight-python"><div class="highlight"><pre>[ 9.  0.]
+</pre></div>
 </div>
 </div>
 <div class="section" id="ptconvex">
@@ -4540,8 +4619,8 @@ environement.</p>
     <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
 </pre></div>
 </div>
-<img alt="./MISC-geomutil_files/MISC-geomutil_48_0.png" src="./MISC-geomutil_files/MISC-geomutil_48_0.png" />
-<img alt="./MISC-geomutil_files/MISC-geomutil_48_1.png" src="./MISC-geomutil_files/MISC-geomutil_48_1.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_48_0.png" src="notebook/MISC-geomutil_files/MISC-geomutil_48_0.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_48_1.png" src="notebook/MISC-geomutil_files/MISC-geomutil_48_1.png" />
 </div>
 <div class="section" id="intersect">
 <h3>14.2.7. intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
@@ -4581,7 +4660,7 @@ index in the ndarray.</p>
 <span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;test intersect&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./MISC-geomutil_files/MISC-geomutil_53_0.png" src="./MISC-geomutil_files/MISC-geomutil_53_0.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_53_0.png" src="notebook/MISC-geomutil_files/MISC-geomutil_53_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span>
 </pre></div>
 </div>
@@ -4611,7 +4690,8 @@ index in the ndarray.</p>
 </div>
 <div class="section" id="useful-functions">
 <h2>14.3. Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><pre>isaligned?</pre>
+<div class="highlight-python"><div class="highlight"><pre>isaligned?
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">27.835</span><span class="p">,</span>  <span class="mf">10.891</span><span class="p">])</span>
 <span class="n">phs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">27.836</span><span class="p">,</span>  <span class="mf">10.926</span><span class="p">])</span>
@@ -4642,7 +4722,7 @@ index in the ndarray.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">27.836000000000002</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.832500000000003</span><span class="p">,</span> <span class="mf">10.65</span><span class="p">,</span> <span class="mf">10.950000000000001</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./MISC-geomutil_files/MISC-geomutil_64_1.png" src="./MISC-geomutil_files/MISC-geomutil_64_1.png" />
+<img alt="notebook/MISC-geomutil_files/MISC-geomutil_64_1.png" src="notebook/MISC-geomutil_files/MISC-geomutil_64_1.png" />
 <div class="highlight-python"><div class="highlight"><pre>
 </pre></div>
 </div>
@@ -4674,7 +4754,7 @@ index in the ndarray.</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

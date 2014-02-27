@@ -105,21 +105,15 @@ contains additional visibility relationships between vertices and edges.</p>
 <p>This format using &#8216;.str&#8217; and &#8216;.str2&#8217; is going to be deprecated and replaced
 gradually with only &#8216;.osm&#8217; and &#8216;.ini&#8217; file.  It is still maintained to insure
 compatibility with a pre existing version of the tool written in C language.</p>
-<dl class="attribute">
-<dt id="pylayers.gis.layout">
-<tt class="descclassname">pylayers.gis.</tt><tt class="descname">layout</tt><a class="headerlink" href="#pylayers.gis.layout" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#module-pylayers.gis.layout" title="pylayers.gis.layout"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.gis.layout</span></tt></a></p>
-</dd></dl>
-
 <span class="target" id="module-pylayers.gis.layout"></span><dl class="class">
 <dt id="pylayers.gis.layout.Layout">
-<em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr3.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handling Layout</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>Gs</strong> : Structure graph</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>Gs</strong> : Structure graph</p>
 <p><strong>Gt</strong> : Topological graph  (indicates topological relationships between rooms)</p>
 <p><strong>Gr</strong> : Graph of room</p>
 <p><strong>Gv</strong> : Graph of visibility</p>
@@ -130,7 +124,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <p><strong>tahe</strong> : tail head</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>add_door</strong> :</p>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>add_door</strong> :</p>
 <p><strong>add_fnod</strong> :</p>
 <p><strong>add_furniture</strong> :</p>
 <p><strong>add_furniture_file</strong> :</p>
@@ -242,7 +236,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
 <blockquote>
 <div><p>segment number</p>
 </div></blockquote>
@@ -262,7 +256,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>p</strong> :  (1x2) tuple</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p</strong> :  (1x2) tuple</td>
 </tr>
 </tbody>
 </table>
@@ -276,7 +270,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
 <blockquote>
 <div><p>default = &#8216;R1_C&#8217;</p>
 </div></blockquote>
@@ -315,7 +309,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>_filefur</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_filefur</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -329,7 +323,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>np0</strong> : point number</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>np0</strong> : point number</p>
 <p><strong>s1</strong> : edge number 1</p>
 <p class="last"><strong>s2</strong> : edge number 2</p>
 </td>
@@ -346,7 +340,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> : ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : ndarray</p>
 <blockquote>
 <div><blockquote>
 <div><p>point</p>
@@ -378,7 +372,7 @@ compatibility with a pre existing version of the tool written in C language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ns</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ns</strong> : int</p>
 <blockquote>
 <div><p>segment number</p>
 </div></blockquote>
@@ -403,7 +397,7 @@ create 2 segments with same properties</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n1</strong> : integer &lt; 0</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n1</strong> : integer &lt; 0</p>
 <p><strong>n2</strong> : integer &lt; 0</p>
 <p><strong>name</strong> : string</p>
 <blockquote>
@@ -415,7 +409,7 @@ create 2 segments with same properties</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>num</strong> : segment number (&gt;0)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>num</strong> : segment number (&gt;0)</p>
 </td>
 </tr>
 </tbody>
@@ -439,7 +433,7 @@ connect : list of point number</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
 <blockquote>
 <div><p>edge number &gt; 0</p>
 </div></blockquote>
@@ -469,7 +463,7 @@ connect : list of point number</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
 <blockquote>
 <div><p>segment number</p>
 </div></blockquote>
@@ -491,11 +485,11 @@ connect : list of point number</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p1</strong> : np.array (2 x Np) or (2,)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : np.array (2 x Np) or (2,)</p>
 <p><strong>p2</strong> : np.array (2 x Np) or (2,)</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> : list</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> : list</p>
 <blockquote>
 <div><p>list of segment number on the link</p>
 </div></blockquote>
@@ -529,7 +523,7 @@ connect : list of point number</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p1</strong> : (1 x 2 )</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : (1 x 2 )</p>
 <blockquote>
 <div><p>[0,0]</p>
 </div></blockquote>
@@ -539,7 +533,7 @@ connect : list of point number</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> : list</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> : list</p>
 <blockquote>
 <div><p>list of segment number on the link</p>
 </div></blockquote>
@@ -565,7 +559,7 @@ connect : list of point number</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
 <blockquote>
 <div><p>x offset (default 0)</p>
 </div></blockquote>
@@ -601,7 +595,7 @@ connect : list of point number</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : string composed of</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : string composed of</p>
 <blockquote class="last">
 <div><p>&#8216;t&#8217; : Gt
 &#8216;r&#8217; : Gr
@@ -670,7 +664,7 @@ R+  R- T+ T-</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>Ga</strong> : graph of adjascent rooms</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Ga</strong> : graph of adjascent rooms</td>
 </tr>
 </tbody>
 </table>
@@ -732,7 +726,7 @@ Each simple cycle of Gs is a node of Gt</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>show</strong> : boolean</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>show</strong> : boolean</p>
 <blockquote class="last">
 <div><p>default False</p>
 </div></blockquote>
@@ -773,7 +767,7 @@ Each simple cycle of Gs is a node of Gt</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>consistent</strong> : Boolean</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>consistent</strong> : Boolean</p>
 <blockquote class="last">
 <div><p>True if consistent</p>
 </div></blockquote>
@@ -808,13 +802,13 @@ Each simple cycle of Gs is a node of Gt</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.chgmss">
-<tt class="descname">chgmss</tt><big>(</big><em>ns</em>, <em>ss_name=</em><span class="optional">[</span><span class="optional">]</span>, <em>ss_z=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.chgmss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.chgmss" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">chgmss</tt><big>(</big><em>ns</em>, <em>ss_name=</em>, <span class="optional">[</span><span class="optional">]</span><em>ss_z=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.chgmss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.chgmss" title="Permalink to this definition">¶</a></dt>
 <dd><p>change a specific multi subseggments properties</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ns</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ns</strong> : int</p>
 <blockquote>
 <div><p>segment number</p>
 </div></blockquote>
@@ -851,7 +845,7 @@ Each simple cycle of Gs is a node of Gt</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>xmin</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xmin</strong> :</p>
 <blockquote class="last">
 <div><p>xmax
 ymin
@@ -885,7 +879,7 @@ the AAS (Allowed Angular Sector)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cy :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cy :</strong> :</p>
 <blockquote>
 <div><p>cycle</p>
 </div></blockquote>
@@ -923,7 +917,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>lnc</strong> :  list of cycle number</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lnc</strong> :  list of cycle number</td>
 </tr>
 </tbody>
 </table>
@@ -937,7 +931,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>lp</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lp</strong> : list</p>
 <blockquote class="last">
 <div><p>node list</p>
 </div></blockquote>
@@ -955,7 +949,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>le</strong> : list of segment number</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>le</strong> : list of segment number</td>
 </tr>
 </tbody>
 </table>
@@ -969,7 +963,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
 <blockquote class="last">
 <div><p>segment number</p>
 </div></blockquote>
@@ -1015,7 +1009,7 @@ al2</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> : ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : ndarray</p>
 <blockquote>
 <div><p>point coordinate</p>
 </div></blockquote>
@@ -1025,7 +1019,7 @@ al2</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dist</strong> :</p>
 <blockquote class="last">
 <div><p>list of distances to walls of room nroom</p>
 </div></blockquote>
@@ -1074,13 +1068,13 @@ specified by the $BASENAME environment variable</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>edlist</strong> : list or ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>edlist</strong> : list or ndarray</p>
 <blockquote>
 <div><p>edge list</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndlist</strong> : ndarray</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ndlist</strong> : ndarray</p>
 <blockquote class="last">
 <div><p>node list</p>
 </div></blockquote>
@@ -1098,7 +1092,7 @@ specified by the $BASENAME environment variable</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>np</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>np</strong> : integer</p>
 <blockquote class="last">
 <div><p>point number</p>
 </div></blockquote>
@@ -1116,7 +1110,7 @@ specified by the $BASENAME environment variable</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
 <blockquote>
 <div><p>edge number</p>
 </div></blockquote>
@@ -1167,12 +1161,12 @@ o : toggle overlay</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.editorGtk">
-<tt class="descname">editorGtk</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.editorGtk" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">editorGtk</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editorGtk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editorGtk" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.editorTk">
-<tt class="descname">editorTk</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.editorTk" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">editorTk</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editorTk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editorTk" title="Permalink to this definition">¶</a></dt>
 <dd><p>invoke interactive layout graphical editor</p>
 <p class="rubric">Notes</p>
 <p>point edition</p>
@@ -1205,7 +1199,7 @@ o : toggle overlay</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e</strong> :</p>
 <p><strong>subseg</strong> : boolean</p>
 <blockquote class="last">
 <div><p>default False</p>
@@ -1241,6 +1235,7 @@ self.tahe (2xNs)
 self.tgs
 self.dca
 self.lsss : list of subsegments</p>
+<p>assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]</p>
 </dd></dl>
 
 <dl class="method">
@@ -1251,7 +1246,7 @@ self.lsss : list of subsegments</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>centered</strong> : Boolean</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>centered</strong> : Boolean</p>
 <blockquote class="last">
 <div><p>if True the layout is centered around its center of gravity</p>
 </div></blockquote>
@@ -1277,7 +1272,7 @@ self.lsss : list of subsegments</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>sigarr</strong> : signature</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sigarr</strong> : signature</td>
 </tr>
 </tbody>
 </table>
@@ -1291,7 +1286,7 @@ self.lsss : list of subsegments</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>nd_in: int</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nd_in: int</strong> :</p>
 <blockquote>
 <div><blockquote>
 <div><p>initial graph node (segment or point)</p>
@@ -1304,7 +1299,7 @@ self.lsss : list of subsegments</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>paths</strong> : list</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>paths</strong> : list</p>
 <blockquote class="last">
 <div><p>paths between nd_in and nd_fin</p>
 </div></blockquote>
@@ -1322,13 +1317,13 @@ self.lsss : list of subsegments</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ax</strong> : list ot tuple</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ax</strong> : list ot tuple</p>
 <blockquote>
 <div><p>[xmin,xmax,ymin,ymax]</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>ptlist,seglist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ptlist,seglist</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -1359,7 +1354,7 @@ self.lsss : list of subsegments</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>s1</strong> : segment number</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s1</strong> : segment number</td>
 </tr>
 </tbody>
 </table>
@@ -1381,7 +1376,7 @@ else -1 is return</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>tahe</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tahe</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -1411,7 +1406,7 @@ p2 : (1 x 2 )</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>_filename</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_filename</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -1433,7 +1428,7 @@ p2 : (1 x 2 )</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>filename</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -1449,7 +1444,7 @@ p2 : (1 x 2 )</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_filefur</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filefur</strong> : string</p>
 <blockquote class="last">
 <div><p>short name of the furniture ini file</p>
 </div></blockquote>
@@ -1486,7 +1481,7 @@ p2 : (1 x 2 )</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
 <blockquote class="last">
 <div><p>file name extension .ini</p>
 </div></blockquote>
@@ -1504,7 +1499,7 @@ p2 : (1 x 2 )</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>_fileosm</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileosm</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -1524,7 +1519,7 @@ of 1e7=10000000. The convention is set back when loading the osm file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
 <p><strong>_filematini</strong> : string</p>
 <blockquote>
 <div><p>default &#8216;matDB.ini&#8217;</p>
@@ -1553,7 +1548,7 @@ of 1e7=10000000. The convention is set back when loading the osm file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
 <blockquote>
 <div><p>str2 filename</p>
 </div></blockquote>
@@ -1597,13 +1592,13 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
 <blockquote>
 <div><p>{&#8216;str&#8217;|&#8217;ini&#8217;|&#8217;osm&#8217;|&#8217;str2&#8217;|&#8217;wrl&#8217;}</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>lfile_s</strong> : list</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lfile_s</strong> : list</p>
 <blockquote class="last">
 <div><p>sorted list of all the .str file of strdir</p>
 </div></blockquote>
@@ -1623,6 +1618,32 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.gis.layout.Layout.mayafile">
+<tt class="descname">mayafile</tt><big>(</big><em>centered=True</em>, <em>show=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.mayafile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.mayafile" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a .off geomview file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>centered</strong> : Boolean</p>
+<blockquote class="last">
+<div><p>if True the layout is centered around its center of gravity</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The <cite>.off</cite> file can be vizualized through the show3 method</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">geomfile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.gis.layout.Layout.nd2seg">
 <tt class="descname">nd2seg</tt><big>(</big><em>ndlist</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.nd2seg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.nd2seg" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert node list to edge list</p>
@@ -1630,13 +1651,13 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ndlist</strong> : list or ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ndlist</strong> : list or ndarray</p>
 <blockquote>
 <div><p>node list</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> : ndarray</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> : ndarray</p>
 <blockquote class="last">
 <div><p>edge list</p>
 </div></blockquote>
@@ -1657,7 +1678,7 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pt  np.array(1x2)</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt  np.array(1x2)</strong> :</p>
 <p class="last"><strong>tol = 0.01      tolerance</strong> :</p>
 </td>
 </tr>
@@ -1667,13 +1688,13 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.outputGi">
-<tt class="descname">outputGi</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.outputGi" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">outputGi</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.outputGi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.outputGi" title="Permalink to this definition">¶</a></dt>
 <dd><p>filter authorized Gi edges output</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>L</strong> : Layout</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>L</strong> : Layout</td>
 </tr>
 </tbody>
 </table>
@@ -1693,7 +1714,7 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>lns</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lns</strong> :</p>
 <p class="last"><strong>*kwargs</strong> :</p>
 </td>
 </tr>
@@ -1709,9 +1730,9 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>pt</strong> : point (ndarray)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pt</strong> : point (ndarray)</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>ncy</strong> : cycle number</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>ncy</strong> : cycle number</td>
 </tr>
 </tbody>
 </table>
@@ -1727,9 +1748,9 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>pt</strong> : point (ndarray)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pt</strong> : point (ndarray)</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>nr</strong> : Room number</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>nr</strong> : Room number</td>
 </tr>
 </tbody>
 </table>
@@ -1745,7 +1766,7 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>p_Tx</strong> : numpy.ndarray</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>p_Tx</strong> : numpy.ndarray</p>
 <blockquote>
 <div><p>A point of the placement of the Tx</p>
 </div></blockquote>
@@ -1775,9 +1796,9 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>room</strong> : int</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>room</strong> : int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>nod</strong> : sorted list</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>nod</strong> : sorted list</td>
 </tr>
 </tbody>
 </table>
@@ -1791,9 +1812,9 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>room</strong> : int</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>room</strong> : int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>seg</strong> : list</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>seg</strong> : list</td>
 </tr>
 </tbody>
 </table>
@@ -1807,7 +1828,7 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>angle (deg)</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>angle (deg)</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -1827,7 +1848,7 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
 <blockquote class="last">
 <div><p>short filemame with extension</p>
 </div></blockquote>
@@ -1845,7 +1866,7 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>filename</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -1861,7 +1882,7 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>_fileosm</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileosm</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -1875,7 +1896,7 @@ edge (nstr0,nstr1)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
 <blockquote class="last">
 <div><p>file is  written in the struc directory of the current Project
 directory which is defined through the environment variable $BASENAME
@@ -1893,19 +1914,19 @@ furniture :  boolean</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.seg2pts">
-<tt class="descname">seg2pts</tt><big>(</big><em>aseg</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.seg2pts" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">seg2pts</tt><big>(</big><em>aseg</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seg2pts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seg2pts" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert segments array to coresponding termination points array</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>aseg</strong> : np.array (,Ns) or int for single value:w</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>aseg</strong> : np.array (,Ns) or int for single value:w</p>
 <blockquote>
 <div><p>array of segment number (&gt;0)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pth</strong> : np.array (4 x Ns)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>pth</strong> : np.array (4 x Ns)</p>
 <blockquote class="last">
 <div><p>pth is a vstacking of tail point (2,Ns) and head point (2,Ns)</p>
 </div></blockquote>
@@ -1931,9 +1952,9 @@ furniture :  boolean</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>seg</strong> : int</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seg</strong> : int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>nr</strong> : Room number</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>nr</strong> : Room number</td>
 </tr>
 </tbody>
 </table>
@@ -1949,7 +1970,7 @@ furniture :  boolean</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p1</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> :</p>
 <blockquote>
 <div><p>array (1 x 2)</p>
 </div></blockquote>
@@ -1959,7 +1980,7 @@ furniture :  boolean</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
 <blockquote class="last">
 <div><p>list of segment number inside a planar region defined by p1 an p2</p>
 </div></blockquote>
@@ -1993,7 +2014,7 @@ furniture :  boolean</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p1</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> :</p>
 <blockquote>
 <div><p>array (2 x N)</p>
 </div></blockquote>
@@ -2003,7 +2024,7 @@ furniture :  boolean</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
 <blockquote class="last">
 <div><p>list of segment number inside a planar region defined by p1 an p2</p>
 </div></blockquote>
@@ -2044,13 +2065,13 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ptlist array(1xNp)</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ptlist array(1xNp)</strong> :</p>
 <blockquote>
 <div><p>point number array</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
 <blockquote class="last">
 <div><p>array seglist associated with ptlist</p>
 </div></blockquote>
@@ -2078,13 +2099,13 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ptlist</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ptlist</strong> :</p>
 <blockquote>
 <div><p>array(1xNp) Point number array</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
 <blockquote class="last">
 <div><p>array seglist associated with ptlist</p>
 </div></blockquote>
@@ -2110,7 +2131,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>iseg</strong> : np.array</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iseg</strong> : np.array</p>
 <blockquote class="last">
 <div><p>index of segments</p>
 </div></blockquote>
@@ -2145,7 +2166,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>bdis boolean (default True)</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bdis boolean (default True)</strong> :</p>
 <blockquote>
 <div><p>boolean display (call geowview if True)</p>
 </div></blockquote>
@@ -2167,7 +2188,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : char</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : char</p>
 <blockquote>
 <div><p>&#8216;t&#8217; : Gt &#8216;r&#8217; : Gr &#8216;s&#8217; : Gs &#8216;v&#8217; : Gv  &#8216;c&#8217;: Gc &#8216;i&#8217; : Gi</p>
 </div></blockquote>
@@ -2232,12 +2253,15 @@ p2 : numpy.ndarray</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/gis-layout-2.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/gis-layout-2.py">Source code</a>, <a class="reference external" href="../modules/gis-layout-2.png">png</a>, <a class="reference external" href="../modules/gis-layout-2.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/gis-layout-2.png" src="../_images/gis-layout-2.png" />
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showGi">
-<tt class="descname">showGi</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.showGi" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showGi</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showGi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showGi" title="Permalink to this definition">¶</a></dt>
 <dd><p>show graph of interactions Gi</p>
 <dl class="docutils">
 <dt>en <span class="classifier-delimiter">:</span> <span class="classifier">int </span></dt>
@@ -2253,7 +2277,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ndlist</strong> : np.array</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ndlist</strong> : np.array</p>
 <blockquote>
 <div><p>set of nodes to be displayed</p>
 </div></blockquote>
@@ -2277,7 +2301,7 @@ p2 : numpy.ndarray</div></blockquote>
 <p><strong>display parameters are defined in  display dictionnary</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>ax</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ax</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -2286,13 +2310,13 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showGt">
-<tt class="descname">showGt</tt><big>(</big><em>ax=</em><span class="optional">[</span><span class="optional">]</span>, <em>roomlist=</em><span class="optional">[</span><span class="optional">]</span>, <em>mode='area'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showGt" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showGt</tt><big>(</big><em>ax=</em>, <span class="optional">[</span><span class="optional">]</span><em>roomlist=</em>, <span class="optional">[</span><span class="optional">]</span><em>mode='area'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showGt" title="Permalink to this definition">¶</a></dt>
 <dd><p>show topological graph Gt</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ax</strong> : matlplotlib axes</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ax</strong> : matlplotlib axes</p>
 <p><strong>roomlist</strong> : list</p>
 <blockquote class="last">
 <div><p>list of room numbers</p>
@@ -2311,7 +2335,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>display</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>display</strong> :</p>
 <p><strong>fig</strong> :</p>
 <p><strong>ax</strong> :</p>
 <p><strong>nodes</strong> : boolean</p>
@@ -2324,7 +2348,7 @@ p2 : numpy.ndarray</div></blockquote>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>fig</strong> : figure instance</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fig</strong> : figure instance</p>
 <p class="last"><strong>ax</strong> : axes instance</p>
 </td>
 </tr>
@@ -2347,13 +2371,13 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x8662e90&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xbf9a690&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Tx</strong> : np.array (2,1)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tx</strong> : np.array (2,1)</p>
 <blockquote>
 <div><p>Transmitter coordinates</p>
 </div></blockquote>
@@ -2367,7 +2391,7 @@ p2 : numpy.ndarray</div></blockquote>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>fig</strong> : figure instance</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fig</strong> : figure instance</p>
 <p><strong>ax</strong> : axes instance</p>
 <p class="last"><strong>lines</strong> : lines instance</p>
 </td>
@@ -2378,13 +2402,13 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.show_layer">
-<tt class="descname">show_layer</tt><big>(</big><em>name</em>, <em>edlist=</em><span class="optional">[</span><span class="optional">]</span>, <em>alpha=1</em>, <em>width=0</em>, <em>color='black'</em>, <em>dnodes=False</em>, <em>dthin=False</em>, <em>dlabels=False</em>, <em>font_size=15</em>, <em>fGHz=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_layer" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show_layer</tt><big>(</big><em>name</em>, <em>edlist=</em>, <span class="optional">[</span><span class="optional">]</span><em>alpha=1</em>, <em>width=0</em>, <em>color='black'</em>, <em>dnodes=False</em>, <em>dthin=False</em>, <em>dlabels=False</em>, <em>font_size=15</em>, <em>fGHz=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_layer" title="Permalink to this definition">¶</a></dt>
 <dd><p>show layer</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name :</strong> :</p>
 <p><strong>edlist</strong> : []</p>
 <p><strong>alpha</strong> : float</p>
 <blockquote>
@@ -2425,7 +2449,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ndlist</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ndlist</strong> :</p>
 <p><strong>size</strong> : int</p>
 <blockquote>
 <div><p>default 10</p>
@@ -2451,13 +2475,13 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.show_seg1">
-<tt class="descname">show_seg1</tt><big>(</big><em>edlist=</em><span class="optional">[</span><span class="optional">]</span>, <em>alpha=1</em>, <em>width=1</em>, <em>size=2</em>, <em>color='black'</em>, <em>font_size=15</em>, <em>dlabels=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_seg1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_seg1" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show_seg1</tt><big>(</big><em>edlist=</em>, <span class="optional">[</span><span class="optional">]</span><em>alpha=1</em>, <em>width=1</em>, <em>size=2</em>, <em>color='black'</em>, <em>font_size=15</em>, <em>dlabels=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_seg1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_seg1" title="Permalink to this definition">¶</a></dt>
 <dd><p>show segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>edlist</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>edlist</strong> :</p>
 <p><strong>alpha</strong> :</p>
 <p><strong>width</strong> :</p>
 <p><strong>size</strong> :</p>
@@ -2478,7 +2502,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>edlist</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>edlist</strong> : list</p>
 <blockquote>
 <div><p>segment list</p>
 </div></blockquote>
@@ -2520,14 +2544,14 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>iTx</strong> : Transmitter room</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iTx</strong> : Transmitter room</p>
 <p><strong>iRx  :</strong> :</p>
 <blockquote>
 <div><p>Transmitter room</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>sigarr    :</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>sigarr    :</strong> :</p>
 <p class="last"><strong>signature :</strong> :</p>
 </td>
 </tr>
@@ -2551,7 +2575,7 @@ T4 : limit the ndt to only edges and nodes in visibility from Tx</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dico</strong> : dict</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dico</strong> : dict</p>
 <blockquote class="last">
 <div><p>sub segment name as key and segment number as value</p>
 </div></blockquote>
@@ -2569,11 +2593,11 @@ T4 : limit the ndt to only edges and nodes in visibility from Tx</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>offx</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>offx</strong> :</p>
 <p><strong>offy</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>walls</strong> : list of wall tuples  (Transit format)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>walls</strong> : list of wall tuples  (Transit format)</p>
 </td>
 </tr>
 </tbody>
@@ -2594,7 +2618,7 @@ T4 : limit the ndt to only edges and nodes in visibility from Tx</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>vec :</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vec :</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -2602,7 +2626,7 @@ T4 : limit the ndt to only edges and nodes in visibility from Tx</dd>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.visi_papb">
-<tt class="descname">visi_papb</tt><big>(</big><em>pa</em>, <em>pb</em>, <em>edgelist=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.visi_papb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.visi_papb" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">visi_papb</tt><big>(</big><em>pa</em>, <em>pb</em>, <em>edgelist=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.visi_papb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.visi_papb" title="Permalink to this definition">¶</a></dt>
 <dd><p>visi_papb : determine if pa and pb are in visibility for the structure graph</p>
 <p>visi_papb(pa,pb,edgelist)</p>
 <p>pa       : 1x2
@@ -2618,7 +2642,7 @@ edgelist : exclusion edge list</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> :</p>
 <blockquote class="last">
 <div><p>np.array point</p>
 </div></blockquote>
@@ -2670,7 +2694,7 @@ Occultation 8  situations
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>nroom1</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nroom1</strong> :</p>
 <blockquote class="last">
 <div><p>nroom2</p>
 </div></blockquote>
@@ -2722,7 +2746,7 @@ Occultation 8  situations
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

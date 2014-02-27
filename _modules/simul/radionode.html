@@ -681,15 +681,16 @@
         <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filegeom</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.vect&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.off&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span> 
-            
+
             <span class="n">gv</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geomoff</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
             <span class="n">ant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span>
             <span class="c"># if not hasattr(ant,&#39;theta&#39;):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">ant</span><span class="o">.</span><span class="n">pattern</span><span class="p">:</span>
-                <span class="n">ant</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ant</span><span class="o">.</span><span class="n">fromfile</span><span class="p">:</span>
+                <span class="n">ant</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span> 
                 <span class="n">ant</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="n">V</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ant</span><span class="o">.</span><span class="n">nf</span><span class="o">/</span><span class="mi">2</span><span class="p">,:,:]</span>
+            <span class="n">V</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ant</span><span class="o">.</span><span class="n">Nf</span><span class="o">/</span><span class="mi">2</span><span class="p">,:,:]</span>
+ 
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;position&#39;</span><span class="p">):</span>
                 <span class="k">print</span> <span class="s">&quot;no position available&quot;</span>
             <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
@@ -1037,7 +1038,7 @@
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

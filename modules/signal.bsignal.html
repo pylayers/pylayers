@@ -105,7 +105,7 @@ FUsignal
 FHsignal</p>
 <dl class="class">
 <dt id="pylayers.signal.bsignal.Bsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">Bsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">Bsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal with an embedded time base</p>
 <p>This class gathers a 1D signal and its axis indexation.</p>
 <p>This class offers a transparent back and forth mechanism between time and frequency domain.</p>
@@ -115,19 +115,19 @@ FHsignal</p>
 <p>By construction len(y):=len(x), len(x) takes priority in case of observed conflict</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.cformat">
-<tt class="descname">cformat</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.cformat" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cformat</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.cformat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.cformat" title="Permalink to this definition">¶</a></dt>
 <dd><p>complex format</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>uy</strong> : ndarray()</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>uy</strong> : ndarray()</p>
 <blockquote>
 <div><p>select rows of y</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>xn</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>xn</strong> :</p>
 <p><strong>yn</strong> :</p>
 <p class="last"><strong>ylabels</strong> :</p>
 </td>
@@ -138,13 +138,13 @@ FHsignal</p>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.extract">
-<tt class="descname">extract</tt><big>(</big><em>u</em><big>)</big><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.extract" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">extract</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>extract y[u,:]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>O</strong> : Usignal</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>O</strong> : Usignal</td>
 </tr>
 </tbody>
 </table>
@@ -152,7 +152,7 @@ FHsignal</p>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.flatteny">
-<tt class="descname">flatteny</tt><big>(</big><em>yrange=</em><span class="optional">[</span><span class="optional">]</span>, <em>reversible=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.flatteny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.flatteny" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">flatteny</tt><big>(</big><em>yrange=</em>, <span class="optional">[</span><span class="optional">]</span><em>reversible=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.flatteny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.flatteny" title="Permalink to this definition">¶</a></dt>
 <dd><p>flatten y array
 Parameters
 &#8212;&#8212;&#8212;-
@@ -171,11 +171,11 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>xmin</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xmin</strong> : float</p>
 <p><strong>xmax</strong> : float</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>nothing self is modified</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>nothing self is modified</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -220,7 +220,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>interpolation</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>interpolation</strong> : string</p>
 <blockquote>
 <div><p>&#8216;none&#8217;|&#8217;nearest&#8217;|&#8217;bilinear&#8217;</p>
 </div></blockquote>
@@ -241,8 +241,8 @@ else y is smashed</div></blockquote>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="o">+</span><span class="mi">1j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -262,7 +262,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>filename</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -276,7 +276,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>iy</strong> : index of the waveform to plot (-1 = all)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iy</strong> : index of the waveform to plot (-1 = all)</p>
 <p><strong>col</strong> : string</p>
 <blockquote>
 <div><p>default  &#8216;black&#8217;</p>
@@ -328,7 +328,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>filename</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -363,7 +363,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>x</strong> : np.array</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> : np.array</td>
 </tr>
 </tbody>
 </table>
@@ -380,7 +380,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>fun</strong> : function</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fun</strong> : function</td>
 </tr>
 </tbody>
 </table>
@@ -394,7 +394,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
 <blockquote class="last">
 <div><p>default &#8216;b-&#8216;</p>
 </div></blockquote>
@@ -406,11 +406,8 @@ else y is smashed</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">si</span> <span class="o">=</span> <span class="n">Bsignal</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">setx</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">x</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">sety</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">x</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">y</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">si</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -425,7 +422,7 @@ else y is smashed</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>color</strong> : string</p>
 <blockquote class="last">
 <div><p>default &#8216;b-&#8216;</p>
 </div></blockquote>
@@ -439,7 +436,7 @@ else y is smashed</div></blockquote>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.EnImpulse">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">EnImpulse</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>fc=4</em>, <em>band=3</em>, <em>thresh=10</em>, <em>fe=20</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#EnImpulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.EnImpulse" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">EnImpulse</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>fc=4</em>, <em>band=3</em>, <em>thresh=10</em>, <em>fe=20</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#EnImpulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.EnImpulse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an Energy normalized Gaussian impulse (Usignal)</p>
 <p>EnImpulse(x,fc,band,thresh,fe)</p>
 <blockquote>
@@ -469,7 +466,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.FBsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FBsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FBsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>FBsignal : Base signal in Frequency domain</p>
 <p>plot     : plot modulus and phase
 plotri   : plot real part and imaginary part
@@ -482,7 +479,7 @@ plotdB   : plot modulus in dB</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>phase</strong> : boolean</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>phase</strong> : boolean</p>
 <blockquote>
 <div><p>default True</p>
 </div></blockquote>
@@ -508,7 +505,7 @@ plotdB   : plot modulus in dB</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">FBsignal</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mi">1j</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -523,7 +520,7 @@ plotdB   : plot modulus in dB</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>mask :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mask :</strong> :</p>
 <p><strong>n :</strong> :</p>
 <p class="last"><strong>phase :</strong> :</p>
 </td>
@@ -540,7 +537,7 @@ plotdB   : plot modulus in dB</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>nb</strong> : int</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nb</strong> : int</td>
 </tr>
 </tbody>
 </table>
@@ -553,7 +550,7 @@ plotdB   : plot modulus in dB</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>color</strong> : string</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>color</strong> : string</td>
 </tr>
 </tbody>
 </table>
@@ -563,7 +560,7 @@ plotdB   : plot modulus in dB</p>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.FHsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FHsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FHsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FHsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FHsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FHsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FHsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>FHsignal : Hermitian uniform signal in Frequency domain</p>
 <p>ifft  : inverse Fourier transform &#8211;&gt; TUsignal
 unrex : unredundant extraction    &#8211;&gt; FUsignal</p>
@@ -581,7 +578,7 @@ tt = &#8216;centered&#8217;  default</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>return a real TUsignal</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>return a real TUsignal</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -612,19 +609,19 @@ expressed in the frequency domain</p>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.FUDAsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FUDAsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>tau0=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>dod=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>doa=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDAsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDAsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FUDAsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>tau0=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>dod=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>doa=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDAsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDAsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>FUDAsignal : Frequency domain Uniform signal with Delays and Angles</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray 1xN</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray 1xN</p>
 <p><strong>y</strong> : ndarray MxN</p>
 <p><strong>tau0</strong> : delay</p>
 <p><strong>tau1</strong> : additional delay</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>minphas</strong> : force minimal phase    (Not tested)</p>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>minphas</strong> : force minimal phase    (Not tested)</p>
 <p><strong>totud</strong> : transform to a TUD signal</p>
 <p><strong>iftd</strong> : inverse Fourier transform</p>
 <p><strong>ft1</strong> : construct CIR from ifft(RTF)</p>
@@ -633,17 +630,106 @@ expressed in the frequency domain</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUDAsignal.cut">
+<tt class="descname">cut</tt><big>(</big><em>threshold=0.99</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDAsignal.cut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDAsignal.cut" title="Permalink to this definition">¶</a></dt>
+<dd><p>cut the signal at an Energy threshold level</p>
+<p>threshold : float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUDAsignal.showtap">
+<tt class="descname">showtap</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDAsignal.showtap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDAsignal.showtap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUDAsignal.sort">
+<tt class="descname">sort</tt><big>(</big><em>typ='tau'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDAsignal.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDAsignal.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>sort FUD signal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>which parameter to sort &#8216;</dt>
+<dd><p class="first last">tau : (default)
+energy</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUDAsignal.tap">
+<tt class="descname">tap</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDAsignal.tap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDAsignal.tap" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate channel tap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
+<blockquote>
+<div><p>center frequency</p>
+</div></blockquote>
+<p><strong>WMHz</strong> : floar</p>
+<blockquote>
+<div><p>bandwidth</p>
+</div></blockquote>
+<p><strong>Ntap</strong> : int</p>
+<blockquote>
+<div><p>number of taps (related to bandwith)
+as the bandwith increases the potential number of taps increases</p>
+</div></blockquote>
+<p><strong>Ns</strong> : int</p>
+<blockquote>
+<div><p>number of spatial realizations</p>
+</div></blockquote>
+<p><strong>Nm</strong> : int</p>
+<blockquote>
+<div><p>number of time samples
+the channel is sample along a distance of half a wavelength</p>
+</div></blockquote>
+<p><strong>Va</strong> : velocity of link termination a</p>
+<p><strong>Vb</strong> : velocity of link termination b</p>
+<p><strong>theta_va</strong> : float</p>
+<blockquote>
+<div><p>theta velocity termination a (in radians)</p>
+</div></blockquote>
+<p><strong>phi_va  :</strong> :</p>
+<blockquote>
+<div><p>phi  velocity termination a (in radians)</p>
+</div></blockquote>
+<p><strong>theta_vb:</strong> :</p>
+<blockquote>
+<div><p>theta velocity termination b (in radians)</p>
+</div></blockquote>
+<p><strong>phi_vb  :</strong> :</p>
+<blockquote class="last">
+<div><p>phi velocity termination b (in radians)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.FUDsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FUDsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>tau0=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FUDsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>tau0=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>FUDsignal : Uniform signal in Frequency domain with delays</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray 1xN</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray 1xN</p>
 <blockquote>
 <div><p>y    : ndarray MxN
 tau0 : delay
@@ -651,7 +737,7 @@ tau1 : additional delay</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>minphas</strong> : force minimal phase    (Not tested)</p>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>minphas</strong> : force minimal phase    (Not tested)</p>
 <p><strong>totud</strong> : transform to a TUD signal</p>
 <p><strong>iftd</strong> : inverse Fourier transform</p>
 <p><strong>ft1</strong> : construct CIR from ifft(RTF)</p>
@@ -662,7 +748,7 @@ tau1 : additional delay</p>
 </table>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUDsignal.cir">
-<tt class="descname">cir</tt><big>(</big><em>fGHzmin=0</em>, <em>fGHzmax=1000</em><big>)</big><a class="headerlink" href="#pylayers.signal.bsignal.FUDsignal.cir" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">cir</tt><big>(</big><em>fGHzmin=0</em>, <em>fGHzmax=1000</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDsignal.cir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDsignal.cir" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -673,7 +759,7 @@ tau1 : additional delay</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> : number of zeros for zero padding</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : number of zeros for zero padding</p>
 <p><strong>ffts</strong> : fftshift indicator</p>
 <blockquote>
 <div><p>0  no fftshift
@@ -696,7 +782,7 @@ tau1 : additional delay</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>df</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>df</strong> : float</p>
 <blockquote class="last">
 <div><p>frequency step (default 0.01)</p>
 </div></blockquote>
@@ -725,13 +811,13 @@ tau1 : additional delay</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> : number of zeros for zero padding</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : number of zeros for zero padding</p>
 <p><strong>k</strong> : starting index</p>
 <p><strong>ffts = 0  no fftshift</strong> :</p>
 <p><strong>ffts = 1  apply fftshift</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>r</strong> : TUsignal</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>r</strong> : TUsignal</p>
 </td>
 </tr>
 </tbody>
@@ -746,7 +832,7 @@ tau1 : additional delay</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : int</p>
 <p><strong>tstart</strong> : float</p>
 <p><strong>tstop</strong> : float</p>
 <p><strong>ffts</strong> : int</p>
@@ -774,7 +860,7 @@ tau1 : additional delay</p>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUDsignal.plot3d">
-<tt class="descname">plot3d</tt><big>(</big><em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDsignal.plot3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDsignal.plot3d" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot3d</tt><big>(</big><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUDsignal.plot3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDsignal.plot3d" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -784,7 +870,6 @@ tau1 : additional delay</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">FUDsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">tau0</span><span class="o">=</span><span class="n">tau0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">plot3d</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -797,7 +882,7 @@ tau1 : additional delay</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : int</p>
 <blockquote>
 <div><p>Number of zeros for zero padding</p>
 </div></blockquote>
@@ -815,17 +900,17 @@ tau1 : additional delay</p>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.FUsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FUsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">FUsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>FUsignal : Uniform signal in Frequency domain</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>x</strong> : nd.array((1xN))</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>x</strong> : nd.array((1xN))</p>
 <p><strong>y</strong> : Complex nd.array((M x N )</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>symH</strong> : force Hermitian symetry &#8211;&gt; FHsignal</p>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>symH</strong> : force Hermitian symetry &#8211;&gt; FHsignal</p>
 <p><strong>symHz</strong> : force Hermitian symetry with zero padding &#8211;&gt; FHsignal</p>
 <p><strong>align</strong> : align two FUsignal on a same frequency base</p>
 <p><strong>enthrsh</strong> : Energy thresholding thresh = 99.99 %</p>
@@ -838,7 +923,7 @@ tau1 : additional delay</p>
 <p><strong>plotri</strong> : plot real part and imaginary part</p>
 <p><strong>plotdB</strong> : plot modulus in dB</p>
 <p><strong>get</strong> : get k th ray</p>
-<p class="last"><strong>chantap</strong> : calculates channel taps</p>
+<p class="last"><strong>tap</strong> : calculates channel taps</p>
 </td>
 </tr>
 </tbody>
@@ -857,36 +942,6 @@ align : align two FUsignal on a same base</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span>  <span class="o">=</span> <span class="n">i1</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.signal.bsignal.FUsignal.chantap">
-<tt class="descname">chantap</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.chantap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.chantap" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate channel tap</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
-<blockquote>
-<div><p>center frequency GHz</p>
-</div></blockquote>
-<p><strong>WGHz</strong> :  float</p>
-<blockquote>
-<div><p>bandwidth GHz</p>
-</div></blockquote>
-<p><strong>Ntap</strong> :  number of taps</p>
-<p><strong>baseband</strong> : boolean</p>
-<blockquote class="last">
-<div><p>default : True</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>see [Tse] <a class="reference external" href="http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf">http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf</a>
-page 26</p>
 </dd></dl>
 
 <dl class="method">
@@ -919,7 +974,7 @@ N : int</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>axis</strong> : (default 0)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axis</strong> : (default 0)</p>
 <p><strong>Friis</strong> :  c/(4 pi fGHz)</p>
 <p><strong>mode</strong> : string</p>
 <blockquote class="last">
@@ -932,8 +987,6 @@ N : int</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span>   <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">En1</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">E</span>   <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">En2</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span><span class="p">((</span><span class="n">En1</span><span class="o">&gt;</span><span class="mf">0.99</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">En1</span><span class="o">&lt;</span><span class="mf">1.01</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -947,13 +1000,13 @@ N : int</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>thresh</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>thresh</strong> : float</p>
 <blockquote>
 <div><p>threshold in percentage (default 99.99)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>EMH2</strong> : cumul energie H</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>EMH2</strong> : cumul energie H</p>
 </td>
 </tr>
 </tbody>
@@ -968,7 +1021,7 @@ N : int</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>k</strong> : indes to get</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>k</strong> : indes to get</td>
 </tr>
 </tbody>
 </table>
@@ -981,7 +1034,7 @@ N : int</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Npt</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Npt</strong> : int</p>
 <blockquote class="last">
 <div><p>default -1 (same number as x)</p>
 </div></blockquote>
@@ -999,7 +1052,7 @@ N : int</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> : Number of zeros (-1) No forcing</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : Number of zeros (-1) No forcing</p>
 <p><strong>ffts</strong> : 0 (no fftshift 1:fftshift)</p>
 <p><strong>&gt;&gt;&gt; e  = EnImpulse()</strong> :</p>
 <p><strong>&gt;&gt;&gt; E  = e.fft()</strong> :</p>
@@ -1030,7 +1083,7 @@ N : int</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>df</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>df</strong> :</p>
 <p><strong>Returns</strong> :</p>
 <p><strong>&#8212;&#8212;-</strong> :</p>
 <blockquote class="last">
@@ -1067,7 +1120,7 @@ y is a 2D array</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>parity</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parity</strong> : integer</p>
 <blockquote>
 <div><p>0 even 1 odd</p>
 </div></blockquote>
@@ -1088,13 +1141,13 @@ y is a 2D array</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> :  int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> :  int</p>
 <blockquote>
 <div><p>Number of zero above f[-1]</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>SH</strong> : FHsignal</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>SH</strong> : FHsignal</p>
 </td>
 </tr>
 </tbody>
@@ -1110,8 +1163,8 @@ y is a 2D array</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">N</span>     <span class="o">=</span> <span class="mi">11</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span>    <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span>    <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span>    <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="mi">1j</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span>    <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="mi">1j</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span><span class="p">))</span>
@@ -1123,6 +1176,36 @@ y is a 2D array</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.tap">
+<tt class="descname">tap</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.tap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.tap" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate channel tap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
+<blockquote>
+<div><p>center frequency GHz</p>
+</div></blockquote>
+<p><strong>WGHz</strong> :  float</p>
+<blockquote>
+<div><p>bandwidth GHz</p>
+</div></blockquote>
+<p><strong>Ntap</strong> :  number of taps</p>
+<p><strong>baseband</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default : True</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>see [Tse] <a class="reference external" href="http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf">http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf</a>
+page 26</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.signal.bsignal.FUsignal.window">
 <tt class="descname">window</tt><big>(</big><em>win='hamming'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.window" title="Permalink to this definition">¶</a></dt>
 <dd><p>windowing of FU signal</p>
@@ -1130,7 +1213,7 @@ y is a 2D array</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>win</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>win</strong> : string</p>
 <blockquote class="last">
 <div><p>window type (&#8216;hamming&#8217;,&#8217;blackman&#8217;,&#8217;hanning&#8217;)</p>
 </div></blockquote>
@@ -1174,9 +1257,9 @@ y is a 2D array</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>N</strong> : int</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N</strong> : int</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>FUsignal</strong> :</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>FUsignal</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -1186,7 +1269,7 @@ y is a 2D array</p>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.MaskImpulse">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">MaskImpulse</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>fc=4</em>, <em>band=3</em>, <em>thresh=10</em>, <em>Tp=100</em>, <em>Pm=-41.3</em>, <em>R=50</em>, <em>fe=100</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#MaskImpulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.MaskImpulse" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">MaskImpulse</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>fc=4</em>, <em>band=3</em>, <em>thresh=10</em>, <em>Tp=100</em>, <em>Pm=-41.3</em>, <em>R=50</em>, <em>fe=100</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#MaskImpulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.MaskImpulse" title="Permalink to this definition">¶</a></dt>
 <dd><p>MaskImpulse : Create an Energy normalized Gaussian impulse (Usignal)</p>
 <blockquote>
 <div>fc     (GHz)   (def = 4GHz)
@@ -1221,7 +1304,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.TBsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">TBsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TBsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TBsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">TBsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TBsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TBsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Based signal in Time domain</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.TBsignal.b2u">
@@ -1231,13 +1314,13 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>N</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N</strong> : integer</p>
 <blockquote>
 <div><p>Number of points</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>U</strong> : TUsignal</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>U</strong> : TUsignal</p>
 </td>
 </tr>
 </tbody>
@@ -1271,7 +1354,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>unit1</strong> : actual unit of data</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>unit1</strong> : actual unit of data</p>
 <p class="last"><strong>unit2</strong> : unit for display</p>
 </td>
 </tr>
@@ -1300,7 +1383,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tau</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau</strong> : float</p>
 <blockquote class="last">
 <div><p>delay for translation</p>
 </div></blockquote>
@@ -1331,13 +1414,13 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.TUDsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">TUDsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>tau=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TUDsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUDsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">TUDsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>tau=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TUDsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUDsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uniform signal in Time domain with delay</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
 <p><strong>y</strong> : ndarray</p>
 <p><strong>tau</strong> : float or ndarray</p>
 <p><strong>.. todo::</strong> :</p>
@@ -1356,7 +1439,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>N</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N</strong> : int</p>
 <blockquote class="last">
 <div><p>number of y signal to plot</p>
 </div></blockquote>
@@ -1370,7 +1453,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.TUsignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">TUsignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TUsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">TUsignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TUsignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uniform signal in Time domain</p>
 <p>This class inheritates from TBsignal and Usignal</p>
 <dl class="method">
@@ -1381,7 +1464,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>toa</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>toa</strong> : float</p>
 <blockquote>
 <div><p>delay value</p>
 </div></blockquote>
@@ -1396,7 +1479,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <p><strong>dB</strong> : Boolean</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Efirst</strong> : Energy amount in the window (in dB if dB)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Efirst</strong> : Energy amount in the window (in dB if dB)</p>
 </td>
 </tr>
 </tbody>
@@ -1411,7 +1494,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tau0</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau0</strong> :</p>
 <p><strong>Sx</strong> :</p>
 <p><strong>Sy</strong> :</p>
 <p class="last"><strong>dB</strong> :</p>
@@ -1429,7 +1512,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>nint</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nint</strong> :</p>
 <p class="last"><strong>E0</strong> :</p>
 </td>
 </tr>
@@ -1445,7 +1528,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tau0</strong> : Time of flight</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau0</strong> : Time of flight</p>
 <p><strong>Tint</strong> :</p>
 <p><strong>sym</strong> :</p>
 <p class="last"><strong>dB</strong> : if True return value in dBnJ</p>
@@ -1464,7 +1547,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Tint: float</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tint: float</strong> :</p>
 <blockquote>
 <div><p>Integration time (ns) default 1</p>
 </div></blockquote>
@@ -1497,7 +1580,7 @@ sym    = 0.25</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>N</strong> : 10</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N</strong> : 10</td>
 </tr>
 </tbody>
 </table>
@@ -1511,7 +1594,7 @@ sym    = 0.25</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tau0</strong> : (ns)            (0)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau0</strong> : (ns)            (0)</p>
 <p><strong>Tint</strong> : Integration time (ns)   (1) include the system error</p>
 <p><strong>sym</strong> : symetrie factor 0.5 = symetric (0.25)</p>
 <p class="last"><strong>dB</strong> : logscale indicator (True)</p>
@@ -1529,7 +1612,7 @@ sym    = 0.25</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tau0</strong> : start value for integration</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau0</strong> : start value for integration</p>
 <p><strong>dB</strong> : (False default) if True value in dB</p>
 <p><strong>usage  :</strong> :</p>
 <blockquote class="last">
@@ -1549,7 +1632,7 @@ sym    = 0.25</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tau</strong> : (ns)            (0)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau</strong> : (ns)            (0)</p>
 <p><strong>Tint</strong> : Integration time (ns)   (1) include the system error</p>
 <p><strong>sym</strong> : symetrie factor 0.5 = symetric (0.25)</p>
 <p class="last"><strong>dB</strong> : logscale indicator (True)</p>
@@ -1567,7 +1650,7 @@ sym    = 0.25</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>N</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N</strong> : integer</p>
 <blockquote class="last">
 <div><p>number of additinal zero values</p>
 </div></blockquote>
@@ -1589,7 +1672,7 @@ sym    = 0.25</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>N</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N</strong> : integer</p>
 <blockquote class="last">
 <div><p>number of additinal zero values</p>
 </div></blockquote>
@@ -1637,7 +1720,7 @@ This calculus is then a minorant of the received energy.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s</strong> : TUsignal</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> : TUsignal</p>
 <p><strong>normalized</strong> : boolean</p>
 <blockquote class="last">
 <div><p>default True</p>
@@ -1656,7 +1739,7 @@ This calculus is then a minorant of the received energy.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>sigma</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigma</strong> : float</p>
 <blockquote class="last">
 <div><p>standard deviation of Gaussian</p>
 </div></blockquote>
@@ -1705,7 +1788,7 @@ environments : Neelesh Metha, Andreas Molish, Lary Greenstein</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Tnoise     :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tnoise     :</strong> :</p>
 <blockquote>
 <div><p>Time duration of noise only portion (default=5ns)</p>
 </div></blockquote>
@@ -1731,7 +1814,7 @@ environments : Neelesh Metha, Andreas Molish, Lary Greenstein</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>ecdf , vary</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ecdf , vary</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -1751,7 +1834,7 @@ mode : string</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>FHsignal</strong> : if mode == &#8216;bilateral&#8217;</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>FHsignal</strong> : if mode == &#8216;bilateral&#8217;</p>
 <p class="last"><strong>FUsignal</strong> : if mode == &#8216;unilateral&#8217;</p>
 </td>
 </tr>
@@ -1771,13 +1854,13 @@ mode : string</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>shift</strong> : boolean</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>shift</strong> : boolean</p>
 <blockquote>
 <div><p>default False</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>FHsignal</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>FHsignal</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -1801,7 +1884,7 @@ mode : string</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>FHsignal</strong> : Frequency signal with hermitian symmetry</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>FHsignal</strong> : Frequency signal with hermitian symmetry</td>
 </tr>
 </tbody>
 </table>
@@ -1820,13 +1903,13 @@ sampling period.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>order</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>order</strong> : int</p>
 <p><strong>wp</strong> : float</p>
 <p><strong>ws</strong> : float</p>
 <p><strong>ftype</strong> : string</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>O</strong> : Output filetered TUsignal</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>O</strong> : Output filetered TUsignal</p>
 </td>
 </tr>
 </tbody>
@@ -1863,7 +1946,7 @@ sampling period.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>R</strong> : Resistance (default 50 Ohms)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>R</strong> : Resistance (default 50 Ohms)</p>
 <p><strong>Tpns</strong> : real</p>
 <blockquote>
 <div><p>PRP (default 100 ns)</p>
@@ -1886,7 +1969,7 @@ sampling period.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
 <blockquote>
 <div><p>long file name if outdir is []
 short file name is outdir is &lt;&gt; []</p>
@@ -1918,7 +2001,7 @@ y is a 2D array</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>x_new</strong> : ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x_new</strong> : ndarray</p>
 <p><strong>kind</strong> : string</p>
 <blockquote class="last">
 <div><p>&#8216;linear&#8217; <a href="#id2"><span class="problematic" id="id3">|</span></a>&#8216;spline&#8217;</p>
@@ -1939,7 +2022,7 @@ multiple of the time step dx.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>tau</strong> : float</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tau</strong> : float</td>
 </tr>
 </tbody>
 </table>
@@ -1947,13 +2030,13 @@ multiple of the time step dx.</p>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.TUsignal.show">
-<tt class="descname">show</tt><big>(</big><em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span>, <em>display=True</em>, <em>PRPns=100</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TUsignal.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em>, <span class="optional">[</span><span class="optional">]</span><em>display=True</em>, <em>PRPns=100</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TUsignal.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show psd</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
 <p><strong>ax</strong> :</p>
 <p class="last"><strong>display</strong> :</p>
 </td>
@@ -1980,7 +2063,7 @@ multiple of the time step dx.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
 <p class="last"><strong>tau0</strong> : float</p>
 </td>
 </tr>
@@ -1996,7 +2079,7 @@ multiple of the time step dx.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>alpha :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha :</strong> :</p>
 <p class="last"><strong>tau0 :</strong> :</p>
 </td>
 </tr>
@@ -2044,7 +2127,7 @@ multiple of the time step dx.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>nint</strong> : integer</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nint</strong> : integer</td>
 </tr>
 </tbody>
 </table>
@@ -2095,7 +2178,7 @@ multiple of the time step dx.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>w</strong> : parameter between 0 and 100</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>w</strong> : parameter between 0 and 100</p>
 <p class="last"><strong>Lei takes w = 9</strong> :</p>
 </td>
 </tr>
@@ -2107,7 +2190,7 @@ multiple of the time step dx.</p>
 
 <dl class="class">
 <dt id="pylayers.signal.bsignal.Usignal">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">Usignal</tt><big>(</big><em>x=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>y=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Usignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Usignal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.bsignal.</tt><tt class="descname">Usignal</tt><big>(</big><em>x=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>y=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Usignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Usignal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal with an embedded uniform Base</p>
 <p>This class inheritate from Bsignal. The only difference
 is that the x base is supposed to be uniform</p>
@@ -2119,7 +2202,7 @@ is that the x base is supposed to be uniform</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>Usignal</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Usignal</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -2136,9 +2219,9 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>u2</strong> : TUsignal</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>u2</strong> : TUsignal</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>TUsignal y extended TU signal, x bases are adjusted</strong> :</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>TUsignal y extended TU signal, x bases are adjusted</strong> :</td>
 </tr>
 </tbody>
 </table>
@@ -2175,15 +2258,21 @@ This function can be improved regarding time granularity</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Usignal.energy">
 <tt class="descname">energy</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Usignal.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Usignal.energy" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate the energy of an  Usignal</p>
+<dd><p>calculate the energy of an Usignal</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>energy</strong> : float</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>energy</strong> : float</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.Usignal.eprfl">
+<tt class="descname">eprfl</tt><big>(</big><em>axis=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Usignal.eprfl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Usignal.eprfl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Energy profile</p>
 </dd></dl>
 
 <dl class="method">
@@ -2194,7 +2283,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : float</p>
 <blockquote>
 <div><p>expansion factor</p>
 </div></blockquote>
@@ -2216,7 +2305,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>m</strong> : maximum value of self.y</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>m</strong> : maximum value of self.y</td>
 </tr>
 </tbody>
 </table>
@@ -2230,7 +2319,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>m</strong> : maximum value of self.y</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>m</strong> : maximum value of self.y</td>
 </tr>
 </tbody>
 </table>
@@ -2244,7 +2333,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>start</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>start</strong> : float</p>
 <p><strong>stop</strong> : float</p>
 <p class="last"><strong>dx</strong> : float</p>
 </td>
@@ -2266,11 +2355,11 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>posmin</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>posmin</strong> : float</p>
 <p><strong>posmax</strong> : float</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Usignal</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Usignal</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -2286,7 +2375,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>w</strong> : float</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>w</strong> : float</td>
 </tr>
 </tbody>
 </table>
@@ -2300,7 +2389,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>xmin</strong> : float</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xmin</strong> : float</td>
 </tr>
 </tbody>
 </table>
@@ -2314,7 +2403,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>xmin</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xmin</strong> : float</p>
 <p class="last"><strong>xmax</strong> : float</p>
 </td>
 </tr>
@@ -2341,7 +2430,7 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>xmax</strong> : float</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xmax</strong> : float</td>
 </tr>
 </tbody>
 </table>
@@ -2379,7 +2468,7 @@ This function can be improved regarding time granularity</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

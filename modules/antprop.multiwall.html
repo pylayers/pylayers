@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="antprop" href="antprop.html" />
-    <link rel="next" title="coverage" href="antprop.coverage.html" />
+    <link rel="next" title="mobility" href="mobility.html" />
     <link rel="prev" title="signature" href="antprop.signature.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="antprop.coverage.html" title="coverage"
+          <a href="mobility.html" title="mobility"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="antprop.signature.html" title="signature"
@@ -62,8 +62,8 @@
   <p class="topless"><a href="antprop.signature.html"
                         title="previous chapter">signature</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="antprop.coverage.html"
-                        title="next chapter">coverage</a></p>
+  <p class="topless"><a href="mobility.html"
+                        title="next chapter">mobility</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -160,7 +160,7 @@ ymin ymax Ny</p>
 </table>
 <p class="rubric">Notes</p>
 <div class="math">
-<p><img src="../_images/math/2df8c3656389be19f96db58058672baafa8f1d09.png" alt="\nu = h \sqrt{\frac{2}{\lambda} \frac{d_1+d_2}{d_1 d_2}}"/></p>
+<p><img src="../_images/math/8810510db7559caf817519cbb5d68f668de2bbd7.png" alt="\nu = h \sqrt{\frac{2}{\lambda} \frac{d_1+d_2}{d_1 d_2}}"/></p>
 </div></dd></dl>
 
 <dl class="function">
@@ -306,10 +306,7 @@ segment 1 :</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/antprop-multiwall-1.py">Source code</a>, <a class="reference external" href="../modules/antprop-multiwall-1.png">png</a>, <a class="reference external" href="../modules/antprop-multiwall-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-multiwall-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/antprop-multiwall-1.png" src="../_images/antprop-multiwall-1.png" />
-</div>
+<p>(<a class="reference external" href="../modules/antprop-multiwall-1.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="function">
@@ -501,7 +498,7 @@ segment 1 :</p>
 </table>
 <p class="rubric">Notes</p>
 <div class="math">
-<p><img src="../_images/math/b9f2bf4fa6852050f5c80f32306007a4fb189997.png" alt="PL_0 = -20 log_{10}(\frac{\lambda}{4\pi}) - GtdB -GrdB"/></p>
+<p><img src="../_images/math/0a9355cc8bba099988c9676edad573df9a5140c4.png" alt="PL_0 = -20 log_{10}(\frac{\lambda}{4\pi}) - GtdB -GrdB"/></p>
 </div><p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span>  <span class="o">=</span> <span class="mf">2.4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
@@ -518,7 +515,7 @@ segment 1 :</p>
 
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.visuPts">
-<tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">visuPts</tt><big>(</big><em>S</em>, <em>nu</em>, <em>nd</em>, <em>Pts</em>, <em>Values</em>, <em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>sp=</em><span class="optional">[</span><span class="optional">]</span>, <em>vmin=0</em>, <em>vmax=-1</em>, <em>label=' '</em>, <em>tit=''</em>, <em>size=25</em>, <em>colbar=True</em>, <em>xticks=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#visuPts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.visuPts" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">visuPts</tt><big>(</big><em>S</em>, <em>nu</em>, <em>nd</em>, <em>Pts</em>, <em>Values</em>, <em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>sp=</em>, <span class="optional">[</span><span class="optional">]</span><em>vmin=0</em>, <em>vmax=-1</em>, <em>label=' '</em>, <em>tit=''</em>, <em>size=25</em>, <em>colbar=True</em>, <em>xticks=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#visuPts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.visuPts" title="Permalink to this definition">¶</a></dt>
 <dd><p>visuPt  : Visualization of values a given points</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -547,7 +544,7 @@ segment 1 :</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="antprop.coverage.html" title="coverage"
+          <a href="mobility.html" title="mobility"
              >next</a></li>
         <li class="right" >
           <a href="antprop.signature.html" title="signature"
@@ -564,7 +561,7 @@ segment 1 :</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

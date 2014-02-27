@@ -250,23 +250,24 @@ is truncated so that there are as many values as names.</p>
 or None if the user cancels the operation.</p>
 <p>Here is some example code, that shows how values returned from
 multenterbox can be checked for validity before they are accepted:</p>
-<div class="highlight-python"><pre>----------------------------------------------------------------------
-msg = "Enter your personal information"
-title = "Credit Card Application"
-fieldNames = ["Name","Street Address","City","State","ZipCode"]
+<div class="highlight-python"><div class="highlight"><pre>----------------------------------------------------------------------
+msg = &quot;Enter your personal information&quot;
+title = &quot;Credit Card Application&quot;
+fieldNames = [&quot;Name&quot;,&quot;Street Address&quot;,&quot;City&quot;,&quot;State&quot;,&quot;ZipCode&quot;]
 fieldValues = []  # we start with blanks for the values
 fieldValues = multenterbox(msg,title, fieldNames)
 
 # make sure that none of the fields was left blank
 while 1:
     if fieldValues == None: break
-    errmsg = ""
+    errmsg = &quot;&quot;
     for i in range(len(fieldNames)):
-        if fieldValues[i].strip() == "":
-            errmsg += ('"%s" is a required field.\n\n' % fieldNames[i])
-    if errmsg == "":
+        if fieldValues[i].strip() == &quot;&quot;:
+            errmsg += (&#39;&quot;%s&quot; is a required field.\n\n&#39; % fieldNames[i])
+    if errmsg == &quot;&quot;:
         break # no problems found
-    fieldValues = multenterbox(errmsg, title, fieldNames, fieldValues)</pre>
+    fieldValues = multenterbox(errmsg, title, fieldNames, fieldValues)
+</pre></div>
 </div>
 </dd></dl>
 
@@ -280,11 +281,12 @@ enterbox when it is displayed.</p>
 <p>By default, enterbox strips its result (i.e. removes leading and trailing
 whitespace).  (If you want it not to strip, use keyword argument: strip=False.)
 This makes it easier to test the results of the call:</p>
-<div class="highlight-python"><pre>reply = enterbox(....)
+<div class="highlight-python"><div class="highlight"><pre>reply = enterbox(....)
 if reply:
     ...
 else:
-    ...</pre>
+    ...
+</pre></div>
 </div>
 </dd></dl>
 
@@ -508,7 +510,7 @@ the store operation will fail.</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

@@ -87,136 +87,6 @@
             
   <div class="section" id="person">
 <span id="id1"></span><h1>Person<a class="headerlink" href="#person" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-pylayers.mobility.transit.Person"></span><dl class="class">
-<dt>
-<tt class="descname">Person(ID=0, interval=0.05, roomId=-1, L=[], net=Network information</tt></dt>
-<dt>
-<tt class="descname">*******************</tt></dt>
-<dt>
-<tt class="descname">number of agents: 0</tt></dt>
-<dt>
-<tt class="descname">[]</tt></dt>
-<dt>
-<tt class="descname"></tt></dt>
-<dt>
-<tt class="descname">0 Mobile Agents</tt></dt>
-<dt>
-<tt class="descname">-------------</tt></dt>
-<dt>
-<tt class="descname">Agents IDs : []</tt></dt>
-<dt>
-<tt class="descname"></tt></dt>
-<dt>
-<tt class="descname">0 Access points</tt></dt>
-<dt>
-<tt class="descname">-------------</tt></dt>
-<dt>
-<tt class="descname">number of access point  :</tt></dt>
-<dt>
-<tt class="descname">access points  IDs : []</tt></dt>
-<dt>
-<tt class="descname">, wld=&lt;pylayers.mobility.transit.World.World instance at 0x12fd9998&gt;, sim=None, moving=True, froom=[], wait=1.0, cdest='random', save=[])</tt></dt>
-<dd><p>Person Process</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>ID</strong> : float/hex/str/...</p>
-<blockquote>
-<div><p>agent Id</p>
-</div></blockquote>
-<p><strong>interval</strong> : float</p>
-<blockquote>
-<div><p>refresh interval of agent mobility</p>
-</div></blockquote>
-<p><strong>roomId</strong> : int</p>
-<blockquote>
-<div><p>room ID where agent start when simulation is launched</p>
-</div></blockquote>
-<p><strong>L</strong> : pylayers.gis.layout.Layout()</p>
-<blockquote>
-<div><p>Layout instance, in which the agent is moving</p>
-</div></blockquote>
-<p><strong>net</strong> : pylayers.network.Network()</p>
-<blockquote>
-<div><p>Network instance, in which network agent are communicating.
-This is used for fill the true position filed of the graph
-It must be removed in a further version ( when a proper save instance
-would be created)</p>
-</div></blockquote>
-<p><strong>wld</strong> : pylayers.mobility.transit.world.world()</p>
-<blockquote>
-<div><p>world instance. equivalent to layout but in the pytk framework. 
-TODO : remove in a further version</p>
-</div></blockquote>
-<p><strong>sim</strong> : SimPy.Simulation.Simulation.RT()</p>
-<blockquote>
-<div><p>Simulation instance share by all the pylayer project.</p>
-</div></blockquote>
-<p><strong>moving</strong> : bool</p>
-<blockquote>
-<div><p>indicate if the agent is moving or not ( relevant for acces poitns)</p>
-</div></blockquote>
-<p><strong>froom</strong> : list</p>
-<blockquote>
-<div><p>list of forbiden rooms.</p>
-</div></blockquote>
-<p><strong>wait</strong> : float</p>
-<blockquote>
-<div><p>wait time of the agent when he has reach teh desitaion</p>
-</div></blockquote>
-<p><strong>cdest</strong> : str</p>
-<blockquote>
-<div><p>method for choosing setination &#8216;random &#8216; of file read</p>
-</div></blockquote>
-<p><strong>save</strong> : list</p>
-<blockquote>
-<div><p>list of save option type .
-It will be removed in a further version ( when a proper save instance
-would be created)</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first last"><strong>Move</strong> : make the agent move</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.mobility.transit.Person.Person.delete">
-<tt class="descclassname">Person.</tt><tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#Person.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.Person.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>delete boid from world.tk</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.mobility.transit.Person.Person.move">
-<tt class="descclassname">Person.</tt><tt class="descname">move</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#Person.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.Person.move" title="Permalink to this definition">¶</a></dt>
-<dd><p>Move the Agent</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.mobility.transit.Person.scale">
-<tt class="descclassname">pylayers.mobility.transit.Person.</tt><tt class="descname">scale</tt><big>(</big><em>self</em>, <em>size</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.scale" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pylayers.mobility.transit.Person.truncate">
-<tt class="descclassname">pylayers.mobility.transit.Person.</tt><tt class="descname">truncate</tt><big>(</big><em>self</em>, <em>max</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#truncate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.truncate" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>max</strong> :</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">References</p>
-<p>&#8220;near collision avoidance&#8221; inspired from
-<a class="reference external" href="http://people.revoledu.com/kardi/publication/Kouchi2001.pdf">http://people.revoledu.com/kardi/publication/Kouchi2001.pdf</a></p>
-</dd></dl>
-
 </div>
 
 
@@ -246,7 +116,7 @@ would be created)</p>
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
