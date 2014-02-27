@@ -577,7 +577,7 @@ class Layout(object):
 
         self.pt[0,:]= np.array([self.Gs.pos[k][0] for k in upnt])  
         self.pt[1,:]= np.array([self.Gs.pos[k][1] for k in upnt]) 
-        
+
 
         self.pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
 
@@ -6595,6 +6595,7 @@ class Layout(object):
 #            else:
 #                core = self.ce[subseg[i-en]][0]
 #                name = sl.di[core]
+
             colname = sl[name]['color']
             colhex = cold[colname]
             col = pyu.rgb(colhex) / 255.
@@ -6659,6 +6660,7 @@ class Layout(object):
 
         ik   = 0
         dikn = {}
+        
         for i in self.Gs.node.keys():
             if i > 0:  # segment
                 if self.Gs.node[i]['name']<>'AIR':
@@ -6679,10 +6681,12 @@ class Layout(object):
                     
                     dikn[ik]=i
                     ik = ik + 1
+
                 else:
+                    
                     en = en-1
 
-        
+
         # d = self.subseg()
         # k : ss_name v: seg number 
         cpt = 0
@@ -6719,17 +6723,33 @@ class Layout(object):
                 ik = ik + 1
 
         npt = 4 * (en + cen)
+        npt_s = (en + cen) 
 
-        points = np.hstack((P1,P2))
-        points = np.hstack((points,P3))
-        points = np.hstack((points,P4))
+        points = np.hstack((P1[:,0:npt_s],P2[:,0:npt_s]))
+        points = np.hstack((points,P3[:,0:npt_s]))
+        points = np.hstack((points,P4[:,0:npt_s]))
         points=points.T
-        boxes=np.empty((npt/4,4))
+        boxes=np.empty((npt/4,4),dtype='int')
         b = np.arange(npt/4)
         boxes[:,0]=b
-        boxes[:,1]=b+(en + cen)
-        boxes[:,2]=b+2*(en + cen)
-        boxes[:,3]=b+3*(en + cen)
+        boxes[:,1]=b+npt_s
+        boxes[:,2]=b+2*npt_s
+        boxes[:,3]=b+3*npt_s
+
+        # manage floor
+        floorx= np.array((points[:,0].min(),points[:,0].max()))
+        floory= np.array((points[:,1].min(),points[:,1].max()))
+        zmin= np.min(points[:,2])
+        Pf = np.array([floorx[0],floory[0],zmin])
+        Pf = np.vstack((Pf,np.array([floorx[0],floory[1],zmin]))) 
+        Pf = np.vstack((Pf,np.array([floorx[1],floory[1],zmin]))) 
+        Pf = np.vstack((Pf,np.array([floorx[1],floory[0],zmin]))) 
+
+        points = np.vstack((points,Pf))
+        bf =np.arange(npt,npt+4)
+        boxes = np.vstack((boxes,bf))
+
+        
 
 
         
@@ -6762,9 +6782,17 @@ class Layout(object):
             colname = sl[name]['color']
             colhex = cold[colname]
             color[i,:] = pyu.rgb(colhex) / 255.
+            color[i+npt_s,:] = pyu.rgb(colhex) / 255.
+            color[i+2*npt_s,:] = pyu.rgb(colhex) / 255.
+            color[i+3*npt_s,:] = pyu.rgb(colhex) / 255.
 
 
 
+        colname = sl['FLOOR']['color']
+        colhex = cold[colname]
+        colf = np.repeat((pyu.rgb(colhex) / 255.)[np.newaxis,:],4,axis=0)
+        color = np.vstack((color,colf))
+        
         mesh = tvtk.PolyData(points=points, polys=boxes)
         mesh.point_data.scalars = color
         mesh.point_data.scalars.name = 'scalars'
