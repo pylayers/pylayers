@@ -6604,7 +6604,7 @@ class Layout(object):
         fos.close()
         return pg 
 
-    def mayafile(self,centered=True,show=True):
+    def _show3(self,centered=True,show=True):
         """ create a .off geomview file 
 
         Parameters
@@ -6669,7 +6669,7 @@ class Layout(object):
                     n2 = nebr[1]
                     P1[0:2, ik] = np.array(self.Gs.pos[n1])-pg
                     P1[2, ik] = self.Gs.node[i]['z'][0]
-                    
+
                     P2[0:2, ik] = np.array(self.Gs.pos[n1])-pg
                     P2[2, ik] = self.Gs.node[i]['z'][1]
 
@@ -6678,12 +6678,12 @@ class Layout(object):
 
                     P4[0:2, ik] = np.array(self.Gs.pos[n2])-pg
                     P4[2, ik] = self.Gs.node[i]['z'][0]
-                    
+
                     dikn[ik]=i
                     ik = ik + 1
 
                 else:
-                    
+
                     en = en-1
 
 
@@ -6781,20 +6781,25 @@ class Layout(object):
 
             colname = sl[name]['color']
             colhex = cold[colname]
-            color[i,:] = pyu.rgb(colhex) / 255.
-            color[i+npt_s,:] = pyu.rgb(colhex) / 255.
-            color[i+2*npt_s,:] = pyu.rgb(colhex) / 255.
-            color[i+3*npt_s,:] = pyu.rgb(colhex) / 255.
+            color[i,:] = pyu.rgb(colhex) 
+            color[i+npt_s,:] = pyu.rgb(colhex) 
+            color[i+2*npt_s,:] = pyu.rgb(colhex) 
+            color[i+3*npt_s,:] = pyu.rgb(colhex) 
 
 
 
         colname = sl['FLOOR']['color']
         colhex = cold[colname]
-        colf = np.repeat((pyu.rgb(colhex) / 255.)[np.newaxis,:],4,axis=0)
+        colf = np.repeat((pyu.rgb(colhex))[np.newaxis,:],4,axis=0)
         color = np.vstack((color,colf))
 
+        # trick for correcting  color assignement
+
+        sc=tvtk.UnsignedCharArray()
+        sc.from_array(color)
+
         mesh = tvtk.PolyData(points=points, polys=boxes)
-        mesh.point_data.scalars = color
+        mesh.point_data.scalars = sc
         mesh.point_data.scalars.name = 'scalars'
 
         if show:
