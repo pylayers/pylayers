@@ -6623,16 +6623,16 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> pg = L.geomfile()
+        >>> pg = L.mayafile()
 
         """
-    
+
         # calculate center of gravity
         if centered:
             pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
         else:
             pg = np.array([0,0])
-        
+
         #en  = self.Ns # number of segments
         en  = len(np.where(np.array(self.Gs.node.keys())>0)[0])
         if en != self.Ns:
@@ -6660,7 +6660,7 @@ class Layout(object):
 
         ik   = 0
         dikn = {}
-        
+
         for i in self.Gs.node.keys():
             if i > 0:  # segment
                 if self.Gs.node[i]['name']<>'AIR':
@@ -6792,7 +6792,7 @@ class Layout(object):
         colhex = cold[colname]
         colf = np.repeat((pyu.rgb(colhex) / 255.)[np.newaxis,:],4,axis=0)
         color = np.vstack((color,colf))
-        
+
         mesh = tvtk.PolyData(points=points, polys=boxes)
         mesh.point_data.scalars = color
         mesh.point_data.scalars.name = 'scalars'
@@ -6812,10 +6812,10 @@ class Layout(object):
 
         bdis boolean (default True)
             boolean display (call geowview if True)
-        centered : boolean     
+        centered : boolean
             if True center the layout before display
-        
-        
+
+
         """
 
         pg = self.geomfile(centered=centered)
