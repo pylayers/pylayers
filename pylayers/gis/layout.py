@@ -6604,7 +6604,7 @@ class Layout(object):
         fos.close()
         return pg 
 
-    def mayafile(self,centered=True,show=True):
+    def _show3(self,centered=True,show=True):
         """ create a .off geomview file 
 
         Parameters
@@ -6781,22 +6781,28 @@ class Layout(object):
 
             colname = sl[name]['color']
             colhex = cold[colname]
-            color[i,:] = pyu.rgb(colhex) / 255.
-            color[i+npt_s,:] = pyu.rgb(colhex) / 255.
-            color[i+2*npt_s,:] = pyu.rgb(colhex) / 255.
-            color[i+3*npt_s,:] = pyu.rgb(colhex) / 255.
+            color[i,:] = pyu.rgb(colhex) 
+            color[i+npt_s,:] = pyu.rgb(colhex) 
+            color[i+2*npt_s,:] = pyu.rgb(colhex) 
+            color[i+3*npt_s,:] = pyu.rgb(colhex) 
 
 
 
         colname = sl['FLOOR']['color']
         colhex = cold[colname]
-        colf = np.repeat((pyu.rgb(colhex) / 255.)[np.newaxis,:],4,axis=0)
+        colf = np.repeat((pyu.rgb(colhex))[np.newaxis,:],4,axis=0)
         color = np.vstack((color,colf))
-        
-        mesh = tvtk.PolyData(points=points, polys=boxes)
-        mesh.point_data.scalars = color
-        mesh.point_data.scalars.name = 'scalars'
 
+        # trick for correct color assignement
+        sc=tvtk.UnsignedCharArray()
+        sc.from_array(color)
+        
+        
+       
+        mesh = tvtk.PolyData(points=points, polys=boxes)
+        mesh.point_data.scalars = sc
+        mesh.point_data.scalars.name = 'scalars'
+        
         if show:
             fig = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
             surf = mlab.pipeline.surface(mesh, opacity=1)
