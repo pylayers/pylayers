@@ -1090,6 +1090,8 @@ class Body(object):
         """
 
         intersect = np.zeros((self.ncyl,1))
+        mu = np.zeros((self.ncyl,1))
+        lmd = 0.075
         for k in range (self.ncyl):
             if k not in cyl:
 
@@ -1118,7 +1120,16 @@ class Body(object):
                 if dmin  < self.sl[k,2]:
                     intersect[k]=1
 
+                    
+                if 0 < alpha < 1 and 0 < beta < 1 :
+                    #print 'dmin = ', dmin  
+                    #print 'r = ', self.sl[k,2]  
+                    dAB = np.sqrt(sum((A-B)**2))
+                    if alpha <> 0:
+                        mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
+                 
         return intersect
+        
 
     def body_link(self, topos = True,frameId = 0):
         """
@@ -1148,7 +1159,9 @@ class Body(object):
         for k,link in enumerate(self.links):
             A = self.dcs[link[0]][:,0]
             B = self.dcs[link[1]][:,0]
-            inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])
+
+            inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])[0]
+            
 
             link_vis[k] =  sum(inter)
         return link_vis
@@ -1326,7 +1339,7 @@ def Global_Trajectory(cycle, traj):
 if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()
-    bd = Body(_filemocap='walk.c3d')
+    bd = Body(_filebody='Alex.ini')
     lt = tr.importsn()
     #traj = tr.Trajectory()
     bd.settopos(lt[0],0.3,cs=True)

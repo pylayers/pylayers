@@ -1144,6 +1144,7 @@ class Ctilde(object):
         # Cg2cl should be applied here
         #
 
+
         #t1 = self.Ctt * Fat + self.Cpt * Fap
         #t2 = self.Ctp * Fat + self.Cpp * Fap
         t1 = self.Ctt * Fat + self.Ctp * Fap
@@ -1810,7 +1811,7 @@ class Tchannel(bs.FUDAsignal):
         #  axis 1 : ray
         #  axis 1 : frequency
         #
-        Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=True)
+        Etot = bs.FUsignal.energy(self,axis=1,mode=mode,Friis=Friis)
         if sumray:
             Etot = np.sum(Etot,axis=0)
         return Etot

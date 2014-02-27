@@ -10,6 +10,7 @@ def vsh(A, dsf=1):
 
     Parameters
     ----------
+
     A   :  antenna
     dsf :  int
         down sampling factor  'default 1'
@@ -35,8 +36,12 @@ def vsh(A, dsf=1):
     th = A.theta[::dsf]
     ph = A.phi[::dsf]
 
+    #th = A.theta[::dsf,0]
+    #ph = A.phi[0,::dsf]
+
     nth = len(th)
     nph = len(ph)
+
     nf = A.Nf
 
     if (nph % 2) == 1:

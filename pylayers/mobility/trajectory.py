@@ -233,7 +233,7 @@ class Trajectory(pd.DataFrame):
             's':s[:-1]}
         super(Trajectory,self).__init__(df,columns=['x','y','z','vx','vy','vz','ax','ay','az','s'],index=td[:-2])  
         self.update()
-
+        return self
 
 
     def rescale(self,speedkmph=3):
@@ -463,7 +463,9 @@ def importsn(_filename='pos.csv'):
         y = dt[dtk[3*it+2]].values
         z = np.zeros(len(x)) 
         pt = np.vstack((x,y,z))
-        lt.append(Trajectory(dt['time'].values,pt=pt.T,unit='s'))
+        T=Trajectory()        
+        lt.append(T.generate(t=dt['time'].values,pt=pt.T,unit='s'))
+        
     return(lt)    
 
 def importh5(self,_filename='simulnet_TA-Office.h5'):

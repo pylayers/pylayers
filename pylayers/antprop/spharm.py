@@ -165,7 +165,7 @@ def index_vsh(L, M):
     return(t)
 
 class VectorCoeff(object):
-    
+
     def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
                  ind=np.array([]), k=np.array([])):
 
@@ -177,22 +177,26 @@ class VectorCoeff(object):
 
         if typ == 's1':
             self.inits1(data,ind)
-    
+
     def inits1(self, data, ind):
-        
+        """
+
+        data :
+        ind
+
+        """
         sh = np.shape(data)
         self.s1 = data
         self.ind_s1 = ind
         self.Nf = sh[0]
 
 class SSHCoeff(object):
-    
     def __init__(self, Cx,Cy,Cz):
         """
 
         Parameters
         ----------
-        
+
         Cx : SCoeff
         Cy : SCoeff
         Cz : SCoeff 
@@ -202,13 +206,11 @@ class SSHCoeff(object):
         self.Cx = Cx
         self.Cy = Cy
         self.Cz = Cz
-        
-  
-           
-    def s2tos3(self, threshold=1e-5):
-        
 
-        """ 
+
+
+    def s2tos3(self, threshold=1e-5):
+        """
         convert scalar spherical coefficients from shape 2 to shape 3
 
         Parameters
@@ -224,7 +226,7 @@ class SSHCoeff(object):
         Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0) # integrates energy over freq axis = 0 
         Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
         Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
-        
+
 
         E = Ex + Ey + Ez
 
@@ -241,7 +243,7 @@ class SSHCoeff(object):
         self.Cz.ind3 = self.Cz.ind2[ind]
         self.Cz.s3 = self.Cz.s2[:, ind]
         self.Cz.k2 = ind
-        
+
     def sets3(self,Cx,Cy,Cz):
         """
 
@@ -275,7 +277,6 @@ class SCoeff(object):
     Attributes
     ----------
 
-    
     s2  shape 2   np.array [ Nf x (N+1)*(M+1)   ]
     s3  shape 3   np.array [ Nf x K     ]
     ind [ K x 2]
@@ -284,7 +285,7 @@ class SCoeff(object):
 
     def __init__(self, typ='s2', fmin=0.6, fmax=6,lmax=20,  data=np.array([]),
                  ind=np.array([]), k=np.array([])):
-    
+
     #~ def __init__(self, **kwargs):
         """ init VCoeff
 
@@ -300,7 +301,7 @@ class SCoeff(object):
 
          s2 , s3 containers are created
         """
-        
+
         #~ defaults = { 'typ': 's2',
                     #~ 'fmin' : 0.6,
                     #~ 'fmax' : 6,
@@ -579,6 +580,7 @@ class SCoeff(object):
 
         Parameters
         ----------
+
         typ :  string
             default ('s1')
             's1'  shape 1  (Nf , N , M )
@@ -608,7 +610,8 @@ class SCoeff(object):
                     v = 20 * np.log10(v)
                 p = plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap,
                             linewidth=0, vmin=-seuildb, vmax=0)
-                plt.colorbar()
+                cb = plt.colorbar()
+                cb.set_labe('Level dB')
                 plt.draw()
             else:
                 v = np.abs(self.s1[k, 0:N, 0:M])
@@ -617,11 +620,13 @@ class SCoeff(object):
                     plt.scatter(Mg, Ng, c=vdB, s=30, cmap=cmap, linewidth=0,
                                 vmin=-seuildb, vmax=0)
                     plt.title(titre)
-                    plt.colorbar()
+                    cb = plt.colorbar()
+                    cb.set_labe('Level dB')
                 else:
                     plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap, linewidth=0)
                     plt.title(titre)
-                    plt.colorbar()
+                    cb = plt.colorbar()
+                    cb.set_labe('Level (linear scale)')
 
                 if xl:
                     plt.xlabel('m', fontsize=fontsize)
@@ -1283,13 +1288,13 @@ class VSHCoeff(object):
         N2 : max level
             default (-1 means all values)
 
-        s1 : 
+        s1 :
         """
         self.Bi.s1tos2(N2)
         self.Br.s1tos2(N2)
         self.Ci.s1tos2(N2)
         self.Cr.s1tos2(N2)
-    
+
     def s2tos3_new(self, k):
         """ convert vector spherical coefficient from shape 2 to shape 3
 
