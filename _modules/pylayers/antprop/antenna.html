@@ -170,6 +170,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;S2R2.sh3&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -263,6 +264,7 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;Gauss&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
+
                 <span class="bp">self</span><span class="o">.</span><span class="n">p0</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;p0&#39;</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t0&#39;</span><span class="p">]</span><span class="c">#np.pi/2.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;p3&#39;</span><span class="p">]</span><span class="c">#np.pi/6. # 30 degrees</span>
@@ -488,6 +490,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ph</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> 
+                <span class="n">Fap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> 
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
@@ -825,6 +829,7 @@
             <span class="n">Ftheta</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">th_lin</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">SqG</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">Greal</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">fa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nt</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">ph</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Np</span><span class="p">)</span>
@@ -2351,7 +2356,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="n">_filesh3</span><span class="p">,</span> <span class="s">&#39; does not exist&#39;</span>
 </div>
-<div class="viewcode-block" id="Antenna.savevsh2"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.savevsh2">[docs]</a>    <span class="k">def</span> <span class="nf">savevsh2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.savevsh2"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.savevsh2">[docs]</a>    <span class="k">def</span> <span class="nf">savevsh2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Create a .vsh2 antenna file</span>
@@ -2359,8 +2364,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c"># create vsh2 file</span>
-
-        <span class="n">_filevsh2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.trx&#39;</span><span class="p">,</span> <span class="s">&#39;.vsh2&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">_filevsh2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.trx&#39;</span><span class="p">,</span> <span class="s">&#39;.vsh2&#39;</span><span class="p">)</span>
+            
+        <span class="n">_filevsh2</span>  <span class="o">=</span> <span class="n">filename</span> 
         <span class="n">filevsh2</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filevsh2</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRANT&#39;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filevsh2</span><span class="p">):</span>
