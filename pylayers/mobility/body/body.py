@@ -960,7 +960,7 @@ class Body(object):
                 #T = np.dot(Rbg,Rab)
                 #T = np.eye(3)
                 T  = self.acs[key]
-                geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
+                geo.pattern(Ant.theta[:,np.newaxis],Ant.phi[np.newaxis,:],V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
         # wireframe body
