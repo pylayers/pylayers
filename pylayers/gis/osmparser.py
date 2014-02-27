@@ -13,9 +13,9 @@ import pdb
 
 # classes that handle the OSM data file format.
 class Way(object):
-    """ 
-    
-    A Way is a polyline or a Polycon (if closed)
+    """
+
+    A Way is a polyline or a Polygon (if closed)
 
     typ : 0 Polygon
           1 LineString
@@ -28,13 +28,13 @@ class Way(object):
         p = np.zeros((2, N))
         self.valid = True
         for k, nid in enumerate(refs):
-            try: 
+            try:
                 p[0, k] = coords.xy[nid][0]
                 p[1, k] = coords.xy[nid][1]
             except:
                 self.valid=False
                 break
-        # closed way of open way
+        # closed way or open way
         if self.valid:
             if (N>=4) & (refs[0]==refs[-1]):
                 self.shp = geu.Polygon(p)
@@ -45,7 +45,7 @@ class Way(object):
 
     def __repr__(self):
         st = ''
-        st = st + str(self.tags) + ':' + str(self.refs) 
+        st = st + str(self.tags) + ':' + str(self.refs)
         return(st)
 
     def show(self,fig=[],ax=[]):
@@ -56,6 +56,9 @@ class Way(object):
 
 class Coords(object):
     """
+
+    A Coords is a point
+
     """
     cpt = 0
     latlon = {}
@@ -68,12 +71,12 @@ class Coords(object):
     def __repr__(self):
         st = ''
         for k in self.xy:
-            st = st + str(k)+ ':' + str(self.xy[k])+'\n' 
+            st = st + str(k)+ ':' + str(self.xy[k])+'\n'
         st = st+ 'Ncoords = '+ str(len(self.xy))+'\n'
         return(st)
 
     def clean(self):
-        self.cpt = 0 
+        self.cpt = 0
         self.latlon={}
         self.xy = {}
         self.minlon =1000
@@ -95,8 +98,8 @@ class Coords(object):
         self.boundary=np.array([self.minlat,self.minlon,self.maxlat,self.maxlon])
 
     def cartesian(self):
-        """ Convert Latitude/Longitude in cartesian 
-        
+        """ Convert Latitude/Longitude in cartesian
+
         Returns
         -------
 
@@ -106,7 +109,7 @@ class Coords(object):
         Notes
         -----
 
-        The transformation is centered on the mean of latitude and longitude 
+        The transformation is centered on the mean of latitude and longitude
 
         """
         bd = self.boundary
@@ -120,11 +123,14 @@ class Coords(object):
         for id in self.latlon:
             x, y = m(self.latlon[id][0], self.latlon[id][1])
             self.xy[id]  = np.array([x,y])
-        
+
         return(m)
 
 class Nodes(object):
     """
+
+    osm Nodes container
+
     """
 
     node = {}
@@ -141,7 +147,7 @@ class Nodes(object):
             lat = coords[1]
             self.cpt += 1
 
-    def clean(self):       
+    def clean(self):
         self.node= {}
         self.cpt = 0
 
@@ -153,7 +159,7 @@ class Ways(object):
 
     w
     way
-    cpt 
+    cpt
 
     Methods
     -------
@@ -168,8 +174,8 @@ class Ways(object):
     cpt = 0
 
     def ways(self, ways):
-        """ 
-            general callback function 
+        """
+            general callback function
         """
         for osmid, tags, refs in ways:
                 self.w[osmid] = (refs,tags)
@@ -181,17 +187,17 @@ class Ways(object):
         self.cpt = 0
 
     def building(self, ways):
-        """ 
-            building callback function 
+        """
+            building callback function
         """
         for osmid, tags, refs in ways:
             if 'building' in tags:
                 self.w[osmid] = (refs,tags)
                 self.cpt += 1
-    
+
     def eval(self,coords):
         """
-            convert into a Way object 
+            convert into a Way object
         """
         for osmid in self.w:
             refs = self.w[osmid][0]
@@ -199,8 +205,8 @@ class Ways(object):
             away =  Way(refs,tags,coords)
             if away.valid:
                 self.way[osmid] = away
-    
-    def show(self,fig=[],ax=[],typ=2):
+
+    def show(self,typ=2,**kwargs):
         """ show all way
 
         Parameters
@@ -209,13 +215,23 @@ class Ways(object):
         fig : figure
         ax  : axe
         typ : 0|1|2 (default)
-
+                0 : display only way of typ 0
+                1 : display only way of typ 1
+                2 : display all way (default)
         """
-        if fig==[]:
-            fig = plt.figure()
-        elif ax==[]:
-            ax = fig.gca()
+        if 'fig' not in kwargs:
+            fig = plt.figure(**kwargs)
+        else:
+            fig = kwargs['fig']
 
+        if 'ax' not in kwargs:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
+        #
+        # This a slow way to display all buildings
+        #
         for b in self.way:
             if typ==0:
                 if self.way.typ==0:
@@ -228,6 +244,34 @@ class Ways(object):
 
         plt.axis('scaled')
         return(fig,ax)
+
+    def tomaska(self):
+        """ convert to masked array
+
+        Returns
+        -------
+
+        ptma : masked array
+
+        """
+
+        tpt=np.empty((2,))
+        mask=np.ones((2,))
+
+        for b in self.way:
+            # retrieve PolyGon or LineString
+            shp = self.way[b].shp
+            if type(shp==geu.Polygon):
+                pa = self.way[b].shp.ndarray()
+                Np = np.shape(pa)[1]
+                for ip in range(Np+1):
+                    tpt = np.vstack((tpt,pa[:,ip%Np]))
+                    mask = np.vstack((mask,np.array([[0,0]])))
+                tpt = np.vstack((tpt,np.array([[0,0]])))
+                mask = np.vstack((mask,np.array([[1,1]])))
+
+        vertices = np.ma.masked_array(tpt, mask)
+        return(vertices)
 
     def showold(self,fig=[],ax=[]):
         """ show ways
@@ -262,13 +306,14 @@ class Relations(object):
                 self.relation[osmid]['tags']=tags
                 self.relation[osmid]['members']=member
                 self.cpt = self.cpt+1
-    def clean(self):       
+    def clean(self):
         self.relation= {}
         self.cpt = 0
 
 class FloorPlan(nx.DiGraph):
     """
-    FloorPlan class
+
+    FloorPlan class derived from nx.DigGraph
 
     """
 
@@ -284,7 +329,7 @@ class FloorPlan(nx.DiGraph):
 
         st = str(self.rootid)+'\n'
         levels = nx.neighbors(self,self.rootid)
-        st = st + '---'+'\n' 
+        st = st + '---'+'\n'
         for l in levels:
             nw = len(nx.neighbors(self,l))
             st = st + str(l)+' : '+ str(nw) + '\n'
@@ -294,8 +339,8 @@ class FloorPlan(nx.DiGraph):
 
     def build(self,typ,eid):
         """
-        
-        Notes : recursive construction 
+
+        Notes : recursive construction
 
         """
         if typ=='relation':
@@ -345,33 +390,42 @@ class FloorPlan(nx.DiGraph):
             else:
                 fig,ax = self.show(k,fig=fig,ax=ax)
         return fig,ax
-
+#
+#  Functions
+#     osmparse
+#     getbdg
+#
+#
 def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True):
     """
 
     Parameters
     ----------
 
-    typ : string 
-        floorplan | building 
+    typ : string
+        floorplan | building
     verbose : boolean
         default : False
-    c : boolean 
+    c : boolean
+        read coords
     n : boolean
-    w : boolean 
-    r : boolean 
+        read nodes
+    w : boolean
+        read  ways
+    r : boolean
+        read relations
 
     Returns
     -------
 
-    coords : 
-    nodes  : 
-    ways   : 
+    coords :
+    nodes  :
+    ways   :
     relations :
 
     """
 
-    if c: 
+    if c:
         coords = Coords()
         coords.clean()
         coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
@@ -386,7 +440,7 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
     else:
         coords = None
 
-    if n:    
+    if n:
         nodes = Nodes()
         nodes.clean()
         nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
@@ -401,27 +455,27 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
     else:
         nodes = None
 
-    if w:    
+    if w:
         ways = Ways()
         ways.clean()
         if typ=='building':
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
-        if typ=='floorplan':    
+        if typ=='floorplan':
             ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
         if verbose:
             print "parsing ways"
         ways_parser.parse(filename)
-    
+
         if verbose:
             print str(ways.cpt)
-    
-        # convert lat,lon in cartesian  
+
+        # convert lat,lon in cartesian
         ways.eval(coords)
     else:
         ways = None
 
 
-    if r:    
+    if r:
         relations = Relations()
         relations.clean()
         relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
@@ -429,7 +483,7 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
         if verbose:
             print "parsing relations"
         relations_parser.parse(filename)
-        
+
         if verbose:
             print str(relations.cpt)
     else:
@@ -439,19 +493,29 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
 
 
 def extract(alat,alon,fileosm,fileout):
-    """
+    """ extraction of an osm sub region using osmconvert
+
+    This function takes two (1xn) arrays of latitude an longitude values
+    Calculates extrema of those values.
+    Invokes osmconvert script on a source fileosm and extract the
+    corresponding zone in the fileout file.
+
+    The functions returns a basemap object for coordinates conversion on this
+    file.
 
     Parameters
     ----------
+
     alat : array of latitude (1xn)
     alon : array of longitude (1xn)
-    fileosm : source osm file 
-    filout  : output osm file  
+    fileosm : source osm file
+    filout  : output osm file
 
     Returns
     -------
 
     m : Basemap oject for coordinates conversion
+
 
     """
     latmax = alat.max()
@@ -470,28 +534,29 @@ def extract(alat,alon,fileosm,fileout):
     m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
             resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
 
-    return(m) 
+    return(m)
 
-def getbdg(fileosm,m):
-    """ get building from osm file 
+def getbdg(fileosm):
+    """ get building from osm file
 
-    Parameters 
+    Parameters
     ----------
 
-    fileosm : string 
-    m : Basemap object 
+    fileosm : string
+    m : Basemap object
 
     Returns
     -------
 
-    zone : list of Polygon  
+    zone : list of Polygon
 
     """
 
     coords,nodes,ways,relation,m = osmparse(fileosm,typ='building')
     zone = []
+    pdb.set_trace()
     for w in ways.way:
-        zone.append(Polygon(p))
+        zone.append(w.shp)
     return(zone)
 
 def buildingsparse(filename):

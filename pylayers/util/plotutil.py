@@ -386,7 +386,7 @@ def displot(pt, ph, arrow=False, **kwargs ):
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
-    defaults = { 'arrow' : False } 
+    defaults = { 'arrow' : False }
 
     for key, value in defaults.items():
         if key not in kwargs:
@@ -400,25 +400,38 @@ def displot(pt, ph, arrow=False, **kwargs ):
     if 'fig' not in kwargs:
         fig = plt.gcf()
     else:
-        fig = kwargs['fig'] 
-    
+        fig = kwargs['fig']
+
     if 'ax' not in kwargs:
         ax  = fig.gca()
     else:
-        ax = kwargs['ax'] 
+        ax = kwargs['ax']
 
     Nseg = np.shape(pt)[1]
+
+    # add dummy points
     pz = np.empty((2,))
     pn = np.zeros((2,))
 
+    # pz (dummy take 1: later)
+    # pt[0]
+    # ph[0]
+    # pn
+    # pt[1]
+    # ph[1]
+    # pn
+    #  ..
+    # (3*Nseg+1) x 2
     for i in range(Nseg):
         pz = np.vstack((pz, pt[:, i], ph[:, i], pn))
 
-    m1 = np.array([0, 0, 1])
+    m1   = np.array([0, 0, 1])
     mask = np.kron(np.ones((2, Nseg)), m1)
+    # 2 x 3*2*Np
     pzz = pz[1:, :].T
     vertices = np.ma.masked_array(pzz, mask)
     ax.plot(vertices[0, :], vertices[1, :],**args)
+    # display arrows at both sides
     if arrow:
         ax.scatter(pt[0,:],pt[1,:],marker='s',color='k')
         ax.scatter(ph[0,:],ph[1,:],marker='^',color='k')
@@ -527,7 +540,7 @@ def cylinder(fig,pa,pb,R):
     t = np.arange(0,1,0.05)
     p = pa[:,:,np.newaxis]+t[np.newaxis,np.newaxis,:]*(pb[:,:,np.newaxis]-pa[:,:,np.newaxis])
     ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
-    
+
 
 if (__name__ == "__main__"):
     plt.ion()
