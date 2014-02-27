@@ -26,6 +26,7 @@ def SSHFunc(L, theta,phi):
     return a spherical matrix ((1+L)*(2+L)/2,nth*nph) and the index (l,m) of the shperical harmonics
 
     """
+  
     l = np.arange(0,1+L).reshape(1,(1+L))
     m = np.arange(0,1+L).reshape(((1+L),1))
     # normalize the associated Legendre polynoms

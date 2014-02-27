@@ -172,11 +172,13 @@ class Body(object):
 
 
         self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
+        self.dcyl = {}
         for cyl in di['cylinder'].keys():
             t = di['cylinder'][cyl]['t']
             h = di['cylinder'][cyl]['h']
             r = di['cylinder'][cyl]['r']
             i = di['cylinder'][cyl]['i']
+            self.dcyl[cyl]=i
             #pdb.set_trace()
             #
             # sl : segment list of the body
@@ -314,7 +316,7 @@ class Body(object):
 
         Examples
         --------
-        
+
         .. plot::
             :include-source:
 
@@ -443,8 +445,8 @@ class Body(object):
         for dev in self.dev.keys():
 
             # retrieving antenna placement information from dictionnary ant
-
-            Id = self.dev[dev]['cyl']
+            cylname = self.dev[dev]['cyl']
+            Id = self.dcyl[cylname]
             alpha = self.dev[dev]['a']*np.pi/180.
             l = self.dev[dev]['l']
             h = self.dev[dev]['h']
@@ -958,7 +960,7 @@ class Body(object):
                 #T = np.dot(Rbg,Rab)
                 #T = np.eye(3)
                 T  = self.acs[key]
-                geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
+                geo.pattern(Ant.theta[:,np.newaxis],Ant.phi[np.newaxis,:],V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
         # wireframe body
@@ -1090,6 +1092,8 @@ class Body(object):
         """
 
         intersect = np.zeros((self.ncyl,1))
+        mu = np.zeros((self.ncyl,1))
+        lmd = 0.075
         for k in range (self.ncyl):
             if k not in cyl:
 
@@ -1118,7 +1122,16 @@ class Body(object):
                 if dmin  < self.sl[k,2]:
                     intersect[k]=1
 
+                    
+                if 0 < alpha < 1 and 0 < beta < 1 :
+                    #print 'dmin = ', dmin  
+                    #print 'r = ', self.sl[k,2]  
+                    dAB = np.sqrt(sum((A-B)**2))
+                    if alpha <> 0:
+                        mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
+                 
         return intersect
+        
 
     def body_link(self, topos = True,frameId = 0):
         """
@@ -1148,7 +1161,9 @@ class Body(object):
         for k,link in enumerate(self.links):
             A = self.dcs[link[0]][:,0]
             B = self.dcs[link[1]][:,0]
-            inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])
+
+            inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])[0]
+            
 
             link_vis[k] =  sum(inter)
         return link_vis
@@ -1326,7 +1341,7 @@ def Global_Trajectory(cycle, traj):
 if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()
-    bd = Body(_filemocap='walk.c3d')
+    bd = Body(_filebody='Alex.ini')
     lt = tr.importsn()
     #traj = tr.Trajectory()
     bd.settopos(lt[0],0.3,cs=True)

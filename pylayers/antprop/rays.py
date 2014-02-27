@@ -1017,22 +1017,22 @@ class Rays(dict):
                 #
 
                 # th : ,r
-                th = np.arccos(si[2, 0, :])
+                thd = np.arccos(si[2, 0, :])
 
                 # ph : ,r
-                ph = np.arctan2(si[1, 0, :], si[0, 0, :])
+                phd = np.arctan2(si[1, 0, :], si[0, 0, :])
 
                 # aod : 2 x r  (radians)
-                self[k]['aod'] = np.vstack((th, ph))
+                self[k]['aod'] = np.vstack((thd, phd))
 
                 # eth : 3 x r
-                eth = np.array([np.cos(th) * np.cos(ph),
-                               np.cos(th) * np.sin(ph),
-                                -np.sin(th)])
+                eth = np.array([np.cos(thd) * np.cos(phd),
+                               np.cos(thd) * np.sin(phd),
+                                -np.sin(thd)])
                 # eph : 3 x r
-                eph = np.array([-np.sin(ph),
-                                np.cos(ph),
-                                np.zeros(len(ph))])
+                eph = np.array([-np.sin(phd),
+                                np.cos(phd),
+                                np.zeros(len(phd))])
 
                 # Bo0 : 3 x 2 x r
                 Bo0 = np.concatenate((eth[:, np.newaxis, :],
@@ -1123,20 +1123,20 @@ class Rays(dict):
                 # th : ,r
                 # fix doa/dod reciprocity
                 #th = np.arccos(si[2, -1, :])
-                th = np.arccos(-si[2, -1, :])
+                tha = np.arccos(-si[2, -1, :])
 
                 # th : ,r
                 #ph = np.arctan2(si[1, -1, :], si[0, -1, :])
-                ph = np.arctan2(-si[1, -1, :], -si[0, -1, :])
+                pha = np.arctan2(-si[1, -1, :], -si[0, -1, :])
 
                 # aoa : 2 x r  (radians)
-                self[k]['aoa'] = np.vstack((th, ph))
-                eth = np.array([np.cos(th) * np.cos(ph),
-                               np.cos(th) * np.sin(ph),
-                                -np.sin(th)])
-                eph = np.array([-np.sin(ph),
-                                np.cos(ph),
-                                np.zeros(len(ph))])
+                self[k]['aoa'] = np.vstack((tha, pha))
+                eth = np.array([np.cos(tha) * np.cos(pha),
+                               np.cos(tha) * np.sin(pha),
+                                -np.sin(tha)])
+                eph = np.array([-np.sin(pha),
+                                np.cos(pha),
+                                np.zeros(len(pha))])
                 # Bo0 : 3 x 2 x r
                 BiN = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
@@ -1197,16 +1197,24 @@ class Rays(dict):
                 self[k]['norm'] = np.array(())
                 si = np.sqrt(np.sum((self[0]['pt'][:,0]-self[0]['pt'][:,1])**2,axis=0))
                 self[k]['si'] = np.vstack((si,0.))
-                self[k]['vsi'] = (self[0]['pt'][:,0]-self[0]['pt'][:,1])/si
+                self[k]['vsi'] = (self[0]['pt'][:,1]-self[0]['pt'][:,0])/si
                 self[k]['dis'] = np.array((si))
                 vsi=self[k]['vsi']
-                th = np.arccos(vsi[2])
-                ph = np.arctan2(vsi[1], vsi[0])
-                self[k]['aod'] = np.vstack((th, ph))
+                thd = np.arccos(vsi[2])
+                phd = np.arctan2(vsi[1], vsi[0])
+                self[k]['aod'] = np.vstack((thd, phd))
                 self[k]['Bo0'] = np.array(())
                 self[k]['scpr'] = np.array(())
                 self[k]['theta'] = np.zeros((1,1))
-                self[k]['aoa'] =  np.vstack((th, ph))
+                #
+                # The following derivation of the doa is the actual chosen angle convention
+                # Those angles are relative to natural spherical coordinates system in the gcs of the scene.
+                #
+                # for a LOS path :
+                #  tha = pi - thd
+                #  pha = phd - pi
+                #
+                self[k]['aoa'] =  np.vstack((np.pi-thd, phd-np.pi))
                 E = np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
                 ze = np.array([0])
