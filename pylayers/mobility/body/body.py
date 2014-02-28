@@ -747,6 +747,8 @@ class Body(object):
         if kwargs['pattern']:
             self.setacs()
             for key in self.dcs.keys():
+                import ipdb
+                ipdb.set_trace()
                 Ant =  ant.Antenna(self.dev[key]['file'])
                 if not hasattr(Ant,'SqG'):
                     Ant.Fsynth()
@@ -754,7 +756,7 @@ class Body(object):
                 V = Ant.SqG[kwargs['k'],:,:]
                 T  = self.acs[key]
 
-                Ant._show3(po=U[:,0], T=T,ilog=False,minr=0.001,maxr=0.02,
+                Ant._show3(po=U[:,0], T=T,ilog=False,minr=0.01,maxr=0.2,
                             newfig=False,title=False,colorbar=False)
                 
 

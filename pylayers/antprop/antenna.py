@@ -1235,11 +1235,11 @@ class Antenna(object):
 
         u = (r - r.min()) /(r.max() - r.min())
 
-        r = minr + (maxr-minr) * r
+        r = minr + (maxr-minr) * u
 
-        x = r * np.sin(phi) * np.cos(th) 
-        y = r * np.cos(phi) 
-        z = r * np.sin(phi) * np.sin(th) 
+        x = r * np.sin(th) * np.cos(phi) 
+        y = r * np.cos(th) 
+        z = r * np.sin(th) * np.sin(phi) 
 
         p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
         #
