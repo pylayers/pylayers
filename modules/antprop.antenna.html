@@ -188,6 +188,13 @@ bcp     : near filed chamber</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth">
+<tt class="descname">Fsynth</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Antenna synthesis
+call Antenna.Fpatt or Antenna.Fsynth3</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fsynth1">
 <tt class="descname">Fsynth1</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>pattern=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth1" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate complex antenna pattern  from VSH Coefficients (shape 1)</p>
@@ -474,7 +481,24 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.loadhfss">
 <tt class="descname">loadhfss</tt><big>(</big><em>lfa=</em>, <span class="optional">[</span><span class="optional">]</span><em>Nt=72</em>, <em>Np=37</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadhfss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadhfss" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lfa :</strong> :</p>
+<p><strong>Nt</strong> : int</p>
+<blockquote>
+<div><p>Number of angle theta</p>
+</div></blockquote>
+<p><strong>Np</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of angle phi</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.loadmat">
@@ -494,15 +518,17 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 </table>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pol1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">45</span><span class="p">,:]),</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pol2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">45</span><span class="p">,:]),</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pol3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">45</span><span class="p">,:]),</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;S1R1 antenna : st loadmat&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/antprop-antenna-3.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/antprop-antenna-3.py">Source code</a>, <a class="reference external" href="../modules/antprop-antenna-3.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-3.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/antprop-antenna-3.png" src="../_images/antprop-antenna-3.png" />
+</div>
 </dd></dl>
 
 <dl class="method">

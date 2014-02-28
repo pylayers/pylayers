@@ -713,8 +713,10 @@
         <span class="n">T</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;T&#39;</span><span class="p">]</span>
         <span class="k">assert</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">T</span><span class="p">))</span><span class="o">&gt;</span><span class="mf">0.99</span><span class="p">)</span>
         <span class="c"># retrieving dimensions</span>
-        <span class="n">Nt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">theta</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">phi</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="c">#np.shape(theta)[0]</span>
+        <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="c">#np.shape(phi)[1]</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
         <span class="k">if</span> <span class="n">ilog</span><span class="p">:</span>
             <span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>

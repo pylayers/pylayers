@@ -120,7 +120,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.antssh</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">mayavi.mlab</span> <span class="kn">as</span> <span class="nn">myv</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span> 
 <span class="k">except</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
 
@@ -270,13 +270,14 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;p3&#39;</span><span class="p">]</span><span class="c">#np.pi/6. # 30 degrees</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">t3</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t3&#39;</span><span class="p">]</span><span class="c">#np.pi/6. # 30 degrees</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">G</span>  <span class="o">=</span> <span class="mi">16</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span><span class="p">)</span> <span class="c"># gain 16/\theta^{2}</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">GdB</span>  <span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">GdB</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;WirePlate&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p0</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;p0&#39;</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t0&#39;</span><span class="p">]</span> <span class="c"># 5*np.pi/6.</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span>  <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t0&#39;</span><span class="p">]</span><span class="c"># </span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">GdB</span> <span class="o">=</span> <span class="mf">5.</span> <span class="c"># gain</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">G</span>  <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">GdB</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span> <span class="c"># gain</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
@@ -319,10 +320,12 @@
             <span class="n">GdB</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;GmaxDB : </span><span class="si">%4.2f</span><span class="s"> dB </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">GdB</span><span class="p">)</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   f = </span><span class="si">%4.2f</span><span class="s"> GHz </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   theta = </span><span class="si">%4.2f</span><span class="s"> (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   phi = </span><span class="si">%4.2f</span><span class="s">  (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
+            <span class="c">#st = st + &quot;   theta = %4.2f (degrees) \n&quot; % (self.theta[u[1],0]*rtd)</span>
+            <span class="c">#st = st + &quot;   phi = %4.2f  (degrees) \n&quot; % (self.phi[0,u[2]]*rtd)</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   theta = </span><span class="si">%4.2f</span><span class="s"> (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   phi = </span><span class="si">%4.2f</span><span class="s">  (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;Not evaluated&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;Not evaluated</span><span class="se">\n</span><span class="s">&#39;</span>
 
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;mat&#39;</span><span class="p">:</span>
@@ -422,26 +425,26 @@
 
 
         <span class="k">if</span> <span class="p">(</span><span class="n">th</span> <span class="o">==</span> <span class="p">[])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ph</span> <span class="o">==</span> <span class="p">[]):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">,</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">,</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="k">else</span> <span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">=</span> <span class="n">th</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ph</span> <span class="o">=</span> <span class="n">ph</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">th</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">ph</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;Gauss&#39;</span><span class="p">:</span>
 
 
-            <span class="n">argth</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">t3</span>
-            <span class="n">e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ph</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">p0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-            <span class="n">e2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p0</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">ph</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="n">argth</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">t3</span>
+            <span class="n">e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">p0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="n">e2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p0</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
             <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">zip</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">e2</span><span class="p">)))</span>
             <span class="n">argphi</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span>
 
             <span class="k">if</span> <span class="n">pattern</span> <span class="p">:</span>
                 <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">2.76</span><span class="o">*</span><span class="n">argth</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">2.76</span><span class="o">*</span><span class="n">argphi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span> <span class="p">)</span>
                 <span class="n">Fap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">2.76</span><span class="o">*</span><span class="n">argth</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">2.76</span><span class="o">*</span><span class="n">argphi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span> <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ph</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+                <span class="c">#self.theta=self.th[:,np.newaxis]</span>
+                <span class="c">#self.phi=self.ph[np.newaxis,:]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[:]</span><span class="o">=</span><span class="n">Fap</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
@@ -453,26 +456,26 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;WirePlate&#39;</span><span class="p">:</span>
 
-            <span class="n">uth1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">uth2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">uth1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">uth2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span>
             <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span>
             <span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([[</span><span class="mi">3</span><span class="o">*</span><span class="n">p</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">p</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="n">p</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="n">p</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">p</span><span class="p">],[</span><span class="n">q</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="n">q</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">q</span><span class="p">]]))</span>
             <span class="n">Y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">)]))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">poly</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
 
-            <span class="n">argth1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[</span><span class="n">uth1</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span>
-                     <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[</span><span class="n">uth1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
-                             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[</span><span class="n">uth1</span><span class="p">])</span>
+            <span class="n">argth1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">uth1</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span>
+                     <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">uth1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+                             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">poly</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">uth1</span><span class="p">])</span>
 
-            <span class="n">argth2</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[</span><span class="n">uth2</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">argth2</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">uth2</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
             <span class="n">argth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">argth1</span><span class="p">,</span><span class="n">argth2</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">pattern</span> <span class="p">:</span>
                 <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="p">(</span><span class="n">argth</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
                 <span class="n">Fap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="p">(</span><span class="n">argth</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ph</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+                <span class="c">#self.theta=self.theta[:,np.newaxis]</span>
+                <span class="c">#self.phi=self.ph[np.newaxis,:]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[:]</span><span class="o">=</span><span class="n">Fap</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
@@ -487,15 +490,15 @@
             <span class="k">if</span> <span class="n">pattern</span> <span class="p">:</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ph</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+                <span class="c">#self.theta = self.theta[:,np.newaxis]</span>
+                <span class="c">#self.phi = self.ph[np.newaxis,:]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> 
-                <span class="n">Fap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> 
+                <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span>
+                <span class="n">Fap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
-                <span class="n">Fap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
+                <span class="n">Fat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
+                <span class="n">Fap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
 
         <span class="c"># TODO create 2 separate functions</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern</span><span class="p">:</span>
@@ -520,10 +523,9 @@
 
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">            &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
-<span class="sd">            &gt;&gt;&gt; A = Antenna(&#39;S1R1.mat&#39;,&#39;ant/UWBAN/Matfile&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; pol1 = plt.polar(A.phi,abs(A.Ftheta[10,45,:]),&#39;b&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; pol2 = plt.polar(A.phi,abs(A.Ftheta[20,45,:]),&#39;r&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; pol3 = plt.polar(A.phi,abs(A.Ftheta[30,45,:]),&#39;g&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; A = Antenna(&#39;S1R1.mat&#39;,directory=&#39;ant/UWBAN/Matfile&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; f,a = A.polar(phd=0)</span>
+<span class="sd">            &gt;&gt;&gt; A.polar(thd=90,fig=f,ax=a)</span>
 <span class="sd">            &gt;&gt;&gt; txt = plt.title(&#39;S1R1 antenna : st loadmat&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
@@ -548,6 +550,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">AntennaName</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">AntennaName</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fa</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">freq</span><span class="o">/</span><span class="mf">1.e9</span>
+        <span class="c">#self.theta = d.theta[:,np.newaxis]</span>
+        <span class="c">#self.phi = d.phi[np.newaxis,:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">theta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">phi</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">Ftheta</span>
@@ -555,12 +559,17 @@
         <span class="n">Gr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span><span class="p">)</span> <span class="o">+</span> \
                      <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Gr</span><span class="p">)</span>
+        <span class="c">#self.Nt = np.shape(self.theta)[0]</span>
+        <span class="c">#self.Np = np.shape(self.phi)[1]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span> <span class="o">==</span>  <span class="nb">float</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
 </div>
 <div class="viewcode-block" id="Antenna.load_trx"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.load_trx">[docs]</a>    <span class="k">def</span> <span class="nf">load_trx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s">&quot;ant&quot;</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">104</span><span class="p">,</span> <span class="n">ntheta</span><span class="o">=</span><span class="mi">181</span><span class="p">,</span> <span class="n">nphi</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a trx file (deprecated)</span>
@@ -794,6 +803,14 @@
 </div>
 <div class="viewcode-block" id="Antenna.loadhfss"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.loadhfss">[docs]</a>    <span class="k">def</span> <span class="nf">loadhfss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lfa</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span><span class="n">Np</span><span class="o">=</span><span class="mi">37</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        lfa :</span>
+<span class="sd">        Nt  : int</span>
+<span class="sd">            Number of angle theta</span>
+<span class="sd">        Np  : int</span>
+<span class="sd">            Number of angle phi</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -808,7 +825,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lfa</span><span class="p">)):</span>
 
 
-            
+
             <span class="n">fGHz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">lfa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.csv&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">4</span><span class="p">]))</span>
             <span class="n">lacsv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">lfa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">,</span><span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;th&#39;</span><span class="p">,</span><span class="s">&#39;ph&#39;</span><span class="p">,</span><span class="s">&#39;abs_grlz&#39;</span><span class="p">,</span><span class="s">&#39;th_absdB&#39;</span><span class="p">,</span><span class="s">&#39;th_phase&#39;</span><span class="p">,</span><span class="s">&#39;ph_absdB&#39;</span><span class="p">,</span><span class="s">&#39;ph_phase&#39;</span><span class="p">,</span><span class="s">&#39;ax_ratio&#39;</span><span class="p">],</span><span class="n">index_col</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
             <span class="n">th</span><span class="o">=</span><span class="n">lacsv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">th</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Np</span><span class="p">,</span><span class="n">Nt</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
@@ -821,7 +838,7 @@
             <span class="n">th_lin</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">th_dB</span><span class="o">/</span><span class="mf">20.</span><span class="p">)</span>
             <span class="n">ph_lin</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">ph_dB</span><span class="o">/</span><span class="mf">20.</span><span class="p">)</span>
 
-            
+
             <span class="c">#th_phase = lacsv[i].th_phase.reshape(72,37)*np.pi/180.</span>
             <span class="c">#ph_phase = lacsv[i].ph_phase.reshape(72,37)*np.pi/180.</span>
             <span class="c">#axratio=lacsv[i].ax_ratio.reshape(72,37)</span>
@@ -829,15 +846,17 @@
             <span class="n">Ftheta</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">th_lin</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">SqG</span><span class="p">[</span><span class="n">i</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">Greal</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">fa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nt</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">ph</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">Np</span><span class="p">)</span>
+        <span class="c">#self.theta = th[0,:].reshape(Nt,1)</span>
+        <span class="c">#self.phi = ph[:,0].reshape(1,Np)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">th</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">ph</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span><span class="o">=</span><span class="n">Fphi</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="o">=</span><span class="n">Ftheta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="o">=</span><span class="n">SqG</span>
 
-          
+
 </div>
 <div class="viewcode-block" id="Antenna.loadtrx"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.loadtrx">[docs]</a>    <span class="k">def</span> <span class="nf">loadtrx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">directory</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load trx file (SATIMO Near Field Chamber raw data)</span>
@@ -1104,6 +1123,8 @@
 <span class="sd">            &gt;&gt;&gt; fig,ax = A.polar(fGHz=[2,3,4],thd=90)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="n">dtr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
 
@@ -1155,8 +1176,10 @@
         <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">fstep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">dtheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">dphi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c">#dtheta = self.theta[1,0]-self.theta[0,0]</span>
+        <span class="c">#dphi = self.phi[0,1]-self.phi[0,0]</span>
+        <span class="n">dtheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dphi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">]:</span>
             <span class="n">ik</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="o">-</span><span class="n">f</span><span class="p">)</span><span class="o">&lt;</span><span class="n">fstep</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -1164,7 +1187,8 @@
             <span class="c"># all theta</span>
             <span class="k">if</span> <span class="s">&#39;phd&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">itheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
-                <span class="n">iphi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;phd&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">dtr</span><span class="p">)</span><span class="o">&lt;</span><span class="n">dtheta</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c">#iphi1 = np.where(abs(self.phi[0,:]-kwargs[&#39;phd&#39;]*dtr)&lt;dtheta)[0][0]</span>
+                <span class="n">iphi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;phd&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">dtr</span><span class="p">)</span><span class="o">&lt;</span><span class="n">dphi</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">Np</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Np</span>
 
                 <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">Np</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1173,13 +1197,15 @@
                     <span class="n">iphi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">iphi1</span> <span class="o">+</span> <span class="p">(</span><span class="n">Np</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
 
                 <span class="c">#   0 &lt; theta &lt; pi/2</span>
-                <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
-                              <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c">#u1 = np.where((self.theta[:,0] &lt;= np.pi / 2) &amp;</span>
+                <span class="c">#              (self.theta[:,0] &gt;= 0))[0]</span>
+                <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="c">#   0:Nt-1</span>
                 <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
                 <span class="c">#   pi/2 &lt; theta &lt; pi</span>
-                <span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
-                                                              <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c">#u3 = np.nonzero((self.theta[:,0] &lt;= np.pi) &amp; ( self.theta[:,0]</span>
+                <span class="c">#                                              &gt; np.pi / 2))[0]</span>
+                <span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">iphi1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
                 <span class="c">#r1  = self.SqG[k,u1[0],iphi1]</span>
                 <span class="n">negr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">r1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
@@ -1203,8 +1229,11 @@
 
             <span class="k">if</span> <span class="s">&#39;thd&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">iphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
-                <span class="n">itheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;thd&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">dtr</span><span class="p">)</span><span class="o">&lt;</span><span class="n">dtheta</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">iphi</span><span class="p">]</span>
+                <span class="c">#itheta = np.where(abs(self.theta[:,0]-kwargs[&#39;thd&#39;]*dtr)&lt;dtheta)[0][0]</span>
+                <span class="c">#angle = self.phi[0,iphi]</span>
+                <span class="n">itheta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="o">-</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;thd&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">dtr</span><span class="p">)</span><span class="o">&lt;</span><span class="n">dtheta</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c">#angle = self.phi[0,iphi]</span>
+                <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">iphi</span><span class="p">]</span>
                 <span class="n">r</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">itheta</span><span class="p">,</span> <span class="n">iphi</span><span class="p">])</span>
                 <span class="n">neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="n">r</span><span class="p">[</span><span class="n">neg</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1220,16 +1249,48 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[],</span><span class="n">title</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">colorbar</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="nd">@mlab.show</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 mayavi</span>
 
 <span class="sd">        fGHz : float</span>
-<span class="sd">            frequency </span>
+<span class="sd">            frequency</span>
 <span class="sd">        title : bool</span>
 <span class="sd">            display title</span>
 <span class="sd">        colorbar :</span>
 <span class="sd">            display colorbar</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;newfig&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span> 
+                     <span class="s">&#39;fGHz&#39;</span> <span class="p">:[],</span>
+                     <span class="s">&#39;po&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span>
+                     <span class="s">&#39;T&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                     <span class="s">&#39;minr&#39;</span> <span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                     <span class="s">&#39;maxr&#39;</span> <span class="p">:</span> <span class="mi">1</span> <span class="p">,</span>
+                     <span class="s">&#39;tag&#39;</span> <span class="p">:</span> <span class="s">&#39;Pat&#39;</span><span class="p">,</span>
+                     <span class="s">&#39;ilog&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                     <span class="s">&#39;title&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s">&#39;colorbar&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="s">&#39;ilog&#39;</span><span class="p">:</span><span class="bp">False</span>
+                     <span class="p">}</span>
+
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="n">fGHz</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">]</span>
+        <span class="n">minr</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;minr&#39;</span><span class="p">]</span>
+        <span class="n">maxr</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;maxr&#39;</span><span class="p">]</span>
+        <span class="n">tag</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;tag&#39;</span><span class="p">]</span>
+        <span class="n">ilog</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ilog&#39;</span><span class="p">]</span>
+        <span class="n">po</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;po&#39;</span><span class="p">]</span>
+        <span class="c"># T is an unitary matrix</span>
+        <span class="n">T</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;T&#39;</span><span class="p">]</span>
+
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">fGHz</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
@@ -1237,19 +1298,48 @@
             <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">fGHz</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">k</span><span class="p">,:,:]</span>
-        <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span>
-        <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
-        
-        <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ilog</span> <span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
-        <span class="n">myv</span><span class="o">.</span><span class="n">mesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">colorbar</span> <span class="p">:</span>
-            <span class="n">myv</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
-            <span class="n">myv</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39; @ &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; GHz&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">r</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">r</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">minr</span> <span class="o">+</span> <span class="p">(</span><span class="n">maxr</span><span class="o">-</span><span class="n">minr</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> 
+        <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> 
+        <span class="n">z</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> 
+
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># antenna cs -&gt; glogal cs</span>
+        <span class="c"># q : Nt x Np x 3</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ij,klj-&gt;kli&#39;</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># translation</span>
+        <span class="c">#</span>
+        <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;newfig&#39;</span><span class="p">]:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+        <span class="n">mlab</span><span class="o">.</span><span class="n">mesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]</span> <span class="p">:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39; @ &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; GHz&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Antenna.show3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="p">[],</span><span class="n">T</span><span class="o">=</span><span class="p">[],</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -1279,6 +1369,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;Gain&#39;</span><span class="p">:</span>
@@ -1299,14 +1392,17 @@
         <span class="c"># geo.pattern requires the following shapes</span>
         <span class="c"># theta (Ntx1)</span>
         <span class="c"># phi (1xNp)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">theta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">phi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span>
+        <span class="c">#if len(np.shape(self.theta))==1:</span>
+        <span class="c">#    theta = self.theta[:,np.newaxis]</span>
+        <span class="c">#else:</span>
+        <span class="c">#    theta=self.theta</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span>
+        <span class="c">#if len(np.shape(self.phi))==1:</span>
+        <span class="c">#    phi = self.phi[np.newaxis,:]</span>
+        <span class="c">#else:</span>
+        <span class="c">#    phi=self.phi</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span>
+
         <span class="n">geo</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="n">po</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span><span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">minr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">maxr</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
         <span class="c">#filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)</span>
         <span class="c">#filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)</span>
@@ -1394,9 +1490,11 @@
 
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">plph</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">plth</span><span class="p">:</span>
-                <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c">#theta = self.theta[n,0]</span>
+                <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
                 <span class="c">#print &quot;m,theta= :&quot;,m,theta*180/np.pi</span>
-                <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">m</span><span class="p">]</span>
+                <span class="c">#phi = self.phi[0,m]</span>
+                <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
                 <span class="c">#print &quot;n,phi=:&quot;,n,phi*180/np.pi</span>
                 <span class="n">B</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">vec_sph</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
                 <span class="n">p</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
@@ -1533,6 +1631,18 @@
         <span class="k">print</span> <span class="s">&quot;FPh = Fph.reshape(A.Nf,A.Nt,A.Np)&quot;</span>
         <span class="k">print</span> <span class="s">&quot;compdiag(20,A,A.theta,A.phi,FTh,FPh) &quot;</span>
 
+</div>
+<div class="viewcode-block" id="Antenna.Fsynth"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Perform Antenna synthesis</span>
+<span class="sd">            call Antenna.Fpatt or Antenna.Fsynth3</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fromfile</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="p">)</span>
+
+
     <span class="c">#def Fsynth1(self, theta, phi, k=0):</span></div>
 <div class="viewcode-block" id="Antenna.Fsynth1"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth1">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate complex antenna pattern  from VSH Coefficients (shape 1)</span>
@@ -1615,6 +1725,7 @@
             <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
+
 
 </div>
 <div class="viewcode-block" id="Antenna.Fsynth2s"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth2s">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth2s</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -1926,8 +2037,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+            <span class="c">#self.theta = theta[:,np.newaxis]</span>
+            <span class="c">#self.phi = phi[np.newaxis,:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">phi</span>
             <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
             <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span><span class="n">phi</span><span class="p">)</span>
 
@@ -2366,8 +2479,8 @@
         <span class="c"># create vsh2 file</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
             <span class="n">_filevsh2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.trx&#39;</span><span class="p">,</span> <span class="s">&#39;.vsh2&#39;</span><span class="p">)</span>
-            
-        <span class="n">_filevsh2</span>  <span class="o">=</span> <span class="n">filename</span> 
+
+        <span class="n">_filevsh2</span>  <span class="o">=</span> <span class="n">filename</span>
         <span class="n">filevsh2</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filevsh2</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRANT&#39;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filevsh2</span><span class="p">):</span>

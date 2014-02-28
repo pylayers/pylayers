@@ -651,7 +651,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">upnt</span><span class="p">])</span>  
         <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">upnt</span><span class="p">])</span> 
-        
+
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -6669,6 +6669,7 @@
 <span class="c">#            else:</span>
 <span class="c">#                core = self.ce[subseg[i-en]][0]</span>
 <span class="c">#                name = sl.di[core]</span>
+
             <span class="n">colname</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
             <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span>
             <span class="n">col</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
@@ -6677,8 +6678,9 @@
         <span class="n">fos</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">pg</span> 
 </div>
-<div class="viewcode-block" id="Layout.mayafile"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.mayafile">[docs]</a>    <span class="k">def</span> <span class="nf">mayafile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; create a .off geomview file </span>
+    <span class="nd">@mlab.show</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; create a .off geomview file</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -6696,16 +6698,16 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; pg = L.geomfile()</span>
+<span class="sd">        &gt;&gt;&gt; pg = L.mayafile()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-    
+
         <span class="c"># calculate center of gravity</span>
         <span class="k">if</span> <span class="n">centered</span><span class="p">:</span>
             <span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">pg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-        
+
         <span class="c">#en  = self.Ns # number of segments</span>
         <span class="n">en</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">en</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ns</span><span class="p">:</span>
@@ -6733,6 +6735,7 @@
 
         <span class="n">ik</span>   <span class="o">=</span> <span class="mi">0</span>
         <span class="n">dikn</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># segment</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="s">&#39;AIR&#39;</span><span class="p">:</span>
@@ -6741,7 +6744,7 @@
                     <span class="n">n2</span> <span class="o">=</span> <span class="n">nebr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">P1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
                     <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    
+
                     <span class="n">P2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
                     <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
@@ -6750,13 +6753,15 @@
 
                     <span class="n">P4</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">])</span><span class="o">-</span><span class="n">pg</span>
                     <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">ik</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    
+
                     <span class="n">dikn</span><span class="p">[</span><span class="n">ik</span><span class="p">]</span><span class="o">=</span><span class="n">i</span>
                     <span class="n">ik</span> <span class="o">=</span> <span class="n">ik</span> <span class="o">+</span> <span class="mi">1</span>
+
                 <span class="k">else</span><span class="p">:</span>
+
                     <span class="n">en</span> <span class="o">=</span> <span class="n">en</span><span class="o">-</span><span class="mi">1</span>
 
-        
+
         <span class="c"># d = self.subseg()</span>
         <span class="c"># k : ss_name v: seg number </span>
         <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -6793,20 +6798,36 @@
                 <span class="n">ik</span> <span class="o">=</span> <span class="n">ik</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="n">npt</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
+        <span class="n">npt_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span> 
 
-        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">P1</span><span class="p">,</span><span class="n">P2</span><span class="p">))</span>
-        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">P3</span><span class="p">))</span>
-        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">P4</span><span class="p">))</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">P1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">npt_s</span><span class="p">],</span><span class="n">P2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">npt_s</span><span class="p">]))</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">P3</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">npt_s</span><span class="p">]))</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">P4</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">npt_s</span><span class="p">]))</span>
         <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="o">.</span><span class="n">T</span>
-        <span class="n">boxes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">npt</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">boxes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">npt</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npt</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
         <span class="n">boxes</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">b</span>
-        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
-        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
-        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">en</span> <span class="o">+</span> <span class="n">cen</span><span class="p">)</span>
+        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="n">npt_s</span>
+        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">npt_s</span>
+        <span class="n">boxes</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">npt_s</span>
+
+        <span class="c"># manage floor</span>
+        <span class="n">floorx</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+        <span class="n">floory</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+        <span class="n">zmin</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">zmin</span><span class="p">])</span>
+        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span> 
+        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span> 
+        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span> 
+
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">Pf</span><span class="p">))</span>
+        <span class="n">bf</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npt</span><span class="p">,</span><span class="n">npt</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">boxes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">boxes</span><span class="p">,</span><span class="n">bf</span><span class="p">))</span>
 
 
-        
+
+
+
 <span class="c">#         _filename,ext = os.path.splitext(self.filename)</span>
 <span class="c">#         _filegeom = _filename+&#39;.off&#39;</span>
 <span class="c">#         self.filegeom=_filegeom</span>
@@ -6835,21 +6856,42 @@
 
             <span class="n">colname</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
             <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span>
-            <span class="n">color</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
+            <span class="n">color</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> 
+            <span class="n">color</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">npt_s</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> 
+            <span class="n">color</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">npt_s</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> 
+            <span class="n">color</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">npt_s</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> 
+
+
+
+        <span class="n">colname</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;FLOOR&#39;</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+        <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span>
+        <span class="n">colf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">((</span><span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:],</span><span class="mi">4</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">color</span><span class="p">,</span><span class="n">colf</span><span class="p">))</span>
+
+        <span class="c"># trick for correcting  color assignement</span>
+
+        <span class="n">sc</span><span class="o">=</span><span class="n">tvtk</span><span class="o">.</span><span class="n">UnsignedCharArray</span><span class="p">()</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
 
 
 
         <span class="n">mesh</span> <span class="o">=</span> <span class="n">tvtk</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">polys</span><span class="o">=</span><span class="n">boxes</span><span class="p">)</span>
-        <span class="n">mesh</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span> <span class="o">=</span> <span class="n">sc</span>
         <span class="n">mesh</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;scalars&#39;</span>
 
-        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-            <span class="n">surf</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">surf</span><span class="p">),</span>
-                                        <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
 
-</div>
+        <span class="k">if</span> <span class="n">newfig</span><span class="p">:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+
+        <span class="n">surf</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">surf</span><span class="p">),</span>
+                                    <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
+
+
+
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
@@ -6858,10 +6900,10 @@
 
 <span class="sd">        bdis boolean (default True)</span>
 <span class="sd">            boolean display (call geowview if True)</span>
-<span class="sd">        centered : boolean     </span>
+<span class="sd">        centered : boolean</span>
 <span class="sd">            if True center the layout before display</span>
-<span class="sd">        </span>
-<span class="sd">        </span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">pg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geomfile</span><span class="p">(</span><span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">)</span>

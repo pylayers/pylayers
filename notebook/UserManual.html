@@ -68,108 +68,135 @@
 <li><a class="reference internal" href="#testing">3.3. Testing</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#slabs-and-materials">4. Slabs and Materials</a><ul>
-<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">4.1. Defining a new Slab and a new Material</a></li>
-<li><a class="reference internal" href="#slab-information">4.2. Slab Information</a></li>
-<li><a class="reference internal" href="#slab-evaluation">4.3. Slab evaluation</a></li>
-<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">4.4. Transmission and Reflexion coefficients</a><ul>
-<li><a class="reference internal" href="#ploting-coefficients">4.4.1. Ploting Coefficients</a></li>
+<li><a class="reference internal" href="#description-of-antennas">4. Description of Antennas</a><ul>
+<li><a class="reference internal" href="#defining-antenna-gain-from-closed-form-formulas">4.1. Defining Antenna gain from closed form formulas</a></li>
+<li><a class="reference internal" href="#description-with-scalar-spherical-harmonics">4.2. Description With Scalar Spherical Harmonics</a></li>
+<li><a class="reference internal" href="#description-of-antennas-with-vector-spherical-harmonics">4.3. Description of Antennas with Vector Spherical Harmonics</a></li>
+<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">4.4. Evaluation of Vector Spherical Harmonics Coefficients</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#evaluation-without-phase-compensation">4.5. Evaluation without phase compensation</a></li>
-<li><a class="reference internal" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">4.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz</a></li>
-<li><a class="reference internal" href="#references">4.7. References</a></li>
+<li><a class="reference internal" href="#slabs-and-materials">5. Slabs and Materials</a><ul>
+<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">5.1. Defining a New Slab and a New Material</a></li>
+<li><a class="reference internal" href="#slab-information">5.2. Slab Information</a></li>
+<li><a class="reference internal" href="#slab-evaluation">5.3. Slab evaluation</a></li>
+<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">5.4. Transmission and Reflexion coefficients</a><ul>
+<li><a class="reference internal" href="#ploting-coefficients">5.4.1. Ploting Coefficients</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-layout-class">5. The Layout class</a><ul>
-<li><a class="reference internal" href="#structure-of-a-layout">5.1. Structure of a Layout</a></li>
-<li><a class="reference internal" href="#subsegments">5.2. Subsegments</a></li>
-<li><a class="reference internal" href="#layout-file-formats">5.3. Layout file formats</a></li>
-<li><a class="reference internal" href="#reading-an-exiting-layout">5.4. Reading an exiting Layout</a></li>
-<li><a class="reference internal" href="#the-display-options-dictionnary">5.5. The display options dictionnary</a></li>
-<li><a class="reference internal" href="#interactive-editor">5.6. Interactive editor</a><ul>
-<li><a class="reference internal" href="#image-overlay">5.6.1. Image overlay</a></li>
-<li><a class="reference internal" href="#scaling-the-figure-overlay">5.6.2. Scaling the figure overlay</a></li>
-<li><a class="reference internal" href="#visualisation-of-the-layout">5.6.3. Visualisation of the layout</a></li>
-<li><a class="reference internal" href="#segment-and-sub-segments">5.6.4. Segment and sub-segments</a></li>
+<li><a class="reference internal" href="#evaluation-without-phase-compensation">5.5. Evaluation without phase compensation</a></li>
+<li><a class="reference internal" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">5.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz</a></li>
+<li><a class="reference internal" href="#references">5.7. References</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#channel-variability-due-to-different-layout-constitutive-materials">5.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
+<li><a class="reference internal" href="#the-layout-class">6. The Layout class</a><ul>
+<li><a class="reference internal" href="#structure-of-a-layout">6.1. Structure of a Layout</a></li>
+<li><a class="reference internal" href="#subsegments">6.2. Subsegments</a></li>
+<li><a class="reference internal" href="#layout-file-formats">6.3. Layout file formats</a></li>
+<li><a class="reference internal" href="#reading-an-exiting-layout">6.4. Reading an exiting Layout</a></li>
+<li><a class="reference internal" href="#the-display-options-dictionnary">6.5. The display options dictionnary</a></li>
+<li><a class="reference internal" href="#interactive-editor">6.6. Interactive editor</a><ul>
+<li><a class="reference internal" href="#image-overlay">6.6.1. Image overlay</a></li>
+<li><a class="reference internal" href="#scaling-the-figure-overlay">6.6.2. Scaling the figure overlay</a></li>
+<li><a class="reference internal" href="#visualisation-of-the-layout">6.6.3. Visualisation of the layout</a></li>
+<li><a class="reference internal" href="#segment-and-sub-segments">6.6.4. Segment and sub-segments</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#electromagnetic-simulation">6. Electromagnetic Simulation</a><ul>
-<li><a class="reference internal" href="#mutliwall-model">6.1. Mutliwall Model</a><ul>
-<li><a class="reference internal" href="#computing-the-multi-wall-model">6.1.1. Computing the Multi-wall model</a></li>
+<li><a class="reference internal" href="#channel-variability-due-to-different-layout-constitutive-materials">6.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-coverage-class">6.2. The Coverage class</a></li>
-<li><a class="reference internal" href="#ray-signatures">6.3. Ray Signatures</a></li>
-<li><a class="reference internal" href="#synthesis-of-ultra-wide-band-waveforms">6.4. Synthesis of Ultra Wide Band Waveforms</a><ul>
-<li><a class="reference internal" href="#calculation-of-uwb-channel-impulse-response">6.4.1. Calculation of UWB channel impulse response</a></li>
+<li><a class="reference internal" href="#electromagnetic-simulation">7. Electromagnetic Simulation</a><ul>
+<li><a class="reference internal" href="#mutliwall-model">7.1. Mutliwall Model</a><ul>
+<li><a class="reference internal" href="#computing-the-multi-wall-model">7.1.1. Computing the Multi-wall model</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#construction-of-the-propagation-channel">6.5. Construction of the propagation channel</a></li>
-<li><a class="reference internal" href="#construction-of-the-transmission-channel">6.6. Construction of the transmission channel</a></li>
-<li><a class="reference internal" href="#calculate-uwb-channel-impulse-response">6.7. Calculate UWB Channel Impulse Response</a></li>
-<li><a class="reference internal" href="#hermitian-symetry-enforcment">6.8. Hermitian symetry enforcment</a></li>
+<li><a class="reference internal" href="#the-coverage-class">7.2. The Coverage class</a></li>
+<li><a class="reference internal" href="#ray-signatures">7.3. Ray Signatures</a></li>
+<li><a class="reference internal" href="#synthesis-of-ultra-wide-band-waveforms">7.4. Synthesis of Ultra Wide Band Waveforms</a><ul>
+<li><a class="reference internal" href="#calculation-of-uwb-channel-impulse-response">7.4.1. Calculation of UWB channel impulse response</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#example-of-an-uwb-channel-ray-tracing-simulation">7. Example of an UWB channel Ray Tracing simulation</a><ul>
-<li><a class="reference internal" href="#adding-coordinates-of-transmiting-and-receiving-points">7.1. Adding coordinates of transmiting and receiving points</a></li>
-<li><a class="reference internal" href="#signatures-rays-and-propagation-and-transmission-channel">7.2. Signatures, rays and propagation and transmission channel</a></li>
-<li><a class="reference internal" href="#calculating-the-propagation-channel">7.3. Calculating the Propagation Channel</a></li>
-<li><a class="reference internal" href="#apply-waveform">7.4. Apply waveform</a></li>
+<li><a class="reference internal" href="#construction-of-the-propagation-channel">7.5. Construction of the propagation channel</a></li>
+<li><a class="reference internal" href="#construction-of-the-transmission-channel">7.6. Construction of the transmission channel</a></li>
+<li><a class="reference internal" href="#calculate-uwb-channel-impulse-response">7.7. Calculate UWB Channel Impulse Response</a></li>
+<li><a class="reference internal" href="#hermitian-symetry-enforcment">7.8. Hermitian symetry enforcment</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#simulation-creation">8. Simulation Creation</a><ul>
-<li><a class="reference internal" href="#id1">8.1. Adding coordinates of transmiting and receiving points</a></li>
-<li><a class="reference internal" href="#signatures-rays-and-channel">8.2. Signatures, Rays and channel</a></li>
-<li><a class="reference internal" href="#id2">8.3. Apply waveform</a></li>
-<li><a class="reference internal" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment">8.4. Example of a trajectory synthesis in DLR WHERE2 environment</a></li>
+<li><a class="reference internal" href="#example-of-an-uwb-channel-ray-tracing-simulation">8. Example of an UWB channel Ray Tracing simulation</a><ul>
+<li><a class="reference internal" href="#adding-coordinates-of-transmiting-and-receiving-points">8.1. Adding coordinates of transmiting and receiving points</a></li>
+<li><a class="reference internal" href="#signatures-rays-and-propagation-and-transmission-channel">8.2. Signatures, rays and propagation and transmission channel</a></li>
+<li><a class="reference internal" href="#calculating-the-propagation-channel">8.3. Calculating the Propagation Channel</a></li>
+<li><a class="reference internal" href="#apply-waveform">8.4. Apply waveform</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#algebraic-localization-class">9. Algebraic Localization Class</a><ul>
-<li><a class="reference internal" href="#example-of-tdoa">9.1. Example of TDOA</a></li>
+<li><a class="reference internal" href="#simulation-creation">9. Simulation Creation</a><ul>
+<li><a class="reference internal" href="#id3">9.1. Adding coordinates of transmiting and receiving points</a></li>
+<li><a class="reference internal" href="#signatures-rays-and-channel">9.2. Signatures, Rays and channel</a></li>
+<li><a class="reference internal" href="#id4">9.3. Apply waveform</a></li>
+<li><a class="reference internal" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment">9.4. Example of a trajectory synthesis in DLR WHERE2 environment</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#rgpa-robust-geometric-positioning-algorithm">10. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
-<li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">10.1. Exploiting Time of Arrival (ToA) only</a></li>
-<li><a class="reference internal" href="#rss">10.2. RSS</a></li>
-<li><a class="reference internal" href="#tdoa">10.3. TDOA</a></li>
+<li><a class="reference internal" href="#handling-human-mobility">10. Handling Human mobility</a><ul>
+<li><a class="reference internal" href="#body-mobility">10.1. Body Mobility</a><ul>
+<li><a class="reference internal" href="#bodycylinder-data-structure">10.1.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure</a></li>
+<li><a class="reference internal" href="#description-of-a-body-file">10.1.2. Description of a body file</a></li>
+<li><a class="reference internal" href="#loading-a-motion-capture-file">10.1.3. Loading a Motion Capture File</a></li>
+<li><a class="reference internal" href="#defining-a-trajectory">10.1.4. Defining a trajectory</a></li>
+<li><a class="reference internal" href="#settopos-method">10.1.5. settopos () method</a></li>
+<li><a class="reference internal" href="#defining-a-large-scale-trajectory">10.1.6. Defining a large scale trajectory</a></li>
+<li><a class="reference internal" href="#trajectory">10.1.7. Trajectory</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#network-simulation-configuration">11. Network Simulation Configuration</a><ul>
-<li><a class="reference internal" href="#layout">11.1. Layout</a></li>
-<li><a class="reference internal" href="#network">11.2. Network</a></li>
-<li><a class="reference internal" href="#mechanics">11.3. Mechanics</a></li>
-<li><a class="reference internal" href="#localization">11.4. Localization</a></li>
-<li><a class="reference internal" href="#simulation">11.5. Simulation</a></li>
+<li><a class="reference internal" href="#posvel">10.2. <tt class="docutils literal"><span class="pre">posvel()</span></tt></a><ul>
+<li><a class="reference internal" href="#definition-of-several-coordinates-systems">10.2.1. Definition of Several Coordinates systems</a></li>
+<li><a class="reference internal" href="#construction-of-the-cylinder-coordinate-system-ccs">10.2.2. Construction of the Cylinder Coordinate System (CCS)</a></li>
+<li><a class="reference internal" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder">10.2.3. Placing a dcs (Device Coordinate System ) on the cylinder</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#geomutil-class">12. Geomutil Class</a></li>
-<li><a class="reference internal" href="#class-polygon">13. Class Polygon</a><ul>
-<li><a class="reference internal" href="#ploting-polygons">13.1. ploting polygons</a></li>
-<li><a class="reference internal" href="#buildgv">13.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
+<li><a class="reference internal" href="#large-scale-mobility">10.3. Large Scale Mobility</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#geomview-classes">14. Geomview classes</a><ul>
-<li><a class="reference internal" href="#geomvect-class">14.1. GeomVect class</a><ul>
-<li><a class="reference internal" href="#geombase">14.1.1. geomBase</a></li>
-<li><a class="reference internal" href="#points">14.1.2. points</a></li>
-<li><a class="reference internal" href="#plotting-a-box">14.1.3. plotting a box</a></li>
+<li><a class="reference internal" href="#algebraic-localization-class">11. Algebraic Localization Class</a><ul>
+<li><a class="reference internal" href="#example-of-tdoa">11.1. Example of TDOA</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#utility-functions">14.2. Utility functions</a><ul>
-<li><a class="reference internal" href="#angledir">14.2.1. angledir</a></li>
-<li><a class="reference internal" href="#linet">14.2.2. linet</a></li>
-<li><a class="reference internal" href="#dptseg-p-pt-ph">14.2.3. dptseg(p,pt,ph)</a></li>
-<li><a class="reference internal" href="#displot">14.2.4. displot</a></li>
-<li><a class="reference internal" href="#ptonseg-pta-phe-pt">14.2.5. ptonseg(pta,phe,pt)</a></li>
-<li><a class="reference internal" href="#ptconvex">14.2.6. ptconvex</a></li>
-<li><a class="reference internal" href="#intersect">14.2.7. intersect</a></li>
+<li><a class="reference internal" href="#rgpa-robust-geometric-positioning-algorithm">12. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">12.1. Exploiting Time of Arrival (ToA) only</a></li>
+<li><a class="reference internal" href="#rss">12.2. RSS</a></li>
+<li><a class="reference internal" href="#tdoa">12.3. TDOA</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#useful-functions">14.3. Useful functions</a></li>
+<li><a class="reference internal" href="#network-simulation-configuration">13. Network Simulation Configuration</a><ul>
+<li><a class="reference internal" href="#layout">13.1. Layout</a></li>
+<li><a class="reference internal" href="#network">13.2. Network</a></li>
+<li><a class="reference internal" href="#mechanics">13.3. Mechanics</a></li>
+<li><a class="reference internal" href="#localization">13.4. Localization</a></li>
+<li><a class="reference internal" href="#simulation">13.5. Simulation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geomutil-class">14. Geomutil Class</a></li>
+<li><a class="reference internal" href="#class-polygon">15. Class Polygon</a><ul>
+<li><a class="reference internal" href="#ploting-polygons">15.1. ploting polygons</a></li>
+<li><a class="reference internal" href="#buildgv">15.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geomview-classes">16. Geomview classes</a><ul>
+<li><a class="reference internal" href="#geomvect-class">16.1. GeomVect class</a><ul>
+<li><a class="reference internal" href="#geombase">16.1.1. geomBase</a></li>
+<li><a class="reference internal" href="#points">16.1.2. points</a></li>
+<li><a class="reference internal" href="#plotting-a-box">16.1.3. plotting a box</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utility-functions">16.2. Utility functions</a><ul>
+<li><a class="reference internal" href="#angledir">16.2.1. angledir</a></li>
+<li><a class="reference internal" href="#linet">16.2.2. linet</a></li>
+<li><a class="reference internal" href="#dptseg-p-pt-ph">16.2.3. dptseg(p,pt,ph)</a></li>
+<li><a class="reference internal" href="#displot">16.2.4. displot</a></li>
+<li><a class="reference internal" href="#ptonseg-pta-phe-pt">16.2.5. ptonseg(pta,phe,pt)</a></li>
+<li><a class="reference internal" href="#ptconvex">16.2.6. ptconvex</a></li>
+<li><a class="reference internal" href="#intersect">16.2.7. intersect</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#useful-functions">16.3. Useful functions</a></li>
 </ul>
 </li>
 </ul>
@@ -345,8 +372,480 @@ export BASENAME=~/plproject
 </div>
 </div>
 </div>
+<div class="section" id="description-of-antennas">
+<h1>4. Description of Antennas<a class="headerlink" href="#description-of-antennas" title="Permalink to this headline">¶</a></h1>
+<p>PyLayers accepts various descriptions of the antenna radiation pattern.
+It goes from a simple antenna gain formula to a full polarization description.</p>
+<ul class="simple">
+<li>Full description on a grid (.mat,.trx)</li>
+<li>Scalar Harmonics decomposition (.sh2,.sh3)</li>
+<li>Vector Harmonics decomposition  (.vsh2,.vsh3)</li>
+<li>Closed form formula for simplified antenna models (Omni,Gauss,WirePlate,...)</li>
+</ul>
+<p>The following examples illustrates some features of the Antenna class.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+  warnings.warn(msg, UserWarning)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x79a8990&gt;
+</pre></div>
+</div>
+<p>Lets start by loading an antenna from a <tt class="docutils literal"><span class="pre">vsh3</span></tt> file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">)</span>
+<span class="n">A</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.vsh3
+-----------------------
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+Not evaluated
+</pre></div>
+</div>
+<p>In fact this is not a void antenna. There is a default file which has
+been loaded and there is an antenna down there. The only thing we know
+at that point is the name of the file which has extension &#8216;.vsh3&#8217; which
+means vector spherical harmonics in shape 3. To list all the availble
+antenna files in the dedicated directory of the project it i possible to
+invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;S1R1.sh3&#39;</span><span class="p">,</span> <span class="s">&#39;S2R2.sh3&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R10.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R11.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R12.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R13.vsh3&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>At that point the radiation pattern of the antenna has not yet been
+evaluated. For a shape 3 pattern the method to calculate the pattern is
+<tt class="docutils literal"><span class="pre">Fsynth3()</span></tt> with the <tt class="docutils literal"><span class="pre">pattern</span></tt> option set to true.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">polar()</span></tt> method allows to superpose different pattern for a list o
+frequecies <tt class="docutils literal"><span class="pre">fGHz</span></tt> + If <tt class="docutils literal"><span class="pre">phd</span></tt> is precised the diagram is given as a
+function of <img class="math" src="../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/> + If <tt class="docutils literal"><span class="pre">thd</span></tt> is precised the diagram is given
+as a function of <img class="math" src="../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">phd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a1</span><span class="p">)</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/AP-Antenna1_11_0.png" src="../_images/AP-Antenna1_11_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.vsh3
+-----------------------
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+-----------------------
+Ntheta : 45
+Nphi : 90
+GmaxDB : 2.23 dB
+   f = 5.60 GHz
+   theta = 69.55 (degrees)
+   phi = 271.01  (degrees)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">gcf</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/AP-Antenna1_13_0.png" src="../_images/AP-Antenna1_13_0.png" />
+<div class="section" id="defining-antenna-gain-from-closed-form-formulas">
+<h2>4.1. Defining Antenna gain from closed form formulas<a class="headerlink" href="#defining-antenna-gain-from-closed-form-formulas" title="Permalink to this headline">¶</a></h2>
+<p>An antenna can be defined from closed-form expressions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f991c9aa0d0&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7f995bc67450&gt;)
+</pre></div>
+</div>
+<img alt="../_images/AP-Antenna1_18_1.png" src="../_images/AP-Antenna1_18_1.png" />
+</div>
+<div class="section" id="description-with-scalar-spherical-harmonics">
+<h2>4.2. Description With Scalar Spherical Harmonics<a class="headerlink" href="#description-with-scalar-spherical-harmonics" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.antssh</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7936310&gt;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.mat
+-----------------------
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+-----------------------
+Ntheta : 91
+Nphi : 180
+GmaxDB : 2.23 dB
+   f = 5.60 GHz
+   theta = 70.00 (degrees)
+   phi = 272.00  (degrees)
+antenna name : Th1
+date : 04/12/12
+time : 15:55
+Notes : Mohamed at the log
+
+Serie : 1
+Run : 1
+Nb theta (lat) : 91
+Nb phi (lon) :180
+</pre></div>
+</div>
+<p>To calcultae scalar spherical harmonics use method <tt class="docutils literal"><span class="pre">ssh(A,L)</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">ssh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>FileName : S1R1.mat
+-----------------------
+fmin : 0.80GHz
+fmax : 5.95GHz
+step : 50.00MHz
+Nf : 104
+-----------------------
+Ntheta : 91
+Nphi : 180
+GmaxDB : 2.23 dB
+   f = 5.60 GHz
+   theta = 70.00 (degrees)
+   phi = 272.00  (degrees)
+antenna name : Th1
+date : 04/12/12
+time : 15:55
+Notes : Mohamed at the log
+
+Serie : 1
+Run : 1
+Nb theta (lat) : 91
+Nb phi (lon) :180
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x83090d0&gt;]
+</pre></div>
+</div>
+<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_6_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_6_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">savesh2</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1/ant/S1R1.sh2  already exist
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">loadsh2</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x84115d0&gt;]
+</pre></div>
+</div>
+<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_9_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_9_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x87e8550&gt;]
+</pre></div>
+</div>
+<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_11_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_11_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">ind2</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">savesh3</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Bureau/P1/ant/S1R1.sh3  already exist
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x8a0fb90&gt;]
+</pre></div>
+</div>
+<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_14_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_14_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">loadsh3</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x8a45210&gt;]
+</pre></div>
+</div>
+<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_16_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_16_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x8cf9b50&gt;]
+</pre></div>
+</div>
+<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_17_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_17_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;Nf&#39;</span><span class="p">,</span>
+ <span class="s">&#39;PhotoFile&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Np&#39;</span><span class="p">,</span>
+ <span class="s">&#39;SqG&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Run&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Nt&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Serie&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Ftheta&#39;</span><span class="p">,</span>
+ <span class="s">&#39;theta&#39;</span><span class="p">,</span>
+ <span class="s">&#39;fromfile&#39;</span><span class="p">,</span>
+ <span class="s">&#39;phi&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Fphi&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Notes&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Date&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S&#39;</span><span class="p">,</span>
+ <span class="s">&#39;AntennaName&#39;</span><span class="p">,</span>
+ <span class="s">&#39;typ&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DataFile&#39;</span><span class="p">,</span>
+ <span class="s">&#39;fa&#39;</span><span class="p">,</span>
+ <span class="s">&#39;evaluated&#39;</span><span class="p">,</span>
+ <span class="s">&#39;StartTime&#39;</span><span class="p">,</span>
+ <span class="s">&#39;_filename&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;k2&#39;</span><span class="p">,</span> <span class="s">&#39;ind3&#39;</span><span class="p">,</span> <span class="s">&#39;ind2&#39;</span><span class="p">,</span> <span class="s">&#39;fmax&#39;</span><span class="p">,</span> <span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="s">&#39;Nf&#39;</span><span class="p">,</span> <span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="s">&#39;lmax&#39;</span><span class="p">,</span> <span class="s">&#39;fmin&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+NCoeff s2  : 36
+Ncoeff s3 : 32
+</pre></div>
+</div>
+</div>
+<div class="section" id="description-of-antennas-with-vector-spherical-harmonics">
+<h2>4.3. Description of Antennas with Vector Spherical Harmonics<a class="headerlink" href="#description-of-antennas-with-vector-spherical-harmonics" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.antvsh</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x85a9310&gt;
+</pre></div>
+</div>
+<p>Read a trx file. This file has no header, it contains 7 columns :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
+<span class="c">#A = Antenna(&#39;trx1&#39;,&#39;UWB_CEA.trx&#39;)</span>
+</pre></div>
+</div>
+<p>The shape of the <img class="math" src="../_images/math/25ec171b8cd2533076b18a6196dd5f139999b5bb.png" alt="F_{\phi}"/> functions indicates :</p>
+<ul class="simple">
+<li><img class="math" src="../_images/math/a002bf44d9dd6a26e70c61d3c743e28ecb09799d.png" alt="N_f= 104"/></li>
+<li><img class="math" src="../_images/math/76bc0ee53b05a44ab3a61a38b6d86fedeca2dae8.png" alt="N_{\theta} = 91"/></li>
+<li>:math:<a href="#id1"><span class="problematic" id="id2">`</span></a>N_{phi} = 180 `</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Fphi</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">104</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The frequency ramp is converted in <img class="math" src="../_images/math/75ff9e3612d49cb2c7909cde17452a307348fe5f.png" alt="GHz"/>. In practice we always
+handles frequency expressed in <img class="math" src="../_images/math/75ff9e3612d49cb2c7909cde17452a307348fe5f.png" alt="GHz"/> and delays expressed in
+<img class="math" src="../_images/math/da93a4433922cc997c2ea624d1828cda4232ec10.png" alt="ns"/></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">104</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">1e9</span>
+</pre></div>
+</div>
+<p>Then an electrical delay of <img class="math" src="../_images/math/20f53356c4c104c5a34eafd0d9ad7358b59d1fbc.png" alt="4.185ns"/> is applied on the
+<img class="math" src="../_images/math/0e31c8f84652d7ba21ff8bca08a0e4d8e14bccc5.png" alt="F_{\theta}"/></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tau</span><span class="o">=</span><span class="mf">4.185</span>
+<span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,:,:]</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mi">1j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">fGHz</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">imshow</span><span class="p">(</span><span class="n">unwrap</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,:])))</span>
+<span class="n">title</span><span class="p">(</span><span class="s">r&#39;Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;f index&#39;</span><span class="p">)</span>
+<span class="n">colorbar</span><span class="p">()</span>
+<span class="n">figure</span><span class="p">()</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">unwrap</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x9782b50&gt;]
+</pre></div>
+</div>
+<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_9_1.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_9_1.png" />
+<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_9_2.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_9_2.png" />
+<p>Display of the radiation pattern for all frequencies</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">nf</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">104</span><span class="p">):</span>
+    <span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="n">nf</span><span class="p">,</span><span class="mi">45</span><span class="p">,:]))</span>
+</pre></div>
+</div>
+<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_11_0.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_11_0.png" />
+</div>
+<div class="section" id="evaluation-of-vector-spherical-harmonics-coefficients">
+<h2>4.4. Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h2>
+<p>At that stage we compute the Vector Spherical Harmonics coefficients</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">vsh</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>S1R1.mat
+type :  mat
+S1R1
+Th1
+04/12/12
+15:55
+Mohamed at the log
+
+1
+1
+Nb theta (lat) : 91
+Nb phi (lon) : 180
+No vsh coefficient calculated yet
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Br
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+
+Bi
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+
+Cr
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+
+Ci
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_19_0.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_19_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Br
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 86
+
+Bi
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 86
+
+Cr
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 86
+
+Ci
+-------------
+N1  : 90
+M1  : 89
+Ncoeff s1 8010
+NCoeff s2  : 495
+Ncoeff s3 : 86
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_22_0.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_22_0.png" />
+<div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="slabs-and-materials">
-<h1>4. Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
+<h1>5. Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
 <p>Before introducing any model, lets start by introducing two major classes of
 the PyLayers platform on which is relying the electromagnetic field
 calculation.</p>
@@ -399,7 +898,7 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 </pre></div>
 </div>
 <div class="section" id="defining-a-new-slab-and-a-new-material">
-<h2>4.1. Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
+<h2>5.1. Defining a New Slab and a New Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;wall2&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;reim&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -447,7 +946,7 @@ coefficients w.r.t angle anf frequency.</p>
 </div>
 </div>
 <div class="section" id="slab-information">
-<h2>4.2. Slab Information<a class="headerlink" href="#slab-information" title="Permalink to this headline">¶</a></h2>
+<h2>5.2. Slab Information<a class="headerlink" href="#slab-information" title="Permalink to this headline">¶</a></h2>
 <p>Each slab contains informations about the electromagnetic properties of its constitutive materials.</p>
 <p>Below is presented an example for a simple slab, constituted with a single material.
 The slab &#8216;WOOD&#8217; is defined as a layer of 4cm &#8216;WOOD&#8217; material.</p>
@@ -522,7 +1021,7 @@ properties can be obtained as:</p>
 </div>
 </div>
 <div class="section" id="slab-evaluation">
-<h2>4.3. Slab evaluation<a class="headerlink" href="#slab-evaluation" title="Permalink to this headline">¶</a></h2>
+<h2>5.3. Slab evaluation<a class="headerlink" href="#slab-evaluation" title="Permalink to this headline">¶</a></h2>
 <p>Each Slab can be evaluated to obtain the Transmission and Reflexion
 coefficients for</p>
 <ul class="simple">
@@ -542,8 +1041,8 @@ coefficients for</p>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficients">
-<h2>4.4. Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
-<p>Reflexion and transmission coefficient are computed for the given
+<h2>5.4. Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
+<p>Relexion and transmission coefficient are computed for the given
 frequency range and theta range</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">ithet</span><span class="o">=</span><span class="mi">10</span>
@@ -564,7 +1063,7 @@ Transmission coefficient @ 3.01 GHz and theta= 0.1 :
 </pre></div>
 </div>
 <div class="section" id="ploting-coefficients">
-<h3>4.4.1. Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h3>
+<h3>5.4.1. Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>plotwrt (plot with respect to)
 
 Parameters
@@ -656,7 +1155,7 @@ Parameters
 </div>
 </div>
 <div class="section" id="evaluation-without-phase-compensation">
-<h2>4.5. Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
+<h2>5.5. Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -688,7 +1187,7 @@ Parameters
 <img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" />
 </div>
 <div class="section" id="double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">
-<h2>4.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz<a class="headerlink" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz" title="Permalink to this headline">¶</a></h2>
+<h2>5.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz<a class="headerlink" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.55</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">],[</span><span class="mf">0.049</span><span class="p">])</span>
@@ -722,7 +1221,7 @@ Parameters
 <img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" />
 </div>
 <div class="section" id="references">
-<h2>4.7. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h2>5.7. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p>[1]. <a class="reference external" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&amp;arnumber=5505315&amp;queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation">Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. &#8220;Reflection
 ant Transmission Properties of Building Materials in D-Band for Modeling
 Future mm-Wave Communication Systems&#8221; Antennas and Propagation (EuCAP),
@@ -734,7 +1233,7 @@ N°18</a></p>
 </div>
 </div>
 <div class="section" id="the-layout-class">
-<h1>5. The Layout class<a class="headerlink" href="#the-layout-class" title="Permalink to this headline">¶</a></h1>
+<h1>6. The Layout class<a class="headerlink" href="#the-layout-class" title="Permalink to this headline">¶</a></h1>
 <p>This section explains the main features of the <strong>Layout</strong> class.</p>
 <p>A Layout is a representation of a floorplan, it is handled by the module
 <strong>pylayers.gis.layout</strong>.</p>
@@ -750,7 +1249,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 <li><tt class="docutils literal"><span class="pre">saveosm()</span></tt></li>
 </ul>
 <div class="section" id="structure-of-a-layout">
-<h2>5.1. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>A Layout is firstly described by a set of points (negative index) and a
 set of segments (positive index).</p>
 <p>Both points and segments are nodes of the <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
@@ -760,7 +1259,7 @@ can recover partially or totally an other segment</strong>.</p>
 are exploited for further analysis.</p>
 </div>
 <div class="section" id="subsegments">
-<h2>5.2. Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
+<h2>6.2. Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
 <p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
 introduced.</p>
 <p>A <tt class="docutils literal"><span class="pre">segment</span></tt> has attributes :</p>
@@ -785,7 +1284,7 @@ minimum and maximum heights of associated subsegments (meters)</li>
 different from the segment index.</p>
 </div>
 <div class="section" id="layout-file-formats">
-<h2>5.3. Layout file formats<a class="headerlink" href="#layout-file-formats" title="Permalink to this headline">¶</a></h2>
+<h2>6.3. Layout file formats<a class="headerlink" href="#layout-file-formats" title="Permalink to this headline">¶</a></h2>
 <p>The layout format has regularly evolved over time and is going to evolve
 again. Currently, the different recognized file extensions are the
 following :</p>
@@ -804,7 +1303,7 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 </div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
-<h2>5.4. Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
+<h2>6.4. Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
@@ -970,7 +1469,7 @@ ray signatures.</p>
 <img alt="./GIS-editor_files/GIS-editor_33_0.png" src="./GIS-editor_files/GIS-editor_33_0.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
-<h2>5.5. The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
+<h2>6.5. The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1049,7 +1548,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </div>
 </div>
 <div class="section" id="interactive-editor">
-<h2>5.6. Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
+<h2>6.6. Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
 <p>The command <cite>L.editor()</cite> launches a simple Layout interactive editor.
 The state machine is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
 <p>To have an idea of all available options, look in the
@@ -1079,7 +1578,7 @@ editor is more suited for modyfing constitutive properties of walls.</p>
 <p><strong>m</strong> : to switch from one mode to an other</p>
 <p><strong>i</strong> : to return to init state</p>
 <div class="section" id="image-overlay">
-<h3>5.6.1. Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h3>
+<h3>6.6.1. Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h3>
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
@@ -1101,7 +1600,7 @@ a filename. In that case the file is stored in</p>
 <img alt="./GIS-editor_files/GIS-editor_53_1.png" src="./GIS-editor_files/GIS-editor_53_1.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
-<h3>5.6.2. Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
+<h3>6.6.2. Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
 <p>Before going further it is necessary :</p>
 <ul class="simple">
 <li>to place the global origin</li>
@@ -1141,7 +1640,7 @@ meters) between the two points.</li>
 </div>
 </div>
 <div class="section" id="visualisation-of-the-layout">
-<h3>5.6.3. Visualisation of the layout<a class="headerlink" href="#visualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
+<h3>6.6.3. Visualisation of the layout<a class="headerlink" href="#visualisation-of-the-layout" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
@@ -1158,7 +1657,7 @@ a segment (wall,door,window,...).</p>
 <p><a class="reference external" href="MultiSubsegments.ipynb">Multi Subsegments</a></p>
 </div>
 <div class="section" id="segment-and-sub-segments">
-<h3>5.6.4. Segment and sub-segments<a class="headerlink" href="#segment-and-sub-segments" title="Permalink to this headline">¶</a></h3>
+<h3>6.6.4. Segment and sub-segments<a class="headerlink" href="#segment-and-sub-segments" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1351,7 +1850,7 @@ None
 </div>
 </div>
 <div class="section" id="channel-variability-due-to-different-layout-constitutive-materials">
-<h2>5.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials<a class="headerlink" href="#channel-variability-due-to-different-layout-constitutive-materials" title="Permalink to this headline">¶</a></h2>
+<h2>6.7. Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials<a class="headerlink" href="#channel-variability-due-to-different-layout-constitutive-materials" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
@@ -1456,13 +1955,18 @@ nl : 4048
 </div>
 </div>
 <div class="section" id="electromagnetic-simulation">
-<h1>6. Electromagnetic Simulation<a class="headerlink" href="#electromagnetic-simulation" title="Permalink to this headline">¶</a></h1>
+<h1>7. Electromagnetic Simulation<a class="headerlink" href="#electromagnetic-simulation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="mutliwall-model">
-<h2>6.1. Mutliwall Model<a class="headerlink" href="#mutliwall-model" title="Permalink to this headline">¶</a></h2>
-<p>The multiwall model is an adaptation of the Motley Keenan model. It determines
-the LOS attenuation between Tx and Rx in addoin to free space attenuation the
-losses in the crossed wall takin into account incidence angle, frequency,
-polarisation and constitutive properties of slabs.</p>
+<h2>7.1. Mutliwall Model<a class="headerlink" href="#mutliwall-model" title="Permalink to this headline">¶</a></h2>
+<p>The multiwall model is an adaptation of the Motley Keenan model. It determines the LOS attenuation between Tx and Rx in adding to the free space attenuation, the aggregated losses in crossed walls takinig into account :</p>
+<blockquote>
+<div><ul class="simple">
+<li>incidence angle</li>
+<li>frequency,</li>
+<li>polarisation</li>
+<li>constitutive properties of slabs.</li>
+</ul>
+</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
@@ -1507,7 +2011,7 @@ segment normal.</p>
 </pre></div>
 </div>
 <div class="section" id="computing-the-multi-wall-model">
-<h3>6.1.1. Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
+<h3>7.1.1. Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
 <p>The multi-wall model computation returns losses and LOS excess delay for
 orthogonal and parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="mf">2.4</span>
@@ -1532,7 +2036,7 @@ Excess delay parallel polarization           2.12364 ns
 </div>
 </div>
 <div class="section" id="the-coverage-class">
-<h2>6.2. The Coverage class<a class="headerlink" href="#the-coverage-class" title="Permalink to this headline">¶</a></h2>
+<h2>7.2. The Coverage class<a class="headerlink" href="#the-coverage-class" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes it might be useful to get a fast estimate about losses in
 a given indoor environment. Ray tracing is generally time consuming
 and depending on the purpose of the study it could be relevant to
@@ -1754,7 +2258,7 @@ different frequencies</p>
 <p>The excess delay due to crossing the wall can also be evaluted.</p>
 </div>
 <div class="section" id="ray-signatures">
-<h2>6.3. Ray Signatures<a class="headerlink" href="#ray-signatures" title="Permalink to this headline">¶</a></h2>
+<h2>7.3. Ray Signatures<a class="headerlink" href="#ray-signatures" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1834,7 +2338,7 @@ interactions.</p>
 </div>
 </div>
 <div class="section" id="synthesis-of-ultra-wide-band-waveforms">
-<h2>6.4. Synthesis of Ultra Wide Band Waveforms<a class="headerlink" href="#synthesis-of-ultra-wide-band-waveforms" title="Permalink to this headline">¶</a></h2>
+<h2>7.4. Synthesis of Ultra Wide Band Waveforms<a class="headerlink" href="#synthesis-of-ultra-wide-band-waveforms" title="Permalink to this headline">¶</a></h2>
 <p>Once the propagation channel has been evaluated. This is done in the
 <tt class="docutils literal"><span class="pre">pylayers.antprop.channel</span></tt> module. The received signal is evaluated in
 applying a convolution product of each ray tranfer function with a
@@ -1901,7 +2405,7 @@ ymax : 2.16154131873
 </pre></div>
 </div>
 <div class="section" id="calculation-of-uwb-channel-impulse-response">
-<h3>6.4.1. Calculation of UWB channel impulse response<a class="headerlink" href="#calculation-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h3>
+<h3>7.4.1. Calculation of UWB channel impulse response<a class="headerlink" href="#calculation-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h3>
 <p>We choose to load a simple floor plan.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
@@ -2110,7 +2614,7 @@ representation.</p>
 </div>
 </div>
 <div class="section" id="construction-of-the-propagation-channel">
-<h2>6.5. Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<h2>7.5. Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <p>The following representation shows the spatial spreading of the
 propagation channel. On the left are scattered the intensity of rays wrt
 to angles of departure (in azimut and elevation). On the right is the
@@ -2212,7 +2716,7 @@ the phase term due to delay along the ray.</p>
 </div>
 </div>
 <div class="section" id="construction-of-the-transmission-channel">
-<h2>6.6. Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<h2>7.6. Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <p>The transmission channel is obtained from the combination of the
 propagation channel <img class="math" src="../_images/math/7fed00592d88a5822533d0da9b1d49ba438495cf.png" alt="\tilde{\mathbf{C}}"/> and the vector antenna
 pattern at both side of the radio link. This operation is implemented in
@@ -2253,7 +2757,7 @@ modulus and phase of the ray transfer function.</p>
 </div>
 </div>
 <div class="section" id="calculate-uwb-channel-impulse-response">
-<h2>6.7. Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<h2>7.7. Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
 <p>Once the transmission channel has been evaluated on can convolved the
 waveform with the channel impulse response to get the received waveform.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
@@ -2287,7 +2791,7 @@ waveform with the channel impulse response to get the received waveform.</p>
 <img alt="./PHY-signal_files/PHY-signal_54_1.png" src="./PHY-signal_files/PHY-signal_54_1.png" />
 </div>
 <div class="section" id="hermitian-symetry-enforcment">
-<h2>6.8. Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
+<h2>7.8. Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
 <p>If the number of point for the transmission channel and the waveform
 were the same the mathematical operation is an Hadamard-Shur product
 between <img class="math" src="../_images/math/b9ba21151f0486a8aefcd00ceb7fc544a392fe87.png" alt="\mathbf{Y}"/> and <img class="math" src="../_images/math/ca91977bed6ab8abdd8a746b43d45990814104c3.png" alt="\mathbf{W}"/>.</p>
@@ -2400,7 +2904,7 @@ delay introduced by dielectrics material crossing.</p>
 </div>
 </div>
 <div class="section" id="example-of-an-uwb-channel-ray-tracing-simulation">
-<h1>7. Example of an UWB channel Ray Tracing simulation<a class="headerlink" href="#example-of-an-uwb-channel-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
+<h1>8. Example of an UWB channel Ray Tracing simulation<a class="headerlink" href="#example-of-an-uwb-channel-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
 <p>In the following, all steps required for going from the descrpition of
 the radio scene until the calculation of the UWB channel impulse
 response is described on a simple example.</p>
@@ -2448,7 +2952,7 @@ dictionnary member of the Layout object.which allows to configure the
 </div>
 <img alt="./SIM-raytracing_files/SIM-raytracing_7_0.png" src="./SIM-raytracing_files/SIM-raytracing_7_0.png" />
 <div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
-<h2>7.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
+<h2>8.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation are stored
 in <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
 RadioNode which offers different methods for specifying nodes positions.
@@ -2540,7 +3044,7 @@ represented below. Not all cycles are rooms.</p>
 </div>
 </div>
 <div class="section" id="signatures-rays-and-propagation-and-transmission-channel">
-<h2>7.2. Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<h2>8.2. Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Choose Tx and Rx coordinates</span>
 <span class="n">itx</span><span class="o">=</span><span class="mi">10</span>
 <span class="n">irx</span><span class="o">=</span><span class="mi">2</span>
@@ -2699,7 +3203,7 @@ nl : 2504
 </div>
 </div>
 <div class="section" id="calculating-the-propagation-channel">
-<h2>7.3. Calculating the Propagation Channel<a class="headerlink" href="#calculating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<h2>8.3. Calculating the Propagation Channel<a class="headerlink" href="#calculating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <p>The propagation channel is a <tt class="docutils literal"><span class="pre">Ctilde</span></tt> object. This object can be
 evaluated for different frequency point thanks to the <tt class="docutils literal"><span class="pre">eval()</span></tt> method
 with a frequency array as argument.</p>
@@ -2808,7 +3312,7 @@ shape Cpp : (210, 181)
 </div>
 </div>
 <div class="section" id="apply-waveform">
-<h2>7.4. Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
+<h2>8.4. Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
 <p>Once the propagation channel is obtained the transmission channel is
 calculated with the method <tt class="docutils literal"><span class="pre">prop2tran</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
@@ -2855,7 +3359,7 @@ waveform to the transmission channel.</p>
 </div>
 </div>
 <div class="section" id="simulation-creation">
-<h1>8. Simulation Creation<a class="headerlink" href="#simulation-creation" title="Permalink to this headline">¶</a></h1>
+<h1>9. Simulation Creation<a class="headerlink" href="#simulation-creation" title="Permalink to this headline">¶</a></h1>
 <p>A ray-tracing simulation is controlled via a configuration file which is
 stored in the <em>ini</em> directory of the project directory. By default,
 there is a default configuration file named <strong>default.ini</strong>.</p>
@@ -2925,8 +3429,8 @@ dictionnary member of the Layout object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="s">&#39;(309, 15, 46)&#39;</span><span class="p">,</span> <span class="s">&#39;(148, 46, 44)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="id1">
-<h2>8.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>9.1. Adding coordinates of transmiting and receiving points<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation to be
 perform are stotred in <strong>.ini</strong> files. Transmitter and Receiver are
 instances of the class <tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for
@@ -3049,7 +3553,7 @@ Rxs OK
 </div>
 </div>
 <div class="section" id="signatures-rays-and-channel">
-<h2>8.2. Signatures, Rays and channel<a class="headerlink" href="#signatures-rays-and-channel" title="Permalink to this headline">¶</a></h2>
+<h2>9.2. Signatures, Rays and channel<a class="headerlink" href="#signatures-rays-and-channel" title="Permalink to this headline">¶</a></h2>
 <p>A signature is a sequence of layout objects (points and segments) which
 are involved in a given optical ray joinint the transmiter and the
 receiver. The signatutre is calculated from a layout cycle to an other
@@ -3305,8 +3809,8 @@ nl : 1027
 </pre></div>
 </div>
 </div>
-<div class="section" id="id2">
-<h2>8.3. Apply waveform<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>9.3. Apply waveform<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">freq</span>
 <span class="n">sco</span><span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
 <span class="n">sca</span><span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
@@ -3437,7 +3941,7 @@ rotation matrix# [0] type: B
 <img alt="./SIM-where1_files/SIM-where1_49_0.png" src="./SIM-where1_files/SIM-where1_49_0.png" />
 </div>
 <div class="section" id="example-of-a-trajectory-synthesis-in-dlr-where2-environment">
-<h2>8.4. Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h2>
+<h2>9.4. Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
@@ -3656,8 +4160,823 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <img alt="./SIM-trajectory_files/SIM-trajectory_28_1.png" src="./SIM-trajectory_files/SIM-trajectory_28_1.png" />
 </div>
 </div>
+<div class="section" id="handling-human-mobility">
+<h1>10. Handling Human mobility<a class="headerlink" href="#handling-human-mobility" title="Permalink to this headline">¶</a></h1>
+<p>The body mobility is described at two different level, the body level (small
+scale) and the trajectory level (large scale)</p>
+<div class="section" id="body-mobility">
+<h2>10.1. Body Mobility<a class="headerlink" href="#body-mobility" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.mobility.body.body</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="n">Trajectory</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x894a310&gt;
+</pre></div>
+</div>
+<p>The body mobility is imported from motion capture files. This is the
+chosen manner to achieve a high degree of realism for the modeling of
+the human motion. Two kind of files exist :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">c3d</span></tt> files are a set of point which are evolving in time</li>
+<li><tt class="docutils literal"><span class="pre">bvh</span></tt> files are a stuctured version of the motion capture.</li>
+</ul>
+<p>Both type of file will be exploited in the following.</p>
+<div class="section" id="bodycylinder-data-structure">
+<h3>10.1.1. <tt class="docutils literal"><span class="pre">BodyCylinder</span></tt> data structure<a class="headerlink" href="#bodycylinder-data-structure" title="Permalink to this headline">¶</a></h3>
+<p>To ease electromagnetic simulation a simplification of the motion
+capture data structure is necessary. Generally there is a large number
+of captutred points, not all of them being useful for our modeling.</p>
+<p>The body model is a restriction of key body segments which are
+transformed into <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> cylinders of radius <img class="math" src="../_images/math/c6d83f44e641552ebc20f736bbca0a9423098e78.png" alt="r_k"/>.</p>
+<p>The chosen body model is made of 11 cylinders. 4 cylinders decribing the
+two arms, 4 cylinders decribing the two legs, 2 cylinders describing the
+trunk and 1 cylinder for the head.</p>
+<p>The body cylinder model is handle by a dedicated Python class call
+<tt class="docutils literal"><span class="pre">Body</span></tt></p>
+<p>To create a void body, simply instantiate a Body object from the class</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>which is equivalent to :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;John.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default body filename is John.ini and the default motion capture
+filename is &#8216;07_01.c3d&#8217;. The creation of a Body consists in reading a
+<tt class="docutils literal"><span class="pre">_filebody</span></tt> and a <tt class="docutils literal"><span class="pre">_filemocap</span></tt></p>
+</div>
+<div class="section" id="description-of-a-body-file">
+<h3>10.1.2. Description of a body file<a class="headerlink" href="#description-of-a-body-file" title="Permalink to this headline">¶</a></h3>
+<p>An example of a body file is given below. It is a file in <tt class="docutils literal"><span class="pre">ini</span></tt> format
+with 4 sections.</p>
+<ul class="simple">
+<li>[nodes]</li>
+</ul>
+<p>This section associates a node number to a c3d fils conventional node
+number</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">NodeId</span> <span class="o">=</span> <span class="n">C3DNODE</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>[cylinder]</li>
+</ul>
+<p>This section associates a cylinder Id to a dictionnary wich contains
+cylinder tail head and radius information</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CylId</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">NodeId1</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">,</span><span class="n">NodeId2</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="nb">float</span> <span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="s">&#39;name&#39;</span><span class="p">,}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>[device]</li>
+</ul>
+<p>This section associates a device name to a dictionnary wich contains
+cylinder device related information</p>
+<div class="highlight-python"><div class="highlight"><pre>DevId = {&#39;typ&#39; : {static|mobile}
+          &#39;cyl&#39;: CylId
+          &#39;l&#39;  : length coordinate in ccs,
+          &#39;h&#39;  : height coordinate in ccs,
+          &#39;a&#39;  : angle coordinate in ccs,
+          &#39;file&#39; : antenna file ,
+          &#39;T&#39; : Rotation matrix }
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre>#%load /home/uguen/Bureau/P1/ini/Francois.ini
+            [nodes]
+0 = STRN
+1 = CLAV
+2 = RFHD
+3 =RSHO
+4 =LSHO
+5 =RELB
+6 =LELB
+7 =RWRB
+8 =LWRB
+9 =RFWT
+10 =LFWT
+11 =RKNE
+12 =LKNE
+13 =RANK
+14 =LANK
+15 =BOTT
+[cylinder]
+; sternum (STRN) - clavicule (CLAV)
+trunku = {&#39;t&#39;:0,&#39;h&#39;:1,&#39;r&#39;:0.18,&#39;i&#39;:0}
+; bottom  (BOTT) sternum (STRN)
+trunkb = {&#39;t&#39;:15,&#39;h&#39;:0,&#39;r&#39;:0.17,&#39;i&#39;:10}
+; clavicule (CLAV)  - tete (RFHD)
+headu = {&#39;t&#39;:1,&#39;h&#39;:2,&#39;r&#39;:0.12,&#39;i&#39;:1}
+; coude droit (RELB)  epaule droite (RSHO)
+armr = {&#39;t&#39;:5,&#39;h&#39;:3,&#39;r&#39;:0.05,&#39;i&#39;:2}
+; coude gauche (LELB)  epaule gauche (LSHO)
+arml  = {&#39;t&#39;:6,&#39;h&#39;:4,&#39;r&#39;:0.05,&#39;i&#39;:3}
+; poignet droit (RWRB) coude droit (RELB)
+forearmr = {&#39;t&#39;:7,&#39;h&#39;:5,&#39;r&#39;:0.05,&#39;i&#39;:4}
+; left wrist (LWRB)  left elbow (LELB)
+forearml = {&#39;t&#39;:8,&#39;h&#39;:6,&#39;r&#39;:0.05,&#39;i&#39;:5}
+; knee droit (RKNE) hanche droit (RFWT)
+thighr = {&#39;t&#39;:11,&#39;h&#39;:9,&#39;r&#39;:0.05,&#39;i&#39;:6}
+; knee left (LKNE)  hanche left (LFWT)
+thighl = {&#39;t&#39;:12,&#39;h&#39;:10,&#39;r&#39;:0.05,&#39;i&#39;:7}
+; cheville droit (RANK) genou  droit (RKNE)
+calfr = {&#39;t&#39;:13,&#39;h&#39;:11,&#39;r&#39;:0.05,&#39;i&#39;:8}
+; cheville droit (LANK) genou  droit (LKNE)
+calfl = {&#39;t&#39;:14,&#39;h&#39;:12,&#39;r&#39;:0.05,&#39;i&#39;:9}
+[device]
+0 = {&#39;typ&#39;:&#39;static&#39;,&#39;name&#39;:&#39;BeSpoon Phone&#39;,&#39;cyl&#39;:&#39;trunku&#39;,&#39;l&#39;:0.1,&#39;h&#39;:0.01,&#39;a&#39;:0,&#39;file&#39;:&#39;S2R2.sh3&#39;,&#39;T&#39;:np.array([[1,0,0],[0,1,0],[0,0,1]])}
+1 = {&#39;typ&#39;:&#39;static&#39;,&#39;name&#39;:&#39;Movea Accel&#39;,&#39;cyl&#39;:&#39;trunku&#39;,&#39;l&#39;:0.1,&#39;h&#39;:0.01,&#39;a&#39;:180,&#39;file&#39;:&#39;S2R2.sh3&#39;,&#39;T&#39;:np.array([[1,0,0],[0,1,0],[0,0,1]])}
+2 = {&#39;typ&#39;:&#39;static&#39;,&#39;name&#39;:&#39;Optivent Glass&#39;,&#39;cyl&#39;:&#39;head&#39;,&#39;l&#39;:0.7,&#39;h&#39;:0.01,&#39;a&#39;:0,&#39;file&#39;:&#39;S2R2.sh3&#39;,&#39;T&#39;:np.array([[1,0,0],[0,1,0],[0,0,1]])}
+3 = {&#39;typ&#39;:&#39;static&#39;,&#39;name&#39;:&#39;Geonaute Podo&#39;,&#39;cyl&#39;:&#39;trunkb&#39;,&#39;l&#39;:0.1,&#39;h&#39;:0.01,&#39;a&#39;:45,&#39;file&#39;:&#39;S2R2.sh3&#39;,&#39;T&#39;:np.array([[1,0,0],[0,1,0],[0,0,1]])}
+4 = {&#39;typ&#39;:&#39;static&#39;,&#39;name&#39;:&#39;Breizh Watch&#39;,&#39;cyl&#39;:&#39;forearmr&#39;,&#39;l&#39;:0.2,&#39;h&#39;:0.01,&#39;a&#39;:0,&#39;file&#39;:&#39;S2R2.sh3&#39;,&#39;T&#39;:np.array([[1,0,0],[0,1,0],[0,0,1]])}
+5 = {&#39;typ&#39;:&#39;static&#39;,&#39;name&#39;:&#39;Breizh Watch&#39;,&#39;cyl&#39;:&#39;forearml&#39;,&#39;l&#39;:0.2,&#39;h&#39;:0.01,&#39;a&#39;:0,&#39;file&#39;:&#39;S2R2.sh3&#39;,&#39;T&#39;:np.array([[1,0,0],[0,1,0],[0,0,1]])}
+[mocap]
+
+walk = &#39;07_01_c3d&#39;
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>My name is : John
+
+I have a Galaxy Gear device on the left forearm
+I have a cardio device on the upper part of trunk
+I am nowhere yet
+
+filename : 07_01.c3d
+nframes : 300
+Centered : True
+Mocap Speed : 1.36558346484
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Francois</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;Francois.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">)</span>
+<span class="n">Francois</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>My name is : Francois
+
+I have a Movea Accel device on the upper part of trunk
+I have a BeSpoon Phone device on the upper part of trunk
+I have a Geonaute Podo device on the lower part of trunk
+I have a Optivent Glass device hea
+I have a Breizh Watch device on the left forearm
+I have a Breizh Watch device on the right forearm
+I am nowhere yet
+
+filename : 07_01.c3d
+nframes : 300
+Centered : True
+Mocap Speed : 1.36558346484
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-a-motion-capture-file">
+<h3>10.1.3. Loading a Motion Capture File<a class="headerlink" href="#loading-a-motion-capture-file" title="Permalink to this headline">¶</a></h3>
+<p>A <tt class="docutils literal"><span class="pre">.c3d</span></tt> motion capture file is loaded with the method <tt class="docutils literal"><span class="pre">loadC3D</span></tt>
+with as arguments the motion capture file and the number of frames to
+load.</p>
+<p>The motion is represented as a sequence of framef stored in the <tt class="docutils literal"><span class="pre">d</span></tt>
+variable member.</p>
+<p>It is possible to get the information from the C3D header by using the
+verbose option of the <tt class="docutils literal"><span class="pre">read_c3d</span></tt> function</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># Video Frame Rate</span>
+<span class="n">Vrate</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="c"># Inter Frame</span>
+<span class="n">Tframe</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">120</span>
+<span class="c"># select a number of frame</span>
+<span class="n">nframes</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="c"># Time duration of the whole selected frame sequence</span>
+<span class="n">Tfseq</span> <span class="o">=</span> <span class="n">Tframe</span><span class="o">*</span><span class="n">nframes</span>
+<span class="c">#</span>
+<span class="c"># load a .c3dmotion capture file</span>
+<span class="c"># this update the g.pos</span>
+<span class="c">#</span>
+<span class="c">#bc.loadC3D(filename=&#39;07_01.c3d&#39;,nframes=nframes,centered=True)</span>
+</pre></div>
+</div>
+<p>The duration of the capture is</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;Duration of the motion capture sequence&quot;</span><span class="p">,</span> <span class="n">Tfseq</span><span class="p">,</span><span class="s">&quot; seconds&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Duration of the motion capture sequence 2.5  seconds
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">d</span></tt> is a MDA of shape <tt class="docutils literal"><span class="pre">(3,npoint,nframe)</span></tt>. It contains all the
+possible configurations of the body. In general it is supposed to be a
+cyclic motion as an integer number of walking steps. This allows to
+instantiate the body configuration anywhere else in space in a given
+trajectory.</p>
+<p>A specific space-time configuration of the body is called a
+<strong>``topos``</strong>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-a-trajectory">
+<h3>10.1.4. Defining a trajectory<a class="headerlink" href="#defining-a-trajectory" title="Permalink to this headline">¶</a></h3>
+<p>A Trajectory is a class which :</p>
+<ul class="simple">
+<li>derives from a pandas <tt class="docutils literal"><span class="pre">DataFrame</span></tt></li>
+<li>is container for time,position,velocity and acceleration.</li>
+</ul>
+<p>To define a default trajectory :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>y</th>
+      <th>z</th>
+      <th>vx</th>
+      <th>vy</th>
+      <th>vz</th>
+      <th>ax</th>
+      <th>ay</th>
+      <th>az</th>
+      <th>s</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1970-01-01 00:00:00</th>
+      <td> 0.000000</td>
+      <td> 0.000000</td>
+      <td>-0.675722</td>
+      <td> 0.061186</td>
+      <td> 0.204082</td>
+      <td> 0.539726</td>
+      <td>-0.000229</td>
+      <td> 0</td>
+      <td> 0.401367</td>
+      <td> 0.000000</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.204082</th>
+      <td> 0.061186</td>
+      <td> 0.204082</td>
+      <td>-0.135996</td>
+      <td> 0.060957</td>
+      <td> 0.204082</td>
+      <td> 0.941093</td>
+      <td>-0.000458</td>
+      <td> 0</td>
+      <td>-0.976458</td>
+      <td> 0.580256</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.408163</th>
+      <td> 0.122143</td>
+      <td> 0.408163</td>
+      <td> 0.805096</td>
+      <td> 0.060499</td>
+      <td> 0.204082</td>
+      <td>-0.035365</td>
+      <td>-0.000684</td>
+      <td> 0</td>
+      <td> 0.439891</td>
+      <td> 1.545150</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.612245</th>
+      <td> 0.182642</td>
+      <td> 0.612245</td>
+      <td> 0.769731</td>
+      <td> 0.059815</td>
+      <td> 0.204082</td>
+      <td> 0.404526</td>
+      <td>-0.000909</td>
+      <td> 0</td>
+      <td>-2.415204</td>
+      <td> 1.760928</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.816327</th>
+      <td> 0.242457</td>
+      <td> 0.816327</td>
+      <td> 1.174257</td>
+      <td> 0.058906</td>
+      <td> 0.204082</td>
+      <td>-2.010679</td>
+      <td>-0.001129</td>
+      <td> 0</td>
+      <td> 2.788602</td>
+      <td> 2.217949</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 10 columns</p>
+</div><div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/MOB-body_26_0.png" src="../_images/MOB-body_26_0.png" />
+</div>
+<div class="section" id="settopos-method">
+<h3>10.1.5. settopos () method<a class="headerlink" href="#settopos-method" title="Permalink to this headline">¶</a></h3>
+<p>Once the trajectory has been defined it is possible to send the body at
+the position corresponding to any time of the trajectory with the
+<tt class="docutils literal"><span class="pre">settopos</span></tt> method.</p>
+<p>settopos takes as argument</p>
+<ul class="simple">
+<li>A trajectory</li>
+<li>A time index</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">traj</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
+</pre></div>
+</div>
+<pre class="literal-block">
+'t (s) : 0.0:9.591837nd (m) : 59.4653280432nVmoy (m/s) : 6.19957658196n'
+</pre>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">tmin</span><span class="o">+</span><span class="mf">0.4</span><span class="p">,</span><span class="n">traj</span><span class="o">.</span><span class="n">tmax</span><span class="p">,</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">plane</span><span class="o">=</span><span class="s">&#39;yz&#39;</span><span class="p">,</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/MOB-body_30_0.png" src="../_images/MOB-body_30_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>My centroid position is
+[ 0.31956097  9.3877551 ]
+filename : 07_01.c3d
+nframes : 300
+Centered : True
+Mocap Speed : 1.36558346484
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Francois</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">Francois</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>My centroid position is
+[ 0.97911919  5.91836735]
+filename : 07_01.c3d
+nframes : 300
+Centered : True
+Mocap Speed : 1.36558346484
+</pre></div>
+</div>
+<ul class="simple">
+<li>3 : dimension of space</li>
+<li>16 : number of nodes</li>
+<li>300 : number of frames</li>
+</ul>
+<p>The figure below shows the projection in a vertival plane of the body
+nodes.</p>
+<p>In order to translate the motion in any point in space-time, a
+distinction is made between the real motion or topos and the centered
+motion capture which acts as a virtual motion.</p>
+<p>Let <img class="math" src="../_images/math/067aa56257006c8a054bb0c9f30e2383eb528fc5.png" alt="\mathbf{p}^k"/> denotes the center of gravity of the body in
+the (O,x,y) plane</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">,</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">][:,</span><span class="n">newaxis</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p><img class="math" src="../_images/math/1e018ffeed15f622673016995e323f2e1df16a4e.png" alt="\mathbf{v}_g"/> is the velocity vector of the gravity center of the
+body.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">145</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">vg</span><span class="p">[:,</span><span class="mi">298</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>[ 0.0114987  -0.00026335  0.        ]
+[  1.08123514e-02   7.24411022e-05   0.00000000e+00]
+</pre></div>
+</div>
+<p>At that point the body structure is centered.</p>
+<p>The frame is centered in the xy plane by substracting from the
+configuration of points the projection of the body in the xy plane.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">npoints</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">16</span>
+</pre></div>
+</div>
+<p>Each frame is centered above the origin. For example for a walk motion
+the effect of the centering is just like if the body was still walking
+but not moving forward exactly in the same manner as a walk on a
+conveyor belt.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">pgc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">d</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span>
+<span class="n">pg0</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;True center of gravity&quot;</span><span class="p">,</span> <span class="n">pg0</span>
+<span class="k">print</span> <span class="s">&quot;Center of gravity of the centered frame&quot;</span><span class="p">,</span><span class="n">pgc</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>True center of gravity [-1.74251571  0.49373077  0.        ]
+Center of gravity of the centered frame [  3.74700271e-16   1.38777878e-17   8.94887363e-01]
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The current file contains 300 frames</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">tframe</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">nframes</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">xg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+<span class="n">yg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
+<span class="n">zg</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span>
+<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">xg</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;x component&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;y component&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">tframe</span><span class="p">,</span><span class="n">yg</span><span class="p">)</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">xg</span><span class="p">,</span><span class="n">yg</span><span class="p">,</span><span class="s">&#39;.b&#39;</span><span class="p">)</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">John</span><span class="o">.</span><span class="n">pg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">smocap</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+
+<span class="n">Vmocap</span> <span class="o">=</span> <span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">Tfseq</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Length = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smocap</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; V = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Vmocap</span><span class="o">*</span><span class="mf">3.6</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; km/h&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/MOB-body_52_0.png" src="../_images/MOB-body_52_0.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">smocap</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;evolution of curvilinear abscisse from motion capture centroid trajectory&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frame index&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;distance (meters)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fdd45827110&gt;
+</pre></div>
+</div>
+<img alt="../_images/MOB-body_53_1.png" src="../_images/MOB-body_53_1.png" />
+</div>
+<div class="section" id="defining-a-large-scale-trajectory">
+<h3>10.1.6. Defining a large scale trajectory<a class="headerlink" href="#defining-a-large-scale-trajectory" title="Permalink to this headline">¶</a></h3>
+<p>A large scale trajectory is defined in the <img class="math" src="../_images/math/4827c8230a0c9c5ebfa45b20ed4da7282fd8dade.png" alt="(O,x,y)"/> plane.</p>
+<p><tt class="docutils literal"><span class="pre">traj</span></tt> is a data structure (Npt,2)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">Vmocap</span>
+<span class="k">print</span> <span class="n">v</span><span class="o">*</span><span class="mf">3.6</span><span class="p">,</span><span class="s">&quot;Kmph&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>4.91610047343 Kmph
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># time in seconds</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">time</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">))</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">tmax</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">9.97</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>y</th>
+      <th>z</th>
+      <th>vx</th>
+      <th>vy</th>
+      <th>vz</th>
+      <th>ax</th>
+      <th>ay</th>
+      <th>az</th>
+      <th>s</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1970-01-01 00:00:00</th>
+      <td> 0.000000</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.013656</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.000000e+00</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.000000</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.010000</th>
+      <td> 0.013656</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.013656</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.000000e+00</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.013656</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.020000</th>
+      <td> 0.027312</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.013656</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.000000e+00</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.027312</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.030000</th>
+      <td> 0.040968</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.013656</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 6.938894e-18</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.040968</td>
+    </tr>
+    <tr>
+      <th>1970-01-01 00:00:00.040000</th>
+      <td> 0.054623</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.013656</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td>-1.387779e-17</td>
+      <td> 0</td>
+      <td> 0</td>
+      <td> 0.054623</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 10 columns</p>
+</div><img alt="../_images/MOB-body_58_1.png" src="../_images/MOB-body_58_1.png" />
+</div>
+<div class="section" id="trajectory">
+<h3>10.1.7. Trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="posvel">
+<h2>10.2. <tt class="docutils literal"><span class="pre">posvel()</span></tt><a class="headerlink" href="#posvel" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">posvel()</span></tt> function (position and velocity) takes as arguments the
+following parameters</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory object.</li>
+<li><img class="math" src="../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
+<li><img class="math" src="../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> duration of the periodic motion frame sequence</li>
+</ul>
+<p>and returns</p>
+<ul class="simple">
+<li>the frame index
+<img class="math" src="../_images/math/04edfef81bdb632eefe7c3dcb0f91d3b89cb1dbe.png" alt="k_f = \lfloor \frac{t_k \pmod{T_{fs}}}{t_f} \rfloor"/></li>
+<li>the trajectory index <img class="math" src="../_images/math/65bcb943341ec21456552a583de932fa1a7067b8.png" alt="k_t = \lfloor t_k \rfloor"/></li>
+<li>velocity unitary vector along motion capture frame
+<img class="math" src="../_images/math/0ef715b9dc4d710fa91709fe7152686e7b540d17.png" alt="\hat{\mathbf{v}}_s = \frac{\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]}{|\mathbf{p}^g[k_f]-\mathbf{p}^g[k_f-1]|}"/></li>
+<li>:math:<a href="#id5"><span class="problematic" id="id6">`</span></a>hat{mathbf{w}}_s = mathbf{hat{z}} times  hat{mathbf{v}}_s `</li>
+<li>velocity unitary vector along trajectory
+<img class="math" src="../_images/math/14d19cd770c023634baaf3255de1acb8fd9ba9b7.png" alt="\hat{\mathbf{v}}_t = \frac{\mathbf{p}^t[k_t]-\mathbf{p}^g[k_t-1]}{|\mathbf{p}^g[k_t]-\mathbf{p}^t[k_t-1]|}"/></li>
+<li>:math:<a href="#id7"><span class="problematic" id="id8">`</span></a>hat{mathbf{w}}_t = mathbf{hat{z}} times  hat{mathbf{v}}_t `</li>
+</ul>
+<p><img class="math" src="../_images/math/50aacdafd0664e2d05bce2d24f3c311acbc6f483.png" alt="t_f = \frac{T_{fs}}{Nf}"/> is the interframe time or frame sampling
+period, it is equal to the whole duration of the motion sequence
+<img class="math" src="../_images/math/15abacad64bbb4a546704ff6083d79bc7859b877.png" alt="T_{fs}"/> divided by the number of frames</p>
+<p><tt class="docutils literal"><span class="pre">settopos</span></tt> is a method which takes as argument :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">traj</span></tt> a plane trajectory (Npt,2)</li>
+<li><img class="math" src="../_images/math/4a333881289d833f265fe2fef93abf0404b26d60.png" alt="t_k"/> time for evaluation of topos</li>
+</ul>
+<p>In futher version of the project, this function will be modified to be
+able to avoid passing the whole trajectory.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There is now a new data structure in the Body objet. This data structure
+is called a <tt class="docutils literal"><span class="pre">topos</span></tt>.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">topos</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">topos</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">4.19599817</span><span class="p">,</span>  <span class="mf">4.15046572</span><span class="p">,</span>  <span class="mf">4.13081653</span><span class="p">,</span>  <span class="mf">4.07294142</span><span class="p">,</span>  <span class="mf">4.08289287</span><span class="p">,</span>
+         <span class="mf">4.11542251</span><span class="p">,</span>  <span class="mf">3.94530449</span><span class="p">,</span>  <span class="mf">4.26514518</span><span class="p">,</span>  <span class="mf">3.82039411</span><span class="p">,</span>  <span class="mf">4.12746908</span><span class="p">,</span>
+         <span class="mf">4.18189918</span><span class="p">,</span>  <span class="mf">3.89824308</span><span class="p">,</span>  <span class="mf">4.28535797</span><span class="p">,</span>  <span class="mf">3.70884964</span><span class="p">,</span>  <span class="mf">4.41212222</span><span class="p">,</span>
+         <span class="mf">4.15468413</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.00978643</span><span class="p">,</span>  <span class="mf">0.01039192</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.08586912</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15014439</span><span class="p">,</span>  <span class="mf">0.17454155</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.29891008</span><span class="p">,</span>  <span class="mf">0.28336831</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.31726715</span><span class="p">,</span>  <span class="mf">0.37578539</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.14822518</span><span class="p">,</span>
+         <span class="mf">0.12069953</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11848735</span><span class="p">,</span>  <span class="mf">0.13268648</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04485156</span><span class="p">,</span>  <span class="mf">0.07025805</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">0.01376282</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.18925612</span><span class="p">,</span>  <span class="mf">1.35442836</span><span class="p">,</span>  <span class="mf">1.57836099</span><span class="p">,</span>  <span class="mf">1.39037819</span><span class="p">,</span>  <span class="mf">1.40039528</span><span class="p">,</span>
+         <span class="mf">1.07349379</span><span class="p">,</span>  <span class="mf">1.11418117</span><span class="p">,</span>  <span class="mf">0.83620759</span><span class="p">,</span>  <span class="mf">0.89701301</span><span class="p">,</span>  <span class="mf">0.89713179</span><span class="p">,</span>
+         <span class="mf">0.89777028</span><span class="p">,</span>  <span class="mf">0.44315412</span><span class="p">,</span>  <span class="mf">0.43969984</span><span class="p">,</span>  <span class="mf">0.09704225</span><span class="p">,</span>  <span class="mf">0.05562085</span><span class="p">,</span>
+         <span class="mf">0.89745103</span><span class="p">]])</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">John</span><span class="o">.</span><span class="n">plot3d</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd458256d0&gt;,
+ &lt;matplotlib.axes.Axes3DSubplot at 0x7fdd4582d2d0&gt;)
+</pre></div>
+</div>
+<img alt="../_images/MOB-body_69_1.png" src="../_images/MOB-body_69_1.png" />
+<div class="section" id="definition-of-several-coordinates-systems">
+<h3>10.2.1. Definition of Several Coordinates systems<a class="headerlink" href="#definition-of-several-coordinates-systems" title="Permalink to this headline">¶</a></h3>
+<p>Each cylinder of the <tt class="docutils literal"><span class="pre">Body</span></tt> model bears one specific coordinate
+system.</p>
+<p>One or several cylinder coordinate systems can be chosen to define the
+Body Local Coordinates System (BLCS) which is required for motion
+capture (BLCS) applications.</p>
+<p>In general, the origin will be chosen on a position which is the most
+time invariant as on the chest or the back.</p>
+<p>Those frames of references are all defined in the Global Coordinate
+System (GCS) of the scene.</p>
+</div>
+<div class="section" id="construction-of-the-cylinder-coordinate-system-ccs">
+<h3>10.2.2. Construction of the Cylinder Coordinate System (CCS)<a class="headerlink" href="#construction-of-the-cylinder-coordinate-system-ccs" title="Permalink to this headline">¶</a></h3>
+<p>The method <tt class="docutils literal"><span class="pre">setccs()</span></tt> is used to associate a Cylinder Coordinate
+System (CCS) to each cylinder of the bodyCylinder model. Notice that
+those cylinders coordinates systems are not known by the localization
+application. The localization application will define the BLCS from the
+position of radiating devices placed on the body surface.</p>
+<p>Each basis is constructed with the function from
+<tt class="docutils literal"><span class="pre">geomutil.onbfromaxe()</span></tt> : orthonormal bases from axes. This function
+takes 2 sets of <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> points <img class="math" src="../_images/math/9bdd37a0dd7923e0ec534485532e96e4d4d332d8.png" alt="\mathbf{p}_{A,n}"/> and
+<img class="math" src="../_images/math/08835458dc9d70d809798923f8b0dd0301be5cc8.png" alt="\mathbf{p}_{B,n}"/> as input and provides an orthonormal basis as
+output.</p>
+<p>3 unitary vectors are constructed :</p>
+<div class="math">
+<p><img src="../_images/math/2524de9efc82760781e46cee8d969a7bb91a2898.png" alt="\hat{\mathbf{w}}_n = \frac{\mathbf{p}_B-\mathbf{p}_A}{| \mathbf{p}_B-\mathbf{p}_A |}"/></p>
+</div><div class="math">
+<p><img src="../_images/math/6842832c377839770e2fbfd471a2895800458b44.png" alt="\hat{\mathbf{u}}_n = \frac{\hat{\mathbf{v}}_g - (\hat{\mathbf{v}}_g.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n}{|\hat{\mathbf{v}_g} - (\hat{\mathbf{v}_g}.{\hat{\mathbf{w}}_n}) \mathbf{\hat{w}}_n|}"/></p>
+</div><div class="math">
+<p><img src="../_images/math/c2599ac37f7b50d3e2a89dedbb4f273ebe2e4ba1.png" alt="\hat{\mathbf{v}}_n = \mathbf{\hat{w}}_n \times \mathbf{\hat{u}}_n"/></p>
+</div><p>Where <img class="math" src="../_images/math/07cb9349fac20981cf05575d1c2b10e28d09b02d.png" alt="\hat{\mathbf{v}}_g"/> is the unit velocity vector along
+actual trajectory.</p>
+<p>The outpout of <tt class="docutils literal"><span class="pre">geomutil.onbframe</span></tt> is an MDA
+<img class="math" src="../_images/math/b2dbf695774d2af9fa3ad59c30afa05496194c71.png" alt="(3\times n \times 3)"/> of <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> unitary matrices aggregated
+along axis 1</p>
+<div class="math">
+<p><img src="../_images/math/cb83eb772b450d76e29d4fadef3da133d65a7c61.png" alt="\mathbf{T}_n=[\hat{\mathbf{u}}_n, \hat{\mathbf{v}}_n, \hat{\mathbf{w}}_n]"/></p>
+</div><p>To create the CCS :</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">setccs</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
+<span class="k">print</span> <span class="s">&quot;ccs dimensions : &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span>
+<span class="k">print</span> <span class="s">&quot;Check determinant : &quot;</span><span class="p">,</span> <span class="n">la</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">John</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>ccs dimensions :  (11, 3, 3)
+[[ 0.94678656  0.05306765 -0.31745715]
+ [-0.06834689  0.99696857 -0.03718026]
+ [ 0.31452173  0.05689898  0.94754345]]
+Check determinant :  1.0
+</pre></div>
+</div>
+<p>Create a Wireframe body representation from the body graph model</p>
+<p>Representation of frames associated with the cylinder</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>On the figure below the wireframe model is shown associated with the 11
+CCS (Cylinder coordinates systems)</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Image</span><span class="p">(</span><span class="s">&#39;CCS.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/MOB-body_82_0.png" src="../_images/MOB-body_82_0.png" />
+</div>
+<div class="section" id="placing-a-dcs-device-coordinate-system-on-the-cylinder">
+<h3>10.2.3. Placing a dcs (Device Coordinate System ) on the cylinder<a class="headerlink" href="#placing-a-dcs-device-coordinate-system-on-the-cylinder" title="Permalink to this headline">¶</a></h3>
+<p>A DCS is refered by 4 numbers <img class="math" src="../_images/math/cad3d8d10b7bf945cdca8a3d3c9c7dda9af352e1.png" alt="(Id,l,h,\alpha)"/></p>
+<ul class="simple">
+<li>Id : Cylinder Id</li>
+<li>l : length along cylinder</li>
+<li>h : height above cylinder generatrix</li>
+<li>alpha : angle from front direction (degrees)</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">Id</span> <span class="o">=</span> <span class="mi">4</span> <span class="c"># 4 Left Arm</span>
+<span class="n">l</span>  <span class="o">=</span> <span class="mf">0.1</span> <span class="c"># Longitudinal coordinates</span>
+<span class="n">h</span>  <span class="o">=</span> <span class="mf">0.03</span> <span class="c"># height</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">45</span> <span class="c"># angle degrees</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="s">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="s">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s">&#39;head&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="s">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Rotate Matrix around z</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="o">=</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">cs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">dcyl</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;arml&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s">&#39;armr&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s">&#39;calfl&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="s">&#39;calfr&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="s">&#39;forearml&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s">&#39;forearmr&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s">&#39;head&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s">&#39;thighl&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="s">&#39;thighr&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s">&#39;trunkb&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s">&#39;trunku&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">dcs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">John</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">topos</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/MOB-body_93_0.png" src="../_images/MOB-body_93_0.png" />
+</div>
+</div>
+<div class="section" id="large-scale-mobility">
+<h2>10.3. Large Scale Mobility<a class="headerlink" href="#large-scale-mobility" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
 <div class="section" id="algebraic-localization-class">
-<h1>9. Algebraic Localization Class<a class="headerlink" href="#algebraic-localization-class" title="Permalink to this headline">¶</a></h1>
+<h1>11. Algebraic Localization Class<a class="headerlink" href="#algebraic-localization-class" title="Permalink to this headline">¶</a></h1>
 <p>For localization in the plane it is important not to provide the z
 coordinates. Otherwise a singularity problem arises.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -3716,7 +5035,7 @@ LDPs :{&#39;TOA_std&#39;: array([1, 1, 1]), &#39;TOA&#39;: array([ 1.41421356,  
 </pre></div>
 </div>
 <div class="section" id="example-of-tdoa">
-<h2>9.1. Example of TDOA<a class="headerlink" href="#example-of-tdoa" title="Permalink to this headline">¶</a></h2>
+<h2>11.1. Example of TDOA<a class="headerlink" href="#example-of-tdoa" title="Permalink to this headline">¶</a></h2>
 <p>First, it is necesary to define Anchor nodes and associated Reference
 Anchor Nodes. This is important to be very specific about what exactly
 the TDOA is. In the example the Blin node is draw randomly as well as
@@ -3889,9 +5208,9 @@ distance p-4= 18.0277563773 / toa3= 60.0925212577
 </div>
 </div>
 <div class="section" id="rgpa-robust-geometric-positioning-algorithm">
-<h1>10. RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
+<h1>12. RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="exploiting-time-of-arrival-toa-only">
-<h2>10.1. Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
+<h2>12.1. Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
 <p>We call <tt class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></tt> (CLA) the object which gathers all
 the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
@@ -3976,7 +5295,7 @@ TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0
 </div>
 </div>
 <div class="section" id="rss">
-<h2>10.2. RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
+<h2>12.2. RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
 <p>The RSS is a quantity which is weakly related to distance via a
 parametric model. The bettet the model, better would be tthe inference
 ab out tthe associated distance. t To model the Path Loss shadowing
@@ -4002,7 +5321,7 @@ with the above model</p>
 </div>
 </div>
 <div class="section" id="tdoa">
-<h2>10.3. TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
+<h2>12.3. TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Td1</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt2</span><span class="p">]))</span>
 <span class="n">Td2</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt3</span><span class="p">]))</span>
 <span class="n">Td3</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt4</span><span class="p">]))</span>
@@ -4047,7 +5366,7 @@ TDOA 1.375
 </div>
 </div>
 <div class="section" id="network-simulation-configuration">
-<h1>11. Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
+<h1>13. Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
 <p>PyLayers is designed to provide indoor radio channel simulation for
 mobile agents.</p>
 <p>The goal is to adress mobility in indoor environement heterogeneous
@@ -4178,7 +5497,7 @@ verbose = True
 </pre></div>
 </div>
 <div class="section" id="layout">
-<h2>11.1. Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<h2>13.1. Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
 <p>This section allow setup the layout for the simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
 </pre></div>
@@ -4209,7 +5528,7 @@ verbose = True
 </div>
 </div>
 <div class="section" id="network">
-<h2>11.2. Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h2>
+<h2>13.2. Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -4266,7 +5585,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="mechanics">
-<h2>11.3. Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
+<h2>13.3. Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
 <p>This section allow to setup the agent movement during simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
 </pre></div>
@@ -4295,7 +5614,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="localization">
-<h2>11.4. Localization<a class="headerlink" href="#localization" title="Permalink to this headline">¶</a></h2>
+<h2>13.4. Localization<a class="headerlink" href="#localization" title="Permalink to this headline">¶</a></h2>
 <p>Setup Localization algorithms</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))</span>
 </pre></div>
@@ -4332,7 +5651,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="simulation">
-<h2>11.5. Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
+<h2>13.5. Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -4392,7 +5711,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="geomutil-class">
-<h1>12. Geomutil Class<a class="headerlink" href="#geomutil-class" title="Permalink to this headline">¶</a></h1>
+<h1>14. Geomutil Class<a class="headerlink" href="#geomutil-class" title="Permalink to this headline">¶</a></h1>
 <p><strong>Geomutil</strong> is a module which gathers different geometrical functions
 used in other modeule of pylayers.</p>
 <p>The importation is done as below. The geoutil alias is <em>geu</em></p>
@@ -4403,7 +5722,7 @@ used in other modeule of pylayers.</p>
 </div>
 </div>
 <div class="section" id="class-polygon">
-<h1>13. Class Polygon<a class="headerlink" href="#class-polygon" title="Permalink to this headline">¶</a></h1>
+<h1>15. Class Polygon<a class="headerlink" href="#class-polygon" title="Permalink to this headline">¶</a></h1>
 <p>This class is important because it implements the visibility graph, of a
 Polygon.</p>
 <p>The Polygon class is a subclass of the shapely polygon class. It allows
@@ -4421,7 +5740,7 @@ to initialize a Polygon with different object
 </pre></div>
 </div>
 <div class="section" id="ploting-polygons">
-<h2>13.1. ploting polygons<a class="headerlink" href="#ploting-polygons" title="Permalink to this headline">¶</a></h2>
+<h2>15.1. ploting polygons<a class="headerlink" href="#ploting-polygons" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
@@ -4434,7 +5753,7 @@ to initialize a Polygon with different object
 <img alt="./MISC-geomutil_files/MISC-geomutil_8_0.png" src="./MISC-geomutil_files/MISC-geomutil_8_0.png" />
 </div>
 <div class="section" id="buildgv">
-<h2>13.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
+<h2>15.2. <tt class="docutils literal"><span class="pre">buildGv()</span></tt><a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
 <p>Dertermine visibility relationships in a Polygon. Returns a graph</p>
 <p>This function is used for determining visibility relationships in indoor
 environement.</p>
@@ -4454,12 +5773,12 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="geomview-classes">
-<h1>14. Geomview classes<a class="headerlink" href="#geomview-classes" title="Permalink to this headline">¶</a></h1>
+<h1>16. Geomview classes<a class="headerlink" href="#geomview-classes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="geomvect-class">
-<h2>14.1. GeomVect class<a class="headerlink" href="#geomvect-class" title="Permalink to this headline">¶</a></h2>
+<h2>16.1. GeomVect class<a class="headerlink" href="#geomvect-class" title="Permalink to this headline">¶</a></h2>
 <p>This class is used to interact with geomview 3D viewer.</p>
 <div class="section" id="geombase">
-<h3>14.1.1. geomBase<a class="headerlink" href="#geombase" title="Permalink to this headline">¶</a></h3>
+<h3>16.1.1. geomBase<a class="headerlink" href="#geombase" title="Permalink to this headline">¶</a></h3>
 <p>Display a base</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -4472,7 +5791,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="points">
-<h3>14.1.2. points<a class="headerlink" href="#points" title="Permalink to this headline">¶</a></h3>
+<h3>16.1.2. points<a class="headerlink" href="#points" title="Permalink to this headline">¶</a></h3>
 <p>display a set of points</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">gv1</span> <span class="o">=</span> <span class="n">GeomVect</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
 <span class="n">gv1</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -4513,7 +5832,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="plotting-a-box">
-<h3>14.1.3. plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h3>
+<h3>16.1.3. plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">geo</span><span class="o">=</span><span class="n">Geomoff</span><span class="p">(</span><span class="s">&#39;test3&#39;</span><span class="p">)</span>
 <span class="n">geo</span><span class="o">.</span><span class="n">box</span><span class="p">()</span>
 </pre></div>
@@ -4524,9 +5843,9 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="utility-functions">
-<h2>14.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<h2>16.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="angledir">
-<h3>14.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.1. angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
 <p>angledir converts a 3D vector into the 2 spherical angle <img class="math" src="../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/>,
 <img class="math" src="../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/> expressed in radians</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
@@ -4541,7 +5860,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="linet">
-<h3>14.2.2. linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.2. linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -4558,7 +5877,7 @@ environement.</p>
 <img alt="./MISC-geomutil_files/MISC-geomutil_36_0.png" src="./MISC-geomutil_files/MISC-geomutil_36_0.png" />
 </div>
 <div class="section" id="dptseg-p-pt-ph">
-<h3>14.2.3. dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.3. dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
 <p>this function calculates distances between a set of points and a segment</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -4574,7 +5893,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="displot">
-<h3>14.2.4. displot<a class="headerlink" href="#displot" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.4. displot<a class="headerlink" href="#displot" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
 <span class="n">N</span>   <span class="o">=</span> <span class="mi">50</span>
@@ -4586,7 +5905,7 @@ environement.</p>
 <img alt="./MISC-geomutil_files/MISC-geomutil_42_0.png" src="./MISC-geomutil_files/MISC-geomutil_42_0.png" />
 </div>
 <div class="section" id="ptonseg-pta-phe-pt">
-<h3>14.2.5. ptonseg(pta,phe,pt)<a class="headerlink" href="#ptonseg-pta-phe-pt" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.5. ptonseg(pta,phe,pt)<a class="headerlink" href="#ptonseg-pta-phe-pt" title="Permalink to this headline">¶</a></h3>
 <p>used in select.py</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -4600,7 +5919,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="ptconvex">
-<h3>14.2.6. ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.6. ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
 <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -4623,7 +5942,7 @@ environement.</p>
 <img alt="./MISC-geomutil_files/MISC-geomutil_48_1.png" src="./MISC-geomutil_files/MISC-geomutil_48_1.png" />
 </div>
 <div class="section" id="intersect">
-<h3>14.2.7. intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.7. intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
 <p>intersect(A,B,C,D) wether or not the N segments (AB) intersects N
 segments (CD). The intersection is tested only for the segment of same
 index in the ndarray.</p>
@@ -4689,7 +6008,7 @@ index in the ndarray.</p>
 </div>
 </div>
 <div class="section" id="useful-functions">
-<h2>14.3. Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
+<h2>16.3. Useful functions<a class="headerlink" href="#useful-functions" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre>isaligned?
 </pre></div>
 </div>
