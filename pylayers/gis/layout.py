@@ -6604,7 +6604,8 @@ class Layout(object):
         fos.close()
         return pg 
 
-    def _show3(self,centered=True,show=True):
+    @mlab.show
+    def _show3(self,centered=False,newfig=False):
         """ create a .off geomview file 
 
         Parameters
@@ -6797,16 +6798,24 @@ class Layout(object):
 
         sc=tvtk.UnsignedCharArray()
         sc.from_array(color)
-
+        
+        
+               
         mesh = tvtk.PolyData(points=points, polys=boxes)
         mesh.point_data.scalars = sc
         mesh.point_data.scalars.name = 'scalars'
+        
+        
+        if newfig:
+            mlab.clf()
+            mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+        else :
+            mlab.gcf()
+        
+        surf = mlab.pipeline.surface(mesh, opacity=1)
+        mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
+                                    color=(0, 0, 0), )
 
-        if show:
-            fig = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
-            surf = mlab.pipeline.surface(mesh, opacity=1)
-            mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
-                                        color=(0, 0, 0), )
 
 
     def show3(self, bdis=True,centered=True):

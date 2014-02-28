@@ -640,8 +640,10 @@ class Geomoff(Geomview):
         T  = kwargs['T']
         assert (abs(la.det(T))>0.99)
         # retrieving dimensions
-        Nt = np.shape(theta)[0]
-        Np = np.shape(phi)[1]
+        Nt = len(theta)#np.shape(theta)[0]
+        Np = len(phi)#np.shape(phi)[1]
+        theta = theta[:,np.newaxis]
+        phi = phi[np.newaxis,:]
 
         if ilog:
             R = 10 * np.log10(abs(E))
