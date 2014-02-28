@@ -1122,11 +1122,9 @@ class Body(object):
 
                     
                 if 0 < alpha < 1 and 0 < beta < 1 :
-                    #print 'dmin = ', dmin  
-                    #print 'r = ', self.sl[k,2]  
+                                          
                     dAB = np.sqrt(sum((A-B)**2))
-                    if alpha <> 0:
-                        mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
+                    mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
                  
         return intersect
         

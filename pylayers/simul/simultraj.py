@@ -164,7 +164,7 @@ class Simul(object):
         if llink ==[]:
             llink = self.links
             
-        time =  self.traj[0].time()
+        time =  self.traj[0].time()[0:30]
         n_time =len(time)
         n_links = len(llink)
         Kmax = 100
@@ -191,11 +191,14 @@ class Simul(object):
                 TB = self.dpersons[B[0]].acs[B[1]]
                 cylA = self.dpersons[A[0]].dev[A[1]]['cyl']
                 cylB = self.dpersons[B[0]].dev[B[1]]['cyl']
-                interA = self.dpersons[A[0]].intersectBody(pA,pB, topos = True, cyl =[cylA])
-                interB = self.dpersons[B[0]].intersectBody(pA,pB, topos = True, cyl =[cylB])
+                
+                interA = self.dpersons[A[0]].intersectBody3(pA,pB, topos = True)
+                #interB = self.dpersons[B[0]].intersectBody2(pA,pB, topos = True)
+                    
+                   
                 condition ='nlos'
-                if np.sum(interA)==0 and np.sum(interB)== 0 :
-                    condtion = 'los'
+                if interA==1:
+                    condition = 'los'
                 empA = A[1]
                 empB = B[1]
                 emp  = empA
@@ -203,14 +206,15 @@ class Simul(object):
                     emp = empB
                 if emp == 'left_watch':
                     emp = 'right_watch'
-                    if condition == 'los':
-                        condition = 'nlos'
-                    else:
-                        condition = 'los'
+                    #~ if condition == 'los':
+                        #~ condition = 'nlos'
+                    #~ else:
+                        #~ condition = 'los'
                 if emp == 'front_chest':
                     condition = 'los'
-                #pdb.set_trace()
-                alphakOb, taukOb = getchennel(emplacement = emp ,condition = condition)
+                
+               
+                alphakOb, taukOb = getchannel(emplacement = emp ,condition = condition, intersection = interA)
                 alphak =  np.zeros(shape=(Kmax))
                 tauk   =  np.zeros(shape=(Kmax))
                 ntraj = len(taukOb)
@@ -222,6 +226,7 @@ class Simul(object):
                     alphak =  alphakOb[0:Kmax]
                     tauk =  taukOb[0:Kmax]                            
                     print ' warning ntraj > Kmax'
+               
                 tab = np.vstack((alphak,tauk)).T                   
                 resultOb[kt,kl,:,:]= tab  
                   
@@ -261,7 +266,6 @@ class Simul(object):
                 resultEnv[kt,kl,:,:]= tab
                 
         
-        print 'link = ', link
         return resultEnv, resultOb
         
         
