@@ -172,11 +172,13 @@ class Body(object):
 
 
         self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
+        self.dcyl = {}
         for cyl in di['cylinder'].keys():
             t = di['cylinder'][cyl]['t']
             h = di['cylinder'][cyl]['h']
             r = di['cylinder'][cyl]['r']
             i = di['cylinder'][cyl]['i']
+            self.dcyl[cyl]=i
             #pdb.set_trace()
             #
             # sl : segment list of the body
@@ -314,7 +316,7 @@ class Body(object):
 
         Examples
         --------
-        
+
         .. plot::
             :include-source:
 
@@ -443,8 +445,8 @@ class Body(object):
         for dev in self.dev.keys():
 
             # retrieving antenna placement information from dictionnary ant
-
-            Id = self.dev[dev]['cyl']
+            cylname = self.dev[dev]['cyl']
+            Id = self.dcyl[cylname]
             alpha = self.dev[dev]['a']*np.pi/180.
             l = self.dev[dev]['l']
             h = self.dev[dev]['h']
@@ -958,7 +960,7 @@ class Body(object):
                 #T = np.dot(Rbg,Rab)
                 #T = np.eye(3)
                 T  = self.acs[key]
-                geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
+                geo.pattern(Ant.theta[:,np.newaxis],Ant.phi[np.newaxis,:],V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
         # wireframe body

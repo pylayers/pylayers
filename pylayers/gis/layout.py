@@ -6624,16 +6624,16 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> pg = L.geomfile()
+        >>> pg = L.mayafile()
 
         """
-    
+
         # calculate center of gravity
         if centered:
             pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
         else:
             pg = np.array([0,0])
-        
+
         #en  = self.Ns # number of segments
         en  = len(np.where(np.array(self.Gs.node.keys())>0)[0])
         if en != self.Ns:
@@ -6661,7 +6661,7 @@ class Layout(object):
 
         ik   = 0
         dikn = {}
-        
+
         for i in self.Gs.node.keys():
             if i > 0:  # segment
                 if self.Gs.node[i]['name']<>'AIR':
@@ -6670,7 +6670,7 @@ class Layout(object):
                     n2 = nebr[1]
                     P1[0:2, ik] = np.array(self.Gs.pos[n1])-pg
                     P1[2, ik] = self.Gs.node[i]['z'][0]
-                    
+
                     P2[0:2, ik] = np.array(self.Gs.pos[n1])-pg
                     P2[2, ik] = self.Gs.node[i]['z'][1]
 
@@ -6679,12 +6679,12 @@ class Layout(object):
 
                     P4[0:2, ik] = np.array(self.Gs.pos[n2])-pg
                     P4[2, ik] = self.Gs.node[i]['z'][0]
-                    
+
                     dikn[ik]=i
                     ik = ik + 1
 
                 else:
-                    
+
                     en = en-1
 
 
@@ -6794,7 +6794,8 @@ class Layout(object):
         colf = np.repeat((pyu.rgb(colhex))[np.newaxis,:],4,axis=0)
         color = np.vstack((color,colf))
 
-        # trick for correct color assignement
+        # trick for correcting  color assignement
+
         sc=tvtk.UnsignedCharArray()
         sc.from_array(color)
         
@@ -6816,6 +6817,7 @@ class Layout(object):
                                     color=(0, 0, 0), )
 
 
+
     def show3(self, bdis=True,centered=True):
         """ geomview display of the indoor structure
 
@@ -6824,10 +6826,10 @@ class Layout(object):
 
         bdis boolean (default True)
             boolean display (call geowview if True)
-        centered : boolean     
+        centered : boolean
             if True center the layout before display
-        
-        
+
+
         """
 
         pg = self.geomfile(centered=centered)
