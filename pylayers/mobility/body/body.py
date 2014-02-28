@@ -14,6 +14,13 @@ import pylayers.util.geomutil as geu
 import pylayers.mobility.body.DeuxSeg as seg
 import doctest
 import itertools as itt
+try:
+    from mayavi import mlab 
+    from tvtk.tools import visual
+
+except:
+    print 'mayavi not installed'
+
 
 def ChangeBasis(u0, v0, w0, v1):
     """
@@ -686,6 +693,71 @@ class Body(object):
         ax.autoscale(enable=True)
         return(fig,ax)
 
+    def _show3(self,**kwargs):
+        """
+        """
+        defaults = {'iframe' : 0,
+                    'widthfactor' : 1.,
+                    'topos':False,
+                    'pattern':False,
+                    'ccs':True,
+                    'k':0}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        args = {}
+        for k in kwargs:
+            if k not in defaults:
+                args[k] = kwargs[k]
+
+        visual.set_viewer(mlab.gcf())
+
+        fId = kwargs['iframe']
+
+        for k in range(self.ncyl):
+
+            kta = self.sl[k,0]
+            khe = self.sl[k,1]
+            cylrad = self.sl[k,2]
+            if kwargs['topos']:
+                pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+                phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+            else:
+                pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
+                phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+
+            ax = phe-pta
+            cc = (pta+phe)/2.
+            l = np.sqrt(np.sum(ax**2))
+            cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
+                        axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+           
+            # if kwargs['ccs']:
+
+            #     pt = pta+cylrad*self.ccs[k,:,0]
+            #     import ipdb
+            #     ipdb.set_trace()
+            #     mlab.quiver3d(pt,pt,pt,self.ccs[k,0,:],self.ccs[k,1,:],self.ccs[k,2,:])
+    
+                    
+
+
+        if kwargs['pattern']:
+            self.setacs()
+            for key in self.dcs.keys():
+                Ant =  ant.Antenna(self.dev[key]['file'])
+                if not hasattr(Ant,'SqG'):
+                    Ant.Fsynth()
+                U = self.dcs[key]
+                V = Ant.SqG[kwargs['k'],:,:]
+                T  = self.acs[key]
+
+                Ant._show3(po=U[:,0], T=T,ilog=False,minr=0.001,maxr=0.02,
+                            newfig=False,title=False,colorbar=False)
+                
+
 
     def show(self,**kwargs):
         """ show a 2D plane projection of the body
@@ -960,7 +1032,7 @@ class Body(object):
                 #T = np.dot(Rbg,Rab)
                 #T = np.eye(3)
                 T  = self.acs[key]
-                geo.pattern(Ant.theta[:,np.newaxis],Ant.phi[np.newaxis,:],V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
+                geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
         # wireframe body
