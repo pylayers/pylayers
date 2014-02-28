@@ -2326,8 +2326,8 @@ class Antenna(object):
         # create vsh2 file
         if filename == '':
             _filevsh2 = self._filename.replace('.trx', '.vsh2')
-            
-        _filevsh2  = filename 
+
+        _filevsh2  = filename
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):

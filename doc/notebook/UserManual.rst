@@ -166,6 +166,687 @@ Testing
 
  make test-code
 
+Description of Antennas
+=======================
+
+PyLayers accepts various descriptions of the antenna radiation pattern. 
+It goes from a simple antenna gain formula to a full polarization description. 
+
++ Full description on a grid (.mat,.trx) 
++ Scalar Harmonics decomposition (.sh2,.sh3)
++ Vector Harmonics decomposition  (.vsh2,.vsh3)
++ Closed form formula for simplified antenna models (Omni,Gauss,WirePlate,...) 
+
+The following examples illustrates some features of the Antenna class.
+
+.. code-block:: python
+
+    from pylayers.antprop.antenna import *
+
+.. parsed-literal::
+
+    /usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
+      warnings.warn(msg, UserWarning)
+
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x79a8990>
+
+
+Lets start by loading an antenna from a ``vsh3`` file.
+
+.. code-block:: python
+
+    A = Antenna('S1R1.vsh3')
+    A
+
+
+
+.. parsed-literal::
+
+    FileName : S1R1.vsh3
+    -----------------------
+    fmin : 0.80GHz
+    fmax : 5.95GHz
+    step : 50.00MHz
+    Nf : 104
+    Not evaluated
+
+
+
+In fact this is not a void antenna. There is a default file which has
+been loaded and there is an antenna down there. The only thing we know
+at that point is the name of the file which has extension '.vsh3' which
+means vector spherical harmonics in shape 3. To list all the availble
+antenna files in the dedicated directory of the project it i possible to
+invoke the ``ls()`` method.
+
+.. code-block:: python
+
+    A.ls('sh3')
+
+
+
+.. parsed-literal::
+
+    ['S1R1.sh3', 'S2R2.sh3']
+
+
+
+.. code-block:: python
+
+    A.ls('vsh3')
+
+
+
+.. parsed-literal::
+
+    ['S1R1.vsh3',
+     'S1R10.vsh3',
+     'S1R11.vsh3',
+     'S1R12.vsh3',
+     'S1R13.vsh3']
+
+
+At that point the radiation pattern of the antenna has not yet been
+evaluated. For a shape 3 pattern the method to calculate the pattern is
+``Fsynth3()`` with the ``pattern`` option set to true.
+
+.. code-block:: python
+
+    A.Fsynth3(pattern=True)
+
+The ``polar()`` method allows to superpose different pattern for a list o
+frequecies ``fGHz`` + If ``phd`` is precised the diagram is given as a
+function of :math:`\theta` + If ``thd`` is precised the diagram is given
+as a function of :math:`\phi`
+
+.. code-block:: python
+
+    f = plt.figure(figsize=(15,15))
+    a1 = f.add_subplot(121,polar=True)
+    f1,a1 = A.polar(fGHz=[3,4,5],phd=0,GmaxdB=0,fig=f,ax=a1)
+    a2 = f.add_subplot(122,polar=True)
+    f2,a2 = A.polar(fGHz=[3,4,5],thd=90,GmaxdB=5,fig=f,ax=a2)
+
+
+.. image:: AP-Antenna1_files/AP-Antenna1_11_0.png
+
+
+.. code-block:: python
+
+    A
+
+
+
+.. parsed-literal::
+
+    FileName : S1R1.vsh3
+    -----------------------
+    fmin : 0.80GHz
+    fmax : 5.95GHz
+    step : 50.00MHz
+    Nf : 104
+    -----------------------
+    Ntheta : 45
+    Nphi : 90
+    GmaxDB : 2.23 dB 
+       f = 5.60 GHz 
+       theta = 69.55 (degrees) 
+       phi = 271.01  (degrees) 
+
+
+
+.. code-block:: python
+
+    A.C.show(typ='s3')
+    fig = gcf()
+    plt.tight_layout()
+
+
+.. image:: AP-Antenna1_files/AP-Antenna1_13_0.png
+
+
+Defining Antenna gain from closed form formulas
+-----------------------------------------------
+
+An antenna can be defined from closed-form expressions.
+
+.. code-block:: python
+
+    A = Antenna('Omni')
+.. code-block:: python
+
+    A.Fpatt(pattern=True)
+.. code-block:: python
+
+    A.polar()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x7f991c9aa0d0>,
+     <matplotlib.projections.polar.PolarAxes at 0x7f995bc67450>)
+
+
+
+
+.. image:: AP-Antenna1_files/AP-Antenna1_18_1.png
+
+Description With Scalar Spherical Harmonics
+-------------------------------------------
+
+
+.. code-block:: python
+
+    from pylayers.antprop.antenna import *
+    from pylayers.antprop.antssh import *
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x7936310>
+
+
+.. code-block:: python
+
+    A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
+.. code-block:: python
+
+    A
+
+
+
+.. parsed-literal::
+
+    FileName : S1R1.mat
+    -----------------------
+    fmin : 0.80GHz
+    fmax : 5.95GHz
+    step : 50.00MHz
+    Nf : 104
+    -----------------------
+    Ntheta : 91
+    Nphi : 180
+    GmaxDB : 2.23 dB 
+       f = 5.60 GHz 
+       theta = 70.00 (degrees) 
+       phi = 272.00  (degrees) 
+    antenna name : Th1
+    date : 04/12/12
+    time : 15:55
+    Notes : Mohamed at the log
+    
+    Serie : 1
+    Run : 1
+    Nb theta (lat) : 91
+    Nb phi (lon) :180
+
+
+
+To calcultae scalar spherical harmonics use method ``ssh(A,L)``
+
+.. code-block:: python
+
+    L = 5
+    A = ssh(A,L=5)
+.. code-block:: python
+
+    A
+
+
+
+.. parsed-literal::
+
+    FileName : S1R1.mat
+    -----------------------
+    fmin : 0.80GHz
+    fmax : 5.95GHz
+    step : 50.00MHz
+    Nf : 104
+    -----------------------
+    Ntheta : 91
+    Nphi : 180
+    GmaxDB : 2.23 dB 
+       f = 5.60 GHz 
+       theta = 70.00 (degrees) 
+       phi = 272.00  (degrees) 
+    antenna name : Th1
+    date : 04/12/12
+    time : 15:55
+    Notes : Mohamed at the log
+    
+    Serie : 1
+    Run : 1
+    Nb theta (lat) : 91
+    Nb phi (lon) :180
+
+
+
+.. code-block:: python
+
+    plot(abs(A.S.Cx.s2[0]))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x83090d0>]
+
+
+
+
+.. image:: AP-AntennaSSH_files/AP-AntennaSSH_6_1.png
+
+
+.. code-block:: python
+
+    A.savesh2()
+
+.. parsed-literal::
+
+    /home/uguen/Bureau/P1/ant/S1R1.sh2  already exist
+
+
+.. code-block:: python
+
+    A.loadsh2()
+.. code-block:: python
+
+    plot(abs(A.S.Cx.s2[0]))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x84115d0>]
+
+
+
+
+.. image:: AP-AntennaSSH_files/AP-AntennaSSH_9_1.png
+
+
+.. code-block:: python
+
+    A.S.s2tos3()
+.. code-block:: python
+
+    plot(abs(A.S.Cx.s3[0]))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x87e8550>]
+
+
+
+
+.. image:: AP-AntennaSSH_files/AP-AntennaSSH_11_1.png
+
+
+.. code-block:: python
+
+    A.S.Cx.ind2.shape
+
+
+
+.. parsed-literal::
+
+    (36, 2)
+
+
+
+.. code-block:: python
+
+    A.savesh3()
+
+.. parsed-literal::
+
+    /home/uguen/Bureau/P1/ant/S1R1.sh3  already exist
+
+
+.. code-block:: python
+
+    plot(abs(A.S.Cx.s2[0]))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x8a0fb90>]
+
+
+
+
+.. image:: AP-AntennaSSH_files/AP-AntennaSSH_14_1.png
+
+
+.. code-block:: python
+
+    A.loadsh3()
+.. code-block:: python
+
+    plot(abs(A.S.Cx.s3[100]))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x8a45210>]
+
+
+
+
+.. image:: AP-AntennaSSH_files/AP-AntennaSSH_16_1.png
+
+
+.. code-block:: python
+
+    plot(abs(A.S.Cx.s2[100]))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x8cf9b50>]
+
+
+
+
+.. image:: AP-AntennaSSH_files/AP-AntennaSSH_17_1.png
+
+
+.. code-block:: python
+
+    A.__dict__.keys()
+
+
+
+.. parsed-literal::
+
+    ['Nf',
+     'PhotoFile',
+     'Np',
+     'SqG',
+     'Run',
+     'Nt',
+     'Serie',
+     'Ftheta',
+     'theta',
+     'fromfile',
+     'phi',
+     'Fphi',
+     'Notes',
+     'Date',
+     'S',
+     'AntennaName',
+     'typ',
+     'DataFile',
+     'fa',
+     'evaluated',
+     'StartTime',
+     '_filename']
+
+
+
+.. code-block:: python
+
+    A.S.Cx.__dict__.keys()
+
+
+
+.. parsed-literal::
+
+    ['k2', 'ind3', 'ind2', 'fmax', 's2', 'Nf', 's3', 'lmax', 'fmin']
+
+
+
+.. code-block:: python
+
+    A.S.Cx
+
+
+
+.. parsed-literal::
+
+    Nf   : 104
+    fmin (GHz) : 0.8
+    fmax (GHz) : 5.95
+    NCoeff s2  : 36
+    Ncoeff s3 : 32
+
+
+Description of Antennas with Vector Spherical Harmonics
+-------------------------------------------------------
+
+
+.. code-block:: python
+
+    from pylayers.antprop.antenna import *
+    from pylayers.antprop.antvsh import *
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x85a9310>
+
+
+Read a trx file. This file has no header, it contains 7 columns :
+
+.. code-block:: python
+
+    A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
+    #A = Antenna('trx1','UWB_CEA.trx')
+The shape of the :math:`F_{\phi}` functions indicates :
+
+-  :math:`N_f= 104`
+-  :math:`N_{\theta} = 91`
+-  :math:`N_{\phi} = 180 `
+
+.. code-block:: python
+
+    figsize(5,5)
+    shape(A.Fphi)
+
+
+
+.. parsed-literal::
+
+    (104, 91, 180)
+
+
+The frequency ramp is converted in :math:`GHz`. In practice we always
+handles frequency expressed in :math:`GHz` and delays expressed in
+:math:`ns`
+
+.. code-block:: python
+
+    fGHz = A.fa.reshape(104,1,1)/1e9
+Then an electrical delay of :math:`4.185ns` is applied on the
+:math:`F_{\theta}`
+
+.. code-block:: python
+
+    tau=4.185
+    I = A.Ftheta[:,:,:]*exp(-2*1j*pi*fGHz*tau)
+.. code-block:: python
+
+    imshow(unwrap(angle(I[:,45,:])))
+    title(r'Unwrapped phase of $F_{\theta}$ w.r.t frequency and phi for $\theta=\frac{pi}{2}$')
+    ylabel('f index')
+    colorbar()
+    figure()
+    plot(fGHz[:,0,0],unwrap(angle(I[:,45,85])))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x9782b50>]
+
+
+
+
+.. image:: AP-AntennaVSH_files/AP-AntennaVSH_9_1.png
+
+
+
+.. image:: AP-AntennaVSH_files/AP-AntennaVSH_9_2.png
+
+
+Display of the radiation pattern for all frequencies
+
+.. code-block:: python
+
+    for nf in range(104):
+        polar(A.phi,abs(A.Ftheta[nf,45,:]))
+
+
+.. image:: AP-AntennaVSH_files/AP-AntennaVSH_11_0.png
+
+
+
+Evaluation of Vector Spherical Harmonics Coefficients
+-----------------------------------------------------
+
+At that stage we compute the Vector Spherical Harmonics coefficients
+
+.. code-block:: python
+
+    A=vsh(A)
+.. code-block:: python
+
+    A.info()
+
+.. parsed-literal::
+
+    S1R1.mat
+    type :  mat
+    S1R1
+    Th1
+    04/12/12
+    15:55
+    Mohamed at the log
+    
+    1
+    1
+    Nb theta (lat) : 91
+    Nb phi (lon) : 180
+    No vsh coefficient calculated yet
+
+
+.. code-block:: python
+
+    A.C.s1tos2(30)
+.. code-block:: python
+
+    A.C
+
+
+
+.. parsed-literal::
+
+    Br
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+    
+    Bi
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+    
+    Cr
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+    
+    Ci
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+
+
+
+.. code-block:: python
+
+    figsize(10,10)
+    A.C.show('s2',k=300)
+
+
+.. image:: AP-AntennaVSH_files/AP-AntennaVSH_19_0.png
+
+
+.. code-block:: python
+
+    A.C.s2tos3()
+.. code-block:: python
+
+    A.C
+
+
+
+.. parsed-literal::
+
+    Br
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+    Ncoeff s3 : 86
+    
+    Bi
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+    Ncoeff s3 : 86
+    
+    Cr
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+    Ncoeff s3 : 86
+    
+    Ci
+    -------------
+    N1  : 90
+    M1  : 89
+    Ncoeff s1 8010
+    NCoeff s2  : 495
+    Ncoeff s3 : 86
+
+
+
+.. code-block:: python
+
+    A.C.show('s3')
+
+
+.. image:: AP-AntennaVSH_files/AP-AntennaVSH_22_0.png
+
+
+.. code-block:: python
+
+    
+
 Slabs and Materials
 ===================
 
@@ -236,7 +917,7 @@ materials of a ``Slab``
      'PILLAR',
      'ABSORBENT']
 
-Defining a new Slab and a new Material
+Defining a New Slab and a New Material
 --------------------------------------
 
 .. code-block:: python
@@ -444,7 +1125,7 @@ coefficients for
 Transmission and Reflexion coefficients
 ---------------------------------------
 
-Reflexion and transmission coefficient are computed for the given
+Relexion and transmission coefficient are computed for the given
 frequency range and theta range
 
 .. code-block:: python
