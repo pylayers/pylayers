@@ -1,15 +1,8 @@
-
 .. _osmparser:
 
 osmparser
 =========
 
-This module handles the description of the environment with `Open Street Map
-<http://wiki.openstreetmap.org/wiki/Indoor_Mapping>`_ files
-
-
-.. autoclass:: pylayers.gis.osmparser
-    :members:
 
 .. automodule:: pylayers.gis.osmparser
     :members:

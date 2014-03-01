@@ -87,17 +87,11 @@
             
   <div class="section" id="osmparser">
 <span id="id1"></span><h1>osmparser<a class="headerlink" href="#osmparser" title="Permalink to this headline">¶</a></h1>
-<p>This module handles the description of the environment with <a class="reference external" href="http://wiki.openstreetmap.org/wiki/Indoor_Mapping">Open Street Map</a> files</p>
-<dl class="attribute">
-<dt id="pylayers.gis.osmparser">
-<tt class="descclassname">pylayers.gis.</tt><tt class="descname">osmparser</tt><a class="headerlink" href="#pylayers.gis.osmparser" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#module-pylayers.gis.osmparser" title="pylayers.gis.osmparser"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.gis.osmparser</span></tt></a></p>
-</dd></dl>
-
 <span class="target" id="module-pylayers.gis.osmparser"></span><dl class="class">
 <dt id="pylayers.gis.osmparser.Coords">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">Coords</tt><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>A Coords is a point</p>
+<dl class="method">
 <dt id="pylayers.gis.osmparser.Coords.cartesian">
 <tt class="descname">cartesian</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Coords.cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Coords.cartesian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert Latitude/Longitude in cartesian</p>
@@ -105,7 +99,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>m</strong> : Basemap converter</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>m</strong> : Basemap converter</td>
 </tr>
 </tbody>
 </table>
@@ -118,7 +112,7 @@
 <dl class="class">
 <dt id="pylayers.gis.osmparser.FloorPlan">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">FloorPlan</tt><big>(</big><em>rootid</em>, <em>coords</em>, <em>nodes</em>, <em>ways</em>, <em>relations</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#FloorPlan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.FloorPlan" title="Permalink to this definition">¶</a></dt>
-<dd><p>FloorPlan class</p>
+<dd><p>FloorPlan class derived from nx.DigGraph</p>
 <dl class="method">
 <dt id="pylayers.gis.osmparser.FloorPlan.build">
 <tt class="descname">build</tt><big>(</big><em>typ</em>, <em>eid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#FloorPlan.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.FloorPlan.build" title="Permalink to this definition">¶</a></dt>
@@ -127,7 +121,7 @@
 
 <dl class="method">
 <dt id="pylayers.gis.osmparser.FloorPlan.show">
-<tt class="descname">show</tt><big>(</big><em>nid=None</em>, <em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#FloorPlan.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.FloorPlan.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>nid=None</em>, <em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#FloorPlan.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.FloorPlan.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show the floorplan</p>
 </dd></dl>
 
@@ -136,7 +130,8 @@
 <dl class="class">
 <dt id="pylayers.gis.osmparser.Nodes">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">Nodes</tt><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Nodes" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>osm Nodes container</p>
+<dl class="method">
 <dt id="pylayers.gis.osmparser.Nodes.nodes">
 <tt class="descname">nodes</tt><big>(</big><em>nodes</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Nodes.nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Nodes.nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>parse tagged nodes</p>
@@ -147,14 +142,14 @@
 <dl class="class">
 <dt id="pylayers.gis.osmparser.Way">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">Way</tt><big>(</big><em>refs</em>, <em>tags</em>, <em>coords</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Way"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Way" title="Permalink to this definition">¶</a></dt>
-<dd><p>A Way is a polyline or a Polycon (if closed)</p>
+<dd><p>A Way is a polyline or a Polygon (if closed)</p>
 <dl class="docutils">
 <dt>typ <span class="classifier-delimiter">:</span> <span class="classifier">0 Polygon</span></dt>
 <dd>1 LineString</dd>
 </dl>
 <dl class="method">
 <dt id="pylayers.gis.osmparser.Way.show">
-<tt class="descname">show</tt><big>(</big><em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Way.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Way.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Way.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Way.show" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -166,12 +161,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>w</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>w</strong> :</p>
 <p><strong>way</strong> :</p>
 <p><strong>cpt</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>ways</strong> :</p>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>ways</strong> :</p>
 <p><strong>eval</strong> :</p>
 <p class="last"><strong>show</strong> :</p>
 </td>
@@ -192,15 +187,20 @@
 
 <dl class="method">
 <dt id="pylayers.gis.osmparser.Ways.show">
-<tt class="descname">show</tt><big>(</big><em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span>, <em>typ=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Ways.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Ways.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>typ=2</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Ways.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Ways.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show all way</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> : figure</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong> : figure</p>
 <p><strong>ax</strong> : axe</p>
-<p class="last"><strong>typ</strong> : 0|1|2 (default)</p>
+<p><strong>typ</strong> : 0|1|2 (default)</p>
+<blockquote class="last">
+<div><p>0 : display only way of typ 0
+1 : display only way of typ 1
+2 : display all way (default)</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -209,8 +209,22 @@
 
 <dl class="method">
 <dt id="pylayers.gis.osmparser.Ways.showold">
-<tt class="descname">showold</tt><big>(</big><em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Ways.showold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Ways.showold" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showold</tt><big>(</big><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Ways.showold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Ways.showold" title="Permalink to this definition">¶</a></dt>
 <dd><p>show ways</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.osmparser.Ways.tomaska">
+<tt class="descname">tomaska</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#Ways.tomaska"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.Ways.tomaska" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert to masked array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>ptma</strong> : masked array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -229,17 +243,24 @@
 <dl class="function">
 <dt id="pylayers.gis.osmparser.extract">
 <tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">extract</tt><big>(</big><em>alat</em>, <em>alon</em>, <em>fileosm</em>, <em>fileout</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.extract" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>extraction of an osm sub region using osmconvert</p>
+<p>This function takes two (1xn) arrays of latitude an longitude values
+Calculates extrema of those values.
+Invokes osmconvert script on a source fileosm and extract the
+corresponding zone in the fileout file.</p>
+<p>The functions returns a basemap object for coordinates conversion on this
+file.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>alat</strong> : array of latitude (1xn)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alat</strong> : array of latitude (1xn)</p>
 <p><strong>alon</strong> : array of longitude (1xn)</p>
 <p><strong>fileosm</strong> : source osm file</p>
 <p><strong>filout</strong> : output osm file</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>m</strong> : Basemap oject for coordinates conversion</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>m</strong> : Basemap oject for coordinates conversion</p>
 </td>
 </tr>
 </tbody>
@@ -248,17 +269,17 @@
 
 <dl class="function">
 <dt id="pylayers.gis.osmparser.getbdg">
-<tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">getbdg</tt><big>(</big><em>fileosm</em>, <em>m</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#getbdg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.getbdg" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">getbdg</tt><big>(</big><em>fileosm</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/osmparser.html#getbdg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.getbdg" title="Permalink to this definition">¶</a></dt>
 <dd><p>get building from osm file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fileosm</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fileosm</strong> : string</p>
 <p><strong>m</strong> : Basemap object</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>zone</strong> : list of Polygon</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>zone</strong> : list of Polygon</p>
 </td>
 </tr>
 </tbody>
@@ -272,7 +293,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
 <blockquote>
 <div><p>floorplan | building</p>
 </div></blockquote>
@@ -281,12 +302,24 @@
 <div><p>default : False</p>
 </div></blockquote>
 <p><strong>c</strong> : boolean</p>
+<blockquote>
+<div><p>read coords</p>
+</div></blockquote>
 <p><strong>n</strong> : boolean</p>
+<blockquote>
+<div><p>read nodes</p>
+</div></blockquote>
 <p><strong>w</strong> : boolean</p>
+<blockquote>
+<div><p>read  ways</p>
+</div></blockquote>
 <p><strong>r</strong> : boolean</p>
+<blockquote>
+<div><p>read relations</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>coords :</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coords :</strong> :</p>
 <p><strong>nodes  :</strong> :</p>
 <p><strong>ways   :</strong> :</p>
 <p class="last"><strong>relations :</strong> :</p>
@@ -325,7 +358,7 @@
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
