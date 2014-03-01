@@ -193,7 +193,11 @@
 <div class="viewcode-block" id="Trajectory"><a class="viewcode-back" href="../../../modules/mobility.trajectory.html#pylayers.mobility.trajectory.Trajectory">[docs]</a><span class="k">class</span> <span class="nc">Trajectory</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  Define a trajectory</span>
 
-<span class="sd">    This class derives from pandas.DataFrame</span>
+<span class="sd">    This class derives from pandas.DataFrame. It handles a full 3D trajectory</span>
+<span class="sd">    description.</span>
+
+<span class="sd">    A trajectory is time-stamped and contains information about position,</span>
+<span class="sd">    velocity and acceleration.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -241,13 +245,22 @@
 <div class="viewcode-block" id="Trajectory.update"><a class="viewcode-back" href="../../../modules/mobility.trajectory.html#pylayers.mobility.trajectory.Trajectory.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update class member data</span>
 
+<span class="sd">        This method updates following data members</span>
+
+<span class="sd">        + tmin (s)</span>
+<span class="sd">        + tmax (s)</span>
+<span class="sd">        + ts   time step in second</span>
+<span class="sd">        + ttime (s) trajectory duration</span>
+<span class="sd">        + measnsp</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
 <span class="sd">        bool :</span>
-<span class="sd">            True if Trajectroy has values, False otherwise</span>
+<span class="sd">            True if Trajectory has values, False otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="o">*</span><span class="mf">1e-9</span>

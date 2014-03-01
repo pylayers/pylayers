@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="mobility" href="mobility.html" />
     <link rel="next" title="body" href="mobility.body.body.html" />
-    <link rel="prev" title="constraints" href="mobility.agent.html" /> 
+    <link rel="prev" title="Agent" href="mobility.agent.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="mobility.body.body.html" title="body"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="mobility.agent.html" title="constraints"
+          <a href="mobility.agent.html" title="Agent"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -60,7 +60,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="mobility.agent.html"
-                        title="previous chapter">constraints</a></p>
+                        title="previous chapter">Agent</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="mobility.body.body.html"
                         title="next chapter">body</a></p>
@@ -91,7 +91,10 @@
 <dt id="pylayers.mobility.trajectory.Trajectory">
 <em class="property">class </em><tt class="descclassname">pylayers.mobility.trajectory.</tt><tt class="descname">Trajectory</tt><big>(</big><em>df={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define a trajectory</p>
-<p>This class derives from pandas.DataFrame</p>
+<p>This class derives from pandas.DataFrame. It handles a full 3D trajectory
+description.</p>
+<p>A trajectory is time-stamped and contains information about position,
+velocity and acceleration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -155,105 +158,105 @@
 <dt>
 <tt class="descname">8.97959184,   9.18367347,   9.3877551 ,   9.59183673,</tt></dt>
 <dt>
-<tt class="descname">9.79591837,  10.        ]), pt=array([[  0.        ,   0.        ,  -0.91171829],</tt></dt>
+<tt class="descname">9.79591837,  10.        ]), pt=array([[  0.        ,   0.        ,  -0.69731285],</tt></dt>
 <dt>
-<tt class="descname">[  0.06118625,   0.20408163,  -0.30023381],</tt></dt>
+<tt class="descname">[  0.06118625,   0.20408163,   0.42558999],</tt></dt>
 <dt>
-<tt class="descname">[  0.12214321,   0.40816327,   0.92514028],</tt></dt>
+<tt class="descname">[  0.12214321,   0.40816327,   0.80753028],</tt></dt>
 <dt>
-<tt class="descname">[  0.18264248,   0.6122449 ,  -1.32388204],</tt></dt>
+<tt class="descname">[  0.18264248,   0.6122449 ,  -0.15326276],</tt></dt>
 <dt>
-<tt class="descname">[  0.24245733,   0.81632653,  -0.37808268],</tt></dt>
+<tt class="descname">[  0.24245733,   0.81632653,  -1.35519998],</tt></dt>
 <dt>
-<tt class="descname">[  0.30136363,   1.02040816,  -0.3514459 ],</tt></dt>
+<tt class="descname">[  0.30136363,   1.02040816,   1.25866684],</tt></dt>
 <dt>
-<tt class="descname">[  0.35914064,   1.2244898 ,   0.01248539],</tt></dt>
+<tt class="descname">[  0.35914064,   1.2244898 ,   1.33423503],</tt></dt>
 <dt>
-<tt class="descname">[  0.41557185,   1.42857143,  -2.67747026],</tt></dt>
+<tt class="descname">[  0.41557185,   1.42857143,   0.15285619],</tt></dt>
 <dt>
-<tt class="descname">[  0.47044581,   1.63265306,   0.49786936],</tt></dt>
+<tt class="descname">[  0.47044581,   1.63265306,   1.69362333],</tt></dt>
 <dt>
-<tt class="descname">[  0.52355688,   1.83673469,  -2.0323541 ],</tt></dt>
+<tt class="descname">[  0.52355688,   1.83673469,  -0.3993463 ],</tt></dt>
 <dt>
-<tt class="descname">[  0.57470604,   2.04081633,  -1.67982927],</tt></dt>
+<tt class="descname">[  0.57470604,   2.04081633,   0.13447774],</tt></dt>
 <dt>
-<tt class="descname">[  0.62370163,   2.24489796,   1.2837153 ],</tt></dt>
+<tt class="descname">[  0.62370163,   2.24489796,  -0.16302049],</tt></dt>
 <dt>
-<tt class="descname">[  0.67036003,   2.44897959,   1.096011  ],</tt></dt>
+<tt class="descname">[  0.67036003,   2.44897959,   0.39134188],</tt></dt>
 <dt>
-<tt class="descname">[  0.71450642,   2.65306122,  -0.57453186],</tt></dt>
+<tt class="descname">[  0.71450642,   2.65306122,  -1.20517096],</tt></dt>
 <dt>
-<tt class="descname">[  0.75597537,   2.85714286,   1.42657791],</tt></dt>
+<tt class="descname">[  0.75597537,   2.85714286,  -1.28176608],</tt></dt>
 <dt>
-<tt class="descname">[  0.79461147,   3.06122449,  -0.35437967],</tt></dt>
+<tt class="descname">[  0.79461147,   3.06122449,  -0.98767021],</tt></dt>
 <dt>
-<tt class="descname">[  0.83026995,   3.26530612,   0.58730333],</tt></dt>
+<tt class="descname">[  0.83026995,   3.26530612,  -0.4804809 ],</tt></dt>
 <dt>
-<tt class="descname">[  0.86281718,   3.46938776,  -0.37322129],</tt></dt>
+<tt class="descname">[  0.86281718,   3.46938776,   0.71688612],</tt></dt>
 <dt>
-<tt class="descname">[  0.89213121,   3.67346939,  -1.42863603],</tt></dt>
+<tt class="descname">[  0.89213121,   3.67346939,  -0.28684973],</tt></dt>
 <dt>
-<tt class="descname">[  0.91810218,   3.87755102,  -0.70468713],</tt></dt>
+<tt class="descname">[  0.91810218,   3.87755102,   0.07780187],</tt></dt>
 <dt>
-<tt class="descname">[  0.94063279,   4.08163265,  -1.18238526],</tt></dt>
+<tt class="descname">[  0.94063279,   4.08163265,  -0.03323871],</tt></dt>
 <dt>
-<tt class="descname">[  0.95963858,   4.28571429,  -1.09078707],</tt></dt>
+<tt class="descname">[  0.95963858,   4.28571429,   0.25002931],</tt></dt>
 <dt>
-<tt class="descname">[  0.97504836,   4.48979592,  -1.45161657],</tt></dt>
+<tt class="descname">[  0.97504836,   4.48979592,  -0.89462207],</tt></dt>
 <dt>
-<tt class="descname">[  0.98680437,   4.69387755,   1.0925814 ],</tt></dt>
+<tt class="descname">[  0.98680437,   4.69387755,  -0.76065317],</tt></dt>
 <dt>
-<tt class="descname">[  0.99486256,   4.89795918,   0.2702883 ],</tt></dt>
+<tt class="descname">[  0.99486256,   4.89795918,   0.36011461],</tt></dt>
 <dt>
-<tt class="descname">[  0.99919273,   5.10204082,  -0.0286654 ],</tt></dt>
+<tt class="descname">[  0.99919273,   5.10204082,  -0.6004219 ],</tt></dt>
 <dt>
-<tt class="descname">[  0.99977866,   5.30612245,  -0.37179707],</tt></dt>
+<tt class="descname">[  0.99977866,   5.30612245,  -1.14178679],</tt></dt>
 <dt>
-<tt class="descname">[  0.99661815,   5.51020408,   2.03455162],</tt></dt>
+<tt class="descname">[  0.99661815,   5.51020408,  -1.43674377],</tt></dt>
 <dt>
-<tt class="descname">[  0.98972305,   5.71428571,   0.22365898],</tt></dt>
+<tt class="descname">[  0.98972305,   5.71428571,   1.77449081],</tt></dt>
 <dt>
-<tt class="descname">[  0.97911919,   5.91836735,   0.75989939],</tt></dt>
+<tt class="descname">[  0.97911919,   5.91836735,   0.92458462],</tt></dt>
 <dt>
-<tt class="descname">[  0.96484631,   6.12244898,   0.12460825],</tt></dt>
+<tt class="descname">[  0.96484631,   6.12244898,   0.42055534],</tt></dt>
 <dt>
-<tt class="descname">[  0.94695789,   6.32653061,   1.63105923],</tt></dt>
+<tt class="descname">[  0.94695789,   6.32653061,  -1.30420031],</tt></dt>
 <dt>
-<tt class="descname">[  0.92552097,   6.53061224,   1.33469956],</tt></dt>
+<tt class="descname">[  0.92552097,   6.53061224,  -1.74566353],</tt></dt>
 <dt>
-<tt class="descname">[  0.90061587,   6.73469388,   1.95274367],</tt></dt>
+<tt class="descname">[  0.90061587,   6.73469388,  -0.65285092],</tt></dt>
 <dt>
-<tt class="descname">[  0.87233593,   6.93877551,  -0.71426523],</tt></dt>
+<tt class="descname">[  0.87233593,   6.93877551,  -0.53391569],</tt></dt>
 <dt>
-<tt class="descname">[  0.84078711,   7.14285714,  -1.07873962],</tt></dt>
+<tt class="descname">[  0.84078711,   7.14285714,   0.07714503],</tt></dt>
 <dt>
-<tt class="descname">[  0.80608763,   7.34693878,   0.97682879],</tt></dt>
+<tt class="descname">[  0.80608763,   7.34693878,   1.52393924],</tt></dt>
 <dt>
-<tt class="descname">[  0.76836753,   7.55102041,   0.53501722],</tt></dt>
+<tt class="descname">[  0.76836753,   7.55102041,  -1.58732716],</tt></dt>
 <dt>
-<tt class="descname">[  0.72776815,   7.75510204,  -1.0026014 ],</tt></dt>
+<tt class="descname">[  0.72776815,   7.75510204,  -0.42741994],</tt></dt>
 <dt>
-<tt class="descname">[  0.68444163,   7.95918367,  -0.67693729],</tt></dt>
+<tt class="descname">[  0.68444163,   7.95918367,   0.23798486],</tt></dt>
 <dt>
-<tt class="descname">[  0.63855032,   8.16326531,  -0.57156681],</tt></dt>
+<tt class="descname">[  0.63855032,   8.16326531,  -1.73353703],</tt></dt>
 <dt>
-<tt class="descname">[  0.59026619,   8.36734694,  -0.99287478],</tt></dt>
+<tt class="descname">[  0.59026619,   8.36734694,   0.50958936],</tt></dt>
 <dt>
-<tt class="descname">[  0.53977018,   8.57142857,  -3.16083813],</tt></dt>
+<tt class="descname">[  0.53977018,   8.57142857,   1.30854028],</tt></dt>
 <dt>
-<tt class="descname">[  0.48725151,   8.7755102 ,   0.33792088],</tt></dt>
+<tt class="descname">[  0.48725151,   8.7755102 ,   0.16230038],</tt></dt>
 <dt>
-<tt class="descname">[  0.43290697,   8.97959184,  -0.37835523],</tt></dt>
+<tt class="descname">[  0.43290697,   8.97959184,   1.3523332 ],</tt></dt>
 <dt>
-<tt class="descname">[  0.37694022,   9.18367347,   1.52947223],</tt></dt>
+<tt class="descname">[  0.37694022,   9.18367347,  -0.38089476],</tt></dt>
 <dt>
-<tt class="descname">[  0.31956097,   9.3877551 ,   1.37982935],</tt></dt>
+<tt class="descname">[  0.31956097,   9.3877551 ,   0.88977653],</tt></dt>
 <dt>
-<tt class="descname">[  0.26098424,   9.59183673,  -0.09540566],</tt></dt>
+<tt class="descname">[  0.26098424,   9.59183673,   1.22691006],</tt></dt>
 <dt>
-<tt class="descname">[  0.20142953,   9.79591837,  -1.11921657],</tt></dt>
+<tt class="descname">[  0.20142953,   9.79591837,   1.03664048],</tt></dt>
 <dt>
-<tt class="descname">[  0.14112001,  10.        ,   0.59344171]]), unit='s')</tt></dt>
+<tt class="descname">[  0.14112001,  10.        ,  -0.16744803]]), unit='s')</tt></dt>
 <dd><p>Generate a trajectroy from a numpy array</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -424,13 +427,21 @@ y : y values</p>
 <dt id="pylayers.mobility.trajectory.Trajectory.update">
 <tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>update class member data</p>
+<p>This method updates following data members</p>
+<ul class="simple">
+<li>tmin (s)</li>
+<li>tmax (s)</li>
+<li>ts   time step in second</li>
+<li>ttime (s) trajectory duration</li>
+<li>measnsp</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>bool :</strong> :</p>
 <blockquote class="last">
-<div><p>True if Trajectroy has values, False otherwise</p>
+<div><p>True if Trajectory has values, False otherwise</p>
 </div></blockquote>
 </td>
 </tr>
@@ -505,7 +516,7 @@ import simulnet csv file</p>
           <a href="mobility.body.body.html" title="body"
              >next</a></li>
         <li class="right" >
-          <a href="mobility.agent.html" title="constraints"
+          <a href="mobility.agent.html" title="Agent"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
