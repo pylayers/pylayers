@@ -9,11 +9,11 @@ User references
 
 .. module:: pylayers
 
-This references section  generated from the source code details classes and methods of PyLayers. 
+This references section generated from the PyLayers source code details classes and methods of PyLayers. 
 
 
-Geo Related Information 
-=======================
+Geo Related Classes 
+====================
 
 .. toctree::
    :maxdepth: 2

@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="mobility" href="mobility.html" />
-    <link rel="next" title="&lt;no title&gt;" href="mobility.transit.path.html" />
+    <link rel="next" title="body" href="mobility.body.body.html" />
     <link rel="prev" title="constraints" href="mobility.agent.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="mobility.transit.path.html" title="&lt;no title&gt;"
+          <a href="mobility.body.body.html" title="body"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="mobility.agent.html" title="constraints"
@@ -62,8 +62,8 @@
   <p class="topless"><a href="mobility.agent.html"
                         title="previous chapter">constraints</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="mobility.transit.path.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="mobility.body.body.html"
+                        title="next chapter">body</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -88,57 +88,214 @@
   <div class="section" id="trajectory">
 <span id="id1"></span><h1>trajectory<a class="headerlink" href="#trajectory" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-pylayers.mobility.trajectory"></span><dl class="class">
-<dt>
-<tt class="descname">Trajectory(t=[], pt=array([[ 0.  ,  0.  ,  0.  ],</tt></dt>
-<dt>
-<tt class="descname">[ 0.01,  0.  ,  0.  ],</tt></dt>
-<dt>
-<tt class="descname">[ 0.02,  0.  ,  0.  ],</tt></dt>
-<dt>
-<tt class="descname">...,</tt></dt>
-<dt>
-<tt class="descname">[ 9.97,  0.  ,  0.  ],</tt></dt>
-<dt>
-<tt class="descname">[ 9.98,  0.  ,  0.  ],</tt></dt>
-<dt>
-<tt class="descname">[ 9.99,  0.  ,  0.  ]]), unit='s')</tt></dt>
+<dt id="pylayers.mobility.trajectory.Trajectory">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.trajectory.</tt><tt class="descname">Trajectory</tt><big>(</big><em>df={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define a trajectory</p>
 <p>This class derives from pandas.DataFrame</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>tmin</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>tmin</strong> : float</p>
 <p><strong>tmax</strong> : float</p>
 <p><strong>tttimr :</strong> :</p>
 <p><strong>dtot :</strong> :</p>
 <p><strong>meansp :</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>time</strong> :</p>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>time</strong> :</p>
 <p><strong>space</strong> :</p>
+<p><strong>update</strong> :</p>
 <p><strong>rescale</strong> :</p>
-<p class="last"><strong>plot</strong> :</p>
+<p><strong>generate</strong> :</p>
+<p><strong>distance</strong> :</p>
+<p><strong>plot</strong> :</p>
+<p class="last"><strong>replay</strong> :</p>
 </td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="pylayers.mobility.trajectory.Trajectory.distance">
-<tt class="descclassname">Trajectory.</tt><tt class="descname">distance</tt><big>(</big><em>tk</em><big>)</big><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.distance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">distance</tt><big>(</big><em>tk</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>recover distance at time tk</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tk :</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">Trajectory.generate(t=array([  0.        ,   0.20408163,   0.40816327,   0.6122449 ,</tt></dt>
+<dt>
+<tt class="descname">0.81632653,   1.02040816,   1.2244898 ,   1.42857143,</tt></dt>
+<dt>
+<tt class="descname">1.63265306,   1.83673469,   2.04081633,   2.24489796,</tt></dt>
+<dt>
+<tt class="descname">2.44897959,   2.65306122,   2.85714286,   3.06122449,</tt></dt>
+<dt>
+<tt class="descname">3.26530612,   3.46938776,   3.67346939,   3.87755102,</tt></dt>
+<dt>
+<tt class="descname">4.08163265,   4.28571429,   4.48979592,   4.69387755,</tt></dt>
+<dt>
+<tt class="descname">4.89795918,   5.10204082,   5.30612245,   5.51020408,</tt></dt>
+<dt>
+<tt class="descname">5.71428571,   5.91836735,   6.12244898,   6.32653061,</tt></dt>
+<dt>
+<tt class="descname">6.53061224,   6.73469388,   6.93877551,   7.14285714,</tt></dt>
+<dt>
+<tt class="descname">7.34693878,   7.55102041,   7.75510204,   7.95918367,</tt></dt>
+<dt>
+<tt class="descname">8.16326531,   8.36734694,   8.57142857,   8.7755102 ,</tt></dt>
+<dt>
+<tt class="descname">8.97959184,   9.18367347,   9.3877551 ,   9.59183673,</tt></dt>
+<dt>
+<tt class="descname">9.79591837,  10.        ]), pt=array([[  0.        ,   0.        ,  -0.91171829],</tt></dt>
+<dt>
+<tt class="descname">[  0.06118625,   0.20408163,  -0.30023381],</tt></dt>
+<dt>
+<tt class="descname">[  0.12214321,   0.40816327,   0.92514028],</tt></dt>
+<dt>
+<tt class="descname">[  0.18264248,   0.6122449 ,  -1.32388204],</tt></dt>
+<dt>
+<tt class="descname">[  0.24245733,   0.81632653,  -0.37808268],</tt></dt>
+<dt>
+<tt class="descname">[  0.30136363,   1.02040816,  -0.3514459 ],</tt></dt>
+<dt>
+<tt class="descname">[  0.35914064,   1.2244898 ,   0.01248539],</tt></dt>
+<dt>
+<tt class="descname">[  0.41557185,   1.42857143,  -2.67747026],</tt></dt>
+<dt>
+<tt class="descname">[  0.47044581,   1.63265306,   0.49786936],</tt></dt>
+<dt>
+<tt class="descname">[  0.52355688,   1.83673469,  -2.0323541 ],</tt></dt>
+<dt>
+<tt class="descname">[  0.57470604,   2.04081633,  -1.67982927],</tt></dt>
+<dt>
+<tt class="descname">[  0.62370163,   2.24489796,   1.2837153 ],</tt></dt>
+<dt>
+<tt class="descname">[  0.67036003,   2.44897959,   1.096011  ],</tt></dt>
+<dt>
+<tt class="descname">[  0.71450642,   2.65306122,  -0.57453186],</tt></dt>
+<dt>
+<tt class="descname">[  0.75597537,   2.85714286,   1.42657791],</tt></dt>
+<dt>
+<tt class="descname">[  0.79461147,   3.06122449,  -0.35437967],</tt></dt>
+<dt>
+<tt class="descname">[  0.83026995,   3.26530612,   0.58730333],</tt></dt>
+<dt>
+<tt class="descname">[  0.86281718,   3.46938776,  -0.37322129],</tt></dt>
+<dt>
+<tt class="descname">[  0.89213121,   3.67346939,  -1.42863603],</tt></dt>
+<dt>
+<tt class="descname">[  0.91810218,   3.87755102,  -0.70468713],</tt></dt>
+<dt>
+<tt class="descname">[  0.94063279,   4.08163265,  -1.18238526],</tt></dt>
+<dt>
+<tt class="descname">[  0.95963858,   4.28571429,  -1.09078707],</tt></dt>
+<dt>
+<tt class="descname">[  0.97504836,   4.48979592,  -1.45161657],</tt></dt>
+<dt>
+<tt class="descname">[  0.98680437,   4.69387755,   1.0925814 ],</tt></dt>
+<dt>
+<tt class="descname">[  0.99486256,   4.89795918,   0.2702883 ],</tt></dt>
+<dt>
+<tt class="descname">[  0.99919273,   5.10204082,  -0.0286654 ],</tt></dt>
+<dt>
+<tt class="descname">[  0.99977866,   5.30612245,  -0.37179707],</tt></dt>
+<dt>
+<tt class="descname">[  0.99661815,   5.51020408,   2.03455162],</tt></dt>
+<dt>
+<tt class="descname">[  0.98972305,   5.71428571,   0.22365898],</tt></dt>
+<dt>
+<tt class="descname">[  0.97911919,   5.91836735,   0.75989939],</tt></dt>
+<dt>
+<tt class="descname">[  0.96484631,   6.12244898,   0.12460825],</tt></dt>
+<dt>
+<tt class="descname">[  0.94695789,   6.32653061,   1.63105923],</tt></dt>
+<dt>
+<tt class="descname">[  0.92552097,   6.53061224,   1.33469956],</tt></dt>
+<dt>
+<tt class="descname">[  0.90061587,   6.73469388,   1.95274367],</tt></dt>
+<dt>
+<tt class="descname">[  0.87233593,   6.93877551,  -0.71426523],</tt></dt>
+<dt>
+<tt class="descname">[  0.84078711,   7.14285714,  -1.07873962],</tt></dt>
+<dt>
+<tt class="descname">[  0.80608763,   7.34693878,   0.97682879],</tt></dt>
+<dt>
+<tt class="descname">[  0.76836753,   7.55102041,   0.53501722],</tt></dt>
+<dt>
+<tt class="descname">[  0.72776815,   7.75510204,  -1.0026014 ],</tt></dt>
+<dt>
+<tt class="descname">[  0.68444163,   7.95918367,  -0.67693729],</tt></dt>
+<dt>
+<tt class="descname">[  0.63855032,   8.16326531,  -0.57156681],</tt></dt>
+<dt>
+<tt class="descname">[  0.59026619,   8.36734694,  -0.99287478],</tt></dt>
+<dt>
+<tt class="descname">[  0.53977018,   8.57142857,  -3.16083813],</tt></dt>
+<dt>
+<tt class="descname">[  0.48725151,   8.7755102 ,   0.33792088],</tt></dt>
+<dt>
+<tt class="descname">[  0.43290697,   8.97959184,  -0.37835523],</tt></dt>
+<dt>
+<tt class="descname">[  0.37694022,   9.18367347,   1.52947223],</tt></dt>
+<dt>
+<tt class="descname">[  0.31956097,   9.3877551 ,   1.37982935],</tt></dt>
+<dt>
+<tt class="descname">[  0.26098424,   9.59183673,  -0.09540566],</tt></dt>
+<dt>
+<tt class="descname">[  0.20142953,   9.79591837,  -1.11921657],</tt></dt>
+<dt>
+<tt class="descname">[  0.14112001,  10.        ,   0.59344171]]), unit='s')</tt></dt>
+<dd><p>Generate a trajectroy from a numpy array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt</strong> : np.ndarray:</p>
+<blockquote>
+<div><p>(npt x x x y)
+with</p>
+<blockquote>
+<div><p>npt : number of samples
+x : x values
+y : y values</p>
+</div></blockquote>
+</div></blockquote>
+<p><strong>t = np.ndarray</strong> :</p>
+<blockquote>
+<div><p>(1 x npt)</p>
+</div></blockquote>
+<p><strong>unit</strong> : str</p>
+<blockquote class="last">
+<div><p>time unity (&#8216;s&#8217;|&#8217;ns&#8217;,...)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.mobility.trajectory.Trajectory.plot">
-<tt class="descclassname">Trajectory.</tt><tt class="descname">plot</tt><big>(</big><em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span>, <em>Nlabels=5</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em>, <span class="optional">[</span><span class="optional">]</span><em>Nlabels=5</em>, <em>typ='plot'</em>, <em>L=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot trajectory</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
 <p><strong>ax</strong> :</p>
-<p class="last"><strong>Nlabels</strong> : int</p>
+<p><strong>Nlabels</strong> : int</p>
+<p><strong>typ</strong> : &#8216;plot&#8217;|&#8217;scatter&#8217;</p>
+<p class="last"><strong>L</strong> : pylayers.gis.layout.Layout object to be displayed</p>
 </td>
 </tr>
 </tbody>
@@ -152,7 +309,8 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">t</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="mi">0</span><span class="o">*</span><span class="n">t</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">pt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">pt</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -164,20 +322,53 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.mobility.trajectory.Trajectory.replay">
+<tt class="descname">replay</tt><big>(</big><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em>, <span class="optional">[</span><span class="optional">]</span><em>Nlabels=5</em>, <em>typ='plot'</em>, <em>L=</em>, <span class="optional">[</span><span class="optional">]</span><em>speed=1</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.replay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.replay" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>replay a trajectory</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fig</strong> :</p>
+<p><strong>ax</strong> :</p>
+<p><strong>Nlabels</strong> : int</p>
+<blockquote>
+<div><p>default 5</p>
+</div></blockquote>
+<p><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;plot&#8217;|&#8217;scatter&#8217;</p>
+</div></blockquote>
+<p><strong>L</strong> : pylayers.gis.layout.Layout</p>
+<blockquote>
+<div><p>Layout for body to be displayed in</p>
+</div></blockquote>
+<p><strong>speed</strong> : float</p>
+<blockquote class="last">
+<div><p>speed ratio</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.mobility.trajectory.Trajectory.rescale">
-<tt class="descclassname">Trajectory.</tt><tt class="descname">rescale</tt><big>(</big><em>speedkmph=3</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.rescale" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">rescale</tt><big>(</big><em>speedkmph=3</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.rescale" title="Permalink to this definition">¶</a></dt>
 <dd><p>same length but specified speed</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>speedkmph</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>speedkmph</strong> : float</p>
 <blockquote>
 <div><p>targeted mean speed in km/h</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>t</strong> : rescaled trajectory</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>t</strong> : rescaled trajectory</p>
 </td>
 </tr>
 </tbody>
@@ -186,19 +377,19 @@
 
 <dl class="method">
 <dt id="pylayers.mobility.trajectory.Trajectory.space">
-<tt class="descclassname">Trajectory.</tt><tt class="descname">space</tt><big>(</big><em>ndim=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.space"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.space" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">space</tt><big>(</big><em>ndim=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.space"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.space" title="Permalink to this definition">¶</a></dt>
 <dd><p>extract space information</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ndim</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ndim</strong> : int</p>
 <blockquote>
 <div><p>number of dimensions (default 2)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>pt</strong> : nd.array()</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>pt</strong> : nd.array()</p>
 </td>
 </tr>
 </tbody>
@@ -207,21 +398,39 @@
 
 <dl class="method">
 <dt id="pylayers.mobility.trajectory.Trajectory.time">
-<tt class="descclassname">Trajectory.</tt><tt class="descname">time</tt><big>(</big><em>unit=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.time" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">time</tt><big>(</big><em>unit=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.time" title="Permalink to this definition">¶</a></dt>
 <dd><p>extract time</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>unit</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>unit</strong> : integer</p>
 <blockquote>
 <div><p>default 0 (s) - 3 (ms) 6 (mus) 9 (ns)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>t</strong> : nd.array</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>t</strong> : nd.array</p>
 <blockquote class="last">
 <div><p>time in 10**-unit  s</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.trajectory.Trajectory.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#Trajectory.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update class member data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>bool :</strong> :</p>
+<blockquote class="last">
+<div><p>True if Trajectroy has values, False otherwise</p>
 </div></blockquote>
 </td>
 </tr>
@@ -232,24 +441,53 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="pylayers.mobility.trajectory.importsn">
-<tt class="descclassname">pylayers.mobility.trajectory.</tt><tt class="descname">importsn</tt><big>(</big><em>_filename='pos.csv'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#importsn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.importsn" title="Permalink to this definition">¶</a></dt>
-<dd><p>import simulnet csv file</p>
+<dt id="pylayers.mobility.trajectory.importh5">
+<tt class="descclassname">pylayers.mobility.trajectory.</tt><tt class="descname">importh5</tt><big>(</big><em>self</em>, <em>_filename='simulnet_TA-Office.h5'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#importh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.importh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>import simulnet h5 file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>default simulnet + Layout_filename . h5</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>lt</strong> : list of trajectory</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.mobility.trajectory.importsn">
+<tt class="descclassname">pylayers.mobility.trajectory.</tt><tt class="descname">importsn</tt><big>(</big><em>_filename='pos.csv'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/trajectory.html#importsn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.importsn" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id2"><span class="problematic" id="id3">**</span></a><a href="#id4"><span class="problematic" id="id5">**</span></a>DEPRECATED
+import simulnet csv file</p>
+<p><a href="#id6"><span class="problematic" id="id7">**</span></a><a href="#id8"><span class="problematic" id="id9">**</span></a>DEPRECATED</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
 <blockquote>
 <div><p>default &#8216;pos.csv&#8217;</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>lt</strong> : list of trajectory</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>lt</strong> : list of trajectory</p>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.mobility.trajectory">
+<tt class="descclassname">pylayers.mobility.</tt><tt class="descname">trajectory</tt><a class="headerlink" href="#pylayers.mobility.trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#pylayers.mobility.trajectory" title="pylayers.mobility.trajectory"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.mobility.trajectory</span></tt></a></p>
 </dd></dl>
 
 </div>
@@ -264,7 +502,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="mobility.transit.path.html" title="&lt;no title&gt;"
+          <a href="mobility.body.body.html" title="body"
              >next</a></li>
         <li class="right" >
           <a href="mobility.agent.html" title="constraints"
@@ -281,7 +519,7 @@
 
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
