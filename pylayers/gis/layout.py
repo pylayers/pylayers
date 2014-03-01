@@ -6606,7 +6606,7 @@ class Layout(object):
 
     @mlab.show
     def _show3(self,centered=True,newfig=False):
-        """ create a .off geomview file 
+        """ create a .off geomview file
 
         Parameters
         ----------
@@ -6750,10 +6750,10 @@ class Layout(object):
         bf =np.arange(npt,npt+4)
         boxes = np.vstack((boxes,bf))
 
-        
 
 
-        
+
+
 #         _filename,ext = os.path.splitext(self.filename)
 #         _filegeom = _filename+'.off'
 #         self.filegeom=_filegeom
@@ -6798,20 +6798,20 @@ class Layout(object):
 
         sc=tvtk.UnsignedCharArray()
         sc.from_array(color)
-        
-        
-               
+
+
+
         mesh = tvtk.PolyData(points=points, polys=boxes)
         mesh.point_data.scalars = sc
         mesh.point_data.scalars.name = 'scalars'
-        
-        
+
+
         if newfig:
             mlab.clf()
             mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
             mlab.gcf()
-        
+
         surf = mlab.pipeline.surface(mesh, opacity=1)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )

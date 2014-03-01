@@ -322,17 +322,16 @@ class Body(object):
 
             >>> import numpy as np
             >>> import pylayers.mobility.trajectory as tr
+            >>> import pylayers.mobility.body.body as body
             >>> import matplotlib.pyplot as plt
             >>> time = np.arange(0,10,0.1)
             >>> v = 4000/3600.
             >>> x = v*time
             >>> y = np.zeros(len(time))
             >>> traj = tr.Trajectory()
-            >>> bc = Body()
-            >>> bc.settopos(traj,2.3)
-            >>> nx.draw(bc.g,bc.g.pos)
-            >>> axe = plt.axis('scaled')
-            >>> plt.show()
+            >>> John = body.Body()
+            >>> John.settopos(traj,2.3)
+            >>> John.show()
 
         Notes
         -----
@@ -696,6 +695,11 @@ class Body(object):
         frameiId : int
         plane : string
             'yz' | 'xz' | 'xy'
+        widthfactor : int
+        topos : boolean
+            default False
+
+
 
         """
 
@@ -1163,7 +1167,7 @@ class Body(object):
             B = self.dcs[link[1]][:,0]
 
             inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])[0]
-            
+
 
             link_vis[k] =  sum(inter)
         return link_vis
