@@ -4,6 +4,8 @@ PyLayers
 PyLayers is a site-specific propagation simulator developed for
 evaluating indoor localization algorithms. 
 
+PyLayers handles body mobility moving in a wireless propagation channel. 
+
 WebSite : http://www.pylayers.org
 
 The code is developped at the University of Rennes 1 in the laboratory
