@@ -3,6 +3,7 @@
 
 mobility
 ========
+
 .. module:: pylayers.mobility
 
 .. toctree::

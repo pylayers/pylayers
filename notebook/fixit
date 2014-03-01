@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "fixit"
+cd $WEBSITE/html/notebook
 for i in *.html;
 do 
 cat $i | sed "s/notebook/\./g" > tmp
