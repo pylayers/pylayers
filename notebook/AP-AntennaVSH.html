@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -47,6 +53,11 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./AP-AntennaVSH.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -72,7 +83,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.antvsh</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x85a9310&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7776310&gt;
 </pre></div>
 </div>
 <p>Read a trx file. This file has no header, it contains 7 columns :</p>
@@ -113,17 +124,17 @@ handles frequency expressed in <img class="math" src="../_images/math/75ff9e3612
 <span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">unwrap</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x9782b50&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x89b9b50&gt;]
 </pre></div>
 </div>
-<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_9_1.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_9_1.png" />
-<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_9_2.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_9_2.png" />
+<img alt="../_images/AP-AntennaVSH_9_1.png" src="../_images/AP-AntennaVSH_9_1.png" />
+<img alt="../_images/AP-AntennaVSH_9_2.png" src="../_images/AP-AntennaVSH_9_2.png" />
 <p>Display of the radiation pattern for all frequencies</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">nf</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">104</span><span class="p">):</span>
     <span class="n">polar</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="n">nf</span><span class="p">,</span><span class="mi">45</span><span class="p">,:]))</span>
 </pre></div>
 </div>
-<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_11_0.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_11_0.png" />
+<img alt="../_images/AP-AntennaVSH_11_0.png" src="../_images/AP-AntennaVSH_11_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;Ntheta&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span>
 <span class="k">print</span> <span class="s">&#39;Nphi&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span>
 <span class="k">print</span> <span class="s">&#39;Nf&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span>
@@ -215,7 +226,7 @@ NCoeff s2  : 495
 <span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_19_0.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_19_0.png" />
+<img alt="../_images/AP-AntennaVSH_19_0.png" src="../_images/AP-AntennaVSH_19_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -258,7 +269,7 @@ Ncoeff s3 : 86
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-AntennaVSH_files/AP-AntennaVSH_22_0.png" src="./AP-AntennaVSH_files/AP-AntennaVSH_22_0.png" />
+<img alt="../_images/AP-AntennaVSH_22_0.png" src="../_images/AP-AntennaVSH_22_0.png" />
 <div class="highlight-python"><div class="highlight"><pre>
 </pre></div>
 </div>
@@ -273,6 +284,12 @@ Ncoeff s3 : 86
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -282,7 +299,8 @@ Ncoeff s3 : 86
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

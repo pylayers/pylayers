@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -63,6 +69,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./SIM-configfiles.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -88,10 +99,8 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4a77dd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x73ddf10&gt;
+</pre></div>
 </div>
 <div class="section" id="network-simulation-configuration">
 <h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
@@ -110,9 +119,10 @@ level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simula
 <div class="section" id="simulnet-ini">
 <h2>Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
 <p>This file is located in <tt class="docutils literal"><span class="pre">$BASENAME/ini</span></tt></p>
-<div class="highlight-python"><pre>!cat $BASENAME/ini/simulnet.ini</pre>
+<div class="highlight-python"><div class="highlight"><pre>!cat $BASENAME/ini/simulnet.ini
+</pre></div>
 </div>
-<div class="highlight-python"><pre>[Mysql]
+<div class="highlight-python"><div class="highlight"><pre>[Mysql]
 host = localhost
 user = root
 passwd = sqlsql
@@ -122,7 +132,7 @@ dumpdb =True
 [Save]
 ; deprecated save option
 save=[]
-;save=['csv','mysql','matlab','pyray','txt','ini']
+;save=[&#39;csv&#39;,&#39;mysql&#39;,&#39;matlab&#39;,&#39;pyray&#39;,&#39;txt&#39;,&#39;ini&#39;]
 ; save format using Save class..to be deprecatred soon
 savep=False
 ; pandas save format . only record mechanical. To be upgraded soon
@@ -142,16 +152,16 @@ the_world_scale      = 20
 ; update time for agent movement
 mecanic_update_time = 1
 ; select how agnt choose destiantion
-;'random' ; file
-choose_destination = 'random'
+;&#39;random&#39; ; file
+choose_destination = &#39;random&#39;
 ; experimental show for debug purpose
 pdshow=True
 
 [Network]
 ; simulate the network
 network=True
-; refresh TOA regulary 'synchro 'or with distance 'autionomous'
-Communication_mode='autonomous'
+; refresh TOA regulary &#39;synchro &#39;or with distance &#39;autionomous&#39;
+Communication_mode=&#39;autonomous&#39;
 ; update time for refreshing network
 network_update_time = 0.1
 ; show nodes moving &amp; radio link
@@ -170,14 +180,14 @@ dispinfo = False
 localization = True
 ; time to refresh localization
 localization_update_time = 1.0
-; list of used methods method = ['alg','geo']
-method = ['alg']
+; list of used methods method = [&#39;alg&#39;,&#39;geo&#39;]
+method = [&#39;alg&#39;]
 
 
 
 [Simulation]
 ; simulation filename for savepd
-filename = 'simulnet'
+filename = &#39;simulnet&#39;
 ; Simulation duration
 duration = 10.0
 ; speed ratio ag
@@ -189,7 +199,8 @@ showtk   = False
 ; choose seed for random mobiliity
 seed = 1
 ; verbose output
-verbose = True</pre>
+verbose = True
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Cp</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
 <span class="n">Cp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
@@ -233,7 +244,8 @@ verbose = True</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ls</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">Bureau</span><span class="o">/</span><span class="n">P1</span><span class="o">/</span><span class="n">netsave</span><span class="o">/</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>ls: impossible d'accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type</pre>
+<div class="highlight-python"><div class="highlight"><pre>ls: impossible d&#39;accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type
+</pre></div>
 </div>
 <div class="section" id="layout">
 <h3>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h3>
@@ -514,6 +526,12 @@ Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of 
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -523,8 +541,9 @@ Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of 
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

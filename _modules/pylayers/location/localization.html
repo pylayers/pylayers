@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -95,7 +101,7 @@
 <span class="kn">from</span>   <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="n">PLSmodel</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 
-<div class="viewcode-block" id="Localization"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization">[docs]</a><span class="k">class</span> <span class="nc">Localization</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Localization"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.Localization">[docs]</a><span class="k">class</span> <span class="nc">Localization</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -146,7 +152,7 @@
 
 
 
-<div class="viewcode-block" id="Localization.fill_cla"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.fill_cla">[docs]</a>    <span class="k">def</span> <span class="nf">fill_cla</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Localization.fill_cla"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.Localization.fill_cla">[docs]</a>    <span class="k">def</span> <span class="nf">fill_cla</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Fill the constraint layer array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -201,7 +207,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Localization.update"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Localization.update"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.Localization.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            update constraints information (anchor position, value and std)</span>
 <span class="sd">            from the network graph</span>
@@ -268,7 +274,7 @@
         <span class="c">#         self.cla.usable[x]=False</span>
 
 </div>
-<div class="viewcode-block" id="Localization.savep"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.savep">[docs]</a>    <span class="k">def</span> <span class="nf">savep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Localization.savep"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.Localization.savep">[docs]</a>    <span class="k">def</span> <span class="nf">savep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            write an estimated position into self.net</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -277,7 +283,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Localization.compute_geo"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.compute_geo">[docs]</a>    <span class="k">def</span> <span class="nf">compute_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Localization.compute_geo"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.Localization.compute_geo">[docs]</a>    <span class="k">def</span> <span class="nf">compute_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Compute position with the geometric algorithm</span>
 
@@ -305,7 +311,7 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 </div>
-<div class="viewcode-block" id="Localization.compute_alg"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.compute_alg">[docs]</a>    <span class="k">def</span> <span class="nf">compute_alg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Localization.compute_alg"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.Localization.compute_alg">[docs]</a>    <span class="k">def</span> <span class="nf">compute_alg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Compute position with the algebraic algorithm</span>
 <span class="sd">        Returns</span>
@@ -353,7 +359,7 @@
 
 
 
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PLocalization.run"><a class="viewcode-back" href="../../../modules/pylayers.location.localization.html#pylayers.location.localization.PLocalization.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="c">#        self.loc.get_const()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">fill_cla</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;TOA&#39;</span><span class="p">)</span>
@@ -382,7 +388,7 @@
 
             <span class="k">if</span> <span class="n">bep</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
                 <span class="k">print</span> <span class="s">&#39;LOCALIZATION node&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39; update @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_updt_time</span>
+            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_updt_time</span></div>
 </pre></div>
 
           </div>
@@ -393,6 +399,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -404,6 +416,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

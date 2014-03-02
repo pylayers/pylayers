@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Utilization of objects from Bsignal class &mdash; PyLayers</title>
+    <title>7.1. Utilization of objects from Bsignal class &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -49,12 +55,17 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Utilization of objects from Bsignal class</a><ul>
-<li><a class="reference internal" href="#generation-of-an-impulse-of-normalized-energy">Generation of an Impulse of normalized energy</a></li>
+<li><a class="reference internal" href="#">7.1. Utilization of objects from Bsignal class</a><ul>
+<li><a class="reference internal" href="#generation-of-an-impulse-of-normalized-energy">7.1.1. Generation of an Impulse of normalized energy</a></li>
 </ul>
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/manual/bsignal.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -77,9 +88,9 @@
           <div class="body">
             
   <div class="section" id="utilization-of-objects-from-bsignal-class">
-<h1>Utilization of objects from Bsignal class<a class="headerlink" href="#utilization-of-objects-from-bsignal-class" title="Permalink to this headline">¶</a></h1>
+<h1>7.1. Utilization of objects from Bsignal class<a class="headerlink" href="#utilization-of-objects-from-bsignal-class" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="generation-of-an-impulse-of-normalized-energy">
-<h2>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h2>
+<h2>7.1.1. Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h2>
 <p>An energy normalized impulse can be defined as follows</p>
 <div class="math">
 <p><img src="../_images/math/d18a2d56846b353af21398db350c7507121b7a64.png" alt="p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/></p>
@@ -102,8 +113,8 @@
 
 <span class="gp">In [7]: </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gr">Out[7]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x5d78dd0&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x5ddb4d0&gt;]], dtype=object))</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x8813dd0&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x88214d0&gt;]], dtype=object))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/simple_impulse.png"><img alt="../_images/simple_impulse.png" src="../_images/simple_impulse.png" style="width: 5in;" /></a>
@@ -136,7 +147,7 @@
 
 <span class="go">/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simulem.pyc in load(self, _filesimul)</span>
 <span class="go">   1214             print self.filestr</span>
-<span class="go">   1215         except: </span>
+<span class="go">   1215         except:</span>
 <span class="go">-&gt; 1216             raise NameError(&#39;Error in section struc from &#39;+ _filesimul)</span>
 <span class="go">   1217 </span>
 <span class="go">   1218         try:</span>
@@ -159,8 +170,8 @@
 
 <span class="gp">In [20]: </span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gr">Out[20]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x6a209d0&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x6a20e90&gt;]], dtype=object))</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0xe21c610&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0xe21cad0&gt;]], dtype=object))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/default_wav.png"><img alt="../_images/default_wav.png" src="../_images/default_wav.png" style="width: 5in;" /></a>
@@ -215,7 +226,7 @@
 <span class="go">No vsh coefficient calculated yet</span>
 
 <span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0x6a6b710</span><span class="o">&gt;</span>
+<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0xd35e110</span><span class="o">&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="go">---------------------------------------------------------------------------</span>
@@ -239,6 +250,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -249,6 +266,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

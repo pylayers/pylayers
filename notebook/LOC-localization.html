@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -47,6 +53,11 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./LOC-localization.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -72,10 +83,8 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="n">dist</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x31cedd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x830af10&gt;
+</pre></div>
 </div>
 <div class="section" id="example-of-tdoa">
 <h1>Example of TDOA<a class="headerlink" href="#example-of-tdoa" title="Permalink to this headline">¶</a></h1>
@@ -96,8 +105,8 @@ anchor nodes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOA</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.54537504</span><span class="p">,</span>  <span class="mf">0.02374239</span><span class="p">,</span>  <span class="mf">0.40641275</span><span class="p">,</span>  <span class="mf">0.28704257</span><span class="p">,</span>  <span class="mf">0.40882703</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.24740044</span><span class="p">,</span>  <span class="mf">0.88101586</span><span class="p">,</span>  <span class="mf">0.39382248</span><span class="p">,</span>  <span class="mf">0.65056523</span><span class="p">,</span>  <span class="mf">0.13011449</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.36835174</span><span class="p">,</span>  <span class="mf">0.11518092</span><span class="p">,</span>  <span class="mf">0.15635803</span><span class="p">,</span>  <span class="mf">0.4354154</span> <span class="p">,</span>  <span class="mf">0.3390774</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.44733286</span><span class="p">,</span>  <span class="mf">0.9081777</span> <span class="p">,</span>  <span class="mf">0.75765558</span><span class="p">,</span>  <span class="mf">0.81160016</span><span class="p">,</span>  <span class="mf">0.4006534</span> <span class="p">]])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOAr1</span>
@@ -110,8 +119,8 @@ anchor nodes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOAr2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.40882703</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.13011449</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.3390774</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.4006534</span><span class="p">]])</span>
 </pre></div>
 </div>
 <p>The figure below illustrates the situation, in red the anchor nodes, the
@@ -125,7 +134,7 @@ blue star is the blind node.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
-<img alt="./LOC-localization_files/LOC-localization_8_1.png" src="./LOC-localization_files/LOC-localization_8_1.png" />
+<img alt="../_images/LOC-localization_8_1.png" src="../_images/LOC-localization_8_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOA</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">dr1</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr1</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">dr2</span><span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">AN_TDOAr2</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
@@ -140,10 +149,11 @@ blue star is the blind node.</p>
 <span class="k">print</span> <span class="n">tdoa2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[  2.67184219e-01   1.12653403e+00  -1.41556406e-01   3.06691440e-01
-   5.55111512e-17]
-[-0.03732559  0.82202422 -0.44606621  0.00218164 -0.3045098 ]
-[ 0.26718422  1.12653403 -0.14155641  0.30669144  0.        ]</pre>
+<div class="highlight-python"><div class="highlight"><pre>[  1.73460363e-01   1.47461658e+00   9.60176197e-01   1.30495474e+00
+  -2.22044605e-16]
+[-0.45612721  0.845029    0.33058862  0.67536716 -0.62958758]
+[ 0.17346036  1.47461658  0.9601762   1.30495474  0.        ]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">node</span><span class="o">=</span><span class="p">{}</span>
 <span class="n">nodes</span><span class="p">[</span><span class="s">&#39;BN&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">BN</span>
@@ -160,12 +170,13 @@ blue star is the blind node.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Nodes :  {'RN_TDOA': array([[ 0.54537504,  0.02374239,  0.40641275,  0.28704257,  0.40882703],
-       [ 0.24740044,  0.88101586,  0.39382248,  0.65056523,  0.13011449]]), 'BN': array([[ 0.2],
-       [ 0.3]]), 'RNr_TDOA': array([[ 0.40882703],
-       [ 0.13011449]])}
-Location dependent parameters :  {'TDOA': array([  2.67184219e-01,   1.12653403e+00,  -1.41556406e-01,
-         3.06691440e-01,   5.55111512e-17]), 'TDOA_std': array([ 1.,  1.,  1.,  1.,  1.])}</pre>
+<div class="highlight-python"><div class="highlight"><pre>Nodes :  {&#39;RN_TDOA&#39;: array([[ 0.36835174,  0.11518092,  0.15635803,  0.4354154 ,  0.3390774 ],
+       [ 0.44733286,  0.9081777 ,  0.75765558,  0.81160016,  0.4006534 ]]), &#39;BN&#39;: array([[ 0.2],
+       [ 0.3]]), &#39;RNr_TDOA&#39;: array([[ 0.3390774],
+       [ 0.4006534]])}
+Location dependent parameters :  {&#39;TDOA&#39;: array([  1.73460363e-01,   1.47461658e+00,   9.60176197e-01,
+         1.30495474e+00,  -2.22044605e-16]), &#39;TDOA_std&#39;: array([ 1.,  1.,  1.,  1.,  1.])}
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
 </pre></div>
@@ -173,8 +184,8 @@ Location dependent parameters :  {'TDOA': array([  2.67184219e-01,   1.12653403e
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">toa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.19993211</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.29998922</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.19979756</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.2988086</span> <span class="p">]])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;BN&#39;</span><span class="p">]</span>
@@ -198,6 +209,12 @@ Location dependent parameters :  {'TDOA': array([  2.67184219e-01,   1.12653403e
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -207,8 +224,9 @@ Location dependent parameters :  {'TDOA': array([  2.67184219e-01,   1.12653403e
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

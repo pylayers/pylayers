@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="pylayers.mobility" href="../mobility.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -38,12 +38,19 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../mobility.html" accesskey="U">pylayers.mobility</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -93,7 +100,7 @@
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 
-<div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../../../modules/mobility.agent.html#pylayers.mobility.agent.Agent">[docs]</a><span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../../../modules/pylayers.mobility.agent.html#pylayers.mobility.agent.Agent">[docs]</a><span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;   Agent </span>
 
 
@@ -124,7 +131,7 @@
 <span class="sd">                enable/disable localization process of the agent</span>
 <span class="sd">           &#39;loc_updt&#39;: float</span>
 <span class="sd">                update time interval for localization process</span>
-<span class="sd">           &#39;Layout&#39;: pylayers.gis.Layout()</span>
+<span class="sd">           &#39;L&#39;: pylayers.gis.Layout()</span>
 <span class="sd">           &#39;net&#39;:pylayers.network.Network(),</span>
 <span class="sd">           &#39;RAT&#39;: list of string</span>
 <span class="sd">                list of used radio access techology of the agent</span>
@@ -146,21 +153,25 @@
 <span class="sd">                &#39;autonomous&#39;: all TOAs are refreshed regulary</span>
 <span class="sd">                &#39;synchro&#39; : only visilbe TOAs are refreshed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;ID&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;ID&#39;</span><span class="p">:</span> <span class="s">&#39;0&#39;</span><span class="p">,</span>
                     <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;johndoe&#39;</span><span class="p">,</span>
                     <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;ag&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;color&#39;</span><span class="p">:</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;pdshow&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;pos&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
-                    <span class="s">&#39;roomId&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;roomId&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
                     <span class="s">&#39;froom&#39;</span><span class="p">:[],</span>
                     <span class="s">&#39;wait&#39;</span><span class="p">:[],</span>
+                    <span class="s">&#39;seed&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                     <span class="s">&#39;cdest&#39;</span><span class="p">:</span><span class="s">&#39;random&#39;</span><span class="p">,</span>
                     <span class="s">&#39;meca_updt&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
                     <span class="s">&#39;loc&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;loc_updt&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
                     <span class="s">&#39;loc_method&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;geo&#39;</span><span class="p">],</span>
-                    <span class="s">&#39;Layout&#39;</span><span class="p">:</span> <span class="n">Layout</span><span class="p">(),</span>
+                    <span class="s">&#39;L&#39;</span><span class="p">:</span> <span class="n">Layout</span><span class="p">(),</span>
+                    <span class="s">&#39;network&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                     <span class="s">&#39;net&#39;</span><span class="p">:</span> <span class="n">Network</span><span class="p">(),</span>
-                    <span class="s">&#39;RAT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;wifi&#39;</span><span class="p">],</span>
+                    <span class="s">&#39;RAT&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;rat1&#39;</span><span class="p">],</span>
                     <span class="s">&#39;world&#39;</span><span class="p">:</span> <span class="n">world</span><span class="p">(),</span>
                     <span class="s">&#39;save&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s">&#39;sim&#39;</span><span class="p">:</span> <span class="n">Simulation</span><span class="p">(),</span>
@@ -183,35 +194,55 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">epwr</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;gcom&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;sim&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;RAT&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">epwr</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">epwr</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;sens&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sens</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">180</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sens</span> <span class="o">=</span> <span class="n">sens</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sens&#39;</span><span class="p">]</span>
+
+
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dcond</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;dcond&#39;</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 
+
+        <span class="c"># check if node id already given</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;another agent has the ID: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s">&#39; .Please use an other ID&#39;</span> <span class="p">)</span>
+
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;ag&#39;</span><span class="p">:</span>
             <span class="c"># mechanical init</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meca</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+                               <span class="n">color</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">],</span>
+                               <span class="n">pdshow</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;pdshow&#39;</span><span class="p">],</span>
                                 <span class="n">roomId</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;roomId&#39;</span><span class="p">],</span>
-                                <span class="n">L</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;Layout&#39;</span><span class="p">],</span>
+                                <span class="n">L</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;L&#39;</span><span class="p">],</span>
                                 <span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
                                 <span class="n">interval</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;meca_updt&#39;</span><span class="p">],</span>
                                 <span class="n">wld</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;world&#39;</span><span class="p">],</span>
                                 <span class="n">sim</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sim&#39;</span><span class="p">],</span>
+                                <span class="n">seed</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;seed&#39;</span><span class="p">],</span>
                                 <span class="n">moving</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                                 <span class="n">froom</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;froom&#39;</span><span class="p">],</span>
                                 <span class="n">wait</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;wait&#39;</span><span class="p">],</span>
                                 <span class="n">cdest</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;cdest&#39;</span><span class="p">],</span>
-                                <span class="n">save</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">])</span>
+                                <span class="n">save</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">]</span>
+                                <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">behaviors</span> <span class="o">=</span> <span class="p">[</span><span class="n">Seek</span><span class="p">(),</span> <span class="n">Containment</span><span class="p">(),</span>\
                                    <span class="n">Separation</span><span class="p">(),</span> <span class="n">InterpenetrationConstraint</span><span class="p">()]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">steering_mind</span> <span class="o">=</span> <span class="n">queue_steering_mind</span>
-<span class="c">#            self.meca.steering_mind = queue_steering_mind</span>
-        <span class="c"># filll in network</span>
-
             <span class="c">## Network init</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">position</span><span class="p">),</span>
                              <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">RAT</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;RAT&#39;</span><span class="p">],</span>
-                             <span class="n">epwr</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;epwr&#39;</span><span class="p">],</span> <span class="n">sens</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sens&#39;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+                             <span class="n">epwr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epwr</span><span class="p">,</span> <span class="n">sens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sens</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">move</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
@@ -219,9 +250,9 @@
 
             <span class="c">## Communication init</span>
 
-            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;synchro&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;synchro&#39;</span> <span class="ow">and</span>  <span class="n">args</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]:</span>
                 <span class="c">## The TOA requests are made every refreshTOA time ( can be modified in agent.ini)</span>
-
+                <span class="c">## This Mode will be deprecated in future version</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
                               <span class="n">dcond</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">,</span> <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rxt</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
@@ -231,7 +262,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxt</span><span class="o">.</span><span class="n">refresh_TOA</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
 
 
-            <span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;autonomous&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;autonomous&#39;</span> <span class="ow">and</span>  <span class="n">args</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]:</span>
                 <span class="c">## The requests are made by node only when they are in visibility of pairs.</span>
 
                 <span class="c"># self.rxr only manage a refresh RSS process</span>
@@ -255,17 +286,17 @@
             <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;roomId&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;pos&#39;</span><span class="p">],</span>
                                  <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">RAT</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;RAT&#39;</span><span class="p">],</span>
-                                 <span class="n">epwr</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;epwr&#39;</span><span class="p">],</span> <span class="n">sens</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sens&#39;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+                                 <span class="n">epwr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epwr</span><span class="p">,</span> <span class="n">sens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sens</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">pp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;Layout&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;roomId&#39;</span><span class="p">]])</span>
+                <span class="n">pp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;L&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;roomId&#39;</span><span class="p">]])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">pp</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">RAT</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;RAT&#39;</span><span class="p">],</span>
-                                 <span class="n">epwr</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;epwr&#39;</span><span class="p">],</span> <span class="n">sens</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sens&#39;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+                                 <span class="n">epwr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epwr</span><span class="p">,</span> <span class="n">sens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sens</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;sim&#39;</span><span class="p">]</span>
-<span class="c">#            self.sim.activate(self.meca, self.meca.move(),0.0)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;autonomous&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;autonomous&#39;</span> <span class="ow">and</span>  <span class="n">args</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
                               <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">wait_request</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
@@ -287,7 +318,7 @@
 
         <span class="k">if</span> <span class="s">&#39;txt&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">]:</span>
             <span class="n">pyu</span><span class="o">.</span><span class="n">writenode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;loc&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">:</span>
+        <span class="k">if</span>  <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span> <span class="ow">and</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;loc&#39;</span><span class="p">]</span> <span class="p">:</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">Localization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
                                     <span class="n">method</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;loc_method&#39;</span><span class="p">])</span>
@@ -295,8 +326,39 @@
                                       <span class="n">loc_updt_time</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;loc_updt&#39;</span><span class="p">],</span>
                                       <span class="n">tx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">,</span>
                                       <span class="n">sim</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sim&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">1.5</span><span class="p">)</span></div>
-</pre></div>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">1.5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;General Agent info </span><span class="se">\n</span><span class="s">********************</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;name : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;ID: &#39;</span>  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;type: &#39;</span>  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> 
+
+      
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s"> More Agent information about:&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">+ Mecanichal =&gt; self.meca&#39;</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">+ Network =&gt; self.net&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">+ Personnal Network =&gt; self.PN&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">+ Localization =&gt; self.loc</span><span class="se">\n\n</span><span class="s">&#39;</span>
+
+        <span class="k">try</span> <span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
+        <span class="k">except</span><span class="p">:</span> 
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;No network simulated&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
+            <span class="k">try</span> <span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;no localization simulated&#39;</span>
+
+
+
+        <span class="k">return</span> <span class="n">s</span>
+</pre></div></div>
 
           </div>
         </div>
@@ -306,18 +368,26 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../mobility.html" >pylayers.mobility</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

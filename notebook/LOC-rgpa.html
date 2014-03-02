@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -57,6 +63,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./LOC-rgpa.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -88,10 +99,8 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x47d2dd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x717ef10&gt;
+</pre></div>
 </div>
 <p>Let&#8217;s define 4 anchors in the plane.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pt1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
@@ -116,10 +125,11 @@ blue</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x49400d0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x73489d0&gt;
+</pre></div>
 </div>
-<img alt="./LOC-rgpa_files/LOC-rgpa_5_1.png" src="./LOC-rgpa_files/LOC-rgpa_5_1.png" />
-<p>The euclidian distance betwenn blind node <img class="math" src="../_images/math/36f73fc1312ee0349b3f3a0f3bd9eb5504339011.png" alt="p"/> and anchors ans the
+<img alt="../_images/LOC-rgpa_5_1.png" src="../_images/LOC-rgpa_5_1.png" />
+<p>The euclidian distance betwenn blind node <img class="math" src="../_images/math/3eca8557203e86160952e1c0f735f7417f3285b1.png" alt="p"/> and anchors ans the
 corresponding Time of flight are evaluated.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -137,10 +147,11 @@ corresponding Time of flight are evaluated.</p>
 <span class="k">print</span> <span class="s">&#39;distance p-4=&#39;</span><span class="p">,</span><span class="n">d4</span><span class="p">,</span> <span class="s">&#39;/ toa3=&#39;</span><span class="p">,</span><span class="n">toa4</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>distance p-1= 5.0 / toa1= 16.6666666667
+<div class="highlight-python"><div class="highlight"><pre>distance p-1= 5.0 / toa1= 16.6666666667
 distance p-2= 14.1421356237 / toa2= 47.1404520791
 distance p-3= 23.5372045919 / toa3= 78.4573486396
-distance p-4= 18.0277563773 / toa3= 60.0925212577</pre>
+distance p-4= 18.0277563773 / toa3= 60.0925212577
+</pre></div>
 </div>
 <div class="section" id="rgpa-robust-geometric-positioning-algorithm">
 <h1>RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
@@ -169,21 +180,22 @@ the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">c</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
+<div class="highlight-python"><div class="highlight"><pre>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
     0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,
  node | peer   |type | rat  | p              | value    | std  | runable| usable|
     1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,
  node | peer   |type | rat  | p              | value    | std  | runable| usable|
     2 |        |TOA  |      | [ 5 28]        | [ 78.457]| [ 1.]|       1|      1|,
  node | peer   |type | rat  | p              | value    | std  | runable| usable|
-    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]</pre>
+    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]
+</pre></div>
 </div>
 <p>Get information on the cla :</p>
 <ul class="simple">
 <li>type : TOA / RSS</li>
 <li>p : Position of the origin of the constraint</li>
 <li>value : power ( RSS ) / time in ns ( TOA)</li>
-<li>std : standard deviation <img class="math" src="../_images/math/741fb9098efcb98055f467f87630a5d0ca599b6b.png" alt="\sigma^2"/> of value</li>
+<li>std : standard deviation <img class="math" src="../_images/math/93c29bfedc993de115781b4fbb7e3a8b9e8d6b51.png" alt="\sigma^2"/> of value</li>
 <li>runable : does the constraint has a position p ?</li>
 <li>obsolete : does the value has been obtained recently ?</li>
 <li>usuable : runbale AND NOT obsolete</li>
@@ -192,14 +204,15 @@ the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>type , p              , value, std  , runable, usable, obsolete, evaluated
+<div class="highlight-python"><div class="highlight"><pre>type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
 type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0
 type , p              , value, std  , runable, usable, obsolete, evaluated
 TOA  , [ 5 28]        , [ 78.457], [ 1.],       1,      1,        0,         0
 type , p              , value, std  , runable, usable, obsolete, evaluated
-TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0</pre>
+TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0
+</pre></div>
 </div>
 <p>Update the CLA</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
@@ -207,6 +220,12 @@ TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0</
 </div>
 <p>Compute the cla</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>cluster
+enter in HT processing
+!!!!! HT FAIL !!!!!!!
+2 first constraint of CLA have to be TOA and others RSS in order to use HT
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
@@ -249,7 +268,7 @@ with the above model</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mf">9.3413044301112294</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">8.5640710716311421</span>
 </pre></div>
 </div>
 </div>
@@ -269,7 +288,7 @@ with the above model</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>TDOA 2.0
+<div class="highlight-python"><div class="highlight"><pre>TDOA 2.0
 TDOA 2.0
 TDOA 2.0
 TDOA 1.5
@@ -280,7 +299,8 @@ TDOA 1.375
 TDOA 1.375
 TDOA 1.375
 TDOA 1.375
-TDOA 1.375</pre>
+TDOA 1.375
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
 </pre></div>
@@ -370,6 +390,12 @@ TDOA 1.375</pre>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -379,8 +405,9 @@ TDOA 1.375</pre>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

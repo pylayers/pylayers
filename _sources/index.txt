@@ -4,4 +4,4 @@
    :hidden:
 
    notebook/UserManual.rst
-   modules/index
+   modules/pylayers

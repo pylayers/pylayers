@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -88,12 +94,12 @@
 <span class="c">#d0 = float(plm_opt[&#39;d0&#39;])</span>
 <span class="c">#PL_method = plm_opt[&#39;method&#39;] # mean, median , mode</span>
 
-<div class="viewcode-block" id="Take_all"><a class="viewcode-back" href="../../../modules/location.locarule.html#pylayers.location.locarule.Take_all">[docs]</a><span class="k">class</span> <span class="nc">Take_all</span><span class="p">():</span>
+<div class="viewcode-block" id="Take_all"><a class="viewcode-back" href="../../../modules/pylayers.location.locarule.html#pylayers.location.locarule.Take_all">[docs]</a><span class="k">class</span> <span class="nc">Take_all</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Take TOA and Pr for any RAT.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Take_all.take"><a class="viewcode-back" href="../../../modules/location.locarule.html#pylayers.location.locarule.Take_all.take">[docs]</a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">net</span><span class="p">,</span> <span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">LDP</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Take_all.take"><a class="viewcode-back" href="../../../modules/pylayers.location.locarule.html#pylayers.location.locarule.Take_all.take">[docs]</a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">net</span><span class="p">,</span> <span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">LDP</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -266,12 +272,12 @@
 <span class="c">#N=sps.uniform(scale=)</span>
 <span class="c">#            </span>
 </div></div>
-<span class="k">def</span> <span class="nf">merge_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">LDP</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="merge_rules"><a class="viewcode-back" href="../../../modules/pylayers.location.locarule.html#pylayers.location.locarule.merge_rules">[docs]</a><span class="k">def</span> <span class="nf">merge_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">LDP</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="n">rules</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="p">:</span>
         <span class="n">rules</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">LDP</span><span class="p">))</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">rules</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">rules</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -282,6 +288,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -293,6 +305,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

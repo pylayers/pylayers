@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
@@ -118,7 +124,7 @@
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 
-<div class="viewcode-block" id="rename"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.rename">[docs]</a><span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">,</span><span class="n">rep</span><span class="o">=</span><span class="s">&#39;./&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="rename"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.rename">[docs]</a><span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">,</span><span class="n">rep</span><span class="o">=</span><span class="s">&#39;./&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; rename simulation file with proper itx/irx </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -139,7 +145,7 @@
     <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">filenew</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="spafile"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.spafile">[docs]</a><span class="k">def</span> <span class="nf">spafile</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">sdir</span><span class="p">):</span>
+<div class="viewcode-block" id="spafile"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.spafile">[docs]</a><span class="k">def</span> <span class="nf">spafile</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">sdir</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        create a .spa file for  Ray Tracing</span>
 
@@ -163,7 +169,7 @@
     <span class="n">fspa</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Palch"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Palch">[docs]</a><span class="k">class</span> <span class="nc">Palch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Palch"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Palch">[docs]</a><span class="k">class</span> <span class="nc">Palch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Launching parameters class</span>
 
 <span class="sd">    Methods</span>
@@ -181,7 +187,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Palch.info"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Palch.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Palch.info"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Palch.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s">&quot;----------------------------------------------&quot;</span>
@@ -220,7 +226,7 @@
         <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">typalgo</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
         <span class="n">fi</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Palch.gui"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Palch.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Palch.gui"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Palch.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the Launching parameter .palch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -242,7 +248,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
 </div></div>
-<div class="viewcode-block" id="Patra"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Patra">[docs]</a><span class="k">class</span> <span class="nc">Patra</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Patra"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Patra">[docs]</a><span class="k">class</span> <span class="nc">Patra</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tracing parameters class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -269,7 +275,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">distdiff</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">var2D3D</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
-<div class="viewcode-block" id="Patra.save"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Patra.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Patra.save"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Patra.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filepatra</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRTRA&#39;</span><span class="p">])</span>
@@ -279,7 +285,7 @@
         <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var2D3D</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
         <span class="n">fi</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Patra.gui"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Patra.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Patra.gui"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Patra.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get the Launching parameter .palch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">patragui</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;Launching Parameter&#39;</span><span class="p">,</span>
@@ -294,14 +300,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
 </div></div>
-<div class="viewcode-block" id="Pafreq"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Pafreq">[docs]</a><span class="k">class</span> <span class="nc">Pafreq</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Pafreq"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Pafreq">[docs]</a><span class="k">class</span> <span class="nc">Pafreq</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; frequency setting</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Pafreq.info"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Pafreq.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pafreq.info"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Pafreq.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display frequency range information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s">&quot;----------------------------------------------&quot;</span>
@@ -328,7 +334,7 @@
         <span class="n">fi</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
         <span class="n">fi</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Pafreq.gui"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Pafreq.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pafreq.gui"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Pafreq.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the Launching parameter .palch</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -344,7 +350,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
 </div></div>
-<div class="viewcode-block" id="Patud"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Patud">[docs]</a><span class="k">class</span> <span class="nc">Patud</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Patud"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Patud">[docs]</a><span class="k">class</span> <span class="nc">Patud</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; tratotud parameters</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">purc</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nrmax</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
@@ -352,7 +358,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span class="n">num</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nrmax</span> <span class="o">=</span> <span class="n">nrmax</span>
 
-<div class="viewcode-block" id="Patud.info"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Patud.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Patud.info"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Patud.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; info</span>
 
 <span class="sd">        Examples</span>
@@ -369,7 +375,7 @@
         <span class="k">print</span> <span class="s">&quot;nrmax : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrmax</span>
         <span class="k">print</span> <span class="s">&quot;purc : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">purc</span>
 </div>
-<div class="viewcode-block" id="Patud.gui"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Patud.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Patud.gui"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Patud.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui for tratotud parameters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tudgui</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;Launching Parameter&#39;</span><span class="p">,</span>
@@ -382,7 +388,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">purc</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">tudgui</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
 </div></div>
-<div class="viewcode-block" id="Launch"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Launch">[docs]</a><span class="k">class</span> <span class="nc">Launch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Launch"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Launch">[docs]</a><span class="k">class</span> <span class="nc">Launch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; container to handle data from .lch files</span>
 
 <span class="sd">    Attributes</span>
@@ -410,7 +416,7 @@
 <span class="sd">    launching :</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Launch.info"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Launch.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Launch.info"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Launch.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get __dict__ info</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
@@ -418,7 +424,7 @@
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">print</span> <span class="n">j</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Launch.choose"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Launch.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Launch.choose"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Launch.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Choose a Launching  file in launchdir</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -431,7 +437,7 @@
         <span class="n">_filelch</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getshort</span><span class="p">(</span><span class="n">filelch</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filelch</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Launch.load"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Launch.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filelch</span><span class="p">):</span>
+<div class="viewcode-block" id="Launch.load"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Launch.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filelch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a .lch file</span>
 
 <span class="sd">        Parameters</span>
@@ -566,7 +572,7 @@
             <span class="n">dt</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">edge_type</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Launch.show"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Launch.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">deepmax</span><span class="o">=</span><span class="mi">1</span> <span class="p">,</span><span class="n">f</span> <span class="o">=</span> <span class="p">[]):</span>
+<div class="viewcode-block" id="Launch.show"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Launch.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">deepmax</span><span class="o">=</span><span class="mi">1</span> <span class="p">,</span><span class="n">f</span> <span class="o">=</span> <span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show ray launching until a given depth</span>
 
 <span class="sd">        Parameters</span>
@@ -646,7 +652,7 @@
 
 
 </div></div>
-<div class="viewcode-block" id="Simul"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul">[docs]</a><span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul">[docs]</a><span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Simulation Class</span>
 
 <span class="sd">    Methods</span>
@@ -823,7 +829,7 @@
         <span class="c">#self.load(self.filesimul)</span>
 
 
-<div class="viewcode-block" id="Simul.gui"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.gui"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui to modify the simulation file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">simulgui</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;Simulation file&#39;</span><span class="p">,</span>
@@ -850,7 +856,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fileantTx</span> <span class="o">=</span> <span class="n">simulgui</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fileantRx</span> <span class="o">=</span> <span class="n">simulgui</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Simul.updcfg"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.updcfg">[docs]</a>    <span class="k">def</span> <span class="nf">updcfg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.updcfg"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.updcfg">[docs]</a>    <span class="k">def</span> <span class="nf">updcfg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update simulation .ini config file with values currently in use.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;files&quot;</span><span class="p">,</span> <span class="s">&quot;struc&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="p">)</span>
@@ -896,7 +902,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Simul.clean"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.clean"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; clean</span>
 
 <span class="sd">       Notes</span>
@@ -937,7 +943,7 @@
                     <span class="k">print</span> <span class="n">filename</span>
 
 </div>
-<div class="viewcode-block" id="Simul.clean_project"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.clean_project">[docs]</a>    <span class="k">def</span> <span class="nf">clean_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.clean_project"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.clean_project">[docs]</a>    <span class="k">def</span> <span class="nf">clean_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clean Pyrpoject directory</span>
 
@@ -1040,7 +1046,7 @@
             <span class="k">return</span> <span class="bp">False</span>
 
 </div>
-<div class="viewcode-block" id="Simul.save"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.save"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save simulation file</span>
 
 <span class="sd">        Simulation files are .ini files which are saved in a dedicated</span>
@@ -1189,7 +1195,7 @@
 <span class="c">#        self.config.write(fd)</span>
 <span class="c">#        fd.close()</span>
 </div>
-<div class="viewcode-block" id="Simul.save_project"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.save_project">[docs]</a>    <span class="k">def</span> <span class="nf">save_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.save_project"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.save_project">[docs]</a>    <span class="k">def</span> <span class="nf">save_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save Simulation files in a zipfile</span>
 
 <span class="sd">        Simulation files are .ini files which are saved in a dedicated</span>
@@ -1205,7 +1211,7 @@
         <span class="n">root</span><span class="o">.</span><span class="n">withdraw</span><span class="p">()</span>
         <span class="k">print</span> <span class="s">&quot;Current project saved in&quot;</span><span class="p">,</span> <span class="n">zipfileName</span>
 </div>
-<div class="viewcode-block" id="Simul.load_project"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.load_project">[docs]</a>    <span class="k">def</span> <span class="nf">load_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.load_project"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.load_project">[docs]</a>    <span class="k">def</span> <span class="nf">load_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load Simulation files from a zipfile</span>
 
 <span class="sd">        Simulation files are .ini files which are saved in a dedicated</span>
@@ -1224,7 +1230,7 @@
         <span class="n">root</span><span class="o">.</span><span class="n">withdraw</span><span class="p">()</span>
         <span class="k">print</span> <span class="s">&quot;Current project loaded in&quot;</span><span class="p">,</span> <span class="n">dirname</span>
 </div>
-<div class="viewcode-block" id="Simul.choose"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.choose"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Choose a simulation file in simuldir</span>
 
@@ -1238,7 +1244,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filesimul</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getshort</span><span class="p">(</span><span class="n">fichsimul</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Simul.load"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filesimul</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.load"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filesimul</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a simulation configuration file</span>
 
 <span class="sd">         each transmiter simulation results in the creation of an .ini file</span>
@@ -1427,7 +1433,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.layout"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.layout">[docs]</a>    <span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestruc</span><span class="p">,</span> <span class="n">_filematini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">_fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.layout"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.layout">[docs]</a>    <span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestruc</span><span class="p">,</span> <span class="n">_filematini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">_fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a layout in the simulation oject</span>
 
 <span class="sd">        Parameters</span>
@@ -1459,7 +1465,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;files&quot;</span><span class="p">,</span> <span class="s">&quot;mat&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filematini</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Simul.show"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">irx</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">furniture</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Simul.show"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">irx</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">furniture</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show simulation</span>
 
 <span class="sd">            Parameters</span>
@@ -1559,7 +1565,7 @@
         <span class="c">#for k in range(self.rx.N):</span>
         <span class="c">#   ax.text(self.rx.position[0,k],self.rx.position[1,k],str(k),color=&#39;black&#39;)</span>
 </div>
-<div class="viewcode-block" id="Simul.PL"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.PL">[docs]</a>    <span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.PL"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.PL">[docs]</a>    <span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot Path Loss</span>
 
 <span class="sd">        itx</span>
@@ -1581,7 +1587,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">td</span><span class="p">,</span> <span class="n">tEa</span><span class="p">,</span> <span class="n">tEo</span>
 </div>
-<div class="viewcode-block" id="Simul.evalcir"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.evalcir">[docs]</a>    <span class="k">def</span> <span class="nf">evalcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;new&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.evalcir"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.evalcir">[docs]</a>    <span class="k">def</span> <span class="nf">evalcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;new&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1630,7 +1636,7 @@
             <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="p">][</span><span class="n">kr</span><span class="p">]</span> <span class="o">=</span> <span class="n">cir</span>
         <span class="k">return</span><span class="p">(</span><span class="n">tcir</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.loadcir"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.loadcir">[docs]</a>    <span class="k">def</span> <span class="nf">loadcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.loadcir"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.loadcir">[docs]</a>    <span class="k">def</span> <span class="nf">loadcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1663,7 +1669,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">cira</span><span class="p">,</span> <span class="n">ciro</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.pltcir"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.pltcir">[docs]</a>    <span class="k">def</span> <span class="nf">pltcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">irx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Simul.pltcir"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.pltcir">[docs]</a>    <span class="k">def</span> <span class="nf">pltcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">irx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; plot Channel Impulse Response</span>
 
 <span class="sd">        Parameters</span>
@@ -1737,7 +1743,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="c">#plt.savefig(&#39;Tx&#39;+str(itx),format=pdf,dpi=300)</span>
 </div>
-<div class="viewcode-block" id="Simul.scatter"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.scatter">[docs]</a>    <span class="k">def</span> <span class="nf">scatter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span>
+<div class="viewcode-block" id="Simul.scatter"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.scatter">[docs]</a>    <span class="k">def</span> <span class="nf">scatter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span>
                 <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span>
                 <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
                 <span class="n">spl</span><span class="o">=</span><span class="mi">221</span><span class="p">,</span>
@@ -1787,7 +1793,7 @@
             <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">cblabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.info"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="p">[],</span> <span class="n">irx</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Simul.info"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="p">[],</span> <span class="n">irx</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; display simulation information</span>
 
 <span class="sd">         Parameters</span>
@@ -1861,7 +1867,7 @@
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">print</span> <span class="n">j</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Simul.filtray"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.filtray">[docs]</a>    <span class="k">def</span> <span class="nf">filtray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">tau0</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.filtray"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.filtray">[docs]</a>    <span class="k">def</span> <span class="nf">filtray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">tau0</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; filter rays</span>
 
 <span class="sd">        Parameters</span>
@@ -1891,7 +1897,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Tx&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">itx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-Rx&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">irx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
             <span class="n">tau0</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &lt; tau &lt; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tau1</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="Simul.showray"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.showray">[docs]</a>    <span class="k">def</span> <span class="nf">showray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">iray</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Simul.showray"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.showray">[docs]</a>    <span class="k">def</span> <span class="nf">showray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">iray</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show layout and rays for a radio link</span>
 
 <span class="sd">        Parameters</span>
@@ -1946,7 +1952,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Tx&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">itx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-Rx&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">irx</span><span class="p">)</span> <span class="o">+</span>
                       <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">iray</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">iray</span><span class="p">)))</span>
 </div>
-<div class="viewcode-block" id="Simul.show3l"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.show3l">[docs]</a>    <span class="k">def</span> <span class="nf">show3l</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.show3l"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.show3l">[docs]</a>    <span class="k">def</span> <span class="nf">show3l</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of a specific link</span>
 
 <span class="sd">        g = S.show3l(itx,irx)</span>
@@ -1966,7 +1972,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.show3"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.show3"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rays</span><span class="o">=</span><span class="p">[],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the simulation configuration</span>
 
 <span class="sd">        Parameters</span>
@@ -2018,7 +2024,7 @@
         <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.freq"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.freq">[docs]</a>    <span class="k">def</span> <span class="nf">freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GUI</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.freq"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.freq">[docs]</a>    <span class="k">def</span> <span class="nf">freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GUI</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            return the frequency base from the content of filefreq</span>
 
@@ -2052,7 +2058,7 @@
         <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">Nf</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.getlaunch"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.getlaunch">[docs]</a>    <span class="k">def</span> <span class="nf">getlaunch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.getlaunch"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.getlaunch">[docs]</a>    <span class="k">def</span> <span class="nf">getlaunch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         get the kth launch</span>
 
@@ -2072,7 +2078,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span><span class="p">(</span><span class="s">&quot;Tx not available&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.gettra"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.gettra">[docs]</a>    <span class="k">def</span> <span class="nf">gettra</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.gettra"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.gettra">[docs]</a>    <span class="k">def</span> <span class="nf">gettra</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         Gtra = S.gettra(itx,irx)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2083,7 +2089,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;gettra warning : wrong tx or rx index&quot;</span>
 </div>
-<div class="viewcode-block" id="Simul.gettud"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.gettud">[docs]</a>    <span class="k">def</span> <span class="nf">gettud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.gettud"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.gettud">[docs]</a>    <span class="k">def</span> <span class="nf">gettud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         Gtud = S.gettud(itx,irx)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2096,7 +2102,7 @@
     <span class="c">#def gettud(self,k,l):</span>
     <span class="c">#def getfield(self,k,l):</span>
 </div>
-<div class="viewcode-block" id="Simul.launching"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.launching">[docs]</a>    <span class="k">def</span> <span class="nf">launching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.launching"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.launching">[docs]</a>    <span class="k">def</span> <span class="nf">launching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; start the launching program and get the results files</span>
 
 <span class="sd">        Parameters</span>
@@ -2179,7 +2185,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Simul.tracing"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.tracing">[docs]</a>    <span class="k">def</span> <span class="nf">tracing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.tracing"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.tracing">[docs]</a>    <span class="k">def</span> <span class="nf">tracing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; exec tracing</span>
 
 <span class="sd">        Parameters</span>
@@ -2246,7 +2252,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="n">itx</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
             <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Simul.tratotud"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.tratotud">[docs]</a>    <span class="k">def</span> <span class="nf">tratotud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.tratotud"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.tratotud">[docs]</a>    <span class="k">def</span> <span class="nf">tratotud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert tracing in .tud</span>
 
 <span class="sd">        Parameters</span>
@@ -2323,7 +2329,7 @@
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Simul.field"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.field">[docs]</a>    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.field"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.field">[docs]</a>    <span class="k">def</span> <span class="nf">field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; field calculation for Tx Rx using evalfield command</span>
 
 <span class="sd">        Parameters</span>
@@ -2379,7 +2385,7 @@
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Simul.run2"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.run2">[docs]</a>    <span class="k">def</span> <span class="nf">run2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">cirforce</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.run2"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.run2">[docs]</a>    <span class="k">def</span> <span class="nf">run2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">cirforce</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run the simulation for 1 tx and a set of rx</span>
 
 <span class="sd">            Parameters</span>
@@ -2463,7 +2469,7 @@
             <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="n">cirdir</span><span class="p">)</span>
             <span class="n">spio</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
             </div>
-<div class="viewcode-block" id="Simul.run"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">srx</span><span class="o">=</span><span class="p">[],</span> <span class="n">cirforce</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.run"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">srx</span><span class="o">=</span><span class="p">[],</span> <span class="n">cirforce</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run the simulation for 1 tx and a set of rx</span>
 
 <span class="sd">            Parameters</span>
@@ -2575,7 +2581,7 @@
                         <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span></div>
-<div class="viewcode-block" id="Simul.gt"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.gt">[docs]</a>    <span class="k">def</span> <span class="nf">gt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.gt"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.gt">[docs]</a>    <span class="k">def</span> <span class="nf">gt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gtud</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">gt</span> <span class="o">=</span> <span class="n">GrRayTud</span><span class="p">()</span>
@@ -2585,7 +2591,7 @@
         <span class="n">gt</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filetud</span><span class="p">,</span> <span class="n">filetang</span><span class="p">,</span> <span class="n">filerang</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.delay"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.delay">[docs]</a>    <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.delay"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.delay">[docs]</a>    <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            calculate LOS link delay</span>
 
@@ -2602,7 +2608,7 @@
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">df</span><span class="p">))</span>
         <span class="k">return</span><span class="p">(</span><span class="n">dist</span> <span class="o">/</span> <span class="mf">0.3</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.gr"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.gr">[docs]</a>    <span class="k">def</span> <span class="nf">gr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.gr"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.gr">[docs]</a>    <span class="k">def</span> <span class="nf">gr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">           return a  cluster or fays from link itx-irx</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2610,7 +2616,7 @@
         <span class="n">gr</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtra</span><span class="p">[</span><span class="n">itx</span><span class="p">][</span><span class="n">irx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.VC"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.VC">[docs]</a>    <span class="k">def</span> <span class="nf">VC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.VC"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.VC">[docs]</a>    <span class="k">def</span> <span class="nf">VC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            return Vect Channel for link itx irx</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2618,7 +2624,7 @@
         <span class="n">VCl</span> <span class="o">=</span> <span class="n">channelc</span><span class="o">.</span><span class="n">VectChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">VCl</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Simul.cir"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.cir">[docs]</a>    <span class="k">def</span> <span class="nf">cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">store_level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRCIR&#39;</span><span class="p">],</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul.cir"><a class="viewcode-back" href="../../modules-old/simul.simulem.html#simul.simulem.Simul.cir">[docs]</a>    <span class="k">def</span> <span class="nf">cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">store_level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRCIR&#39;</span><span class="p">],</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate a set of channel impulse responses</span>
 
@@ -2760,6 +2766,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
@@ -2771,6 +2783,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

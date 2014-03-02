@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -76,7 +82,7 @@
 <span class="c">#import MySQLdb as msql</span>
 
 
-<div class="viewcode-block" id="conv_vecarr"><a class="viewcode-back" href="../../../modules/util.utilnet.html#pylayers.util.utilnet.conv_vecarr">[docs]</a><span class="k">def</span> <span class="nf">conv_vecarr</span><span class="p">(</span><span class="n">vin</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="conv_vecarr"><a class="viewcode-back" href="../../../modules/pylayers.util.utilnet.html#pylayers.util.utilnet.conv_vecarr">[docs]</a><span class="k">def</span> <span class="nf">conv_vecarr</span><span class="p">(</span><span class="n">vin</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; convert vec3 =&gt; np.array and  np.array =&gt; vec3 </span>
 
 <span class="sd">    Parameters</span>
@@ -102,10 +108,10 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;vin must be either a vec3 or a np.ndarray instance&#39;</span><span class="p">)</span>
 
 </div>
-<span class="k">def</span> <span class="nf">str2bool</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+<div class="viewcode-block" id="str2bool"><a class="viewcode-back" href="../../../modules/pylayers.util.utilnet.html#pylayers.util.utilnet.str2bool">[docs]</a><span class="k">def</span> <span class="nf">str2bool</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
   <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;True&quot;</span><span class="p">,</span> <span class="s">&quot;true&quot;</span><span class="p">,</span> <span class="s">&quot;1&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="create_msql"><a class="viewcode-back" href="../../../modules/util.utilnet.html#pylayers.util.utilnet.create_msql">[docs]</a><span class="k">def</span> <span class="nf">create_msql</span><span class="p">(</span><span class="n">HOST</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span><span class="n">USER</span><span class="o">=</span><span class="s">&#39;root&#39;</span><span class="p">,</span><span class="n">PASSWD</span><span class="o">=</span><span class="s">&#39;sqlsql&#39;</span><span class="p">,</span><span class="n">DATABASE</span><span class="o">=</span><span class="s">&#39;piplusdb&#39;</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="create_msql"><a class="viewcode-back" href="../../../modules/pylayers.util.utilnet.html#pylayers.util.utilnet.create_msql">[docs]</a><span class="k">def</span> <span class="nf">create_msql</span><span class="p">(</span><span class="n">HOST</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span><span class="n">USER</span><span class="o">=</span><span class="s">&#39;root&#39;</span><span class="p">,</span><span class="n">PASSWD</span><span class="o">=</span><span class="s">&#39;sqlsql&#39;</span><span class="p">,</span><span class="n">DATABASE</span><span class="o">=</span><span class="s">&#39;piplusdb&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -153,6 +159,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -164,6 +176,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

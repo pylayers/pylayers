@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
@@ -87,7 +93,7 @@
 <span class="n">_world</span> <span class="o">=</span> <span class="bp">None</span>
 
 
-<div class="viewcode-block" id="world"><a class="viewcode-back" href="../../../../modules/mobility.transit.world.html#pylayers.mobility.transit.World.world">[docs]</a><span class="k">def</span> <span class="nf">world</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="world"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.world">[docs]</a><span class="k">def</span> <span class="nf">world</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; defining world</span>
 
 <span class="sd">    Notes</span>
@@ -103,7 +109,7 @@
     <span class="k">return</span> <span class="n">_world</span>
 
 </div>
-<span class="k">def</span> <span class="nf">near</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+<div class="viewcode-block" id="near"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.near">[docs]</a><span class="k">def</span> <span class="nf">near</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
     <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">tile</span>
     <span class="n">tile_distance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">distance</span> <span class="o">/</span> <span class="n">tile_size</span><span class="p">)</span>
     <span class="n">all_items</span> <span class="o">=</span> <span class="p">[]</span>
@@ -112,8 +118,8 @@
             <span class="n">all_items</span> <span class="o">+=</span> <span class="n">items</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">),</span> <span class="p">[])</span>
     <span class="k">return</span> <span class="n">all_items</span>
 
-
-<div class="viewcode-block" id="World"><a class="viewcode-back" href="../../../../modules/mobility.transit.world.html#pylayers.mobility.transit.World.World">[docs]</a><span class="k">class</span> <span class="nc">World</span><span class="p">:</span>
+</div>
+<div class="viewcode-block" id="World"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World">[docs]</a><span class="k">class</span> <span class="nc">World</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Class World </span>
 <span class="sd">    </span>
 <span class="sd">    Methods</span>
@@ -133,7 +139,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_obstacles</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_zones</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="World.boids"><a class="viewcode-back" href="../../../../modules/mobility.transit.world.html#pylayers.mobility.transit.World.World.boids">[docs]</a>    <span class="k">def</span> <span class="nf">boids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="World.boids"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.boids">[docs]</a>    <span class="k">def</span> <span class="nf">boids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -154,7 +160,7 @@
 
         <span class="k">return</span> <span class="n">other_boids</span>
 </div>
-<div class="viewcode-block" id="World.add_boid"><a class="viewcode-back" href="../../../../modules/mobility.transit.world.html#pylayers.mobility.transit.World.World.add_boid">[docs]</a>    <span class="k">def</span> <span class="nf">add_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+<div class="viewcode-block" id="World.add_boid"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.add_boid">[docs]</a>    <span class="k">def</span> <span class="nf">add_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -171,7 +177,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_boids</span><span class="p">[</span><span class="n">tile</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
         <span class="n">boid</span><span class="o">.</span><span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span>
 </div>
-<div class="viewcode-block" id="World.remove_boid"><a class="viewcode-back" href="../../../../modules/mobility.transit.world.html#pylayers.mobility.transit.World.World.remove_boid">[docs]</a>    <span class="k">def</span> <span class="nf">remove_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+<div class="viewcode-block" id="World.remove_boid"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.remove_boid">[docs]</a>    <span class="k">def</span> <span class="nf">remove_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -181,17 +187,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_boids</span><span class="p">[</span><span class="n">boid</span><span class="o">.</span><span class="n">tile</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">update_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+<div class="viewcode-block" id="World.update_boid"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.update_boid">[docs]</a>    <span class="k">def</span> <span class="nf">update_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">tile_size</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span>
             <span class="n">boid</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">tile_size</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">tile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">boid</span><span class="o">.</span><span class="n">tile</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_boids</span><span class="p">[</span><span class="n">boid</span><span class="o">.</span><span class="n">tile</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_boid</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">obstacles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="World.obstacles"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.obstacles">[docs]</a>    <span class="k">def</span> <span class="nf">obstacles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">near</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obstacles</span><span class="p">,</span> <span class="n">DIST_OBST</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">add_wall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">wall</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="World.add_wall"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.add_wall">[docs]</a>    <span class="k">def</span> <span class="nf">add_wall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">wall</span><span class="p">):</span>
         <span class="n">the_obstacles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obstacles</span>
         <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">line_start</span><span class="p">,</span> <span class="n">line_end</span> <span class="o">=</span> <span class="n">wall</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="n">wall</span><span class="p">[</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
@@ -210,8 +216,8 @@
                         <span class="n">the_obstacles</span><span class="p">[</span><span class="n">tile</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">line_start</span><span class="p">,</span> <span class="n">line_end</span><span class="p">))</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">the_obstacles</span><span class="p">[</span><span class="n">tile</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">line_start</span><span class="p">,</span> <span class="n">line_end</span><span class="p">)]</span>
-
-<div class="viewcode-block" id="World.zones"><a class="viewcode-back" href="../../../../modules/mobility.transit.world.html#pylayers.mobility.transit.World.World.zones">[docs]</a>    <span class="k">def</span> <span class="nf">zones</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="World.zones"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.zones">[docs]</a>    <span class="k">def</span> <span class="nf">zones</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -223,7 +229,7 @@
             <span class="n">boid</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">tile_size</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zones</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="p">[])</span>
 </div>
-<div class="viewcode-block" id="World.add_zone"><a class="viewcode-back" href="../../../../modules/mobility.transit.world.html#pylayers.mobility.transit.World.World.add_zone">[docs]</a>    <span class="k">def</span> <span class="nf">add_zone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone</span><span class="p">):</span>
+<div class="viewcode-block" id="World.add_zone"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.add_zone">[docs]</a>    <span class="k">def</span> <span class="nf">add_zone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters </span>
 <span class="sd">        ----------</span>
@@ -242,7 +248,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">the_zones</span><span class="p">[</span><span class="n">tile</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">zone</span><span class="p">]</span>
 </div>
-    <span class="k">def</span> <span class="nf">to_local</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+<div class="viewcode-block" id="World.to_local"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.World.html#pylayers.mobility.transit.World.World.to_local">[docs]</a>    <span class="k">def</span> <span class="nf">to_local</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">unused_z</span> <span class="o">=</span> <span class="n">point</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
         <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">xx</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">yy</span><span class="p">,</span>
                     <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">xx</span> <span class="o">+</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">yy</span><span class="p">)</span>
@@ -274,7 +280,7 @@
 <span class="c">#         return (self.y_offset - yy) * self.scale</span>
 <span class="c"># </span>
 <span class="c">#     def s_(self, ss):</span>
-<span class="c">#         return ss * self.scale</span></div>
+<span class="c">#         return ss * self.scale</span></div></div>
 </pre></div>
 
           </div>
@@ -285,6 +291,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
@@ -298,6 +310,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

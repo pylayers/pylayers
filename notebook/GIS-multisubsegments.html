@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -55,6 +61,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./GIS-multisubsegments.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -88,10 +99,8 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3d87dd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7b94f10&gt;
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 <span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;defstr3&#39;</span>
@@ -107,10 +116,11 @@ attribute of the subsegment can be changed with the method <tt class="docutils l
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>structure saved in  defstr3.str2
-structure saved in  defstr3.ini</pre>
+<div class="highlight-python"><div class="highlight"><pre>structure saved in  defstr3.str2
+structure saved in  defstr3.ini
+</pre></div>
 </div>
-<p>The <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> graph dictionnary has the following structure</p>
+<p>The <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph dictionnary has the following structure</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span>
 </pre></div>
 </div>
@@ -172,10 +182,10 @@ structure saved in  defstr3.ini</pre>
   <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
   <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
 </pre></div>
@@ -183,7 +193,7 @@ structure saved in  defstr3.ini</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>default.ini
+<div class="highlight-python"><div class="highlight"><pre>default.ini
 ------------------------------------------
 Layout Info :
 filestr :  defstr3.ini
@@ -198,11 +208,11 @@ Gs Nodes :  17
 Gs Edges :  18
 Gt Nodes :  2
 Gt Edges :  1
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
 Gr Nodes    : 2
 Gr Edges    : 1
-Nc  = Gr.node[nroom]['cycles']
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
 None
 Tx Info :
 npos       :  1
@@ -213,7 +223,7 @@ name       :
 type       :  tx
 fileini    :  radiotx.ini
 filespa    :  radiotx.spa
-filegeom   :  radiotx.vect
+filegeom   :  radiotx.off
 fileant    :  defant.vsh3
 filestr    :  defstr.str2
 None
@@ -226,10 +236,11 @@ name       :
 type       :  rx
 fileini    :  radiorx.ini
 filespa    :  radiorx.spa
-filegeom   :  radiorx.vect
+filegeom   :  radiorx.off
 fileant    :  defant.vsh3
 filestr    :  defstr.str2
-None</pre>
+None
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -247,15 +258,16 @@ None</pre>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+<div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
+</pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_9_1.png" />
+<img alt="../_images/GIS-multisubsegments_9_1.png" src="../_images/GIS-multisubsegments_9_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_10_0.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_10_0.png" />
+<img alt="../_images/GIS-multisubsegments_10_0.png" src="../_images/GIS-multisubsegments_10_0.png" />
 <p>The different steps are :</p>
 <ul class="simple">
 <li>determine the signatures</li>
@@ -277,7 +289,7 @@ None</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 6 : [1 2 3 4 5 6]
@@ -302,7 +314,8 @@ None</pre>
 9 / 14 : [301 302 303 304 305 306 307 308 309 310 311 312 313 314]
 -----
 ni : 1873
-nl : 4061</pre>
+nl : 4061
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
@@ -318,10 +331,11 @@ nl : 4061</pre>
 <span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
+  warnings.warn(&quot;No labeled objects found. &quot;
+</pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_16_1.png" />
+<img alt="../_images/GIS-multisubsegments_16_1.png" src="../_images/GIS-multisubsegments_16_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">type</span><span class="p">(</span><span class="n">cirair</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -341,9 +355,10 @@ nl : 4061</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">layer</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5907c90&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xa604d90&gt;
+</pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_18_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_18_1.png" />
+<img alt="../_images/GIS-multisubsegments_18_1.png" src="../_images/GIS-multisubsegments_18_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
@@ -358,7 +373,7 @@ nl : 4061</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_19_0.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_19_0.png" />
+<img alt="../_images/GIS-multisubsegments_19_0.png" src="../_images/GIS-multisubsegments_19_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#fig2=plt.figure()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
@@ -372,11 +387,12 @@ nl : 4061</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x60baf50&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7fac60586d50&gt;
+</pre></div>
 </div>
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_20_1.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_20_1.png" />
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_20_2.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_20_2.png" />
-<img alt="./GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" src="./GIS-multisubsegments_files/GIS-multisubsegments_20_3.png" />
+<img alt="../_images/GIS-multisubsegments_20_1.png" src="../_images/GIS-multisubsegments_20_1.png" />
+<img alt="../_images/GIS-multisubsegments_20_2.png" src="../_images/GIS-multisubsegments_20_2.png" />
+<img alt="../_images/GIS-multisubsegments_20_3.png" src="../_images/GIS-multisubsegments_20_3.png" />
 </div>
 </div>
 
@@ -389,6 +405,12 @@ nl : 4061</pre>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -398,8 +420,9 @@ nl : 4061</pre>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

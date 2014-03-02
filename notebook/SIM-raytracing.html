@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -58,6 +64,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./SIM-raytracing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -96,10 +107,8 @@ default configuration file named <strong>default.ini</strong> is loaded.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3b78dd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x822ff10&gt;
+</pre></div>
 </div>
 <p>A first step consists in loading a layout associated with the
 simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
@@ -131,20 +140,21 @@ dictionnary member of the Layout object.which allows to configure the
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_7_0.png" src="./SIM-raytracing_files/SIM-raytracing_7_0.png" />
+<img alt="../_images/SIM-raytracing_7_0.png" src="../_images/SIM-raytracing_7_0.png" />
 <div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
 <h2>Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation are stored
 in <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
 RadioNode which offers different methods for specifying nodes positions.
 The stucture of this <strong>.ini</strong> file presented below. The node Id is
-associated with the 3 coordinates <img class="math" src="../_images/math/accc80fdf164cef264f56a82b6f9f6add320fe05.png" alt="x,y,z"/> separated by white
+associated with the 3 coordinates <img class="math" src="../_images/math/975c0f20e558a0b09286b055b142fe433bb84f93.png" alt="x,y,z"/> separated by white
 spaces.</p>
-<div class="highlight-python"><pre>[coordinates]
+<div class="highlight-python"><div class="highlight"><pre>[coordinates]
 1 = -12.2724 7.76319999993 1.2
 2 = -18.7747 15.1779999998 1.2
 3 = -4.14179999998 8.86029999983 1.2
-4 = -9.09139999998 15.1899000001 1.2</pre>
+4 = -9.09139999998 15.1899000001 1.2
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1tx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
@@ -155,17 +165,19 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+<div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
+</pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_13_1.png" src="./SIM-raytracing_files/SIM-raytracing_13_1.png" />
+<img alt="../_images/SIM-raytracing_13_1.png" src="../_images/SIM-raytracing_13_1.png" />
 <p>The different object of the simulation cans be accessed to obtain
 different information. Below the number of transmitter and receiver.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;number of Tx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>number of Tx : 302
-number of rx : 4</pre>
+<div class="highlight-python"><div class="highlight"><pre>number of Tx : 302
+number of rx : 4
+</pre></div>
 </div>
 <p>The decomposition of the layout in a set of disjoint cycles is
 represented below. Not all cycles are rooms.</p>
@@ -177,7 +189,7 @@ represented below. Not all cycles are rooms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_17_1.png" src="./SIM-raytracing_files/SIM-raytracing_17_1.png" />
+<img alt="../_images/SIM-raytracing_17_1.png" src="../_images/SIM-raytracing_17_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
@@ -185,7 +197,7 @@ represented below. Not all cycles are rooms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_18_1.png" src="./SIM-raytracing_files/SIM-raytracing_18_1.png" />
+<img alt="../_images/SIM-raytracing_18_1.png" src="../_images/SIM-raytracing_18_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">istup</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">==</span><span class="nb">tuple</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="n">cy5</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">5</span><span class="p">,</span><span class="n">istup</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">cy5</span>
@@ -251,8 +263,9 @@ point to cycle function.</p>
 <span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>tx point belongs to cycle  5
-rx point belongs to cycle  4</pre>
+<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  5
+rx point belongs to cycle  4
+</pre></div>
 </div>
 <p>Then the signature between cycle 5 and cycle 4 can be calculated. This
 is done by instantiating a Signature object with a given layout and the
@@ -268,7 +281,7 @@ number of signatures for each number of interactions.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Signatures
+<div class="highlight-python"><div class="highlight"><pre>Signatures
 ----------
 from cycle : 5 to cycle 4
 1 : 1
@@ -847,7 +860,8 @@ from cycle : 5 to cycle 4
    [ 44  20 337 ...,  12  12  12]
    [1 1 1 ..., 2 2 2]
    [ 29  29  29 ..., 334 334 334]
-   [2 2 2 ..., 1 1 1]</pre>
+   [2 2 2 ..., 1 1 1]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#Si.run4(cutoff=5)</span>
 </pre></div>
@@ -868,14 +882,15 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
 <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3b78d90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7c17150&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xe4133d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xe3b0150&gt;)
+</pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_34_1.png" src="./SIM-raytracing_files/SIM-raytracing_34_1.png" />
+<img alt="../_images/SIM-raytracing_34_1.png" src="../_images/SIM-raytracing_34_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>N2Drays : 42
+<div class="highlight-python"><div class="highlight"><pre>N2Drays : 42
 from 24395 signatures
 #Rays/#Sig: 0.00172166427547
 pTx : [-24.867   12.3097   1.2   ]
@@ -907,7 +922,8 @@ pRx : [-18.7747  15.178    1.2   ]
  [337 135]
  [ 46  30]
  [319 333]
- [335  30]]</pre>
+ [335  30]]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># r2d.show3(strucname=&#39;WHERE1&#39;)</span>
 </pre></div>
@@ -930,7 +946,7 @@ the reflection on ceil and floor.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -950,7 +966,8 @@ the reflection on ceil and floor.</p>
 9 / 4 : [206 207 208 209]
 -----
 ni : 1147
-nl : 2504</pre>
+nl : 2504
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">18</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="mi">13</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
 </pre></div>
@@ -1000,14 +1017,15 @@ with a frequency array as argument.</p>
 <span class="k">print</span> <span class="s">&quot;Nf : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>fmin :  2.0
+<div class="highlight-python"><div class="highlight"><pre>fmin :  2.0
 fmax :  11.0
-Nf :  181</pre>
+Nf :  181
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -1027,7 +1045,8 @@ Nf :  181</pre>
 9 / 4 : [206 207 208 209]
 -----
 ni : 1147
-nl : 2504</pre>
+nl : 2504
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ectt</span><span class="p">,</span><span class="n">Ecpp</span><span class="p">,</span><span class="n">Ectp</span><span class="p">,</span><span class="n">Ecpt</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
@@ -1047,25 +1066,27 @@ nl : 2504</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_54_1.png" src="./SIM-raytracing_files/SIM-raytracing_54_1.png" />
+<img alt="../_images/SIM-raytracing_54_1.png" src="../_images/SIM-raytracing_54_1.png" />
 <p>The multipath doa/dod diagram can be obtained via the method <tt class="docutils literal"><span class="pre">doadod</span></tt>.
 The colorbar corresponds to the total energy of the path.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3b84fd0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x944e110&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xfe17f10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x13e5a110&gt;)
+</pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_56_1.png" src="./SIM-raytracing_files/SIM-raytracing_56_1.png" />
+<img alt="../_images/SIM-raytracing_56_1.png" src="../_images/SIM-raytracing_56_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Nfreq  : 181
+<div class="highlight-python"><div class="highlight"><pre>Nfreq  : 181
 Nray : 210
 shape Ctt : (210, 181)
 shape Ctp : (210, 181)
 shape Cpt : (210, 181)
-shape Cpp : (210, 181)</pre>
+shape Cpp : (210, 181)
+</pre></div>
 </div>
 </div>
 <div class="section" id="apply-waveform">
@@ -1084,13 +1105,14 @@ array as it is illustrated below.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">mesdir</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/home/uguen/data/WHERE1/measures</pre>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/data/WHERE1/measures
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;generic&#39;</span><span class="p">,</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_63_0.png" src="./SIM-raytracing_files/SIM-raytracing_63_0.png" />
+<img alt="../_images/SIM-raytracing_63_0.png" src="../_images/SIM-raytracing_63_0.png" />
 <p>Finally, the received UWB waveform can be synthesize in applyng the
 waveform to the transmission channel.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
@@ -1110,13 +1132,15 @@ waveform to the transmission channel.</p>
 <span class="c">#plt.axis((0,180,-0.1,0.1))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
+  warnings.warn(&quot;No labeled objects found. &quot;
+</pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x942db10&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x1634fbd0&gt;
+</pre></div>
 </div>
-<img alt="./SIM-raytracing_files/SIM-raytracing_66_2.png" src="./SIM-raytracing_files/SIM-raytracing_66_2.png" />
-<img alt="./SIM-raytracing_files/SIM-raytracing_66_3.png" src="./SIM-raytracing_files/SIM-raytracing_66_3.png" />
+<img alt="../_images/SIM-raytracing_66_2.png" src="../_images/SIM-raytracing_66_2.png" />
+<img alt="../_images/SIM-raytracing_66_3.png" src="../_images/SIM-raytracing_66_3.png" />
 </div>
 </div>
 
@@ -1129,6 +1153,12 @@ waveform to the transmission channel.</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -1138,8 +1168,9 @@ waveform to the transmission channel.</p>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

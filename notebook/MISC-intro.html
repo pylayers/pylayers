@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -64,6 +70,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./MISC-intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -187,7 +198,7 @@ good idea is to install first
 you most of the required dependencies.</p>
 <div class="section" id="dependencies">
 <h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>Before to install pylayers you need to install the following dependencies
+<div class="highlight-python"><div class="highlight"><pre>Before to install pylayers you need to install the following dependencies
 
 
 numpy&gt;=1.6.1
@@ -203,23 +214,26 @@ pyintervall&gt;=1.0
 pandas &gt;=0.12.0
 
 The installation of matplotlib basemap requires installation of libraries GEOS
-and PROJ4. The installation procedure is well described in</pre>
+and PROJ4. The installation procedure is well described in
+</pre></div>
 </div>
 <p><a class="reference external" href="http://matplotlib.org/basemap/users/installing.html">http://matplotlib.org/basemap/users/installing.html</a></p>
-<div class="highlight-python"><pre>For supporting the osm format PyLayers is relying on imposm. The installation
+<div class="highlight-python"><div class="highlight"><pre>For supporting the osm format PyLayers is relying on imposm. The installation
 of imposm is not straighforward it requires to install first Tokyo-Cabinet
 and Google-Protobuf library. PyLayers can work without imposm you need to
-comment the only import to the module in pylayers/gis/osmparser.py.</pre>
+comment the only import to the module in pylayers/gis/osmparser.py.
+</pre></div>
 </div>
 <p><a class="reference external" href="http://imposm.org/docs/imposm/latest/install.html#id1">http://imposm.org/docs/imposm/latest/install.html#id1</a></p>
-<div class="highlight-python"><pre>Most of these dependencies are handled in the setup.py script.
+<div class="highlight-python"><div class="highlight"><pre>Most of these dependencies are handled in the setup.py script.
 
-python setup.py install</pre>
+python setup.py install
+</pre></div>
 </div>
 </div>
 <div class="section" id="setting-of-environment-variables-basename-and-pylayers">
 <h3>Setting of environment variables $BASENAME and $PYLAYERS<a class="headerlink" href="#setting-of-environment-variables-basename-and-pylayers" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>It is required to define the two enviroment variables $PYLAYERS and $BASENAME
+<div class="highlight-python"><div class="highlight"><pre>It is required to define the two enviroment variables $PYLAYERS and $BASENAME
 
 in your .bashrc add those 2 lines
 
@@ -228,18 +242,20 @@ in your .bashrc add those 2 lines
 for example if you install PyLyers in your home directory
 
 export PYLAYERS=~/pylayers
-export BASENAME=~/plproject</pre>
+export BASENAME=~/plproject
+</pre></div>
 </div>
 </div>
 <div class="section" id="installing-pyinterval">
 <h3>Installing PyInterval<a class="headerlink" href="#installing-pyinterval" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>get crlibm library first
+<div class="highlight-python"><div class="highlight"><pre>get crlibm library first
 http://lipforge.ens-lyon.fr/frs/?group_id=8&amp;release_id=123
 
 if problem for compilation add
 CPPFLAGS= -fPIC in scs_lib/Makefile
 
-sudo easy_install pyinterval</pre>
+sudo easy_install pyinterval
+</pre></div>
 </div>
 </div>
 <div class="section" id="testing">
@@ -258,6 +274,12 @@ sudo easy_install pyinterval</pre>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -267,8 +289,9 @@ sudo easy_install pyinterval</pre>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

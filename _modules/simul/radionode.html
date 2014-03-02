@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
@@ -87,7 +93,7 @@
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 
 
-<div class="viewcode-block" id="RadioNode"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode">[docs]</a><span class="k">class</span> <span class="nc">RadioNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode">[docs]</a><span class="k">class</span> <span class="nc">RadioNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; container for a Radio Node</span>
 
 <span class="sd">     This class manages the spatial and temporal behavior of a radio node</span>
@@ -216,7 +222,7 @@
                       <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RadioNode.pos2pt"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.pos2pt">[docs]</a>    <span class="k">def</span> <span class="nf">pos2pt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.pos2pt"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.pos2pt">[docs]</a>    <span class="k">def</span> <span class="nf">pos2pt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert position to points dict</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -225,7 +231,7 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npt</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="RadioNode.transform"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">trans</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.transform"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">trans</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; tranform position rotation + translation</span>
 
 <span class="sd">        Parameters</span>
@@ -242,7 +248,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Rot</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span><span class="o">+</span><span class="n">trans</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="RadioNode.info"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.info"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display RadioNodes informations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -260,7 +266,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="RadioNode.clear"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.clear"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; clear positions</span>
 
 <span class="sd">        The origin [0,0,0] is always defined as the first point </span>
@@ -286,7 +292,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-<div class="viewcode-block" id="RadioNode.point"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.point">[docs]</a>    <span class="k">def</span> <span class="nf">point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="p">[],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.point"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.point">[docs]</a>    <span class="k">def</span> <span class="nf">point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="p">[],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a position to RadioNode</span>
 
 <span class="sd">        The new RadioNode is saved in .spa</span>
@@ -344,7 +350,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pos2pt</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.linevect"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.linevect">[docs]</a>    <span class="k">def</span> <span class="nf">linevect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">npt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span> <span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.linevect"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.linevect">[docs]</a>    <span class="k">def</span> <span class="nf">linevect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">npt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span> <span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a line along a direction </span>
 
 <span class="sd">        Parameters</span>
@@ -393,7 +399,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
     </div>
-<div class="viewcode-block" id="RadioNode.line"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.line">[docs]</a>    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npt</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pth</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.line"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.line">[docs]</a>    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npt</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pth</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build a line trajectory for a RadioNode</span>
 
 <span class="sd">        Parameters</span>
@@ -441,7 +447,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.surface"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.surface">[docs]</a>    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.surface"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.surface">[docs]</a>    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a surface to RadioNode</span>
 
 <span class="sd">        add a surface with basis (p0p1,p0p2)</span>
@@ -497,7 +503,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.volume"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.volume">[docs]</a>    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N3</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p3</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.volume"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.volume">[docs]</a>    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N3</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p3</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a volume to RadioNode</span>
 
 <span class="sd">        build a volume with edges : p0p1, p0p2, p0p3</span>
@@ -563,7 +569,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.loadini"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.loadini">[docs]</a>    <span class="k">def</span> <span class="nf">loadini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="s">&#39;ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.loadini"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.loadini">[docs]</a>    <span class="k">def</span> <span class="nf">loadini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="s">&#39;ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load an .ini file</span>
 
 <span class="sd">        Parameters</span>
@@ -593,7 +599,7 @@
                 
         <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">=</span><span class="n">Trajectory</span><span class="p">(</span><span class="n">pt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>        
         </div>
-<div class="viewcode-block" id="RadioNode.loadspa"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.loadspa">[docs]</a>    <span class="k">def</span> <span class="nf">loadspa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLCH&#39;</span><span class="p">]):</span>
+<div class="viewcode-block" id="RadioNode.loadspa"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.loadspa">[docs]</a>    <span class="k">def</span> <span class="nf">loadspa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLCH&#39;</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot; load a spa file</span>
 
 <span class="sd">        Parameters</span>
@@ -634,7 +640,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ident</span>
         <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.save"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.save"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save RadioNode in  .ini, .spa, .vect file</span>
 
 <span class="sd">        This function save the RadioNode in different files format</span>
@@ -722,7 +728,7 @@
 
             <span class="n">fi_spa</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gpoint"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.gpoint">[docs]</a>    <span class="k">def</span> <span class="nf">gpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gpoint"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.gpoint">[docs]</a>    <span class="k">def</span> <span class="nf">gpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui point </span>
 
 <span class="sd">        Parameters</span>
@@ -741,7 +747,7 @@
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gline"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.gline">[docs]</a>    <span class="k">def</span> <span class="nf">gline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gline"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.gline">[docs]</a>    <span class="k">def</span> <span class="nf">gline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui line</span>
 
 <span class="sd">        A line is built between the first point and the gui point</span>
@@ -762,7 +768,7 @@
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gsurface"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.gsurface">[docs]</a>    <span class="k">def</span> <span class="nf">gsurface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gsurface"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.gsurface">[docs]</a>    <span class="k">def</span> <span class="nf">gsurface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui surface</span>
 
 <span class="sd">        Parameters</span>
@@ -783,7 +789,7 @@
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gvolume"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.gvolume">[docs]</a>    <span class="k">def</span> <span class="nf">gvolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gvolume"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.gvolume">[docs]</a>    <span class="k">def</span> <span class="nf">gvolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui volume </span>
 
 <span class="sd">        Parameters</span>
@@ -887,7 +893,7 @@
 <span class="c">#                        fi_spa.write(chaine)</span>
 <span class="c">#                fi_spa.close()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.show"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span> <span class="o">=</span><span class="p">[],</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.show"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span> <span class="o">=</span><span class="p">[],</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display RadioNode position in the 2D strucure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">num</span> <span class="o">==</span><span class="p">[]:</span>
@@ -900,7 +906,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
-<div class="viewcode-block" id="RadioNode.show3"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestr</span><span class="o">=</span><span class="s">&#39;DLR.off&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.show3"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestr</span><span class="o">=</span><span class="s">&#39;DLR.off&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display RadioNode position in geomview</span>
 
 <span class="sd">        Parameters</span>
@@ -925,7 +931,7 @@
         <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="RadioNode.move"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.move"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; move RadioNode with a specified offset over each cartesian axis</span>
 
 <span class="sd">        Parameters</span>
@@ -940,7 +946,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">dz</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.extract"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.extract"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; extract the i-th radionode component </span>
 
 <span class="sd">        Parameters</span>
@@ -990,7 +996,7 @@
 
         <span class="k">return</span> <span class="n">u</span>
 </div>
-<div class="viewcode-block" id="RadioNode.loadvsh"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.loadvsh">[docs]</a>    <span class="k">def</span> <span class="nf">loadvsh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.loadvsh"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.loadvsh">[docs]</a>    <span class="k">def</span> <span class="nf">loadvsh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load an antenna </span>
 
 
@@ -999,7 +1005,7 @@
         <span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileant</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">A</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gantenna"><a class="viewcode-back" href="../../modules/simul.radionode.html#simul.radionode.RadioNode.gantenna">[docs]</a>    <span class="k">def</span> <span class="nf">gantenna</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gantenna"><a class="viewcode-back" href="../../modules-old/simul.radionode.html#simul.radionode.RadioNode.gantenna">[docs]</a>    <span class="k">def</span> <span class="nf">gantenna</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get antenna file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">tkFileDialog</span>
@@ -1027,6 +1033,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
@@ -1038,6 +1050,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

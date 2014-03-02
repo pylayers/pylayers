@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
@@ -85,7 +91,7 @@
 <span class="kn">import</span> <span class="nn">types</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">copy</span>
 
 <span class="c"># vec3</span>
-<div class="viewcode-block" id="vec3"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3">[docs]</a><span class="k">class</span> <span class="nc">vec3</span><span class="p">:</span>
+<div class="viewcode-block" id="vec3"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3">[docs]</a><span class="k">class</span> <span class="nc">vec3</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Three-dimensional vector.</span>
 
 <span class="sd">    This class can be used to represent points, vectors, normals</span>
@@ -451,7 +457,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">,</span><span class="s">&quot;index out of range&quot;</span>
 
-<div class="viewcode-block" id="vec3.cross"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.cross">[docs]</a>    <span class="k">def</span> <span class="nf">cross</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.cross"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.cross">[docs]</a>    <span class="k">def</span> <span class="nf">cross</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Cross product.</span>
 
 <span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
@@ -469,7 +475,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for cross()&quot;</span>
         
 </div>
-<div class="viewcode-block" id="vec3.length"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.length">[docs]</a>    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.length"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.length">[docs]</a>    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the length of the vector.</span>
 
 <span class="sd">        v.length() is equivalent to abs(v).</span>
@@ -481,7 +487,7 @@
 
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">*</span><span class="bp">self</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="vec3.normalize"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.normalize"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return normalized vector.</span>
 
 <span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
@@ -492,7 +498,7 @@
         <span class="n">nlen</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">*</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="n">nlen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">nlen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="n">nlen</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="vec3.angle"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.angle">[docs]</a>    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.angle"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.angle">[docs]</a>    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return angle (in radians) between self and other.</span>
 
 <span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
@@ -506,7 +512,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for angle()&quot;</span>
 </div>
-<div class="viewcode-block" id="vec3.reflect"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.reflect">[docs]</a>    <span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.reflect"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.reflect">[docs]</a>    <span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the reflection vector.</span>
 
 <span class="sd">        N is the surface normal which has to be of unit length.</span>
@@ -518,7 +524,7 @@
 
         <span class="k">return</span> <span class="bp">self</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">*</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="n">N</span>
 </div>
-<div class="viewcode-block" id="vec3.refract"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.refract">[docs]</a>    <span class="k">def</span> <span class="nf">refract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">eta</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.refract"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.refract">[docs]</a>    <span class="k">def</span> <span class="nf">refract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">eta</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the transmitted vector.</span>
 
 <span class="sd">        N is the surface normal which has to be of unit length.</span>
@@ -538,7 +544,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">eta</span><span class="o">*</span><span class="bp">self</span> <span class="o">-</span> <span class="p">(</span><span class="n">eta</span><span class="o">*</span><span class="n">dot</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">N</span>
 </div>
-<div class="viewcode-block" id="vec3.ortho"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.ortho">[docs]</a>    <span class="k">def</span> <span class="nf">ortho</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.ortho"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.ortho">[docs]</a>    <span class="k">def</span> <span class="nf">ortho</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns an orthogonal vector.</span>
 
 <span class="sd">        Returns a vector that is orthogonal to self (where</span>
@@ -563,14 +569,14 @@
             <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         
 	</div>
-    <span class="k">def</span> <span class="nf">ang0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="vec3.ang0"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.ang0">[docs]</a>    <span class="k">def</span> <span class="nf">ang0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 	<span class="n">C</span>    <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span>
 	<span class="k">try</span><span class="p">:</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
 	<span class="k">except</span><span class="p">:</span> 
 		<span class="k">return</span> <span class="mf">0.0</span>
-
-    <span class="k">def</span> <span class="nf">vquarter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="vec3.vquarter"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.vquarter">[docs]</a>    <span class="k">def</span> <span class="nf">vquarter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 	<span class="n">a0</span> 	<span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">())</span>
 	<span class="n">a1</span> 	<span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">())</span>
 	<span class="n">a0</span><span class="o">.</span><span class="n">x</span>	<span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span><span class="o">+</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
@@ -579,7 +585,7 @@
 	<span class="n">a1</span><span class="o">.</span><span class="n">y</span>	<span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
 	<span class="k">return</span> <span class="p">[</span><span class="n">a0</span><span class="p">,</span><span class="bp">self</span><span class="p">,</span><span class="n">a1</span><span class="p">]</span>
 
-<span class="c">######################################################################</span></div>
+<span class="c">######################################################################</span></div></div>
 <span class="k">def</span> <span class="nf">_test</span><span class="p">():</span>
     <span class="kn">import</span> <span class="nn">doctest</span><span class="o">,</span> <span class="nn">vec3</span>
     <span class="n">failed</span><span class="p">,</span> <span class="n">total</span> <span class="o">=</span> <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">(</span><span class="n">vec3</span><span class="p">)</span>
@@ -603,6 +609,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
@@ -616,6 +628,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

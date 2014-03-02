@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -91,7 +97,7 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 
-<div class="viewcode-block" id="Cycles"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycles">[docs]</a><span class="k">class</span> <span class="nc">Cycles</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycles"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycles">[docs]</a><span class="k">class</span> <span class="nc">Cycles</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Graph of Cycles</span>
 
 <span class="sd">    Methods</span>
@@ -113,14 +119,14 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Cycles.info"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycles.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycles.info"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycles.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get info from Cycles object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s">&quot;Number of cycles : &quot;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gi</span><span class="p">:</span>
             <span class="k">print</span> <span class="n">k</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Cycles.inclusion"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycles.inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">full</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycles.inclusion"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycles.inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">full</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  Inform the inclusion relations between cycles</span>
 
 <span class="sd">        Notes</span>
@@ -235,7 +241,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">cy1</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Cycles.decompose"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycles.decompose">[docs]</a>    <span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycles.decompose"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycles.decompose">[docs]</a>    <span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; recursive function to transform the cycle basis</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -322,7 +328,7 @@
                 <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </div></div>
-<div class="viewcode-block" id="Cycle"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle">[docs]</a><span class="k">class</span> <span class="nc">Cycle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle">[docs]</a><span class="k">class</span> <span class="nc">Cycle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Graph cycle class</span>
 
 <span class="sd">    Attributes</span>
@@ -426,7 +432,7 @@
             <span class="k">return</span>
 
 
-<div class="viewcode-block" id="Cycle.update"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.update"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -461,7 +467,7 @@
 
 
 
-<div class="viewcode-block" id="Cycle.info"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.info"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span>
@@ -470,7 +476,7 @@
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span>
 </div>
-<div class="viewcode-block" id="Cycle.flip"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.flip">[docs]</a>    <span class="k">def</span> <span class="nf">flip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.flip"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.flip">[docs]</a>    <span class="k">def</span> <span class="nf">flip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; flip the Cycle</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -479,7 +485,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">area</span>     <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">SignedArea</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Cycle.inclusion"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.inclusion"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  Return True if self includes Cy</span>
 
 <span class="sd">        Parameters</span>
@@ -531,7 +537,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
 </div>
-<div class="viewcode-block" id="Cycle.simplify"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.simplify"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -546,7 +552,7 @@
                 <span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">Cy</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Cycle.intersect"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.intersect"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Find intersection with an other cycle</span>
 
 <span class="sd">        Parameters</span>
@@ -634,7 +640,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">flip</span><span class="p">,</span><span class="n">brin</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Cycle.split"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cyin</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.split"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cyin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; split(Cy)</span>
 
 <span class="sd">          Parameters</span>
@@ -689,7 +695,7 @@
             <span class="k">return</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Cycle.corrcy"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.corrcy">[docs]</a>    <span class="k">def</span> <span class="nf">corrcy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">flip</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.corrcy"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.corrcy">[docs]</a>    <span class="k">def</span> <span class="nf">corrcy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">flip</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; cyclic matching correlation</span>
 
 <span class="sd">        Parameters</span>
@@ -779,7 +785,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">flip</span><span class="p">,</span><span class="n">brin</span><span class="p">,</span><span class="n">tk1</span><span class="p">,</span><span class="n">tk2</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Cycle.show"><a class="viewcode-back" href="../../../modules/gis.cycles.html#pylayers.gis.cycles.Cycle.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.show"><a class="viewcode-back" href="../../../modules/pylayers.gis.cycles.html#pylayers.gis.cycles.Cycle.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        show cycle</span>
 
@@ -805,6 +811,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -816,8 +828,9 @@
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

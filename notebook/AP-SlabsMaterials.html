@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -64,6 +70,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./AP-SlabsMaterials.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -101,12 +112,11 @@ module.</p>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8b90f10&gt;
+</pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4f0add0&gt;</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4fce110&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8c8eed0&gt;
+</pre></div>
 </div>
 <p>The Class <tt class="docutils literal"><span class="pre">SlabDB</span></tt> contains a dictionnary of all available Slab. This
 information is read in the file <tt class="docutils literal"><span class="pre">slabDB.ini</span></tt> of the current project
@@ -145,7 +155,7 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 </div>
 <div class="section" id="defining-a-new-slab-and-a-new-material">
 <h2>Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;wall2&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;reim&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;wall2&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;reim&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;slab2&#39;</span><span class="p">,[</span><span class="s">&#39;wall2&#39;</span><span class="p">],[</span><span class="mf">0.15</span><span class="p">])</span>
@@ -156,11 +166,11 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">(</span><span class="mf">2.6</span><span class="p">),</span>
  <span class="s">&#39;epr2&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">(</span><span class="o">-</span><span class="mf">0.026</span><span class="p">),</span>
- <span class="s">&#39;epsr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="n">j</span><span class="p">),</span>
+ <span class="s">&#39;epsr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026j</span><span class="p">),</span>
  <span class="s">&#39;fGHz&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
  <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
- <span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.6124717046742498</span><span class="o">-</span><span class="mf">0.0080621569744854828</span><span class="n">j</span><span class="p">),</span>
+ <span class="s">&#39;n&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.6124717046742498</span><span class="o">-</span><span class="mf">0.0080621569744854828j</span><span class="p">),</span>
  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;wall2&#39;</span><span class="p">,</span>
  <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
  <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0057777777777777775</span><span class="p">}</span>
@@ -180,16 +190,17 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;bound method Slab.ev of fGHz : [ 3.]:[ 4.99]:200
+<div class="highlight-python"><div class="highlight"><pre>&lt;bound method Slab.ev of fGHz : [ 3.]:[ 4.99]:200
 theta : [ 0.]:[ 1.57]:158
 | wall2 |
 |---------------|
-&gt;</pre>
+&gt;
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_15_0.png" />
+<img alt="../_images/AP-SlabsMaterials_15_0.png" src="../_images/AP-SlabsMaterials_15_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -249,21 +260,21 @@ properties can be obtained as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmat&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
- <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
- <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">),</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
   <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}]</span>
@@ -276,7 +287,7 @@ properties can be obtained as:</p>
 coefficients for</p>
 <ul class="simple">
 <li>a given frequency range</li>
-<li>a given incidence angle range (<img class="math" src="../_images/math/cc252e43022d2dfe51620c5ed140b7db3d8a0968.png" alt="0\le\theta&lt;\frac{\pi}{2}"/>)</li>
+<li>a given incidence angle range (<img class="math" src="../_images/math/c8ecea85ef2986cea055fbac1cc3ee95d1ca2537.png" alt="0\le\theta&lt;\frac{\pi}{2}"/>)</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
@@ -286,7 +297,8 @@ coefficients for</p>
 <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Here, slab is evaluted for&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;frequency(ies)&#39;</span><span class="p">,</span> <span class="s">&#39;and&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;angle(s)</span><span class="se">\n</span><span class="s">&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)</pre>
+<div class="highlight-python"><div class="highlight"><pre>Here, slab is evaluted for 200 frequency(ies) and 158 angle(s)
+</pre></div>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficients">
@@ -300,7 +312,7 @@ frequency range and theta range</p>
 <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Transmission coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> T=&#39;</span><span class="p">,</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Reflection coefficient @ 3.01 GHz and theta= 0.1 :
+<div class="highlight-python"><div class="highlight"><pre>Reflection coefficient @ 3.01 GHz and theta= 0.1 :
 
  R= [[-0.39396205-0.17289585j  0.00000000+0.j        ]
  [ 0.00000000+0.j          0.39396205+0.17289585j]]
@@ -308,11 +320,12 @@ frequency range and theta range</p>
 Transmission coefficient @ 3.01 GHz and theta= 0.1 :
 
  T= [[-0.17594898-0.86927604j -0.00000000+0.j        ]
- [-0.00000000+0.j         -0.17594898-0.86927604j]]</pre>
+ [-0.00000000+0.j         -0.17594898-0.86927604j]]
+</pre></div>
 </div>
 <div class="section" id="ploting-coefficients">
 <h3>Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>plotwrt (plot with respect to)
+<div class="highlight-python"><div class="highlight"><pre>plotwrt (plot with respect to)
 
 Parameters
 ----------
@@ -320,19 +333,20 @@ Parameters
  kv  : int
     variable index
  polar: string
-        'po', # po | p | o   (parallel+ortho | parallel | ortogonal)
+        &#39;po&#39;, # po | p | o   (parallel+ortho | parallel | ortogonal)
  coeff: string
-        'RT', # RT | R | T   (Reflexion &amp; Transmission ) | Reflexion | Transmission
+        &#39;RT&#39;, # RT | R | T   (Reflexion &amp; Transmission ) | Reflexion | Transmission
  var:  string
-        'a',    # a | f       angle | frequency
+        &#39;a&#39;,    # a | f       angle | frequency
  types : string
-        'm' | 'r' | 'd' | 'l20'
-        mod   rad    deg   dB</pre>
+        &#39;m&#39; | &#39;r&#39; | &#39;d&#39; | &#39;l20&#39;
+        mod   rad    deg   dB
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;R&#39;</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_36_0.png" />
+<img alt="../_images/AP-SlabsMaterials_36_0.png" src="../_images/AP-SlabsMaterials_36_0.png" />
 <p>with respect to angle</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
@@ -341,9 +355,10 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x56ab810&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0xc958550&gt;
+</pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_38_1.png" />
+<img alt="../_images/AP-SlabsMaterials_38_1.png" src="../_images/AP-SlabsMaterials_38_1.png" />
 <p>wrt to angle and frequency</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
@@ -351,7 +366,7 @@ Parameters
 <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_40_0.png" />
+<img alt="../_images/AP-SlabsMaterials_40_0.png" src="../_images/AP-SlabsMaterials_40_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
@@ -369,12 +384,12 @@ Parameters
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_0.png" />
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_41_1.png" />
+<img alt="../_images/AP-SlabsMaterials_41_0.png" src="../_images/AP-SlabsMaterials_41_0.png" />
+<img alt="../_images/AP-SlabsMaterials_41_1.png" src="../_images/AP-SlabsMaterials_41_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">## Adding new materials</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mi">3</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mi">3</span><span class="o">+</span><span class="mi">0j</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
 
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">])</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.10</span><span class="p">])</span>
@@ -396,10 +411,11 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
+  warnings.warn(&quot;No labeled objects found. &quot;
+</pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_43_1.png" />
+<img alt="../_images/AP-SlabsMaterials_43_1.png" src="../_images/AP-SlabsMaterials_43_1.png" />
 </div>
 </div>
 <div class="section" id="evaluation-without-phase-compensation">
@@ -418,10 +434,11 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[[&lt;matplotlib.axes.AxesSubplot object at 0x10c08e90&gt;]
- [&lt;matplotlib.axes.AxesSubplot object at 0x12351950&gt;]]</pre>
+<div class="highlight-python"><div class="highlight"><pre>[[&lt;matplotlib.axes.AxesSubplot object at 0x12bb6190&gt;]
+ [&lt;matplotlib.axes.AxesSubplot object at 0xb5715d0&gt;]]
+</pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_45_1.png" />
+<img alt="../_images/AP-SlabsMaterials_45_1.png" src="../_images/AP-SlabsMaterials_45_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -435,7 +452,7 @@ Parameters
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_46_0.png" />
+<img alt="../_images/AP-SlabsMaterials_46_0.png" src="../_images/AP-SlabsMaterials_46_0.png" />
 </div>
 <div class="section" id="double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">
 <h2>Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz<a class="headerlink" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz" title="Permalink to this headline">¶</a></h2>
@@ -448,30 +465,31 @@ Parameters
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_48_0.png" />
+<img alt="../_images/AP-SlabsMaterials_48_0.png" src="../_images/AP-SlabsMaterials_48_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">,[</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;GlassJc&#39;</span><span class="p">],[</span><span class="mf">0.0029</span><span class="p">,</span><span class="mf">0.0102</span><span class="p">,</span><span class="mf">0.0029</span><span class="p">])</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_49_0.png" />
+<img alt="../_images/AP-SlabsMaterials_49_0.png" src="../_images/AP-SlabsMaterials_49_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x10f2d290&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x15ccf190&gt;
+</pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_50_1.png" />
+<img alt="../_images/AP-SlabsMaterials_50_1.png" src="../_images/AP-SlabsMaterials_50_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>  <span class="c"># @20°</span>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" src="./AP-SlabsMaterials_files/AP-SlabsMaterials_51_0.png" />
+<img alt="../_images/AP-SlabsMaterials_51_0.png" src="../_images/AP-SlabsMaterials_51_0.png" />
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -495,6 +513,12 @@ N°18</a></p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -504,8 +528,9 @@ N°18</a></p>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

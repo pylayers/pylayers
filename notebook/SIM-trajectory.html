@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -56,6 +62,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./SIM-trajectory.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -95,10 +106,8 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3c7bdd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8e9df10&gt;
+</pre></div>
 </div>
 <p>This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
@@ -139,7 +148,7 @@ run a full simulation and returns a list of channel impulse response.</p>
             <span class="n">Si</span>  <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
             <span class="n">ctxp</span> <span class="o">=</span> <span class="n">ctx</span>
             <span class="n">crxp</span> <span class="o">=</span> <span class="n">crx</span>
-            <span class="n">Si</span><span class="o">.</span><span class="n">run4</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
+            <span class="n">Si</span><span class="o">.</span><span class="n">run5</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">)</span>
         <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
         <span class="c">#r2d.show(S.L)</span>
 
@@ -212,7 +221,8 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x53f6fd0&gt;]</pre>
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0xa662790&gt;]
+</pre></div>
 </div>
 <img alt="./SIM-trajectory_files/SIM-trajectory_11_1.png" src="./SIM-trajectory_files/SIM-trajectory_11_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
@@ -231,10 +241,12 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+<div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
+</pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5190550&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7ff890c0db10&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fe53034c790&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fe530350c10&gt;)
+</pre></div>
 </div>
 <img alt="./SIM-trajectory_files/SIM-trajectory_15_2.png" src="./SIM-trajectory_files/SIM-trajectory_15_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
@@ -244,7 +256,7 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 </div>
 <img alt="./SIM-trajectory_files/SIM-trajectory_17_0.png" src="./SIM-trajectory_files/SIM-trajectory_17_0.png" />
 <p>running the simulation</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#tcir = evalcir(S,wav,cutoff=4)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#tcir = evalcir(S,wav,cutoff=3)</span>
 </pre></div>
 </div>
 <p>Saving the data in pickle format</p>
@@ -268,19 +280,6 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
         <span class="n">ttcir</span><span class="o">=</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>---------------------------------------------------------------------------
-IOError                                   Traceback (most recent call last)
-
-&lt;ipython-input-13-e0e0469d8408&gt; in &lt;module&gt;()
-      1 #del tcir
-----&gt; 2 file=open("tcir5.pickle","r")
-      3 tcir=pickle.load(file)
-      4 file.close()
-      5 #
-
-
-IOError: [Errno 2] No such file or directory: 'tcir5.pickle'</pre>
-</div>
 </div>
 <div class="section" id="aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">
 <h2>Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
@@ -296,9 +295,22 @@ IOError: [Errno 2] No such file or directory: 'tcir5.pickle'</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="./SIM-trajectory_files/SIM-trajectory_25_1.png" src="./SIM-trajectory_files/SIM-trajectory_25_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
+  warnings.warn(&quot;No labeled objects found. &quot;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fe530350c50&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0xa5d6110&gt;]], dtype=object))
+</pre></div>
+</div>
+<img alt="./SIM-trajectory_files/SIM-trajectory_26_2.png" src="./SIM-trajectory_files/SIM-trajectory_26_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -306,12 +318,23 @@ IOError: [Errno 2] No such file or directory: 'tcir5.pickle'</pre>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xb6c9110&gt;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fe530795090&gt;
+</pre></div>
+</div>
+<img alt="./SIM-trajectory_files/SIM-trajectory_27_2.png" src="./SIM-trajectory_files/SIM-trajectory_27_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xac25950&gt;
+</pre></div>
+</div>
+<img alt="./SIM-trajectory_files/SIM-trajectory_28_1.png" src="./SIM-trajectory_files/SIM-trajectory_28_1.png" />
 </div>
 </div>
 
@@ -324,6 +347,12 @@ IOError: [Errno 2] No such file or directory: 'tcir5.pickle'</pre>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -333,8 +362,9 @@ IOError: [Errno 2] No such file or directory: 'tcir5.pickle'</pre>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

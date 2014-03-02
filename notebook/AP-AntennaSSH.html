@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -47,6 +53,11 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./AP-AntennaSSH.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -72,7 +83,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.antssh</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7936310&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x77f0310&gt;
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="n">directory</span><span class="o">=</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
@@ -140,10 +151,10 @@ Nb phi (lon) :180
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x83090d0&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f568097f0d0&gt;]
 </pre></div>
 </div>
-<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_6_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_6_1.png" />
+<img alt="../_images/AP-AntennaSSH_6_1.png" src="../_images/AP-AntennaSSH_6_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">savesh2</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -156,20 +167,20 @@ Nb phi (lon) :180
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x84115d0&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f5680a855d0&gt;]
 </pre></div>
 </div>
-<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_9_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_9_1.png" />
+<img alt="../_images/AP-AntennaSSH_9_1.png" src="../_images/AP-AntennaSSH_9_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x87e8550&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f5680e5a550&gt;]
 </pre></div>
 </div>
-<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_11_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_11_1.png" />
+<img alt="../_images/AP-AntennaSSH_11_1.png" src="../_images/AP-AntennaSSH_11_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">ind2</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -185,27 +196,27 @@ Nb phi (lon) :180
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x8a0fb90&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f5680e8db90&gt;]
 </pre></div>
 </div>
-<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_14_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_14_1.png" />
+<img alt="../_images/AP-AntennaSSH_14_1.png" src="../_images/AP-AntennaSSH_14_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">loadsh3</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x8a45210&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f56810ba210&gt;]
 </pre></div>
 </div>
-<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_16_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_16_1.png" />
+<img alt="../_images/AP-AntennaSSH_16_1.png" src="../_images/AP-AntennaSSH_16_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">[</span><span class="mi">100</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x8cf9b50&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f568135db50&gt;]
 </pre></div>
 </div>
-<img alt="./AP-AntennaSSH_files/AP-AntennaSSH_17_1.png" src="./AP-AntennaSSH_files/AP-AntennaSSH_17_1.png" />
+<img alt="../_images/AP-AntennaSSH_17_1.png" src="../_images/AP-AntennaSSH_17_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -259,6 +270,12 @@ Ncoeff s3 : 32
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -268,7 +285,8 @@ Ncoeff s3 : 32
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

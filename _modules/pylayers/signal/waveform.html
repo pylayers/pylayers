@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -38,6 +38,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -87,7 +93,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.util</span>     <span class="kn">import</span> <span class="n">easygui</span>
 <span class="kn">from</span> <span class="nn">pylayers.measures</span> <span class="kn">import</span> <span class="n">mesuwb</span>
 
-<div class="viewcode-block" id="Waveform"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform">[docs]</a><span class="k">class</span> <span class="nc">Waveform</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform">[docs]</a><span class="k">class</span> <span class="nc">Waveform</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Attributes</span>
@@ -146,7 +152,7 @@
                 <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Waveform.eval"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.eval"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate waveform</span>
 
 <span class="sd">            The lambda/4*pi factor which is necessary to get the proper budget </span>
@@ -174,7 +180,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sfgh</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfg</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stgh</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfgh</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Waveform.info"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.info"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  display information about waveform</span>
 
 <span class="sd">        Results</span>
@@ -193,7 +199,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;typ:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Waveform.show2"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.show2">[docs]</a>    <span class="k">def</span> <span class="nf">show2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Tpns</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.show2"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.show2">[docs]</a>    <span class="k">def</span> <span class="nf">show2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Tpns</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show2</span>
 
 <span class="sd">        Parameters</span>
@@ -209,7 +215,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Tp = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Tp</span><span class="p">))</span>
         <span class="n">psd</span><span class="o">.</span><span class="n">plotdB</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Waveform.ip_generic"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.ip_generic">[docs]</a>    <span class="k">def</span> <span class="nf">ip_generic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.ip_generic"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.ip_generic">[docs]</a>    <span class="k">def</span> <span class="nf">ip_generic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;    Create an Energy normalized Gaussian impulse (Usignal)</span>
 
 <span class="sd">        ip_generic(self,parameters)</span>
@@ -234,7 +240,7 @@
         <span class="n">W</span>   <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">ftshift</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">W</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Waveform.fromfile"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.fromfile">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.fromfile"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.fromfile">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get the measurement waveform from WHERE1 measurement campaign</span>
 
@@ -284,7 +290,7 @@
         <span class="n">W</span>   <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">ftshift</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">W</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Waveform.fromfile2"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.fromfile2">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.fromfile2"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.fromfile2">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get the measurement waveform from WHERE1 measurement campaign</span>
 
@@ -335,7 +341,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">W</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Waveform.read"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">config</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.read"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">config</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -367,7 +373,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Waveform.gui"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.gui"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the Waveform parameter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -399,7 +405,7 @@
             <span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
             <span class="n">show</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Waveform.show"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Waveform.show"><a class="viewcode-back" href="../../../modules/pylayers.signal.waveform.html#pylayers.signal.waveform.Waveform.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># title construction</span>
@@ -436,6 +442,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
@@ -447,6 +459,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

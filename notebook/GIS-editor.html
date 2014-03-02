@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -72,6 +78,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./GIS-editor.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -116,7 +127,7 @@ with the plugin <em>PicLayer</em>. This is well described in
 <h2>Structure of a Layout<a class="headerlink" href="#structure-of-a-layout" title="Permalink to this headline">¶</a></h2>
 <p>At first a Layout is described by a set of points (negative index) and a
 set of segments (positive index).</p>
-<p>Points and segments are nodes of the <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> graph.</p>
+<p>Points and segments are nodes of the <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> graph.</p>
 <p>It is required to respect a strict non overlapping rule. <strong>No segments
 can recover partially or totally an other segment</strong>.</p>
 <p>This rule allows to capture topological relations of the network which
@@ -165,10 +176,8 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x41ffdd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x782cf10&gt;
+</pre></div>
 </div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
@@ -218,48 +227,51 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 </pre></div>
 </div>
 <p>The structure of the <tt class="docutils literal"><span class="pre">.osm</span></tt> file is shown below</p>
-<div class="highlight-python"><pre>%%bash
+<div class="highlight-python"><div class="highlight"><pre>%%bash
 
     cd $BASENAME/struc
-    ls *.osm</pre>
+    ls *.osm
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">DLR</span><span class="o">.</span><span class="n">osm</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>%%bash
+<div class="highlight-python"><div class="highlight"><pre>%%bash
     cd $BASENAME/struc
     head DLR.osm
-    echo '---'
-    tail -17 DLR.osm</pre>
+    echo &#39;---&#39;
+    tail -17 DLR.osm
+</pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
-&lt;osm version='0.6' upload='false' generator='PyLayers'&gt;
-&lt;node id='-212' action='modify' visible='true' lat='47.0100855114' lon='-1.98980710934' /&gt;
-&lt;node id='-210' action='modify' visible='true' lat='47.0100789151' lon='-1.9897910381' /&gt;
-&lt;node id='-208' action='modify' visible='true' lat='47.0100738861' lon='-1.98977878545' /&gt;
-&lt;node id='-206' action='modify' visible='true' lat='47.0100616861' lon='-1.98982814281' /&gt;
-&lt;node id='-204' action='modify' visible='true' lat='47.0101583649' lon='-1.98982436917' /&gt;
-&lt;node id='-202' action='modify' visible='true' lat='47.0101656174' lon='-1.98981796656' /&gt;
-&lt;node id='-200' action='modify' visible='true' lat='47.0101843662' lon='-1.98977935424' /&gt;
-&lt;node id='-198' action='modify' visible='true' lat='47.0101791636' lon='-1.98982426816' /&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;osm version=&#39;0.6&#39; upload=&#39;false&#39; generator=&#39;JOSM&#39;&gt;
+  &lt;node id=&#39;-2933&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0102863152&#39; lon=&#39;-1.98999074851&#39; /&gt;
+  &lt;node id=&#39;-2931&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0102663448&#39; lon=&#39;-1.98994209188&#39; /&gt;
+  &lt;node id=&#39;-2929&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101704193&#39; lon=&#39;-1.99009306374&#39; /&gt;
+  &lt;node id=&#39;-2927&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100439167&#39; lon=&#39;-1.98970576768&#39; /&gt;
+  &lt;node id=&#39;-2925&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100850365&#39; lon=&#39;-1.9898850341&#39; /&gt;
+  &lt;node id=&#39;-2923&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101029262&#39; lon=&#39;-1.98992862121&#39; /&gt;
+  &lt;node id=&#39;-2921&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101264719&#39; lon=&#39;-1.98998598846&#39; /&gt;
+  &lt;node id=&#39;-2919&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101648588&#39; lon=&#39;-1.99007951611&#39; /&gt;
 ---
-&lt;tag k='transition' v='False' /&gt;
-&lt;/way&gt;
-&lt;way id='-10000123' action='modify' visible='true'&gt;
-&lt;nd ref='-200' /&gt;
-&lt;nd ref='-100' /&gt;
-&lt;tag k='name' v='WALL' /&gt;
-&lt;tag k='z' v="('0.0', '3.0')" /&gt;
-&lt;tag k='transition' v='False' /&gt;
-&lt;/way&gt;
-&lt;way id='-10000124' action='modify' visible='true'&gt;
-&lt;nd ref='-166' /&gt;
-&lt;nd ref='-188' /&gt;
-&lt;tag k='name' v='WALL' /&gt;
-&lt;tag k='z' v="('0.0', '3.0')" /&gt;
-&lt;tag k='transition' v='False' /&gt;
-&lt;/way&gt;
-&lt;/osm&gt;</pre>
+    &lt;tag k=&#39;z&#39; v=&#39;(&amp;apos;0.0&amp;apos;, &amp;apos;3.0&amp;apos;)&#39; /&gt;
+  &lt;/way&gt;
+  &lt;way id=&#39;-2937&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
+    &lt;nd ref=&#39;-2929&#39; /&gt;
+    &lt;nd ref=&#39;-2819&#39; /&gt;
+    &lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
+    &lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
+    &lt;tag k=&#39;z&#39; v=&#39;(&amp;apos;0.0&amp;apos;, &amp;apos;3.0&amp;apos;)&#39; /&gt;
+  &lt;/way&gt;
+  &lt;way id=&#39;-2935&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
+    &lt;nd ref=&#39;-2931&#39; /&gt;
+    &lt;nd ref=&#39;-2933&#39; /&gt;
+    &lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
+    &lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
+    &lt;tag k=&#39;z&#39; v=&#39;(&amp;apos;0.0&amp;apos;, &amp;apos;3.0&amp;apos;)&#39; /&gt;
+  &lt;/way&gt;
+&lt;/osm&gt;
+</pre></div>
 </div>
 <p>To read a new layout in osm format :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.osm&#39;</span><span class="p">)</span>
@@ -268,11 +280,11 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_20_0.png" src="./GIS-editor_files/GIS-editor_20_0.png" />
+<img alt="../_images/GIS-editor_20_0.png" src="../_images/GIS-editor_20_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>filestr :  DLR.osm
+<div class="highlight-python"><div class="highlight"><pre>filestr :  DLR.osm
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
@@ -284,49 +296,52 @@ Gs Nodes :  229
 Gs Edges :  248
 Gt Nodes :  0
 Gt Edges :  0
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
 Gr Nodes    : 0
 Gr Edges    : 0
-Nc  = Gr.node[nroom]['cycles']</pre>
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
+</pre></div>
 </div>
 <p>The different graphs associated with the layout are then built</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:183: RuntimeWarning: invalid value encountered in arccos
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:183: RuntimeWarning: invalid value encountered in arccos
   pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5110: RuntimeWarning: invalid value encountered in greater
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5127: RuntimeWarning: invalid value encountered in greater
   isegkeep = isegments[prob&gt;0]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5112: RuntimeWarning: invalid value encountered in greater
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5129: RuntimeWarning: invalid value encountered in greater
   dsegprob = {k:v for k,v in zip(isegkeep,prob[prob&gt;0])}
 /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:156: RuntimeWarning: invalid value encountered in arccos
   pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
 /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:174: RuntimeWarning: invalid value encountered in arccos
-  pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)</pre>
+  pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">14</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:165: RuntimeWarning: invalid value encountered in arccos
-  pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)</pre>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:165: RuntimeWarning: invalid value encountered in arccos
+  pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
+</pre></div>
 </div>
-<p>The topological graph <img class="math" src="../_images/math/d09e016d19aaa1364e31dffd743f8db063419ec1.png" alt="\mathcal{G}_t"/> or graph of non overlapping
+<p>The topological graph <img class="math" src="../_images/math/81225d898fa4a260a2c7eb990cc0e37b3d34ab5f.png" alt="\mathcal{G}_t"/> or graph of non overlapping
 cycles.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_25_0.png" src="./GIS-editor_files/GIS-editor_25_0.png" />
-<p>The graph of room <img class="math" src="../_images/math/b5eff55f8ed4e5e817f0be899b354c715da26192.png" alt="\mathcal{G}_r"/>. Two rooms which share at least
+<img alt="../_images/GIS-editor_25_0.png" src="../_images/GIS-editor_25_0.png" />
+<p>The graph of room <img class="math" src="../_images/math/7adf94bbad41196d6e46a083c8fa572339f33f2f.png" alt="\mathcal{G}_r"/>. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_27_0.png" src="./GIS-editor_files/GIS-editor_27_0.png" />
-<p>The graph of waypath <img class="math" src="../_images/math/fb6c51febbf5936878821cf7f6d25450c2531f61.png" alt="\mathcal{G}_w"/>. This graph is used for agent
+<img alt="../_images/GIS-editor_27_0.png" src="../_images/GIS-editor_27_0.png" />
+<p>The graph of waypath <img class="math" src="../_images/math/a7abe4ad210aa755e26fe5019ee06b8dee65bd62.png" alt="\mathcal{G}_w"/>. This graph is used for agent
 mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
 yet</p>
@@ -334,14 +349,14 @@ yet</p>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_29_0.png" src="./GIS-editor_files/GIS-editor_29_0.png" />
-<p>The graph of visibility <img class="math" src="../_images/math/2734dadd677c194791acb2128007de35d2383fcc.png" alt="\mathcal{G_v}"/></p>
+<img alt="../_images/GIS-editor_29_0.png" src="../_images/GIS-editor_29_0.png" />
+<p>The graph of visibility <img class="math" src="../_images/math/2019da1c9a58643ae395b7177603bf14a9346d5a.png" alt="\mathcal{G_v}"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_31_0.png" src="./GIS-editor_files/GIS-editor_31_0.png" />
-<p>The graph of interactions <img class="math" src="../_images/math/f7c6dfbc6b2e94bb65357fd159c519c967ebedf8.png" alt="\mathcal{G}_i"/> used to determine the
+<img alt="../_images/GIS-editor_31_0.png" src="../_images/GIS-editor_31_0.png" />
+<p>The graph of interactions <img class="math" src="../_images/math/f73bdbe32e898c36e2a3ccbdc51d8cd1798861e9.png" alt="\mathcal{G}_i"/> used to determine the
 ray signatures.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -349,14 +364,14 @@ ray signatures.</p>
 <span class="n">b</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_33_0.png" src="./GIS-editor_files/GIS-editor_33_0.png" />
+<img alt="../_images/GIS-editor_33_0.png" src="../_images/GIS-editor_33_0.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
 <h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>filestr :  DLR.osm
+<div class="highlight-python"><div class="highlight"><pre>filestr :  DLR.osm
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
@@ -368,11 +383,12 @@ Gs Nodes :  229
 Gs Edges :  248
 Gt Nodes :  20
 Gt Edges :  48
-vnodes = Gt.node[Nc]['cycles'].cycle
-poly = Gt.node[Nc]['cycle'].polyg
+vnodes = Gt.node[Nc][&#39;cycles&#39;].cycle
+poly = Gt.node[Nc][&#39;cycle&#39;].polyg
 Gr Nodes    : 16
 Gr Edges    : 16
-Nc  = Gr.node[nroom]['cycles']</pre>
+Nc  = Gr.node[nroom][&#39;cycles&#39;]
+</pre></div>
 </div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
 display options are specified in the display dictionnary. Those options
@@ -523,12 +539,14 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f1554f899d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x4342850&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x80851d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f4c2004acd0&gt;)
+</pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f1554f89b10&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7f4c20070810&gt;
+</pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_53_2.png" src="./GIS-editor_files/GIS-editor_53_2.png" />
+<img alt="../_images/GIS-editor_53_2.png" src="../_images/GIS-editor_53_2.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h3>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
@@ -553,20 +571,21 @@ meters) between the two points.</li>
 <p>In that sequence of operation it is useful to rescale the figure with
 &#8216;r&#8217;.</p>
 <p>At that stage, it is possible to start creating points</p>
-<div class="highlight-python"><pre>'b'  : selct a segment
-'l'  : select activelayer
-'i'  : back to init state
-'e'  : edit segment
-'t'  : translate  structure
-'h'  : add subsegment
-'d'  : delete subsegment
-'r'  : refresh
-'o'  : toggle overlay
-'m'  : toggle mode (point or segment)
-'z'  : change display parameters
-'q'  : quit interactive mode
-'x'  : save .str2 file
-'w'  : display all layers</pre>
+<div class="highlight-python"><div class="highlight"><pre>&#39;b&#39;  : selct a segment
+&#39;l&#39;  : select activelayer
+&#39;i&#39;  : back to init state
+&#39;e&#39;  : edit segment
+&#39;t&#39;  : translate  structure
+&#39;h&#39;  : add subsegment
+&#39;d&#39;  : delete subsegment
+&#39;r&#39;  : refresh
+&#39;o&#39;  : toggle overlay
+&#39;m&#39;  : toggle mode (point or segment)
+&#39;z&#39;  : change display parameters
+&#39;q&#39;  : quit interactive mode
+&#39;x&#39;  : save .str2 file
+&#39;w&#39;  : display all layers
+</pre></div>
 </div>
 </div>
 <div class="section" id="vizualisation-of-the-layout">
@@ -579,9 +598,9 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./GIS-editor_files/GIS-editor_59_0.png" src="./GIS-editor_files/GIS-editor_59_0.png" />
-<p>Each node of <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> with a negative index is a point.</p>
-<p>Each node of <img class="math" src="../_images/math/673e1e6c3939d8ee94732b25f322dd26b37ff4cd.png" alt="\mathcal{G}_s"/> with a positive index corresponds to
+<img alt="../_images/GIS-editor_59_0.png" src="../_images/GIS-editor_59_0.png" />
+<p>Each node of <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a negative index is a point.</p>
+<p>Each node of <img class="math" src="../_images/math/9d358e50c5697373ad7cc566b95dfe19d68e9d20.png" alt="\mathcal{G}_s"/> with a positive index corresponds to
 a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 <p><a class="reference external" href="MultiSubsegments.ipynb">Multi Subsegments</a></p>
@@ -598,6 +617,12 @@ a segment (wall,door,window,...).</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -607,8 +632,9 @@ a segment (wall,door,window,...).</p>
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

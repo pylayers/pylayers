@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '',
+        VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -57,6 +63,11 @@
 </li>
 </ul>
 
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/./SIM-where1.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -92,10 +103,8 @@ there is a default configuration file named <strong>default.ini</strong>.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/pkg_resources.py:991: UserWarning: /home/uguen/.python-eggs is writable by group/others and vulnerable to attack when used with get_resource_filename. Consider a more secure location (set with .set_extraction_path or the PYTHON_EGG_CACHE environment variable).
-  warnings.warn(msg, UserWarning)</pre>
-</div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3ee9dd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7d3af10&gt;
+</pre></div>
 </div>
 <p>A first step consists in loading a layout associated with the
 simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
@@ -119,8 +128,9 @@ simulation object <strong>S</strong>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3ef50d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x5327790&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x20c9b10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x9473810&gt;)
+</pre></div>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_5_1.png" src="./SIM-where1_files/SIM-where1_5_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
@@ -128,12 +138,13 @@ simulation object <strong>S</strong>.</p>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>int0 :  (309, 15, 46)
+<div class="highlight-python"><div class="highlight"><pre>int0 :  (309, 15, 46)
 int1 :  (202, 46, 59)
- output  {'(137, 59, 58)': 0.64242282168494413, '(230, 59, 67)': 0.35757717831506564, '(230, 59)': 0.35757717831506564}
+ output  {&#39;(137, 59, 58)&#39;: 0.64242282168494413, &#39;(230, 59, 67)&#39;: 0.35757717831506564, &#39;(230, 59)&#39;: 0.35757717831506564}
  Sum pR :  0.357577178315
  Sum pT :  0.642422821685
-lseg [137 230]</pre>
+lseg [137 230]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">31.123950000000001</span><span class="p">,</span> <span class="mf">34.74295</span><span class="p">,</span> <span class="mf">3.6289500000000001</span><span class="p">,</span> <span class="mf">17.468049999999998</span><span class="p">)</span>
 </pre></div>
@@ -162,13 +173,14 @@ dictionnary member of the Layout object.</p>
 perform are stotred in <strong>.ini</strong> files. Transmitter and Receiver are
 instances of the class <tt class="docutils literal"><span class="pre">RadioNode</span></tt> which offers different methods for
 specifying nodes positions. The stucture of this <strong>.ini</strong> file presented
-below. The node Id is associated with the 3 coordinates <img class="math" src="../_images/math/accc80fdf164cef264f56a82b6f9f6add320fe05.png" alt="x,y,z"/>
+below. The node Id is associated with the 3 coordinates <img class="math" src="../_images/math/975c0f20e558a0b09286b055b142fe433bb84f93.png" alt="x,y,z"/>
 separated by white spaces.</p>
-<div class="highlight-python"><pre>[coordinates]
+<div class="highlight-python"><div class="highlight"><pre>[coordinates]
 1 = -12.2724 7.76319999993 1.2
 2 = -18.7747 15.1779999998 1.2
 3 = -4.14179999998 8.86029999983 1.2
-4 = -9.09139999998 15.1899000001 1.2</pre>
+4 = -9.09139999998 15.1899000001 1.2
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1tx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
@@ -179,7 +191,8 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+<div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
+</pre></div>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_15_1.png" src="./SIM-where1_files/SIM-where1_15_1.png" />
 <p>Select Tx and Rx positions</p>
@@ -230,8 +243,9 @@ method of the Simulation object</p>
 <span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>number of Tx : 302
-number of rx : 4</pre>
+<div class="highlight-python"><div class="highlight"><pre>number of Tx : 302
+number of rx : 4
+</pre></div>
 </div>
 <p>Choose measurement points</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Chose used points here</span>
@@ -259,10 +273,11 @@ number of rx : 4</pre>
     <span class="k">print</span> <span class="s">&#39;Rxs OK&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[-24.867   12.3097   1.2   ] [-24.867   12.3097   1.2   ]
+<div class="highlight-python"><div class="highlight"><pre>[-24.867   12.3097   1.2   ] [-24.867   12.3097   1.2   ]
 [-18.7747  15.178    1.2   ] [-18.7747  15.178    1.2   ]
 Txs OK
-Rxs OK</pre>
+Rxs OK
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -274,7 +289,8 @@ Rxs OK</pre>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x985e1d0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7fa4e9df83d0&gt;
+</pre></div>
 </div>
 </div>
 <div class="section" id="signatures-rays-and-channel">
@@ -291,8 +307,9 @@ point to cycle function.</p>
 <span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>tx point belongs to cycle  5
-rx point belongs to cycle  4</pre>
+<div class="highlight-python"><div class="highlight"><pre>tx point belongs to cycle  5
+rx point belongs to cycle  4
+</pre></div>
 </div>
 <p>Then the signature between cycle 5 and cycle 4 can be calculated. This
 is done by instantiating a Signature object with a given layout and the
@@ -312,15 +329,17 @@ is done by instantiating a Signature object with a given layout and the
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x9361f50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x9364610&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fa4e890e850&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fa4e9df8610&gt;)
+</pre></div>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_30_1.png" src="./SIM-where1_files/SIM-where1_30_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x986ce10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x8656410&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fa4e8900550&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fa4eaa6bd90&gt;)
+</pre></div>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_31_1.png" src="./SIM-where1_files/SIM-where1_31_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
@@ -328,7 +347,7 @@ is done by instantiating a Signature object with a given layout and the
 <span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -340,12 +359,13 @@ is done by instantiating a Signature object with a given layout and the
 6 / 16 : [84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99]
 -----
 ni : 435
-nl : 970</pre>
+nl : 970
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Rays3D
+<div class="highlight-python"><div class="highlight"><pre>Rays3D
 ----------
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
@@ -357,7 +377,8 @@ nl : 970</pre>
 6 / 16 : [84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99]
 -----
 ni : 435
-nl : 970</pre>
+nl : 970
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">freq</span><span class="p">()</span>
 </pre></div>
@@ -554,17 +575,20 @@ nl : 970</pre>
 <span class="n">title</span><span class="p">(</span><span class="s">u&#39;received waveform without antenna $</span><span class="se">\\</span><span class="s">theta</span><span class="se">\\</span><span class="s">theta$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-  warnings.warn("No labeled objects found. "</pre>
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
+  warnings.warn(&quot;No labeled objects found. &quot;
+</pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0xcba5990&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fa4b0463f90&gt;
+</pre></div>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_42_2.png" src="./SIM-where1_files/SIM-where1_42_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;received waveform with antenna&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0xcf70090&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fa4b19cc290&gt;
+</pre></div>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_43_1.png" src="./SIM-where1_files/SIM-where1_43_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#dchan={i:&#39;ch&#39;+str(i) for i in range(1,5)}</span>
@@ -601,8 +625,9 @@ nl : 970</pre>
 <span class="k">print</span> <span class="s">&#39;simulated first path delay&#39;</span><span class="p">,</span><span class="n">r3d</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>real delay between tx and rx 22.4680672606
-simulated first path delay 22.4680672606</pre>
+<div class="highlight-python"><div class="highlight"><pre>real delay between tx and rx 22.4680672606
+simulated first path delay 22.4680672606
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">delays</span>
 </pre></div>
@@ -637,7 +662,7 @@ simulated first path delay 22.4680672606</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>-------------------------
+<div class="highlight-python"><div class="highlight"><pre>-------------------------
 Informations of ray # 0
 -------------------------
 
@@ -657,13 +682,15 @@ interaction # 0 type: T
  [ 0.00000000+0.j          0.34443500+0.50490218j]]
 rotation matrix# [0] type: B
 [[ 0.99533359  0.09649373]
- [-0.09649373  0.99533359]]</pre>
+ [-0.09649373  0.99533359]]
+</pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xcf848d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0xcdc3a90&gt;)</pre>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fa4b11f2c50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fa4b1f0ff50&gt;)
+</pre></div>
 </div>
 <img alt="./SIM-where1_files/SIM-where1_49_1.png" src="./SIM-where1_files/SIM-where1_49_1.png" />
 </div>
@@ -678,6 +705,12 @@ rotation matrix# [0] type: B
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -687,8 +720,9 @@ rotation matrix# [0] type: B
     </div>
 
     <div class="footer">
-        &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
