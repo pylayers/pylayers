@@ -1,0 +1,68 @@
+digraph finite_state_machine {
+        
+        subgraph SegmentActions{
+        node [shape = square,color=purple] EditSegment AddSegment DeleteSubSegment DeleteSegment;
+        }
+        subgraph DisplayActions{
+        node [shape = square,color=blue] SetDx SetDy Scaling Refresh ToggleLabel;
+	node [shape = square,color=blue] ToggleOverlay SetOrigin DisplayGui SaveStructure EqualizePoints;
+        }
+        
+        subgraph PointActions{
+	node [shape = square,color=green] DeletePoint AddPoint AddPointOnSeg;
+        }
+ 
+        subgraph Layers{
+	node [shape = square,color=cyan] IncrementLayer SelectActiveLayer ;
+        }
+
+        subgraph States{
+	size="18,15"
+	node [shape = doublecircle,color=red]; INIT CP CPS CPSS SS SSS SP1 SP2;
+        }
+
+	CP -> INIT [ label = "i", font=14 ];
+	SS -> INIT [ label = "i" ];
+	CPS -> INIT [ label = "i" ];
+	INIT -> CP [ label = "m" ];
+	CP -> INIT [ label = "m" ];
+        CP -> SetOrigin [ label ="o"];
+        INIT -> ToggleOverlay[ label ="o"];
+        INIT -> IncrementLayer[ label ="="];
+        INIT -> DisplayGui [ label ="z"];
+        INIT -> SaveStructure [ label ="x"];
+        INIT -> Scaling  [ label ="j"];
+        INIT -> Refresh  [ label ="r"];
+        INIT -> ToggleLabel  [ label ="n"];
+        INIT -> SP1 [ label ="select p1 "];
+        INIT -> SelectActiveLayer [ label ="l"];
+        INIT -> EqualizePoints [ label ="e"];
+        SP1 -> SP2 [ label ="select p2  p1 <> p2"];
+        SP1 -> INIT [ label ="select p2 & p1 == p2 "];
+        SP1 -> DeletePoint [ label = "d" ];
+        SS -> SSS [label = "h"];
+        DeleteSegment -> INIT;
+        SS -> DeleteSegment [ label = "d" ];
+        SSS -> DeleteSubSegment [ label = "d" ];
+        SS -> AddPointOnSeg [ label = "select p1 & p1 not seg ta or he"];
+        AddPointOnSeg -> INIT;
+        DeletePoint -> INIT;
+        DeleteSubSegment -> INIT;
+        INIT -> SS [ label ="select s1 (lclic)"];
+        SS -> SSS [ label ="select s1 & s1 has subseg"];
+        SS -> INIT [ label ="select s1 & s1 has no subseg"];
+        CP -> CPS [ label = "select s1" ];
+        CPS -> CPSS [ label = "select s2 & s1<> s2 " ];
+        SP2 -> AddSegment [ label = "if p1p2 do not exist"]
+        AddSegment -> INIT ; 
+        SS -> EditSegment [label = "e" ];
+        SSS -> EditSegment [label = "e" ];
+        SP1 -> EditPoint [label ="e"];
+        EditSegment -> INIT;
+        EditPoint -> INIT;
+        SetOrigin -> SetDx [label = "select px"];
+        SetDx -> SetDy [label = "select py"];
+        CP -> AddPoint [label = "lclic"];
+        SetDy -> CP
+
+}
