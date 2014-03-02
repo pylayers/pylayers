@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.geometric.util.model module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.location.geometric.util package" href="pylayers.location.geometric.util.html" />
+    <link rel="next" title="pylayers.location.geometric.util.scene module" href="pylayers.location.geometric.util.scene.html" />
+    <link rel="prev" title="pylayers.location.geometric.util.geomview module" href="pylayers.location.geometric.util.geomview.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.util.scene.html" title="pylayers.location.geometric.util.scene module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.util.geomview.html" title="pylayers.location.geometric.util.geomview module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.util.html" accesskey="U">pylayers.location.geometric.util package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.util.geomview.html"
+                        title="previous chapter">pylayers.location.geometric.util.geomview module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.util.scene.html"
+                        title="next chapter">pylayers.location.geometric.util.scene module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.location.geometric.util.model.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.location.geometric.util.model">
+<span id="pylayers-location-geometric-util-model-module"></span><h1>pylayers.location.geometric.util.model module<a class="headerlink" href="#module-pylayers.location.geometric.util.model" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.util.model.Model">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.util.model.</tt><tt class="descname">Model</tt><big>(</big><em>f=3.0</em>, <em>n=2.64</em>, <em>d0=1.0</em>, <em>method='OneSlope'</em>, <em>d=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>PL=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>RSS model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>f : frequency in GHz
+n : path loss exponent
+method : used model</p>
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.OneSlope">
+<tt class="descname">OneSlope</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.OneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.OneSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>OneSlope model : give Power Level from distance  with OneSlope method</p>
+<p>f : frequency  GHz
+n : path loss exponent
+D : Distance array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.PL0_c">
+<tt class="descname">PL0_c</tt><big>(</big><em>Gt=0</em>, <em>Gr=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.PL0_c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.PL0_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>PL0_c : PL0 compute
+f  : frequency GHz
+Gt : transmitting antenna gain dB (default 0 dB) 
+Gr : receiving antenna gain dB (default 0 dB)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.get_PL">
+<tt class="descname">get_PL</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.get_PL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.get_PL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Power Level from a given distance</p>
+<p>d : distance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.get_d">
+<tt class="descname">get_d</tt><big>(</big><em>PL</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.get_d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.get_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get  distance from a given Power Level</p>
+<p>d : distance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.iOneSlope">
+<tt class="descname">iOneSlope</tt><big>(</big><em>PL</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.iOneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.iOneSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>inverse OneSlope model : give distance from Power Level with OneSlope method</p>
+<p>f : frequency  GHz
+n : path loss exponent
+D : Distance array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.util.model.Model.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/util/model.html#Model.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.util.model.Model.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.util.scene.html" title="pylayers.location.geometric.util.scene module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.util.geomview.html" title="pylayers.location.geometric.util.geomview module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.util.html" >pylayers.location.geometric.util package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

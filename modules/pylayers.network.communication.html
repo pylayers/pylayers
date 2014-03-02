@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.network.communication module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.network package" href="pylayers.network.html" />
+    <link rel="next" title="pylayers.network.emsolver module" href="pylayers.network.emsolver.html" />
+    <link rel="prev" title="pylayers.network package" href="pylayers.network.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.emsolver.html" title="pylayers.network.emsolver module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.html" title="pylayers.network package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.network.html" accesskey="U">pylayers.network package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.network.html"
+                        title="previous chapter">pylayers.network package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.network.emsolver.html"
+                        title="next chapter">pylayers.network.emsolver module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.network.communication.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.network.communication">
+<span id="pylayers-network-communication-module"></span><h1>pylayers.network.communication module<a class="headerlink" href="#module-pylayers.network.communication" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt>
+<tt class="descname">Gcom(net=Network information</tt></dt>
+<dt>
+<tt class="descname">*******************</tt></dt>
+<dt>
+<tt class="descname">number of agents: 0</tt></dt>
+<dt>
+<tt class="descname">[]</tt></dt>
+<dt>
+<tt class="descname"></tt></dt>
+<dt>
+<tt class="descname">0 Mobile Agents</tt></dt>
+<dt>
+<tt class="descname">-------------</tt></dt>
+<dt>
+<tt class="descname">Agents IDs : []</tt></dt>
+<dt>
+<tt class="descname"></tt></dt>
+<dt>
+<tt class="descname">0 Access points</tt></dt>
+<dt>
+<tt class="descname">-------------</tt></dt>
+<dt>
+<tt class="descname">number of access point  :</tt></dt>
+<dt>
+<tt class="descname">access points  IDs : []</tt></dt>
+<dt>
+<tt class="descname">, sim=&lt;SimPy.Simulation.Simulation object at 0x16fc3e90&gt;)</tt></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">networkx.classes.multidigraph.MultiDiGraph</span></tt></p>
+<p>Communication graph</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>net</strong> : pylayers.network.network()</p>
+<p><strong>sim</strong> : SimPy.SimulationRT()</p>
+<p><strong>devt</strong> : dictionary</p>
+<blockquote class="last">
+<div><p>dictionnary of event</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>That class inherits of networkx.MultiDiGraph().
+Its nodes are the nodes of the passing Network object.
+Its edge represents all the possbile communication bridge between thoses nodes.
+On the edge, timestamped message can be passed between nodes</p>
+<p>Contrary to pylayers.network, which is an undirected graph, here edge are directed.</p>
+<p>Hence the dictionnary of simpy events (devt) can be created.
+The keys of devt are a tuple (nodeid#1, nodeid#2 , rat).</p>
+<dl class="method">
+<dt id="pylayers.network.communication.Gcom.create">
+<tt class="descclassname">Gcom.</tt><tt class="descname">create</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.create" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Create the communication graph and the dictionnary of simpy events</div></blockquote>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.communication</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">Gcom</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.Gcom.create_evt">
+<tt class="descclassname">Gcom.</tt><tt class="descname">create_evt</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.create_evt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.create_evt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dictionnary of simpy event.
+Hence each node of communication graph can send signal to others</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.Gcom.create_graph">
+<tt class="descclassname">Gcom.</tt><tt class="descname">create_graph</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.create_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.create_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the communication graph from the Network graph</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.Gcom.load_dec_file">
+<tt class="descclassname">Gcom.</tt><tt class="descname">load_dec_file</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#Gcom.load_dec_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.Gcom.load_dec_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.network.communication.RX">
+<em class="property">class </em><tt class="descclassname">pylayers.network.communication.</tt><tt class="descname">RX</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SimPy.Lib.Process</span></tt></p>
+<p>RX process</p>
+<p>Each agent has a RX process to receive information asynchronously.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>sim</strong> : SimPy.SimulationRT()</p>
+<p><strong>ID</strong> : string</p>
+<blockquote>
+<div><p>id of the agent</p>
+</div></blockquote>
+<p><strong>net</strong> : pylayers.network.network()</p>
+<p><strong>gcom</strong> : pylayers.network.communication()</p>
+<blockquote>
+<div><p>a graph a communication</p>
+</div></blockquote>
+<p><strong>devt</strong> : dictionary</p>
+<blockquote>
+<div><p>dictionnary of event</p>
+</div></blockquote>
+<p><strong>refreshRSS</strong> : float</p>
+<blockquote>
+<div><p>time interval where RSS are refreshed</p>
+</div></blockquote>
+<p><strong>refreshTOA</strong> : float</p>
+<blockquote>
+<div><p>time interval where TOA are refresh (if agent.comm_mode ==&#8217;syncho&#8217;)</p>
+</div></blockquote>
+<p><strong>mp</strong> : bool</p>
+<blockquote class="last">
+<div><p>message passing [Not yet implemented]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.network.communication.RX.create_evt">
+<tt class="descname">create_evt</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.create_evt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.create_evt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create simpy events from communication gaph</p>
+<p>The available reception event for the given id are pickup into the
+communication graph to fill self.devt.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.communication</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">TX</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">create_evt</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.RX.fill_req">
+<tt class="descname">fill_req</tt><big>(</big><em>n</em>, <em>rat</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.fill_req"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.fill_req" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>update values of the personnal network of a requester in regard</dt>
+<dd>with the action define in self.gcom.dec[requester.id]</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>n</strong> : id of the requester</p>
+<blockquote class="last">
+<div><p>rat : used rat</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.RX.refresh_RSS">
+<tt class="descname">refresh_RSS</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.refresh_RSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.refresh_RSS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh RSS process</p>
+<p>The RSS values on the edges of the Personnal Network of node self.ID
+are refreshed every self.refreshRSS</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.RX.wait_request">
+<tt class="descname">wait_request</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#RX.wait_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.RX.wait_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait request</p>
+<p>The self.ID node wait a request from another node of its Personal network.
+Once the request is received, self.ID reply to the requester node
+and fill the PN of the requester in regards with the action define in
+self.gcom.dec[requester.id]</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.network.communication.TX">
+<em class="property">class </em><tt class="descclassname">pylayers.network.communication.</tt><tt class="descname">TX</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SimPy.Lib.Process</span></tt></p>
+<dl class="docutils">
+<dt>TX process ( not used for now)</dt>
+<dd>Each agent use the TX process for querying LDP/information/message passing data
+to other agent</dd>
+</dl>
+<dl class="method">
+<dt id="pylayers.network.communication.TX.create_evt">
+<tt class="descname">create_evt</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.create_evt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.create_evt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create simpy events from communication gaph</p>
+<p>The available reception event for the given id are pickup into the
+communication graph to fill self.devt.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.communication</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">TX</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">create_evt</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.TX.interpret_dec">
+<tt class="descname">interpret_dec</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.interpret_dec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.interpret_dec" title="Permalink to this definition">¶</a></dt>
+<dd><p>interprete decision rule from self.dec</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.TX.request">
+<tt class="descname">request</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>request a transmission commanded by localizaiton</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.communication.TX.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#TX.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.TX.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.network.communication.dcond">
+<em class="property">class </em><tt class="descclassname">pylayers.network.communication.</tt><tt class="descname">dcond</tt><big>(</big><em>ID=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#dcond"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.dcond" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<p>may be obsolete</p>
+<dl class="method">
+<dt id="pylayers.network.communication.dcond.parse">
+<tt class="descname">parse</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/communication.html#dcond.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.communication.dcond.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.emsolver.html" title="pylayers.network.emsolver module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.network.html" title="pylayers.network package"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.network.html" >pylayers.network package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

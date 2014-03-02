@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.mobility.body.c3dtools module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.mobility.body package" href="pylayers.mobility.body.html" />
+    <link rel="next" title="pylayers.mobility.body.cylinder module" href="pylayers.mobility.body.cylinder.html" />
+    <link rel="prev" title="pylayers.mobility.body.c3d module" href="pylayers.mobility.body.c3d.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.body.cylinder.html" title="pylayers.mobility.body.cylinder module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.body.c3d.html" title="pylayers.mobility.body.c3d module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.html" >pylayers.mobility package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.body.html" accesskey="U">pylayers.mobility.body package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.mobility.body.c3d.html"
+                        title="previous chapter">pylayers.mobility.body.c3d module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.mobility.body.cylinder.html"
+                        title="next chapter">pylayers.mobility.body.cylinder module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.mobility.body.c3dtools.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.mobility.body.c3dtools">
+<span id="pylayers-mobility-body-c3dtools-module"></span><h1>pylayers.mobility.body.c3dtools module<a class="headerlink" href="#module-pylayers.mobility.body.c3dtools" title="Permalink to this headline">¶</a></h1>
+<p>A Python library for reading and writing C3D files.</p>
+<dl class="class">
+<dt id="pylayers.mobility.body.c3dtools.Group">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.body.c3dtools.</tt><tt class="descname">Group</tt><big>(</big><em>name=None</em>, <em>desc=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A group of parameters from a C3D file.</p>
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.add_param">
+<tt class="descname">add_param</tt><big>(</big><em>name</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.add_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.add_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.binary_size">
+<tt class="descname">binary_size</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.binary_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.binary_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of bytes to store this group and its parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_float">
+<tt class="descname">get_float</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_float"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_float" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_int16">
+<tt class="descname">get_int16</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_int16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_int16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_int32">
+<tt class="descname">get_int32</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_int32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_int32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_int8">
+<tt class="descname">get_int8</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_int8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_int8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_string">
+<tt class="descname">get_string</tt><big>(</big><em>key</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_uint16">
+<tt class="descname">get_uint16</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_uint16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_uint16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_uint32">
+<tt class="descname">get_uint32</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_uint32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_uint32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Group.get_uint8">
+<tt class="descname">get_uint8</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Group.get_uint8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Group.get_uint8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.mobility.body.c3dtools.Header">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.body.c3dtools.</tt><tt class="descname">Header</tt><big>(</big><em>handle=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Header information from a C3D file.</p>
+<dl class="attribute">
+<dt id="pylayers.mobility.body.c3dtools.Header.BINARY_FORMAT">
+<tt class="descname">BINARY_FORMAT</tt><em class="property"> = 'BBHHHHHfHHf270sHH214s'</em><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Header.BINARY_FORMAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Header.read">
+<tt class="descname">read</tt><big>(</big><em>handle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Header.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Header.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and parse binary header data from a file handle.</p>
+<p>This method reads exactly 512 bytes from the beginning of the file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Header.write">
+<tt class="descname">write</tt><big>(</big><em>handle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Header.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Header.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write binary header data to a file handle.</p>
+<p>This method writes exactly 512 bytes to the beginning of the file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.mobility.body.c3dtools.Manager">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.body.c3dtools.</tt><tt class="descname">Manager</tt><big>(</big><em>header=None</em>, <em>groups=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A base class for managing C3D file metadata.</p>
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.analog_per_frame">
+<tt class="descname">analog_per_frame</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.analog_per_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.analog_per_frame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.check_group">
+<tt class="descname">check_group</tt><big>(</big><em>group_id</em>, <em>name=None</em>, <em>desc=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.check_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.check_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new parameter group.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.end_field">
+<tt class="descname">end_field</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.end_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.end_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.frame_rate">
+<tt class="descname">frame_rate</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.frame_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.frame_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.group">
+<tt class="descname">group</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the parameter group with a given name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.groups">
+<tt class="descname">groups</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the (name, group) pairs in our file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.num_analog">
+<tt class="descname">num_analog</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.num_analog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.num_analog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.num_points">
+<tt class="descname">num_points</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.num_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.num_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.parameter_blocks">
+<tt class="descname">parameter_blocks</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.parameter_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.parameter_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the size (in 512B blocks) of the parameter section.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.points_per_frame">
+<tt class="descname">points_per_frame</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.points_per_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.points_per_frame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Manager.start_field">
+<tt class="descname">start_field</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Manager.start_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Manager.start_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.mobility.body.c3dtools.Param">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.body.c3dtools.</tt><tt class="descname">Param</tt><big>(</big><em>name</em>, <em>desc=''</em>, <em>data_size=1</em>, <em>dimensions=None</em>, <em>bytes=None</em>, <em>handle=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>We represent a single named parameter from a C3D file.</p>
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Param.binary_size">
+<tt class="descname">binary_size</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Param.binary_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Param.binary_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of bytes needed to store this parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Param.read">
+<tt class="descname">read</tt><big>(</big><em>handle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Param.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Param.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read binary data for this parameter from a file handle.</p>
+<p>This reads exactly enough data from the current position in the file to
+initialize the parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Param.write">
+<tt class="descname">write</tt><big>(</big><em>handle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Param.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Param.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write binary data for this parameter to a file handle.</p>
+<p>This writes data at the current position in the file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.mobility.body.c3dtools.Reader">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.body.c3dtools.</tt><tt class="descname">Reader</tt><big>(</big><em>handle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.mobility.body.c3dtools.Manager" title="pylayers.mobility.body.c3dtools.Manager"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.mobility.body.c3dtools.Manager</span></tt></a></p>
+<p>This class provides methods for reading the data in a C3D file.</p>
+<p>A C3D file contains metadata and frame-based data describing 3D motion.</p>
+<p>You can iterate over the frames in the file by calling
+&#8220;read_frames(handle)&#8221; after construction:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">c3d</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;capture.c3d&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">points</span><span class="p">,</span> <span class="n">analog</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">read_frames</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s">&#39;points in this frame&#39;</span>
+<span class="gp">... </span>    <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">analog</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Reader.read_frames">
+<tt class="descname">read_frames</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Reader.read_frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Reader.read_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over the data frames from our C3D file handle.</p>
+<p>This generates a sequence of (points, analog) ordered pairs, one
+ordered pair per frame. The first element of each frame contains a numpy
+array of 4D &#8220;points&#8221; and the second element of each frame contains a
+numpy array of 1D &#8220;analog&#8221; values that were probably recorded
+simultaneously. The four dimensions in the point data are typically
+(x, y, z) and a &#8220;confidence&#8221; estimate for the point.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.mobility.body.c3dtools.Writer">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.body.c3dtools.</tt><tt class="descname">Writer</tt><big>(</big><em>handle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Writer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.mobility.body.c3dtools.Manager" title="pylayers.mobility.body.c3dtools.Manager"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.mobility.body.c3dtools.Manager</span></tt></a></p>
+<p>This class manages the task of writing metadata and frames to a C3D file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">c3d</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;data.c3d&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frames</span> <span class="o">=</span> <span class="n">smooth_frames</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">read_frames</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">c3d</span><span class="o">.</span><span class="n">Writer</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;smoothed.c3d&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">write_from_reader</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Writer.write_frames">
+<tt class="descname">write_frames</tt><big>(</big><em>frames</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Writer.write_frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Writer.write_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the given list of frame data to our file handle.</p>
+<dl class="docutils">
+<dt>frames: A sequence of (points, analog) tuples, each containing data for</dt>
+<dd>one frame.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Writer.write_from_reader">
+<tt class="descname">write_from_reader</tt><big>(</big><em>frames</em>, <em>reader</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Writer.write_from_reader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Writer.write_from_reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a file with the same metadata and number of frames as a Reader.</p>
+<p>frames: A sequence of frames to write.
+reader: Copy metadata from this reader to the output file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Writer.write_like_phasespace">
+<tt class="descname">write_like_phasespace</tt><big>(</big><em>frames</em>, <em>frame_count</em>, <em>point_frame_rate=480.0</em>, <em>analog_frame_rate=0.0</em>, <em>point_scale_factor=-1.0</em>, <em>point_units='mm  '</em>, <em>gen_scale=1.0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Writer.write_like_phasespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Writer.write_like_phasespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a set of frames to a file so it looks like Phasespace wrote it.</p>
+<p>frames: The sequence of frames to write.
+frame_count: The number of frames to write.
+point_frame_rate: The frame rate of the data.
+analog_frame_rate: The number of analog samples per frame.
+point_scale_factor: The scale factor for point data.
+point_units: The units that the point numbers represent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.body.c3dtools.Writer.write_metadata">
+<tt class="descname">write_metadata</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/body/c3dtools.html#Writer.write_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.body.c3dtools.Writer.write_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write metadata for this file to our file handle.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.body.cylinder.html" title="pylayers.mobility.body.cylinder module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.body.c3d.html" title="pylayers.mobility.body.c3d module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.html" >pylayers.mobility package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.body.html" >pylayers.mobility.body package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

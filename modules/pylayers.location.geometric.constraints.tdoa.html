@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.geometric.constraints.tdoa module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.location.geometric.constraints package" href="pylayers.location.geometric.constraints.html" />
+    <link rel="next" title="pylayers.location.geometric.constraints.toa module" href="pylayers.location.geometric.constraints.toa.html" />
+    <link rel="prev" title="pylayers.location.geometric.constraints.rss module" href="pylayers.location.geometric.constraints.rss.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.toa.html" title="pylayers.location.geometric.constraints.toa module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.rss.html" title="pylayers.location.geometric.constraints.rss module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.constraints.html" accesskey="U">pylayers.location.geometric.constraints package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.constraints.rss.html"
+                        title="previous chapter">pylayers.location.geometric.constraints.rss module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.constraints.toa.html"
+                        title="next chapter">pylayers.location.geometric.constraints.toa module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.location.geometric.constraints.tdoa.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.location.geometric.constraints.tdoa">
+<span id="pylayers-location-geometric-constraints-tdoa-module"></span><h1>pylayers.location.geometric.constraints.tdoa module<a class="headerlink" href="#module-pylayers.location.geometric.constraints.tdoa" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt>
+<tt class="descname">TDOA(id='0', value=array([45]), std=array(4.0), vcw=3, p=array([[ 0,  0,  0],</tt></dt>
+<dt>
+<tt class="descname">[10, 10, 10]]), origin={})</tt></dt>
+<dd><p>Bases: <a class="reference internal" href="pylayers.location.geometric.constraints.constraint.html#pylayers.location.geometric.constraints.constraint.Constraint" title="pylayers.location.geometric.constraints.constraint.Constraint"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.location.geometric.constraints.constraint.Constraint</span></tt></a></p>
+<p>TDOA Constraint</p>
+<p>Description and evaluation of TDOA constraints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote>
+<div><p>Constraint value in ns.</p>
+</div></blockquote>
+<p><strong>std</strong> : np.array</p>
+<blockquote>
+<div><p>Value standard deviation in ns.</p>
+</div></blockquote>
+<p><strong>vcw</strong> : float</p>
+<blockquote>
+<div><p>scale factor.</p>
+</div></blockquote>
+<p><strong>p</strong> : np.array 2 x ndim</p>
+<blockquote>
+<div><p>constraint centers</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>drange</strong> : difference of distance conversion from time self.value.</p>
+<p><strong>sstd</strong> : difference of distance conversion from time self.std</p>
+<p><strong>runable</strong> : True NOT USED</p>
+<p><strong>evaluated :False NOT USED</strong> :</p>
+<p><strong>self.Id</strong> : Constraint ID</p>
+<p><strong>from annulus bound:</strong> :</p>
+<p><strong>min</strong> : minimum value of observable</p>
+<p><strong>max</strong> : maximum value of observable</p>
+<p><strong>mean</strong> : mean value of observable</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>annulus_bound(self)</strong> : Compute the minimum and maximum distance of the enclosing annulus of the constraint</p>
+<p><strong>tdoa_box(vcw)</strong> : find the enclosing box of TDOA constraint for a given vcw</p>
+<p><strong>rescale(self,vcw)</strong> : rescale contraint boundary with a given scale factor &#8216;vcw&#8217;</p>
+<p><strong>inclusive(self,b)</strong> : Is constraint center is inside a box ?</p>
+<p><strong>valid(self,b)</strong> : Test if Lbox is compatible with the constraint</p>
+<p><strong>valid_v(self,lv)</strong> : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.</p>
+<p><strong>bd2coordinates()</strong> :</p>
+<p class="last"><strong>estvol(self)</strong> : Constraint Volume estimation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.location.geometric.constraints.Constraint</span></tt></p>
+</div>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.annulus_bound">
+<tt class="descclassname">TDOA.</tt><tt class="descname">annulus_bound</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the minimum and maximum distance of the enclosing annulus of the constraint for a given self.vcw</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.inclusive">
+<tt class="descclassname">TDOA.</tt><tt class="descname">inclusive</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.inclusive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.inclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>A box b is inclusive for the constraint if self.p is included in the box</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.repart">
+<tt class="descclassname">TDOA.</tt><tt class="descname">repart</tt><big>(</big><em>DD</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.repart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.repart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.rescale">
+<tt class="descclassname">TDOA.</tt><tt class="descname">rescale</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>rescale(vcw) :  rescale constraint with vcw factor</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_axes">
+<tt class="descclassname">TDOA.</tt><tt class="descname">tdoa_axes</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.tdoa_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>triedre [vn,wn,tn], support of the contraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_box">
+<tt class="descclassname">TDOA.</tt><tt class="descname">tdoa_box</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.tdoa_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the inclusive box for a given vcw</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.update">
+<tt class="descclassname">TDOA.</tt><tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraint inforamtion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.valid">
+<tt class="descclassname">TDOA.</tt><tt class="descname">valid</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>valid(b) : check if box b is valid for the given constraint</p>
+<p>A box is valid if it not not valid</p>
+<dl class="docutils">
+<dt>A box is not valid if all distances are greater than rangemax</dt>
+<dd>or all distances are less than rangemin</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.valid_v">
+<tt class="descclassname">TDOA.</tt><tt class="descname">valid_v</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if vertex are valid for the given constraint</p>
+<p>A box is valid if it not not valid</p>
+<dl class="docutils">
+<dt>A box is not valid if all distances are greater than rangemax</dt>
+<dd>or all distances are less than rangemin</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.toa.html" title="pylayers.location.geometric.constraints.toa module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.rss.html" title="pylayers.location.geometric.constraints.rss module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.constraints.html" >pylayers.location.geometric.constraints package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

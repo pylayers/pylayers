@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.antssh module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.antprop package" href="pylayers.antprop.html" />
+    <link rel="next" title="pylayers.antprop.antvsh module" href="pylayers.antprop.antvsh.html" />
+    <link rel="prev" title="pylayers.antprop.antenna module" href="pylayers.antprop.antenna.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antvsh.html" title="pylayers.antprop.antvsh module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.html" title="pylayers.antprop.antenna module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.antprop.html" accesskey="U">pylayers.antprop package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.html"
+                        title="previous chapter">pylayers.antprop.antenna module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antvsh.html"
+                        title="next chapter">pylayers.antprop.antvsh module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.antprop.antssh.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.antprop.antssh">
+<span id="pylayers-antprop-antssh-module"></span><h1>pylayers.antprop.antssh module<a class="headerlink" href="#module-pylayers.antprop.antssh" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.antprop.antssh.CartToSphere">
+<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">CartToSphere</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>ex</em>, <em>ey</em>, <em>ez</em>, <em>bfreq=True</em>, <em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#CartToSphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.CartToSphere" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> :</p>
+<p><strong>phi</strong> :</p>
+<p><strong>ex</strong> :</p>
+<p><strong>ey</strong> :</p>
+<p><strong>ez</strong> :</p>
+<p><strong>bfreq</strong> : boolean</p>
+<p><strong>pattern</strong> : boolean</p>
+<p><strong>Convert from cartesian to spherical  coordinates</strong> :</p>
+<p class="last"><strong>bfreq</strong> : boolean parameter to indicate if the conversion is done for all frequencies of only one.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.antprop.antssh.SSHFunc">
+<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">SSHFunc</tt><big>(</big><em>L</em>, <em>theta</em>, <em>phi</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SSHFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SSHFunc" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : integer,</p>
+<blockquote>
+<div><p>spherical harmonics order</p>
+</div></blockquote>
+<p><strong>theta: numpy array(1, nth)</strong> :</p>
+<p class="last"><strong>phi: numpy array(1,nph)</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Compute the spherical harmonic functions for the order L
+return a spherical matrix ((1+L)*(2+L)/2,nth*nph) and the index (l,m) of the shperical harmonics</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.antprop.antssh.SSHFunc2">
+<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">SSHFunc2</tt><big>(</big><em>L</em>, <em>theta</em>, <em>phi</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SSHFunc2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SSHFunc2" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : integer,</p>
+<blockquote>
+<div><p>spherical harmonics order</p>
+</div></blockquote>
+<p><strong>theta: numpy array(1, ndir)</strong> :</p>
+<p class="last"><strong>phi: numpy array(1,ndir)</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>theta and phi should have the same dimensions which represents the rays
+Compute the spherical harmonic functions for the order L
+return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.antprop.antssh.SphereToCart">
+<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">SphereToCart</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>eth</em>, <em>eph</em>, <em>bfreq</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SphereToCart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SphereToCart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert from spherical to cartesian coordinates
+bfreq : boolean parameter to indicate if the conversion is done for all frequencies of only one.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.antprop.antssh.ssh">
+<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">ssh</tt><big>(</big><em>A</em>, <em>dsf=1</em>, <em>L=20</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#ssh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.ssh" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the Scalar Spherical Harmonics coefficients</p>
+<blockquote>
+<div>m : phi    longitude
+l : theta  latitude</div></blockquote>
+<p>Antenna pattern are stored       (f theta phi)
+Coeff are stored with this order (f , l , m )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> :  antenna</p>
+<p><strong>dsf</strong> :  int</p>
+<blockquote class="last">
+<div><p>down sampling factor  &#8216;default 1&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antvsh.html" title="pylayers.antprop.antvsh module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.html" title="pylayers.antprop.antenna module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.antprop.html" >pylayers.antprop package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

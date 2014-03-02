@@ -1,0 +1,584 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.algebraic.algebraic module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.location.algebraic package" href="pylayers.location.algebraic.html" />
+    <link rel="next" title="pylayers.location.geometric package" href="pylayers.location.geometric.html" />
+    <link rel="prev" title="pylayers.location.algebraic package" href="pylayers.location.algebraic.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.html" title="pylayers.location.geometric package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.algebraic.html" title="pylayers.location.algebraic package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.algebraic.html" accesskey="U">pylayers.location.algebraic package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.location.algebraic.html"
+                        title="previous chapter">pylayers.location.algebraic package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.html"
+                        title="next chapter">pylayers.location.geometric package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.location.algebraic.algebraic.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.location.algebraic.algebraic">
+<span id="pylayers-location-algebraic-algebraic-module"></span><h1>pylayers.location.algebraic.algebraic module<a class="headerlink" href="#module-pylayers.location.algebraic.algebraic" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.algebraic.algebraic.algloc">
+<em class="property">class </em><tt class="descclassname">pylayers.location.algebraic.algebraic.</tt><tt class="descname">algloc</tt><big>(</big><em>nodes={}</em>, <em>ldp={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>This class regroups algebraic localization algorithms</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>nodes</strong> : dictionnary</p>
+<p><strong>ldp</strong> : dictionnary</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>plot</strong> : plot scenario</p>
+<p><strong>show</strong> : plot scenario</p>
+<p class="last"><strong>get_range</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This class gathers various implementation of location algorithms.
+The object has :</p>
+<blockquote>
+<div><ul class="simple">
+<li>a dictionnary of nodes</li>
+<li>a dictionnary of location dependent parameters</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.crb">
+<tt class="descname">crb</tt><big>(</big><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.crb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.crb" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method compute the cramer rao bound (CRB) at position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>P</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>rss : boolean
+toa : boolean
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>CRB</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crb_rss</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">crb</span><span class="p">(</span><span class="n">BN</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crb_toa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">crb</span><span class="p">(</span><span class="n">BN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crb_tdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">crb</span><span class="p">(</span><span class="n">BN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crb_rsstoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">crb</span><span class="p">(</span><span class="n">BN</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crb_rsstdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">crb</span><span class="p">(</span><span class="n">BN</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crb_toatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">crb</span><span class="p">(</span><span class="n">BN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crb_rsstoatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">crb</span><span class="p">(</span><span class="n">BN</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-1.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.fim">
+<tt class="descname">fim</tt><big>(</big><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.fim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.fim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the fisher information matrix in P for the given
+Parameters
+&#8212;&#8212;&#8212;-</p>
+<blockquote>
+<div>P : numpy.ndarray
+rss : boolean
+toa : boolean
+tdoa : boolean</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>FIM</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.get_range">
+<tt class="descname">get_range</tt><big>(</big><em>Rest='mode'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.get_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.get_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the range from RSS using the &#8220;Rest&#8221; estimator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Rest</strong> : string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>rg</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r_mode</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r_median</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="s">&#39;median&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r_mean</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-2.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.get_range_std">
+<tt class="descname">get_range_std</tt><big>(</big><em>Rest='mode'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.get_range_std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.get_range_std" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the RSS range standard deviation using the &#8220;Rest&#8221;         estimator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Rest</strong> : string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>rg_std</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rs_mode</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">get_range_std</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rs_median</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">get_range_std</span><span class="p">(</span><span class="s">&#39;median&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rs_mean</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">get_range_std</span><span class="p">(</span><span class="s">&#39;mean&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-3.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display scenario information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.ls_locate">
+<tt class="descname">ls_locate</tt><big>(</big><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em>, <em>Rest='mode'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ls_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ls_locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method applies least squares (LS) approximation to get
+position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<p><strong>toa</strong> : boolean</p>
+<p><strong>tdoa</strong> : boolean</p>
+<p><strong>Rest</strong> : string</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rss</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_toa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_tdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_toatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstoatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-4.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.ml_function">
+<tt class="descname">ml_function</tt><big>(</big><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ml_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ml_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>This defines the ML function to be minimized if ML estimator
+is used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>P</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>rss : boolean
+toa : boolean
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ML</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.ml_locate">
+<tt class="descname">ml_locate</tt><big>(</big><em>P0</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ml_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ml_locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This applies ML estimator to compute position P</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>P0</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>rss : boolean
+toa : boolean
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rss</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ml_locate</span><span class="p">(</span><span class="n">BN0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_toa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ml_locate</span><span class="p">(</span><span class="n">BN0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_tdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ml_locate</span><span class="p">(</span><span class="n">BN0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ml_locate</span><span class="p">(</span><span class="n">BN0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ml_locate</span><span class="p">(</span><span class="n">BN0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_toatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ml_locate</span><span class="p">(</span><span class="n">BN0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstoatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">ml_locate</span><span class="p">(</span><span class="n">BN0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-5.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.plot">
+<tt class="descname">plot</tt><big>(</big><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot scenario</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>toa</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>tdoa</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.show">
+<tt class="descname">show</tt><big>(</big><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot scenario</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<p><strong>toa</strong> : boolean</p>
+<p class="last"><strong>tdoa</strong> : boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-6.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.algebraic.algebraic.algloc.wls_locate">
+<tt class="descname">wls_locate</tt><big>(</big><em>rss=False</em>, <em>toa=True</em>, <em>tdoa=False</em>, <em>Rest='mode'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.wls_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.wls_locate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method applies weighted least squares (WLS) approximation
+to get position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<blockquote>
+<div><p>toa : boolean
+tdoa : boolean
+Rest : string</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rss</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_toa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_tdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_toatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P_rsstoatdoa</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-7.py">Source code</a>)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.location.algebraic.algebraic.scenario">
+<tt class="descclassname">pylayers.location.algebraic.algebraic.</tt><tt class="descname">scenario</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.scenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is not a class member, it defines a sample scenario.
+Defines a sample scenario for testing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>nodes</strong> : dictionnary</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>&#8216;BN&#8217; 
+&#8216;RN_RSS&#8217;
+&#8216;RN_TDOA&#8217;
+&#8216;RN_TOA&#8217;
+&#8216;RNr_TDOA&#8217;</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>ldp <span class="classifier-delimiter">:</span> <span class="classifier">all ldps of bn0</span></dt>
+<dd><p class="first last">&#8216;PL0&#8217;
+&#8216;RSS&#8217;
+&#8216;RSS_np&#8217;
+&#8216;RSS_std&#8217;
+&#8216;TDOA&#8217;
+&#8216;TDOA_std&#8217;
+&#8216;TOA&#8217;
+&#8216;TOA_std&#8217;</p>
+</dd>
+</dl>
+<p>bn0   : The true position of blind node</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nRN</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dim</span> <span class="o">=</span> <span class="mi">3</span> <span class="c"># 2 for 2D, 3 for 3D</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="mf">20.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BN</span> <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BN0</span> <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RN_TOA</span> <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span><span class="n">nRN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RN_RSS</span> <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span><span class="n">nRN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RN_TDOA</span> <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span><span class="n">nRN</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d_TOA</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">RN_TOA</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c"># actual distances</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TOF</span> <span class="o">=</span> <span class="n">d_TOA</span><span class="o">/</span><span class="n">c</span> <span class="c"># actual TOA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TOA_std</span> <span class="o">=</span> <span class="mf">0.001</span><span class="o">/</span><span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">TOF</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TOA</span> <span class="o">=</span> <span class="n">TOF</span> <span class="o">+</span> <span class="n">TOA_std</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rss_std</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rss_np</span> <span class="o">=</span> <span class="mf">2.645</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pl0</span> <span class="o">=</span> <span class="mf">34.7</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d0</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d_RSS</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">RN_RSS</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c"># actual distances</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">rss_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pl0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rss_db</span> <span class="o">=</span> <span class="n">pl0</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="n">rss_np</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_RSS</span><span class="o">/</span><span class="n">d0</span><span class="p">)</span><span class="o">+</span><span class="n">X</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">RNr_TDOA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span><span class="n">nRN</span><span class="p">))</span><span class="c">#L*sp.rand(dim,nRN)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">RN_TDOA</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">RNr_TDOA</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TDOF</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">dr</span><span class="p">)</span><span class="o">/</span><span class="n">c</span> <span class="c"># actual TDOA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TDOA_std</span> <span class="o">=</span> <span class="mf">0.001</span><span class="o">/</span><span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">TDOF</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TDOA</span> <span class="o">=</span> <span class="n">TDOF</span> <span class="o">+</span> <span class="n">TDOA_std</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="o">=</span><span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;BN&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">BN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_RSS&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">RN_RSS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_TOA&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">RN_TOA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_TDOA&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">RN_TDOA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RNr_TDOA&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">RNr_TDOA</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="o">=</span><span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rss_db</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rss_std</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_np&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rss_np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;PL0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOA_std</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TDOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TDOA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TDOA_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TDOA_std</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;Nodes&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">nodes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;LDPs&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ldp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;BN0:initial guess for ML estimator&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">BN0</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-location-algebraic-algebraic-8.py">Source code</a>)</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.html" title="pylayers.location.geometric package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.algebraic.html" title="pylayers.location.algebraic package"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.algebraic.html" >pylayers.location.algebraic package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

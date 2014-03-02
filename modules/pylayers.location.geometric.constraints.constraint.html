@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.geometric.constraints.constraint module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.location.geometric.constraints package" href="pylayers.location.geometric.constraints.html" />
+    <link rel="next" title="pylayers.location.geometric.constraints.exclude module" href="pylayers.location.geometric.constraints.exclude.html" />
+    <link rel="prev" title="pylayers.location.geometric.constraints.cla module" href="pylayers.location.geometric.constraints.cla.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.exclude.html" title="pylayers.location.geometric.constraints.exclude module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.cla.html" title="pylayers.location.geometric.constraints.cla module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.constraints.html" accesskey="U">pylayers.location.geometric.constraints package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.constraints.cla.html"
+                        title="previous chapter">pylayers.location.geometric.constraints.cla module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.constraints.exclude.html"
+                        title="next chapter">pylayers.location.geometric.constraints.exclude module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.location.geometric.constraints.constraint.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.location.geometric.constraints.constraint">
+<span id="pylayers-location-geometric-constraints-constraint-module"></span><h1>pylayers.location.geometric.constraints.constraint module<a class="headerlink" href="#module-pylayers.location.geometric.constraints.constraint" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.constraint.</tt><tt class="descname">Constraint</tt><big>(</big><em>type</em>, <em>id='0'</em>, <em>p=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Constraint class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>time</strong> : float</p>
+<blockquote>
+<div><p>time stamp</p>
+</div></blockquote>
+<p><strong>lbox</strong> : LBoxN</p>
+<blockquote>
+<div><p>LBoxN intialisation
+self.usable = True
+self.visible = True
+self.obsolete = False</p>
+</div></blockquote>
+<p><strong>runable</strong> : boolean</p>
+<blockquote>
+<div><p>A constriat is runable if it has a center</p>
+</div></blockquote>
+<p><strong>usable: boolean</strong> :</p>
+<blockquote>
+<div><p>a constraint is usable is it has a std AND a value AND is visible</p>
+</div></blockquote>
+<p><strong>visible</strong> : boolean</p>
+<blockquote>
+<div><p>is the constraint visible (used for simulnet simulation</p>
+</div></blockquote>
+<p><strong>parmsh</strong> : dictionary</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>keys <span class="classifier-delimiter">:</span> <span class="classifier">[&#8216;display&#8217;]=True     # launch geomview interactively</span></dt>
+<dd><p class="first last">[&#8216;mode&#8217;]=&#8217;Current&#8217;   # display current box or full constraint
+[&#8216;scene&#8217;]=True      # display whole scene
+[&#8216;point&#8217;]=True       # display constraint point(s)
+[&#8216;boxes&#8217;]=True       # display constraint box
+[&#8216;estimated&#8217;]=True  # display estimated point
+[&#8216;estimated_LS&#8217;]=False # display estimated point with LS method
+[&#8216;quadric&#8217;]=True   # display sphere or hyperbola
+[&#8216;grid&#8217;]=True       # display grid
+[&#8216;grav&#8217;]=True</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>Constraint.C_Id</strong> : Contraint Identity automatically increased for new instanciation</p>
+<p><strong>type</strong> : str</p>
+<blockquote>
+<div><p>contraint type (TOA,TDOA,RSS)</p>
+</div></blockquote>
+<p><strong>p</strong> : nd.array</p>
+<blockquote>
+<div><p>Constraint center</p>
+</div></blockquote>
+<p><strong>self.Id</strong> : str</p>
+<blockquote>
+<div><p>Constraint.C_Id</p>
+</div></blockquote>
+<p><strong>ndim</strong> : int</p>
+<blockquote>
+<div><p>Constraint dimension (2D/3D)</p>
+</div></blockquote>
+<p><strong>origin</strong> : dict</p>
+<blockquote>
+<div><p>origin of the contraint, (used for simulnet simulation 
+&#8216;id&#8217; : id of the node generating the constraint
+&#8216;link&#8217; : edge of network graph Gr
+&#8216;rat&#8217; : RAT on which constraint has been obtained
+&#8216;ldp&#8217; : type of observable</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>info()</strong> : Display information about constraint</p>
+<p class="last"><strong>show3()</strong> : display constraint on Geomview. Parameters tahnks to self.parmsh</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.simul.simulnet.html#module-pylayers.simul.simulnet" title="pylayers.simul.simulnet"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.simulnet</span></tt></a>, <a class="reference internal" href="pylayers.location.localization.html#module-pylayers.location.localization" title="pylayers.location.localization"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.location.localization</span></tt></a></p>
+</div>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.info_old">
+<tt class="descname">info_old</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.info_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.info_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>display info on constraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.show3">
+<tt class="descname">show3</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>display constraint on Geomview</p>
+<p>The filename is boxes{Id}.list</p>
+<p>Id is the Id of the current constraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.updc">
+<tt class="descname">updc</tt><big>(</big><em>name='p'</em>, <em>value=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.updc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.updc" title="Permalink to this definition">¶</a></dt>
+<dd><p>update values of a constraint</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.exclude.html" title="pylayers.location.geometric.constraints.exclude module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.cla.html" title="pylayers.location.geometric.constraints.cla module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.constraints.html" >pylayers.location.geometric.constraints package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

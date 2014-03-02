@@ -1,0 +1,608 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.geometric.constraints.cla module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.location.geometric.constraints package" href="pylayers.location.geometric.constraints.html" />
+    <link rel="next" title="pylayers.location.geometric.constraints.constraint module" href="pylayers.location.geometric.constraints.constraint.html" />
+    <link rel="prev" title="pylayers.location.geometric.constraints package" href="pylayers.location.geometric.constraints.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.constraint.html" title="pylayers.location.geometric.constraints.constraint module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.html" title="pylayers.location.geometric.constraints package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.constraints.html" accesskey="U">pylayers.location.geometric.constraints package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.constraints.html"
+                        title="previous chapter">pylayers.location.geometric.constraints package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.location.geometric.constraints.constraint.html"
+                        title="next chapter">pylayers.location.geometric.constraints.constraint module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.location.geometric.constraints.cla.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.location.geometric.constraints.cla">
+<span id="pylayers-location-geometric-constraints-cla-module"></span><h1>pylayers.location.geometric.constraints.cla module<a class="headerlink" href="#module-pylayers.location.geometric.constraints.cla" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.constraints.cla.CLA">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.cla.</tt><tt class="descname">CLA</tt><big>(</big><em>parmsh={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Constraint Layer Array class
+The Constraint Layer Array gather all constraints and process them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>c</strong> : list</p>
+<blockquote>
+<div><p>contraints contained in CLA</p>
+</div></blockquote>
+<p><strong>type</strong> : list</p>
+<blockquote>
+<div><p>types of contraints contained in CLA</p>
+</div></blockquote>
+<p><strong>std</strong> : list</p>
+<blockquote>
+<div><p>standard deviation of constraints</p>
+</div></blockquote>
+<p><strong>vcw</strong> : list</p>
+<blockquote>
+<div><p>scale factor of constraints</p>
+</div></blockquote>
+<p><strong>Nc</strong> : integer</p>
+<blockquote>
+<div><p>Layer number of current processing</p>
+</div></blockquote>
+<p><strong>pe</strong> :  np.array</p>
+<blockquote>
+<div><p>Position estimated</p>
+</div></blockquote>
+<p><strong>dlayer</strong> : dictionnary</p>
+<blockquote>
+<div><p>key : Layer number
+value : list of Enclosed (0) and ambiguous (1) boxes.</p>
+</div></blockquote>
+<p><strong>iter</strong> : integer</p>
+<blockquote>
+<div><p>current iteration of refine process</p>
+</div></blockquote>
+<p><strong>erronous</strong> : list</p>
+<blockquote>
+<div><p>fills with number constraint which are not compatibleselfselfselfself.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>info(self)</strong> : Give info</p>
+<p><strong>compute(pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):</strong> :</p>
+<blockquote>
+<div><p>compute the CLA to estimate the positon.</p>
+</div></blockquote>
+<p><strong>rescale(self,f_vcw,cid=None)</strong> : rescale Constraint Box</p>
+<p><strong>annulus_bound(self,cid=None)</strong> : rescale Constraint</p>
+<p><strong>append(self,c)</strong> : Append a Constraint to CLA</p>
+<p><strong>setvcw(self,vcw):</strong> : Set vcw for all constraint</p>
+<p><strong>merge2(self,vcw_init=1.0)</strong> : Merge all constraint from the CLA</p>
+<p><strong>valid_v(self,lv,N)</strong> : Test vertexes with all constraints</p>
+<p><strong>refine(self,l,NBOXMAX=100,VOLMIN=0.1)</strong> : reduce the validity zone</p>
+<p><strong>show3(self,l=-1,amb=False,sc=&#8217;all&#8217;)</strong> : show3</p>
+<p><strong>prob(self,c,d)</strong> : Compute DDP for the given vertexes</p>
+<p><strong>gapdetect(self,l,dlindx)</strong> : Gap detection for bimodal solution</p>
+<p><strong>min_dist(self,a,b)</strong> : OBSOLETE</p>
+<p class="last"><strong>estpos2(self,l=-1,amb=False)</strong> : Position estimation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.annulus_bound">
+<tt class="descname">annulus_bound</tt><big>(</big><em>cid=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>adapt cmin and cmax of constraints</p>
+<p>Update cmin and cmax of constraints for a given self.vcw</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body">cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Nothing but update boxe size either for each constraints from cid list either for all contraints in the CLA list self.c.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.append">
+<tt class="descname">append</tt><big>(</big><em>c</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a constraint into the CLA</p>
+<p>add a constraint into the CLA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>c</strong> : any constraint wichi heritates from Constraint object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>Nothing but fills self.c list of constraints</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.compute">
+<tt class="descname">compute</tt><big>(</big><em>pe=True</em>, <em>mergeRSS=False</em>, <em>refineRSS=True</em>, <em>NBOXMAX=50</em>, <em>VOLMIN=0.001</em>, <em>HT=True</em>, <em>forceamb=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.compute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the cla to estimate the postion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pe</strong> : boolean</p>
+<blockquote>
+<div><p>set to True to compute the position estimation store into self.pe</p>
+</div></blockquote>
+<p><strong>mergeRSS</strong> : boolean</p>
+<blockquote>
+<div><p>True : if there is RSS in cla, they are used to find the smallest merge
+False (default): even if there is RSS in cla, they are neglected during the merge process</p>
+</div></blockquote>
+<p><strong>refineRSS :boolean</strong> :</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous</dt>
+<dd><p class="first last">during the refine process</p>
+</dd>
+</dl>
+<p>False: if there is RSS in cla, they are ignore during the refine process</p>
+</div></blockquote>
+<p><strong>NBOXMAX</strong> : integer</p>
+<blockquote>
+<div><p>Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)</p>
+</div></blockquote>
+<p><strong>NVOLMIN</strong> : float</p>
+<blockquote>
+<div><p>Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)</p>
+</div></blockquote>
+<p><strong>HT</strong> : boolean</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True <span class="classifier-delimiter">:</span> <span class="classifier">if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</span></dt>
+<dd><p class="first last">in estpos2 method</p>
+</dd>
+</dl>
+<p>False : no HT methos is applied</p>
+<p>Description of the hypothesis testing (HT) method in:
+Hybrid positioning based on hypothesis thesting
+N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+A Hybrid Positioning Method Based on Hypothesis Testing
+,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
+<a class="reference external" href="http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&amp;arnumber=6205594">http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&amp;arnumber=6205594</a></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>return</strong> : boolean</p>
+<blockquote>
+<div><p>True if the position estimation has been performed.</p>
+</div></blockquote>
+<p class="last"><strong>update a self.pe which contain the estimated position</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.estpos">
+<tt class="descname">estpos</tt><big>(</big><em>l=-1</em>, <em>amb=False</em>, <em>test=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.estpos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.estpos" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED !
+estpos(l,amb=True) : estimate position</p>
+<p>l : layer number
+amb : if True include ambigous boxes of VA in gravity center computation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.estpos2">
+<tt class="descname">estpos2</tt><big>(</big><em>l=-1</em>, <em>amb=False</em>, <em>HT=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.estpos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.estpos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position estimation</p>
+<p>estimate position from the enclosed or/and ambibuous boxes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : Layer of the estimation. If -1 estimation is made on the highest available layer</p>
+<p><strong>amb</strong> : Use ambiguous boxes (if available) to perform the position estimation. default = False</p>
+<p><strong>HT</strong> : boolean</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True <span class="classifier-delimiter">:</span> <span class="classifier">if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</span></dt>
+<dd><p class="first last">in estpos2 method</p>
+</dd>
+</dl>
+<p>False : no HT methos is applied</p>
+<p>Hybrid positioning based on hypothesis thesting
+N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+A Hybrid Positioning Method Based on Hypothesis Testing
+,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing but fills self.pe with an array</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.gapdetect">
+<tt class="descname">gapdetect</tt><big>(</big><em>l</em>, <em>dlindx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.gapdetect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.gapdetect" title="Permalink to this definition">¶</a></dt>
+<dd><p>basic gap detection</p>
+<p>Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
+This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : layer number</p>
+<p><strong>dlindx</strong> : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes</p>
+<p><strong>Returns</strong> :</p>
+<p><strong>&#8212;&#8212;</strong> :</p>
+<p><strong>clust</strong> : a list of array. each array contains boxes from the same cluster</p>
+<p class="last"><strong>axis</strong> : axis/axes where gap has/have been detectes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.gapdetect2">
+<tt class="descname">gapdetect2</tt><big>(</big><em>l</em>, <em>dlindx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.gapdetect2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.gapdetect2" title="Permalink to this definition">¶</a></dt>
+<dd><p>basic gap detection</p>
+<p>Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
+This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.
+requiere  pyinterval class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : layer number</p>
+<p class="last"><strong>dlindx</strong> : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.merge2">
+<tt class="descname">merge2</tt><big>(</big><em>vcw_init=1.0</em>, <em>RSS=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.merge2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.merge2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge all constraints from the CLA2_reduc2</p>
+<p>Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.</p>
+<ul class="simple">
+<li>if the result of this merging is empty (no common intersections between all the boxes), all the constraints&#8217;s vcw are increased (x2) and this processing is operated until an intersection exists (physically intersection MUST exist)</li>
+<li>if the result of this merging is not empty (intersection exists between all the boxes), all the constraints&#8217;s vcw are decreased and this processing is operated until no intersection exists. the previous value of vcw is thus used for all constraints.</li>
+</ul>
+<p>This method ensure to find the smallest instersection box satisfaying all the constraints</p>
+<p>Also here is initialized self.dlayer.
+use of dlayer dictionnary:</p>
+<p>self.dlayer[Layer][type of boxes]</p>
+<p>Layer = number of intersecting constraints
+type of boxes : 0 = enclose boxes (EB)</p>
+<blockquote>
+<div>1 = ambiguous boxes (AB)</div></blockquote>
+<p>After the merging, all constraints boxes are store as AB list. EB list is void.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>vcw_init</strong> : float</p>
+<blockquote>
+<div><p>intial value of scale factor vcw. This value is updated during the process and affect all constraints ! default =1.0</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.min_dist">
+<tt class="descname">min_dist</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.min_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.min_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>OBSOLETE</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.prob">
+<tt class="descname">prob</tt><big>(</big><em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>determine probability of list of vertex</p>
+<p>Return the probability of each vertex from an array in regard of the constraint origin, standard deviation and vcw</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : contraint number in the self.c list</p>
+<p><strong>d</strong> : an array of vertex</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>v</strong> : probability of each vertex</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.refine">
+<tt class="descname">refine</tt><big>(</big><em>l</em>, <em>NBOXMAX=50</em>, <em>VOLMIN=0.001</em>, <em>RSS=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.refine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.refine" title="Permalink to this definition">¶</a></dt>
+<dd><p>refine the l layer of the CLA</p>
+<p>Refine the l layer of the CLA  until the maximum number of boxes (NBOXMAX) or the minimal volume of boxes (VOLMIN) has been reached.</p>
+<p>Once the CLA has been merged, this method aims to enclose the solution thanks to an octree/quadtreee process</p>
+<p>self.dlayer[l][0] : LBox which contains boxes inside of the validity area (VA)
+self.dlayer[l][1] : LBox which contains ambiguous boxes (partially inside of the VA == at least 1 edge inside the VA)
+All boxes partially inside of the VA are divided into octants. Each octants are tested into the self.valid.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : the layer number</p>
+<p><strong>NBOXMAX</strong> : the maximum number of obtained boxes</p>
+<p><strong>VOLMIN</strong> :  the minimum volume achievable by the obtained boxes</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, but fills self.dlayer[l][0] and self.dlayer[l][1] respectively with enclosed boxes and ambiguous boxes</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.remove">
+<tt class="descname">remove</tt><big>(</big><em>k</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>OBSOLETE/ TO BE DEVELOPPED</p>
+<p>remove(k) : remove a constraint to cla</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.rescale">
+<tt class="descname">rescale</tt><big>(</big><em>f_vcw</em>, <em>cid=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>idem setvcw but update current vcw with a multiplier factor</p>
+<p>change vcw for all constraints of the CLA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>f_vcw</strong> : a scale factor of the current vcw of the constraint.</p>
+<p><strong>cid</strong> : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.setvcw">
+<tt class="descname">setvcw</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.setvcw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.setvcw" title="Permalink to this definition">¶</a></dt>
+<dd><p>update scale factor of all constraint</p>
+<p>rescale all the constraints&#8217;s boxes according to the given vcw</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>vcw</strong> : a vcw value</p>
+<p><strong>RSS</strong> : boolean</p>
+<blockquote>
+<div><p>True : RSS are considered in merging
+False : RSS are excluded from merging</p>
+</div></blockquote>
+<p><strong>Returns</strong> :</p>
+<p><strong>&#8212;&#8212;-</strong> :</p>
+<p class="last"><strong>Nothing but update all constraint from the CLA</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.show3">
+<tt class="descname">show3</tt><big>(</big><em>l=-1</em>, <em>amb=False</em>, <em>sc='all'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display constraints and theirs boxes through geomview.</p>
+<p>geomview parameters are the following</p>
+<p>self.parmsh[&#8216;display&#8217;]=False            # launch geomview interactively
+self.parmsh[&#8216;scene&#8217;]=True               # display whole scene
+self.parmsh[&#8216;boxes&#8217;]=True               # display constraint box
+self.parmsh[&#8216;constr_boxes&#8217;]=False       # display constraint box
+self.parmsh[&#8216;estimated&#8217;]=True           # display estimated point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l</strong> : layer number to observe. If -1 estimation is made on the highest available layer. default = -1</p>
+<p><strong>amb</strong> : display ambiguous boxes. default = false</p>
+<p><strong>sc</strong> : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default &#8216;all&#8217;</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing but calls a geomview instance</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update all constraints of the CLA</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.valid_v">
+<tt class="descname">valid_v</tt><big>(</big><em>lv</em>, <em>N</em>, <em>RSS=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>test a vertex list with constraints</p>
+<p>Each vertexes from boxes pass into the list are tested to determine if the box is out (OB), ambiguous (AB) or enclosed (EB)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lv</strong> : a vertex list from BOXN.octants</p>
+<p><strong>N</strong> : number of constraints aka layer number</p>
+<p><strong>RSS</strong> : boolean</p>
+<blockquote>
+<div><p>True : RSS constraints are kept as any other constraints for boxes evaluation (ambigous /enclosed)
+False : RSS constraints are ignored in boxes evaluation (ambigous /enclosed)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>AB</strong> : a list with the numerous of Ambiguous Boxes</p>
+<p class="last"><strong>EB</strong> : a list with the numerous of Enclosed Boxes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.constraint.html" title="pylayers.location.geometric.constraints.constraint module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.geometric.constraints.html" title="pylayers.location.geometric.constraints package"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.html" >pylayers.location.geometric package</a> &raquo;</li>
+          <li><a href="pylayers.location.geometric.constraints.html" >pylayers.location.geometric.constraints package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

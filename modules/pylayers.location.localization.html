@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.localization module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.location package" href="pylayers.location.html" />
+    <link rel="next" title="pylayers.location.locarule module" href="pylayers.location.locarule.html" />
+    <link rel="prev" title="pylayers.location.learning.loclearn module" href="pylayers.location.learning.loclearn.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.locarule.html" title="pylayers.location.locarule module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.learning.loclearn.html" title="pylayers.location.learning.loclearn module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" accesskey="U">pylayers.location package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.location.learning.loclearn.html"
+                        title="previous chapter">pylayers.location.learning.loclearn module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.location.locarule.html"
+                        title="next chapter">pylayers.location.locarule module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.location.localization.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.location.localization">
+<span id="pylayers-location-localization-module"></span><h1>pylayers.location.localization module<a class="headerlink" href="#module-pylayers.location.localization" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.localization.Localization">
+<em class="property">class </em><tt class="descclassname">pylayers.location.localization.</tt><tt class="descname">Localization</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.compute_alg">
+<tt class="descname">compute_alg</tt><big>(</big><em>rat='all'</em>, <em>ldp='all'</em>, <em>now=0.0</em>, <em>pe=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.compute_alg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.compute_alg" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Compute position with the algebraic algorithm</div></blockquote>
+<blockquote>
+<div>True if estimatited position has been computed</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.compute_geo">
+<tt class="descname">compute_geo</tt><big>(</big><em>rat='all'</em>, <em>ldp='all'</em>, <em>now=0.0</em>, <em>pe=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.compute_geo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.compute_geo" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Compute position with the geometric algorithm</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>True if estimated position has been computed</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.fill_cla">
+<tt class="descname">fill_cla</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.fill_cla"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.fill_cla" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the constraint layer array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.savep">
+<tt class="descname">savep</tt><big>(</big><em>value</em>, <em>now=0.0</em>, <em>name='pe'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.savep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.savep" title="Permalink to this definition">¶</a></dt>
+<dd><p>write an estimated position into self.net</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.localization.Localization.update">
+<tt class="descname">update</tt><big>(</big><em>rat='all'</em>, <em>ldp='all'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/localization.html#Localization.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.Localization.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraints information (anchor position, value and std)
+from the network graph</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<tt class="descname">PLocalization(loc=Localization information</tt></dt>
+<dt>
+<tt class="descname">*************************</tt></dt>
+<dt>
+<tt class="descname"></tt></dt>
+<dt>
+<tt class="descname">Node ID: 0</tt></dt>
+<dt>
+<tt class="descname">Localization methods: ['geo', 'alg']</tt></dt>
+<dt>
+<tt class="descname"></tt></dt>
+<dt>
+<tt class="descname">CLA:</tt></dt>
+<dt>
+<tt class="descname">node | peer   |type | rat  | p              | value    | std  | runable| usable|</tt></dt>
+<dt>
+<tt class="descname"></tt></dt>
+<dt>
+<tt class="descname">position evaluated by the CLA</tt></dt>
+<dt>
+<tt class="descname">[]</tt></dt>
+<dt>
+<tt class="descname">, tx=&lt; Instance of TX, id 385651152:</tt></dt>
+<dt>
+<tt class="descname">.eventsFired=[]</tt></dt>
+<dt>
+<tt class="descname">.lcst=[]</tt></dt>
+<dt>
+<tt class="descname">.cmdrq=&lt; Instance of SimEvent, id 385651344:</tt></dt>
+<dt>
+<tt class="descname">.name=RQ0</tt></dt>
+<dt>
+<tt class="descname">.waits=[]</tt></dt>
+<dt>
+<tt class="descname">.queues=[]</tt></dt>
+<dt>
+<tt class="descname">.signalparam=None</tt></dt>
+<dt>
+<tt class="descname">.occurred=False</tt></dt>
+<dt>
+<tt class="descname">.sim=&lt;SimPy.SimulationRT.SimulationRT object at 0x16f86190&gt;</tt></dt>
+<dt>
+<tt class="descname">&gt;</tt></dt>
+<dt>
+<tt class="descname">.gcom=</tt></dt>
+<dt>
+<tt class="descname">.net=</tt></dt>
+<dt>
+<tt class="descname">.PN=</tt></dt>
+<dt>
+<tt class="descname">.sim=&lt;SimPy.SimulationRT.SimulationRT object at 0x16f86190&gt;</tt></dt>
+<dt>
+<tt class="descname">.args={'lcst': [], 'gcom': &lt;pylayers.network.communication.Gcom object at 0x16fc9250&gt;, 'devt': {}, 'net': Network information</tt></dt>
+<dt>
+<tt class="descname">*******************</tt></dt>
+<dt>
+<tt class="descname">number of agents: 0</tt></dt>
+<dt>
+<tt class="descname">[]</tt></dt>
+<dt>
+<tt class="descname"></tt></dt>
+<dt>
+<tt class="descname">0 Mobile Agents</tt></dt>
+<dt>
+<tt class="descname">-------------</tt></dt>
+<dt>
+<tt class="descname">Agents IDs : []</tt></dt>
+<dt>
+<tt class="descname"></tt></dt>
+<dt>
+<tt class="descname">0 Access points</tt></dt>
+<dt>
+<tt class="descname">-------------</tt></dt>
+<dt>
+<tt class="descname">number of access point  :</tt></dt>
+<dt>
+<tt class="descname">access points  IDs : []</tt></dt>
+<dt>
+<tt class="descname">, 'dec': {}, 'ID': 0, 'sim': None}</tt></dt>
+<dt>
+<tt class="descname">.ID=0</tt></dt>
+<dt>
+<tt class="descname">.name=Tx0</tt></dt>
+<dt>
+<tt class="descname">.devt={}</tt></dt>
+<dt>
+<tt class="descname">.dec={}</tt></dt>
+<dt>
+<tt class="descname">&gt;, loc_updt_time=0.5, sim=None)</tt></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SimPy.Lib.Process</span></tt></p>
+<dl class="method">
+<dt id="pylayers.location.localization.PLocalization.run">
+<tt class="descclassname">PLocalization.</tt><tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/localization.html#PLocalization.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.localization.PLocalization.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.locarule.html" title="pylayers.location.locarule module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.location.learning.loclearn.html" title="pylayers.location.learning.loclearn module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.location.html" >pylayers.location package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

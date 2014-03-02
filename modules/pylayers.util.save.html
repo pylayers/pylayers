@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.util.save module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.util package" href="pylayers.util.html" />
+    <link rel="next" title="pylayers.util.utilnet module" href="pylayers.util.utilnet.html" />
+    <link rel="prev" title="pylayers.util.pyutil module" href="pylayers.util.pyutil.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.utilnet.html" title="pylayers.util.utilnet module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.pyutil.html" title="pylayers.util.pyutil module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.util.html" accesskey="U">pylayers.util package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.util.pyutil.html"
+                        title="previous chapter">pylayers.util.pyutil module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.util.utilnet.html"
+                        title="next chapter">pylayers.util.utilnet module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.util.save.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.util.save">
+<span id="pylayers-util-save-module"></span><h1>pylayers.util.save module<a class="headerlink" href="#module-pylayers.util.save" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.util.save.Save">
+<em class="property">class </em><tt class="descclassname">pylayers.util.save.</tt><tt class="descname">Save</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SimPy.Lib.Process</span></tt></p>
+<p>Save all variable of a simulnet simulation.
+Save process can be setup with the save.ini file from /&lt;project&gt;/ini</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>net</strong> : pylayers.network.network()</p>
+<p><strong>sim</strong> : SimPy.SimulationRT()</p>
+<p><strong>savemat</strong> : dictionnary with all the saved results from a simulation</p>
+<blockquote>
+<div><p>( obtained after self.export() )</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>run ():</strong> :</p>
+<blockquote>
+<div><p>save the current simulation evey k step (setup into save.ini)</p>
+</div></blockquote>
+<p><strong>load():</strong> :</p>
+<blockquote>
+<div><p>Load saved results of a simulation. file extension  .pck</p>
+</div></blockquote>
+<p><strong>export(etype) :</strong> :</p>
+<blockquote class="last">
+<div><p>export the results into the etype format.
+available format : 
+- &#8216;python&#8217;
+- &#8216;matlab&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.util.save.Save.load">
+<tt class="descname">load</tt><big>(</big><em>filename=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a saved trace simulation</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.save</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">Save</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.util.save.Save.mat_export">
+<tt class="descname">mat_export</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.mat_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.mat_export" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>export save simulation to a matlab file</div></blockquote>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.save</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">Save</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">mat_export</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.util.save.Save.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the save Result process</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.utilnet.html" title="pylayers.util.utilnet module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.pyutil.html" title="pylayers.util.pyutil module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.util.html" >pylayers.util package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

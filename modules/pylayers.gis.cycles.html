@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.gis.cycles module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.gis package" href="pylayers.gis.html" />
+    <link rel="next" title="pylayers.gis.furniture module" href="pylayers.gis.furniture.html" />
+    <link rel="prev" title="pylayers.gis.basemapexample module" href="pylayers.gis.basemapexample.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.furniture.html" title="pylayers.gis.furniture module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.basemapexample.html" title="pylayers.gis.basemapexample module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.gis.html" accesskey="U">pylayers.gis package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.gis.basemapexample.html"
+                        title="previous chapter">pylayers.gis.basemapexample module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.gis.furniture.html"
+                        title="next chapter">pylayers.gis.furniture module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.gis.cycles.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.gis.cycles">
+<span id="pylayers-gis-cycles-module"></span><h1>pylayers.gis.cycles module<a class="headerlink" href="#module-pylayers.gis.cycles" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.gis.cycles.Cycle">
+<em class="property">class </em><tt class="descclassname">pylayers.gis.cycles.</tt><tt class="descname">Cycle</tt><big>(</big><em>G</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Graph cycle class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>vertices</strong> : np.array</p>
+<p><strong>edges</strong> : np.array</p>
+<p class="last"><strong>cycle</strong> : np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.corrcy">
+<tt class="descname">corrcy</tt><big>(</big><em>Cy</em>, <em>flip=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.corrcy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.corrcy" title="Permalink to this definition">¶</a></dt>
+<dd><p>cyclic matching correlation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Cy</strong> : Cycle</p>
+<p><strong>flip</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default = False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.flip">
+<tt class="descname">flip</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.flip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.flip" title="Permalink to this definition">¶</a></dt>
+<dd><p>flip the Cycle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.inclusion">
+<tt class="descname">inclusion</tt><big>(</big><em>Cy</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.inclusion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.inclusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if self includes Cy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Cy</strong> : Cycle</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>boolean</strong> : True if Cy subset self</p>
+<p class="last"><strong>path</strong> : path</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Inclusion implies :</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>The area of the including cycle is larger than the area of included cycle</li>
+<li>The 2 cycles have at least  a common segment</li>
+<li>When the  common segment is travelled with the same orientation
+both cycle SignedArea have the same sign</li>
+</ol>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.intersect">
+<tt class="descname">intersect</tt><big>(</big><em>Cy</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.intersect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find intersection with an other cycle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Cy</strong> : Cycle</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>flip</strong> : boolean</p>
+<blockquote>
+<div><p>indicates the orientation of the common brin
+True : flipped direction
+False : same direction</p>
+</div></blockquote>
+<p class="last"><strong>brin</strong> : common portion of th</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>flip,path = C1.intersect(C2)</p>
+<p>if flip == True &#8211;&gt; The 2 cycles have a reverse travel
+direction for the common path</p>
+<p>path is the common path along the cycle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.show">
+<tt class="descname">show</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>show cycle</p>
+<p>Acceleration can be obtained if the polygon is calculated once</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.simplify">
+<tt class="descname">simplify</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.simplify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.simplify" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>L</strong> : list of cycles</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.split">
+<tt class="descname">split</tt><big>(</big><em>Cy</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.split" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cyin</strong> :  input cycle</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>cyout</strong> : list of output cycles</p>
+<p><strong>punctual</strong> : boolean</p>
+<blockquote class="last">
+<div><p>True if punctual connection</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Simplify 2 cycles which are in a mutual relation of inclusion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycle.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycle.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycle.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.gis.cycles.Cycles">
+<em class="property">class </em><tt class="descclassname">pylayers.gis.cycles.</tt><tt class="descname">Cycles</tt><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">networkx.classes.digraph.DiGraph</span></tt></p>
+<p>Graph of Cycles</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>inclusion</strong> :</p>
+<blockquote class="last">
+<div><p>decompose</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycles.decompose">
+<tt class="descname">decompose</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycles.decompose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycles.decompose" title="Permalink to this definition">¶</a></dt>
+<dd><p>recursive function to transform the cycle basis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycles.inclusion">
+<tt class="descname">inclusion</tt><big>(</big><em>full=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycles.inclusion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycles.inclusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inform the inclusion relations between cycles</p>
+<p class="rubric">Notes</p>
+<p>update cycle inclusion graph</p>
+<p>inclusion is not a reciprocal relation that is the reason why
+we loop twice over the entire cycles list</p>
+<dl class="docutils">
+<dt>Algorithm :</dt>
+<dd><dl class="first last docutils">
+<dt>for all cycles ck</dt>
+<dd><dl class="first last docutils">
+<dt>for all cycles cl</dt>
+<dd><dl class="first last docutils">
+<dt>if ck &lt;&gt; cl</dt>
+<dd><p class="first">check inclusion of Ck in Cl
+If Inclusion detected</p>
+<blockquote class="last">
+<div>update graphe</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.cycles.Cycles.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/cycles.html#Cycles.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.cycles.Cycles.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>get info from Cycles object</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.furniture.html" title="pylayers.gis.furniture module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.basemapexample.html" title="pylayers.gis.basemapexample module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.gis.html" >pylayers.gis package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

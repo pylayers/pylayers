@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.mobility.transit.World module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.mobility.transit package" href="pylayers.mobility.transit.html" />
+    <link rel="next" title="pylayers.mobility.transit.vec3 module" href="pylayers.mobility.transit.vec3.html" />
+    <link rel="prev" title="pylayers.mobility.transit.SteeringBehavior module" href="pylayers.mobility.transit.SteeringBehavior.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.transit.vec3.html" title="pylayers.mobility.transit.vec3 module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.transit.SteeringBehavior.html" title="pylayers.mobility.transit.SteeringBehavior module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.html" >pylayers.mobility package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.transit.html" accesskey="U">pylayers.mobility.transit package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.mobility.transit.SteeringBehavior.html"
+                        title="previous chapter">pylayers.mobility.transit.SteeringBehavior module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.mobility.transit.vec3.html"
+                        title="next chapter">pylayers.mobility.transit.vec3 module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.mobility.transit.World.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.mobility.transit.World">
+<span id="pylayers-mobility-transit-world-module"></span><h1>pylayers.mobility.transit.World module<a class="headerlink" href="#module-pylayers.mobility.transit.World" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.mobility.transit.World.World">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.transit.World.</tt><tt class="descname">World</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class World</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>boids</strong> :</p>
+<p><strong>add_boid</strong> :</p>
+<p><strong>remove_boid</strong> :</p>
+<p><strong>update_boid</strong> :</p>
+<p><strong>obstacles</strong> :</p>
+<p class="last"><strong>add_wall</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.add_boid">
+<tt class="descname">add_boid</tt><big>(</big><em>boid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.add_boid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.add_boid" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boid</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.add_wall">
+<tt class="descname">add_wall</tt><big>(</big><em>*wall</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.add_wall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.add_wall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.add_zone">
+<tt class="descname">add_zone</tt><big>(</big><em>zone</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.add_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.add_zone" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>zone</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.boids">
+<tt class="descname">boids</tt><big>(</big><em>boid</em>, <em>distance=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.boids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.boids" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>boid</strong> :</p>
+<p><strong>distance</strong> : int</p>
+<blockquote>
+<div><p>default 2</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>other_boids</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.obstacles">
+<tt class="descname">obstacles</tt><big>(</big><em>boid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.obstacles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.obstacles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.remove_boid">
+<tt class="descname">remove_boid</tt><big>(</big><em>boid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.remove_boid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.remove_boid" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boid</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.to_local">
+<tt class="descname">to_local</tt><big>(</big><em>boid</em>, <em>point</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.to_local"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.to_local" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.update_boid">
+<tt class="descname">update_boid</tt><big>(</big><em>boid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.update_boid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.update_boid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.World.World.zones">
+<tt class="descname">zones</tt><big>(</big><em>boid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#World.zones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.World.zones" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boid</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.mobility.transit.World.near">
+<tt class="descclassname">pylayers.mobility.transit.World.</tt><tt class="descname">near</tt><big>(</big><em>boid</em>, <em>items</em>, <em>distance</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#near"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.near" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pylayers.mobility.transit.World.world">
+<tt class="descclassname">pylayers.mobility.transit.World.</tt><tt class="descname">world</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/World.html#world"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.World.world" title="Permalink to this definition">¶</a></dt>
+<dd><p>defining world</p>
+<p class="rubric">Notes</p>
+<p><a class="reference external" href="http://e-collection.library.ethz.ch/eserv/eth:27090/eth-27090-01.pdf">Obstacles in pedestrian simulations</a></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.transit.vec3.html" title="pylayers.mobility.transit.vec3 module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.mobility.transit.SteeringBehavior.html" title="pylayers.mobility.transit.SteeringBehavior module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.html" >pylayers.mobility package</a> &raquo;</li>
+          <li><a href="pylayers.mobility.transit.html" >pylayers.mobility.transit package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

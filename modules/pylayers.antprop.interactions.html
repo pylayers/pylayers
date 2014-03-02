@@ -1,0 +1,642 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.interactions module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.antprop package" href="pylayers.antprop.html" />
+    <link rel="next" title="pylayers.antprop.multiwall module" href="pylayers.antprop.multiwall.html" />
+    <link rel="prev" title="pylayers.antprop.coverage module" href="pylayers.antprop.coverage.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.multiwall.html" title="pylayers.antprop.multiwall module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.coverage.html" title="pylayers.antprop.coverage module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.antprop.html" accesskey="U">pylayers.antprop package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.coverage.html"
+                        title="previous chapter">pylayers.antprop.coverage module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.multiwall.html"
+                        title="next chapter">pylayers.antprop.multiwall module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.antprop.interactions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.antprop.interactions">
+<span id="pylayers-antprop-interactions-module"></span><h1>pylayers.antprop.interactions module<a class="headerlink" href="#module-pylayers.antprop.interactions" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.antprop.interactions.IntB">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">IntB</tt><big>(</big><em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></tt></a></p>
+<p>Local Basis interaction class</p>
+<p>Basis interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>data</strong> : np.array:</p>
+<blockquote>
+<div><p>WARNING np.shape(data) = (ninter x 4)
+the input matrix 2x2 is rehaped as 1x 4</p>
+</div></blockquote>
+<p><strong>idx</strong> : list</p>
+<blockquote>
+<div><p>index of the corresponding ray and interaction</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first last"><strong>eval</strong> : evaluation of B interaction</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The interaction object is np.array with shape (nf,ninter 2, 2)</p>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.IntB.eval">
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntB.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntB.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluation of B interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array()</p>
+<blockquote>
+<div><p>freqeuncy range</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>self.data</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">IntB</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([ 1.,  0.,  0.,  1.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([[ 1.,  0.,  0.,  1.],</span>
+<span class="go">       [ 1.,  0.,  0.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eB</span><span class="o">=</span><span class="n">B</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nf</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">nf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ninter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">eB</span><span class="p">)</span>
+<span class="go">(181, 2, 2, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span><span class="o">.</span><span class="n">delay</span>
+<span class="go">array([ 0.,  0.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.interactions.IntD">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">IntD</tt><big>(</big><em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=</em>, <span class="optional">[</span><span class="optional">]</span><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></tt></a></p>
+<p>Diffraction interaction class
+.. todo to be implemented</p>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.IntD.eval">
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntD.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntD.eval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.interactions.IntL">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">IntL</tt><big>(</big><em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></tt></a></p>
+<p>Loss interaction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>data</strong> : np.array((ninter x [dist]))</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>idx <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">index of the corresponding ray and interaction</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>np.array:</strong> :</p>
+<blockquote class="last">
+<div><p>(nf ,ninter, 2, 2)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.IntL.eval">
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntL.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntL.eval" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>evaluation of B interactions</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">3</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">IntL</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([3])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([[3],</span>
+<span class="go">       [6]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eL</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ninter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nf</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">nf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">eL</span><span class="p">)</span>
+<span class="go">(181, 2, 2, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">delay</span>
+<span class="go">array([ 10.,  20.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.interactions.IntR">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">IntR</tt><big>(</big><em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></tt></a></p>
+<p>Reflexion interaction class</p>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.IntR.eval">
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntR.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntR.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluation of reflexion interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fGHz</strong> : np.array (,Nf)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>self.A</strong> : evaluated interaction</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>data = np.array((ninter x [theta,si,st]))</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># generate input data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta1</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta2</span> <span class="o">=</span> <span class="mf">0.4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si01</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si02</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sir1</span> <span class="o">=</span> <span class="mf">3.15</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sir2</span> <span class="o">=</span> <span class="mf">3.4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">theta1</span><span class="p">,</span><span class="n">si01</span><span class="p">,</span><span class="n">sir1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">theta2</span><span class="p">,</span><span class="n">si02</span><span class="p">,</span><span class="n">sir2</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># store input data to Instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">IntR</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([ 0.1 ,  4.  ,  3.15])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">uslidx</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">dusl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># evaluation parameters (normally read from config.ini)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">11.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">olf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">R</span><span class="o">.</span><span class="n">nf</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># evaluation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eR</span><span class="o">=</span><span class="n">R</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ninter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">eR</span><span class="p">)</span>
+<span class="go">(181, 2, 2, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eR</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">array([-0.06412945+0.15756758j,  0.00000000+0.j        ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span><span class="o">.</span><span class="n">delay</span>
+<span class="go">array([ 13.33333333,   2.        ])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.interactions.IntT">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">IntT</tt><big>(</big><em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></tt></a></p>
+<p>Transmission  interaction class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><strong>data = np.array(( i x [theta,si,st]))</strong> :</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.IntT.eval">
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntT.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntT.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>example given for</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># generate input data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta1</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta2</span> <span class="o">=</span> <span class="mf">0.4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si01</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">si02</span> <span class="o">=</span> <span class="mf">0.6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sir1</span> <span class="o">=</span> <span class="mf">3.15</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sir2</span> <span class="o">=</span> <span class="mf">3.4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">theta1</span><span class="p">,</span><span class="n">si01</span><span class="p">,</span><span class="n">sir1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">theta2</span><span class="p">,</span><span class="n">si02</span><span class="p">,</span><span class="n">sir2</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># store input data to Instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">IntT</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([ 0.1 ,  4.  ,  3.15])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span><span class="n">idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">uslidx</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">dusl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># evaluation parameters (normally read from config.ini)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">11.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">olf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">T</span><span class="o">.</span><span class="n">nf</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># evaluation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eT</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ninter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">eT</span><span class="p">)</span>
+<span class="go">(181, 2, 2, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eT</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">array([[ 0.43318949-0.87334289j, -0.00000000+0.j        ],</span>
+<span class="go">       [-0.00000000+0.j        ,  0.43247609-0.87414221j]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
+<span class="go">array([ 13.33333333,   2.        ])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.interactions.Inter">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">Inter</tt><big>(</big><em>typ=0</em>, <em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=</em>, <span class="optional">[</span><span class="optional">]</span><em>_filemat='matDB.ini'</em>, <em>_fileslab='slabDB.ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Inter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Inter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Interactions</p>
+<p>Meta class of interactions ( Interactions, IntB/IntL/IntT/intR/intD)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>typ</strong> : int</p>
+<blockquote class="last">
+<div><blockquote>
+<div><blockquote>
+<div><p>type of interaction
+1 : R 
+2 : T
+3 : D 
+0 : Tx or Rx</p>
+</div></blockquote>
+<p>-1 : B</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>data: np.array</dt>
+<dd><p class="first last">data for the interaction</p>
+</dd>
+<dt>idx:</dt>
+<dd><p class="first last">idx number of the interaction between 0 and (ray number * inter number)</p>
+</dd>
+<dt>fGHz <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd><p class="first last">frequency range in GHz</p>
+</dd>
+<dt>nf <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">number of step into freq range</p>
+</dd>
+<dt>olf <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd><p class="first last">np.ones((nf)) used for broadcasting</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.Inter.create_dusl">
+<tt class="descname">create_dusl</tt><big>(</big><em>a</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Inter.create_dusl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Inter.create_dusl" title="Permalink to this definition">¶</a></dt>
+<dd><p>create dictionnary of used slab.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : np.array of strings which contains ordered interactions</p>
+<blockquote class="last">
+<div><p>ordered as in self.idx/self.data</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.interactions.Inter.sinsout">
+<tt class="descname">sinsout</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Inter.sinsout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Inter.sinsout" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate sin sout of the interaction</p>
+<p class="rubric">Notes</p>
+<p>if typ</p>
+<blockquote>
+<div><p>1 : Reflexion 
+2 : Transmission 
+3 : Diffraction</p>
+<p>si : self.data[:,1]
+so : self.data[:,2]</p>
+</div></blockquote>
+<p>if typ = 0</p>
+<p>if typ = -1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.interactions.Inter.stack">
+<tt class="descname">stack</tt><big>(</big><em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=0</em>, <em>isdata=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Inter.stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Inter.stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>stack data and the associated idx</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : np.array()</p>
+<blockquote>
+<div><p>data to stack</p>
+</div></blockquote>
+<p><strong>idx :</strong> :</p>
+<blockquote>
+<div><p>index to stack</p>
+</div></blockquote>
+<p><strong>isdata: bool</strong> :</p>
+<blockquote class="last">
+<div><p>False if you just want to stack idx (only used for intE class )</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">=</span><span class="n">Inter</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">idx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([3, 4, 5])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">.</span><span class="n">idx</span>
+<span class="go">[0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">idx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([[3, 4, 5],</span>
+<span class="go">       [3, 4, 5],</span>
+<span class="go">       [7, 8, 9]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span><span class="o">.</span><span class="n">idx</span>
+<span class="go">[0, 1, 2]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.interactions.Interactions">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">Interactions</tt><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pylayers.antprop.interactions.Inter" title="pylayers.antprop.interactions.Inter"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions.Inter</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<p>Interaction parameters</p>
+<p>gather all type of interactions (IntB/L/R/T)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>add(self,li): add a list of basis interactions</strong> :</p>
+<p><strong>addi(self,i): add a single interaction</strong> :</p>
+<p><strong>eval(self)</strong> : evaluate all the interactions added thanks to self.add or self.addi</p>
+<blockquote>
+<div><p>and create the self.I which gather all thoses interactions</p>
+</div></blockquote>
+<p><strong>5 following types of interactions</strong> :</p>
+<p><strong>B</strong> : local basis transformation matrix (unitary)</p>
+<p><strong>L</strong> : LOS case</p>
+<p><strong>R</strong> : Reflection</p>
+<p><strong>T</strong> : Transmission</p>
+<p class="last"><strong>D</strong> : Diffraction</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.antprop.interactions.Interactions.add">
+<tt class="descname">add</tt><big>(</big><em>li</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a list of interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>li :</strong> :</p>
+<blockquote class="last">
+<div><p>list of interactions</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.interactions.Interactions.addi">
+<tt class="descname">addi</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions.addi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.addi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add interactions as a member of Interactions class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i</strong> : Inter object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.interactions.Interactions.eval">
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate all the interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fGHz</strong> : np.array()</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>self.I <span class="classifier-delimiter">:</span> <span class="classifier">np.shape(self.I) = (self.nf,self.nimax,2,2)</span></dt>
+<dd>with self.nf :  number of frequences
+self.nimax : the total number of interactions ( of all rays)</dd>
+<dt>self.sout :</dt>
+<dd>distance from interaction to the next one</dd>
+<dt>self.si0 :</dt>
+<dd>distance from the previous interaction to the the considered one</dd>
+<dt>self.alpha :</dt>
+<dd>alpha as described into Legendre Thesis</dd>
+<dt>self.gamma :</dt>
+<dd>!! gamma**2 !!! (squared included) as described</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.multiwall.html" title="pylayers.antprop.multiwall module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.coverage.html" title="pylayers.antprop.coverage module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.antprop.html" >pylayers.antprop package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

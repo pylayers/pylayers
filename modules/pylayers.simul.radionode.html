@@ -1,0 +1,706 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.simul.radionode module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.simul package" href="pylayers.simul.html" />
+    <link rel="next" title="pylayers.simul.simulem module" href="pylayers.simul.simulem.html" />
+    <link rel="prev" title="pylayers.simul.exploit_simulnet module" href="pylayers.simul.exploit_simulnet.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simulem.html" title="pylayers.simul.simulem module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.exploit_simulnet.html" title="pylayers.simul.exploit_simulnet module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.simul.html" accesskey="U">pylayers.simul package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.simul.exploit_simulnet.html"
+                        title="previous chapter">pylayers.simul.exploit_simulnet module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.simul.simulem.html"
+                        title="next chapter">pylayers.simul.simulem module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.simul.radionode.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.simul.radionode">
+<span id="pylayers-simul-radionode-module"></span><h1>pylayers.simul.radionode module<a class="headerlink" href="#module-pylayers.simul.radionode" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.simul.radionode.RadioNode">
+<em class="property">class </em><tt class="descclassname">pylayers.simul.radionode.</tt><tt class="descname">RadioNode</tt><big>(</big><em>name=''</em>, <em>typ='undefined'</em>, <em>_fileini='radionode.ini'</em>, <em>_filetraj='pos.csv'</em>, <em>_fileant='defant.vsh3'</em>, <em>_filestr='defstr.str2'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>container for a Radio Node</p>
+<p>This class manages the spatial and temporal behavior of a radio node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>position</strong> :</p>
+<blockquote>
+<div><p>position of the RadioNode np.array([],dtype=float)</p>
+</div></blockquote>
+<p><strong>time</strong> :</p>
+<blockquote>
+<div><p>time tag of the RadioNode np.array([],dtype=float)</p>
+</div></blockquote>
+<p><strong>orientation</strong> :</p>
+<blockquote>
+<div><p>orientation 3x3xn (rotation matrix for each position)</p>
+</div></blockquote>
+<p><strong>points</strong> :</p>
+<blockquote>
+<div><p>dictionnary of points (redundant information)</p>
+</div></blockquote>
+<p><strong>antenneid</strong> :</p>
+<blockquote>
+<div><p>id of the antenna</p>
+</div></blockquote>
+<p><strong>type</strong> :</p>
+<blockquote>
+<div><p>0: undefined 1: Tx 2 : Rx</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>info</strong> : display information about a RadioNode</p>
+<p><strong>loadspa</strong> : load a spa file in PulsRay data format</p>
+<p><strong>save</strong> : save a RadioNode file in .spa, .ini, .vect data format</p>
+<p><strong>point</strong> : set a RadioNode point position</p>
+<p><strong>points</strong> : set a RadioNode set of points position</p>
+<p><strong>line</strong> : set a RadioNode route</p>
+<p><strong>surface</strong> : set a RadioNode area</p>
+<p><strong>volume</strong> : set a RadioNode volume</p>
+<p><strong>gpoint</strong> : set a RadioNode point position (gui)</p>
+<p><strong>gline</strong> : set a RadioNode route          (gui)</p>
+<p><strong>gsurface</strong> : set a RadioNode area           (gui)</p>
+<p><strong>gvolume</strong> : set a RadioNode volume         (gui)</p>
+<p class="last"><strong>show3</strong> : display the RadioNode in the associated structure</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>clear positions</p>
+<p>The origin [0,0,0] is always defined as the first point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.extract">
+<tt class="descname">extract</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>extract the i-th radionode component</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>i</strong> : integer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>u</strong> : RadioNode</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.gantenna">
+<tt class="descname">gantenna</tt><big>(</big><em>mode='subst'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.gantenna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.gantenna" title="Permalink to this definition">¶</a></dt>
+<dd><p>get antenna file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.gline">
+<tt class="descname">gline</tt><big>(</big><em>mode='subst'</em>, <em>display=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.gline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.gline" title="Permalink to this definition">¶</a></dt>
+<dd><p>gui line</p>
+<p>A line is built between the first point and the gui point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>subst</p>
+</div></blockquote>
+<p><strong>display</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.gpoint">
+<tt class="descname">gpoint</tt><big>(</big><em>mode='subst'</em>, <em>display=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.gpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.gpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>gui point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>subst</p>
+</div></blockquote>
+<p><strong>display</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.gsurface">
+<tt class="descname">gsurface</tt><big>(</big><em>mode='subst'</em>, <em>display=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.gsurface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.gsurface" title="Permalink to this definition">¶</a></dt>
+<dd><p>gui surface</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>subst</p>
+</div></blockquote>
+<p><strong>display</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.gvolume">
+<tt class="descname">gvolume</tt><big>(</big><em>mode='subst'</em>, <em>display=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.gvolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.gvolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>gui volume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>subst</p>
+</div></blockquote>
+<p><strong>display</strong> : boolean</p>
+<blockquote class="last">
+<div><p>False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>display RadioNodes informations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.line">
+<tt class="descname">line</tt><big>(</big><em>npt, ptt=[0, 0, 0], pth=[1, 0, 0], mode='subst'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.line" title="Permalink to this definition">¶</a></dt>
+<dd><p>build a line trajectory for a RadioNode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>npt</strong> : integer</p>
+<blockquote>
+<div><p>number of points</p>
+</div></blockquote>
+<p><strong>ptt</strong> : list or ndarray</p>
+<blockquote>
+<div><p>starting point coordinates  (default [0,0,0])</p>
+</div></blockquote>
+<p><strong>ptf</strong> : list or ndarray</p>
+<blockquote>
+<div><p>ending point coordinates</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;subst&#8217; for replacement (default)
+&#8216;append&#8217; for appending</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">3</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">position</span>
+<span class="go">array([[ 0. ,  0.5,  1. ],</span>
+<span class="go">       [ 0. ,  0. ,  0. ],</span>
+<span class="go">       [ 0. ,  0. ,  0. ]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.linevect">
+<tt class="descname">linevect</tt><big>(</big><em>npt=1, step=1.0, ptt=[0, 0, 0], vec=[1, 0, 0], mode='subst'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.linevect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.linevect" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a line along a direction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>npt</strong> : int</p>
+<blockquote>
+<div><p>number of points</p>
+</div></blockquote>
+<p><strong>step</strong> : float</p>
+<blockquote>
+<div><p>incremental distance in meters</p>
+</div></blockquote>
+<p><strong>ptt</strong> : list or array</p>
+<blockquote>
+<div><p>1x3 point tail (starting point)</p>
+</div></blockquote>
+<p><strong>vec</strong> : list or arry</p>
+<blockquote>
+<div><p>1x3 unitary vector</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;subst&#8217;
+&#8216;append&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span>
+<span class="go">0 : 0.0 0.0 0.0</span>
+<span class="go">1 : 1.0 0.0 0.0</span>
+<span class="go">2 : 2.0 0.0 0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.loadini">
+<tt class="descname">loadini</tt><big>(</big><em>_filespa</em>, <em>rep='ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.loadini"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.loadini" title="Permalink to this definition">¶</a></dt>
+<dd><p>load an .ini file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filespa</strong> : string</p>
+<blockquote>
+<div><p>short filename</p>
+</div></blockquote>
+<p><strong>rep</strong> : string</p>
+<blockquote class="last">
+<div><p>directory name</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.loadspa">
+<tt class="descname">loadspa</tt><big>(</big><em>_filespa</em>, <em>rep='output'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.loadspa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.loadspa" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a spa file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filespa</strong> : string</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>short filename</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>rep <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
+<dd><p class="first last">directory name</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.loadvsh">
+<tt class="descname">loadvsh</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.loadvsh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.loadvsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>load an antenna</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.move">
+<tt class="descname">move</tt><big>(</big><em>dx</em>, <em>dy</em>, <em>dz</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>move RadioNode with a specified offset over each cartesian axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
+<p><strong>dy</strong> : float</p>
+<p class="last"><strong>dz</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.point">
+<tt class="descname">point</tt><big>(</big><em>pt=[0, 0, 0], time=[1], orientation=[], mode='subst'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.point" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a position to RadioNode</p>
+<p>The new RadioNode is saved in .spa</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt</strong> : ndarray</p>
+<blockquote>
+<div><p>point position (1 x 3)</p>
+</div></blockquote>
+<p><strong>time</strong> : ndarray</p>
+<blockquote>
+<div><p>1x1</p>
+</div></blockquote>
+<p><strong>orientation</strong> : ndarray</p>
+<blockquote>
+<div><p>3x3 matrix</p>
+</div></blockquote>
+<p><strong>mode: string</strong> :</p>
+<blockquote class="last">
+<div><p>&#8216;subst&#8217; for replacement (default)
+&#8216;append&#8217; for appending</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
+<span class="go">array([[1],</span>
+<span class="go">       [1],</span>
+<span class="go">       [1]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">RadioNode.points(pt=array([[0],</tt></dt>
+<dt>
+<tt class="descname">[0],</tt></dt>
+<dt>
+<tt class="descname">[0]]))</tt></dt>
+<dd><p>add a set of points to RadioNode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>point position (3 x Npt)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.pos2pt">
+<tt class="descname">pos2pt</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.pos2pt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.pos2pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert position to points dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.save">
+<tt class="descname">save</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save RadioNode in  .ini, .spa, .vect file</p>
+<p>This function save the RadioNode in different files format</p>
+<p>.spa  : pulsray format
+.vect : geomview format</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.show">
+<tt class="descname">show</tt><big>(</big><em>num=</em>, <span class="optional">[</span><span class="optional">]</span><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em>, <span class="optional">[</span><span class="optional">]</span><em>linewidth=1</em>, <em>marker='-'</em>, <em>color='b'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display RadioNode position in the 2D strucure</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.show3">
+<tt class="descname">show3</tt><big>(</big><em>_filestr='DLR.off'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>display RadioNode position in geomview</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filestr</strong> : string</p>
+<blockquote class="last">
+<div><p>structure file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.surface">
+<tt class="descname">surface</tt><big>(</big><em>N1=2, N2=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], mode='subst'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.surface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a surface to RadioNode</p>
+<p>add a surface with basis (p0p1,p0p2)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N1</strong> : int</p>
+<blockquote>
+<div><p>default 2</p>
+</div></blockquote>
+<p><strong>N2</strong> : int</p>
+<blockquote>
+<div><p>default 2</p>
+</div></blockquote>
+<p><strong>p0</strong> : array or list</p>
+<blockquote>
+<div><p>first point</p>
+</div></blockquote>
+<p><strong>p1</strong> : array or list</p>
+<blockquote>
+<div><p>second point</p>
+</div></blockquote>
+<p><strong>p2</strong> : array or list</p>
+<blockquote>
+<div><p>third point</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;subst&#8217;
+&#8216;append&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="o">=</span> <span class="n">RadioNode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],[</span><span class="mf">3.0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.transform">
+<tt class="descname">transform</tt><big>(</big><em>alpha</em>, <em>trans</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>tranform position rotation + translation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>angle (rad)</p>
+</div></blockquote>
+<p class="last"><strong>trans</strong> : np.array()  (,2)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.simul.radionode.RadioNode.volume">
+<tt class="descname">volume</tt><big>(</big><em>N1=2, N2=2, N3=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], p3=[0, 0, 1], mode='subst'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/simul/radionode.html#RadioNode.volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.radionode.RadioNode.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a volume to RadioNode</p>
+<p>build a volume with edges : p0p1, p0p2, p0p3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N1</strong> : int</p>
+<blockquote>
+<div><p>number of points on axis 1</p>
+</div></blockquote>
+<p><strong>N2</strong> : int</p>
+<blockquote>
+<div><p>number of points on axis 2</p>
+</div></blockquote>
+<p><strong>N3</strong> : int</p>
+<blockquote>
+<div><p>number of points on axis 3</p>
+</div></blockquote>
+<p><strong>p0</strong> : list or ndarray</p>
+<blockquote>
+<div><p>first point</p>
+</div></blockquote>
+<p><strong>p1</strong> : list or ndarray</p>
+<blockquote>
+<div><p>second point</p>
+</div></blockquote>
+<p><strong>p2</strong> : list or ndarray</p>
+<blockquote>
+<div><p>third point</p>
+</div></blockquote>
+<p><strong>p3</strong> : list or ndarray</p>
+<blockquote class="last">
+<div><p>fourth point</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.radionode</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">3.0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.1</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span><span class="mf">1.1</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simulem.html" title="pylayers.simul.simulem module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.exploit_simulnet.html" title="pylayers.simul.exploit_simulnet module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >pylayers package</a> &raquo;</li>
+          <li><a href="pylayers.simul.html" >pylayers.simul package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

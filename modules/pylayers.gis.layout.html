@@ -1,0 +1,2867 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.gis.layout module &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="pylayers.gis package" href="pylayers.gis.html" />
+    <link rel="next" title="pylayers.gis.osmparser module" href="pylayers.gis.osmparser.html" />
+    <link rel="prev" title="pylayers.gis.furniture module" href="pylayers.gis.furniture.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.osmparser.html" title="pylayers.gis.osmparser module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.furniture.html" title="pylayers.gis.furniture module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="pylayers.gis.html" accesskey="U">pylayers.gis package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.gis.furniture.html"
+                        title="previous chapter">pylayers.gis.furniture module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.gis.osmparser.html"
+                        title="next chapter">pylayers.gis.osmparser module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/pylayers.gis.layout.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.gis.layout">
+<span id="pylayers-gis-layout-module"></span><h1>pylayers.gis.layout module<a class="headerlink" href="#module-pylayers.gis.layout" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.gis.layout.Layout">
+<em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Handling Layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>Gs</strong> : Structure graph</p>
+<p><strong>Gt</strong> : Topological graph  (indicates topological relationships between rooms)</p>
+<p><strong>Gr</strong> : Graph of room</p>
+<p><strong>Gv</strong> : Graph of visibility</p>
+<p><strong>Gc</strong> : Connection graph (indicates visbility relationships)</p>
+<p><strong>Nnode</strong> : Number of nodes of Gs</p>
+<p><strong>Nedge</strong> : Number of edges of Gs</p>
+<p><strong>pt</strong> : points sequence</p>
+<p><strong>tahe</strong> : tail head</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>add_door</strong> :</p>
+<p><strong>add_fnod</strong> :</p>
+<p><strong>add_furniture</strong> :</p>
+<p><strong>add_furniture_file</strong> :</p>
+<p><strong>add_nfpe</strong> :</p>
+<p><strong>add_pnod</strong> :</p>
+<p><strong>add_pons</strong> :</p>
+<p><strong>add_segment</strong> :</p>
+<p><strong>add_subseg</strong> :</p>
+<p><strong>add_window</strong> :</p>
+<p><strong>angleonlink</strong> :</p>
+<p><strong>boundary</strong> :</p>
+<p><strong>build</strong> :</p>
+<p><strong>buildGc</strong> :</p>
+<p><strong>buildGi</strong> :</p>
+<p><strong>buildGi2</strong> :</p>
+<p><strong>buildGr</strong> :</p>
+<p><strong>buildGr3</strong> :</p>
+<p><strong>buildGt</strong> :</p>
+<p><strong>buildGv</strong> :</p>
+<p><strong>buildGw</strong> :</p>
+<p><strong>builGr2</strong> :</p>
+<p><strong>check</strong> :</p>
+<p><strong>check2</strong> :</p>
+<p><strong>checkvis</strong> :</p>
+<p><strong>cleanup</strong> :</p>
+<p><strong>clip</strong> :</p>
+<p><strong>closest_edge</strong> :</p>
+<p><strong>cycleinline</strong> :</p>
+<p><strong>del_cycle</strong> :</p>
+<p><strong>delete</strong> :</p>
+<p><strong>del_points</strong> :</p>
+<p><strong>del_segment</strong> :</p>
+<p><strong>del_subseg</strong> :</p>
+<p><strong>diag</strong> :</p>
+<p><strong>displaygui</strong> :</p>
+<p><strong>distwall</strong> :</p>
+<p><strong>dumpr</strong> :</p>
+<p><strong>dumpw</strong> :</p>
+<p><strong>ed2nd</strong> :</p>
+<p><strong>editor</strong> :</p>
+<p><strong>edit_point</strong> :</p>
+<p><strong>edit_segment</strong> :</p>
+<p><strong>facet3D</strong> :</p>
+<p><strong>facets3D</strong> :</p>
+<p><strong>find_edgelist</strong> :</p>
+<p><strong>g2npy</strong> :</p>
+<p><strong>geomfile</strong> :</p>
+<p><strong>get_paths</strong> :</p>
+<p><strong>get_Sg_pos</strong> :</p>
+<p><strong>get_zone</strong> :</p>
+<p><strong>have_subseg</strong> :</p>
+<p><strong>help</strong> :</p>
+<p><strong>info</strong> :</p>
+<p><strong>info_edge</strong> :</p>
+<p><strong>ispoint</strong> :</p>
+<p><strong>layerongrid</strong> :</p>
+<p><strong>layeronlink</strong> :</p>
+<p><strong>load</strong> :</p>
+<p><strong>loadfur</strong> :</p>
+<p><strong>loadG</strong> :</p>
+<p><strong>loadini</strong> :</p>
+<p><strong>loadstr</strong> :</p>
+<p><strong>loadstr2</strong> :</p>
+<p><strong>ls</strong> :</p>
+<p><strong>nd2seg</strong> :</p>
+<p><strong>onseg</strong> :</p>
+<p><strong>plot_segments</strong> :</p>
+<p><strong>pt2cy</strong> :</p>
+<p><strong>pt2ro</strong> :</p>
+<p><strong>randTxRx</strong> :</p>
+<p><strong>room2nodes</strong> :</p>
+<p><strong>room2segments</strong> :</p>
+<p><strong>save</strong> :</p>
+<p><strong>saveini</strong> :</p>
+<p><strong>savestr2</strong> :</p>
+<p><strong>seg2ro</strong> :</p>
+<p><strong>seginframe</strong> :</p>
+<p><strong>seginline</strong> :</p>
+<p><strong>segpt</strong> :</p>
+<p><strong>seguv</strong> :</p>
+<p><strong>show3</strong> :</p>
+<p><strong>showG</strong> :</p>
+<p><strong>showGs</strong> :</p>
+<p><strong>showGt</strong> :</p>
+<p><strong>showGv</strong> :</p>
+<p><strong>show_layer</strong> :</p>
+<p><strong>show_nodes</strong> :</p>
+<p><strong>show_seg1</strong> :</p>
+<p><strong>show_segment</strong> :</p>
+<p><strong>showSig</strong> :</p>
+<p><strong>signature</strong> :</p>
+<p><strong>subseg</strong> :</p>
+<p><strong>thwall</strong> :</p>
+<p><strong>visilist</strong> :</p>
+<p><strong>visi_papb</strong> :</p>
+<p><strong>waypoint</strong> :</p>
+<p class="last"><strong>waypointGw</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This class exploits <cite>networkx</cite> to store Layout information</p>
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_door">
+<tt class="descname">add_door</tt><big>(</big><em>s1</em>, <em>zmin</em>, <em>zmax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_door"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_door" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a door on segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
+<blockquote>
+<div><p>segment number</p>
+</div></blockquote>
+<p><strong>zmin</strong> : float</p>
+<p class="last"><strong>zmax</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_fnod">
+<tt class="descname">add_fnod</tt><big>(</big><em>p=(0.0</em>, <em>0.0)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_fnod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_fnod" title="Permalink to this definition">¶</a></dt>
+<dd><p>add free node  p</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p</strong> :  (1x2) tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_furniture">
+<tt class="descname">add_furniture</tt><big>(</big><em>name='R1_C'</em>, <em>matname='PARTITION'</em>, <em>origin=(0.0</em>, <em>0.0)</em>, <em>zmin=0.0</em>, <em>height=0.0</em>, <em>width=0.0</em>, <em>length=0.0</em>, <em>angle=0.0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_furniture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_furniture" title="Permalink to this definition">¶</a></dt>
+<dd><p>add piece of furniture</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>default = &#8216;R1_C&#8217;</p>
+</div></blockquote>
+<p><strong>matname</strong> : string</p>
+<blockquote>
+<div><p>default = &#8216;PARTITION&#8217;</p>
+</div></blockquote>
+<p><strong>origin</strong> : tuple of floats</p>
+<p><strong>height</strong> : float</p>
+<blockquote>
+<div><p>default = 0</p>
+</div></blockquote>
+<p><strong>width</strong> : float</p>
+<blockquote>
+<div><p>default = 0</p>
+</div></blockquote>
+<p><strong>length</strong> : float</p>
+<blockquote>
+<div><p>default = 0</p>
+</div></blockquote>
+<p><strong>angle</strong> : float</p>
+<blockquote class="last">
+<div><p>default = 0</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_furniture_file">
+<tt class="descname">add_furniture_file</tt><big>(</big><em>_filefur</em>, <em>typ=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_furniture_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_furniture_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>add pieces of furniture from .ini files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_filefur</strong> : string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_nfpe">
+<tt class="descname">add_nfpe</tt><big>(</big><em>np0</em>, <em>s1</em>, <em>s2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_nfpe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_nfpe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add node on s1 from projection of np0 along s2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>np0</strong> : point number</p>
+<p><strong>s1</strong> : edge number 1</p>
+<p class="last"><strong>s2</strong> : edge number 2</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_pnod">
+<tt class="descname">add_pnod</tt><big>(</big><em>p</em>, <em>e1</em>, <em>e2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_pnod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_pnod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project point p on segment e1 along segment e2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : ndarray</p>
+<blockquote>
+<div><blockquote>
+<div><p>point</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>e1 <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">edge number 1</p>
+</dd>
+<dt>e2 <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">edge number 2</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>..todo</strong> :</p>
+<blockquote class="last">
+<div><p>This function is void</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_pons">
+<tt class="descname">add_pons</tt><big>(</big><em>ns</em>, <em>alpha=0.5</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_pons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_pons" title="Permalink to this definition">¶</a></dt>
+<dd><p>add point on segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ns</strong> : int</p>
+<blockquote>
+<div><p>segment number</p>
+</div></blockquote>
+<p><strong>alpha</strong> : parameterization of the point</p>
+<blockquote class="last">
+<div><p>alpha = 0 (tail) alpha = 1 (head)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>delete segment ns
+create 2 segments with same properties</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_segment">
+<tt class="descname">add_segment</tt><big>(</big><em>n1</em>, <em>n2</em>, <em>name='PARTITION'</em>, <em>z=(0.0</em>, <em>3.0)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>add edge between node n1 and node n2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n1</strong> : integer &lt; 0</p>
+<p><strong>n2</strong> : integer &lt; 0</p>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>layer name &#8216;PARTITION&#8217;</p>
+</div></blockquote>
+<p><strong>z</strong> : tuple of float</p>
+<blockquote>
+<div><p>default = (0,3.0)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>num</strong> : segment number (&gt;0)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A segment dictionnary has the following mandatory attributes</p>
+<p>name : slab name associated with segment
+zmin : float  (meters)
+zmax : float  (meters)
+norm : array  (1x3)  segment normal
+transition : boolean
+ncycles : list of involved cycles
+connect : list of point number</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_subseg">
+<tt class="descname">add_subseg</tt><big>(</big><em>s1</em>, <em>name='DOOR'</em>, <em>zmin=0</em>, <em>zmax=2.24</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_subseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_subseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a subsegment on a segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
+<blockquote>
+<div><p>edge number &gt; 0</p>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote>
+<div><p>slab name</p>
+</div></blockquote>
+<p><strong>zmin</strong> : float</p>
+<blockquote>
+<div><p>default 0</p>
+</div></blockquote>
+<p><strong>zmax</strong> : float</p>
+<blockquote class="last">
+<div><p>default 2.24 m</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.add_window">
+<tt class="descname">add_window</tt><big>(</big><em>s1</em>, <em>z</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a window on segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
+<blockquote>
+<div><p>segment number</p>
+</div></blockquote>
+<p><strong>z</strong> : tuple of float</p>
+<blockquote class="last">
+<div><p>(zmin,zmax)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.angleonlink">
+<tt class="descname">angleonlink</tt><big>(</big><em>p1=array([0</em>, <em>0])</em>, <em>p2=array([10</em>, <em>3])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.angleonlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.angleonlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : np.array (2 x Np) or (2,)</p>
+<p><strong>p2</strong> : np.array (2 x Np) or (2,)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> : list</p>
+<blockquote>
+<div><p>list of segment number on the link</p>
+</div></blockquote>
+<p class="last"><strong>angle</strong> : angle (in radians) between segment and LOS axis</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>#array([(0, 141, 1.2793395519256592), (0, 62, 0.29145678877830505),</dt>
+<dd><blockquote class="first">
+<div>(0, 65, 0.29145678877830505)],</div></blockquote>
+<p class="last">dtype=[(&#8216;i&#8217;, &#8216;&lt;i8&#8217;), (&#8216;s&#8217;, &#8216;&lt;i8&#8217;), (&#8216;a&#8217;, &#8216;&lt;f4&#8217;)])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.angleonlinkold">
+<tt class="descname">angleonlinkold</tt><big>(</big><em>p1=array([0</em>, <em>0])</em>, <em>p2=array([10</em>, <em>3])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.angleonlinkold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.angleonlinkold" title="Permalink to this definition">¶</a></dt>
+<dd><p>angleonlink(self,p1,p2) returns seglist between p1 and p2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : (1 x 2 )</p>
+<blockquote>
+<div><p>[0,0]</p>
+</div></blockquote>
+<p><strong>p2</strong> : (1 x 2 )</p>
+<blockquote>
+<div><p>[10,3]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> : list</p>
+<blockquote>
+<div><p>list of segment number on the link</p>
+</div></blockquote>
+<p class="last"><strong>theta</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>#&gt;&gt;&gt; from pylayers.gis.layout import *
+#&gt;&gt;&gt; L = Layout(&#8216;DLR.ini&#8217;,&#8217;matDB.ini&#8217;,&#8217;slabDB.ini&#8217;)
+#&gt;&gt;&gt; p1 = np.array([0,0])
+#&gt;&gt;&gt; p2 = np.array([10,3])
+#&gt;&gt;&gt; L.angleonlinkold(p1,p2)
+#(array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.boundary">
+<tt class="descname">boundary</tt><big>(</big><em>dx=0</em>, <em>dy=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a blank boundary around layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dx</strong> : float</p>
+<blockquote>
+<div><p>x offset (default 0)</p>
+</div></blockquote>
+<p><strong>dy</strong> : float</p>
+<blockquote>
+<div><p>y offset (default 0 )</p>
+</div></blockquote>
+<p class="last"><strong>self.ax is updated</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;example.str&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
+<span class="go">(0.0, 10.0, -2.0, 2.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.builGr2">
+<tt class="descname">builGr2</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.builGr2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.builGr2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.build">
+<tt class="descname">build</tt><big>(</big><em>graph='trwcvi'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>build graphs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : string composed of</p>
+<blockquote class="last">
+<div><p>&#8216;t&#8217; : Gt
+&#8216;r&#8217; : Gr
+&#8216;w&#8221; : Gw
+&#8216;s&#8217; : Gs
+&#8216;v&#8217; : Gv
+&#8216;i&#8217; : Gi</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGc">
+<tt class="descname">buildGc</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGc" title="Permalink to this definition">¶</a></dt>
+<dd><p>build the connectivity graph</p>
+<p>nd_nd  : node to node only convex to convex visibility is taken into account
+nd_ed  : node to edge
+ed_ed  : edge to edge</p>
+<p>Faire ce travail piece par piece
+Ce code implemnte une condition necessaire mais non suffisante</p>
+<p>Il existe des points de degre &lt;=2 qui ne sont pas diffractant
+si en zone concave</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</div></blockquote>
+<p>ncoin , ndiff</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGi">
+<tt class="descname">buildGi</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGi" title="Permalink to this definition">¶</a></dt>
+<dd><p>build graph of interactions</p>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>For each node &gt; of graph Gs creates</dt>
+<dd>4 different nodes associated to the same segment
+R+  R- T+ T-</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGi2">
+<tt class="descname">buildGi2</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGi2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>build dictionnary of graph of interactions</p>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>For each node &gt; 0 of graph Gs creates</dt>
+<dd>4 different nodes associated to the same segment
+R+  R- T+ T-</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGr">
+<tt class="descname">buildGr</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGr" title="Permalink to this definition">¶</a></dt>
+<dd><p>build the graph of rooms Gr</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>Ga</strong> : graph of adjascent rooms</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>adjascent rooms are connected
+Gr is at first a deep copy of Gt</p>
+<p>The difficulty here is to take into account the AIR transition
+segments</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGr3">
+<tt class="descname">buildGr3</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGr3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGr3" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>A room is a set of cycles which contains at least one door</p>
+<p>This function requires Gt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGt">
+<tt class="descname">buildGt</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Built topological graph Gt</p>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li>Exploit <cite>cycle_basis</cite> function of NetworkX to get a cycle
+decomposition of the graph</li>
+<li>Each discovered cycle in the graph Gs is transform in a Cycles.Cycles object
+LC (List of Cycles) contains the list of all these Cycle objects</li>
+</ol>
+<p>Algorithm to create the Gt graph.
+Each simple cycle of Gs is a node of Gt</p>
+<p>Algorithm  : Seek for Cycle inter connectivity</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>For c1 in cycles :</dt>
+<dd><dl class="first last docutils">
+<dt>vnodesc = get vnodes(c1)</dt>
+<dd><dl class="first last docutils">
+<dt>For c2 in cycles &gt; c1</dt>
+<dd><dl class="first last docutils">
+<dt>vnodesl = get vnodes(l)</dt>
+<dd>nkinnl = vnodesk :math:cap vnodesl</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGv">
+<tt class="descname">buildGv</tt><big>(</big><em>show=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGv" title="Permalink to this definition">¶</a></dt>
+<dd><p>build global visibility graph</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>show</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;example.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ga</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">buildGr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGv</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGw">
+<tt class="descname">buildGw</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGw" title="Permalink to this definition">¶</a></dt>
+<dd><p>build Graph of waypaths</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGr" title="pylayers.gis.layout.Layout.buildGr"><tt class="xref py py-obj docutils literal"><span class="pre">buildGr</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>for all edges of Gr (adjascent room)</dt>
+<dd>if room1 and room2 have a common transition</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.check">
+<tt class="descname">check</tt><big>(</big><em>level=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check Layout consistency</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>consistent</strong> : Boolean</p>
+<blockquote class="last">
+<div><p>True if consistent</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">GeomUtil.isBetween</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>For all segments</dt>
+<dd><dl class="first last docutils">
+<dt>get the 2 vertices</dt>
+<dd><dl class="first last docutils">
+<dt>for all the other vertices</dt>
+<dd>check if it belongs to segment</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.check2">
+<tt class="descname">check2</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.check2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.check2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout checking</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.checkvis">
+<tt class="descname">checkvis</tt><big>(</big><em>p</em>, <em>edgelist</em>, <em>nodelist</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.checkvis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.checkvis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.chgmss">
+<tt class="descname">chgmss</tt><big>(</big><em>ns</em>, <em>ss_name=</em>, <span class="optional">[</span><span class="optional">]</span><em>ss_z=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.chgmss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.chgmss" title="Permalink to this definition">¶</a></dt>
+<dd><p>change a specific multi subseggments properties</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ns</strong> : int</p>
+<blockquote>
+<div><p>segment number</p>
+</div></blockquote>
+<p><strong>ss_name</strong> : list of Nss  string</p>
+<blockquote>
+<div><p>name of the different constitutive SLAB of the multi-segments</p>
+</div></blockquote>
+<p class="last"><strong>ss_z</strong> : list of Nss tuple (zmin,zmax)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout.g2npy</span></tt></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.cleanup">
+<tt class="descname">cleanup</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>cleanup the Layout</p>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li>Remove nodes which are not connected</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.clip">
+<tt class="descname">clip</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>ymin</em>, <em>ymax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.clip" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the list of edges which cross or belong to the clipping zone</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xmin</strong> :</p>
+<blockquote class="last">
+<div><p>xmax
+ymin
+ymax</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li>Determine all segments outside the clipping zone</li>
+<li>Union of the 4 conditions</li>
+<li>setdiff1d between the whole array of segments and the segments outside</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.closest_edge">
+<tt class="descname">closest_edge</tt><big>(</big><em>p</em>, <em>AAS</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.closest_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.closest_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function return the closest segment from p which belong to
+the AAS (Allowed Angular Sector)</p>
+<p>[ns] = closest_edge(self,p,AAS)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.cy2pt">
+<tt class="descname">cy2pt</tt><big>(</big><em>cy=0</em>, <em>h=1.2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.cy2pt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.cy2pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a point into a given cycle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cy :</strong> :</p>
+<blockquote>
+<div><p>cycle</p>
+</div></blockquote>
+<p><strong>h</strong> : float</p>
+<blockquote>
+<div><p>point height</p>
+</div></blockquote>
+<p><strong>Returns</strong> :</p>
+<p><strong>&#8212;&#8212;-</strong> :</p>
+<p class="last"><strong>point</strong> : nd.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.cycleinline">
+<tt class="descname">cycleinline</tt><big>(</big><em>c1</em>, <em>c2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.cycleinline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.cycleinline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the intersection between a given line and all segments
+Parameters
+&#8212;&#8212;&#8212;-</p>
+<blockquote>
+<div>p1 : numpy.ndarray
+p2 : numpy.ndarray</div></blockquote>
+<blockquote>
+<div>I : numpy.ndarray</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.del_cycle">
+<tt class="descname">del_cycle</tt><big>(</big><em>lnc</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.del_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.del_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete a cycle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lnc</strong> :  list of cycle number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.del_points">
+<tt class="descname">del_points</tt><big>(</big><em>lp</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.del_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.del_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete points in list lp</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lp</strong> : list</p>
+<blockquote class="last">
+<div><p>node list</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.del_segment">
+<tt class="descname">del_segment</tt><big>(</big><em>le</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.del_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.del_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete segment e</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>le</strong> : list of segment number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.del_subseg">
+<tt class="descname">del_subseg</tt><big>(</big><em>e1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.del_subseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.del_subseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete sub subsegent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<blockquote class="last">
+<div><p>segment number</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete Layout graphs</p>
+<p>delete  Gs,Gc,Gm</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.diag">
+<tt class="descname">diag</tt><big>(</big><em>p1</em>, <em>p2</em>, <em>l</em>, <em>al1</em>, <em>al2</em>, <em>quadsel</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.diag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.diag" title="Permalink to this definition">¶</a></dt>
+<dd><p>p1  :
+p2  :
+al1
+al2</p>
+<dl class="docutils">
+<dt>quadsel <span class="classifier-delimiter">:</span> <span class="classifier">0   all quadrant</span></dt>
+<dd>2 1
+3 4</dd>
+</dl>
+<p>WARNING : Not Tested</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.displaygui">
+<tt class="descname">displaygui</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.displaygui"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.displaygui" title="Permalink to this definition">¶</a></dt>
+<dd><p>displaygui() : open a GUI for display configuration</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.distwall">
+<tt class="descname">distwall</tt><big>(</big><em>p</em>, <em>nroom</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.distwall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.distwall" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate distance to wall</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : ndarray</p>
+<blockquote>
+<div><p>point coordinate</p>
+</div></blockquote>
+<p><strong>nroom</strong> : int</p>
+<blockquote>
+<div><p>room number of p</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dist</strong> :</p>
+<blockquote class="last">
+<div><p>list of distances to walls of room nroom</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Return  dist a list of all the distances to the walls of a room</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.dumpr">
+<tt class="descname">dumpr</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpr" title="Permalink to this definition">¶</a></dt>
+<dd><p>read a dump of given Graph</p>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>graph <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>&#8216;t&#8217; : Gt
+&#8216;r&#8217; : Gr
+&#8216;s&#8217; : Gs
+&#8216;v&#8217; : Gv
+&#8216;i&#8217; : Gi</dd>
+</dl>
+<p>.gpickle files are store under the struc directory of the project
+specified by the $BASENAME environment variable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.dumpw">
+<tt class="descname">dumpw</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpw" title="Permalink to this definition">¶</a></dt>
+<dd><p>write a dump of given Graph</p>
+<p class="rubric">Notes</p>
+<p>&#8216;t&#8217; : Gt
+&#8216;r&#8217; : Gr
+&#8216;s&#8217; : Gs
+&#8216;v&#8217; : Gv
+&#8216;i&#8217; : Gi</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.ed2nd">
+<tt class="descname">ed2nd</tt><big>(</big><em>edlist</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.ed2nd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.ed2nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert edgelist to nodelist</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>edlist</strong> : list or ndarray</p>
+<blockquote>
+<div><p>edge list</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ndlist</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>node list</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.edit_point">
+<tt class="descname">edit_point</tt><big>(</big><em>np</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.edit_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>edit point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>np</strong> : integer</p>
+<blockquote class="last">
+<div><p>point number</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.edit_segment">
+<tt class="descname">edit_segment</tt><big>(</big><em>e1</em>, <em>gui=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.edit_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>edit segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<blockquote>
+<div><p>edge number</p>
+</div></blockquote>
+<p class="last"><strong>gui</strong> : boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>A segment has the following properties :</dt>
+<dd><ul class="first last simple">
+<li>name  : string</li>
+<li>z  :  tuple</li>
+<li>transition : boolean (default FALSE)</li>
+</ul>
+</dd>
+</dl>
+<p>If a segment has subsegments attached the following properties are
+added :</p>
+<blockquote>
+<div><ul class="simple">
+<li>ss_name : string</li>
+<li>ss_z : subsegment [(min height (meters),max height (meters))]</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.editor">
+<tt class="descname">editor</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>invoke interactive layout graphical editor</p>
+<p class="rubric">Notes</p>
+<p>point edition</p>
+<blockquote>
+<div><p>m  toggle point edition mode  (CP : Create Point)</p>
+<blockquote>
+<div>lclic same x
+rclic same y
+cclic free point</div></blockquote>
+</div></blockquote>
+<p>segment edition</p>
+<blockquote>
+<div>[0-f] - display one of the 16 first layers
+x : save structure
+o : toggle overlay</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.editorGtk">
+<tt class="descname">editorGtk</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editorGtk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editorGtk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.editorTk">
+<tt class="descname">editorTk</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editorTk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editorTk" title="Permalink to this definition">¶</a></dt>
+<dd><p>invoke interactive layout graphical editor</p>
+<p class="rubric">Notes</p>
+<p>point edition</p>
+<blockquote>
+<div><p>m  toggle point edition mode  (CP : Create Point)</p>
+<blockquote>
+<div>lclic same x
+rclic same y
+cclic free point</div></blockquote>
+</div></blockquote>
+<p>segment edition</p>
+<blockquote>
+<div>[0-f] - display one of the 16 first layers
+x : save structure
+o : toggle overlay</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.extrseg">
+<tt class="descname">extrseg</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.extrseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.extrseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate extremum of segments</p>
+<p class="rubric">Notes</p>
+<p>Used in seginframe</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.facet3D">
+<tt class="descname">facet3D</tt><big>(</big><em>e</em>, <em>subseg=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.facet3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.facet3D" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e</strong> :</p>
+<p><strong>subseg</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.facets3D">
+<tt class="descname">facets3D</tt><big>(</big><em>edlist</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.facets3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.facets3D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.find_edgelist">
+<tt class="descname">find_edgelist</tt><big>(</big><em>edgelist</em>, <em>nodelist</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.find_edgelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.find_edgelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>edgelist : input edgelist
+nodelist : input nodelist</p>
+<p>return the subset of edgelist</p>
+<p>Not Finished :</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.g2npy">
+<tt class="descname">g2npy</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.g2npy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.g2npy" title="Permalink to this definition">¶</a></dt>
+<dd><p>from graphs to numpy arrays conversion</p>
+<p class="rubric">Notes</p>
+<p>This function updates from Gs:</p>
+<p>self.pt (2xNp)
+self.tahe (2xNs)
+self.tgs
+self.dca
+self.lsss : list of subsegments</p>
+<p>assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.geomfile">
+<tt class="descname">geomfile</tt><big>(</big><em>centered=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.geomfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.geomfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a .off geomview file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>centered</strong> : Boolean</p>
+<blockquote class="last">
+<div><p>if True the layout is centered around its center of gravity</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The <cite>.off</cite> file can be vizualized through the show3 method</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pg</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">geomfile</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.get_Sg_pos">
+<tt class="descname">get_Sg_pos</tt><big>(</big><em>sigarr</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.get_Sg_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.get_Sg_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>return position of the signatures</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sigarr</strong> : signature</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.get_paths">
+<tt class="descname">get_paths</tt><big>(</big><em>nd_in</em>, <em>nd_fin</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.get_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.get_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the possible paths of graph Gs between two nodes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nd_in: int</strong> :</p>
+<blockquote>
+<div><blockquote>
+<div><p>initial graph node (segment or point)</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>nd_fin: int</dt>
+<dd><p class="first last">final graph node (segment or point)</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>paths</strong> : list</p>
+<blockquote class="last">
+<div><p>paths between nd_in and nd_fin</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.get_zone">
+<tt class="descname">get_zone</tt><big>(</big><em>ax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.get_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.get_zone" title="Permalink to this definition">¶</a></dt>
+<dd><p>get point list and segment list in a rectangular zone</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ax</strong> : list ot tuple</p>
+<blockquote>
+<div><p>[xmin,xmax,ymin,ymax]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ptlist,seglist</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.have_subseg">
+<tt class="descname">have_subseg</tt><big>(</big><em>e1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.have_subseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.have_subseg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.help">
+<tt class="descname">help</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.help" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>gives information about the Layout</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.info_segment">
+<tt class="descname">info_segment</tt><big>(</big><em>s1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.info_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.info_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>information about segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s1</strong> : segment number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.ispoint">
+<tt class="descname">ispoint</tt><big>(</big><em>pt</em>, <em>tol=0.45</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.ispoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.ispoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>ispoint(pt,tol) : verify if pt is a point of Layout</p>
+<p>if True the point number (numbered from 1) is return
+else -1 is return</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.isseg">
+<tt class="descname">isseg</tt><big>(</big><em>ta</em>, <em>he</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.isseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.isseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>test if ta&lt;-&gt;he is a segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tahe</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.layerongrid">
+<tt class="descname">layerongrid</tt><big>(</big><em>grid</em>, <em>Tx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.layerongrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.layerongrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>grid Nx,Ny,2
+Tx   1x2
+.. todo:: layeron grid Not finished</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.layeronlink">
+<tt class="descname">layeronlink</tt><big>(</big><em>p1</em>, <em>p2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.layeronlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.layeronlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>layeronlink(self,p1,p2) return seglist between p1 and p2</p>
+<p>p1 : (1 x 2 )
+p2 : (1 x 2 )</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.load">
+<tt class="descname">load</tt><big>(</big><em>_filename</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a Layout in different formats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_filename</strong> : string</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Available format are :</p>
+<blockquote>
+<div>.ini   : ini file format (natural one) DIRINI
+.str2  : native Pyray (C implementation) DIRSTRUC
+.str   : binary file with visibility DIRSTRUC
+.osm   : opens street map format  DIROSM</div></blockquote>
+<p>layout files are stored in the directory pstruc[&#8216;DIRxxx&#8217;]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadG">
+<tt class="descname">loadG</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.loadG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadG" title="Permalink to this definition">¶</a></dt>
+<dd><p>load Layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>File extension is .gml</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadfur">
+<tt class="descname">loadfur</tt><big>(</big><em>_filefur</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.loadfur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadfur" title="Permalink to this definition">¶</a></dt>
+<dd><p>loadfur load a furniture file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filefur</strong> : string</p>
+<blockquote class="last">
+<div><p>short name of the furniture ini file</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Furniture objects are stored in self.lfur list</p>
+<p class="rubric">Examples</p>
+<p>Load a Layout file and an associated furniture ini file</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;WHERE1.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">loadfur</span><span class="p">(</span><span class="s">&#39;Furw1.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">furniture</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;loadfur&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-gis-layout-1.py">Source code</a>, <a class="reference external" href="../modules/pylayers-gis-layout-1.png">png</a>, <a class="reference external" href="../modules/pylayers-gis-layout-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/pylayers-gis-layout-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/pylayers-gis-layout-1.png" src="../_images/pylayers-gis-layout-1.png" />
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadini">
+<tt class="descname">loadini</tt><big>(</big><em>_fileini</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.loadini"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadini" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a structure file from an .ini format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
+<blockquote class="last">
+<div><p>file name extension .ini</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadosm">
+<tt class="descname">loadosm</tt><big>(</big><em>_fileosm</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.loadosm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadosm" title="Permalink to this definition">¶</a></dt>
+<dd><p>load layout from an osm file format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileosm</strong> : string</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>In JOSM nodes are numbered with negative indexes. It is not valid to
+have a positive node number. To stay compliant with the PyLayers
+convention which tells that &lt;0 node are points and &gt;0 are segments,  
+in the osm format, segments are numbered negatively with a known offset
+of 1e7=10000000. The convention is set back when loading the osm file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadstr">
+<tt class="descname">loadstr</tt><big>(</big><em>_filename</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.loadstr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>loadstr load a .str de PulsRay</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<p><strong>_filematini</strong> : string</p>
+<blockquote>
+<div><p>default &#8216;matDB.ini&#8217;</p>
+</div></blockquote>
+<p><strong>_fileslabini</strong> : string</p>
+<blockquote class="last">
+<div><p>default &#8216;slabDB.ini&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">loadstr</span><span class="p">(</span><span class="s">&#39;example.str&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadstr2">
+<tt class="descname">loadstr2</tt><big>(</big><em>_filename</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.loadstr2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadstr2" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a Graph from a str2 file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<blockquote>
+<div><p>str2 filename</p>
+</div></blockquote>
+<p><strong>_filematini</strong> :</p>
+<blockquote>
+<div><p>mat filename</p>
+</div></blockquote>
+<p><strong>_fileslabini</strong> :</p>
+<blockquote class="last">
+<div><p>slab filename</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>str2 format is as follow</p>
+<p>Np Ns Nss
+xp_1 yp_1 zp_1 codep_1
+...
+xp_Np yp_Np zp_Np codep_Np
+tail_1 head_1 left_1 core_1 right_1 zmin_1 zmax_1
+...
+tail_Ns head_Ns left_Ns core_Ns right_Ns zmin_Ns zmax_Ns
+segId_1 SlabCode_1 wall_floor_ceil_1 prop_d_1 zmin_1 zmax_1
+...
+segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">loadstr2</span><span class="p">(</span><span class="s">&#39;Lstruc.str2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.ls">
+<tt class="descname">ls</tt><big>(</big><em>typ='ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.ls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.ls" title="Permalink to this definition">¶</a></dt>
+<dd><p>list the available file in dirstruc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
+<blockquote>
+<div><p>{&#8216;str&#8217;|&#8217;ini&#8217;|&#8217;osm&#8217;|&#8217;str2&#8217;|&#8217;wrl&#8217;}</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lfile_s</strong> : list</p>
+<blockquote class="last">
+<div><p>sorted list of all the .str file of strdir</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>strdir is defined in the Project module</p>
+<p class="rubric">Examples</p>
+<p>Display all available structures</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fillist</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.nd2seg">
+<tt class="descname">nd2seg</tt><big>(</big><em>ndlist</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.nd2seg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.nd2seg" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert node list to edge list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ndlist</strong> : list or ndarray</p>
+<blockquote>
+<div><p>node list</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>edge list</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>previously nd2ed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.onseg">
+<tt class="descname">onseg</tt><big>(</big><em>pt</em>, <em>tol=0.01</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.onseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.onseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>segment number from point (deprecated)</p>
+<p>return segment number which contains point pt</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt  np.array(1x2)</strong> :</p>
+<p class="last"><strong>tol = 0.01      tolerance</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.outputGi">
+<tt class="descname">outputGi</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.outputGi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.outputGi" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter authorized Gi edges output</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>L</strong> : Layout</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+This function checks that this sequence is feasible
+, whatever the type of nstr0 and nstr1.
+The feasible outputs from nstr0 to nstr1 are stored in an output field of
+edge (nstr0,nstr1)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.plot_segments">
+<tt class="descname">plot_segments</tt><big>(</big><em>lns</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.plot_segments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.plot_segments" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lns</strong> :</p>
+<p class="last"><strong>*kwargs</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.pt2cy">
+<tt class="descname">pt2cy</tt><big>(</big><em>pt=array([0</em>, <em>0])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.pt2cy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.pt2cy" title="Permalink to this definition">¶</a></dt>
+<dd><p>point to cycle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pt</strong> : point (ndarray)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>ncy</strong> : cycle number</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If a cycle contains point pt this function returns the cycle number</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.pt2ro">
+<tt class="descname">pt2ro</tt><big>(</big><em>pt=array([0</em>, <em>0])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.pt2ro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.pt2ro" title="Permalink to this definition">¶</a></dt>
+<dd><p>point to room</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pt</strong> : point (ndarray)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>nr</strong> : Room number</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If a room contains point pt this function returns the room number</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.randTxRx">
+<tt class="descname">randTxRx</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.randTxRx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.randTxRx" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns random coordinates for Tx and Rx.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>p_Tx</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>A point of the placement of the Tx</p>
+</div></blockquote>
+<p><strong>p_Rx</strong> : numpy.ndarray</p>
+<blockquote class="last">
+<div><p>A point of the placement of the Rx</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>ex fn Tx_Rx_pos</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;example.str&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p_Tx</span><span class="p">,</span><span class="n">p_Rx</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">randTxRx</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.room2nodes">
+<tt class="descname">room2nodes</tt><big>(</big><em>room</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.room2nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.room2nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the nodes of a room</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>room</strong> : int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>nod</strong> : sorted list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.room2segments">
+<tt class="descname">room2segments</tt><big>(</big><em>room</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.room2segments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.room2segments" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the segments of a room</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>room</strong> : int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>seg</strong> : list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.rotate">
+<tt class="descname">rotate</tt><big>(</big><em>angle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.rotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>rotate layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>angle (deg)</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.save">
+<tt class="descname">save</tt><big>(</big><em>filename=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save layout</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.saveini">
+<tt class="descname">saveini</tt><big>(</big><em>_fileini</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.saveini"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.saveini" title="Permalink to this definition">¶</a></dt>
+<dd><p>save structure in an ini file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
+<blockquote class="last">
+<div><p>short filemame with extension</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.saveold">
+<tt class="descname">saveold</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.saveold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.saveold" title="Permalink to this definition">¶</a></dt>
+<dd><p>save Layout (deprecated)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> : string</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>File extension is .gml</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.saveosm">
+<tt class="descname">saveosm</tt><big>(</big><em>_fileosm</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.saveosm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.saveosm" title="Permalink to this definition">¶</a></dt>
+<dd><p>save layout in osm file format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>_fileosm</strong> : string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.savestr2">
+<tt class="descname">savestr2</tt><big>(</big><em>_filename='default.str2'</em>, <em>furniture=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.savestr2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.savestr2" title="Permalink to this definition">¶</a></dt>
+<dd><p>save Layout in .str2 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<blockquote class="last">
+<div><p>file is  written in the struc directory of the current Project
+directory which is defined through the environment variable $BASENAME
+furniture :  boolean</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>To produce the .str file</p>
+<blockquote>
+<div>&gt; newstruc -str2 file.str2 -conf ../project.conf</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.seg2pts">
+<tt class="descname">seg2pts</tt><big>(</big><em>aseg</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seg2pts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seg2pts" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert segments array to coresponding termination points array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>aseg</strong> : np.array (,Ns) or int for single value:w</p>
+<blockquote>
+<div><p>array of segment number (&gt;0)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>pth</strong> : np.array (4 x Ns)</p>
+<blockquote class="last">
+<div><p>pth is a vstacking of tail point (2,Ns) and head point (2,Ns)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.seg2ro">
+<tt class="descname">seg2ro</tt><big>(</big><em>seg</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seg2ro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seg2ro" title="Permalink to this definition">¶</a></dt>
+<dd><p>point to room</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seg</strong> : int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>nr</strong> : Room number</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If a room contains point pt this function returns the room number</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.seginframe">
+<tt class="descname">seginframe</tt><big>(</big><em>p1</em>, <em>p2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seginframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seginframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the seg list of a given zone defined by two points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> :</p>
+<blockquote>
+<div><p>array (1 x 2)</p>
+</div></blockquote>
+<p><strong>p2</strong> :</p>
+<blockquote>
+<div><p>array (1 x 2)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<blockquote class="last">
+<div><p>list of segment number inside a planar region defined by p1 an p2</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;office.str&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">seginframe</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
+<span class="go">array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35,  36,</span>
+<span class="go">        37,  38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60,</span>
+<span class="go">        61,  62,  63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,</span>
+<span class="go">        98,  99, 109, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,</span>
+<span class="go">       122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 141,</span>
+<span class="go">       144, 145, 148, 151, 160, 161, 162, 163, 164, 166, 167, 168, 169,</span>
+<span class="go">       170, 171, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188,</span>
+<span class="go">       191, 192, 193, 194, 195, 217])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.seginframe2">
+<tt class="descname">seginframe2</tt><big>(</big><em>p1</em>, <em>p2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seginframe2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seginframe2" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the seg list of a given zone defined by two points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> :</p>
+<blockquote>
+<div><p>array (2 x N)</p>
+</div></blockquote>
+<p><strong>p2</strong> :</p>
+<blockquote>
+<div><p>array (2 x N)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<blockquote class="last">
+<div><p>list of segment number inside a planar region defined by p1 an p2</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seglist</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seginframe2</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edlist</span>  <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">L</span><span class="o">.</span><span class="n">tsg</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="n">seglist</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">edlist</span><span class="o">=</span><span class="n">edlist</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.seginline">
+<tt class="descname">seginline</tt><big>(</big><em>p1</em>, <em>p2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seginline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seginline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the intersection between a given line and all segments
+Parameters
+&#8212;&#8212;&#8212;-</p>
+<blockquote>
+<div>p1 : numpy.ndarray
+p2 : numpy.ndarray</div></blockquote>
+<blockquote>
+<div>I : numpy.ndarray</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.segpt">
+<tt class="descname">segpt</tt><big>(</big><em>ptlist=array([0])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.segpt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.segpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the seg list of a sequence of point number</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ptlist array(1xNp)</strong> :</p>
+<blockquote>
+<div><p>point number array</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<blockquote class="last">
+<div><p>array seglist associated with ptlist</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>segpt is faster than segpt2</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;example.str&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ptlist</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">segpt</span><span class="p">(</span><span class="n">ptlist</span><span class="p">)</span>
+<span class="go">array([0, 1, 5, 7])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.segpt2">
+<tt class="descname">segpt2</tt><big>(</big><em>ptlist=array([0])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.segpt2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.segpt2" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the seg list of a sequence of point number</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ptlist</strong> :</p>
+<blockquote>
+<div><p>array(1xNp) Point number array</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<blockquote class="last">
+<div><p>array seglist associated with ptlist</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;example.str&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ptlist</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">segpt</span><span class="p">(</span><span class="n">ptlist</span><span class="p">)</span>
+<span class="go">array([0, 1, 5, 7])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.seguv">
+<tt class="descname">seguv</tt><big>(</big><em>iseg</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.seguv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.seguv" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns unitary vector along segments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iseg</strong> : np.array</p>
+<blockquote class="last">
+<div><p>index of segments</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">17</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">seguv</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+<span class="go">array([[-1.,  0.,  1., -1.],</span>
+<span class="go">       [ 0., -1.,  0.,  0.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">seguv</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+<span class="go">array([-1.,  0.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.show">
+<tt class="descname">show</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.show3">
+<tt class="descname">show3</tt><big>(</big><em>bdis=True</em>, <em>centered=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>geomview display of the indoor structure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bdis boolean (default True)</strong> :</p>
+<blockquote>
+<div><p>boolean display (call geowview if True)</p>
+</div></blockquote>
+<p><strong>centered</strong> : boolean</p>
+<blockquote class="last">
+<div><p>if True center the layout before display</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.showG">
+<tt class="descname">showG</tt><big>(</big><em>graph='r'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showG" title="Permalink to this definition">¶</a></dt>
+<dd><p>show graphs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : char</p>
+<blockquote>
+<div><p>&#8216;t&#8217; : Gt &#8216;r&#8217; : Gr &#8216;s&#8217; : Gs &#8216;v&#8217; : Gv  &#8216;c&#8217;: Gc &#8216;i&#8217; : Gi</p>
+</div></blockquote>
+<p><strong>show</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>fig</strong> : matplotlib figure</p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>ax</strong> :</p>
+<blockquote>
+<div><p>[]</p>
+</div></blockquote>
+<p><strong>nodes</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>eded :</strong> :</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>ndnd :</strong> :</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>nded :</strong> :</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>linewidth</strong> :</p>
+<blockquote>
+<div><p>2</p>
+</div></blockquote>
+<p><strong>nodelist</strong> :</p>
+<blockquote class="last">
+<div><p>[]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;example.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;Gs&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tit</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;Gt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tic</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;Gr&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tiv</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;Gv&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-gis-layout-2.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.showGi">
+<tt class="descname">showGi</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showGi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showGi" title="Permalink to this definition">¶</a></dt>
+<dd><p>show graph of interactions Gi</p>
+<dl class="docutils">
+<dt>en <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>edge number</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.showGs">
+<tt class="descname">showGs</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showGs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showGs" title="Permalink to this definition">¶</a></dt>
+<dd><p>show structure graph Gs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ndlist</strong> : np.array</p>
+<blockquote>
+<div><p>set of nodes to be displayed</p>
+</div></blockquote>
+<p><strong>edlist</strong> : np.array</p>
+<blockquote>
+<div><p>set of edges to be displayed</p>
+</div></blockquote>
+<p><strong>roomlist</strong> : list</p>
+<blockquote>
+<div><p>default : []</p>
+</div></blockquote>
+<p><strong>show</strong> : boolean</p>
+<blockquote>
+<div><p>default True</p>
+</div></blockquote>
+<p><strong>furniture</strong> : boolean</p>
+<blockquote>
+<div><p>default False</p>
+</div></blockquote>
+<p><strong>width</strong> : 2</p>
+<p><strong>display parameters are defined in  display dictionnary</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ax</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.showGt">
+<tt class="descname">showGt</tt><big>(</big><em>ax=</em>, <span class="optional">[</span><span class="optional">]</span><em>roomlist=</em>, <span class="optional">[</span><span class="optional">]</span><em>mode='area'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showGt" title="Permalink to this definition">¶</a></dt>
+<dd><p>show topological graph Gt</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ax</strong> : matlplotlib axes</p>
+<p><strong>roomlist</strong> : list</p>
+<blockquote class="last">
+<div><p>list of room numbers</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.showGv">
+<tt class="descname">showGv</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showGv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showGv" title="Permalink to this definition">¶</a></dt>
+<dd><p>show graph Gv (visibility)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>display</strong> :</p>
+<p><strong>fig</strong> :</p>
+<p><strong>ax</strong> :</p>
+<p><strong>nodes</strong> : boolean</p>
+<blockquote>
+<div><p>display nodes</p>
+</div></blockquote>
+<p><strong>edges</strong> : boolean</p>
+<blockquote>
+<div><p>display edges</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fig</strong> : figure instance</p>
+<p class="last"><strong>ax</strong> : axes instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;example.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGv</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Show Gv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/pylayers-gis-layout-3.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.showSig">
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xba7ec90&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show signature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tx</strong> : np.array (2,1)</p>
+<blockquote>
+<div><p>Transmitter coordinates</p>
+</div></blockquote>
+<p><strong>Rx</strong> : np.array (2,1)</p>
+<blockquote>
+<div><p>Receipter coordinates</p>
+</div></blockquote>
+<p><strong>sr</strong> : boolean</p>
+<blockquote>
+<div><p>show room signature</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fig</strong> : figure instance</p>
+<p><strong>ax</strong> : axes instance</p>
+<p class="last"><strong>lines</strong> : lines instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.show_layer">
+<tt class="descname">show_layer</tt><big>(</big><em>name</em>, <em>edlist=</em>, <span class="optional">[</span><span class="optional">]</span><em>alpha=1</em>, <em>width=0</em>, <em>color='black'</em>, <em>dnodes=False</em>, <em>dthin=False</em>, <em>dlabels=False</em>, <em>font_size=15</em>, <em>fGHz=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>show layer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name :</strong> :</p>
+<p><strong>edlist</strong> : []</p>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>transparency</p>
+</div></blockquote>
+<p><strong>width</strong> : int</p>
+<blockquote>
+<div><p>if width = 0 linewidth depends on slab property</p>
+</div></blockquote>
+<p><strong>color</strong> : string</p>
+<blockquote>
+<div><p>default black&#8217;</p>
+</div></blockquote>
+<p><strong>dnodes :</strong> :</p>
+<blockquote>
+<div><p>display nodes (False )</p>
+</div></blockquote>
+<p><strong>dthin :</strong> :</p>
+<blockquote>
+<div><p>display thin ( False )</p>
+</div></blockquote>
+<p><strong>dlabels :</strong> :</p>
+<blockquote>
+<div><p>display labels ( False )</p>
+</div></blockquote>
+<p class="last"><strong>font_size</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.show_nodes">
+<tt class="descname">show_nodes</tt><big>(</big><em>ndlist=[100000000.0], size=10, color='b', dlabels=False, font_size=15, alpha=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>show nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ndlist</strong> :</p>
+<p><strong>size</strong> : int</p>
+<blockquote>
+<div><p>default 10</p>
+</div></blockquote>
+<p><strong>color</strong> :  &#8216;b&#8217;</p>
+<p><strong>dlabels</strong> : Boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>font_size</strong> : int</p>
+<blockquote>
+<div><p>15</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float</p>
+<blockquote class="last">
+<div><p>transparancy</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.show_seg1">
+<tt class="descname">show_seg1</tt><big>(</big><em>edlist=</em>, <span class="optional">[</span><span class="optional">]</span><em>alpha=1</em>, <em>width=1</em>, <em>size=2</em>, <em>color='black'</em>, <em>font_size=15</em>, <em>dlabels=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_seg1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_seg1" title="Permalink to this definition">¶</a></dt>
+<dd><p>show segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>edlist</strong> :</p>
+<p><strong>alpha</strong> :</p>
+<p><strong>width</strong> :</p>
+<p><strong>size</strong> :</p>
+<p><strong>color</strong> :</p>
+<p><strong>font_size</strong> :</p>
+<p class="last"><strong>dlabels</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.show_segment">
+<tt class="descname">show_segment</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>show segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>edlist</strong> : list</p>
+<blockquote>
+<div><p>segment list</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>transparency 0&lt; alpha &lt; 1</p>
+</div></blockquote>
+<p><strong>width</strong> : float</p>
+<blockquote>
+<div><p>line width (default 1)</p>
+</div></blockquote>
+<p><strong>color</strong> : string</p>
+<blockquote>
+<div><p>default &#8216;black&#8217;</p>
+</div></blockquote>
+<p><strong>dnodes</strong> : boolean</p>
+<blockquote>
+<div><p>display nodes ( Default False)</p>
+</div></blockquote>
+<p><strong>dlabels</strong> : boolean</p>
+<blockquote>
+<div><p>display labels ( Default False)</p>
+</div></blockquote>
+<p><strong>font_size</strong> : int</p>
+<blockquote class="last">
+<div><p>Default 15</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.signature">
+<tt class="descname">signature</tt><big>(</big><em>iTx</em>, <em>iRx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine signature between node iTx and node iRx</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iTx</strong> : Transmitter room</p>
+<p><strong>iRx  :</strong> :</p>
+<blockquote>
+<div><p>Transmitter room</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>sigarr    :</strong> :</p>
+<p class="last"><strong>signature :</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<dl class="last docutils">
+<dt>This a temporary function</dt>
+<dd>There is some algorithmic work to find the best way to determine signature
+T4 : limit the ndt to only edges and nodes in visibility from Tx</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.subseg">
+<tt class="descname">subseg</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.subseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.subseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>establishes the association : name &lt;-&gt;  edgelist</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dico</strong> : dict</p>
+<blockquote class="last">
+<div><p>sub segment name as key and segment number as value</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.thwall">
+<tt class="descname">thwall</tt><big>(</big><em>offx</em>, <em>offy</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.thwall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.thwall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list of wall tuples (Transit.world format )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>offx</strong> :</p>
+<p><strong>offy</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>walls</strong> : list of wall tuples  (Transit format)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walls</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">thwall</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.translate">
+<tt class="descname">translate</tt><big>(</big><em>vec</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>translate layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vec :</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.visi_papb">
+<tt class="descname">visi_papb</tt><big>(</big><em>pa</em>, <em>pb</em>, <em>edgelist=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.visi_papb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.visi_papb" title="Permalink to this definition">¶</a></dt>
+<dd><p>visi_papb : determine if pa and pb are in visibility for the structure graph</p>
+<p>visi_papb(pa,pb,edgelist)</p>
+<p>pa       : 1x2
+pb       : 1x2
+edgelist : exclusion edge list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.visilist">
+<tt class="descname">visilist</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.visilist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.visilist" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the list of nodes from Gc which are visible from point p</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> :</p>
+<blockquote class="last">
+<div><p>np.array point</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>AAS = [0:2pi]
+While (AAS != void set)</p>
+<blockquote>
+<div><blockquote>
+<div><ol class="arabic simple">
+<li>Find segment ns either
+i)  the closest segment from p in AAS
+ii) neighbor of prec(ns)</li>
+<li>Find the edgelist visible from ns</li>
+</ol>
+</div></blockquote>
+<dl class="docutils">
+<dt>edgelist = vedgelist(ns)</dt>
+<dd><ol class="first last arabic" start="3">
+<li><p class="first">Check_occultation(p,ns,edgelist)
+Occultation 8  situations
+[p1,pM,p2] = [T,T,T]  : fully occulted</p>
+<blockquote>
+<div><p>[     ]    partially visible
+[F,F,F]  : fully visible</p>
+</div></blockquote>
+</li>
+<li><p class="first">Update Allowed Angular Sector  (AAS)</p>
+</li>
+</ol>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.waypoint">
+<tt class="descname">waypoint</tt><big>(</big><em>nroom1</em>, <em>nroom2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.waypoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.waypoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.waypointGw">
+<tt class="descname">waypointGw</tt><big>(</big><em>nroom1</em>, <em>nroom2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.waypointGw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.waypointGw" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the waypoint between room1 and room2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nroom1</strong> :</p>
+<blockquote class="last">
+<div><p>nroom2</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;WHERE1.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nroom1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nroom2</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">waypointGw</span><span class="p">(</span><span class="n">nroom1</span><span class="p">,</span><span class="n">nroom2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Handling Layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>Gs</strong> : Structure graph</p>
+<p><strong>Gt</strong> : Topological graph  (indicates topological relationships between rooms)</p>
+<p><strong>Gr</strong> : Graph of room</p>
+<p><strong>Gv</strong> : Graph of visibility</p>
+<p><strong>Gc</strong> : Connection graph (indicates visbility relationships)</p>
+<p><strong>Nnode</strong> : Number of nodes of Gs</p>
+<p><strong>Nedge</strong> : Number of edges of Gs</p>
+<p><strong>pt</strong> : points sequence</p>
+<p><strong>tahe</strong> : tail head</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>add_door</strong> :</p>
+<p><strong>add_fnod</strong> :</p>
+<p><strong>add_furniture</strong> :</p>
+<p><strong>add_furniture_file</strong> :</p>
+<p><strong>add_nfpe</strong> :</p>
+<p><strong>add_pnod</strong> :</p>
+<p><strong>add_pons</strong> :</p>
+<p><strong>add_segment</strong> :</p>
+<p><strong>add_subseg</strong> :</p>
+<p><strong>add_window</strong> :</p>
+<p><strong>angleonlink</strong> :</p>
+<p><strong>boundary</strong> :</p>
+<p><strong>build</strong> :</p>
+<p><strong>buildGc</strong> :</p>
+<p><strong>buildGi</strong> :</p>
+<p><strong>buildGi2</strong> :</p>
+<p><strong>buildGr</strong> :</p>
+<p><strong>buildGr3</strong> :</p>
+<p><strong>buildGt</strong> :</p>
+<p><strong>buildGv</strong> :</p>
+<p><strong>buildGw</strong> :</p>
+<p><strong>builGr2</strong> :</p>
+<p><strong>check</strong> :</p>
+<p><strong>check2</strong> :</p>
+<p><strong>checkvis</strong> :</p>
+<p><strong>cleanup</strong> :</p>
+<p><strong>clip</strong> :</p>
+<p><strong>closest_edge</strong> :</p>
+<p><strong>cycleinline</strong> :</p>
+<p><strong>del_cycle</strong> :</p>
+<p><strong>delete</strong> :</p>
+<p><strong>del_points</strong> :</p>
+<p><strong>del_segment</strong> :</p>
+<p><strong>del_subseg</strong> :</p>
+<p><strong>diag</strong> :</p>
+<p><strong>displaygui</strong> :</p>
+<p><strong>distwall</strong> :</p>
+<p><strong>dumpr</strong> :</p>
+<p><strong>dumpw</strong> :</p>
+<p><strong>ed2nd</strong> :</p>
+<p><strong>editor</strong> :</p>
+<p><strong>edit_point</strong> :</p>
+<p><strong>edit_segment</strong> :</p>
+<p><strong>facet3D</strong> :</p>
+<p><strong>facets3D</strong> :</p>
+<p><strong>find_edgelist</strong> :</p>
+<p><strong>g2npy</strong> :</p>
+<p><strong>geomfile</strong> :</p>
+<p><strong>get_paths</strong> :</p>
+<p><strong>get_Sg_pos</strong> :</p>
+<p><strong>get_zone</strong> :</p>
+<p><strong>have_subseg</strong> :</p>
+<p><strong>help</strong> :</p>
+<p><strong>info</strong> :</p>
+<p><strong>info_edge</strong> :</p>
+<p><strong>ispoint</strong> :</p>
+<p><strong>layerongrid</strong> :</p>
+<p><strong>layeronlink</strong> :</p>
+<p><strong>load</strong> :</p>
+<p><strong>loadfur</strong> :</p>
+<p><strong>loadG</strong> :</p>
+<p><strong>loadini</strong> :</p>
+<p><strong>loadstr</strong> :</p>
+<p><strong>loadstr2</strong> :</p>
+<p><strong>ls</strong> :</p>
+<p><strong>nd2seg</strong> :</p>
+<p><strong>onseg</strong> :</p>
+<p><strong>plot_segments</strong> :</p>
+<p><strong>pt2cy</strong> :</p>
+<p><strong>pt2ro</strong> :</p>
+<p><strong>randTxRx</strong> :</p>
+<p><strong>room2nodes</strong> :</p>
+<p><strong>room2segments</strong> :</p>
+<p><strong>save</strong> :</p>
+<p><strong>saveini</strong> :</p>
+<p><strong>savestr2</strong> :</p>
+<p><strong>seg2ro</strong> :</p>
+<p><strong>seginframe</strong> :</p>
+<p><strong>seginline</strong> :</p>
+<p><strong>segpt</strong> :</p>
+<p><strong>seguv</strong> :</p>
+<p><strong>show3</strong> :</p>
+<p><strong>showG</strong> :</p>
+<p><strong>showGs</strong> :</p>
+<p><strong>showGt</strong> :</p>
+<p><strong>showGv</strong> :</p>
+<p><strong>show_layer</strong> :</p>
+<p><strong>show_nodes</strong> :</p>
+<p><strong>show_seg1</strong> :</p>
+<p><strong>show_segment</strong> :</p>
+<p><strong>showSig</strong> :</p>
+<p><strong>signature</strong> :</p>
+<p><strong>subseg</strong> :</p>
+<p><strong>thwall</strong> :</p>
+<p><strong>visilist</strong> :</p>
+<p><strong>visi_papb</strong> :</p>
+<p><strong>waypoint</strong> :</p>
+<p class="last"><strong>waypointGw</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This class exploits <cite>networkx</cite> to store Layout information</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.osmparser.html" title="pylayers.gis.osmparser module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.gis.furniture.html" title="pylayers.gis.furniture module"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="pylayers.gis.html" >pylayers.gis package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
