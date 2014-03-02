@@ -743,23 +743,22 @@ class Body(object):
             cc = (pta+phe)/2.
             l = np.sqrt(np.sum(ax**2))
             cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
-                        axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
-           
+                       axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+
             # if kwargs['ccs']:
 
             #     pt = pta+cylrad*self.ccs[k,:,0]
             #     import ipdb
             #     ipdb.set_trace()
             #     mlab.quiver3d(pt,pt,pt,self.ccs[k,0,:],self.ccs[k,1,:],self.ccs[k,2,:])
-    
-                    
+
+
 
 
         if kwargs['pattern']:
             self.setacs()
             for key in self.dcs.keys():
                 import ipdb
-                ipdb.set_trace()
                 Ant =  ant.Antenna(self.dev[key]['file'])
                 if not hasattr(Ant,'SqG'):
                     Ant.Fsynth()
@@ -769,7 +768,7 @@ class Body(object):
 
                 Ant._show3(po=U[:,0], T=T,ilog=False,minr=0.01,maxr=0.2,
                             newfig=False,title=False,colorbar=False)
-                
+
 
 
     def show(self,**kwargs):
@@ -1438,8 +1437,7 @@ if __name__ == '__main__':
     #bd.setccs(topos=True)
     #bd.setdcs()
     #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
-    bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=True)
-    bd.show()
+    bd._show3(k=46,ccs=True,topos=True,pattern=True)
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
     #bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')

@@ -390,17 +390,17 @@ class Antenna(object):
             Y=np.array(([0,1,1/(1.*self.sqG)]))
             self.poly = la.solve(A,Y)
 
-            argth1 = np.abs(self.poly[0]*self.th[uth1]**3
-                     + self.poly[1]*self.th[uth1]**2
-                             + self.poly[2]*self.th[uth1])
+            argth1 = np.abs(self.poly[0]*self.theta[uth1]**3
+                     + self.poly[1]*self.theta[uth1]**2
+                             + self.poly[2]*self.theta[uth1])
 
-            argth2 = -(1/(np.pi-self.t0)**2)*(self.th[uth2]-self.t0)**2+1
+            argth2 = -(1/(np.pi-self.t0)**2)*(self.theta[uth2]-self.t0)**2+1
             argth = np.hstack((argth1,argth2))[::-1]
 
             if pattern :
                 Fat = self.sqG * (argth[:,np.newaxis])
                 Fap = self.sqG * (argth[:,np.newaxis])
-                #self.theta=self.th[:,np.newaxis]
+                #self.theta=self.theta[:,np.newaxis]
                 #self.phi=self.ph[np.newaxis,:]
                 self.SqG=np.ones((self.Nf,self.Nt,self.Np))
                 self.SqG[:]=Fap
@@ -423,8 +423,8 @@ class Antenna(object):
                 Fap = self.sqG
 
             else:
-                Fat = self.sqG * np.ones((len(self.th),self.Nf))
-                Fap = self.sqG * np.zeros((len(self.th),self.Nf))
+                Fat = self.sqG * np.ones((len(self.theta),self.Nf))
+                Fap = self.sqG * np.zeros((len(self.theta),self.Nf))
 
         # TODO create 2 separate functions
         if not pattern:
@@ -1025,7 +1025,7 @@ class Antenna(object):
         Parameters
         ----------
 
-        'fGHz' : frequzncy
+        'fGHz' : frequency
         phd : phi in degrees
         thd : theta in degrees
         'GmaxdB':  max gain to be displayed
@@ -1049,6 +1049,9 @@ class Antenna(object):
             >>> fig,ax = A.polar(fGHz=[2,3,4],thd=90)
 
         """
+
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
 
         dtr = np.pi/180.
 
@@ -1173,11 +1176,9 @@ class Antenna(object):
             ax.legend()
         return(fig,ax)
 
-    def _show3(self,fGHz=[],title=True,colorbar=True):
+    @mlab.show
+    def _show3(self,**kwargs):
         """ show3 mayavi
-
-        Parameters
-        ----------
 
         fGHz : float
             frequency
@@ -1185,16 +1186,38 @@ class Antenna(object):
             display title
         colorbar :
             display colorbar
-
-        Examples
-        --------
-
-        >>> from pylayers.antprop.antenna import *
-        >>> A = Antenna('defant.sh3')
-        >>> A.Fsynth3()
-        >>> A._show3()
-
         """
+
+        defaults = { 'newfig':True, 
+                     'fGHz' :[],
+                     'po': np.array([0,0,0]),
+                     'T' : np.eye(3),
+                     'minr' : 0.1,
+                     'maxr' : 1 ,
+                     'tag' : 'Pat',
+                     'ilog' : False,
+                     'title':True,
+                     'colorbar':True,
+                     'ilog':False
+                     }
+
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        fGHz = kwargs['fGHz']
+        minr = kwargs['minr']
+        maxr = kwargs['maxr']
+        tag  = kwargs['tag']
+        ilog = kwargs['ilog']
+        po = kwargs['po']
+        # T is an unitary matrix
+        T  = kwargs['T']
+
+
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
 
         if fGHz == []:
             k = len(self.fa)/2
@@ -1214,9 +1237,9 @@ class Antenna(object):
 
         r = minr + (maxr-minr) * u
 
-        x = r * np.sin(th) * np.cos(phi)
-        y = r * np.cos(th)
-        z = r * np.sin(th) * np.sin(phi)
+        x = r * np.sin(th) * np.cos(phi) 
+        y = r * np.cos(th) 
+        z = r * np.sin(th) * np.sin(phi) 
 
         p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
         #
@@ -1234,6 +1257,7 @@ class Antenna(object):
         y = q[...,1]
         z = q[...,2]
 
+
         if kwargs['newfig']:
             mlab.clf()
         else :
@@ -1241,7 +1265,7 @@ class Antenna(object):
         mlab.mesh(x, y, z)
         if kwargs['colorbar'] :
             mlab.colorbar()
-        if kwargs['title']: 
+        if kwargs['title']:
             mlab.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
 
 
@@ -1271,6 +1295,9 @@ class Antenna(object):
             >>> #A.show3()
 
         """
+
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
 
         f = self.fa[k]
 
@@ -1530,6 +1557,16 @@ class Antenna(object):
         print "FTh = Fth.reshape(A.Nf,A.Nt,A.Np)"
         print "FPh = Fph.reshape(A.Nf,A.Nt,A.Np)"
         print "compdiag(20,A,A.theta,A.phi,FTh,FPh) "
+
+    def Fsynth(self, theta = [], phi=[], pattern=True):
+        """ Perform Antenna synthesis
+        call Antenna.Fpatt or Antenna.Fsynth3
+        """
+
+        if self.fromfile:
+            self.Fsynth3(theta,phi,pattern)
+        else :
+            self.Fpatt(theta,phi,pattern)
 
     #def Fsynth1(self, theta, phi, k=0):
     def Fsynth1(self, theta, phi,pattern=False):
