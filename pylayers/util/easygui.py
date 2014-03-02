@@ -658,7 +658,7 @@ def __multfillablebox(msg="Fill in values for the fields."
     messageFrame.pack(side=TOP, fill=BOTH)
 
     #-------------------- the msg widget ----------------------------
-    messageWidget = Message(messageFrame, width="4.5i", text=msg)
+    messageWidget = Message(messageFrame,  text=msg)
     messageWidget.configure(font=(PROPORTIONAL_FONT_FAMILY,PROPORTIONAL_FONT_SIZE))
     messageWidget.pack(side=RIGHT, expand=1, fill=BOTH, padx='3m', pady='3m')
 
