@@ -47,7 +47,7 @@ from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
 import pandas as pd
 try:
-    import mayavi.mlab as myv
+    from mayavi import mlab
 except:
     print 'mayavi not installed'
 
@@ -1202,19 +1202,47 @@ class Antenna(object):
             k = np.where(fGHz>self.fa)[0]
 
         r = self.SqG[k,:,:]
-        phi = self.phi
-        th = self.theta
+        th = self.theta[:,np.newaxis]
+        phi = self.phi[np.newaxis,:]
 
+        if ilog :
+            r = 10*np.log10(abs(r))
+        else:
+            r = abs(r)
 
-        x = r * np.sin(phi) * np.cos(th)
-        y = r * np.cos(phi)
-        z = r * np.sin(phi) * np.sin(th)
+        u = (r - r.min()) /(r.max() - r.min())
 
-        myv.mesh(x, y, z)
-        if colorbar :
-            myv.colorbar()
-        if title:
-            myv.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
+        r = minr + (maxr-minr) * u
+
+        x = r * np.sin(th) * np.cos(phi)
+        y = r * np.cos(th)
+        z = r * np.sin(th) * np.sin(phi)
+
+        p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
+        #
+        # antenna cs -> glogal cs
+        # q : Nt x Np x 3
+        q = np.einsum('ij,klj->kli',T,p)
+        #
+        # translation
+        #
+        q[...,0]=q[...,0]+po[0]
+        q[...,1]=q[...,1]+po[1]
+        q[...,2]=q[...,2]+po[2]
+
+        x = q[...,0]
+        y = q[...,1]
+        z = q[...,2]
+
+        if kwargs['newfig']:
+            mlab.clf()
+        else :
+            mlab.gcf()
+        mlab.mesh(x, y, z)
+        if kwargs['colorbar'] :
+            mlab.colorbar()
+        if kwargs['title']: 
+            mlab.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
 
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):

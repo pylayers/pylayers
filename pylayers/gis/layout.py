@@ -6620,7 +6620,7 @@ class Layout(object):
         return pg
 
     @mlab.show
-    def _show3(self,centered=True,newfig=False):
+    def _show3(self,centered=False,newfig=False):
         """ create a .off geomview file
 
         Parameters
