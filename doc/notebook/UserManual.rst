@@ -854,25 +854,24 @@ Before introducing any model, lets start by introducing two major classes of
 the PyLayers platform on which is relying the electromagnetic field
 calculation. 
 
-A `Slab` is a set ol several layers of materials with specified thickness.
+A `Slab` is a set of several layers of materials with specified thickness.
 Slabs are used to describe properties of the different constitutive
 elements of a building such as wall, windows ,...
 
-In practice when describing a specific building, it is necessary to
-specify a set of different slabs with different characteristics.
+In practice when describing a specific building, we specify a set of different slabs with different 
+dielectric characteristics.
 
-The structure which gathers this set is ``SlabDB``. If no file argument
+The structure which gathers `Slab` is ``SlabDB``. If no file argument
 is given, this structure is initialized with the default file:
 
 `slabDB.ini <https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini>`__
 
-This section illustrates some features of the ``pylayers.antprop.slab`` module.
+We illustrates below some features of the ``pylayers.antprop.slab`` module.
 
 .. code-block:: python
 
     from pylayers.antprop.slab import *
     fig = plt.figure(figsize=(10,10))
-
 
 
 The Class ``SlabDB`` contains a dictionnary of all available Slab. This
