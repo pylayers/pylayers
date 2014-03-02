@@ -1,8 +1,8 @@
 # -*- coding:Utf-8 -*-
 import os
-import numpy as np 
-import scipy as sp 
-import matplotlib.pylab as plt 
+import numpy as np
+import scipy as sp
+import matplotlib.pylab as plt
 import scipy.special as spe
 import doctest
 import logging
@@ -13,7 +13,7 @@ import shutil
 import sys
 import zipfile
 #
-# getlong 
+# getlong
 # getshort
 # getdir
 # shp
@@ -26,17 +26,17 @@ import zipfile
 #
 # Wave Related functions
 #
-##############
+###################################
 def delay(p1,p2):
-    """ delay in ns between 2 point 
+    """ calculate delay in ns between 2 points
 
     Parameters
     ----------
 
     p1  ndarray (1x2)
-        point 1 coordinates 
+        point 1 coordinates (meters)
     p2  ndarray (1x2)
-        point 2 coordinates
+        point 2 coordinates (meters)
 
     Examples
     --------
@@ -46,54 +46,46 @@ def delay(p1,p2):
     >>> tau = delay(p1,p2)
     >>> assert tau==1.,"Warning : speed of light has changed"
 
+    See Also
+    --------
+
+    pylayers.measures.mesuwb
+
+
     """
     v   = p1-p2
     d2  = np.dot(v,v)
     d   = np.sqrt(d2)
     tau = d/0.3
+
     return(tau)
-#####################
-def lt2dic(lt):
-    """ convert list of tuple to dictionary 
-
-    Parameters
-    ----------
-
-    lt : list of tuple
-        the first element of tuple is th ekey dictionary
-
-    Examples
-    --------
-
-       >>> lt = [ ('1','1 2 3'),('2','1.5 2'),('3','4.78 89.0 2')]
-       >>> d = lt2dic(lt)
-    """
-    dic = {}
-    for tup in lt:
-        dic[tup[0]]=tup[1]
-    return(dic)    
 
 def lt2idic(lt):
-    """ convert list of tuple to dictionary 
+    """ convert list of tuple to dictionary
 
     Parameters
     ----------
 
-    lt : list 
+    lt : list
 
-    Examples 
+    Examples
     --------
 
     >>> from pylayers.util.pyutil import *
     >>> lt = [ ('1','1 2 3'),('2','1.5 2 3'),('3','4.78 89.0 2')]
     >>> d = lt2idic(lt)
 
+    See Also
+    --------
+
+    pylayers.simul.radionode
+
     """
     dic = {}
     for tup in lt:
         val = tup[1].split(' ')
         dic[int(tup[0])]=np.array([float(val[0]),float(val[1]),float(val[2])])
-    return(dic)    
+    return(dic)
 
 def getlong(shortname,directory):
     """  get a long name
@@ -104,13 +96,20 @@ def getlong(shortname,directory):
 
     Parameters
     ----------
+
     shortname : string
         short name of the file
+    dir       : string
+        directory in $BASENAME or $PYLAYERS
 
-    dir       : directory in $BASENAME or $PYLAYERS
-    source    : string 
+    Returns
+    -------
+
+    longname : string
+        long name of the file
 
     """
+
     try:
         basename=os.environ['BASENAME']
     except:
@@ -121,29 +120,62 @@ def getlong(shortname,directory):
     return(longname)
 
 def getshort(longname):
+    """  get a short name
+
+    Parameters
+    ----------
+
+    longname : string
+        short name of the file
+
+    Returns
+    -------
+
+    shortname : string
+        short name of the file
+
+    """
+
     shortname=os.path.split(longname)[1]
     return(shortname)
 
 def getdir(longname):
+    """  get directory of a long name
+
+    Parameters
+    ----------
+
+    longname : string
+        short name of the file
+
+    Returns
+    -------
+
+    dirname: string
+
+    """
     rac=os.path.split(longname)[0]
-    dir=os.path.split(rac)[1]
-    return(dir)
-        
+    dirname=os.path.split(rac)[1]
+
+    return(dirname)
+
 def shp(arr):
     """ return dimension of an array
+
     Parameters
     ----------
     arr : ndarray
 
-    Returns 
+    Returns
     -------
-    shp : tuple 
-    
+
+    shp : tuple
+
     Examples
     --------
 
-    >>> import pylayers.util.pyutil as pyu 
-    >>> import numpy as np 
+    >>> import pylayers.util.pyutil as pyu
+    >>> import numpy as np
     >>> from scipy import *
     >>> a = np.arange(10)
     >>> pyu.shp(a)
@@ -158,11 +190,11 @@ def shp(arr):
         shp = np.shape(arr)
     else:
         shp = (1,len(arr))
-    return(shp)             
+    return(shp)
 
 def dimcmp(ar1,ar2):
-    """ compare shape of arrays  
-    
+    """ compare shape of arrays
+
     Parameters
     ----------
     ar1 : ndarray
@@ -170,11 +202,13 @@ def dimcmp(ar1,ar2):
 
     Returns
     -------
-    return code : int 
+
+    return code : int
         0 arrays are not compatible
-        1 arrayis have same dimension 
-        2 second argument has greater dimension 
+        1 arrays have same dimension
+        2 second argument has greater dimension
         3 first argument has greater dimension
+
     """
     sh1 = shp(ar1)
     sh2 = shp(ar2)
@@ -188,22 +222,25 @@ def dimcmp(ar1,ar2):
         return(3)
 
 def tstincl(ar1,ar2):
-    """ testincl(ar1,ar2)
+    """ test wheteher ar1 interval is included in interval ar2
 
     Parameters
     ----------
+
     ar1 : ndarray
     ar2 : ndarray
 
     Returns
     -------
+
     0 : if ar1 and ar2 have no points in common
     1 : if  ar2 includes ar1
     2 : else
 
-    Summary
-    -------
-        test wheteher the ar1 interval is included in interval ar2  
+    See Also
+    --------
+
+    pylayers.signal.bsignal align
 
     """
     if ((ar1[0]>=ar2[0])&(ar1[-1]<=ar2[-1])):
@@ -211,7 +248,7 @@ def tstincl(ar1,ar2):
     if ((ar1[0]>ar2[-1]) or (ar2[0]>ar1[-1])):
         return(0)
     else:
-        return(2)       
+        return(2)
 
 def findpos(ar,val):
     """
@@ -272,11 +309,18 @@ def LegFunc(nn,ntrunc,theta,phi):
 
     Parameters
     ----------
-    nn        :  integer 
-    ntrunc    :  integer 
+
+    nn        :  integer
+    ntrunc    :  integer
     theta     :  np.array(1xNtheta)
     theta     :  np.array(1xNtheta)
     phi       :  np.array(1xNtheta)
+
+    Returns
+    -------
+
+    Ylm : np.array
+
     """
     m=array(zeros(nn),dtype=integer)
     l=array(zeros(nn),dtype=integer)
@@ -300,20 +344,22 @@ def LegFunc(nn,ntrunc,theta,phi):
     return(Ylm)
 
 def ExpFunc (x,y):
-    """ Exponential fitting
+    """ exponential fitting
     Parameters
     ----------
     x : np.array
     y : np.array
-    
+
     Returns
     -------
+
     a : estimation of \\alpha
     b : estimation of \\beta
 
     Notes
     -----
-    find a possible equation of an exponential function of the form :
+
+    Fit data to an exponential function of the form :
 
         .. math::    y = \\alpha e^{- \\beta x}    
 
@@ -340,11 +386,27 @@ def ExpFunc (x,y):
     return(alpha,beta)
 
 def InvFunc (x,z):
-    """
-    (alfa,beta) = InvFunc (x,y)
+    """ inverse fitting
 
-    find a possible equation of an inverse proportional function of the form :
-         y = alfa/x + beta    
+    Parameters
+    ----------
+
+    x : array (,N)
+    y : array (,N)
+
+    Returns
+    -------
+
+    alpha : float
+    beta : float
+
+    Notes
+    -----
+
+    fit data to an inverse function of the form :
+
+        .. math:: y = \\frac{\\alpha}{x} + \\beta
+
     """
     y = 1./x
     (a,b)=polyfit(y,z,1)
@@ -352,11 +414,26 @@ def InvFunc (x,z):
     return(a,b)
 
 def PowFunc (x,y):
-    """
-    (alfa,beta) = PowFunc (x,y)
+    """ power fitting
 
-    find a possible equation of a power function of the form :
-         y = alfa/ x**beta    
+    Parameters
+    ----------
+
+    x : array (,N)
+    y : array (,N)
+
+    Returns
+    -------
+
+    alpha : float
+    beta : float
+
+    Notes
+    -----
+
+    fit data to an inverse function of the form :
+        .. math:: y = \\frac{\\alpha}{x^{\\beta}
+
     """
     t = 1./x
     z=log(y)
@@ -1015,26 +1092,41 @@ def nbint(a):
 
 
 def encodmtlb(lin):
+    """  encode python list of string in Matlab format
+
+    Parameters
+    ----------
+
+    lin : input list
+    encodmtlbi(lin) :
+
+    Returns
+    -------
+
+    lout : output list
+
+    Examples
+    --------
+
+    >>> lin = ['aaa','bbbbbbb','ccc','dd']
+    >>> F   = {}
+    >>> F['lin']=encodmtl(lin)
+    >>> print F['lin']
+    >>> io.savemat('encodmtlb_ex.mat',F)
+
+    Notes
+    -----
+
+    The List is read column by column and written line by line in a same NxM matrix.
+    If char does not exist it is replaced by space.
+
     """
-    encodmtlbi(lin) : encode python list of string in Matlab format
 
-    Exemple : 
+    #
 
-    lin = ['aaa','bbbbbbb','ccc','dd']
-    F   = {}
-    F['lin']=encodmtl(lin)
-    io.savemat('encodmtlb_ex.mat',F)
-
-    Principle: 
-
-        The List is read column by column and written line by line in a same NxM matrix.
-        If char does not exist it is replaced by space. 
-    """
-    
-    # Determiner la taille (NxM) de la matrice
     N = len(lin)
 
-    # Determiner la chaine de longueur maximale
+    # 
     M  = 0
     lout = []
     str  = ''
@@ -1042,7 +1134,7 @@ def encodmtlb(lin):
         m = len(lin[i])
         if (m>M):
             M=m
-        
+
     for  j in range(M):
         for  i in range(N):
             m = len(lin[i])
@@ -1051,38 +1143,45 @@ def encodmtlb(lin):
                 c = ' '
             else:
                  c = lin[i][j]    
-                
+
             str = str + c
             if mod(k+1,M)==0:
                 lout.append(str)
                 str=''
-                     
+
     return(lout)
 
 def sqrte(z):
     """ Evanescent SQRT for waves problems
-     Sophocles J. Orfanidis - 1999-2008 - www.ece.rutgers.edu/~orfanidi/ewa
+
+     .. _Sophocles J. Orfanidis - 1999-2008: http://www.ece.rutgers.edu/~orfanidi/ewa
+
      Parameters
      ----------
-     z : 
+
+     z : np.array
          array of complex numbers
+
      Returns
      -------
-     y : 
-         square root of z
-       
-         Notes: for z = a-j*b, y is defined as follows:
-              [ sqrt(a-j*b),  if b~=0  
-          y = [ sqrt(a),      if b==0 and a>=0              
+
+     y : np.array
+
+     Notes
+     -----
+
+         for z = a-j*b, y is defined as follows:
+              [ sqrt(a-j*b),  if b~=0
+          y = [ sqrt(a),      if b==0 and a>=0
               [ -j*sqrt(|a|), if b==0 and a<0   (i.e., the negative of what the ordinary SQRT gives)
          this definition is necessary to produce exponentially-decaying evanescent waves 
              (under the convention exp(j*omega*t) for harmonic time dependence)
-        it is equivalent to the operation y = conj(sqrt(conj(a-j*b))), 
+         it is equivalent to the operation y = conj(sqrt(conj(a-j*b))), 
          but it fixes a bug in the ordinary SQRT in MATLAB arising whenever the real part is negative 
          and the imaginary part is an array with some zero elements. For example, compare the outputs:
-         conj(sqrt(conj(-1 - array([0,1])*1j))) =      0 + 1.0000i,    sqrte(-1 - [0; 1]*j) =      0 - 1.0000i
-                                          0.4551 - 1.0987i                            0.4551 - 1.0987i
-        but
+         conj(sqrt(conj(-1 - array([0,1])*1j))) =      0 + 1.0000i,  
+         sqrte(-1 - [0; 1]*j) =      0 - 1.0000i 0.4551 - 1.0987i                            0.4551 - 1.0987i
+         but
 
            conj(sqrt(conj(-1 + 0*1j))) = 0 - 1.000i,               sqrte(-1 + 0*j) = 0 - 1.000i
     """
@@ -1096,28 +1195,27 @@ def sqrte(z):
 
 def untie(a,b):
     """
-    
+
     Parameters
     ----------
-    a
-    b
+    a : np.array
+    b : np.array
+
     Returns
     -------
-    boolean 
-    a
-    r 
+
+    boolean,a,r
+    boolean,b,r
 
     """
     la    = len(a)
     lb    = len(b)
     u     = np.intersect1d(a,b)
     lu    = len(u)
-    #print lu
-    #print min(la,lb)/2
     if lu >= min(la,lb)/2:
-        # segment de a non commun avec b
+        # a segment not in commun with b
         aa    = a[~np.in1d(a,u)]
-        # segment de b non commun avec a
+        # b segment not in common with a
         bb    = b[~np.in1d(b,u)]
         r     = np.hstack((aa,bb))
         if la<lb:
@@ -1137,7 +1235,7 @@ def corrcy(a,b):
 
     Returns
     -------
-    tk : 
+    tk :
 
     Example
     -------
@@ -1146,6 +1244,11 @@ def corrcy(a,b):
     >>> b  =  [1,2,3,4]
     >>> tk = corrcy(a,b)
     >>> assert tk[0]==4,'Problem in corrcy'
+
+    See Also
+    --------
+
+    pylayers.gis.cycles
 
     """
     na = len(a)
@@ -1273,7 +1376,7 @@ def foo(var1, var2, long_var_name='hi') :
     """
 
     pass
-    
+
 
 def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
     """ plot the cumulative density function of x
@@ -1282,16 +1385,16 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
     ----------
 
     x :  np.array  (N)
-    color : string 
-        color symbol 
+    color : string
+        color symbol
     label : string
         label
-    lw: float  
+    lw: float
         linewidth
-    xlabel : string 
-        xlabel 
-    ylabel : string 
-        ylabel 
+    xlabel : string
+        xlabel
+    ylabel : string
+        ylabel
 
     Examples
     --------
@@ -1299,13 +1402,12 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
     .. plot::
         :include-source:
 
-        >>> from matplotlib.pyplot import * 
+        >>> from matplotlib.pyplot import *
         >>> import pylayers.util.pyutil as pyu
         >>> from scipy import *
         >>> import matplotlib.pylab as plt
         >>> x = randn(100)
         >>> pyu.cdf(x)
-        >>> plt.show()
 
     """
     x  = np.sort(x)

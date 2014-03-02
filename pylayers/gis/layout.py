@@ -7198,6 +7198,6 @@ class Layout(object):
 
 
 if __name__ == "__main__":
-    plt.ion()
+    #plt.ion()
     doctest.testmod()
     #L = Layout('defstr3.ini')

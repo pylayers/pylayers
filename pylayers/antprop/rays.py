@@ -129,23 +129,23 @@ class Rays(dict):
                 s = s + '#Rays/#Sig: '+ str( len(self)/(1.*self.nb_origin_sig) )
 
                 s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
-               
+
                 for k in self:
                     #sk = np.shape(self[k]['sig'])[2]
                     s = s + str(k) + ': '+ str(self[k]['sig'][0,:])+'\n'
-                    #s = s + str(sk) + 'rays with' + str(k) + ' interactions'                    
+                    #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
         except:
             print "problem"
             return(s)
 
         return(s)
-   
+
     def reciprocal(self):
         """ switch tx and rx
-       
+
         """
 
-       
+
         r = Rays(self.pRx,self.pTx)
         r.is3D = self.is3D
         r.nray = self.nray
@@ -189,7 +189,7 @@ class Rays(dict):
         if self.evaluated :
 
             for ir in range(self.nray):
-               
+
                 iint1 = self.ray(ir)
                 iint2 = r.ray(ir)
 
@@ -197,7 +197,7 @@ class Rays(dict):
                 A1 = self.I.I[:, iint1, :, :]
                 A2 = r.I.I[:, iint2, :, :][:,::-1,:,:]
                 assert np.allclose(A1,A2),pdb.set_trace()
-               
+
                 # check bases
                 #  ray 1 : B0   | B[0]   | B[1] | B[2] | B[3] | B[4]
                 #  ray 2 : B[4] | B[3]  | B[2]  | B[1] | B[0] | B0
@@ -208,7 +208,7 @@ class Rays(dict):
 
 
     def sort(self):
-        """
+        """ sort rays
         """
         u = np.argsort(self.dis)
 
@@ -477,7 +477,7 @@ class Rays(dict):
             #print "----"
             sigsave = copy.copy(sig)
             # add parameterization of tx and rx (0,1)
-            a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))  
+            a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))
 
             # reshape signature in adding tx and rx
             sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
@@ -488,10 +488,10 @@ class Rays(dict):
             Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
 
             # pte is the sequence of point in 3D ndim =3   ( ndim x k x Nrayk)
-            pte = self[k]['pt']           
+            pte = self[k]['pt']
 
             # ndim x k+2 x Nrayk
-            pte = np.hstack((Tx, pte, Rx)) 
+            pte = np.hstack((Tx, pte, Rx))
 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
@@ -505,18 +505,18 @@ class Rays(dict):
                     # get sorted indices
                     ks = np.argsort(a1e, axis=0)
                     # a1es : extended sorted horizontal + vertical parameterization
-                    a1es = np.sort(a1e, axis=0) 
+                    a1es = np.sort(a1e, axis=0)
 
                     # #### Check if it exist same parameter value  in horizontal plane
                     # #### and vertical plane. Move parameter is so.
                     da1es = np.diff(a1es,axis=0)
                     pda1es = np.where(da1es<1e-10)
                     a1es[pda1es]=a1es[pda1es]-1e-3
-                   
+
 
                     # prepare an extended sequence of points ( ndim x  (Nint+k+2) x Nrayk )
-                    ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))    
-                   
+                    ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))
+
                     #
                     # Boolean ceil/floor detector
                     #
@@ -888,7 +888,7 @@ class Rays(dict):
 
         # nsegment x k
         key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
-       
+
         # maximum number for refering to segment
         # not to be confused with a number of segment
 
@@ -1003,7 +1003,7 @@ class Rays(dict):
                 # si : (i+1) x r
                 #self[k]['si'] = lsi
                 #self[k]['dis'] = np.sum(lsi,axis=0)
-               
+
                 # normal : 3 x i x r
                 vn = self[k]['norm']
                 # s_in : 3 x i x r
@@ -1305,17 +1305,17 @@ class Rays(dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-       
+
         tsl = np.array(())
         rsl = np.array(())
-       
+
         # loop on group of interactions
         for k in self:
 
             if k !=0:
-               
+
                 uR = uT = uD = uRf = uRc = 0.
-               
+
                 # structure number (segment or point)
                 # nstr : i x r
                 nstr = self[k]['sig'][0, 1:-1, :]

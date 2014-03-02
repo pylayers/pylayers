@@ -1176,12 +1176,24 @@ class Antenna(object):
     def _show3(self,fGHz=[],title=True,colorbar=True):
         """ show3 mayavi
 
+        Parameters
+        ----------
+
         fGHz : float
             frequency
         title : bool
             display title
         colorbar :
             display colorbar
+
+        Examples
+        --------
+
+        >>> from pylayers.antprop.antenna import *
+        >>> A = Antenna('defant.sh3')
+        >>> A.Fsynth3()
+        >>> A._show3()
+
         """
 
         if fGHz == []:
@@ -3004,9 +3016,6 @@ def show3D(F, theta, phi, k, col=True):
         >>> from pylayers.antprop.antenna import *
         >>> ifreq = 0
         >>> A     = Antenna('defant.vsh3')
-        >>> A.Nt  = 30
-        >>> A.Np  = 60
-        >>> A.Nf  = len(A.fa)
         >>> theta = np.linspace(0,np.pi,A.Nt)
         >>> phi   = np.linspace(0,2*np.pi,A.Np)
         >>> Fth3,Fph3 = A.Fsynth3(theta,phi)

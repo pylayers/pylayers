@@ -597,8 +597,8 @@ class Geomoff(Geomview):
         Parameters
         ----------
 
-        theta : np.array (Nt x 1 )
-        phi   : np.array (1 x Np)
+        theta : np.array (,Nt)
+        phi   : np.array (,Np)
         E     : np.array complex  (Nt,Np)
         po    : origin (1x3)
         T     : rotation matrix (3x3)
@@ -611,9 +611,9 @@ class Geomoff(Geomview):
 
            >>> from pylayers.util.geomutil import *
            >>> import numpy as np
-           >>> th = np.arange(0,np.pi,0.05)[:,np.newaxis]
-           >>> ph = np.arange(0,2*np.pi,0.05)[np.newaxis,:]
-           >>> E = 1.5*np.sin(th)*np.cos(0*ph)
+           >>> th = np.arange(0,np.pi,0.05)
+           >>> ph = np.arange(0,2*np.pi,0.05)
+           >>> E = 1.5*np.sin(th[:,np.newaxis])*np.cos(0*ph[np.newaxis,:])
            >>> g = Geomoff('dipole')
            >>> g.pattern(th,ph,E)
            >>> g.show3()
@@ -1472,7 +1472,7 @@ def isleft(a,b,c):
     .. plot::
         :include-source:
 
-        >>>from pylayers.util.plotutil import *
+        >>> from pylayers.util.plotutil import *
         >>> import scipy as sp
         >>> import numpy as np
         >>> from pylayers.util.geomutil import *
@@ -3385,16 +3385,17 @@ def mirror(p,pa,pb):
 
     .. plot::
         :include-source:
+
         >>> from pylayers.util.geomutil import *
         >>> from pylayers.util.plotutil import *
+        >>> import matplotlib.pyplot as plt
         >>> import numpy as np
-        >>> p = np.random.randn((2,1000))
+        >>> p = np.random.randn(2,1000)
         >>> pa  = np.array([0,0])
         >>> pb  = np.array([0,1])
         >>> M = mirror(p,pa,pb)
-        >>> displot(pa,pb)
-        >>> plot(p[0,:],p[1,:],'or',alpha=0.2)
-        >>> plot(M[0,:],M[1,:],'ob',alpha=0.2)
+        >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
+        >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
 
     """
 

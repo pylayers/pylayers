@@ -2469,25 +2469,27 @@ def abouteasygui():
 
 
 if __name__ == '__main__':
-    if True:
-        egdemo()
-    else:
-        # test the new root feature
-        root = Tk()
-        msg = """This is a test of a main Tk() window in which we will place an easygui msgbox.
-                It will be an interesting experiment.\n\n"""
-        messageWidget = Message(root, text=msg, width=1000)
-        messageWidget.pack(side=TOP, expand=YES, fill=X, padx='3m', pady='3m')
-        messageWidget = Message(root, text=msg, width=1000)
-        messageWidget.pack(side=TOP, expand=YES, fill=X, padx='3m', pady='3m')
+    pass
 
-
-        msgbox("this is a test of passing in boxRoot", root=root)
-        msgbox("this is a second test of passing in boxRoot", root=root)
-
-        reply = enterbox("Enter something", root=root)
-        writeln("You wrote:", reply)
-
-        reply = enterbox("Enter something else", root=root)
-        writeln("You wrote:", reply)
-        root.destroy()
+#    if True:
+#        egdemo()
+#    else:
+#        # test the new root feature
+#        root = Tk()
+#        msg = """This is a test of a main Tk() window in which we will place an easygui msgbox.
+#                It will be an interesting experiment.\n\n"""
+#        messageWidget = Message(root, text=msg, width=1000)
+#        messageWidget.pack(side=TOP, expand=YES, fill=X, padx='3m', pady='3m')
+#        messageWidget = Message(root, text=msg, width=1000)
+#        messageWidget.pack(side=TOP, expand=YES, fill=X, padx='3m', pady='3m')
+#
+#
+#        msgbox("this is a test of passing in boxRoot", root=root)
+#        msgbox("this is a second test of passing in boxRoot", root=root)
+#
+#        reply = enterbox("Enter something", root=root)
+#        writeln("You wrote:", reply)
+#
+#        reply = enterbox("Enter something else", root=root)
+#        writeln("You wrote:", reply)
+#        root.destroy()

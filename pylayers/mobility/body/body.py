@@ -50,7 +50,7 @@ def dist(A, B):
 
 
 class Body(object):
-    """ Class to manage the Body model
+    """ Class to manage a Body model
 
     Members
     -------
@@ -77,18 +77,19 @@ class Body(object):
     cylinder_basis_k
     cyl_antenna
 
-    Notes
-    -----
 
-    nodes_Id = {0:'STRN',1:'CLAV',2:'RFHD',3:'RSHO',
-    4:'LSHO', 5:'RELB',6:'LELB', 7:'RWRB',8:'LWRB', 9:'RFWT',
-    10:'LFWT', 11:'RKNE', 12:'LKNE',13:'RANK', 14:'LANK' ,
-    15:'LFIN' ,16:'LELB', 17:'RUPA',18:'LUPA', 19:'RFRM',
-    20:'LFRM', 21:'LSHN', 22:'RSHN',23:'LTHI', 24:'RTHI',
-    25:'LHEE', 26:'RHEE', 27:'LTOE',28:'RTOE', 29:'RMT5'}
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
+        """
+        Parameters
+        ----------
+
+        _filebody : string 
+        _filemocap : string     
+
+        """
+
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
         self.loadC3D(filename=_filemocap,centered=True)
@@ -140,6 +141,7 @@ class Body(object):
         ----------
 
         _filebody : body short filename
+
         Notes
         -----
 
@@ -148,7 +150,7 @@ class Body(object):
         + section [nodes]
         Node number = Node name
         + section [cylinder]
-        Cylinder number = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
+        CylinderId = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
         + section [antennas]
         Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
 
@@ -187,6 +189,8 @@ class Body(object):
             self.sl[i,:] = np.array([t,h,r])
 
         self.ncyl = len(di['cylinder'].values())
+        
+        # update devices dict 
         self.dev={}
         for dev in di['device'].keys():
             self.dev[dev]=di['device'][dev]
@@ -329,9 +333,12 @@ class Body(object):
             >>> x = v*time
             >>> y = np.zeros(len(time))
             >>> traj = tr.Trajectory()
+            >>> traj.generate()
             >>> John = body.Body()
             >>> John.settopos(traj,2.3)
-            >>> John.show()
+            >>> fig,ax = John.show(plane='xz',color='b')
+            >>> plt.title('xz')
+            >>> plt.show()
 
         Notes
         -----
@@ -414,7 +421,7 @@ class Body(object):
         topos : boolean
                 default : True
         frameId : int
-                default 0 
+                default 0
 
         Returns
         -------
@@ -423,21 +430,26 @@ class Body(object):
 
         Examples
         --------
-        >>> import numpy as np
-        >>> import pylayers.mobility.trajectory as tr
-        >>> import matplotlib.pyplot as plt
-        >>> time = np.arange(0,10,0.1)
-        >>> v = 4000/3600.
-        >>> x = v*time
-        >>> y = np.zeros(len(time))
-        >>> traj = tr.Trajectory()
-        >>> bc = Body()
-        >>> bc.settopos(traj,2.3,2)
-        >>> bc.setccs(topos=True)
-        >>> bc.setdcs()
-        >>> nx.draw(bc.g,bc.g.pos)
-        >>> axe = plt.axis('scaled')
-        >>> plt.show()
+
+        .. plot::
+            :include-source:
+
+            >>> import numpy as np
+            >>> import pylayers.mobility.trajectory as tr
+            >>> import pylayers.mobility.body.body as body
+            >>> import matplotlib.pyplot as plt
+            >>> time = np.arange(0,10,0.1)
+            >>> v = 4000/3600.
+            >>> x = v*time
+            >>> y = np.zeros(len(time))
+            >>> traj = tr.Trajectory()
+            >>> traj.generate()
+            >>> bc = body.Body()
+            >>> bc.settopos(traj,2.3,2)
+            >>> bc.setccs(topos=True)
+            >>> bc.setdcs()
+            >>> bc.show(plane='yz',color='b',widthfactor=80)
+            >>> plt.show()
 
         """
         self.dcs = {}
@@ -725,7 +737,7 @@ class Body(object):
             ax2 = 2
         if kwargs['plane'] == 'xy':
             ax1 = 0
-            ax2 = 2
+            ax2 = 1
 
         fId = kwargs['frameId']
 

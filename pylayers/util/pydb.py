@@ -70,7 +70,7 @@ class pysql():
         for i in range(len(column_names)):
             column_names[i]=column_names[i][0]
         return column_names
-        
+
     def runselectcmd(self,cmd):
         """
         run a select sql command cmd
@@ -97,4 +97,4 @@ class pysql():
         self.cnxn.commit()
 
 
-        
+

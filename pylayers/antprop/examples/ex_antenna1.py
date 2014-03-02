@@ -4,8 +4,8 @@ import matplotlib.pylab as plt
 from numpy import *
 import pdb
 """
-This example : 
-    
+This example :
+
     1 : loads a measured antenna
     2 : applies an electrical delay obtained from data with getdelay method
     3 : evaluate the antenna vsh coefficient with a downsampling factor of 2
@@ -17,13 +17,13 @@ This example :
 
 filename = 'S1R6.mat'
 
-A = Antenna(filename,'ant/UWBAN/Matfile')
+A = Antenna(filename,directory='ant/UWBAN/Matfile')
 
 #plot(freq,angle(A.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]*exp(2j*pi*freq.reshape(len(freq))*electricalDelay)))
 freq = A.fa.reshape(104,1,1)
 delayCandidates = arange(-10,10,0.001)
 electricalDelay = A.getdelay(freq,delayCandidates)
-disp('Electrical Delay = ' + str(electricalDelay)+' ns') 
+disp('Electrical Delay = ' + str(electricalDelay)+' ns')
 
 
 A.Ftheta = A.Ftheta*exp(2*1j*pi*freq*electricalDelay)
@@ -41,7 +41,7 @@ tmse = []
 Lmax = 40
 A.C.s1tos2(40)
 A.C.s2tos3(1e-5)
-errelTh,errelPh,errel = A.errel(20,dsf,typ='s3')
+errelTh,errelPh,errel = A.errel(20,dsf,typ='vsh3')
 
 #tl = arange(1,6,0.01)
 #for l in tl:

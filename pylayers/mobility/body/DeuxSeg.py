@@ -1,7 +1,7 @@
-from numpy import *
-from scipy import *
-from matplotlib.pylab import *
-from scipy.linalg import *
+import numpy as np
+import scipy as sp
+import matplotlib.pylab as plt
+import scipy.linalg as la
 
 
 
@@ -12,14 +12,14 @@ def dist(A,B,C,D,alpha,beta):
     AC=C-A
     CD=D-C
     BA=A-B
-    
+
     u0 = dot(AC,AC)
     u4 = dot(BA,BA)
     u5 = dot(CD,CD)
     u1 = dot(BA,AC)
     u2 = dot(CD,AC)
     u3 = dot(CD,BA)
-    
+
     f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
     M  = A - alpha*BA
     N  = C + beta*CD
@@ -60,40 +60,40 @@ def dmin3d(A,B,C,D):
 
 # <codecell>
 if (__name__=="__main__"):
-		
-	A = rand(3)
-	B = rand(3)
-	C = rand(3)
-	D = rand(3)
 
-	a,b,d=dmin3d(A,B,C,D)
+    A = rand(3)
+    B = rand(3)
+    C = rand(3)
+    D = rand(3)
 
-	if a < 0:
-		a = 0 
+    a,b,d=dmin3d(A,B,C,D)
 
-	if a > 1:
-		a = 1
-	if b < 0:
-		b = 0 
-	if b > 1:
-		b = 1 
-		   
-	f, g   = dist(A,B,C,D,a,b)
+    if a < 0:
+        a = 0
 
-	print a,b,d
+    if a > 1:
+        a = 1
+    if b < 0:
+        b = 0
+    if b > 1:
+        b = 1
 
-	print f,g
+    f, g   = dist(A,B,C,D,a,b)
 
-	print 'sqrt ' ,  sqrt(f), sqrt(g)
+    print a,b,d
 
-	# <codecell>
+    print f,g
 
-	a
+    print 'sqrt ' ,  sqrt(f), sqrt(g)
 
-	# <codecell>
+    # <codecell>
 
-	b
+    a
 
-	# <codecell>
+    # <codecell>
+
+    b
+
+    # <codecell>
 
 

@@ -1,40 +1,35 @@
-# -*- coding: utf-8 -*-
-# <nbformat>3.0</nbformat>
-
-# <markdowncell>
-
-# # Initialization
-
-# <codecell>
-
 from pylayers.gis.layout import *
 from pylayers.mobility.agent import *
 from pylayers.network.network import *
 from pylayers.network.emsolver import *
 
-# <markdowncell>
 
 # ## Layout Creation
-# 
-# First we need to load a layout structure. 
-# 
+#
+# First we need to load a layout structure.
+#
 # A place where nodes from a network can move and communicate
 
 # <codecell>
 
-L=Layout('TA-Office.str')
-L.build('str') # build 's'tructure, 't'opological and 'r'oom graphs
-fig,ax=L.showG('',show=False)
+L=Layout('TA-Office.ini')
+try:
+    L.dumpr() # build 's'tructure, 't'opological and 'r'oom graphs
+except:
+    L.build()
+    L.dumpw()
+
+fig,ax=L.showG('s')
 
 
 # <markdowncell>
 
 # ## Network Creation
-# 
-# Now we must instanciate a void Network. 
-# 
+#
+# Now we must instanciate a void Network.
+#
 # A Network will gather all radio acces technology RAT from all agents
-# The Network class inherits from networkx 
+# The Network class inherits from networkx
 
 # <codecell>
 
@@ -43,20 +38,21 @@ N=Network()
 # <markdowncell>
 
 # ## Agents Creation
-# 
+#
 # Then we need to instanciate agents ( nodes ) into that layout.
 # An agent is either a moving person or a static acces point which have one or more (RAT).
-# 
+#
 # - For that tutorial we create 3 agents in room **0 ,3 and 5** respectively.
 # - We suppose they communicate on the same and unique RAT : **'rat1'**
 # - Obviously agent will evolve into the previously created network **N**.
-#     
+#
 
 # <codecell>
 
 Ag=[]
 nb_agent = 3
 room_init=[0,3,5]
+pdb.set_trace()
 for na in range(nb_agent):
     Ag.append(
               Agent(ID = na,
@@ -70,7 +66,7 @@ for na in range(nb_agent):
 # <markdowncell>
 
 # ## Connection Creation
-# 
+#
 # Now we can create the Network. It means, we connect agents all together, according to their common RAT.
 
 # <codecell>
@@ -94,14 +90,14 @@ N.show(fig = fig2, legend = True)
 # <markdowncell>
 
 # The node is a dictionnary whi containts the folowing keys :
-# 
+#
 # * 'PN'  : Its Personnal Network ( described in the following)
 # * 'RAT' : A list of RAT of which it belongs
 # * 'p'   : Its true position
 # * 'pe'  : Its estimated position if it has computed it by itself ( cf. location tutorial - IN CONSTRUCTION -)
 # * 't'   : A time stamp
 # * 'type': Its type ( 'ag' : for agent or 'ap' for access point )
-# 
+#
 # example with node '0'
 
 # <codecell>
@@ -110,10 +106,10 @@ N.node[0]
 
 # <markdowncell>
 
-# The edge is a dictionnary of dictionnary. 
+# The edge is a dictionnary of dictionnary.
 # Each RAT is a key of the first dictionnary.
 # Location dependent parameter (LDP) is the key of the second.
-# 
+#
 # example with edge 0-1
 
 # <codecell>
@@ -127,19 +123,19 @@ N.edge[0][1]
 # <markdowncell>
 
 # # Compute Location dependent parameters (LDPs)
-# 
+#
 # LDPs are radio measurements bewteen agents. It could be either:
-# 
-# 1. Time of Arrival (**TOA**) 
+#
+# 1. Time of Arrival (**TOA**)
 # 2. Received Power (**Pr**)
 
 # <markdowncell>
 
 # ## EMS initialization
-# 
-# We first initialize the electromagnetic solver (EMS) for the given Network N. 
+#
+# We first initialize the electromagnetic solver (EMS) for the given Network N.
 # We must give it a Layout strucuture, in order to be able to compute accurate LDP.
-# 
+#
 # .. note:: it could have be made during the Network instantiation
 
 # <codecell>
@@ -149,7 +145,7 @@ N.EMS=EMSolver(L)
 # <markdowncell>
 
 # ## Computation
-# 
+#
 # The we compute *TOA* and *received power*  dependent parameters, and display for link 0-1
 
 # <codecell>

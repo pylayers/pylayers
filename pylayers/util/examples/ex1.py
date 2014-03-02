@@ -34,8 +34,9 @@ ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
 
 pA = np.array([[3],[3],[3]])
 pB = np.array([[10],[10],[10]])
+v  = np.array([[1],[0],[0]])
 pM = (pA+pB)/2.
-T  = onbfromaxe(pA,pB)
+T  = onb(pA,pB,v)
 R = 1
 X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
 Y = np.hstack((pM,pA,pB,pM+R*T[0,:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[:,1].reshape(3,1)))
