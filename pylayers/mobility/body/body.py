@@ -92,8 +92,8 @@ class Body(object):
         Parameters
         ----------
 
-        _filebody : string 
-        _filemocap : string     
+        _filebody : string
+        _filemocap : string
 
         """
 
@@ -705,7 +705,17 @@ class Body(object):
         return(fig,ax)
 
     def _show3(self,**kwargs):
-        """
+        """ mayavi visualization
+
+        Parameters
+        ----------
+        iframe :
+        widthfactor :
+        topos : boolean
+        pattern : boolean
+        ccs : boolean
+        k : frame index
+
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
@@ -758,16 +768,23 @@ class Body(object):
         if kwargs['pattern']:
             self.setacs()
             for key in self.dcs.keys():
-                import ipdb
                 Ant =  ant.Antenna(self.dev[key]['file'])
+
                 if not hasattr(Ant,'SqG'):
                     Ant.Fsynth()
+
                 U = self.dcs[key]
                 V = Ant.SqG[kwargs['k'],:,:]
-                T  = self.acs[key]
+                T = self.acs[key]
 
-                Ant._show3(po=U[:,0], T=T,ilog=False,minr=0.01,maxr=0.2,
-                            newfig=False,title=False,colorbar=False)
+                Ant._show3(po=U[:,0],
+                           T=T,
+                           ilog=False,
+                           minr=0.01,
+                           maxr=0.2,
+                           newfig=False,
+                           title=False,
+                           colorbar=False)
 
 
 
