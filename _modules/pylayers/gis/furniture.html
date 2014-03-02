@@ -82,26 +82,6 @@
 <span class="sd">&quot;&quot;&quot; Handle Furnitures</span>
 
 
-<span class="sd">Summary</span>
-<span class="sd">-------</span>
-
-<span class="sd">This module handle the description of furnitures</span>
-<span class="sd">For now furnitures are rectangular objects.</span>
-<span class="sd">In the future it should be able to accept any polygon as a furniture element</span>
-
-<span class="sd">Furniture are stored in an ini file of dirstruc.</span>
-
-<span class="sd">    from pylayers.gis.layout import *</span>
-<span class="sd">    import matplotlib.pylab as plt</span>
-<span class="sd">    L = Layout()</span>
-<span class="sd">    L.loadstr(&#39;where1.ini&#39;)</span>
-<span class="sd">    L.showGs()</span>
-<span class="sd">    L.loadfur(&#39;Furw1.ini&#39;)</span>
-<span class="sd">    fig = plt.gcf()</span>
-<span class="sd">    ax  = fig.get_axes()[0]</span>
-<span class="sd">    for fur in L.lfur:</span>
-<span class="sd">        fur.show(fig,ax)</span>
-
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -109,7 +89,6 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
-<span class="c">#import Graph</span>
 <span class="kn">from</span>   <span class="nn">matplotlib.path</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span>   <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">PathPatch</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -136,7 +115,23 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 
-<span class="sd">    A piece of furniture is a rectangular object with the following parameters</span>
+<span class="sd">    This class handle the description of furnitures.</span>
+<span class="sd">    Until now furnitures are limited to rectangular objects.</span>
+<span class="sd">    A possible evolution would be to authorize any polygon as a furniture element</span>
+
+<span class="sd">    Furniture are stored in an ini file of dirstruc.</span>
+
+<span class="sd">    from pylayers.gis.layout import *</span>
+<span class="sd">    import matplotlib.pylab as plt</span>
+<span class="sd">    L = Layout()</span>
+<span class="sd">    L.loadstr(&#39;where1.ini&#39;)</span>
+<span class="sd">    L.showGs()</span>
+<span class="sd">    L.loadfur(&#39;Furw1.ini&#39;)</span>
+<span class="sd">    fig = plt.gcf()</span>
+<span class="sd">    ax  = fig.get_axes()[0]</span>
+<span class="sd">    for fur in L.lfur:</span>
+<span class="sd">        fur.show(fig,ax)</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
