@@ -126,12 +126,12 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    config </span>
-<span class="sd">    fileini </span>
+<span class="sd">    config</span>
+<span class="sd">    fileini</span>
 <span class="sd">    ems_opt</span>
-<span class="sd">    toa_opt </span>
+<span class="sd">    toa_opt</span>
 <span class="sd">    EMS_method</span>
-<span class="sd">        </span>
+<span class="sd">       </span>
 <span class="sd">    sigmaTOA</span>
 
 <span class="sd">    Notes</span>
@@ -140,7 +140,7 @@
 <span class="sd">    During dynamic simulation, on a regular basis nodes needs radio information</span>
 <span class="sd">    about their neighbors. This radio information can be obtained with</span>
 <span class="sd">    different technique from statistical model to site specific simulation</span>
-<span class="sd">    using ray tracing. </span>
+<span class="sd">    using ray tracing.</span>
 
 <span class="sd">    EMS_method = { &#39;multiwall&#39;,&#39;raytracing&#39;}</span>
 
@@ -169,12 +169,12 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        RAT : string </span>
-<span class="sd">            RAT name </span>
+<span class="sd">        RAT : string</span>
+<span class="sd">            RAT name</span>
 <span class="sd">        model : dictionnary</span>
-<span class="sd">            parameters of the PL model </span>
-<span class="sd">            </span>
-<span class="sd">            </span>
+<span class="sd">            parameters of the PL model</span>
+<span class="sd">           </span>
+<span class="sd">           </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
@@ -192,20 +192,20 @@
 
 
     <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; load a path loss shadowing model for a RAT </span>
+        <span class="sd">&quot;&quot;&quot; load a path loss shadowing model for a RAT</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        RAT  : string </span>
-<span class="sd">            RAT name </span>
+<span class="sd">        RAT  : string</span>
+<span class="sd">            RAT name</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">ratopt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">))</span>
-        
-        <span class="c"># Path Loss Shadowing model </span>
+       
+        <span class="c"># Path Loss Shadowing model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">]),</span>
                                    <span class="n">rssnp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;rssnp&#39;</span><span class="p">]),</span>
                                    <span class="n">d0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]),</span>
@@ -218,19 +218,19 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+<span class="sd">       </span>
 <span class="sd">        p : np.array</span>
 <span class="sd">        e : np.array</span>
 <span class="sd">        LDP : string</span>
 <span class="sd">            Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</span>
-<span class="sd">        epwr : list </span>
+<span class="sd">        epwr : list</span>
 <span class="sd">           nodes emmited power</span>
-<span class="sd">        sens : list </span>
+<span class="sd">        sens : list</span>
 <span class="sd">            nodes sensitivity</span>
-<span class="sd">                </span>
+<span class="sd">               </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        </span>
+<span class="sd">       </span>
 <span class="sd">        value : float</span>
 <span class="sd">            A LDP value :     * A time in ns for LDP =&#39;TOA&#39;</span>
 <span class="sd">                    * A received power in dBm for LDP =&#39;Pr&#39;</span>
@@ -266,8 +266,8 @@
 <span class="c">#                    std = self.model.sigrss*sp.randn(len(d))</span>
 <span class="c">#                    r=model.getPL(d,model.sigrss)</span>
 <span class="c">#                    return ([[- r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)</span>
-<span class="c">#                </span>
-<span class="c">#            </span>
+<span class="c">#               </span>
+<span class="c">#           </span>
 
 
 
@@ -283,7 +283,7 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
                 <span class="n">lp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))])</span>
-                <span class="c"># euclidian distance </span>
+                <span class="c"># euclidian distance</span>
                 <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
                 <span class="n">slp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">lp</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -300,26 +300,26 @@
 
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lpa</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                         <span class="c"># excess time of flight + losses computation</span>
-                        <span class="c"># </span>
-                        <span class="c"># Losst returns 4 parameters   </span>
-                        <span class="c">#   Lo Lp Edo Edp </span>
+                        <span class="c">#</span>
+                        <span class="c"># Losst returns 4 parameters  </span>
+                        <span class="c">#   Lo Lp Edo Edp</span>
                         <span class="c">#</span>
                         <span class="c">#</span>
-                        <span class="n">MW</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> 
-                        <span class="c"># MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) </span>
+                        <span class="n">MW</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="c"># MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])</span>
                         <span class="c"># loss free space</span>
                         <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">frees</span><span class="p">,</span><span class="n">mw</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">)</span> <span class="p">))</span>
                         <span class="c"># Pr.extend(lepwr - MW[0] - frees)</span>
-                        
+                       
                         <span class="c"># WARNING : only one polarization is taken into</span>
                         <span class="c"># account here</span>
-                        <span class="c"># save losses computation </span>
+                        <span class="c"># save losses computation</span>
 
                         <span class="n">loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">loss</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
-                        <span class="c"># save excess tof computation </span>
+                        <span class="c"># save excess tof computation</span>
                         <span class="n">TOA</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">TOA</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
 
-                    <span class="c"># emmited power for the first nodes of computed edges </span>
+                    <span class="c"># emmited power for the first nodes of computed edges</span>
                     <span class="n">lepwr1</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
                     <span class="n">lepwr2</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
                     <span class="n">Pr</span> <span class="o">=</span> <span class="n">lepwr1</span> <span class="o">-</span> <span class="n">loss</span> <span class="o">-</span> <span class="n">frees</span>
@@ -330,7 +330,7 @@
                     <span class="n">P</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sigrss</span>
                     <span class="n">lsens</span> <span class="o">=</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
 
-                    <span class="c"># visibility or not </span>
+                    <span class="c"># visibility or not</span>
                     <span class="n">v</span> <span class="o">=</span> <span class="n">P</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">lsens</span>
 
                     <span class="c"># same toa for link and reverse link</span>
@@ -356,7 +356,7 @@
 <span class="c">#                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))</span>
 <span class="c">#                        lepwr.extend(epwr[i+1:lpa])</span>
 <span class="c">#                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)</span>
-<span class="c">#            </span>
+<span class="c">#           </span>
 <span class="c">#                elif LDP == &#39;TOA&#39;: #### NOT CORRECT !</span>
 <span class="c">#                    std = self.sigmaTOA*sp.randn(len(d))</span>
 <span class="c">#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)</span>
