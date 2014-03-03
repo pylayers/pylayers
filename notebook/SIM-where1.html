@@ -103,7 +103,7 @@ there is a default configuration file named <strong>default.ini</strong>.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7d3af10&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x80f1fd0&gt;
 </pre></div>
 </div>
 <p>A first step consists in loading a layout associated with the
@@ -128,11 +128,11 @@ simulation object <strong>S</strong>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x20c9b10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x9473810&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x81bc210&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x9824590&gt;)
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_5_1.png" src="./SIM-where1_files/SIM-where1_5_1.png" />
+<img alt="../_images/SIM-where1_5_1.png" src="../_images/SIM-where1_5_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGi</span><span class="p">(</span><span class="n">en</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
@@ -149,7 +149,7 @@ lseg [137 230]
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">31.123950000000001</span><span class="p">,</span> <span class="mf">34.74295</span><span class="p">,</span> <span class="mf">3.6289500000000001</span><span class="p">,</span> <span class="mf">17.468049999999998</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_6_2.png" src="./SIM-where1_files/SIM-where1_6_2.png" />
+<img alt="../_images/SIM-where1_6_2.png" src="../_images/SIM-where1_6_2.png" />
 <p>The layout display is fully parameterized via the embedded <strong>display</strong>
 dictionnary member of the Layout object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
@@ -160,7 +160,7 @@ dictionnary member of the Layout object.</p>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_8_0.png" src="./SIM-where1_files/SIM-where1_8_0.png" />
+<img alt="../_images/SIM-where1_8_0.png" src="../_images/SIM-where1_8_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -194,7 +194,7 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_15_1.png" src="./SIM-where1_files/SIM-where1_15_1.png" />
+<img alt="../_images/SIM-where1_15_1.png" src="../_images/SIM-where1_15_1.png" />
 <p>Select Tx and Rx positions</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
 <span class="mi">10</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
@@ -283,13 +283,13 @@ Rxs OK
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_21_0.png" src="./SIM-where1_files/SIM-where1_21_0.png" />
+<img alt="../_images/SIM-where1_21_0.png" src="../_images/SIM-where1_21_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;tx&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0x7fa4e9df83d0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.legend.Legend at 0xe8e0dd0&gt;
 </pre></div>
 </div>
 </div>
@@ -329,19 +329,19 @@ is done by instantiating a Signature object with a given layout and the
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fa4e890e850&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fa4e9df8610&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xe4dec50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fc840210390&gt;)
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_30_1.png" src="./SIM-where1_files/SIM-where1_30_1.png" />
+<img alt="../_images/SIM-where1_30_1.png" src="../_images/SIM-where1_30_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fa4e8900550&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fa4eaa6bd90&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xe4d1150&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xcfe9d10&gt;)
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_31_1.png" src="./SIM-where1_files/SIM-where1_31_1.png" />
+<img alt="../_images/SIM-where1_31_1.png" src="../_images/SIM-where1_31_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">r3d</span>
@@ -566,7 +566,7 @@ nl : 970
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_40_0.png" src="./SIM-where1_files/SIM-where1_40_0.png" />
+<img alt="../_images/SIM-where1_40_0.png" src="../_images/SIM-where1_40_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ciro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 <span class="n">cira</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 </pre></div>
@@ -579,18 +579,18 @@ nl : 970
   warnings.warn(&quot;No labeled objects found. &quot;
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fa4b0463f90&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fc843ce4f50&gt;
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_42_2.png" src="./SIM-where1_files/SIM-where1_42_2.png" />
+<img alt="../_images/SIM-where1_42_2.png" src="../_images/SIM-where1_42_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;received waveform with antenna&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fa4b19cc290&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fc843a84650&gt;
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_43_1.png" src="./SIM-where1_files/SIM-where1_43_1.png" />
+<img alt="../_images/SIM-where1_43_1.png" src="../_images/SIM-where1_43_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#dchan={i:&#39;ch&#39;+str(i) for i in range(1,5)}</span>
 <span class="n">dchan</span><span class="o">=</span><span class="p">{}</span>
 <span class="n">dchan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;ch3&#39;</span>
@@ -617,7 +617,7 @@ nl : 970
 <span class="c">#ciro.plot()</span>
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_45_0.png" src="./SIM-where1_files/SIM-where1_45_0.png" />
+<img alt="../_images/SIM-where1_45_0.png" src="../_images/SIM-where1_45_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">tx</span><span class="o">-</span><span class="n">rx</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
 
@@ -688,11 +688,11 @@ rotation matrix# [0] type: B
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">180</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fa4b11f2c50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fa4b1f0ff50&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xa65e9d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x10426190&gt;)
 </pre></div>
 </div>
-<img alt="./SIM-where1_files/SIM-where1_49_1.png" src="./SIM-where1_files/SIM-where1_49_1.png" />
+<img alt="../_images/SIM-where1_49_1.png" src="../_images/SIM-where1_49_1.png" />
 </div>
 </div>
 
@@ -721,7 +721,7 @@ rotation matrix# [0] type: B
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 02, 2014.
+      Last updated on mars 03, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

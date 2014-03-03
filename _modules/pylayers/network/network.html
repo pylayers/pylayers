@@ -195,8 +195,9 @@
 
 </div></div>
 <div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Network class</span>
-<span class="sd">    inherit of networkx.Graph()</span>
+    <span class="sd">&quot;&quot;&quot; Network class</span>
+
+<span class="sd">    inherits of networkx.Graph()</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -217,9 +218,9 @@
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    get_RAT(self)                    : Get RAT from nodes of the network</span>
-<span class="sd">    connect(self)                    : Connect each node from a rat together</span>
-<span class="sd">    create(self)                    : compute get_RAT(),get_pos() and connect()</span>
+<span class="sd">    get_RAT(self)  : Get RAT from nodes of the network</span>
+<span class="sd">    connect(self)  : Connect each node from a rat together</span>
+<span class="sd">    create(self)   : compute get_RAT(),get_pos() and connect()</span>
 <span class="sd">    update_LDP(self,n1,n2,RAT,LDP=None,value=[])    : update Location Dependent Parameter  </span>
 <span class="sd">    compute_LDP(self,RAT) : compute the LDP value thanks to a ElectroMag Solver </span>
 <span class="sd">    update_pos(self,n,p=np.array)            : update node (or node list) position</span>
@@ -254,8 +255,6 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;number of agents: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
 
-
-            
             <span class="n">typ</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> 
 
             <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
@@ -285,11 +284,11 @@
             <span class="k">for</span> <span class="n">e1</span><span class="p">,</span><span class="n">e2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
                 <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="n">rat</span> <span class="o">=</span> <span class="n">r</span>
-                    <span class="n">TOA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>          
-                    <span class="n">stdTOA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>          
-                    <span class="n">pr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>          
-                    <span class="n">stdpr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  
-                    <span class="k">try</span> <span class="p">:</span>        
+                    <span class="n">TOA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">stdTOA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">pr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">stdpr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">try</span> <span class="p">:</span>
                         <span class="n">tTOA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">e1</span><span class="p">][</span><span class="n">e2</span><span class="p">][</span><span class="n">r</span><span class="p">][</span><span class="s">&#39;tTOA&#39;</span><span class="p">]</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="n">tTOA</span> <span class="o">=</span> <span class="s">&#39;nan&#39;</span>
@@ -308,11 +307,11 @@
 
 
 <div class="viewcode-block" id="Network.perm"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.perm">[docs]</a>    <span class="k">def</span> <span class="nf">perm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
-        <span class="sd">&quot;&quot;&quot; combi = itertools.permutation(iterable,r) adapted </span>
-<span class="sd">    </span>
+        <span class="sd">&quot;&quot;&quot; combi = itertools.permutation(iterable,r) adapted</span>
+
 <span class="sd">        This is an adapted version of itertools.permutations in order to be complient with the networkx.add_edges_from method.</span>
 <span class="sd">        itertools.permutations(range(4), 3) --&gt; 012 013 021 023 031 302 102 103 ...</span>
-<span class="sd">    </span>
+
 <span class="sd">        self.perm([10,11],2,&#39;wifi&#39;) --&gt;     (10, 11, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []}) </span>
 <span class="sd">                                (11, 10, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []})</span>
 
@@ -326,10 +325,10 @@
 
 
 <span class="sd">        Returns</span>
-<span class="sd">        ------     </span>
+<span class="sd">        --------</span>
 
 <span class="sd">        out : tuple(node_list,r,RAT,d):</span>
-<span class="sd">        node_list    : list of node1        </span>
+<span class="sd">        node_list    : list of node1</span>
 <span class="sd">        r        : gather r node in the tuple</span>
 <span class="sd">        RAT        : the specified RAT</span>
 <span class="sd">        d        : dictionnary of RAT attribute</span>
@@ -341,11 +340,11 @@
 <span class="sd">        &gt;&gt;&gt; N=Network()</span>
 <span class="sd">        &gt;&gt;&gt; l= [0,1,2]</span>
 <span class="sd">        &gt;&gt;&gt; key=&#39;toto&#39;</span>
-<span class="sd">        &gt;&gt;&gt; d=dict(key1=1,key2=2) </span>
+<span class="sd">        &gt;&gt;&gt; d=dict(key1=1,key2=2)</span>
 <span class="sd">        &gt;&gt;&gt; perm=N.perm(l,2,key,d)</span>
-<span class="sd">        &gt;&gt;&gt; perm.next()        </span>
+<span class="sd">        &gt;&gt;&gt; perm.next()</span>
 <span class="sd">        (0, 1, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
-<span class="sd">        &gt;&gt;&gt; perm.next()        </span>
+<span class="sd">        &gt;&gt;&gt; perm.next()</span>
 <span class="sd">        (0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})        for l in self.LDP:</span>
 <span class="sd">        &gt;&gt;&gt; perm.next()</span>
 <span class="sd">        (1, 0, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
@@ -385,11 +384,11 @@
 </div>
 <div class="viewcode-block" id="Network.combi"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.combi">[docs]</a>    <span class="k">def</span> <span class="nf">combi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
         <span class="sd">&quot;&quot;&quot; combi = itertools.combination(iterable,r) adapted </span>
-<span class="sd">    </span>
+
 <span class="sd">        This is an adapted version of itertools.combinations in order to be complient with the networkx.add_edges_from method.</span>
 <span class="sd">        itertools.combinations(&#39;ABCD&#39;, 2) --&gt; AB AC AD BC BD CD</span>
 <span class="sd">        itertools.combinations(range(4), 3) --&gt; 012 013 023 123</span>
-<span class="sd">    </span>
+
 <span class="sd">        self.combi([10,11,12],2,&#39;wifi&#39;) --&gt;     (10, 11, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []}) </span>
 <span class="sd">                                (10, 12, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []})</span>
 <span class="sd">                            (11, 12, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []})</span>
@@ -431,7 +430,7 @@
 <span class="c">#        for l in self.LDP:</span>
 <span class="c">#            d[l]=[]</span>
 
-            
+
 
         <span class="n">pool</span> <span class="o">=</span> <span class="n">iterable</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
