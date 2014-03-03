@@ -26,6 +26,12 @@ from pylayers.antprop.interactions import *
 from pylayers.antprop.slab import *
 from pylayers.antprop.channel import Ctilde
 import pylayers.signal.bsignal as bs
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
 
 class Rays(dict):
     """ A set af rays
@@ -1898,6 +1904,53 @@ class Rays(dict):
             os.system(chaine)
         else:
             return(filename)
+
+    @mlab.show
+    def _show3(self,L,ilist=[],rlist=[],newfig=False):
+        """
+
+        """
+        if newfig:
+            mlab.clf()
+            mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+        else :
+            mlab.gcf()
+
+        L._show3()
+
+        try:
+            L.filename
+        except:
+            raise NameError('L argument must be a layout object')
+
+        
+
+        if ilist == []:
+            nbi = self.keys()
+        else :
+            if not isinstance(ilist,list):
+                nbi = np.array(([ilist]))
+            else :
+                nbi = np.array((ilist))
+
+        if not isinstance(rlist,list):
+            rlist=[rlist]
+
+        for i in nbi:
+            if rlist == []:
+                r = range(np.shape(self[i]['pt'])[2])
+            else :
+                r = np.array((rlist)) 
+            # number of rays
+            nbr = len(r) 
+            # current number of interactions
+            cnbi = i + 2
+            pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
+            lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+            mesh = tvtk.PolyData(points=pt.T, polys=lines)
+            mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
+                                                 color=(0, 0, 0), )
+
 
     def show3(self,
               L=[],
