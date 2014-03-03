@@ -252,27 +252,43 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Interface.tocolor"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; convert transmission into color</span>
 
-<span class="sd">Parameters</span>
-<span class="sd">----------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
-<span class="sd">fGHz : np.array</span>
+<span class="sd">        fGHz : np.array</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        col : string</span>
+<span class="sd">            hexadecimal color</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See Also </span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        pylayers.gis.layout.showGs</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># nf x nt x 2 x 2</span>
         <span class="n">modTo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="n">modTp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">N</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">:</span>
             <span class="n">M</span> <span class="o">=</span> <span class="n">N</span><span class="o">/</span><span class="mi">3</span>
+
             <span class="n">ared</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">])</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">)</span>
             <span class="n">agreen</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="n">M</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">])</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="n">M</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">)</span>
             <span class="n">ablue</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">:])</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">:]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">))</span>
+
+            <span class="c"># hexadsecimal convert</span>
             <span class="n">vred</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ared</span><span class="o">*</span><span class="mi">255</span><span class="p">)))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
             <span class="n">vgreen</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">agreen</span><span class="o">*</span><span class="mi">255</span><span class="p">)))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
             <span class="n">vblue</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ablue</span><span class="o">*</span><span class="mi">255</span><span class="p">)))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vred</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
                 <span class="n">vred</span> <span class="o">=</span> <span class="s">&#39;0&#39;</span><span class="o">+</span><span class="n">vred</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vgreen</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
