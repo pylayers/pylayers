@@ -124,7 +124,7 @@ class Body(object):
         if 'topos' not in dir(self):
             st = st+ 'I am nowhere yet\n\n'
         else :
-            st = 'My centroid position is \n'+ str(self.centroid)+"\n"
+            st = st + 'My centroid position is \n'+ str(self.centroid)+"\n"
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):
@@ -1447,10 +1447,11 @@ def Global_Trajectory(cycle, traj):
 if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()
-    bd = Body(_filebody='Alex.ini')
+    bd = Body(_filebody='John.ini')
     lt = tr.importsn()
-    #traj = tr.Trajectory()
-    bd.settopos(lt[0],0.3,cs=True)
+    traj = tr.Trajectory()
+    traj.generate()
+    bd.settopos(traj,0.3,cs=True)
     #bd.setccs(topos=True)
     #bd.setdcs()
     #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)

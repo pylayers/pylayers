@@ -47,7 +47,7 @@ from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
 import pandas as pd
 try:
-    from mayavi import mlab
+    from mayavi import mlab 
 except:
     print 'mayavi not installed'
 
@@ -203,7 +203,8 @@ class Antenna(object):
             elif typ == 'WirePlate':
                 self.typ = typ
                 self.p0 = kwargs['p0']
-                self.t0 = kwargs['t0'] # 5*np.pi/6.
+                kwargs['t0'] = 5*np.pi/6.
+                self.t0 =  kwargs['t0']# 
                 self.GdB = 5. # gain
                 self.G  = pow(10.,self.GdB/10.) # gain
                 self.sqG = np.sqrt(self.G)
@@ -416,7 +417,7 @@ class Antenna(object):
             if pattern :
 
                 self.SqG = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
-                #self.theta = self.th[:,np.newaxis]
+                #self.theta = self.theta[:,np.newaxis]
                 #self.phi = self.ph[np.newaxis,:]
                 self.evaluated = True
                 Fat = self.sqG
@@ -1025,7 +1026,7 @@ class Antenna(object):
         Parameters
         ----------
 
-        'fGHz' : frequency
+        'fGHz' : frequzncy
         phd : phi in degrees
         thd : theta in degrees
         'GmaxdB':  max gain to be displayed
@@ -1049,7 +1050,6 @@ class Antenna(object):
             >>> fig,ax = A.polar(fGHz=[2,3,4],thd=90)
 
         """
-
         if not self.evaluated:
             self.Fsynth(pattern=True)
 
@@ -1238,8 +1238,8 @@ class Antenna(object):
         r = minr + (maxr-minr) * u
 
         x = r * np.sin(th) * np.cos(phi) 
-        y = r * np.cos(th) 
-        z = r * np.sin(th) * np.sin(phi) 
+        y = r * np.sin(th) * np.sin(phi) 
+        z = r * np.cos(th) 
 
         p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
         #
@@ -1558,15 +1558,17 @@ class Antenna(object):
         print "FPh = Fph.reshape(A.Nf,A.Nt,A.Np)"
         print "compdiag(20,A,A.theta,A.phi,FTh,FPh) "
 
+
     def Fsynth(self, theta = [], phi=[], pattern=True):
         """ Perform Antenna synthesis
-        call Antenna.Fpatt or Antenna.Fsynth3
+            call Antenna.Fpatt or Antenna.Fsynth3
         """
 
         if self.fromfile:
             self.Fsynth3(theta,phi,pattern)
         else :
             self.Fpatt(theta,phi,pattern)
+
 
     #def Fsynth1(self, theta, phi, k=0):
     def Fsynth1(self, theta, phi,pattern=False):
@@ -1650,6 +1652,7 @@ class Antenna(object):
             Fph = Fph.reshape(Nf, Nt, Np)
 
         return Fth, Fph
+
 
 
     def Fsynth2s(self,dsf=1):
@@ -1950,10 +1953,10 @@ class Antenna(object):
 
         Nf = len(self.fa)
         if theta==[]:
-            theta=np.linspace(0,np.pi,45)
+            theta=np.linspace(0,np.pi,25)
 
         if phi == []:
-            phi= np.linspace(0,2*np.pi,90)
+            phi= np.linspace(0,2*np.pi,50)
 
         Nt = len(theta)
         Np = len(phi)
@@ -2403,8 +2406,8 @@ class Antenna(object):
         # create vsh2 file
         if filename == '':
             _filevsh2 = self._filename.replace('.trx', '.vsh2')
-
-        _filevsh2  = filename
+            
+        _filevsh2  = filename 
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
@@ -3081,6 +3084,9 @@ def show3D(F, theta, phi, k, col=True):
         >>> from pylayers.antprop.antenna import *
         >>> ifreq = 0
         >>> A     = Antenna('defant.vsh3')
+        >>> A.Nt  = 30
+        >>> A.Np  = 60
+        >>> A.Nf  = len(A.fa)
         >>> theta = np.linspace(0,np.pi,A.Nt)
         >>> phi   = np.linspace(0,2*np.pi,A.Np)
         >>> Fth3,Fph3 = A.Fsynth3(theta,phi)
