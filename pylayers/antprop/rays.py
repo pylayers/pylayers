@@ -1907,7 +1907,21 @@ class Rays(dict):
 
     @mlab.show
     def _show3(self,L,ilist=[],rlist=[],newfig=False):
-        """
+        """ plot 3D rays within the simulated environment
+            using Mayavi
+
+        Parameters
+        ----------
+
+        L : Layout object
+            Layout to be displayed
+        ilist : list 
+            list of group of interactions
+        rlist : list
+            list of index rays
+        newfig : boolean (default: False)
+            if true create a new mayavi figure 
+            else : use the current
 
         """
         if newfig:
