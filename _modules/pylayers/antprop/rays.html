@@ -105,6 +105,12 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="n">Ctilde</span>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
+    <span class="kn">from</span> <span class="nn">mayavi.sources.vtk_data_source</span> <span class="kn">import</span> <span class="n">VTKDataSource</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
 
 <div class="viewcode-block" id="Rays"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays">[docs]</a><span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A set af rays</span>
@@ -1978,6 +1984,67 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </div>
+    <span class="nd">@mlab.show</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="p">[],</span><span class="n">ilist</span><span class="o">=</span><span class="p">[],</span><span class="n">rlist</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; plot 3D rays within the simulated environment</span>
+<span class="sd">            using Mayavi</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        L : Layout object</span>
+<span class="sd">            Layout to be displayed</span>
+<span class="sd">        ilist : list </span>
+<span class="sd">            list of group of interactions</span>
+<span class="sd">        rlist : list</span>
+<span class="sd">            list of index rays</span>
+<span class="sd">        newfig : boolean (default: False)</span>
+<span class="sd">            if true create a new mayavi figure </span>
+<span class="sd">            else : use the current</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">newfig</span><span class="p">:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">fgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+
+        
+        <span class="k">if</span> <span class="n">L</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;L argument must be a layout object&#39;</span><span class="p">)</span>
+
+            <span class="n">L</span><span class="o">.</span><span class="n">_show3</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">ilist</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">nbi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ilist</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+                <span class="n">nbi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="n">ilist</span><span class="p">]))</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">nbi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">ilist</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rlist</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="n">rlist</span><span class="o">=</span><span class="p">[</span><span class="n">rlist</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nbi</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rlist</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;pt&#39;</span><span class="p">])[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">rlist</span><span class="p">))</span> 
+            <span class="c"># number of rays</span>
+            <span class="n">nbr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> 
+            <span class="c"># current number of interactions</span>
+            <span class="n">cnbi</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="n">pt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;pt&#39;</span><span class="p">][:,:,</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">cnbi</span><span class="o">*</span><span class="n">nbr</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s">&#39;F&#39;</span><span class="p">)</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cnbi</span><span class="o">*</span><span class="n">nbr</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cnbi</span><span class="p">,</span><span class="n">nbr</span><span class="p">)</span>
+            <span class="n">mesh</span> <span class="o">=</span> <span class="n">tvtk</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">pt</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">polys</span><span class="o">=</span><span class="n">lines</span><span class="p">)</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">mesh</span><span class="p">),</span>
+                                                 <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
+
+
 <div class="viewcode-block" id="Rays.show3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
               <span class="n">L</span><span class="o">=</span><span class="p">[],</span>
               <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>

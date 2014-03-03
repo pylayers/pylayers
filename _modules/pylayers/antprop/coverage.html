@@ -77,6 +77,9 @@
           <div class="body">
             
   <h1>Source code for pylayers.antprop.coverage</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">str2bool</span>
@@ -164,7 +167,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;temperaturek&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;noisefactordb&#39;</span><span class="p">])</span>
 
-        
+
         <span class="n">Pn</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">kBoltzmann</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bandwidthmhz</span><span class="o">*</span><span class="mf">1e3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Pn</span><span class="p">)</span><span class="o">+</span><span class="mi">60</span>
 
@@ -231,10 +234,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))))</span>
 
-        </div>
+</div>
 <div class="viewcode-block" id="Coverage.coverold"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.coverold">[docs]</a>    <span class="k">def</span> <span class="nf">coverold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; start the coverage calculation</span>
-<span class="sd">        </span>
+
 <span class="sd">        Deprecated : slow implementation</span>
 
 <span class="sd">        Examples</span>
@@ -288,9 +291,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">snrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
 
 
-    </div>
+</div>
 <div class="viewcode-block" id="Coverage.showEd"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.showEd">[docs]</a>    <span class="k">def</span> <span class="nf">showEd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows a map of direct path excess delay </span>
+        <span class="sd">&quot;&quot;&quot; shows a map of direct path excess delay</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        polar : string</span>
+<span class="sd">            &#39;o&#39; | &#39;p&#39;</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -302,7 +311,9 @@
 <span class="sd">            &gt;&gt;&gt; C = Coverage()</span>
 <span class="sd">            &gt;&gt;&gt; C.cover()</span>
 <span class="sd">            &gt;&gt;&gt; C.showEd(polar=&#39;o&#39;)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;alphacy&#39;</span><span class="p">):</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphacy&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.0</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;colorcy&#39;</span><span class="p">):</span>
@@ -333,7 +344,7 @@
 
         <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
             <span class="n">mcEdof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edo</span><span class="p">)</span>
-            
+
             <span class="n">cov</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcEdof</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                              <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="s">&#39;jet&#39;</span><span class="p">,</span>
                              <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
@@ -347,7 +358,7 @@
 
         <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
             <span class="n">mcEdpf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edp</span><span class="p">)</span>
-            
+
             <span class="n">cov</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcEdpf</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                              <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="s">&#39;jet&#39;</span><span class="p">,</span>
                              <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
@@ -437,10 +448,10 @@
         <span class="k">if</span> <span class="n">rxsens</span> <span class="p">:</span>
 
             <span class="c">## values between the rx sensitivity and noise floor</span>
-            <span class="n">mcPrf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">((</span><span class="n">prdbm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">)</span> 
+            <span class="n">mcPrf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">((</span><span class="n">prdbm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">)</span>
                                      <span class="o">&amp;</span> <span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="p">),</span><span class="n">prdbm</span><span class="p">)</span>
             <span class="c"># mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens) ,prdbm)</span>
-            
+
             <span class="n">cov1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcPrf</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                              <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">copper</span><span class="p">,</span>
                              <span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
@@ -472,7 +483,7 @@
             <span class="n">title</span><span class="o">=</span><span class="n">title</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s"> white : Pr (dBm) &lt; </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span> <span class="o">+</span> <span class="s">&#39; dBm&#39;</span>
 
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
         <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
@@ -485,7 +496,7 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
-        </div>
+</div>
 <div class="viewcode-block" id="Coverage.showTransistionRegion"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.showTransistionRegion">[docs]</a>    <span class="k">def</span> <span class="nf">showTransistionRegion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -551,13 +562,13 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Coverage.showLoss"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.showLoss">[docs]</a>    <span class="k">def</span> <span class="nf">showLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.showLoss"><a class="viewcode-back" href="../../../modules/pylayers.antprop.coverage.html#pylayers.antprop.coverage.Coverage.showLoss">[docs]</a>    <span class="k">def</span> <span class="nf">showLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show losses map</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        polar : string </span>
+<span class="sd">        polar : string</span>
 <span class="sd">            &#39;o&#39;|&#39;p&#39;|&#39;both&#39;</span>
 
 <span class="sd">        Examples</span>
@@ -572,41 +583,46 @@
 <span class="sd">            &gt;&gt;&gt; C.showLoss(polar=&#39;o&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; C.showLoss(polar=&#39;p&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
-        
-        <span class="c"># setting the grid </span>
+
+        <span class="c"># setting the grid</span>
 
         <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
+        <span class="n">Lo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span>
+        <span class="n">Lp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span>
         <span class="c"># orthogonal polarization</span>
         <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
-            <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">Lo</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
                             <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>
-                            <span class="n">vmin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-                            <span class="n">vmax</span> <span class="o">=</span> <span class="mi">140</span><span class="p">)</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Map of losses, orthogonal (V) polarization&#39;</span><span class="p">)</span> 
+                            <span class="n">vmin</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+                            <span class="n">vmax</span> <span class="o">=</span> <span class="mi">130</span><span class="p">)</span>
+            <span class="n">str1</span> <span class="o">=</span> <span class="s">&#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="p">(</span><span class="n">str1</span><span class="p">)</span>
 
         <span class="c"># parallel polarization</span>
         <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-            <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">Lp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
                             <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>
-                            <span class="n">vmin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-                            <span class="n">vmax</span> <span class="o">=</span> <span class="mi">140</span><span class="p">)</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Map of losses, parallel (H) polarization&#39;</span><span class="p">)</span> 
+                            <span class="n">vmin</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+                            <span class="n">vmax</span> <span class="o">=</span> <span class="mi">130</span><span class="p">)</span>
+            <span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="p">(</span><span class="n">str2</span><span class="p">)</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
         <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span><span class="n">cax</span><span class="p">)</span>
+        <span class="n">clb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span><span class="n">cax</span><span class="p">)</span>
+        <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Loss (dB)&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
