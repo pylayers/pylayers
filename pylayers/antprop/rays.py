@@ -1906,7 +1906,7 @@ class Rays(dict):
             return(filename)
 
     @mlab.show
-    def _show3(self,L,ilist=[],rlist=[],newfig=False):
+    def _show3(self,L=[],ilist=[],rlist=[],newfig=False):
         """ plot 3D rays within the simulated environment
             using Mayavi
 
@@ -1930,14 +1930,14 @@ class Rays(dict):
         else :
             mlab.gcf()
 
-        L._show3()
-
-        try:
-            L.filename
-        except:
-            raise NameError('L argument must be a layout object')
-
         
+        if L != []:
+            try:
+                L.filename
+            except:
+                raise NameError('L argument must be a layout object')
+
+            L._show3()
 
         if ilist == []:
             nbi = self.keys()

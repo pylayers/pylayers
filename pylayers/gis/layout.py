@@ -6620,7 +6620,7 @@ class Layout(object):
         return pg
 
     @mlab.show
-    def _show3(self,centered=False,newfig=False):
+    def _show3(self,centered=False,newfig=False,opacity=1.):
         """ create a .off geomview file
 
         Parameters
@@ -6827,7 +6827,7 @@ class Layout(object):
         else :
             mlab.gcf()
 
-        surf = mlab.pipeline.surface(mesh, opacity=1)
+        surf = mlab.pipeline.surface(mesh, opacity=opacity)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )
 
