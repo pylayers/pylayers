@@ -1,0 +1,675 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.util.plotutil &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.util.plotutil</h1><div class="highlight"><pre>
+<span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">axes3d</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+
+
+<div class="viewcode-block" id="cformat"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.cformat">[docs]</a><span class="k">def</span> <span class="nf">cformat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; complex format</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    x : ndarray   (,Nx)</span>
+<span class="sd">    y : ndarray (Ny,Nx)</span>
+
+<span class="sd">    uy : ndarray()</span>
+<span class="sd">        select rows of y</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xn</span>
+<span class="sd">    yn</span>
+<span class="sd">    ylabels</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;typ&#39;</span><span class="p">:[</span><span class="s">&#39;l20&#39;</span><span class="p">]}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">if</span> <span class="s">&#39;uy&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">uy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">y</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">uy</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;uy&#39;</span><span class="p">]</span>
+
+    <span class="c"># radians to degree coefficient   </span>
+    <span class="n">rtd</span> <span class="o">=</span> <span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
+
+    <span class="n">xn</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;m&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Magnitude&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:])</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;v&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Amplitude&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;l10&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Magnitude (dB)&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;l20&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Magnitude (dB)&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;d&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Phase (deg)&#39;</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;r&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Phase (rad)&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:])</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;du&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Unwrapped Phase (deg)&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span><span class="o">*</span><span class="n">rtd</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;ru&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Unwrapped Phase (rad)&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]))</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;re&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Real part&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:])</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;im&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Imaginary part&#39;</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:])</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;gdn&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Group delay (ns)&#39;</span>
+        <span class="n">df</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">xn</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">yn</span>  <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;gdm&#39;</span><span class="p">:</span>
+        <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Group distance (m)&#39;</span>
+        <span class="n">df</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">xn</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;ylabels&#39;</span>  <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">ylabels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ylabels&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">xn</span><span class="p">,</span><span class="n">yn</span><span class="p">,</span><span class="n">ylabels</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="mulcplot"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.mulcplot">[docs]</a><span class="k">def</span> <span class="nf">mulcplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; handling multiple complex variable plots</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    x : ndarray  (,N)</span>
+
+<span class="sd">    y : ndarray  (M,N)</span>
+
+<span class="sd">    types : &#39;m&#39;   : modulus</span>
+<span class="sd">            &#39;v&#39;   : value</span>
+<span class="sd">            &#39;l10&#39; : dB (10 log10)</span>
+<span class="sd">            &#39;l20&#39; : dB (20 log10)</span>
+<span class="sd">            &#39;d&#39;   : phase degrees</span>
+<span class="sd">            &#39;r&#39;   : phase radians</span>
+<span class="sd">            &#39;du&#39;  : phase degrees unwrap </span>
+<span class="sd">            &#39;ru&#39;  : phase radians unwrap </span>
+<span class="sd">            &#39;gdn&#39; : group delay (ns) </span>
+<span class="sd">            &#39;gdm&#39; : group distance (m) </span>
+<span class="sd">            &#39;re&#39;  : real part</span>
+<span class="sd">            &#39;im&#39;  : imaginary part </span>
+
+
+<span class="sd">    fig and ax are numpy arrays of fig and ax</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; from pylayers.util.plotutil import *</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    If len(y.shape) &gt; 2 the two first axes are used as nlin and ncol this</span>
+<span class="sd">    takes the priority over the passed values nlin and ncol</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;typ&#39;</span><span class="p">:[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span>
+                <span class="s">&#39;titles&#39;</span><span class="p">:[</span><span class="s">&#39;&#39;</span><span class="p">],</span>
+                <span class="s">&#39;labels&#39;</span><span class="p">:[</span><span class="s">&#39;&#39;</span><span class="p">],</span>
+                <span class="s">&#39;xlabels&#39;</span><span class="p">:[</span><span class="s">&#39;time (ns)&#39;</span><span class="p">],</span>
+                <span class="s">&#39;ncol&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                <span class="s">&#39;nlin&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                <span class="s">&#39;fig&#39;</span><span class="p">:[],</span>
+                <span class="s">&#39;ax&#39;</span><span class="p">:[],</span>
+                <span class="s">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+               <span class="p">}</span>
+
+    <span class="c"># radians to degree coefficient</span>
+    <span class="n">rtd</span> <span class="o">=</span> <span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+    <span class="c"># smart placement of legend box</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.loc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;best&#39;</span>
+
+    <span class="n">grid</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="s">&#39;nlin&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">grid</span><span class="o">=</span><span class="bp">True</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="c">#</span>
+    <span class="c"># ylabels is deduced from types</span>
+    <span class="c"># ==&gt; do not set any ylabels defaults</span>
+    <span class="c">#</span>
+    <span class="k">if</span> <span class="s">&#39;ylabels&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">ylabels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;m&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Amplitude&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;v&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Amplitude&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;l10&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Amplitude (dB)&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;l20&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Amplitude (dB)&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;d&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Phase (deg)&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;r&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Phase (rad)&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;du&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Unwrapped Phase (deg)&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;ru&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Unwrapped Phase (rad)&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;re&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Real part&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;im&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Imaginary part&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;gdn&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Group delay (ns)&#39;</span><span class="p">),</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;gdm&#39;</span><span class="p">:</span>
+                <span class="n">ylabels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;Group distance (m)&#39;</span><span class="p">),</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ylabels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ylabels&#39;</span><span class="p">]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
+    <span class="n">nlin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nlin&#39;</span><span class="p">]</span>
+    <span class="n">ncol</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ncol&#39;</span><span class="p">]</span>
+    <span class="n">titles</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">]</span>
+    <span class="n">xlabels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;xlabels&#39;</span><span class="p">]</span>
+    <span class="n">figsize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;figsize&#39;</span><span class="p">]</span>
+
+    <span class="n">ntypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">types</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+    <span class="n">ntitles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">titles</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+    <span class="n">nlabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+    <span class="n">nxlabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xlabels</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+    <span class="n">nylabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ylabels</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+
+
+    <span class="c"># filtering kwargs argument for plot function</span>
+    <span class="n">args</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">args</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="c">#</span>
+    <span class="c"># shape of entries</span>
+    <span class="c">#</span>
+    <span class="n">shx</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">shy</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c">#</span>
+    <span class="c"># This is for handling MDA of shape</span>
+    <span class="c">#</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span> <span class="c"># 3</span>
+        <span class="n">ydim</span> <span class="o">=</span> <span class="n">shy</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">nlin</span> <span class="o">=</span> <span class="n">ydim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ncol</span> <span class="o">=</span> <span class="n">ydim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">grid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span> <span class="c">#2   1 column</span>
+                <span class="n">nlin</span> <span class="o">=</span> <span class="n">shy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ncol</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>          <span class="c">#0   1 line / 1 column</span>
+                <span class="n">nlin</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">ncol</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+
+
+    <span class="c"># below is the same axis constraint as for Bsignal object</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">shx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">shy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="s">&quot;plotutil : x,y shape incompatibility&quot;</span>
+
+    <span class="n">nfigy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">assert</span><span class="p">((</span><span class="n">nfigy</span><span class="o">==</span><span class="n">ncol</span><span class="o">*</span><span class="n">nlin</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">nfigy</span><span class="o">==</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span><span class="p">((</span><span class="n">nlabels</span><span class="o">==</span><span class="n">nfigy</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">nlabels</span><span class="o">==</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span><span class="p">((</span><span class="n">ntitles</span><span class="o">==</span><span class="n">ncol</span><span class="o">*</span><span class="n">nlin</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">ntitles</span><span class="o">==</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span><span class="p">((</span><span class="n">nxlabels</span><span class="o">==</span><span class="n">nfigy</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">nxlabels</span><span class="o">==</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">assert</span><span class="p">((</span><span class="n">nylabels</span><span class="o">==</span><span class="n">nfigy</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">nxlabels</span><span class="o">==</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">ax</span><span class="o">==</span><span class="p">[]:</span>
+        <span class="c"># nlin , ncol subplot</span>
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nlin</span><span class="p">,</span><span class="n">ncol</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;figsize&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">nlin</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">ncol</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ax</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nlin</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+            <span class="k">if</span> <span class="n">ncol</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nlin</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">ncol</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ax</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlin</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncol</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">nlabels</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">lablc</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">lablc</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;v&#39;</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:],</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;r&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;ru&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;d&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])</span><span class="o">*</span><span class="n">rtd</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;du&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:]))</span><span class="o">*</span><span class="n">rtd</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;m&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;l10&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;l20&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;re&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;im&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;gdn&#39;</span><span class="p">:</span>
+                    <span class="n">df</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;gdm&#39;</span><span class="p">:</span>
+                    <span class="n">df</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="mf">0.3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="n">lablc</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">nxlabels</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabels</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">nylabels</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabels</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">ntitles</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">l</span><span class="o">*</span><span class="n">ncol</span><span class="o">+</span><span class="n">c</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;v&#39;</span><span class="p">:</span>
+                    <span class="c">#ax[l,c].plot(x[k%nfigx,:],y[k%nfigy,:],label=labels[k%nlabels],**args)</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:],</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;r&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;ru&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:])),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;d&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:])</span><span class="o">*</span><span class="n">rtd</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;du&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:]))</span><span class="o">*</span><span class="n">rtd</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;m&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;l10&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:])),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;l20&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:])),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;re&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntypes</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;im&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:]),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;gdn&#39;</span><span class="p">:</span>
+                    <span class="n">df</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:])))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">types</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;gdm&#39;</span><span class="p">:</span>
+                    <span class="n">df</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="o">-</span><span class="mf">0.3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nfigy</span><span class="p">,:])))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nlabels</span><span class="p">],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+
+                <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nxlabels</span><span class="p">])</span>
+                <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nylabels</span><span class="p">])</span>
+
+                <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntitles</span><span class="p">])</span>
+                <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+                <span class="c">#ax[l,c].get_xaxis().set_visible(False)</span>
+                <span class="c">#ax[l,c].get_yaxis().set_visible(False)</span>
+
+    <span class="c">#plt.tight_layout()</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="displot"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.displot">[docs]</a><span class="k">def</span> <span class="nf">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">arrow</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span> <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; discontinuous plot</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    pt:</span>
+<span class="sd">        tail points array (2 x (2*Nseg))</span>
+<span class="sd">    ph :</span>
+<span class="sd">        head points array (2 x (2*Nseg))</span>
+<span class="sd">    arrow : bool</span>
+<span class="sd">        display arrow on segments (square = tail, triangle = head)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    f,a</span>
+<span class="sd">        fig and ax</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :include-source:</span>
+
+<span class="sd">        &gt;&gt;&gt; import scipy as sp</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
+<span class="sd">        &gt;&gt;&gt; N   = 10</span>
+<span class="sd">        &gt;&gt;&gt; pt  = sp.rand(2,N)</span>
+<span class="sd">        &gt;&gt;&gt; ph  = sp.rand(2,N)</span>
+<span class="sd">        &gt;&gt;&gt; f,a = displot(pt,ph)</span>
+<span class="sd">        &gt;&gt;&gt; txt = plt.title(&#39;pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments&#39;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;arrow&#39;</span> <span class="p">:</span> <span class="bp">False</span> <span class="p">,</span>
+                 <span class="s">&#39;fig&#39;</span> <span class="p">:</span> <span class="p">[]</span> <span class="p">,</span>
+                 <span class="s">&#39;ax&#39;</span> <span class="p">:</span> <span class="p">[]</span>  <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+    <span class="n">args</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">args</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="n">ax</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
+
+    <span class="n">Nseg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pt</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c"># add dummy points</span>
+    <span class="n">pz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
+    <span class="n">pn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
+
+    <span class="c"># pz (dummy take 1: later)</span>
+    <span class="c"># pt[0]</span>
+    <span class="c"># ph[0]</span>
+    <span class="c"># pn</span>
+    <span class="c"># pt[1]</span>
+    <span class="c"># ph[1]</span>
+    <span class="c"># pn</span>
+    <span class="c">#  ..</span>
+    <span class="c"># (3*Nseg+1) x 2</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nseg</span><span class="p">):</span>
+        <span class="n">pz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pz</span><span class="p">,</span> <span class="n">pt</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">ph</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">pn</span><span class="p">))</span>
+
+    <span class="n">m1</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">Nseg</span><span class="p">)),</span> <span class="n">m1</span><span class="p">)</span>
+    <span class="c"># 2 x 3*2*Np</span>
+    <span class="n">pzz</span> <span class="o">=</span> <span class="n">pz</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">pzz</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
+    <span class="c"># display arrows at both sides</span>
+    <span class="k">if</span> <span class="n">arrow</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ph</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">ph</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;^&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+
+</div>
+<div class="viewcode-block" id="pol3D"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.pol3D">[docs]</a><span class="k">def</span> <span class="nf">pol3D</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">rho</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">sf</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">shade</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;pol3D&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; polar 3D  surface plot</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    rho  : np.array</span>
+<span class="sd">          t  x p</span>
+<span class="sd">    theta : np.array</span>
+<span class="sd">          1 x t</span>
+<span class="sd">    phi  : np.array</span>
+<span class="sd">          1 x p</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. plot:: </span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.util.plotutil import *</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; theta = np.linspace(0,np.pi,90)</span>
+<span class="sd">        &gt;&gt;&gt; phi = np.linspace(0,2*np.pi,180)</span>
+<span class="sd">        &gt;&gt;&gt; rho = np.ones((len(theta),len(phi)))</span>
+<span class="sd">        &gt;&gt;&gt; fig=plt.figure()</span>
+<span class="sd">        &gt;&gt;&gt; pol3D(fig,rho,theta,phi)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+    <span class="c"># x : r x t x p</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span> <span class="o">*</span>  <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span> <span class="o">*</span>  <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">antialiased</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim3d</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim3d</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim3d</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">sf</span><span class="p">:</span>
+        <span class="n">sz</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_size_inches</span><span class="p">()</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="n">sz</span> <span class="o">*</span> <span class="mf">1.8</span><span class="p">)</span>
+        <span class="n">figname</span> <span class="o">=</span> <span class="n">figdirV</span> <span class="o">+</span> <span class="s">&#39;V&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname</span> <span class="o">+</span> <span class="n">ext1</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s">&#39;portrait&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname</span> <span class="o">+</span> <span class="n">ext2</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s">&#39;portrait&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname</span> <span class="o">+</span> <span class="n">ext3</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s">&#39;portrait&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="cylinder"><a class="viewcode-back" href="../../../modules/pylayers.util.plotutil.html#pylayers.util.plotutil.cylinder">[docs]</a><span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">pa</span><span class="p">,</span><span class="n">pb</span><span class="p">,</span><span class="n">R</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; plot a cylinder</span>
+<span class="sd">    pa : 3 x nc </span>
+<span class="sd">    pb : 3 x nc </span>
+<span class="sd">    R  : 1 x Nc</span>
+
+<span class="sd">    &gt;&gt;&gt; from pylayers.util.plotutil import *</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; pa = np.array([0,0,0])</span>
+<span class="sd">    &gt;&gt;&gt; pb = np.array([0,0,10])</span>
+<span class="sd">    &gt;&gt;&gt; fig = plt.figure()</span>
+<span class="sd">    &gt;&gt;&gt; cylinder(fig,pa,pb,3)</span>
+<span class="sd">    &gt;&gt;&gt; plt.show()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pa</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">nc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">pa</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pb</span> <span class="o">=</span> <span class="n">pb</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s">&#39;3d&#39;</span><span class="p">)</span> 
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="c"># 3 x nc</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">pb</span><span class="o">-</span><span class="n">pa</span><span class="p">)</span>
+    <span class="n">mv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nc</span><span class="p">)</span>
+    <span class="n">vn</span> <span class="o">=</span> <span class="n">v</span><span class="o">/</span><span class="n">mv</span>
+    <span class="k">if</span> <span class="n">nc</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">pr</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">nc</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pr</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">pp</span> <span class="o">=</span> <span class="n">pr</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pr</span><span class="o">*</span><span class="n">vn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">mpp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pp</span><span class="o">*</span><span class="n">pp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">pn</span> <span class="o">=</span> <span class="n">pp</span><span class="o">/</span><span class="n">mpp</span>
+    <span class="n">qn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">pn</span><span class="p">,</span><span class="n">vn</span><span class="p">,</span><span class="n">axisa</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">axisb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">axisc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c"># 3 x nc x ntheta</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="n">R</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span><span class="o">*</span><span class="n">pn</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> \
+              <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span><span class="o">*</span><span class="n">qn</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+    <span class="c">#ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label=&#39;parametric curve&#39;,color=&#39;b&#39;)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pb</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="n">R</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span><span class="o">*</span><span class="n">pn</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> \
+               <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span><span class="o">*</span><span class="n">qn</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+    <span class="c">#ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label=&#39;parametric curve&#39;,color=&#39;b&#39;)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pa</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="p">(</span><span class="n">pb</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">-</span><span class="n">pa</span><span class="p">[:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;parametric curve&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+
+</div>
+<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

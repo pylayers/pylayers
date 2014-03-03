@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.util.CDF &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.util.CDF</h1><div class="highlight"><pre>
+<span class="c"># -*- coding:Utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="c">#import mplrc.ieee.transaction</span>
+<span class="c">#</span>
+<span class="c"># mplrc is a python module which provides an easy way to change</span>
+<span class="c"># matplotlib&#39;s plotting configuration for specific publications.</span>
+<span class="c"># git clone https://github.com/arsenovic/mplrc.git</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
+
+
+<span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;text.usetex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;text.latex.unicode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+
+
+<div class="viewcode-block" id="CDF"><a class="viewcode-back" href="../../../modules/pylayers.util.CDF.html#pylayers.util.CDF.CDF">[docs]</a><span class="k">class</span> <span class="nc">CDF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ld</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        cdf = CDF(ld)</span>
+
+<span class="sd">        ld is a list of dictionnary</span>
+
+<span class="sd">        d0 = ld[0]</span>
+
+<span class="sd">        d0[&#39;bound&#39;]       : abscisse bounds of the cdf</span>
+<span class="sd">        d0[&#39;values&#39;]      : valeurs</span>
+<span class="sd">        d0[&#39;xlabel&#39;]      :</span>
+<span class="sd">        d0[&#39;ylabel&#39;]      :</span>
+<span class="sd">        d0[&#39;legend&#39;]      : legend</span>
+<span class="sd">        d0[&#39;title]        : title</span>
+<span class="sd">        d0[&#39;filename]     : filename</span>
+<span class="sd">        d0[&#39;linewidth&#39;]   : linewidth</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ld</span> <span class="o">=</span> <span class="n">ld</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plt.rcParams[&#39;xtick.labelsize&#39;] =&#39;x-large&#39;</span>
+<span class="sd">        plt.rcParams[&#39;ytick.labelsize&#39;] =&#39;x-large&#39;</span>
+<span class="sd">        plt.rcParams[&#39;axes.labelsize&#39;]  =&#39;large&#39;</span>
+<span class="sd">        plt.rcParams[&#39;font.weight&#39;]     =&#39;normal&#39;</span>
+<span class="sd">        plt.rcParams[&#39;xtick.minor.size&#39;]=2</span>
+<span class="sd">        plt.rcParams[&#39;legend.fontsize&#39;] = &#39;xx-large&#39;</span>
+<span class="sd">        plt.rcParams[&#39;font.size&#39;]       =20</span>
+<span class="sd">        plt.rcParams[&#39;grid.linewidth&#39;]  =3.5</span>
+<span class="sd">        plt.rcParams[&#39;xtick.major.pad&#39;] =20</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cdf</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ld</span><span class="p">:</span>
+            <span class="n">bound</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;bound&#39;</span><span class="p">]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;values&#39;</span><span class="p">]</span>
+            <span class="n">Nv</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">cdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bound</span><span class="p">:</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">values</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">)</span>
+                <span class="n">lu</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">Nv</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">)</span>
+                <span class="n">cdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">cdf</span><span class="p">,</span> <span class="n">lu</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cdf</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CDF.show"><a class="viewcode-back" href="../../../modules/pylayers.util.CDF.html#pylayers.util.CDF.CDF.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        show()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="c">#               plt.matplotlib.rc(&#39;font&#39;, **{&#39;family&#39;: &#39;serif&#39;,</span>
+<span class="c">#                                            &#39;serif&#39;: [&#39;Computer Modern Roman&#39;]})</span>
+
+<span class="c">#               coloumn_width_cm = 20.  # Get this from LaTeX using \showthe\columnwidth</span>
+<span class="c">#               golden_mean = (np.sqrt(5)-1.0)/2.0         # Aesthetic ratio</span>
+<span class="c">#               fig_width = coloumn_width_cm*0.393700787  # width in inches</span>
+<span class="c">#               fig_height = fig_width*golden_mean      # height in inches</span>
+<span class="c">#               fig_size =  [fig_width,fig_height]</span>
+<span class="c">#               params = {&#39;backend&#39;: &#39;ps&#39;,</span>
+<span class="c">#                 &#39;axes.labelsize&#39;: 15,</span>
+<span class="c">#                 &#39;text.fontsize&#39;: 15,</span>
+<span class="c">#                 &#39;legend.fontsize&#39;: 15,</span>
+<span class="c">#                 &#39;xtick.labelsize&#39;: 12,</span>
+<span class="c">#                 &#39;ytick.labelsize&#39;: 12,</span>
+<span class="c">#                 &#39;text.usetex&#39;: True,</span>
+<span class="c">#                 &#39;figure.figsize&#39;: fig_size}</span>
+<span class="c">#               plt.rcParams.update(params)</span>
+
+        <span class="n">leg</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ld</span><span class="p">)):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ld</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">bound</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;bound&#39;</span><span class="p">]</span>
+            <span class="n">marker</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;marker&#39;</span><span class="p">]</span>
+            <span class="n">markersize</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;markersize&#39;</span><span class="p">]</span>
+            <span class="n">markercolor</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;markercolor&#39;</span><span class="p">]</span>
+            <span class="n">markerfrequency</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;markerfrequency&#39;</span><span class="p">]</span>
+            <span class="n">linewidth</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span>
+            <span class="n">linestyle</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;linestyle&#39;</span><span class="p">]</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;legend&#39;</span><span class="p">]</span>
+<span class="c">#                       leg.append(legend)</span>
+            <span class="n">cdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdf</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bound</span><span class="p">,</span> <span class="n">cdf</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">markevery</span><span class="o">=</span><span class="n">markerfrequency</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="n">markersize</span><span class="p">,</span> <span class="n">mfc</span><span class="o">=</span><span class="n">markercolor</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">legend</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ld</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;xlabel&#39;</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ld</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;ylabel&#39;</span><span class="p">])</span>
+        <span class="c">#plt.legend((c),(leg),loc=0,scatterpoints=1,numpoints=1.)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;.pdf&#39;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;pdf&#39;</span><span class="p">,</span>
+                    <span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;.eps&#39;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;eps&#39;</span><span class="p">,</span>
+                    <span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">d0</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;bound&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;xlabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;xlabel&#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;ylabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;ylabel&#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;legend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;legend &#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;markercolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;markerfrequency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;title&#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;marker&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;-&#39;</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">d0</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;essai.png&#39;</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;bound&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;xlabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;xlabel&#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;ylabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;ylabel&#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;legend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;legend &#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;markersize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;markercolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;blue&#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;-&#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;markerfrequency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;title&#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;marker&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span>
+    <span class="n">d1</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">lv</span> <span class="o">=</span> <span class="p">[</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">CDF</span><span class="p">(</span><span class="n">lv</span><span class="p">,</span> <span class="s">&#39;fig&#39;</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

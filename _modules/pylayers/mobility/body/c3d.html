@@ -1,0 +1,705 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.mobility.body.c3d &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../../index.html" />
+    <link rel="up" title="pylayers.mobility.body" href="../body.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../../index.html"><img src="../../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../mobility.html" >pylayers.mobility</a> &raquo;</li>
+          <li><a href="../body.html" accesskey="U">pylayers.mobility.body</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.mobility.body.c3d</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">matplotlib.collections</span> <span class="kn">as</span> <span class="nn">mc</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">LineCollection</span>
+<span class="kn">import</span> <span class="nn">mpl_toolkits.mplot3d.art3d</span> <span class="kn">as</span> <span class="nn">cc</span>
+
+
+<div class="viewcode-block" id="Marker"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3d.html#pylayers.mobility.body.c3d.Marker">[docs]</a><span class="k">class</span> <span class="nc">Marker</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;[x = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; y = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; z = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="ParameterGroup"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3d.html#pylayers.mobility.body.c3d.ParameterGroup">[docs]</a><span class="k">class</span> <span class="nc">ParameterGroup</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">parameter</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">nom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span> <span class="o">=</span> <span class="n">parameter</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter</span>
+
+</div>
+<div class="viewcode-block" id="Parameter"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3d.html#pylayers.mobility.body.c3d.Parameter">[docs]</a><span class="k">class</span> <span class="nc">Parameter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">description</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span> <span class="o">=</span> <span class="n">datatype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+
+        <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span>
+
+</div>
+<div class="viewcode-block" id="getNumber"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3d.html#pylayers.mobility.body.c3d.getNumber">[docs]</a><span class="k">def</span> <span class="nf">getNumber</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="c">#sum = (sum &lt;&lt; 8) + ord(str[i]) for big indian</span>
+        <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="nb">str</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">,</span> <span class="nb">str</span><span class="p">[</span><span class="n">length</span><span class="p">:]</span>
+
+</div>
+<div class="viewcode-block" id="getFloat"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3d.html#pylayers.mobility.body.c3d.getFloat">[docs]</a><span class="k">def</span> <span class="nf">getFloat</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+
+
+<span class="c"># Input:        FullFileName - file (including path) to be read</span>
+<span class="c">#</span>
+<span class="c"># Variable:</span>
+<span class="c"># Markers            3D-marker data [Nmarkers x NvideoFrames x Ndim(=3)]</span>
+<span class="c"># VideoFrameRate     Frames/sec</span>
+<span class="c"># AnalogSignals      Analog signals [Nsignals x NanalogSamples ]</span>
+<span class="c"># AnalogFrameRate    Samples/sec</span>
+<span class="c"># Event              Event(Nevents).time ..value  ..name</span>
+<span class="c"># ParameterGroup     ParameterGroup(Ngroups).Parameters(Nparameters).data ..etc.</span>
+<span class="c"># CameraInfo         MarkerRelated CameraInfo [Nmarkers x NvideoFrames]</span>
+<span class="c"># ResidualError      MarkerRelated ErrorInfo  [Nmarkers x NvideoFrames]</span></div>
+<div class="viewcode-block" id="read_c3d"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3d.html#pylayers.mobility.body.c3d.read_c3d">[docs]</a><span class="k">def</span> <span class="nf">read_c3d</span><span class="p">(</span><span class="n">_filename</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; read c3d file </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">FullFileName</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="s">&#39;body/c3d&#39;</span><span class="p">)</span>
+    <span class="n">Markers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">VideoFrameRate</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">AnalogSignals</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">AnalogFrameRate</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">Event</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ParameterGroups</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">CameraInfo</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ResidualError</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;*********************&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;**** Opening File ***&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;*********************&quot;</span>
+
+    <span class="c">#ind=findstr(FullFileName,&#39;\&#39;);</span>
+    <span class="c">#if ind&gt;0, FileName=FullFileName(ind(length(ind))+1:length(FullFileName)); else FileName=FullFileName; end</span>
+        <span class="k">print</span> <span class="s">&quot;FileName = &quot;</span><span class="p">,</span> <span class="n">FullFileName</span>
+    <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">FullFileName</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="c"># native format (PC-intel)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">fid</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">content_memory</span> <span class="o">=</span> <span class="n">content</span>
+
+    <span class="n">NrecordFirstParameterblock</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>     <span class="c"># Reading record number of parameter section</span>
+
+    <span class="n">key</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c">#if key~=80,</span>
+    <span class="c">#h=errordlg([&#39;File: &#39;,FileName,&#39; does not comply to the C3D format&#39;],&#39;application error&#39;);</span>
+    <span class="c">#uiwait(h)</span>
+    <span class="c">#fclose(fid)</span>
+    <span class="c">#return</span>
+    <span class="c">#end</span>
+
+    <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="mi">80</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;File: &#39;</span><span class="p">,</span> <span class="n">FullFileName</span><span class="p">,</span> <span class="s">&#39; does not comply to the C3D format&#39;</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c">#fseek(fid,512*(NrecordFirstParameterblock-1)+3,&#39;bof&#39;); % jump to processortype - field</span>
+    <span class="c">#proctype=fread(fid,1,&#39;int8&#39;)-83;                       % proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">512</span> <span class="o">*</span> <span class="p">(</span><span class="n">NrecordFirstParameterblock</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+    <span class="n">proctype</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">proctype</span> <span class="o">=</span> <span class="n">proctype</span> <span class="o">-</span> <span class="mi">83</span>                      <span class="c"># proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)</span>
+
+    <span class="c">#print &quot;*************************&quot;</span>
+    <span class="c">#print &quot;**** Processor coding ***&quot;</span>
+    <span class="c">#print &quot;*************************&quot;</span>
+
+    <span class="c">#if proctype == 1:</span>
+    <span class="c">#    print &quot;Intel-PC&quot;</span>
+    <span class="c">#elif proctype == 2:</span>
+    <span class="c">#    print &quot;DEC-VAX&quot;</span>
+    <span class="c">#elif proctype == 3:</span>
+    <span class="c">#    print &quot;MIPS-SUN/SGI&quot;</span>
+    <span class="c">#else:</span>
+    <span class="c">#    print &quot;unknown processor type&quot;</span>
+
+    <span class="c">#if proctype==2,</span>
+    <span class="c">#    fclose(fid);</span>
+    <span class="c">#    fid=fopen(FullFileName,&#39;r&#39;,&#39;d&#39;); % DEC VAX D floating point and VAX ordering</span>
+    <span class="c">#end</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;***********************&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;**** Reading Header ***&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;***********************&quot;</span>
+
+    <span class="c"># ###############################################</span>
+    <span class="c"># ##                                           ##</span>
+    <span class="c"># ##    read header                            ##</span>
+    <span class="c"># ##                                           ##</span>
+    <span class="c"># ###############################################</span>
+
+    <span class="c">#%NrecordFirstParameterblock=fread(fid,1,&#39;int8&#39;);     % Reading record number of parameter section</span>
+    <span class="c">#%key1=fread(fid,1,&#39;int8&#39;);                           % key = 80;</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content_memory</span>
+
+    <span class="c">#</span>
+    <span class="c">#fseek(fid,2,&#39;bof&#39;);</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+    <span class="c">#</span>
+    <span class="n">Nmarkers</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">NanalogSamplesPerVideoFrame</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">StartFrame</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">EndFrame</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">MaxInterpolationGap</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">Scale</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getFloat</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="n">NrecordDataBlock</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">NanalogFramesPerVideoFrame</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">NanalogFramesPerVideoFrame</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">NanalogChannels</span> <span class="o">=</span> <span class="n">NanalogSamplesPerVideoFrame</span> <span class="o">/</span> \
+            <span class="n">NanalogFramesPerVideoFrame</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">NanalogChannels</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">VideoFrameRate</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getFloat</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="n">AnalogFrameRate</span> <span class="o">=</span> <span class="n">VideoFrameRate</span> <span class="o">*</span> <span class="n">NanalogFramesPerVideoFrame</span>
+
+    <span class="n">dinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">dinfo</span><span class="p">[</span><span class="s">&#39;NanalogFramesPerVideoFRame&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">NanalogFramesPerVideoFrame</span>
+    <span class="n">dinfo</span><span class="p">[</span><span class="s">&#39;AnalogFrameRate&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">AnalogFrameRate</span>
+    <span class="n">dinfo</span><span class="p">[</span><span class="s">&#39;VideoFrameRate&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">VideoFrameRate</span>
+    <span class="n">dinfo</span><span class="p">[</span><span class="s">&#39;Scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Scale</span>
+    <span class="n">dinfo</span><span class="p">[</span><span class="s">&#39;Nmarkers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Nmarkers</span>
+    <span class="n">dinfo</span><span class="p">[</span><span class="s">&#39;StartFrame&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">StartFrame</span>
+    <span class="n">dinfo</span><span class="p">[</span><span class="s">&#39;EndFrame&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">EndFrame</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;NanalogFramesPerVideoFrame= &quot;</span><span class="p">,</span> <span class="n">NanalogFramesPerVideoFrame</span>
+        <span class="k">print</span> <span class="s">&quot;AnalogFrameRate= &quot;</span><span class="p">,</span> <span class="n">AnalogFrameRate</span>
+        <span class="k">print</span> <span class="s">&quot;VideoFrameRate= &quot;</span><span class="p">,</span> <span class="n">VideoFrameRate</span>
+        <span class="k">print</span> <span class="s">&quot;Scale= &quot;</span><span class="p">,</span> <span class="n">Scale</span>
+        <span class="k">print</span> <span class="s">&quot;Nmarkers= &quot;</span><span class="p">,</span> <span class="n">Nmarkers</span>
+        <span class="k">print</span> <span class="s">&quot;StartFrame= &quot;</span><span class="p">,</span> <span class="n">StartFrame</span>
+        <span class="k">print</span> <span class="s">&quot;EndFrame= &quot;</span><span class="p">,</span> <span class="n">EndFrame</span>
+
+        <span class="k">print</span> <span class="s">&quot;***********************&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;**** Reading Events ...&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;***********************&quot;</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content_memory</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">298</span><span class="p">:]</span>  <span class="c"># bizarre .. ce devrait etre 150 selon la doc</span>
+
+    <span class="n">EventIndicator</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">EventTime</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">EventValue</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">EventName</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;EventIndicator = &quot;</span><span class="p">,</span> <span class="n">EventIndicator</span>
+    <span class="k">if</span> <span class="n">EventIndicator</span> <span class="o">==</span> <span class="mi">12345</span><span class="p">:</span>
+        <span class="n">Nevents</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c">#print &quot;Nevents= &quot;, Nevents</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">Nevents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nevents</span><span class="p">):</span>
+                <span class="n">letime</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getFloat</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                <span class="n">EventTime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letime</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content_memory</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">188</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nevents</span><span class="p">):</span>
+                <span class="n">lavalue</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">EventValue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lavalue</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content_memory</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">198</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nevents</span><span class="p">):</span>
+                <span class="n">lenom</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+                <span class="n">EventName</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lenom</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;***************************&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;**** Reading Parameters ...&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;***************************&quot;</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content_memory</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">512</span> <span class="o">*</span> <span class="p">(</span><span class="n">NrecordFirstParameterblock</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):]</span>
+
+    <span class="n">ParameterGroups</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ParameterNumberIndex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c">#</span>
+    <span class="n">dat1</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">key2</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">NparameterRecords</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;NparameterRecords=&quot;</span><span class="p">,</span> <span class="n">NparameterRecords</span>
+    <span class="n">proctype</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">proctype</span> <span class="o">=</span> <span class="n">proctype</span> <span class="o">-</span> <span class="mi">83</span>                      <span class="c"># proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NparameterRecords</span><span class="p">):</span>
+        <span class="n">leparam</span> <span class="o">=</span> <span class="n">ParameterGroup</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">ParameterGroups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">leparam</span><span class="p">)</span>
+        <span class="n">ParameterNumberIndex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c">#</span>
+    <span class="c">#</span>
+    <span class="n">Ncharacters</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Ncharacters</span> <span class="o">&gt;=</span> <span class="mi">128</span><span class="p">:</span>
+        <span class="n">Ncharacters</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">Ncharacters</span><span class="p">)</span>
+    <span class="n">GroupNumber</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">GroupNumber</span> <span class="o">&gt;=</span> <span class="mi">128</span><span class="p">:</span>
+        <span class="n">GroupNumber</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">GroupNumber</span><span class="p">)</span>
+    <span class="c">#print &quot;GroupNumber = &quot;, GroupNumber</span>
+
+    <span class="k">while</span> <span class="n">Ncharacters</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">GroupNumber</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">GroupNumber</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">GroupNumber</span><span class="p">)</span>
+            <span class="n">GroupName</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Ncharacters</span><span class="p">]</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">Ncharacters</span><span class="p">:]</span>
+            <span class="c">#print &quot;Group Number = &quot;, GroupNumber</span>
+            <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">GroupName</span>
+            <span class="c">#print &quot;ParameterGroupName =&quot;, GroupName</span>
+            <span class="n">offset</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">deschars</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">GroupDescription</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">deschars</span><span class="p">]</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">deschars</span><span class="p">:]</span>
+            <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">GroupDescription</span>
+    <span class="c">#</span>
+            <span class="n">ParameterNumberIndex</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">offset</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">deschars</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">ParameterNumberIndex</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span> <span class="o">=</span> <span class="n">ParameterNumberIndex</span><span class="p">[</span>
+                <span class="n">GroupNumber</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">ParameterNumber</span> <span class="o">=</span> <span class="n">ParameterNumberIndex</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span>
+            <span class="c">#print &quot;ParameterNumber=&quot;, ParameterNumber</span>
+            <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Parameter</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">))</span>
+            <span class="n">ParameterName</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Ncharacters</span><span class="p">]</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">Ncharacters</span><span class="p">:]</span>
+            <span class="c">#print &quot;ParameterName = &quot;,ParameterName</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ParameterName</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                    <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">ParameterName</span>
+            <span class="n">offset</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">filepos</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">content_memory</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+            <span class="n">nextrec</span> <span class="o">=</span> <span class="n">filepos</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">-</span> <span class="mi">2</span>
+
+            <span class="nb">type</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span> <span class="o">&gt;=</span> <span class="mi">128</span><span class="p">:</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="nb">type</span>
+            <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+
+            <span class="n">dimnum</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dimnum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">datalength</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mult</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">dimension</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimnum</span><span class="p">):</span>
+                    <span class="n">ladim</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">dimension</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ladim</span><span class="p">)</span>
+                    <span class="n">mult</span> <span class="o">=</span> <span class="n">mult</span> <span class="o">*</span> <span class="n">dimension</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                        <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dim</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dimension</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">datalength</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span> <span class="o">*</span> <span class="n">mult</span>
+
+            <span class="c">#print &quot;ParameterNumber = &quot;, ParameterNumber, &quot; Group Number = &quot;, GroupNumber</span>
+
+            <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+                <span class="n">wordlength</span> <span class="o">=</span> <span class="n">dimension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">dimnum</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">datalength</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimension</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">wordlength</span><span class="p">])</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">wordlength</span><span class="p">:]</span>
+                        <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                            <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">dimnum</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">datalength</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">wordlength</span><span class="p">]</span>
+                    <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                        <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c"># ???</span>
+                <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">ParameterName</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;LABELS&quot;</span> <span class="ow">and</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">GroupName</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;POINT&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&quot;POINT = &quot;</span><span class="p">,</span> <span class="n">ParameterGroups</span><span class="p">[</span>
+                        <span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                    <span class="n">Point</span> <span class="o">=</span> <span class="n">ParameterGroups</span><span class="p">[</span>
+                        <span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                <span class="k">elif</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">ParameterName</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;LABEL_PREFIXES&quot;</span> <span class="ow">and</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="n">GroupName</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;SUBJECTS&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&quot;SUBJECTS = &quot;</span><span class="p">,</span> <span class="n">ParameterGroups</span><span class="p">[</span>
+                        <span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                    <span class="n">Subjects</span> <span class="o">=</span> <span class="n">ParameterGroups</span><span class="p">[</span>
+                        <span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span><span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c">#print  ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data</span>
+                    <span class="k">pass</span>
+
+            <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">Nparameters</span> <span class="o">=</span> <span class="n">datalength</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;Nparameters=&quot;</span><span class="p">,</span> <span class="n">Nparameters</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nparameters</span><span class="p">):</span>
+                    <span class="n">ladata</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ladata</span><span class="p">)</span>
+                <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                    <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+                <span class="c">#print ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data</span>
+
+                <span class="c">#print &quot;type boolean&quot;</span>
+            <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">datalength</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">Nparameters</span> <span class="o">=</span> <span class="n">datalength</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nparameters</span><span class="p">):</span>
+                    <span class="n">ladata</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ladata</span><span class="p">)</span>
+                <span class="c">#ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data=data</span>
+                <span class="k">if</span> <span class="n">dimnum</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c">#???? print &quot;arg je comprends pas&quot;</span>
+                    <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                        <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+                    <span class="c">#???ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data=reshape(data,dimension)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                        <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+                <span class="c">#print ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data</span>
+
+                <span class="c">#pass</span>
+                <span class="c">#print &quot;type integer&quot;</span>
+            <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">datalength</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">Nparameters</span> <span class="o">=</span> <span class="n">datalength</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nparameters</span><span class="p">):</span>
+                    <span class="n">ladata</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getFloat</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ladata</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dimnum</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                        <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+                    <span class="c">#print &quot;arg je comprends pas&quot;</span>
+                    <span class="c">#???ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data=reshape(data,dimension)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                        <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+                <span class="c">#print ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c">#print &quot;error&quot;</span>
+                <span class="k">pass</span>
+            <span class="n">deschars</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">deschars</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">deschars</span><span class="p">]</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">deschars</span><span class="p">:]</span>
+                <span class="n">ParameterGroups</span><span class="p">[</span><span class="n">GroupNumber</span><span class="p">]</span><span class="o">.</span><span class="n">parameter</span><span class="p">[</span>
+                    <span class="n">ParameterNumber</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content_memory</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">nextrec</span><span class="p">:]</span>
+
+        <span class="n">Ncharacters</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Ncharacters</span> <span class="o">&gt;=</span> <span class="mi">128</span><span class="p">:</span>
+            <span class="n">Ncharacters</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">Ncharacters</span><span class="p">)</span>
+        <span class="n">GroupNumber</span><span class="p">,</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">GroupNumber</span> <span class="o">&gt;=</span> <span class="mi">128</span><span class="p">:</span>
+            <span class="n">GroupNumber</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">GroupNumber</span><span class="p">)</span>
+        <span class="c">#print &quot;GroupNumber = &quot;, GroupNumber</span>
+
+    <span class="c">## ###############################################</span>
+    <span class="c">## ##                                           ##</span>
+    <span class="c">## ##    read data block                        ##</span>
+    <span class="c">## ##                                           ##</span>
+    <span class="c">## ###############################################</span>
+    <span class="c">##  Get the coordinate and analog data</span>
+    <span class="c">#</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content_memory</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[(</span><span class="n">NrecordDataBlock</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">512</span><span class="p">:]</span>
+
+    <span class="n">NvideoFrames</span> <span class="o">=</span> <span class="n">EndFrame</span> <span class="o">-</span> <span class="n">StartFrame</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;NVideoFrames = &quot;</span><span class="p">,</span> <span class="n">NvideoFrames</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NvideoFrames</span><span class="p">):</span>
+        <span class="n">Markers</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="n">ResidualError</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="n">CameraInfo</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nmarkers</span><span class="p">):</span>
+            <span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Marker</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+            <span class="n">ResidualError</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">CameraInfo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c">#print Markers</span>
+    <span class="c">#</span>
+    <span class="c">#if Scale &lt; 0</span>
+    <span class="c">#    for i=1:NvideoFrames</span>
+    <span class="c">#        for j=1:Nmarkers</span>
+    <span class="c">#            Markers(i,j,1:3)=fread(fid,3,&#39;float32&#39;)&#39;;</span>
+    <span class="c">#            a=fix(fread(fid,1,&#39;float32&#39;));</span>
+    <span class="c">#            highbyte=fix(a/256);</span>
+    <span class="c">#            lowbyte=a-highbyte*256;</span>
+    <span class="c">#            CameraInfo(i,j)=highbyte;</span>
+    <span class="c">#            ResidualError(i,j)=lowbyte*abs(Scale);</span>
+    <span class="c">#        end</span>
+    <span class="c">#        waitbar(i/NvideoFrames)</span>
+    <span class="c">#        for j=1:NanalogFramesPerVideoFrame,</span>
+    <span class="c">#            AnalogSignals(j+NanalogFramesPerVideoFrame*(i-1),1:NanalogChannels)=...</span>
+    <span class="c">#                fread(fid,NanalogChannels,&#39;int16&#39;)&#39;;</span>
+    <span class="c">#        end</span>
+    <span class="c">#    end</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;***************************&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;**** Reading DataBlock ....&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;***************************&quot;</span>
+    <span class="n">ptr_read</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">Scale</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NvideoFrames</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nmarkers</span><span class="p">):</span>
+                <span class="c">#x, content = getFloat(content)</span>
+                <span class="c">#y, content = getFloat(content)</span>
+                <span class="c">#z, content = getFloat(content)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">[</span><span class="n">ptr_read</span><span class="p">:</span><span class="n">ptr_read</span> <span class="o">+</span> <span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ptr_read</span> <span class="o">+=</span> <span class="mi">4</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">[</span><span class="n">ptr_read</span><span class="p">:</span><span class="n">ptr_read</span> <span class="o">+</span> <span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ptr_read</span> <span class="o">+=</span> <span class="mi">4</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">[</span><span class="n">ptr_read</span><span class="p">:</span><span class="n">ptr_read</span> <span class="o">+</span> <span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ptr_read</span> <span class="o">+=</span> <span class="mi">4</span>
+                <span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">Scale</span>
+                <span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">Scale</span>
+                <span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="n">Scale</span>
+                <span class="c">#a, content  = getFloat(content)</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">[</span><span class="n">ptr_read</span><span class="p">:</span><span class="n">ptr_read</span> <span class="o">+</span> <span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ptr_read</span> <span class="o">+=</span> <span class="mi">4</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+                <span class="n">highbyte</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span> <span class="o">/</span> <span class="mi">256</span><span class="p">)</span>
+                <span class="n">lowbyte</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">highbyte</span> <span class="o">*</span> <span class="mi">256</span>
+                <span class="n">CameraInfo</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">highbyte</span>
+                <span class="n">ResidualError</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowbyte</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Scale</span><span class="p">)</span>
+                <span class="c">#if i&lt; 2:</span>
+                <span class="c">#print Markers[i][j]</span>
+            <span class="n">ptr_read</span> <span class="o">+=</span> <span class="n">NanalogFramesPerVideoFrame</span> <span class="o">*</span> <span class="n">NanalogChannels</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="c">#for j in range (NanalogFramesPerVideoFrame):</span>
+            <span class="c">#  for k in range(NanalogChannels):</span>
+            <span class="c">#    val, content = getNumber(content, 2)</span>
+            <span class="c">#    AnalogSignals[j+NanalogFramesPerVideoFrame*(i)][k]=val #??? i-1</span>
+    <span class="c">#else</span>
+    <span class="c">#    for i=1:NvideoFrames</span>
+    <span class="c">#        for j=1:Nmarkers</span>
+    <span class="c">#            Markers(i,j,1:3)=fread(fid,3,&#39;int16&#39;)&#39;.*Scale;</span>
+    <span class="c">#            ResidualError(i,j)=fread(fid,1,&#39;int8&#39;);</span>
+    <span class="c">#            CameraInfo(i,j)=fread(fid,1,&#39;int8&#39;);</span>
+    <span class="c">#        end</span>
+    <span class="c">#        waitbar(i/NvideoFrames)</span>
+    <span class="c">#        for j=1:NanalogFramesPerVideoFrame,</span>
+    <span class="c">#            AnalogSignals(j+NanalogFramesPerVideoFrame*(i-1),1:NanalogChannels)=...</span>
+    <span class="c">#                fread(fid,NanalogChannels,&#39;int16&#39;)&#39;;</span>
+    <span class="c">#        end</span>
+    <span class="c">#    end</span>
+    <span class="c">#end</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NvideoFrames</span><span class="p">):</span>
+            <span class="c">#print &quot;**** Frame &quot;, i, &quot; *****&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;*&quot;</span><span class="p">,</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nmarkers</span><span class="p">):</span>
+                <span class="c">#x, content = getNumber(content,2)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">ptr_read</span><span class="p">])</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="n">content</span><span class="p">[</span>
+                    <span class="n">ptr_read</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span>
+                <span class="n">ptr_read</span> <span class="o">+=</span> <span class="mi">2</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">32768</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="c">#y, content = getNumber(content,2)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">ptr_read</span><span class="p">])</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="n">content</span><span class="p">[</span>
+                    <span class="n">ptr_read</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span>
+                <span class="n">ptr_read</span> <span class="o">+=</span> <span class="mi">2</span>
+                <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">32768</span><span class="p">:</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="c">#z, content = getNumber(content,2)</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">ptr_read</span><span class="p">])</span> <span class="o">+</span> <span class="nb">ord</span><span class="p">(</span><span class="n">content</span><span class="p">[</span>
+                    <span class="n">ptr_read</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span>
+                <span class="n">ptr_read</span> <span class="o">+=</span> <span class="mi">2</span>
+                <span class="k">if</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="mi">32768</span><span class="p">:</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">z</span><span class="p">)</span>
+                <span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">Scale</span>
+                <span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">Scale</span>
+                <span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="n">Scale</span>
+                <span class="c">#if i&lt; 2:</span>
+                <span class="c">#  print Markers[i][j]</span>
+                <span class="n">ResidualError</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">CameraInfo</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">content</span> <span class="o">=</span> <span class="n">getNumber</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ptr_read</span> <span class="o">+=</span> <span class="n">NanalogFramesPerVideoFrame</span> <span class="o">*</span> <span class="n">NanalogChannels</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="c">#for j in range (NanalogFramesPerVideoFrame):</span>
+            <span class="c">#  for k in range(NanalogChannels):</span>
+            <span class="c">#    val, content = getNumber(content, 2)</span>
+                <span class="c">#AnalogSignals(j+NanalogFramesPerVideoFrame*(i-1),1:NanalogChannels)=val</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Added</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Frames</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">NvideoFrames</span><span class="p">,</span> <span class="n">Nmarkers</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NvideoFrames</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Nmarkers</span><span class="p">):</span>
+            <span class="n">Frames</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">Frames</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">Frames</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">Markers</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">z</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">Subjects</span><span class="p">,</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Frames</span><span class="p">,</span><span class="n">dinfo</span><span class="p">)</span>
+<span class="c">#    fr = Frames[0]</span>
+<span class="c">#    &quot;&quot;&quot;axex = fr[:,0]</span>
+<span class="c">#    axey = fr[:,1]</span>
+<span class="c">#    axez = fr[:,2]</span>
+<span class="c">#</span>
+<span class="c">#    fig = plt.figure()</span>
+<span class="c">#    ax = fig.add_subplot(111, projection=&#39;3d&#39;)</span>
+<span class="c">#    ax.scatter(axex,-axey,-axez)</span>
+<span class="c">#    plt.show()&quot;&quot;&quot;</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#    fig=plt.figure()</span>
+<span class="c">#    #ax=fig.gca(projection=&#39;3d&#39;)</span>
+<span class="c">#    ax = fig.add_subplot(111, projection=&#39;3d&#39;)</span>
+<span class="c">#    sg= (fr[0,:],fr[1,:],fr[2,:],fr[3,:])</span>
+<span class="c">#    lc= cc.Line3DCollection(LineCollection)</span>
+<span class="c">#    lc.set_segments(sg)</span>
+<span class="c">#    ax.add_collection3d(sg)</span>
+<span class="c">#    ln =LineCollection(sg)</span>
+<span class="c">#    ln.set_segments(sg)</span>
+<span class="c">#    plt.show()</span>
+<span class="c">#    h=mesh(axex,axey,axez)&quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../mobility.html" >pylayers.mobility</a> &raquo;</li>
+          <li><a href="../body.html" >pylayers.mobility.body</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.util.save &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.util.save</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">Simulation</span><span class="p">,</span> <span class="n">Process</span><span class="p">,</span> <span class="n">hold</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="kn">as</span> <span class="nn">spio</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">ConfigParser</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="n">Network</span><span class="p">,</span> <span class="n">Node</span><span class="p">,</span> <span class="n">PNetwork</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+
+
+<div class="viewcode-block" id="Save"><a class="viewcode-back" href="../../../modules/pylayers.util.save.html#pylayers.util.save.Save">[docs]</a><span class="k">class</span> <span class="nc">Save</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Save all variable of a simulnet simulation.</span>
+<span class="sd">    Save process can be setup with the save.ini file from /&lt;project&gt;/ini</span>
+<span class="sd">        </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    net : pylayers.network.network()</span>
+<span class="sd">    sim : SimPy.SimulationRT()</span>
+
+<span class="sd">    savemat : dictionnary with all the saved results from a simulation</span>
+<span class="sd">               ( obtained after self.export() )</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    run ():</span>
+<span class="sd">        save the current simulation evey k step (setup into save.ini)</span>
+<span class="sd">    load():</span>
+<span class="sd">        Load saved results of a simulation. file extension  .pck</span>
+<span class="sd">        </span>
+<span class="sd">    export(etype) :</span>
+<span class="sd">        export the results into the etype format.</span>
+<span class="sd">        available format : </span>
+<span class="sd">        - &#39;python&#39;</span>
+<span class="sd">        - &#39;matlab&#39;</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;L&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;net&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;sim&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+
+<span class="c">##       initialize attributes</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+
+        <span class="n">Process</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;save&#39;</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sim&#39;</span><span class="p">])</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;save.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;config&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;position&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ldp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;ldp&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rat</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;rat&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lpos</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="s">&#39;position&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lldp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;ldp&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lrat</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rat</span><span class="p">[</span><span class="s">&#39;rat&#39;</span><span class="p">])</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;sim&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;net&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Save.load"><a class="viewcode-back" href="../../../modules/pylayers.util.save.html#pylayers.util.save.Save.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot; Load a saved trace simulation</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.util.save import *</span>
+<span class="sd">        &gt;&gt;&gt; S=Save()</span>
+<span class="sd">        &gt;&gt;&gt; S.load()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
+
+        <span class="n">out</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">infile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">infile</span><span class="p">))</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">EOFError</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">UnpicklingError</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">infile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">dout</span><span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dout</span>
+
+</div>
+<div class="viewcode-block" id="Save.mat_export"><a class="viewcode-back" href="../../../modules/pylayers.util.save.html#pylayers.util.save.Save.mat_export">[docs]</a>    <span class="k">def</span> <span class="nf">mat_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            export save simulation to a matlab file</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.util.save import *</span>
+<span class="sd">        &gt;&gt;&gt; S=Save()</span>
+<span class="sd">        &gt;&gt;&gt; S.mat_export()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">)</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">inn</span><span class="p">,</span><span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">[</span><span class="s">&#39;node_&#39;</span><span class="o">+</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">n2</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">n2</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">[</span><span class="s">&#39;node_&#39;</span><span class="o">+</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;node_&#39;</span><span class="o">+</span><span class="n">n2</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n2</span><span class="p">]</span>
+                        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n2</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">o</span> <span class="o">==</span><span class="s">&#39;subnet&#39;</span> <span class="ow">and</span> <span class="n">inn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;lrat&#39;</span><span class="p">]:</span>
+                        <span class="n">li</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="n">o</span><span class="p">][</span><span class="n">r</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="n">o</span><span class="p">][</span><span class="n">r</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;node_&#39;</span><span class="o">+</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">li</span><span class="p">]</span>
+                
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="n">o</span><span class="p">][</span><span class="s">&#39;node_&#39;</span><span class="o">+</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="n">o</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+                        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="n">o</span><span class="p">][</span><span class="n">n</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+        <span class="n">spio</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Save.run"><a class="viewcode-back" href="../../../modules/pylayers.util.save.html#pylayers.util.save.Save.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Run the save Result process</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;write&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;lpos&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lpos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;lldp&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lldp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;lrat&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lrat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;nbsamples&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">])</span><span class="o">/</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">[</span><span class="s">&#39;save_update_time&#39;</span><span class="p">]))</span><span class="o">+</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;duration&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;save_update_time&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">[</span><span class="s">&#39;save_update_time&#39;</span><span class="p">])</span>
+
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="mi">0</span>
+
+        <span class="c">### init save dictionnary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;Layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="s">&#39;type&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="s">&#39;epwr&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="s">&#39;sens&#39;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;subnet&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lrat</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;subnet&#39;</span><span class="p">][</span><span class="n">rat</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+
+        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">n</span><span class="p">:{}})</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">()]</span>
+
+        <span class="c"># find the size of save array regarding the simulation duration and</span>
+        <span class="c"># the saved sample time</span>
+        <span class="n">nb_sample</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">])</span><span class="o">/</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">[</span><span class="s">&#39;save_update_time&#39;</span><span class="p">]))</span><span class="o">+</span><span class="mi">1</span>
+
+
+        <span class="c"># create void array to be fill with simulation data</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lpos</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">position</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_sample</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">=</span><span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="p">{}</span>
+            <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lrat</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">rat</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rat</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+                <span class="k">for</span> <span class="n">ldp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lldp</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">rat</span><span class="p">][</span><span class="n">ldp</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_sample</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rat</span><span class="p">][</span><span class="n">ldp</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nb_sample</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">rl</span><span class="o">=</span><span class="p">{}</span>
+            <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lrat</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ldp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lldp</span><span class="p">:</span>
+                    <span class="n">rl</span><span class="p">[</span><span class="n">rat</span><span class="o">+</span><span class="n">ldp</span><span class="p">]</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">],</span><span class="n">ldp</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lpos</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="n">position</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">position</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lrat</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">ldp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lldp</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">rat</span><span class="p">][</span><span class="n">ldp</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">rl</span><span class="p">[</span><span class="n">rat</span><span class="o">+</span><span class="n">ldp</span><span class="p">][</span><span class="n">e</span><span class="p">]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rat</span><span class="p">][</span><span class="n">ldp</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">rl</span><span class="p">[</span><span class="n">rat</span><span class="o">+</span><span class="n">ldp</span><span class="p">][</span><span class="n">e</span><span class="p">]</span>
+                        <span class="k">except</span><span class="p">:</span>
+                            <span class="k">pass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">[</span><span class="s">&#39;save_update_time&#39;</span><span class="p">])</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

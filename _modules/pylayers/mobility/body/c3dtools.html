@@ -1,0 +1,781 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.mobility.body.c3dtools &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../../index.html" />
+    <link rel="up" title="pylayers.mobility.body" href="../body.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../../index.html"><img src="../../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../mobility.html" >pylayers.mobility</a> &raquo;</li>
+          <li><a href="../body.html" accesskey="U">pylayers.mobility.body</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.mobility.body.c3dtools</h1><div class="highlight"><pre>
+<span class="c"># Copyright (c) 2010 Leif Johnson &lt;leif@leifjohnson.net&gt;</span>
+<span class="c">#</span>
+<span class="c"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c"># in the Software without restriction, including without limitation the rights</span>
+<span class="c"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c"># copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c"># furnished to do so, subject to the following conditions:</span>
+<span class="c">#</span>
+<span class="c"># The above copyright notice and this permission notice shall be included in all</span>
+<span class="c"># copies or substantial portions of the Software.</span>
+<span class="c">#</span>
+<span class="c"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c"># SOFTWARE.</span>
+
+<span class="sd">&#39;&#39;&#39;A Python library for reading and writing C3D files.&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">array</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">cStringIO</span>
+
+
+<div class="viewcode-block" id="Header"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Header">[docs]</a><span class="k">class</span> <span class="nc">Header</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Header information from a C3D file.&#39;&#39;&#39;</span>
+
+    <span class="n">BINARY_FORMAT</span> <span class="o">=</span> <span class="s">&#39;BBHHHHHfHHf270sHH214s&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_block</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameter_block</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span> <span class="o">=</span> <span class="mi">3</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_count</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analog_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_frame</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_per_frame</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame_rate</span> <span class="o">=</span> <span class="mf">60.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_gap</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">long_event_labels</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Header.write"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Header.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Write binary header data to a file handle.</span>
+
+<span class="sd">        This method writes exactly 512 bytes to the beginning of the file.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BINARY_FORMAT</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">parameter_block</span><span class="p">,</span>
+                                 <span class="mh">0x50</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">point_count</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">analog_count</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">first_frame</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">max_gap</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">sample_per_frame</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">frame_rate</span><span class="p">,</span>
+                                 <span class="s">&#39;&#39;</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">long_event_labels</span> <span class="ow">and</span> <span class="mh">0x3039</span> <span class="ow">or</span> <span class="mh">0x0</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">label_block</span><span class="p">,</span>
+                                 <span class="s">&#39;&#39;</span><span class="p">))</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;&#39;&#39;wrote C3D header information:</span>
+<span class="s">  parameter_block: </span><span class="si">%(parameter_block)s</span><span class="s"></span>
+<span class="s">      point_count: </span><span class="si">%(point_count)s</span><span class="s"></span>
+<span class="s">     analog_count: </span><span class="si">%(analog_count)s</span><span class="s"></span>
+<span class="s">      first_frame: </span><span class="si">%(first_frame)s</span><span class="s"></span>
+<span class="s">       last_frame: </span><span class="si">%(last_frame)s</span><span class="s"></span>
+<span class="s">          max_gap: </span><span class="si">%(max_gap)s</span><span class="s"></span>
+<span class="s">     scale_factor: </span><span class="si">%(scale_factor)s</span><span class="s"></span>
+<span class="s">       data_block: </span><span class="si">%(data_block)s</span><span class="s"></span>
+<span class="s"> sample_per_frame: </span><span class="si">%(sample_per_frame)s</span><span class="s"></span>
+<span class="s">       frame_rate: </span><span class="si">%(frame_rate)s</span><span class="s"></span>
+<span class="s">long_event_labels: </span><span class="si">%(long_event_labels)s</span><span class="s"></span>
+<span class="s">      label_block: </span><span class="si">%(label_block)s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Header.read"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Header.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Read and parse binary header data from a file handle.</span>
+
+<span class="sd">        This method reads exactly 512 bytes from the beginning of the file.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameter_block</span><span class="p">,</span>
+         <span class="n">_</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">point_count</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">analog_count</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">first_frame</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">last_frame</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">max_gap</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">data_block</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">sample_per_frame</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">frame_rate</span><span class="p">,</span>
+         <span class="n">_</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">long_event_labels</span><span class="p">,</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">label_block</span><span class="p">,</span>
+         <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BINARY_FORMAT</span><span class="p">,</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;&#39;&#39;loaded C3D header information:</span>
+<span class="s">  parameter_block: </span><span class="si">%(parameter_block)s</span><span class="s"></span>
+<span class="s">      point_count: </span><span class="si">%(point_count)s</span><span class="s"></span>
+<span class="s">     analog_count: </span><span class="si">%(analog_count)s</span><span class="s"></span>
+<span class="s">      first_frame: </span><span class="si">%(first_frame)s</span><span class="s"></span>
+<span class="s">       last_frame: </span><span class="si">%(last_frame)s</span><span class="s"></span>
+<span class="s">          max_gap: </span><span class="si">%(max_gap)s</span><span class="s"></span>
+<span class="s">     scale_factor: </span><span class="si">%(scale_factor)s</span><span class="s"></span>
+<span class="s">       data_block: </span><span class="si">%(data_block)s</span><span class="s"></span>
+<span class="s"> sample_per_frame: </span><span class="si">%(sample_per_frame)s</span><span class="s"></span>
+<span class="s">       frame_rate: </span><span class="si">%(frame_rate)s</span><span class="s"></span>
+<span class="s">long_event_labels: </span><span class="si">%(long_event_labels)s</span><span class="s"></span>
+<span class="s">      label_block: </span><span class="si">%(label_block)s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Param"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Param">[docs]</a><span class="k">class</span> <span class="nc">Param</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;We represent a single named parameter from a C3D file.&#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">,</span>
+                 <span class="n">desc</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">data_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">dimensions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="nb">bytes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">handle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Set up a new parameter with at least a name.</span>
+
+<span class="sd">        name: The name of the parameter.</span>
+<span class="sd">        desc: The description of the parameter.</span>
+<span class="sd">        data_size: The number of bytes that are in the binary representation of</span>
+<span class="sd">          the data for this parameter. Use -1 if this parameter represents</span>
+<span class="sd">          string data.</span>
+<span class="sd">        dimensions: The dimensions of the data for this parameter. This is</span>
+<span class="sd">          primarily used for string data ; if you want to use strings, they must</span>
+<span class="sd">          all be passed in the &quot;bytes&quot; variable as a space-delimited string.</span>
+<span class="sd">          Each field in the string must be the same length, and that length must</span>
+<span class="sd">          be passed in the dimensions list.</span>
+<span class="sd">        bytes: The raw bytes for this parameter. Use struct.pack() to construct</span>
+<span class="sd">          this value, or just pass the raw string data for string parameters.</span>
+<span class="sd">        handle: If provided, the data for the parameter will be read from this</span>
+<span class="sd">          file handle.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">negative_data_size</span> <span class="o">=</span> <span class="n">data_size</span> <span class="o">&lt;</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_size</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">data_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">dimensions</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bytes</span> <span class="o">=</span> <span class="nb">bytes</span>
+
+        <span class="k">if</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;&lt;Param: </span><span class="si">%s</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span>
+
+<div class="viewcode-block" id="Param.binary_size"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Param.binary_size">[docs]</a>    <span class="k">def</span> <span class="nf">binary_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return the number of bytes needed to store this parameter.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="c"># group_id</span>
+            <span class="mi">2</span> <span class="o">+</span> <span class="c"># next offset marker</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="c"># size of name and name bytes</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="c"># data size</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span> <span class="o">+</span> <span class="c"># size of dimensions and dimension bytes</span>
+            <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_size</span> <span class="o">+</span> <span class="c"># data</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span> <span class="c"># size of desc and desc bytes</span>
+            <span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Param.write"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Param.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Write binary data for this parameter to a file handle.</span>
+
+<span class="sd">        This writes data at the current position in the file.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_data_size</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="o">-</span><span class="n">size</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)))</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;B&#39;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">),</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bytes</span><span class="p">:</span>
+            <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bytes</span><span class="p">)</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">)))</span>
+        <span class="n">handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;&#39;&#39;wrote C3D parameter information:</span>
+<span class="s">      name: </span><span class="si">%(name)s</span><span class="s"></span>
+<span class="s">      desc: </span><span class="si">%(desc)s</span><span class="s"></span>
+<span class="s"> data_size: </span><span class="si">%(data_size)s</span><span class="s"></span>
+<span class="s">dimensions: </span><span class="si">%(dimensions)s</span><span class="s"></span>
+<span class="s">     bytes: </span><span class="si">%(bytes)r</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Param.read"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Param.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Read binary data for this parameter from a file handle.</span>
+
+<span class="sd">        This reads exactly enough data from the current position in the file to</span>
+<span class="sd">        initialize the parameter.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_size</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_size</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">negative_data_size</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_size</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_size</span><span class="p">)</span>
+
+        <span class="n">count</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">count</span><span class="p">)]</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bytes</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_size</span> <span class="o">*</span> <span class="n">count</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bytes</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_size</span> <span class="o">*</span> <span class="n">count</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;zero data_size * count !&#39;</span><span class="p">)</span>
+
+        <span class="n">size</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">and</span> <span class="n">handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;&#39;&#39;loaded C3D parameter information:</span>
+<span class="s">      name: </span><span class="si">%(name)s</span><span class="s"></span>
+<span class="s">      desc: </span><span class="si">%(desc)s</span><span class="s"></span>
+<span class="s"> data_size: </span><span class="si">%(data_size)s</span><span class="s"></span>
+<span class="s">dimensions: </span><span class="si">%(dimensions)s</span><span class="s"></span>
+<span class="s">     bytes: </span><span class="si">%(bytes)r</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Group"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group">[docs]</a><span class="k">class</span> <span class="nc">Group</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;A group of parameters from a C3D file.&#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;&lt;Group: </span><span class="si">%s</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span>
+
+<div class="viewcode-block" id="Group.add_param"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.add_param">[docs]</a>    <span class="k">def</span> <span class="nf">add_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span> <span class="o">=</span> <span class="n">Param</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;added parameter </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Group.binary_size"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.binary_size">[docs]</a>    <span class="k">def</span> <span class="nf">binary_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return the number of bytes to store this group and its parameters.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="c"># group_id</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="c"># size of name and name bytes</span>
+            <span class="mi">2</span> <span class="o">+</span> <span class="c"># next offset marker</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span> <span class="o">+</span> <span class="c"># size of desc and desc bytes</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">binary_size</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()))</span>
+</div>
+<div class="viewcode-block" id="Group.get_int8"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_int8">[docs]</a>    <span class="k">def</span> <span class="nf">get_int8</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Group.get_uint8"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_uint8">[docs]</a>    <span class="k">def</span> <span class="nf">get_uint8</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Group.get_int16"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_int16">[docs]</a>    <span class="k">def</span> <span class="nf">get_int16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Group.get_uint16"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_uint16">[docs]</a>    <span class="k">def</span> <span class="nf">get_uint16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Group.get_int32"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_int32">[docs]</a>    <span class="k">def</span> <span class="nf">get_int32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Group.get_uint32"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_uint32">[docs]</a>    <span class="k">def</span> <span class="nf">get_uint32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;I&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Group.get_float"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_float">[docs]</a>    <span class="k">def</span> <span class="nf">get_float</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Group.get_string"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Group.get_string">[docs]</a>    <span class="k">def</span> <span class="nf">get_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="n">offset</span><span class="p">]</span>
+
+</div></div>
+<div class="viewcode-block" id="Manager"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager">[docs]</a><span class="k">class</span> <span class="nc">Manager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;A base class for managing C3D file metadata.&#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">header</span> <span class="ow">or</span> <span class="n">Header</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span> <span class="o">=</span> <span class="n">groups</span> <span class="ow">or</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="Manager.check_group"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.check_group">[docs]</a>    <span class="k">def</span> <span class="nf">check_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Add a new parameter group.&#39;&#39;&#39;</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;added C3D parameter group #</span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span>
+                         <span class="n">group_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="p">[</span><span class="n">group_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;using C3D parameter group </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span>
+                         <span class="n">group</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;group name </span><span class="si">%s</span><span class="s"> was used more than once&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span>
+            <span class="n">group</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">group</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+
+        <span class="k">return</span> <span class="n">group</span>
+</div>
+<div class="viewcode-block" id="Manager.group"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.group">[docs]</a>    <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Get the parameter group with a given name.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Manager.groups"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.groups">[docs]</a>    <span class="k">def</span> <span class="nf">groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Get all the (name, group) pairs in our file.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Manager.parameter_blocks"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.parameter_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">parameter_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Compute the size (in 512B blocks) of the parameter section.&#39;&#39;&#39;</span>
+        <span class="nb">bytes</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="nb">bytes</span> <span class="o">+=</span> <span class="n">group</span><span class="o">.</span><span class="n">binary_size</span><span class="p">()</span>
+        <span class="n">blocks</span><span class="p">,</span> <span class="n">overflow</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overflow</span><span class="p">:</span>
+            <span class="n">blocks</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">blocks</span>
+</div>
+<div class="viewcode-block" id="Manager.frame_rate"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.frame_rate">[docs]</a>    <span class="k">def</span> <span class="nf">frame_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_rate</span>
+</div>
+<div class="viewcode-block" id="Manager.num_points"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.num_points">[docs]</a>    <span class="k">def</span> <span class="nf">num_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;POINT&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_uint16</span><span class="p">(</span><span class="s">&#39;USED&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Manager.num_analog"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.num_analog">[docs]</a>    <span class="k">def</span> <span class="nf">num_analog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;ANALOG&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_uint16</span><span class="p">(</span><span class="s">&#39;USED&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Manager.points_per_frame"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.points_per_frame">[docs]</a>    <span class="k">def</span> <span class="nf">points_per_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;POINT&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_uint16</span><span class="p">(</span><span class="s">&#39;USED&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Manager.analog_per_frame"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.analog_per_frame">[docs]</a>    <span class="k">def</span> <span class="nf">analog_per_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;ANALOG&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_uint16</span><span class="p">(</span><span class="s">&#39;USED&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Manager.start_field"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.start_field">[docs]</a>    <span class="k">def</span> <span class="nf">start_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;TRIAL&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_uint32</span><span class="p">(</span><span class="s">&#39;ACTUAL_START_FIELD&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Manager.end_field"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Manager.end_field">[docs]</a>    <span class="k">def</span> <span class="nf">end_field</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;TRIAL&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_uint32</span><span class="p">(</span><span class="s">&#39;ACTUAL_END_FIELD&#39;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Reader"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Reader">[docs]</a><span class="k">class</span> <span class="nc">Reader</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;This class provides methods for reading the data in a C3D file.</span>
+
+<span class="sd">    A C3D file contains metadata and frame-based data describing 3D motion.</span>
+
+<span class="sd">    You can iterate over the frames in the file by calling</span>
+<span class="sd">    &quot;read_frames(handle)&quot; after construction:</span>
+
+<span class="sd">    &gt;&gt;&gt; r = c3d.Reader(open(&#39;capture.c3d&#39;, &#39;rb&#39;))</span>
+<span class="sd">    &gt;&gt;&gt; for points, analog in r.read_frames():</span>
+<span class="sd">    ...     print points.shape, &#39;points in this frame&#39;</span>
+<span class="sd">    ...     frames.append(points, analog)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Initialize this C3D file by reading header and parameter data.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Reader</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">Header</span><span class="p">(</span><span class="n">handle</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_read_metadata</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_read_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Read group and parameter data from our file handle.&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">seek</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">parameter_block</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">512</span><span class="p">)</span>
+
+        <span class="c"># metadata header</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">parameter_blocks</span><span class="p">,</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;BBBB&#39;</span><span class="p">,</span> <span class="n">buf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">processor</span> <span class="o">!=</span> <span class="mi">84</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;We only read Intel C3D files.&#39;</span><span class="p">)</span>
+
+        <span class="c"># read all metadata in a chunk, then process each chunk (to avoid block</span>
+        <span class="c"># boundary issues).</span>
+        <span class="nb">bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">512</span> <span class="o">*</span> <span class="n">parameter_blocks</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">bytes</span><span class="p">:</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">cStringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+
+            <span class="n">chars_in_name</span><span class="p">,</span> <span class="n">group_id</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;bb&#39;</span><span class="p">,</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">group_id</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">chars_in_name</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="n">name</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">chars_in_name</span><span class="p">))</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+            <span class="n">offset_to_next</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">group_id</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">group_id</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+                <span class="n">size</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="n">size</span> <span class="ow">and</span> <span class="n">buf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_group</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> group takes up </span><span class="si">%d</span><span class="s"> bytes&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+                              <span class="n">g</span><span class="o">.</span><span class="n">binary_size</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_group</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> parameter takes up </span><span class="si">%d</span><span class="s"> bytes&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+                              <span class="n">g</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">binary_size</span><span class="p">())</span>
+
+            <span class="nb">bytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">[</span><span class="mi">2</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">chars_in_name</span><span class="p">)</span> <span class="o">+</span> <span class="n">offset_to_next</span><span class="p">:]</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;consumed </span><span class="si">%d</span><span class="s"> bytes of metadata&#39;</span><span class="p">,</span>
+                          <span class="mi">512</span> <span class="o">*</span> <span class="n">parameter_blocks</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="nb">bytes</span><span class="p">))</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;read </span><span class="si">%d</span><span class="s"> parameter groups&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Reader.read_frames"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Reader.read_frames">[docs]</a>    <span class="k">def</span> <span class="nf">read_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Iterate over the data frames from our C3D file handle.</span>
+
+<span class="sd">        This generates a sequence of (points, analog) ordered pairs, one</span>
+<span class="sd">        ordered pair per frame. The first element of each frame contains a numpy</span>
+<span class="sd">        array of 4D &quot;points&quot; and the second element of each frame contains a</span>
+<span class="sd">        numpy array of 1D &quot;analog&quot; values that were probably recorded</span>
+<span class="sd">        simultaneously. The four dimensions in the point data are typically</span>
+<span class="sd">        (x, y, z) and a &quot;confidence&quot; estimate for the point.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># find out where we seek to start reading frame data.</span>
+        <span class="n">start_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;POINT&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_uint16</span><span class="p">(</span><span class="s">&#39;DATA_START&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">start_block</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">data_block</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;start_block </span><span class="si">%d</span><span class="s"> != data_block </span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span>
+                         <span class="n">start_block</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">data_block</span><span class="p">)</span>
+
+        <span class="c"># read frame and analog data in either float or int format.</span>
+        <span class="n">format</span> <span class="o">=</span> <span class="s">&#39;fi&#39;</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;POINT&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s">&#39;SCALE&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">ppf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points_per_frame</span><span class="p">()</span>
+        <span class="n">apf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analog_per_frame</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">seek</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">data_block</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">512</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_field</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_field</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+         
+            <span class="n">points</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">format</span><span class="p">)</span>
+            <span class="n">points</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">ppf</span><span class="p">)</span>
+            <span class="n">analog</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">format</span><span class="p">)</span>
+            <span class="n">analog</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="n">apf</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">ppf</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">analog</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">f</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">f</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;consumed </span><span class="si">%d</span><span class="s"> frames in </span><span class="si">%d</span><span class="s">kB of frame data&#39;</span><span class="p">,</span>
+                              <span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;iterated over </span><span class="si">%d</span><span class="s"> frames&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Writer"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Writer">[docs]</a><span class="k">class</span> <span class="nc">Writer</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;This class manages the task of writing metadata and frames to a C3D file.</span>
+
+<span class="sd">    &gt;&gt;&gt; r = c3d.Reader(open(&#39;data.c3d&#39;, &#39;rb&#39;))</span>
+<span class="sd">    &gt;&gt;&gt; frames = smooth_frames(r.read_frames())</span>
+<span class="sd">    &gt;&gt;&gt; w = c3d.Writer(open(&#39;smoothed.c3d&#39;, &#39;wb&#39;))</span>
+<span class="sd">    &gt;&gt;&gt; w.write_from_reader(frames, r)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Writer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
+
+    <span class="k">def</span> <span class="nf">_pad_block</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Pad the file with 0s to the end of the next block boundary.&#39;&#39;&#39;</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">%</span> <span class="mi">512</span>
+        <span class="k">if</span> <span class="n">extra</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;padding with </span><span class="si">%d</span><span class="s"> zeros&#39;</span><span class="p">,</span> <span class="mi">512</span> <span class="o">-</span> <span class="n">extra</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\x00</span><span class="s">&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">512</span> <span class="o">-</span> <span class="n">extra</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Writer.write_metadata"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Writer.write_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">write_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Write metadata for this file to our file handle.&#39;&#39;&#39;</span>
+        <span class="c"># header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pad_block</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">==</span> <span class="mi">512</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;produced </span><span class="si">%d</span><span class="s"> bytes of header data&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">())</span>
+
+        <span class="c"># groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;BBBB&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter_blocks</span><span class="p">(),</span> <span class="mi">84</span><span class="p">))</span>
+        <span class="n">id_groups</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">id_groups</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_group</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+
+        <span class="c"># padding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pad_block</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">512</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">data_block</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\x00</span><span class="s">&#39;</span> <span class="o">*</span> <span class="mi">512</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;produced </span><span class="si">%d</span><span class="s"> bytes of metadata&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">())</span>
+</div>
+    <span class="k">def</span> <span class="nf">_write_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Write a single parameter group, with parameters, to our file handle.</span>
+
+<span class="sd">        group_id: The numerical ID of the group.</span>
+<span class="sd">        group: The Group object to write to the handle.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;writing C3D parameter group #</span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span>
+                     <span class="n">group_id</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;bb&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="o">-</span><span class="n">group_id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="mi">3</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">desc</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">desc</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;writing group info yields offset </span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;bb&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">group_id</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">binary_size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)))</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;writing </span><span class="si">%d</span><span class="s"> bytes yields offset </span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span>
+                          <span class="mi">4</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="n">param</span><span class="o">.</span><span class="n">binary_size</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;group </span><span class="si">%s</span><span class="s"> ends at byte offset </span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span>
+                      <span class="n">group</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">())</span>
+
+<div class="viewcode-block" id="Writer.write_frames"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Writer.write_frames">[docs]</a>    <span class="k">def</span> <span class="nf">write_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Write the given list of frame data to our file handle.</span>
+
+<span class="sd">        frames: A sequence of (points, analog) tuples, each containing data for</span>
+<span class="sd">          one frame.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">==</span> <span class="mi">512</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">data_block</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">format</span> <span class="o">=</span> <span class="s">&#39;fi&#39;</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;POINT&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s">&#39;SCALE&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">format</span><span class="p">)</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
+            <span class="n">analog</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">format</span><span class="p">)</span>
+            <span class="n">analog</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">analog</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pad_block</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Writer.write_like_phasespace"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Writer.write_like_phasespace">[docs]</a>    <span class="k">def</span> <span class="nf">write_like_phasespace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">frame_count</span><span class="p">,</span>
+                              <span class="n">point_frame_rate</span><span class="o">=</span><span class="mf">480.0</span><span class="p">,</span>
+                              <span class="n">analog_frame_rate</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                              <span class="n">point_scale_factor</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>
+                              <span class="n">point_units</span><span class="o">=</span><span class="s">&#39;mm  &#39;</span><span class="p">,</span>
+                              <span class="n">gen_scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                              <span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Write a set of frames to a file so it looks like Phasespace wrote it.</span>
+
+<span class="sd">        frames: The sequence of frames to write.</span>
+<span class="sd">        frame_count: The number of frames to write.</span>
+<span class="sd">        point_frame_rate: The frame rate of the data.</span>
+<span class="sd">        analog_frame_rate: The number of analog samples per frame.</span>
+<span class="sd">        point_scale_factor: The scale factor for point data.</span>
+<span class="sd">        point_units: The units that the point numbers represent.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">points</span><span class="p">,</span> <span class="n">analog</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c"># POINT group</span>
+        <span class="n">ppf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">point_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_group</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;POINT&#39;</span><span class="p">,</span> <span class="s">&#39;POINT group&#39;</span><span class="p">)</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;USED&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Number of 3d markers&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="n">ppf</span><span class="p">))</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;FRAMES&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;frame count&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">65535</span><span class="p">,</span> <span class="n">frame_count</span><span class="p">)))</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;DATA_START&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;data block number&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;SCALE&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;3d scale factor&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">point_scale_factor</span><span class="p">))</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;RATE&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;3d data capture rate&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">point_frame_rate</span><span class="p">))</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;X_SCREEN&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;X_SCREEN parameter&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="s">&#39;+X&#39;</span><span class="p">)</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;Y_SCREEN&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Y_SCREEN parameter&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="s">&#39;+Z&#39;</span><span class="p">)</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;UNITS&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;3d data units&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">point_units</span><span class="p">)],</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">point_units</span><span class="p">)</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;LABELS&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;labels&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="n">ppf</span><span class="p">],</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;M</span><span class="si">%03d</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">ppf</span><span class="p">)))</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;DESCRIPTIONS&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;descriptions&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="n">ppf</span><span class="p">],</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="s">&#39; &#39;</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">*</span> <span class="n">ppf</span><span class="p">)</span>
+
+        <span class="c"># ANALOG group</span>
+        <span class="n">apf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">analog</span><span class="p">)</span>
+        <span class="n">analog_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_group</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;ANALOG&#39;</span><span class="p">,</span> <span class="s">&#39;ANALOG group&#39;</span><span class="p">)</span>
+        <span class="n">analog_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;USED&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;analog channel count&#39;</span><span class="p">,</span>
+                               <span class="n">data_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                               <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="n">apf</span><span class="p">))</span>
+        <span class="n">analog_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;RATE&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;analog frame rate&#39;</span><span class="p">,</span>
+                               <span class="n">data_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                               <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">analog_frame_rate</span><span class="p">))</span>
+        <span class="n">analog_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;GEN_SCALE&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;analog general scale factor&#39;</span><span class="p">,</span>
+                               <span class="n">data_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                               <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">gen_scale</span><span class="p">))</span>
+        <span class="n">analog_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;SCALE&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;analog channel scale factors&#39;</span><span class="p">,</span>
+                               <span class="n">data_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                               <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">analog_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;OFFSET&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;analog channel offsets&#39;</span><span class="p">,</span>
+                               <span class="n">data_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                               <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c"># TRIAL group</span>
+        <span class="n">trial_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_group</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;TRIAL&#39;</span><span class="p">,</span> <span class="s">&#39;TRIAL group&#39;</span><span class="p">)</span>
+        <span class="n">trial_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;ACTUAL_START_FIELD&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;actual start frame&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;I&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">trial_group</span><span class="o">.</span><span class="n">add_param</span><span class="p">(</span><span class="s">&#39;ACTUAL_END_FIELD&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;actual end frame&#39;</span><span class="p">,</span>
+                              <span class="n">data_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                              <span class="nb">bytes</span><span class="o">=</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;I&#39;</span><span class="p">,</span> <span class="n">frame_count</span><span class="p">))</span>
+
+        <span class="c"># sync parameter information to header.</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter_blocks</span><span class="p">()</span>
+        <span class="n">point_group</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;DATA_START&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">bytes</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">,</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">blocks</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">data_block</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_rate</span> <span class="o">=</span> <span class="n">point_frame_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">last_frame</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">frame_count</span><span class="p">,</span> <span class="mi">65535</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">point_count</span> <span class="o">=</span> <span class="n">ppf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">analog_count</span> <span class="o">=</span> <span class="n">apf</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_metadata</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_frames</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Writer.write_from_reader"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3dtools.html#pylayers.mobility.body.c3dtools.Writer.write_from_reader">[docs]</a>    <span class="k">def</span> <span class="nf">write_from_reader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">reader</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Write a file with the same metadata and number of frames as a Reader.</span>
+
+<span class="sd">        frames: A sequence of frames to write.</span>
+<span class="sd">        reader: Copy metadata from this reader to the output file.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_like_phasespace</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">reader</span><span class="o">.</span><span class="n">end_field</span><span class="p">(),</span> <span class="n">reader</span><span class="o">.</span><span class="n">frame_rate</span><span class="p">())</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s">&#39;__main__&#39;</span><span class="p">:</span> 
+	<span class="n">r</span> <span class="o">=</span> <span class="n">Reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;testStatic.c3d&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../mobility.html" >pylayers.mobility</a> &raquo;</li>
+          <li><a href="../body.html" >pylayers.mobility.body</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

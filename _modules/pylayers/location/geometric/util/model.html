@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.geometric.util.model &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../../../index.html"><img src="../../../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.location.geometric.util.model</h1><div class="highlight"><pre>
+<span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="c">#####################################################################</span>
+<span class="c">#This file is part of RGPA.</span>
+
+<span class="c">#Foobar is free software: you can redistribute it and/or modify</span>
+<span class="c">#it under the terms of the GNU General Public License as published by</span>
+<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#(at your option) any later version.</span>
+
+<span class="c">#Foobar is distributed in the hope that it will be useful,</span>
+<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#GNU General Public License for more details.</span>
+
+<span class="c">#You should have received a copy of the GNU General Public License</span>
+<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c">#-------------------------------------------------------------------</span>
+<span class="c">#authors :</span>
+<span class="c">#Nicolas AMIOT		: nicolas.amiot@univ-rennes1.fr</span>
+<span class="c">#Bernard UGUEN		: bernard.uguen@univ-rennes1.fr</span>
+<span class="c">#Mohamed LAARAIEDH	: mohamed.laaraiedh@univ-rennes1.fr</span>
+<span class="c">#####################################################################</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span> 
+
+
+
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.model.html#pylayers.location.geometric.util.model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot; RSS model</span>
+
+<span class="sd">	:Attributes:</span>
+
+<span class="sd">	f : frequency in GHz</span>
+<span class="sd">	n : path loss exponent</span>
+<span class="sd">	method : used model</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;OneSlope&#39;</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span><span class="n">PL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">f</span>  <span class="o">=</span> <span class="n">f</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">n</span>  <span class="o">=</span> <span class="n">n</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">d0</span>  <span class="o">=</span> <span class="n">d0</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">PL0_c</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="o">=</span><span class="n">method</span>
+
+<div class="viewcode-block" id="Model.info"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.model.html#pylayers.location.geometric.util.model.Model.info">[docs]</a>	<span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">print</span> <span class="s">&#39;frequency (f in GHz) : &#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span>
+		<span class="k">print</span> <span class="s">&#39;path loss exponent (n) : &#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+		<span class="k">print</span> <span class="s">&#39;PL0 : &#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">PL0</span>
+		
+</div>
+<div class="viewcode-block" id="Model.PL0_c"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.model.html#pylayers.location.geometric.util.model.Model.PL0_c">[docs]</a>	<span class="k">def</span> <span class="nf">PL0_c</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Gt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">Gr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		PL0_c : PL0 compute</span>
+<span class="sd">		f  : frequency GHz</span>
+<span class="sd">		Gt : transmitting antenna gain dB (default 0 dB) </span>
+<span class="sd">		Gr : receiving antenna gain dB (default 0 dB) </span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">Gt</span>  <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">Gt</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+		<span class="n">Gr</span>  <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">Gr</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+		<span class="n">ld</span>  <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">PL0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ld</span><span class="o">/</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d0</span><span class="p">))</span> 
+
+</div>
+<div class="viewcode-block" id="Model.OneSlope"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.model.html#pylayers.location.geometric.util.model.Model.OneSlope">[docs]</a>	<span class="k">def</span> <span class="nf">OneSlope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		OneSlope model : give Power Level from distance  with OneSlope method</span>
+
+<span class="sd">		f : frequency  GHz</span>
+<span class="sd">		n : path loss exponent</span>
+<span class="sd">		D : Distance array </span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">PL0_c</span><span class="p">()</span>
+		<span class="n">PL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PL0</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+		<span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Model.iOneSlope"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.model.html#pylayers.location.geometric.util.model.Model.iOneSlope">[docs]</a>	<span class="k">def</span> <span class="nf">iOneSlope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PL</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		inverse OneSlope model : give distance from Power Level with OneSlope method</span>
+
+<span class="sd">		f : frequency  GHz</span>
+<span class="sd">		n : path loss exponent</span>
+<span class="sd">		D : Distance array </span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">PL0_c</span><span class="p">()</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">PL</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">PL0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+		<span class="k">return</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Model.get_PL"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.model.html#pylayers.location.geometric.util.model.Model.get_PL">[docs]</a>	<span class="k">def</span> <span class="nf">get_PL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Get Power Level from a given distance</span>
+<span class="sd">		</span>
+<span class="sd">		d : distance</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+
+		<span class="n">met</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
+		<span class="k">if</span> <span class="n">met</span> <span class="o">==</span><span class="s">&#39;OneSlope&#39;</span><span class="p">:</span>
+			<span class="n">PL</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">OneSlope</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+		
+		<span class="c"># ajouter ici les differentes methodes	</span>
+<span class="c">#		elif mod ==&#39;AUTRE&#39;</span>
+<span class="c">#			self.AuTRE()		</span>
+
+		<span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Model.get_d"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.model.html#pylayers.location.geometric.util.model.Model.get_d">[docs]</a>	<span class="k">def</span> <span class="nf">get_d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PL</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Get  distance from a given Power Level</span>
+<span class="sd">		</span>
+<span class="sd">		d : distance</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">met</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
+		<span class="k">if</span> <span class="n">met</span> <span class="o">==</span><span class="s">&#39;OneSlope&#39;</span><span class="p">:</span>
+			<span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iOneSlope</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
+
+		<span class="c"># ajouter ici les differentes methodes	</span>
+<span class="c">#		elif mod ==&#39;AUTRE&#39;</span>
+<span class="c">#			self.AuTRE()		</span>
+
+
+		<span class="k">return</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+		
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

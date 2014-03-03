@@ -1,0 +1,1042 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.gis.selectl2 &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="pylayers.gis" href="../gis.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../gis.html" accesskey="U">pylayers.gis</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.gis.selectl2</h1><div class="highlight"><pre>
+<span class="c">#!usr/bin/python</span>
+<span class="c"># -*- coding: latin1 -*-</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">Image</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">geomutil</span> <span class="k">as</span> <span class="n">geu</span>
+<span class="kn">from</span> <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">pyutil</span> <span class="k">as</span> <span class="n">pyu</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.easygui</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="SelectL2"><a class="viewcode-back" href="../../../modules/pylayers.gis.selectl2.html#pylayers.gis.selectl2.SelectL2">[docs]</a><span class="k">class</span> <span class="nc">SelectL2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Associates a Layout and a figure</span>
+
+<span class="sd">    &#39;l&#39;  : select activelayer</span>
+<span class="sd">    &#39;i&#39;  : back to init state</span>
+<span class="sd">    &#39;e&#39;  : edit segment</span>
+<span class="sd">    &#39;t&#39;  : translate  structure</span>
+<span class="sd">    &#39;h&#39;  : add subsegment</span>
+<span class="sd">    &#39;d&#39;  : delete subsegment</span>
+<span class="sd">    &#39;r&#39;  : refresh</span>
+<span class="sd">    &#39;o&#39;  : toggle overlay</span>
+<span class="sd">    &#39;m&#39;  : toggle mode (point or segment)</span>
+<span class="sd">    &#39;z&#39;  : change display parameters</span>
+<span class="sd">    &#39;q&#39;  : quit interactive mode</span>
+<span class="sd">    &#39;x&#39;  : save .str2 file</span>
+<span class="sd">    &#39;w&#39;  : display all layers</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">cv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; SelectL is a class which associates a Layout and a figure</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        L   : Layout</span>
+<span class="sd">        fig : figure</span>
+<span class="sd">        ax  : axes</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv</span> <span class="o">=</span> <span class="n">cv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">figure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="s">&#39;Selected : none&#39;</span><span class="p">,</span>
+                                 <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s">&#39;top&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_origin</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_x</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_y</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seg</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coseg</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pt2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt2</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge2</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npsel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nedge_sel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ddoc</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;l&#39;</span>  <span class="p">:</span> <span class="s">&#39;select activelayer&#39;</span><span class="p">,</span>
+            <span class="s">&#39;i&#39;</span>  <span class="p">:</span><span class="s">&#39; back to init state&#39;</span><span class="p">,</span>
+            <span class="s">&#39;j&#39;</span>  <span class="p">:</span><span class="s">&#39; vertical and horizontal scaling&#39;</span><span class="p">,</span>
+            <span class="s">&#39;e&#39;</span>  <span class="p">:</span><span class="s">&#39; edit segment&#39;</span><span class="p">,</span>
+            <span class="s">&#39;b&#39;</span>  <span class="p">:</span><span class="s">&#39; edit segment keyboard&#39;</span><span class="p">,</span>
+            <span class="s">&#39;t&#39;</span>  <span class="p">:</span><span class="s">&#39; translate  structure&#39;</span><span class="p">,</span>
+            <span class="s">&#39;h&#39;</span>  <span class="p">:</span><span class="s">&#39; add subsegment&#39;</span><span class="p">,</span>
+            <span class="s">&#39;d&#39;</span>  <span class="p">:</span><span class="s">&#39; delete selected object&#39;</span><span class="p">,</span>
+            <span class="s">&#39;r&#39;</span>  <span class="p">:</span><span class="s">&#39; refresh&#39;</span><span class="p">,</span>
+            <span class="s">&#39;o&#39;</span>  <span class="p">:</span><span class="s">&#39; toggle overlay (&lt;&gt; CP mode) set origin (CP mode) &#39;</span><span class="p">,</span>
+            <span class="s">&#39;m&#39;</span>  <span class="p">:</span><span class="s">&#39; toggle mode (point or segment)&#39;</span><span class="p">,</span>
+            <span class="s">&#39;n&#39;</span>  <span class="p">:</span> <span class="s">&#39;toggle node label display &#39;</span><span class="p">,</span>
+            <span class="s">&#39;z&#39;</span>  <span class="p">:</span> <span class="s">&#39;change display parameters&#39;</span><span class="p">,</span>
+            <span class="s">&#39;q&#39;</span>  <span class="p">:</span> <span class="s">&#39;quit interactive mode&#39;</span><span class="p">,</span>
+            <span class="s">&#39;x&#39;</span>  <span class="p">:</span> <span class="s">&#39;save .str2 and .ini file&#39;</span><span class="p">,</span>
+            <span class="s">&#39;w&#39;</span>  <span class="p">:</span><span class="s">&#39; display all layers&#39;</span><span class="p">,</span>
+            <span class="s">&#39;v&#39;</span>  <span class="p">:</span><span class="s">&#39; flip layout w.r.t y axis&#39;</span><span class="p">,</span>
+            <span class="s">&#39;f&#39;</span>  <span class="p">:</span><span class="s">&#39; toggle points nodes display&#39;</span><span class="p">,</span>
+            <span class="s">&#39;g&#39;</span>  <span class="p">:</span><span class="s">&#39; toggle segments nodes display&#39;</span><span class="p">,</span>
+            <span class="s">&#39;=&#39;</span>  <span class="p">:</span><span class="s">&#39; increment layer &#39;</span><span class="p">,</span>
+            <span class="s">&#39;,&#39;</span>  <span class="p">:</span> <span class="s">&#39;this help&#39;</span><span class="p">,</span>
+            <span class="s">&#39;delete&#39;</span> <span class="p">:</span><span class="s">&#39;delete selected&#39;</span><span class="p">,</span>
+            <span class="s">&#39;$&#39;</span>  <span class="p">:</span><span class="s">&#39; decrement layer &#39;</span><span class="p">}</span>
+
+<div class="viewcode-block" id="SelectL2.show"><a class="viewcode-back" href="../../../modules/pylayers.gis.selectl2.html#pylayers.gis.selectl2.SelectL2.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">dnodes</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">dedges</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="n">font_size</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show layout</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        clear     : boolean</span>
+<span class="sd">        dnodes    : boolean</span>
+<span class="sd">        dedges    : boolean</span>
+<span class="sd">        dlabels   : boolean</span>
+<span class="sd">        font_size : integer</span>
+<span class="sd">        title     : string</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">title</span><span class="o">==</span><span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+        <span class="n">axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;clear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clear</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">font_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="SelectL2.OnPress"><a class="viewcode-back" href="../../../modules/pylayers.gis.selectl2.html#pylayers.gis.selectl2.SelectL2.OnPress">[docs]</a>    <span class="k">def</span> <span class="nf">OnPress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Keyboard event handler</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        event</span>
+<span class="sd">        verbose</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># selected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;Evenement :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ddoc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evt</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span><span class="o">+</span> <span class="s">&#39;N/A&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_state</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="SelectL2.OnClick"><a class="viewcode-back" href="../../../modules/pylayers.gis.selectl2.html#pylayers.gis.selectl2.SelectL2.OnClick">[docs]</a>    <span class="k">def</span> <span class="nf">OnClick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            OnClick(event)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">()</span>
+        <span class="c">#print xmin,xmax,ymin,ymax</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span>
+        <span class="n">dd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">=</span> <span class="s">&#39;lclic&#39;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ispoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">,</span> <span class="n">dd</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">=</span> <span class="s">&#39;cclic&#39;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ispoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">,</span> <span class="n">dd</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">=</span> <span class="s">&#39;rclic&#39;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">ispoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">,</span> <span class="n">dd</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+
+        <span class="c">#print &quot;Selected point coord : &quot;, self.ptsel</span>
+        <span class="c">#print &quot;Selected point number: &quot;, self.nsel</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Selected segment : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Not a segment : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_state</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="SelectL2.update_state"><a class="viewcode-back" href="../../../modules/pylayers.gis.selectl2.html#pylayers.gis.selectl2.SelectL2.update_state">[docs]</a>    <span class="k">def</span> <span class="nf">update_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;State : &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;Init&#39;</span><span class="p">:</span>
+            <span class="c">#fig,ax = self.show(fig,ax,clear=True)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;Init&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt2</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c">#ax.title.set_text(self.state)</span>
+            <span class="c">#ax.title.set_text(&#39;Init : &#39;</span>
+            <span class="c">#                       +self.L.display[&#39;activelayer&#39;])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c">#</span>
+            <span class="c"># If Layout has no point go to CP state</span>
+            <span class="c">#</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Np</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">=</span><span class="s">&#39;CP&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SO&#39;</span><span class="p">:</span>
+            <span class="n">offx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">offy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">print</span> <span class="s">&quot;Origin set in : &quot;</span><span class="p">,</span><span class="n">offx</span><span class="p">,</span><span class="n">offy</span>
+            <span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin</span><span class="o">-</span><span class="n">offx</span><span class="p">,</span><span class="n">xmax</span><span class="o">-</span><span class="n">offx</span><span class="p">,</span><span class="n">ymin</span><span class="o">-</span><span class="n">offy</span><span class="p">,</span><span class="n">ymax</span><span class="o">-</span><span class="n">offy</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_origin</span><span class="o">=</span><span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_x</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&quot;SX&quot;</span>
+            <span class="k">return</span>
+        <span class="c"># Set X</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SX&#39;</span><span class="p">:</span>
+            <span class="n">offx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">val</span>  <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;enter x value :&#39;</span> <span class="p">)</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">val</span><span class="o">/</span><span class="n">offx</span>
+            <span class="k">print</span> <span class="n">ratio</span>
+            <span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ratio</span><span class="o">*</span><span class="n">xmin</span><span class="p">,</span><span class="n">ratio</span><span class="o">*</span><span class="n">xmax</span><span class="p">,</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_x</span><span class="o">=</span><span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_y</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SY&#39;</span>
+            <span class="k">return</span>
+        <span class="c"># Set Y</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SY&#39;</span><span class="p">:</span>
+            <span class="n">offx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">val</span>  <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;enter y value :&#39;</span><span class="p">)</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">val</span><span class="o">/</span><span class="n">offx</span>
+            <span class="k">print</span> <span class="n">ratio</span>
+            <span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;box&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">ratio</span><span class="o">*</span><span class="n">ymin</span><span class="p">,</span><span class="n">ratio</span><span class="o">*</span><span class="n">ymax</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_y</span><span class="o">=</span><span class="bp">False</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">=</span><span class="s">&quot;CP&quot;</span>
+            <span class="k">return</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SP1&#39;</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;SP1&#39;</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&#39;Selected node : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">)</span>
+            <span class="c">#ax.title.set_text(self.nsel))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pt1</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s">&#39;yellow&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ms</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SP2&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;SP2&#39;</span><span class="p">)</span>
+            <span class="c">#ax.title.set_text(&#39;Selected node : %d &#39; % (self.nsel))</span>
+            <span class="k">print</span> <span class="s">&#39;Selected node : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pt2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">pt2</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pt2</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ms</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
+            <span class="c">#ax.title.set_text(&#39;SP2&#39;)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SS&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;SS&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+            <span class="n">nse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+            <span class="n">ta</span><span class="p">,</span> <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">nse</span><span class="p">)</span>
+            <span class="n">pta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">ta</span><span class="p">])</span>
+            <span class="n">phe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">he</span><span class="p">])</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nse</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span>
+            <span class="c">#self.seg       = linet(ax,pta,phe,alpha,&#39;red&#39;,3.5)</span>
+            <span class="n">segdico</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nse</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">phe</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                        <span class="p">[</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">phe</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                                        <span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;ss_name&#39;</span> <span class="ow">in</span> <span class="n">segdico</span><span class="p">:</span>
+                <span class="n">cosegname</span> <span class="o">=</span> <span class="n">segdico</span><span class="p">[</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span>
+                <span class="n">titre</span> <span class="o">=</span> <span class="s">&#39;Select Segment : </span><span class="si">%d</span><span class="s"> (</span><span class="si">%d</span><span class="s">-&gt;</span><span class="si">%d</span><span class="s">) Layer : </span><span class="si">%s</span><span class="s"> Coseg : </span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nse</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">he</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span><span class="p">,</span> <span class="n">cosegname</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">titre</span> <span class="o">=</span> <span class="s">&#39;Select Segment : </span><span class="si">%d</span><span class="s"> (</span><span class="si">%d</span><span class="s">-&gt;</span><span class="si">%d</span><span class="s">) Layer : </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nse</span><span class="p">,</span> <span class="n">ta</span><span class="p">,</span> <span class="n">he</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nse</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+            <span class="k">print</span> <span class="n">titre</span>
+            <span class="c">#ax.title.set_text(titre)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">show_nodes</span><span class="p">(</span><span class="n">ndlist</span><span class="o">=</span><span class="p">[</span><span class="n">nse</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SSS&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;SSS&#39;</span><span class="p">)</span>
+            <span class="n">nse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span>
+            <span class="n">segdico</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nse</span><span class="p">]</span>
+            <span class="n">z</span>  <span class="o">=</span> <span class="n">segdico</span><span class="p">[</span><span class="s">&#39;ss_z&#39;</span><span class="p">]</span>
+            <span class="c">#ax.title.set_text(&#39;SSS : &#39;+self.L.Gs.node[nse][&#39;name&#39;]+&#39; [&#39;+str(z[0])+&#39;]&#39;)</span>
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nse</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&#39; [&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;]&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># Create Point state</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CP&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;CP&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">segment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">segment1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">segment2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">print</span> <span class="s">&#39;lclic : free point, rclic same x, cclic same y&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="c">#</span>
+        <span class="c"># Create Point on Segment state</span>
+        <span class="c">#</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CPS&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;CPS&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+            <span class="n">ta</span><span class="p">,</span> <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">ta</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phe1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">he</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segment1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">pta1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">phe1</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pta1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">phe1</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                                        <span class="s">&#39;g&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">segment2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CPSS&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&#39;CPSS&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+            <span class="n">ta</span><span class="p">,</span> <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">ta</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phe2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">he</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segment2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">pta2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">phe2</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pta2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">phe2</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                                        <span class="s">&#39;c&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+
+
+        <span class="c">#print self.state</span>
+        <span class="c">#print self.nsel</span>
+        <span class="c">#print self.selected_pt1</span>
+        <span class="c">#print self.selected_pt2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="SelectL2.new_state"><a class="viewcode-back" href="../../../modules/pylayers.gis.selectl2.html#pylayers.gis.selectl2.SelectL2.new_state">[docs]</a>    <span class="k">def</span> <span class="nf">new_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; layout editor state machine</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+
+<span class="sd">        &#39;l&#39;  : select activelayer</span>
+<span class="sd">        &#39;i&#39;  : back to init state</span>
+<span class="sd">        &#39;j&#39;  : vertical and horizontal scaling</span>
+<span class="sd">        &#39;e&#39;  : edit segment</span>
+<span class="sd">        &#39;b&#39;  : edit segment keyboard</span>
+<span class="sd">        &#39;t&#39;  : translate  structure</span>
+<span class="sd">        &#39;h&#39;  : add subsegment</span>
+<span class="sd">        &#39;d&#39;  : delete subsegment</span>
+<span class="sd">        &#39;r&#39;  : refresh</span>
+<span class="sd">        &#39;o&#39;  : toggle overlay (&lt;&gt; CP mode)</span>
+<span class="sd">               set origin (CP mode)</span>
+<span class="sd">        &#39;m&#39;  : toggle mode (point or segment)</span>
+<span class="sd">        &#39;n&#39;  : toggle node label display</span>
+<span class="sd">        &#39;z&#39;  : change display parameters</span>
+<span class="sd">        &#39;q&#39;  : quit interactive mode</span>
+<span class="sd">        &#39;x&#39;  : save .str2 and .ini file</span>
+<span class="sd">        &#39;w&#39;  : display all layers</span>
+<span class="sd">        &#39;v&#39;  : flip layout w.r.t y axis</span>
+<span class="sd">        &#39;f&#39;  : toggle points nodes display</span>
+<span class="sd">        &#39;g&#39;  : toggle segments nodes display</span>
+<span class="sd">        &#39;=&#39;  : increment layer</span>
+<span class="sd">        &#39;$&#39;  : decrement layer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span>
+        <span class="n">cold</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">coldict</span><span class="p">()</span>
+        <span class="c">#print &quot;In State &quot;,self.state</span>
+        <span class="c">#print &quot;In Event &quot;,self.evt</span>
+
+                <span class="c">#</span>
+        <span class="c"># flip layout in y</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;,&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ddoc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">print</span> <span class="n">k</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ddoc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;v&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># translation of layout (open a box)</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;t&#39;</span><span class="p">:</span>
+            <span class="n">offx</span><span class="p">,</span><span class="n">offy</span> <span class="o">=</span> <span class="n">offsetbox</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">offx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">offy</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;3&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+            <span class="k">return</span>
+
+
+        <span class="c"># Choose layers to visualized</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;l&#39;</span><span class="p">:</span>
+            <span class="n">listchoices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">multchoicebox</span><span class="p">(</span><span class="s">&#39;message&#39;</span><span class="p">,</span>
+                                                     <span class="s">&#39;titre&#39;</span><span class="p">,</span> <span class="n">listchoices</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &#39;f&#39; toggle points nodes display</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span><span class="o">==</span><span class="s">&#39;f&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c"># &#39;g&#39; toggle segment nodes dislay</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span><span class="o">==</span><span class="s">&#39;g&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span> 
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c"># &#39;=&#39; Increment layer</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span><span class="o">==</span><span class="s">&#39;=&#39;</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layerset&#39;</span><span class="p">])</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layerset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layerset&#39;</span><span class="p">][(</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">N</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c"># &#39;=&#39; Decrement layer</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span><span class="o">==</span><span class="s">&#39;$&#39;</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layerset&#39;</span><span class="p">])</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layerset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;layerset&#39;</span><span class="p">][(</span><span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">N</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &#39;i&#39; : Back to init state</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;i&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c">#  &#39;e&#39;</span>
+        <span class="c">#       if state == Init</span>
+        <span class="c">#           egalize points coordinates</span>
+        <span class="c">#</span>
+        <span class="c">#       if state == SS</span>
+        <span class="c">#           edit segment properties</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;e&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;Init&#39;</span><span class="p">):</span>
+                <span class="c">#</span>
+                <span class="c"># averaging one point coordinate along the smallest dimension</span>
+                <span class="c">#</span>
+                <span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xbound</span><span class="p">()</span>
+                <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ybound</span><span class="p">()</span>
+                <span class="c"># get node list and edge list</span>
+                <span class="n">ndlist</span><span class="p">,</span> <span class="n">edlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">get_zone</span><span class="p">([</span><span class="n">x1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">y1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">nd</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ndlist</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">tp</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nd</span><span class="p">])))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nd</span><span class="p">])</span>
+                <span class="n">mtp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">stp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">tp</span><span class="o">-</span><span class="n">mtp</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">tp</span><span class="o">-</span><span class="n">mtp</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                <span class="c"># if the standard deviation is lower than 10cm</span>
+                <span class="c"># averaging coordinates along the shortest axis</span>
+                <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">stp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.10</span><span class="p">:</span>
+                    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">stp</span><span class="o">==</span><span class="nb">min</span><span class="p">(</span><span class="n">stp</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">nd</span> <span class="ow">in</span> <span class="n">ndlist</span><span class="p">:</span>
+                        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nd</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nd</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">ind</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nd</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">mtp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">ind</span> <span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nd</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">mtp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SS&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span><span class="s">&#39;SSS&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">edit_segment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SP1&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">edit_point</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &quot;b&quot; : enter a segment node value with keyboard</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;b&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;Init&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;seg number :&quot;</span><span class="p">))</span>
+                <span class="c">#self.L.edit_segment(nseg)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">=</span><span class="s">&#39;SS&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c"># j : vertical and horizontal scaling (Init)</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;j&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;Init&#39;</span><span class="p">:</span>
+                <span class="n">vscale</span><span class="p">,</span><span class="n">hscale</span> <span class="o">=</span> <span class="n">offsetbox</span><span class="p">(</span><span class="n">text1</span><span class="o">=</span><span class="s">&#39;Enter scaling values&#39;</span><span class="p">,</span>
+                                          <span class="n">text2</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;vscale&#39;</span><span class="p">,</span><span class="s">&#39;hscale&#39;</span><span class="p">),</span>
+                                          <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;1.0&#39;</span><span class="p">,</span><span class="s">&#39;1.0&#39;</span><span class="p">)</span>
+                                          <span class="p">)</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">vscale</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+
+        <span class="c"># Init</span>
+        <span class="c"># h : horizontal scaling factor</span>
+        <span class="c">#    add subsegment (SS)</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;h&#39;</span><span class="p">:</span>
+<span class="c">#            if self.state == &#39;Init&#39;:</span>
+<span class="c">#                hscale = eval(raw_input(&quot;horizontal scaling factor : &quot;))</span>
+<span class="c">#                for n in self.L.Gs.pos:</span>
+<span class="c">#                    self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]*hscale,self.L.Gs.pos[n][1])</span>
+<span class="c">#                plt.axis(&#39;tight&#39;)</span>
+<span class="c">#                self.show(clear=True)</span>
+<span class="c">#                self.update_state()</span>
+<span class="c">#                return()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SS&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">add_subseg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SSS&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># d : delete</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;d&#39;</span><span class="p">:</span>
+
+            <span class="k">if</span>  <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SP1&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">del_points</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SS&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">del_segment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SSS&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">del_subseg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &#39;Del&#39; delete points in the current axis region</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;delete&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;Init&#39;</span><span class="p">:</span>
+                <span class="c"># get boundary of the region </span>
+                <span class="n">x1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xbound</span><span class="p">()</span>
+                <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ybound</span><span class="p">()</span>
+
+                <span class="n">ptlist</span><span class="p">,</span> <span class="n">seglist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">get_zone</span><span class="p">([</span><span class="n">x1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">y1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">del_points</span><span class="p">(</span><span class="n">ptlist</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+
+                <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c"># r : Refresh</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;r&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c"># o : Toggle overlay</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;o&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">&lt;&gt;</span> <span class="s">&#39;CP&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SO&#39;</span>
+                <span class="k">return</span><span class="p">()</span>
+
+
+        <span class="c">#</span>
+        <span class="c"># m : Toggle mode edition Point | Segment</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;m&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&quot;Init&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&quot;CP&quot;</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&quot;CP&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&quot;Init&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &#39;z&#39; : change display parameters</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;z&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">displaygui</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &#39;q&#39; : quit interactive mode</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;q&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">mpl_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cid1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">mpl_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">cid2</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c">#</span>
+        <span class="c"># &#39;x&#39; save structure</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;x&#39;</span><span class="p">:</span>
+            <span class="n">racine</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">racine</span> <span class="o">+</span> <span class="s">&#39;.str2&#39;</span>
+            <span class="n">fileini</span> <span class="o">=</span> <span class="n">racine</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span>
+
+            <span class="c"># Commented because ss_ce not updated</span>
+            <span class="c">#self.L.savestr2(filename)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">saveini</span><span class="p">(</span><span class="n">fileini</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">filename</span>
+            <span class="k">print</span> <span class="s">&quot;structure saved in &quot;</span><span class="p">,</span> <span class="n">fileini</span>
+            <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &#39;n&#39; : toggle node label display</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;n&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ndlabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ndlabel&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edlabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edlabel&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># &quot;w&quot; : display all layers</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;w&#39;</span><span class="p">:</span>
+        <span class="c"># display all layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;activelayer&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">clear</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="c">#</span>
+        <span class="c"># Left clic and selected node is a point</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;lclic&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CP&#39;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">add_fnod</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                        <span class="k">return</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="c">#</span>
+            <span class="c"># select point 1 : Init -&gt; SP1</span>
+            <span class="c">#</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;Init&#39;</span><span class="p">:</span>
+                    <span class="c"># yellow point</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SP1&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SO&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SX&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SY&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+            <span class="c">#</span>
+            <span class="c"># select point 2 : SP1 --&gt; SP2</span>
+            <span class="c">#</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SP1&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span><span class="p">:</span>
+                        <span class="c"># green point</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SP2&#39;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                        <span class="k">return</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                        <span class="c"># yellow point</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                        <span class="k">return</span>
+            <span class="c">#</span>
+            <span class="c"># Create point on selected segment orthogonaly to segment starting in</span>
+            <span class="c"># selected point</span>
+            <span class="c">#</span>
+            <span class="c"># Not finished</span>
+            <span class="c">#</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SS&#39;</span><span class="p">:</span>
+                    <span class="c"># get the connection of the selected segment</span>
+                    <span class="n">connect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">][</span><span class="s">&#39;connect&#39;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">!=</span> <span class="n">connect</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">!=</span> <span class="n">connect</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">add_nfpe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge2</span><span class="p">)</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                       <span class="k">return</span>
+                <span class="c"># Create Segment</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;SP2&#39;</span><span class="p">:</span>
+
+                    <span class="n">ta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span>
+                    <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt2</span>
+
+                    <span class="n">segexist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">isseg</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span><span class="n">he</span><span class="p">)</span>
+                    <span class="c"># print segexist</span>
+                    <span class="c"># if segment do not already exist, create it</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">segexist</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">he</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&quot;segment (&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ta</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;,&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">he</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;) already exists&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="c"># create point on segment</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CPS&#39;</span><span class="p">:</span>
+                    <span class="n">pt_new</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">ptonseg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pta1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phe1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">)</span>
+                    <span class="n">pd1</span> <span class="o">=</span> <span class="n">pt_new</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pta1</span>
+                    <span class="n">pd2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phe1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pta1</span>
+                    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pd1</span><span class="p">,</span> <span class="n">pd1</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">pd2</span><span class="p">,</span> <span class="n">pd2</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pt_new</span> <span class="o">!=</span> <span class="p">[]):</span>
+                        <span class="c"># calculate alpha</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">add_pons</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">current_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+            <span class="c"># selection of a segment</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;Init&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SS&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SS&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span>
+                    <span class="n">segdico</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s">&#39;ss_name&#39;</span> <span class="ow">in</span> <span class="n">segdico</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SSS&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;Init&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SSS&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SS&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CP&#39;</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span>
+                <span class="c"># create point on edge</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;CPS&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CPS&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsel</span><span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_edge1</span><span class="p">):</span>
+                <span class="c"># create point on edge</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;CPSS&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;rclic&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CP&#39;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">add_fnod</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">==</span><span class="s">&#39;SP2&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt2</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SP1&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_pt1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SP1&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># right click : back to SS from CPS</span>
+        <span class="c">#</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CPS&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;SS&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># right click : back to CPS from CPSS</span>
+        <span class="c">#</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CPSS&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s">&#39;CPS&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="c">#</span>
+        <span class="c"># Center Clic event</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evt</span> <span class="o">==</span> <span class="s">&#39;cclic&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s">&#39;CP&#39;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">add_fnod</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pt_previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptsel</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">update_state</span><span class="p">()</span>
+                    <span class="k">return</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../gis.html" >pylayers.gis</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

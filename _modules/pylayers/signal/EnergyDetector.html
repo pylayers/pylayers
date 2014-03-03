@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.signal.EnergyDetector &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.signal.EnergyDetector</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="DF"><a class="viewcode-back" href="../../../modules/pylayers.signal.EnergyDetector.html#pylayers.signal.EnergyDetector.DF">[docs]</a><span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Digital Filter Class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]),</span><span class="n">a</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+
+<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../modules/pylayers.signal.EnergyDetector.html#pylayers.signal.EnergyDetector.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">y</span>  <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DF.order"><a class="viewcode-back" href="../../../modules/pylayers.signal.EnergyDetector.html#pylayers.signal.EnergyDetector.DF.order">[docs]</a>    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span>
+</div>
+<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../modules/pylayers.signal.EnergyDetector.html#pylayers.signal.EnergyDetector.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>    <span class="o">=</span> <span class="n">freqz</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span>   <span class="o">=</span> <span class="n">w</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span>   <span class="o">=</span> <span class="n">h</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-15</span><span class="p">))</span>
+        <span class="c">#show()</span>
+</div>
+<div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../modules/pylayers.signal.EnergyDetector.html#pylayers.signal.EnergyDetector.DF.ellip_bp">[docs]</a>    <span class="k">def</span> <span class="nf">ellip_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">gstop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Elliptic Bandpath filter </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>   <span class="o">=</span> <span class="n">iirdesign</span><span class="p">(</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="p">,</span><span class="n">gstop</span><span class="p">,</span><span class="n">analog</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ftype</span><span class="o">=</span><span class="s">&#39;ellip&#39;</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s">&#39;ba&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="o">=</span> <span class="n">a</span>
+
+</div></div>
+<div class="viewcode-block" id="EnergyDetector"><a class="viewcode-back" href="../../../modules/pylayers.signal.EnergyDetector.html#pylayers.signal.EnergyDetector.EnergyDetector">[docs]</a><span class="k">class</span> <span class="nc">EnergyDetector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    EnergyDetector Class</span>
+
+<span class="sd">    This class implements an Energy Detector object</span>
+
+<span class="sd">    PROVIDED METHODS</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filter1</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">filter2</span><span class="p">,</span><span class="n">pfa</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter1</span>  <span class="o">=</span> <span class="n">filter1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span>     <span class="o">=</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter2</span>  <span class="o">=</span> <span class="n">filter2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pfa</span>      <span class="o">=</span> <span class="n">pfa</span>
+
+<div class="viewcode-block" id="EnergyDetector.apply"><a class="viewcode-back" href="../../../modules/pylayers.signal.EnergyDetector.html#pylayers.signal.EnergyDetector.EnergyDetector.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xf1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter1</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xq</span>  <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xf1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">xf1</span><span class="p">)</span>
+        <span class="n">y</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter2</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xq</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#</span>
+    <span class="c"># Signal entree</span>
+    <span class="c">#</span>
+
+    <span class="n">Npoints</span>    <span class="o">=</span> <span class="mi">4000</span>
+
+    <span class="n">Var_w</span>      <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">aff</span>        <span class="o">=</span> <span class="p">{</span><span class="s">&#39;aff&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;dsp&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;densite&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;seuil&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+
+    <span class="n">t</span>  <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Npoints</span><span class="p">)</span>
+    <span class="n">wn</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">Var_w</span><span class="p">)</span><span class="o">*</span><span class="n">randn</span><span class="p">(</span><span class="n">Npoints</span><span class="p">)</span>
+
+    <span class="c">#</span>
+    <span class="c"># Filter 1 : Filtre passe bande d&#39;entree</span>
+    <span class="c">#</span>
+    <span class="n">w1</span>       <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="n">w2</span>       <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">wt</span>       <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">wp</span>       <span class="o">=</span> <span class="p">[</span><span class="n">w1</span><span class="p">,</span><span class="n">w2</span><span class="p">]</span>
+    <span class="n">ws</span>       <span class="o">=</span> <span class="p">[</span><span class="n">w1</span><span class="o">-</span><span class="n">wt</span><span class="p">,</span><span class="n">w2</span><span class="o">+</span><span class="n">wt</span><span class="p">]</span>
+    <span class="n">gpass</span>    <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">gstop</span>    <span class="o">=</span> <span class="mi">30</span>
+    <span class="nb">type</span>     <span class="o">=</span> <span class="s">&#39;ellip&#39;</span>
+
+    <span class="n">filter1</span>  <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
+    <span class="n">filter1</span><span class="o">.</span><span class="n">ellip_bp</span><span class="p">(</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="p">,</span><span class="n">gstop</span><span class="p">)</span>
+
+    <span class="c">#</span>
+    <span class="c"># Filter 2 : Filtre moyenneur en sortie</span>
+    <span class="c">#</span>
+    <span class="n">N</span>       <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">b</span>       <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">a</span>       <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">filter2</span> <span class="o">=</span> <span class="n">DF</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+    <span class="c">#</span>
+    <span class="c">#</span>
+    <span class="c">#</span>
+    <span class="n">beta</span>     <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">pfa</span>      <span class="o">=</span> <span class="mf">0.001</span>
+
+    <span class="n">ED</span> <span class="o">=</span> <span class="n">EnergyDetector</span><span class="p">(</span><span class="n">filter1</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">filter2</span><span class="p">,</span><span class="n">pfa</span><span class="p">)</span>
+    <span class="n">y</span>  <span class="o">=</span> <span class="n">ED</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">wn</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

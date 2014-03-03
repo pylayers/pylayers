@@ -1,0 +1,1034 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.geometric.util.boxn &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../../../index.html"><img src="../../../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.location.geometric.util.boxn</h1><div class="highlight"><pre>
+<span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="c">#####################################################################</span>
+<span class="c">#This file is part of RGPA.</span>
+
+<span class="c">#Foobar is free software: you can redistribute it and/or modify</span>
+<span class="c">#it under the terms of the GNU General Public License as published by</span>
+<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#(at your option) any later version.</span>
+
+<span class="c">#Foobar is distributed in the hope that it will be useful,</span>
+<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#GNU General Public License for more details.</span>
+
+<span class="c">#You should have received a copy of the GNU General Public License</span>
+<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c">#-------------------------------------------------------------------</span>
+<span class="c">#authors :</span>
+<span class="c">#Nicolas AMIOT		: nicolas.amiot@univ-rennes1.fr</span>
+<span class="c">#Bernard UGUEN		: bernard.uguen@univ-rennes1.fr</span>
+<span class="c">#Mohamed LAARAIEDH	: mohamed.laaraiedh@univ-rennes1.fr</span>
+<span class="c">#####################################################################</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>  
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+
+<span class="c">#GeomNetType = np.dtype([(&#39;Id&#39;,np.uint64), </span>
+<span class="c">#        (&#39;time&#39;,np.uint64), </span>
+<span class="c">#	(&#39;p&#39;,float,(3)),</span>
+<span class="c">#	(&#39;v&#39;,float,(3)),</span>
+<span class="c">#	(&#39;a&#39;,float,(3))])</span>
+
+
+<div class="viewcode-block" id="LBoxN"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN">[docs]</a><span class="k">class</span> <span class="nc">LBoxN</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	class LBoxN </span>
+<span class="sd">	List of BoxN </span>
+
+
+<span class="sd">	Atributes</span>
+<span class="sd">	---------</span>
+
+
+<span class="sd">	box	: np.array</span>
+<span class="sd">		array containing BoxN object. default void</span>
+<span class="sd">	vol	: list</span>
+<span class="sd">		volume of each boxes from self.box. default void</span>
+<span class="sd">	bd	: np.arrays	2*len(box) x ndim</span>
+<span class="sd">		contains all the boundaries of boxes from self.box. default void</span>
+<span class="sd">	ndim    : int	</span>
+<span class="sd">		dimension of the nbox	</span>
+<span class="sd">	parmsh	: dictionnary</span>
+<span class="sd">		keys [&#39;display&#39;]	=True</span>
+<span class="sd">		     [&#39;interactive&#39;]	=False</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------	</span>
+<span class="sd">	LB : LBoxN </span>
+<span class="sd">		Create a BoxN object from another one. default : None, the LBoxN obebject created is void.</span>
+
+<span class="sd">	Methods		</span>
+<span class="sd">	-------</span>
+<span class="sd">	mesure(self):</span>
+<span class="sd">		 measure intervals of box</span>
+<span class="sd">	append(self,b):</span>
+<span class="sd">		append a box &#39;b&#39; to a Lbox</span>
+<span class="sd">	append_l(self,lb):</span>
+<span class="sd">		append a lbox &#39;lb&#39; to a lbox</span>
+<span class="sd">	info(self):</span>
+<span class="sd">		display LBoxN information </span>
+<span class="sd">	bd2coord(self,Mapping = False):</span>
+<span class="sd">		convert boundaries of Lbox to their vertexes coordintates</span>
+<span class="sd">	octant(self):</span>
+<span class="sd">		quadtree on Lboxes</span>
+<span class="sd">	volume(self):</span>
+<span class="sd">		estimate volume of LBoxes</span>
+<span class="sd">	intersect(self,lb):</span>
+<span class="sd">		EXPERIMENTAL find the intersection of LBoxN</span>
+<span class="sd">	show3(self,col=&#39;b&#39;,Id=0):		</span>
+<span class="sd">		required file generation for geomview display</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="c">#__slots__=(&#39;box&#39;,&#39;vol&#39;,&#39;bd&#39;,&#39;ndim&#39;,&#39;ctr&#39;,&#39;grav&#39;,&#39;parmsh&#39;)</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lb</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">ndim</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="o">=</span> <span class="p">[]</span> 
+		<span class="k">if</span> <span class="n">Lb</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">box</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">vol</span>   <span class="o">=</span> <span class="p">[]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="p">[]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">ndim</span>  <span class="o">=</span> <span class="n">ndim</span>   <span class="c">#   !!! TO BE DONE</span>
+
+		<span class="c">#	self.bnum = []</span>
+	
+		
+		<span class="k">else</span> <span class="p">:</span>
+
+			<span class="bp">self</span><span class="o">.</span><span class="n">box</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">vol</span>   <span class="o">=</span> <span class="p">[]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="p">[]</span>
+			<span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">Lb</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">ndim</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">mesure</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="o">=</span><span class="p">{}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;interactive&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+
+
+<div class="viewcode-block" id="LBoxN.mesure"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.mesure">[docs]</a>	<span class="k">def</span> <span class="nf">mesure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; LMeasure BoxN</span>
+<span class="sd">		Obtain measure of :</span>
+<span class="sd">		- size of each interval from each dimension for each boxes</span>
+<span class="sd">		- center of each interval from each dimension for each boxes</span>
+<span class="sd">		-  Volume of the BoxN for each boxes (NOT WORKING)</span>
+<span class="sd">		</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span> <span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">lbd</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lbd</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">lbd</span><span class="p">):</span><span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
+<span class="c">#########################FONTIONNE MAIS TROP LOURD/TENT quand bcp de box</span>
+<span class="c">#			C  =np.array(([[1/2.,1/2.]]))</span>
+<span class="c">#			#M  =np.array(([[-1.,1.]]))	</span>
+<span class="c">#			I  = np.identity(len(self.bd)/2)</span>
+<span class="c">#			CTR = np.kron(I,C)</span>
+<span class="c">#			#MES = np.kron(I,M)</span>
+<span class="c">#			#self.mes  = np.dot(MES,self.bd)#self.bd[1,:]-self.bd[0,:]</span>
+<span class="c">#			self.ctr  = np.dot(CTR,self.bd)#(self.bd[1,:]+self.bd[0,:])/2.0</span>
+			<span class="c">#self.vol  = np.prod(self.mes,axis=1)</span>
+		<span class="k">else</span> <span class="p">:</span> 
+			<span class="bp">self</span><span class="o">.</span><span class="n">ctr</span>  <span class="o">=</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="LBoxN.append"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.append">[docs]</a>        <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>	
+		<span class="sd">&quot;&quot;&quot;append : Append a box to LboxN</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		b	: BoxN</span>
+<span class="sd">			box to added</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------	</span>
+<span class="sd">		Nothing but update self.box status</span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+
+
+		<span class="k">try</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">,</span><span class="n">b</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">,</span><span class="n">b</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">,</span><span class="n">b</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+		<span class="n">V1</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="p">)</span>
+		<span class="n">V2</span>  <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">vol</span>
+		<span class="c"># uptate center of gravity </span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">grav</span> <span class="o">=</span> <span class="p">(</span><span class="n">V1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">grav</span><span class="o">+</span><span class="n">V2</span><span class="o">*</span><span class="n">b</span><span class="o">.</span><span class="n">ctr</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">V1</span><span class="o">+</span><span class="n">V2</span><span class="p">)</span>
+		
+		<span class="k">except</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">grav</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">ctr</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">vol</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">ctr</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="LBoxN.append_l"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.append_l">[docs]</a>	<span class="k">def</span> <span class="nf">append_l</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lb</span><span class="p">):</span>	
+		<span class="sd">&quot;&quot;&quot;Append  LBoxN to LBoxN</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+
+<span class="sd">		lb	: LBoxN</span>
+<span class="sd">			lbox to be added</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+
+<span class="sd">		Nothing but update self.box status</span>
+<span class="sd">		</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+<span class="c">#		for i in xrange(len(lb.box)):self.append(lb.box[i])</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">,</span><span class="n">lb</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
+
+		<span class="k">try</span> <span class="p">:</span>	
+
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">,</span><span class="n">lb</span><span class="o">.</span><span class="n">bd</span><span class="p">))</span>	
+			<span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="p">,</span><span class="n">lb</span><span class="o">.</span><span class="n">ctr</span><span class="p">))</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">+</span><span class="n">lb</span><span class="o">.</span><span class="n">vol</span>
+
+		<span class="k">except</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="n">lb</span><span class="o">.</span><span class="n">bd</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="o">=</span><span class="n">lb</span><span class="o">.</span><span class="n">ctr</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">=</span><span class="n">lb</span><span class="o">.</span><span class="n">vol</span>
+
+<span class="c">#			try:</span>
+<span class="c">#				self.bd=np.vstack((self.bd,lb.bd[i][0]))</span>
+<span class="c">#				self.bd=np.vstack((self.bd,lb.bd[i][1]))</span>
+<span class="c">#			except:</span>
+<span class="c">#				self.bd=lb.bd[i][0]</span>
+<span class="c">#				self.bd=lb.bd[i][1]</span>
+
+			
+<span class="c">#		self.box = self.box + lb.box</span>
+<span class="c">#		V1  = sum(self.vol)</span>
+<span class="c">#		V2  = lb.box[0].vol*len(lb.box)</span>
+<span class="c">#		# uptate center of gravity </span>
+<span class="c">#		try:</span>
+<span class="c">#			self.grav = (V1*self.grav+V2*lb.grav)/(V1+V2)</span>
+<span class="c">#		except:</span>
+<span class="c">#			self.grav = lb.grav</span>
+<span class="c">#		self.vol = self.vol + lb.vol</span>
+
+</div>
+<div class="viewcode-block" id="LBoxN.info"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.info">[docs]</a>	<span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; display LBoxN information </span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">Vtot</span> <span class="o">=</span> <span class="mi">0</span> 
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">)):</span>
+			<span class="c">#print &quot;Box : &quot;,k,&quot; Volume :&quot;,self.vol[k]</span>
+			<span class="c">#print &quot;ndim :&quot;,self.ndim</span>
+			<span class="k">print</span> <span class="s">&quot;------------&quot;</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+			<span class="n">Vtot</span> <span class="o">=</span> <span class="n">Vtot</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">vol</span>
+		<span class="k">print</span> <span class="s">&quot;Volume : &quot;</span><span class="p">,</span><span class="n">Vtot</span>	
+</div>
+<div class="viewcode-block" id="LBoxN.bd2coord"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.bd2coord">[docs]</a>	<span class="k">def</span> <span class="nf">bd2coord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Mapping</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Boundaru to coordinates   </span>
+
+<span class="sd">		Convert boundaries of Lbox to their vertexes coordintates</span>
+
+<span class="sd">		in :</span>
+<span class="sd">		[xmin ymin zmin]       </span>
+<span class="sd">		[xmax ymax zmax]</span>
+<span class="sd">			</span>
+<span class="sd">		out :</span>
+
+<span class="sd">		[xmin ymin zmin]</span>
+<span class="sd">		[xmin ymax zmin]</span>
+<span class="sd">		[xmax ymin zmin]</span>
+<span class="sd">		[xmax ymax zmin]</span>
+<span class="sd">		[xmin ymin zmax]</span>
+<span class="sd">		[xmin ymax zmax]</span>
+<span class="sd">		[xmax ymin zmax]</span>
+<span class="sd">		[xmax ymax zmax]</span>
+
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+
+<span class="sd">		Mapping : Boolean</span>
+<span class="sd">			return a mapping of the vertex in regards of Lbox. Default = False</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------		</span>
+
+<span class="sd">		P : array 2^ndim x ndim</span>
+<span class="sd">			coordinates of box vertex </span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+		
+		<span class="n">lbd</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span>
+		
+		<span class="n">dimm1</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">dim</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+
+		<span class="n">P</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lbd</span><span class="o">*</span><span class="n">dimm1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span> <span class="c">#P=(len self.bd/2)*4</span>
+		<span class="c"># organisation de P</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dimm1</span><span class="o">*</span><span class="n">lbd</span><span class="p">,</span><span class="n">dimm1</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">R</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">R</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span><span class="o">=</span><span class="n">R</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">R</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span><span class="o">+</span><span class="mi">1</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+			<span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dimm1</span><span class="o">*</span><span class="n">lbd</span><span class="p">,</span><span class="n">dim</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">R</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">R</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span><span class="o">=</span><span class="n">R</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">R</span><span class="p">),</span><span class="mi">2</span><span class="p">)]</span><span class="o">+</span><span class="mi">1</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">RZ</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dimm1</span><span class="o">*</span><span class="n">lbd</span><span class="p">,</span><span class="n">dim</span><span class="p">),</span><span class="n">dimm1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">lbd</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dimm1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+		<span class="c"># aller chercher dans self.bd</span>
+		<span class="n">R2a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">lbd</span><span class="p">,</span><span class="mi">2</span><span class="p">),:],</span><span class="n">dimm1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="n">R2b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">lbd</span><span class="p">,</span><span class="mi">2</span><span class="p">),:],</span><span class="n">dimm1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+				
+<span class="c">#		# X</span>
+<span class="c">#		P[R,0]=R2a[:,0]#np.repeat(L.bd[range(0,lbd,2),0],4)</span>
+<span class="c">#		P[R+2,0]=R2b[:,0]#np.repeat(L.bd[range(1,lbd,2),0],4)</span>
+<span class="c">#		# Y</span>
+<span class="c">#		P[np.sort(np.mod(R+3,4*lbd)),1]=R2a[:,1]#np.repeat(L.bd[range(0,lbd,2),1],4)</span>
+<span class="c">#		P[R+1,1]=R2b[:,1]#np.repeat(L.bd[range(1,lbd,2),1],4)</span>
+
+
+		<span class="c"># X</span>
+		<span class="n">P</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">R</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="n">dimm1</span><span class="o">*</span><span class="n">lbd</span><span class="p">)),</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">R2a</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="c">#np.repeat(L.bd[range(0,lbd,2),1],4)</span>
+		<span class="n">P</span><span class="p">[</span><span class="n">R</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">R2b</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="c">#np.repeat(L.bd[range(1,lbd,2),1],4)</span>
+
+		<span class="c"># Y</span>
+		<span class="n">P</span><span class="p">[</span><span class="n">R</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">R2a</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="c">#np.repeat(L.bd[range(0,lbd,2),0],4)</span>
+		<span class="n">P</span><span class="p">[</span><span class="n">R</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">R2b</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="c">#np.repeat(L.bd[range(1,lbd,2),0],4)</span>
+
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="c"># Z</span>
+			<span class="n">P</span><span class="p">[</span><span class="n">RZ</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">R2a</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="c">#np.repeat(L.bd[range(0,lbd,2),2],4)</span>
+			<span class="n">P</span><span class="p">[</span><span class="n">RZ</span><span class="o">+</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">R2b</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="c">#np.repeat(L.bd[range(1,lbd,2),2],4)</span>
+
+		
+		<span class="c"># mapping coresponding box</span>
+		<span class="k">if</span> <span class="n">Mapping</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+			<span class="n">Map</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">lbd</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">dim</span><span class="p">)</span>
+		<span class="c">#	Map=10*np.repeat(self.bnum,8)+range(0,8,1)*(len(self.bnum))</span>
+			<span class="k">return</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">Map</span><span class="p">)</span>
+<span class="c">#		P=np.array((</span>
+<span class="c">#		    [self.bd[0,0],self.bd[0,1],self.bd[0,2]],</span>
+<span class="c">#		    [self.bd[0,0],self.bd[1,1],self.bd[0,2]],</span>
+<span class="c">#		    [self.bd[1,0],self.bd[1,1],self.bd[0,2]],</span>
+<span class="c">#		    [self.bd[1,0],self.bd[0,1],self.bd[0,2]],</span>
+<span class="c">#		    [self.bd[0,0],self.bd[0,1],self.bd[1,2]],</span>
+<span class="c">#		    [self.bd[0,0],self.bd[1,1],self.bd[1,2]],</span>
+<span class="c">#		    [self.bd[1,0],self.bd[1,1],self.bd[1,2]],</span>
+<span class="c">#		    [self.bd[1,0],self.bd[0,1],self.bd[1,2]]</span>
+<span class="c">#			   ))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="LBoxN.octant"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.octant">[docs]</a>	<span class="k">def</span> <span class="nf">octant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; quadtree on boxes </span>
+
+<span class="sd">		Divide each Lboxes into 2^ndim equal parts</span>
+<span class="sd">		aka Split each interval from each dimension into 2 equal part</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+
+<span class="sd">		lb	: LBoxN 2^ndim*self.box x ndim</span>
+<span class="sd">			return theLBoxn from quadtree process</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+
+			<span class="n">tlb</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="n">lbox</span> <span class="o">=</span> <span class="n">LBoxN</span><span class="p">([],</span><span class="n">ndim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> 
+			<span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">1</span><span class="p">]]))</span><span class="o">.</span><span class="n">T</span>
+			<span class="n">I</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">CC</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>
+			<span class="n">BD</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CC</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span>
+
+			<span class="n">M</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="mi">16</span><span class="p">)</span>  <span class="c"># groupe de 16 boundaries equivaut a 8 sous boites</span>
+	
+			<span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">Y</span> <span class="o">=</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">Z</span> <span class="o">=</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+			<span class="n">Rx</span> <span class="o">=</span> <span class="n">BD</span><span class="p">[</span><span class="n">X</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">Ry</span> <span class="o">=</span> <span class="n">BD</span><span class="p">[</span><span class="n">Y</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+			<span class="n">Rz</span> <span class="o">=</span> <span class="n">BD</span><span class="p">[</span><span class="n">Z</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+			<span class="n">lbd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">Rx</span><span class="p">,</span><span class="n">Ry</span><span class="p">,</span><span class="n">Rz</span> <span class="p">))</span><span class="o">.</span><span class="n">T</span>
+			<span class="n">llbd</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">lbd</span><span class="p">)</span>
+			<span class="n">xr</span><span class="o">=</span><span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">llbd</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">lb</span><span class="o">=</span><span class="n">LBoxN</span><span class="p">([</span><span class="n">BoxN</span><span class="p">(</span><span class="n">lbd</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span><span class="n">ndim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xr</span><span class="p">])</span>
+			<span class="n">lb</span><span class="o">.</span><span class="n">mesure</span><span class="p">()</span>
+			
+			
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+			<span class="n">tlb</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="n">lbox</span> <span class="o">=</span> <span class="n">LBoxN</span><span class="p">(</span><span class="n">ndim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> 
+			<span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">1</span><span class="p">]]))</span><span class="o">.</span><span class="n">T</span>
+			<span class="n">I</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">CC</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>
+			<span class="n">BD</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CC</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span>
+
+			<span class="n">M</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="mi">8</span><span class="p">)</span>  <span class="c"># groupe de 16 boundaries equivaut a 8 sous boites</span>
+	
+			<span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+			<span class="n">Y</span> <span class="o">=</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+
+			<span class="n">Rx</span> <span class="o">=</span> <span class="n">BD</span><span class="p">[</span><span class="n">X</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+			<span class="n">Ry</span> <span class="o">=</span> <span class="n">BD</span><span class="p">[</span><span class="n">Y</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+			<span class="n">lbd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">Rx</span><span class="p">,</span><span class="n">Ry</span> <span class="p">))</span><span class="o">.</span><span class="n">T</span>
+			<span class="n">llbd</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">lbd</span><span class="p">)</span>
+
+
+			<span class="n">lb</span><span class="o">=</span><span class="n">LBoxN</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">BoxN</span><span class="p">(</span><span class="n">lbd</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span><span class="n">ndim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">llbd</span><span class="p">,</span><span class="mi">2</span><span class="p">)]))</span>
+		
+
+
+		<span class="k">return</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="LBoxN.volume"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.volume">[docs]</a>	<span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Evaluate Boxes volume</span>
+
+<span class="sd">		Compute the volume on each LBoxes</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">=</span><span class="p">[]</span>
+		<span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">:</span>
+			<span class="n">vol</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">vol</span>
+			<span class="k">if</span> <span class="n">vol</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vol</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+
+
+</div>
+<div class="viewcode-block" id="LBoxN.intersect"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.intersect">[docs]</a>	<span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lb</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; EXPERIMENTAL</span>
+
+<span class="sd">		Intersection of 2 LBOXN </span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">new_lb</span><span class="o">=</span><span class="n">LBoxN</span><span class="p">(</span><span class="n">ndim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">)):</span>
+			<span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lb</span><span class="o">.</span><span class="n">box</span><span class="p">)):</span>
+				<span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">lb</span><span class="o">.</span><span class="n">box</span><span class="p">[</span><span class="n">l</span><span class="p">])</span>
+				<span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">vol</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>   <span class="c"># si intersection non vide</span>
+					<span class="n">new_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+		<span class="k">return</span><span class="p">(</span><span class="n">new_lb</span><span class="p">)</span>		
+
+</div>
+<div class="viewcode-block" id="LBoxN.show3"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.LBoxN.show3">[docs]</a>	<span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">Id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Show box into geomview</span>
+
+<span class="sd">		generate a geomview file which allow to represent a box.</span>
+
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+
+<span class="sd">		col	: string</span>
+<span class="sd">			choose box color. compliant with matplotlib colorConverter. default &#39;r&#39;</span>
+<span class="sd">		Id	: list</span>
+<span class="sd">			Identity of boxes to show.Default : [0]</span>
+<span class="sd">			</span>
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+
+<span class="sd">		filename	: string</span>
+<span class="sd">			name of the generated file</span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">filename</span>  <span class="o">=</span> <span class="s">&quot;lbox&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Id</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;.list&quot;</span>
+		<span class="n">filename2</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span><span class="s">&quot;/geom/&quot;</span><span class="o">+</span><span class="n">filename</span>
+		<span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename2</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+		<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;LIST</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">)):</span>
+			<span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+			<span class="n">b</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+			<span class="n">filebox</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span><span class="n">Id</span><span class="o">=</span><span class="p">[</span><span class="n">Id</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+<span class="c">#			filebox = b.show3(col=col[k],Id=[Id,k])</span>
+			<span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;{&lt;&quot;</span><span class="o">+</span><span class="n">filebox</span><span class="o">+</span><span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span>
+			<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
+		<span class="c">#chaine = &quot;{&lt;cloud.list}\n&quot;</span>
+		<span class="c">#fd.write(chaine)</span>
+		<span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]:</span>
+			<span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview  -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename2</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
+			<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
+		<span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>	
+
+</div></div>
+<div class="viewcode-block" id="BoxN"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN">[docs]</a><span class="k">class</span> <span class="nc">BoxN</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;BoxN Class</span>
+
+<span class="sd">	A box is determined by its boundary interval along each dimension</span>
+
+<span class="sd">	</span>
+
+<span class="sd">	Attributes</span>
+<span class="sd">	----------</span>
+
+<span class="sd">	bd	: numpy array 2 x ndim  </span>
+<span class="sd">		box boundary </span>
+<span class="sd">	</span>
+<span class="sd">	ndim	: int</span>
+<span class="sd">		dimension of the box (2D, 3D,...)</span>
+
+<span class="sd">	self.parmsh : dictionnary</span>
+<span class="sd">		display dictionnary for show 3 method TO BE CHANGE !!!</span>
+<span class="sd">		keys	:[&#39;display&#39;]=True</span>
+<span class="sd">			[&#39;interactive&#39;]=False</span>
+
+
+<span class="sd">	OBTAIN FROM mesure()</span>
+<span class="sd">	self.mes	: array 1 x ndim </span>
+<span class="sd">		size of intervals of each dimension</span>
+<span class="sd">	self.ctr	: array 1 x ndim </span>
+<span class="sd">		center of intervals of each dimension </span>
+<span class="sd">	self.vol	: float</span>
+<span class="sd">		Volume of box</span>
+
+<span class="sd">		</span>
+<span class="sd">	Methods</span>
+<span class="sd">	-------</span>
+
+<span class="sd">	info()         : info about class </span>
+<span class="sd">	def mesure(self):</span>
+<span class="sd">		 measure intervals of box</span>
+<span class="sd">	volume()       : evaluate volume </span>
+<span class="sd">	inbox(p)       : is p in box ?</span>
+<span class="sd">	intersect(box) : intersection of two boxes   			</span>
+<span class="sd">	show3()        : geomview vizualization </span>
+<span class="sd">	cut()          : cut a box along given direction </span>
+
+
+
+<span class="sd">	TODO</span>
+<span class="sd">	----</span>
+
+<span class="sd">	Eemove parmsh and replace it by a ini file</span>
+
+<span class="sd">		</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+<span class="c">#	__slots__=(&#39;bd&#39;,&#39;ndim&#39;,&#39;mes&#39;,&#39;ctr&#39;,&#39;vol&#39;,&#39;parmsh&#39;)</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bd</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">ndim</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="c">#		if bd==None:</span>
+<span class="c">#			self.bd  = np.array([]).astype(&#39;float&#39;)</span>
+<span class="c">#		else:</span>
+<span class="c">#			for i in range(np.shape(bd)[1]):</span>
+<span class="c">#				assert bd[1,i]&gt;=bd[0,i] , pdb.set_trace()</span>
+<span class="c">#				self.bd = bd.astype(&#39;float&#39;) </span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="o">=</span><span class="n">bd</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">=</span> <span class="n">ndim</span><span class="c">#np.shape(bd)[1]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mesure</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="o">=</span><span class="p">{}</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;interactive&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+
+
+<span class="c">#		print &quot;%s from %s&quot; % (inspect.stack()[1][3],inspect.stack()[1][1])</span>
+
+
+<div class="viewcode-block" id="BoxN.mesure"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.mesure">[docs]</a>	<span class="k">def</span> <span class="nf">mesure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Measure BoxN</span>
+<span class="sd">		Obtain measure of :</span>
+<span class="sd">		- size of each interval from each dimension </span>
+<span class="sd">		- center of each interval from each dimension </span>
+<span class="sd">		- Volume of the BoxN</span>
+<span class="sd">		</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mes</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">ctr</span>  <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">/</span><span class="mf">2.0</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">vol</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mes</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="BoxN.setbd"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.setbd">[docs]</a>	<span class="k">def</span> <span class="nf">setbd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		setbd : set boundary value on axis</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="k">assert</span> <span class="n">vmin</span><span class="o">&lt;=</span><span class="n">vmax</span><span class="p">,</span> <span class="s">&quot;Incorrect bound&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">axis</span><span class="p">]</span><span class="o">=</span> <span class="n">vmin</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;float&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">axis</span><span class="p">]</span><span class="o">=</span> <span class="n">vmax</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;float&#39;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mesure</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="BoxN.void"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.void">[docs]</a>	<span class="k">def</span> <span class="nf">void</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		return True if box is void</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="n">b</span> <span class="o">=</span> <span class="bp">False</span> 
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">meas</span><span class="o">==</span><span class="p">[]:</span>
+			<span class="n">b</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="k">else</span><span class="p">:</span>
+		    	<span class="n">pmes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meas</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">pmes</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+				<span class="n">b</span> <span class="o">=</span> <span class="bp">True</span>
+
+		<span class="k">return</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="BoxN.info"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.info">[docs]</a>	<span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Information on BoxN</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="k">print</span> <span class="s">&quot;Volume (.vol) :&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span>	
+		<span class="k">print</span> <span class="s">&quot;Center (.ctr)  :&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ctr</span>	
+
+</div>
+<div class="viewcode-block" id="BoxN.bd2coord"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.bd2coord">[docs]</a>	<span class="k">def</span> <span class="nf">bd2coord</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Boundary to coordinates</span>
+<span class="sd">		</span>
+<span class="sd">		Return an array containing of vertex from a box</span>
+
+<span class="sd">		3D case : </span>
+<span class="sd">		in :</span>
+<span class="sd">		[xmin ymin zmin]       </span>
+<span class="sd">		[xmax ymax zmax]</span>
+<span class="sd">			</span>
+<span class="sd">		out :</span>
+
+<span class="sd">		[xmin ymin zmin]</span>
+<span class="sd">		[xmin ymax zmin]</span>
+<span class="sd">		[xmax ymin zmin]</span>
+<span class="sd">		[xmax ymax zmin]</span>
+<span class="sd">		[xmin ymin zmax]</span>
+<span class="sd">		[xmin ymax zmax]</span>
+<span class="sd">		[xmax ymin zmax]</span>
+<span class="sd">		[xmax ymax zmax]</span>
+
+
+
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------		</span>
+
+<span class="sd">		P : array 2^ndim x ndim</span>
+<span class="sd">			coordinates of box vertex </span>
+<span class="sd">	</span>
+<span class="sd">		&quot;&quot;&quot;</span>	
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+			<span class="n">P</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]]))</span>
+			<span class="k">return</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+			<span class="n">P</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span>
+			    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]]))</span>
+			<span class="k">return</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="BoxN.coord2bd"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.coord2bd">[docs]</a>	<span class="k">def</span> <span class="nf">coord2bd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coord</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">		Coordinates to boundary</span>
+<span class="sd">		update boundary array from numpy array  of coordinates</span>
+<span class="sd">		</span>
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+
+<span class="sd">		coord : array 2^ndim x ndim</span>
+<span class="sd">			vertexes coordinates of a boxN</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+
+<span class="sd">		Nothing but fills self.bd</span>
+<span class="sd">		</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="c">#	def octant(self):</span>
+<span class="c">#		tlb = []</span>
+<span class="c">#		lbox = LBoxN([])</span>
+<span class="c">#		BD = np.array((self.bd[0],(self.bd[0]+self.bd[1])/2,self.bd[1] ))</span>
+<span class="c">##		Rx = BD[(range(0,2)+range(1,3))*4,0]</span>
+<span class="c">##		Ry = BD[(range(0,2)*2+range(1,3)*2)*2,1]</span>
+<span class="c">##		Rz = BD[range(0,2)*4+range(1,3)*4,2]</span>
+<span class="c">##		O = np.array((Rx,Ry,Rz )).T</span>
+<span class="c">##		LB = LBoxN([BoxN(O[0:2]),BoxN(O[2:4]),BoxN(O[4:6]),BoxN(O[6:8]),BoxN(O[8:10]),BoxN(O[10:12]),BoxN(O[12:14]),BoxN(O[14:16])])</span>
+<span class="c">##	#	LB.bnum = range(00,010,1)</span>
+<span class="c">##		return(LB)</span>
+<span class="c">##		</span>
+</div>
+<div class="viewcode-block" id="BoxN.octant"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.octant">[docs]</a>	<span class="k">def</span> <span class="nf">octant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; quadtree on boxes OBSOLETE</span>
+
+<span class="sd">		Divide boxes into 2^ndim equal parts</span>
+<span class="sd">		aka Split each interval from each dimension into 2 equal part</span>
+
+
+<span class="sd">		</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">tlb</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">lbox</span> <span class="o">=</span> <span class="n">LBoxN</span><span class="p">([])</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">):</span>
+			<span class="n">tlb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctr</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="n">k</span><span class="p">))</span>
+
+		<span class="n">lbm</span> <span class="o">=</span> <span class="n">tlb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tlb</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+			<span class="n">lbp</span><span class="o">=</span><span class="n">lbm</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">tlb</span><span class="p">[</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+			<span class="n">lbm</span><span class="o">=</span><span class="n">lbp</span>
+
+		<span class="k">return</span><span class="p">(</span><span class="n">lbm</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="BoxN.intersect"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.intersect">[docs]</a>	<span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">box</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; Find intersection between current box and a given one</span>
+<span class="sd">		</span>
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+
+<span class="sd">		box	: BoxN</span>
+<span class="sd">			a BoxN object</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+
+<span class="sd">		new_box	: BoxN</span>
+<span class="sd">			a BoxN object</span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="n">new_box</span> <span class="o">=</span> <span class="n">BoxN</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)),</span><span class="n">ndim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">):</span>	
+			<span class="n">newmin</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">],</span><span class="n">box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+			<span class="n">newmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">],</span><span class="n">box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">newmax</span><span class="o">&gt;</span><span class="n">newmin</span><span class="p">):</span>
+				<span class="n">new_box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">=</span> <span class="n">newmin</span>
+				<span class="n">new_box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">=</span> <span class="n">newmax</span>
+		<span class="n">new_box</span><span class="o">.</span><span class="n">mesure</span><span class="p">()</span>	
+		<span class="k">return</span><span class="p">(</span><span class="n">new_box</span><span class="p">)</span>	
+</div>
+<div class="viewcode-block" id="BoxN.bdiff"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.bdiff">[docs]</a>	<span class="k">def</span> <span class="nf">bdiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">box</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot; OBSOLETE </span>
+
+<span class="sd">		USE self.intersect instead !!!</span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="n">new_box</span> <span class="o">=</span> <span class="n">BoxN</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)),</span><span class="n">ndim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">):</span>	
+			<span class="n">newmin</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">],</span><span class="n">box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+			<span class="n">newmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">],</span><span class="n">box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">])</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">newmax</span><span class="o">&gt;</span><span class="n">newmin</span><span class="p">):</span>
+				<span class="n">new_box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">=</span> <span class="n">newmin</span>
+				<span class="n">new_box</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">=</span> <span class="n">newmax</span>
+		<span class="n">new_box</span><span class="o">.</span><span class="n">mesure</span><span class="p">()</span>	
+		<span class="k">return</span><span class="p">(</span><span class="n">new_box</span><span class="p">)</span>	
+
+
+
+</div>
+<div class="viewcode-block" id="BoxN.show3"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.util.boxn.html#pylayers.location.geometric.util.boxn.BoxN.show3">[docs]</a>	<span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">Id</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">H_Id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;Show box into geomview</span>
+
+<span class="sd">		generate a geomview file which allow to represent a box.</span>
+
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+
+<span class="sd">		dim	: tuple</span>
+<span class="sd">			chose dimension to display. default : (0,1,2)</span>
+<span class="sd">		col	: string</span>
+<span class="sd">			choose box color. compliant with matplotlib colorConverter. default &#39;r&#39;</span>
+<span class="sd">		Id	: list</span>
+<span class="sd">			Identity of boxes to show.Default : [0]</span>
+<span class="sd">		alpha   : float</span>
+<span class="sd">			set transparency. Default 0.2</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">	</span>
+<span class="sd">		fname	: string</span>
+<span class="sd">			name of the generated file</span>
+
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c">#for k in range(len(self.bb)):</span>
+		<span class="n">b</span>        <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+		<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+		<span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+		<span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+		<span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+		<span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+		<span class="n">b</span><span class="p">[</span><span class="mi">5</span><span class="p">,:,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+
+		<span class="n">trans</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="n">H_Id</span><span class="p">),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>		
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;interactive&#39;</span><span class="p">]</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+			<span class="k">print</span> <span class="s">&#39;(read geometry {define foo </span><span class="se">\n</span><span class="s">&#39;</span>
+			<span class="k">print</span> <span class="s">&quot;LIST</span><span class="se">\n</span><span class="s">&quot;</span>
+		        <span class="k">print</span> <span class="s">&quot;{appearance  {-edge material {alpha &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">+</span> <span class="s">&quot; diffuse 1 0 0&quot;</span> <span class="o">+</span><span class="s">&quot; }}&quot;</span>
+			<span class="c"># 6 faces du cube</span>
+			<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>		
+				<span class="k">print</span> <span class="s">&quot;{QUAD &quot;</span>
+				<span class="c"># 4 sommets de la face </span>
+				<span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+					<span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+					<span class="n">y</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+					<span class="n">z</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+					<span class="k">print</span> <span class="n">x</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s">&quot; &quot;</span>
+				<span class="k">print</span> <span class="s">&quot;} &quot;</span>	
+			<span class="k">print</span> <span class="s">&#39;}})&#39;</span>	
+		<span class="k">else</span><span class="p">:</span>	
+
+			<span class="n">ch</span> <span class="o">=</span><span class="s">&#39;_&#39;</span>
+			<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">Id</span><span class="p">:</span>
+				<span class="n">ch</span> <span class="o">=</span> <span class="n">ch</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;_&#39;</span>
+			<span class="n">fname</span> <span class="o">=</span> <span class="s">&quot;box&quot;</span><span class="o">+</span><span class="n">ch</span><span class="o">+</span><span class="s">&quot;.list&quot;</span>
+			<span class="n">filename</span> <span class="o">=</span> <span class="n">basename</span><span class="o">+</span><span class="s">&quot;/geom/&quot;</span><span class="o">+</span><span class="n">fname</span>
+			<span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+			<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;LIST</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">3</span> <span class="p">:</span>
+				<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>		
+					<span class="c"># 6 faces du cube</span>
+					<span class="c">#filebbk = &quot;face&quot; +str(Id)+str(o)+str(l)+str(k)+&quot;.quad&quot;</span>
+					<span class="c">#fdk = open(&quot;./geom/&quot;+filebbk,&quot;w&quot;)</span>
+					<span class="k">if</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;r&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 0 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;b&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 0 1 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;m&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 0 1 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;y&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 1 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;c&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 1 1 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;g&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 1 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;k&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 0 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;orange&#39;</span><span class="p">:</span>
+						<span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 1 0.125 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;skyblue&#39;</span><span class="p">:</span>
+						<span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0.91 1 1 &quot;</span>
+
+
+					<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{appearance  {-edge material {alpha &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; diffuse &quot;</span><span class="o">+</span><span class="n">col</span> <span class="o">+</span><span class="s">&quot; }}&quot;</span><span class="p">)</span>
+					<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{ QUAD</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+					<span class="c"># 4 points de la face </span>
+
+
+					<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+						<span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+						<span class="n">y</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+						<span class="n">z</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+						<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="c">#					if self.ndim==2 :</span>
+<span class="c">#						for i in range(4):</span>
+<span class="c">#							x = str(self.bd[b[k,i,0],dim[0]])</span>
+<span class="c">#							y = str(self.bd[b[k,i,1],dim[1]])</span>
+<span class="c">#							z = str(5.0)</span>
+<span class="c">#							fd.write(x+&quot; &quot;+y+&quot; &quot;+z+&quot;\n&quot;)</span>
+
+
+					<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot; }}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+				<span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>	
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">2</span> <span class="p">:</span>
+					
+				<span class="n">Z</span><span class="o">=</span><span class="mf">1.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">))</span>
+				<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>		
+					<span class="c"># 6 faces du cube</span>
+					<span class="c">#filebbk = &quot;face&quot; +str(Id)+str(o)+str(l)+str(k)+&quot;.quad&quot;</span>
+					<span class="c">#fdk = open(&quot;./geom/&quot;+filebbk,&quot;w&quot;)</span>
+					<span class="k">if</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;r&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 0 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;b&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 0 1 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;m&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 0 1 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;y&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 1 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;c&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 1 1 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;g&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 1 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;k&#39;</span><span class="p">:</span>
+						 <span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0 0 0 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;orange&#39;</span><span class="p">:</span>
+						<span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 1 0.59 0.125 &quot;</span>
+					<span class="k">elif</span> <span class="n">col</span><span class="o">==</span><span class="s">&#39;skyblue&#39;</span><span class="p">:</span>
+						<span class="n">col</span> <span class="o">=</span> <span class="s">&quot; 0.61 1 1 &quot;</span>
+
+
+					<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{appearance  {-edge material {alpha &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; diffuse &quot;</span><span class="o">+</span><span class="n">col</span> <span class="o">+</span><span class="s">&quot; }}&quot;</span><span class="p">)</span>
+					<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{ QUAD</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+					<span class="c"># 4 points de la face </span>
+
+
+					<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+						<span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+						<span class="n">y</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bd</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+<span class="c">#						z = str(self.bd[b[k,i,2],dim[2]])</span>
+						<span class="n">z</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
+						<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="c">#					if self.ndim==2 :</span>
+<span class="c">#						for i in range(4):</span>
+<span class="c">#							x = str(self.bd[b[k,i,0],dim[0]])</span>
+<span class="c">#							y = str(self.bd[b[k,i,1],dim[1]])</span>
+<span class="c">#							z = str(5.0)</span>
+<span class="c">#							fd.write(x+&quot; &quot;+y+&quot; &quot;+z+&quot;\n&quot;)</span>
+
+
+					<span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot; }}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+				<span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>	
+
+
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]:</span>
+				<span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview  -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
+				<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
+
+			<span class="k">return</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

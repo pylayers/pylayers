@@ -1,0 +1,937 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.util.voronoi &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.util.voronoi</h1><div class="highlight"><pre>
+<span class="c">#############################################################################</span>
+<span class="c">#</span>
+<span class="c"># Voronoi diagram calculator/ Delaunay triangulator</span>
+<span class="c"># Translated to Python by Bill Simons</span>
+<span class="c"># September, 2005</span>
+<span class="c">#</span>
+<span class="c"># Calculate Delaunay triangulation or the Voronoi polygons for a set of</span>
+<span class="c"># 2D input points.</span>
+<span class="c">#</span>
+<span class="c"># Derived from code bearing the following notice:</span>
+<span class="c">#</span>
+<span class="c">#  The author of this software is Steven Fortune.  Copyright (c) 1994 by AT&amp;T</span>
+<span class="c">#  Bell Laboratories.</span>
+<span class="c">#  Permission to use, copy, modify, and distribute this software for any</span>
+<span class="c">#  purpose without fee is hereby granted, provided that this entire notice</span>
+<span class="c">#  is included in all copies of any software which is or includes a copy</span>
+<span class="c">#  or modification of this software and in all copies of the supporting</span>
+<span class="c">#  documentation for such software.</span>
+<span class="c">#  THIS SOFTWARE IS BEING PROVIDED &quot;AS IS&quot;, WITHOUT ANY EXPRESS OR IMPLIED</span>
+<span class="c">#  WARRANTY.  IN PARTICULAR, NEITHER THE AUTHORS NOR AT&amp;T MAKE ANY</span>
+<span class="c">#  REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY</span>
+<span class="c">#  OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.</span>
+<span class="c">#</span>
+<span class="c"># Comments were incorporated from Shane O&#39;Sullivan&#39;s translation of the</span>
+<span class="c"># original code into C++ (http://mapviewer.skynet.ie/voronoi.html)</span>
+<span class="c">#</span>
+<span class="c"># Steve Fortune&#39;s homepage: http://netlib.bell-labs.com/cm/cs/who/sjf/index.html</span>
+<span class="c">#</span>
+<span class="c">#############################################################################</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+
+<div class="viewcode-block" id="usage"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.usage">[docs]</a><span class="k">def</span> <span class="nf">usage</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">voronoi - compute Voronoi diagram or Delaunay triangulation</span>
+
+<span class="s">voronoi [-t -p -d]  [filename]</span>
+
+<span class="s">Voronoi reads from filename (or standard input if no filename given) for a set</span>
+<span class="s">of points in the plane and writes either the Voronoi diagram or the Delaunay</span>
+<span class="s">triangulation to the standard output.  Each input line should consist of two</span>
+<span class="s">real numbers, separated by white space.</span>
+
+<span class="s">If option -t is present, the Delaunay triangulation is produced. </span>
+<span class="s">Each output line is a triple i j k, which are the indices of the three points</span>
+<span class="s">in a Delaunay triangle. Points are numbered starting at 0.</span>
+
+<span class="s">If option -t is not present, the Voronoi diagram is produced.</span>
+<span class="s">There are four output record types.</span>
+
+<span class="s">s a b      indicates that an input point at coordinates a b was seen.</span>
+<span class="s">l a b c    indicates a line with equation ax + by = c.</span>
+<span class="s">v a b      indicates a vertex at a b.</span>
+<span class="s">e l v1 v2  indicates a Voronoi segment which is a subsegment of line number l</span>
+<span class="s">           with endpoints numbered v1 and v2.  If v1 or v2 is -1, the line</span>
+<span class="s">           extends to infinity.</span>
+
+<span class="s">Other options include:</span>
+
+<span class="s">d    Print debugging info</span>
+
+<span class="s">p    Produce output suitable for input to plot (1), rather than the forms</span>
+<span class="s">     described above.</span>
+
+<span class="s">On unsorted data uniformly distributed in the unit square, voronoi uses about</span>
+<span class="s">20n+140 bytes of storage.</span>
+
+<span class="s">AUTHOR</span>
+<span class="s">Steve J. Fortune (1987) A Sweepline Algorithm for Voronoi Diagrams,</span>
+<span class="s">Algorithmica 2, 153-174.</span>
+<span class="s">&quot;&quot;&quot;</span>
+
+<span class="c">#############################################################################</span>
+<span class="c">#</span>
+<span class="c"># For programmatic use two functions are available:</span>
+<span class="c">#</span>
+<span class="c">#   computeVoronoiDiagram(points)</span>
+<span class="c">#</span>
+<span class="c">#        Takes a list of point objects (which must have x and y fields).</span>
+<span class="c">#        Returns a 3-tuple of:</span>
+<span class="c">#</span>
+<span class="c">#           (1) a list of 2-tuples, which are the x,y coordinates of the</span>
+<span class="c">#               Voronoi diagram vertices</span>
+<span class="c">#           (2) a list of 3-tuples (a,b,c) which are the equations of the</span>
+<span class="c">#               lines in the Voronoi diagram: a*x + b*y = c</span>
+<span class="c">#           (3) a list of 3-tuples, (l, v1, v2) representing edges of the</span>
+<span class="c">#               Voronoi diagram.  l is the index of the line, v1 and v2 are</span>
+<span class="c">#               the indices of the vetices at the end of the edge.  If</span>
+<span class="c">#               v1 or v2 is -1, the line extends to infinity.</span>
+<span class="c">#</span>
+<span class="c">#   computeDelaunayTriangulation(points):</span>
+<span class="c">#</span>
+<span class="c">#        Takes a list of point objects (which must have x and y fields).</span>
+<span class="c">#        Returns a list of 3-tuples: the indices of the points that form a</span>
+<span class="c">#        Delaunay triangle.</span>
+<span class="c">#</span>
+<span class="c">#############################################################################</span></div>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">getopt</span>
+<span class="n">TOLERANCE</span> <span class="o">=</span> <span class="mf">1e-9</span>
+<span class="n">BIG_FLOAT</span> <span class="o">=</span> <span class="mf">1e38</span>
+
+<span class="c">#------------------------------------------------------------------</span>
+<div class="viewcode-block" id="Context"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context">[docs]</a><span class="k">class</span> <span class="nc">Context</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doPrint</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span>   <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot</span>    <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triangulate</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span>  <span class="o">=</span> <span class="p">[]</span>    <span class="c"># list of vertex 2-tuples: (x,y)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lines</span>     <span class="o">=</span> <span class="p">[]</span>    <span class="c"># equation of line 3-tuple (a b c), for the equation of the line a*x+b*y = c  </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>     <span class="o">=</span> <span class="p">[]</span>    <span class="c"># edge 3-tuple: (line index, vertex 1 index, vertex 2 index)   if either vertex index is -1, the edge extends to infiinity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triangles</span> <span class="o">=</span> <span class="p">[]</span>    <span class="c"># 3-tuple of vertex indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_edge</span> <span class="o">=</span> <span class="p">{}</span>    <span class="c"># edge belongs to 2 vertices</span>
+
+<div class="viewcode-block" id="Context.circle"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.circle">[docs]</a>    <span class="k">def</span> <span class="nf">circle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">rad</span><span class="p">):</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Context.clip_line"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.clip_line">[docs]</a>    <span class="k">def</span> <span class="nf">clip_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">edge</span><span class="p">):</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Context.line"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.line">[docs]</a>    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">):</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Context.outSite"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.outSite">[docs]</a>    <span class="k">def</span> <span class="nf">outSite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;site (</span><span class="si">%d</span><span class="s">) at </span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">triangulate</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">circle</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">cradius</span><span class="p">)</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doPrint</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;s </span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Context.outVertex"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.outVertex">[docs]</a>    <span class="k">def</span> <span class="nf">outVertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
+            <span class="k">print</span>  <span class="s">&quot;vertex(</span><span class="si">%d</span><span class="s">) at </span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">triangulate</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doPrint</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;v </span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Context.outTriple"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.outTriple">[docs]</a>    <span class="k">def</span> <span class="nf">outTriple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span><span class="n">s3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">triangles</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">s1</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s2</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s3</span><span class="o">.</span><span class="n">sitenum</span><span class="p">))</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;circle through left=</span><span class="si">%d</span><span class="s"> right=</span><span class="si">%d</span><span class="s"> bottom=</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s2</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s3</span><span class="o">.</span><span class="n">sitenum</span><span class="p">)</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">triangulate</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">doPrint</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s2</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">s3</span><span class="o">.</span><span class="n">sitenum</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Context.outBisector"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.outBisector">[docs]</a>    <span class="k">def</span> <span class="nf">outBisector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">edge</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">edge</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">c</span><span class="p">))</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;line(</span><span class="si">%d</span><span class="s">) </span><span class="si">%g</span><span class="s">x+</span><span class="si">%g</span><span class="s">y=</span><span class="si">%g</span><span class="s">, bisecting </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sitenum</span><span class="p">)</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">triangulate</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doPrint</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;l </span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Context.outEdge"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Context.outEdge">[docs]</a>    <span class="k">def</span> <span class="nf">outEdge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">edge</span><span class="p">):</span>
+        <span class="n">sitenumL</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">ep</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sitenumL</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">ep</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">]</span><span class="o">.</span><span class="n">sitenum</span>
+        <span class="n">sitenumR</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">ep</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">RE</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sitenumR</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">ep</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">RE</span><span class="p">]</span><span class="o">.</span><span class="n">sitenum</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">,</span><span class="n">sitenumL</span><span class="p">,</span><span class="n">sitenumR</span><span class="p">))</span>
+        <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">triangulate</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">clip_line</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+            <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doPrint</span><span class="p">):</span> 
+                <span class="k">print</span> <span class="s">&quot;e </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">,</span>
+                <span class="k">print</span> <span class="s">&quot; </span><span class="si">%d</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="n">sitenumL</span><span class="p">,</span>
+                <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">sitenumR</span>
+
+<span class="c">#------------------------------------------------------------------</span></div></div>
+<div class="viewcode-block" id="voronoi"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.voronoi">[docs]</a><span class="k">def</span> <span class="nf">voronoi</span><span class="p">(</span><span class="n">siteList</span><span class="p">,</span><span class="n">context</span><span class="p">):</span>
+    <span class="n">edgeList</span>  <span class="o">=</span> <span class="n">EdgeList</span><span class="p">(</span><span class="n">siteList</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span><span class="n">siteList</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">siteList</span><span class="p">))</span>
+    <span class="n">priorityQ</span> <span class="o">=</span> <span class="n">PriorityQueue</span><span class="p">(</span><span class="n">siteList</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span><span class="n">siteList</span><span class="o">.</span><span class="n">ymax</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">siteList</span><span class="p">))</span>
+    <span class="n">siteIter</span> <span class="o">=</span> <span class="n">siteList</span><span class="o">.</span><span class="n">iterator</span><span class="p">()</span>
+    
+    <span class="n">bottomsite</span> <span class="o">=</span> <span class="n">siteIter</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">outSite</span><span class="p">(</span><span class="n">bottomsite</span><span class="p">)</span>
+    <span class="n">newsite</span> <span class="o">=</span> <span class="n">siteIter</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="n">minpt</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="o">-</span><span class="n">BIG_FLOAT</span><span class="p">,</span><span class="o">-</span><span class="n">BIG_FLOAT</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">priorityQ</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
+            <span class="n">minpt</span> <span class="o">=</span> <span class="n">priorityQ</span><span class="o">.</span><span class="n">getMinPt</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">newsite</span> <span class="ow">and</span> <span class="p">(</span><span class="n">priorityQ</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="ow">or</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">newsite</span><span class="p">,</span><span class="n">minpt</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)):</span>
+            <span class="c"># newsite is smallest -  this is a site event</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">outSite</span><span class="p">(</span><span class="n">newsite</span><span class="p">)</span>
+            
+            <span class="c"># get first Halfedge to the LEFT and RIGHT of the new site </span>
+            <span class="n">lbnd</span> <span class="o">=</span> <span class="n">edgeList</span><span class="o">.</span><span class="n">leftbnd</span><span class="p">(</span><span class="n">newsite</span><span class="p">)</span> 
+            <span class="n">rbnd</span> <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">right</span>                    
+            
+            <span class="c"># if this halfedge has no edge, bot = bottom site (whatever that is)</span>
+            <span class="c"># create a new edge that bisects</span>
+            <span class="n">bot</span>  <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">rightreg</span><span class="p">(</span><span class="n">bottomsite</span><span class="p">)</span>     
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">Edge</span><span class="o">.</span><span class="n">bisect</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span><span class="n">newsite</span><span class="p">)</span>      
+            <span class="n">context</span><span class="o">.</span><span class="n">outBisector</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">bot</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">bot</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">=</span><span class="p">[</span> <span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span> <span class="p">]</span>
+            
+            <span class="k">try</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">newsite</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">newsite</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">=</span><span class="p">[</span> <span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span> <span class="p">]</span>
+            
+            
+            <span class="c"># create a new Halfedge, setting its pm field to 0 and insert </span>
+            <span class="c"># this new bisector edge between the left and right vectors in</span>
+            <span class="c"># a linked list</span>
+            <span class="n">bisector</span> <span class="o">=</span> <span class="n">Halfedge</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span><span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">)</span>    
+            <span class="n">edgeList</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">lbnd</span><span class="p">,</span><span class="n">bisector</span><span class="p">)</span>       
+
+            <span class="c"># if the new bisector intersects with the left edge, remove </span>
+            <span class="c"># the left edge&#39;s vertex, and put in the new one</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">bisector</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">priorityQ</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">lbnd</span><span class="p">)</span>
+                <span class="n">priorityQ</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">lbnd</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">newsite</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+            <span class="c"># create a new Halfedge, setting its pm field to 1</span>
+            <span class="c"># insert the new Halfedge to the right of the original bisector</span>
+            <span class="n">lbnd</span> <span class="o">=</span> <span class="n">bisector</span>
+            <span class="n">bisector</span> <span class="o">=</span> <span class="n">Halfedge</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span><span class="n">Edge</span><span class="o">.</span><span class="n">RE</span><span class="p">)</span>     
+            <span class="n">edgeList</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">lbnd</span><span class="p">,</span><span class="n">bisector</span><span class="p">)</span>        
+
+            <span class="c"># if this new bisector intersects with the right Halfedge</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">bisector</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">rbnd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c"># push the Halfedge into the ordered linked list of vertices</span>
+                <span class="n">priorityQ</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">bisector</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">newsite</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            
+            <span class="n">newsite</span> <span class="o">=</span> <span class="n">siteIter</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">priorityQ</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
+            <span class="c"># intersection is smallest - this is a vector (circle) event </span>
+
+            <span class="c"># pop the Halfedge with the lowest vector off the ordered list of </span>
+            <span class="c"># vectors.  Get the Halfedge to the left and right of the above HE</span>
+            <span class="c"># and also the Halfedge to the right of the right HE</span>
+            <span class="n">lbnd</span>  <span class="o">=</span> <span class="n">priorityQ</span><span class="o">.</span><span class="n">popMinHalfedge</span><span class="p">()</span>      
+            <span class="n">llbnd</span> <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">left</span>               
+            <span class="n">rbnd</span>  <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">right</span>              
+            <span class="n">rrbnd</span> <span class="o">=</span> <span class="n">rbnd</span><span class="o">.</span><span class="n">right</span>              
+            
+            <span class="c"># get the Site to the left of the left HE and to the right of</span>
+            <span class="c"># the right HE which it bisects</span>
+            <span class="n">bot</span> <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">leftreg</span><span class="p">(</span><span class="n">bottomsite</span><span class="p">)</span>  
+            <span class="n">top</span> <span class="o">=</span> <span class="n">rbnd</span><span class="o">.</span><span class="n">rightreg</span><span class="p">(</span><span class="n">bottomsite</span><span class="p">)</span> 
+            
+            <span class="c"># output the triple of sites, stating that a circle goes through them</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">rightreg</span><span class="p">(</span><span class="n">bottomsite</span><span class="p">)</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">outTriple</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span><span class="n">top</span><span class="p">,</span><span class="n">mid</span><span class="p">)</span>          
+
+            <span class="c"># get the vertex that caused this event and set the vertex number</span>
+            <span class="c"># couldn&#39;t do this earlier since we didn&#39;t know when it would be processed</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">vertex</span>                 
+            <span class="n">siteList</span><span class="o">.</span><span class="n">setSiteNumber</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">outVertex</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            
+            <span class="c"># set the endpoint of the left and right Halfedge to be this vector</span>
+            <span class="k">if</span> <span class="n">lbnd</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">setEndpoint</span><span class="p">(</span><span class="n">lbnd</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">outEdge</span><span class="p">(</span><span class="n">lbnd</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">rbnd</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">setEndpoint</span><span class="p">(</span><span class="n">rbnd</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">outEdge</span><span class="p">(</span><span class="n">rbnd</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span>
+
+            
+            <span class="c"># delete the lowest HE, remove all vertex events to do with the </span>
+            <span class="c"># right HE and delete the right HE</span>
+            <span class="n">edgeList</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">lbnd</span><span class="p">)</span>           
+            <span class="n">priorityQ</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">rbnd</span><span class="p">)</span>
+            <span class="n">edgeList</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">rbnd</span><span class="p">)</span>
+            
+            
+            <span class="c"># if the site to the left of the event is higher than the Site</span>
+            <span class="c"># to the right of it, then swap them and set &#39;pm&#39; to RIGHT</span>
+            <span class="n">pm</span> <span class="o">=</span> <span class="n">Edge</span><span class="o">.</span><span class="n">LE</span>
+            <span class="k">if</span> <span class="n">bot</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">top</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="n">bot</span><span class="p">,</span><span class="n">top</span> <span class="o">=</span> <span class="n">top</span><span class="p">,</span><span class="n">bot</span>
+                <span class="n">pm</span> <span class="o">=</span> <span class="n">Edge</span><span class="o">.</span><span class="n">RE</span>
+
+            <span class="c"># Create an Edge (or line) that is between the two Sites.  This </span>
+            <span class="c"># creates the formula of the line, and assigns a line number to it</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="n">Edge</span><span class="o">.</span><span class="n">bisect</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>     
+            <span class="n">context</span><span class="o">.</span><span class="n">outBisector</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">bot</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">bot</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">]</span>
+
+            <span class="k">try</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">top</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+              <span class="n">context</span><span class="o">.</span><span class="n">has_edge</span><span class="p">[</span><span class="n">top</span><span class="o">.</span><span class="n">sitenum</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">edge</span><span class="o">.</span><span class="n">edgenum</span><span class="p">]</span>
+
+
+            <span class="c"># create a HE from the edge </span>
+            <span class="n">bisector</span> <span class="o">=</span> <span class="n">Halfedge</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">pm</span><span class="p">)</span>    
+            
+            <span class="c"># insert the new bisector to the right of the left HE</span>
+            <span class="c"># set one endpoint to the new edge to be the vector point &#39;v&#39;</span>
+            <span class="c"># If the site to the left of this bisector is higher than the right</span>
+            <span class="c"># Site, then this endpoint is put in position 0; otherwise in pos 1</span>
+            <span class="n">edgeList</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">llbnd</span><span class="p">,</span> <span class="n">bisector</span><span class="p">)</span> 
+            <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">setEndpoint</span><span class="p">(</span><span class="n">Edge</span><span class="o">.</span><span class="n">RE</span> <span class="o">-</span> <span class="n">pm</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">outEdge</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+            
+            <span class="c"># if left HE and the new bisector don&#39;t intersect, then delete </span>
+            <span class="c"># the left HE, and reinsert it </span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">llbnd</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">bisector</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">priorityQ</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">llbnd</span><span class="p">);</span>
+                <span class="n">priorityQ</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">llbnd</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">bot</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+            <span class="c"># if right HE and the new bisector don&#39;t intersect, then reinsert it </span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">bisector</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">rrbnd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">priorityQ</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">bisector</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">bot</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">he</span> <span class="o">=</span> <span class="n">edgeList</span><span class="o">.</span><span class="n">leftend</span><span class="o">.</span><span class="n">right</span>
+    <span class="k">while</span> <span class="n">he</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">edgeList</span><span class="o">.</span><span class="n">rightend</span><span class="p">:</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">outEdge</span><span class="p">(</span><span class="n">he</span><span class="o">.</span><span class="n">edge</span><span class="p">)</span>
+        <span class="n">he</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">right</span>
+
+<span class="c">#------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="isEqual"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.isEqual">[docs]</a><span class="k">def</span> <span class="nf">isEqual</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">relativeError</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">):</span>
+    <span class="c"># is nearly equal to within the allowed relative error</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">norm</span> <span class="o">&lt;</span> <span class="n">relativeError</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">relativeError</span> <span class="o">*</span> <span class="n">norm</span><span class="p">))</span>
+
+<span class="c">#------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="Site"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Site">[docs]</a><span class="k">class</span> <span class="nc">Site</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sitenum</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sitenum</span> <span class="o">=</span> <span class="n">sitenum</span>
+
+<div class="viewcode-block" id="Site.dump"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Site.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Site #</span><span class="si">%d</span><span class="s"> (</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sitenum</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Site.distance"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Site.distance">[docs]</a>    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="o">*</span><span class="n">dy</span><span class="p">)</span>
+
+<span class="c">#------------------------------------------------------------------</span></div></div>
+<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Edge">[docs]</a><span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">LE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">RE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">EDGE_NUM</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">DELETED</span> <span class="o">=</span> <span class="p">{}</span>   <span class="c"># marker value</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ep</span>  <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edgenum</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Edge.dump"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Edge.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;(#</span><span class="si">%d</span><span class="s"> a=</span><span class="si">%g</span><span class="s">, b=</span><span class="si">%g</span><span class="s">, c=</span><span class="si">%g</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edgenum</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;ep&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ep</span>
+        <span class="k">print</span> <span class="s">&quot;reg&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">reg</span>
+</div>
+<div class="viewcode-block" id="Edge.setEndpoint"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Edge.setEndpoint">[docs]</a>    <span class="k">def</span> <span class="nf">setEndpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lrFlag</span><span class="p">,</span> <span class="n">site</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ep</span><span class="p">[</span><span class="n">lrFlag</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ep</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">RE</span> <span class="o">-</span> <span class="n">lrFlag</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Edge.bisect"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Edge.bisect">[docs]</a>    <span class="k">def</span> <span class="nf">bisect</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">):</span>
+        <span class="n">newedge</span> <span class="o">=</span> <span class="n">Edge</span><span class="p">()</span>
+        <span class="n">newedge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1</span> <span class="c"># store the sites that this edge is bisecting</span>
+        <span class="n">newedge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2</span>
+
+        <span class="c"># to begin with, there are no endpoints on the bisector - it goes to infinity</span>
+        <span class="c"># ep[0] and ep[1] are None</span>
+
+        <span class="c"># get the difference in x dist between the sites</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">s1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">s1</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">adx</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span>  <span class="c"># make sure that the difference in positive</span>
+        <span class="n">ady</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dy</span><span class="p">)</span>
+        
+        <span class="c"># get the slope of the line</span>
+        <span class="n">newedge</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">s1</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">dy</span> <span class="o">+</span> <span class="p">(</span><span class="n">dx</span><span class="o">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="o">*</span><span class="n">dy</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">)</span>  
+        <span class="k">if</span> <span class="n">adx</span> <span class="o">&gt;</span> <span class="n">ady</span> <span class="p">:</span>
+            <span class="c"># set formula of line, with x fixed to 1</span>
+            <span class="n">newedge</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">newedge</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">dy</span><span class="o">/</span><span class="n">dx</span>
+            <span class="n">newedge</span><span class="o">.</span><span class="n">c</span> <span class="o">/=</span> <span class="n">dx</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># set formula of line, with y fixed to 1</span>
+            <span class="n">newedge</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">newedge</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">dx</span><span class="o">/</span><span class="n">dy</span>
+            <span class="n">newedge</span><span class="o">.</span><span class="n">c</span> <span class="o">/=</span> <span class="n">dy</span>
+
+        <span class="n">newedge</span><span class="o">.</span><span class="n">edgenum</span> <span class="o">=</span> <span class="n">Edge</span><span class="o">.</span><span class="n">EDGE_NUM</span>
+        <span class="n">Edge</span><span class="o">.</span><span class="n">EDGE_NUM</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">newedge</span>
+
+
+<span class="c">#------------------------------------------------------------------</span></div></div>
+<div class="viewcode-block" id="Halfedge"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Halfedge">[docs]</a><span class="k">class</span> <span class="nc">Halfedge</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">edge</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">pm</span><span class="o">=</span><span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span>  <span class="o">=</span> <span class="bp">None</span>   <span class="c"># left Halfedge in the edge list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c"># right Halfedge in the edge list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qnext</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c"># priority queue linked list pointer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge</span>  <span class="o">=</span> <span class="n">edge</span>   <span class="c"># edge list Edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span>     <span class="o">=</span> <span class="n">pm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># Site()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ystar</span>  <span class="o">=</span> <span class="n">BIG_FLOAT</span>
+
+<div class="viewcode-block" id="Halfedge.dump"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Halfedge.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Halfedge--------------------------&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;left: &quot;</span><span class="p">,</span>    <span class="bp">self</span><span class="o">.</span><span class="n">left</span>  
+        <span class="k">print</span> <span class="s">&quot;right: &quot;</span><span class="p">,</span>   <span class="bp">self</span><span class="o">.</span><span class="n">right</span> 
+        <span class="k">print</span> <span class="s">&quot;edge: &quot;</span><span class="p">,</span>    <span class="bp">self</span><span class="o">.</span><span class="n">edge</span>  
+        <span class="k">print</span> <span class="s">&quot;pm: &quot;</span><span class="p">,</span>      <span class="bp">self</span><span class="o">.</span><span class="n">pm</span>    
+        <span class="k">print</span> <span class="s">&quot;vertex: &quot;</span><span class="p">,</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">print</span> <span class="s">&quot;None&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;ystar: &quot;</span><span class="p">,</span>   <span class="bp">self</span><span class="o">.</span><span class="n">ystar</span> 
+
+</div>
+    <span class="k">def</span> <span class="nf">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ystar</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">ystar</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ystar</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">ystar</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Halfedge.leftreg"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Halfedge.leftreg">[docs]</a>    <span class="k">def</span> <span class="nf">leftreg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">default</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">==</span> <span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">RE</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Halfedge.rightreg"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Halfedge.rightreg">[docs]</a>    <span class="k">def</span> <span class="nf">rightreg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">default</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">==</span> <span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">RE</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">]</span>
+
+
+    <span class="c"># returns True if p is to right of halfedge self</span></div>
+<div class="viewcode-block" id="Halfedge.isPointRightOf"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Halfedge.isPointRightOf">[docs]</a>    <span class="k">def</span> <span class="nf">isPointRightOf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pt</span><span class="p">):</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span>
+        <span class="n">topsite</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">right_of_site</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">topsite</span><span class="o">.</span><span class="n">x</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">right_of_site</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">==</span> <span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">):</span> 
+            <span class="k">return</span> <span class="bp">True</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="ow">not</span> <span class="n">right_of_site</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">==</span> <span class="n">Edge</span><span class="o">.</span><span class="n">RE</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">a</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="n">dyp</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">topsite</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">dxp</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">topsite</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">fast</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">((</span><span class="ow">not</span> <span class="n">right_of_site</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">right_of_site</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">b</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
+                <span class="n">above</span> <span class="o">=</span> <span class="n">dyp</span> <span class="o">&gt;=</span> <span class="n">e</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">dxp</span>
+                <span class="n">fast</span> <span class="o">=</span> <span class="n">above</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">above</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">e</span><span class="o">.</span><span class="n">b</span> <span class="o">&gt;</span> <span class="n">e</span><span class="o">.</span><span class="n">c</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">):</span>
+                    <span class="n">above</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">above</span>
+                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">above</span><span class="p">):</span>
+                    <span class="n">fast</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">fast</span><span class="p">):</span>
+                <span class="n">dxs</span> <span class="o">=</span> <span class="n">topsite</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">above</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="n">dxp</span><span class="o">*</span><span class="n">dxp</span> <span class="o">-</span> <span class="n">dyp</span><span class="o">*</span><span class="n">dyp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">dxs</span><span class="o">*</span><span class="n">dyp</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="mf">2.0</span><span class="o">*</span><span class="n">dxp</span><span class="o">/</span><span class="n">dxs</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">b</span><span class="o">*</span><span class="n">e</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">):</span>
+                    <span class="n">above</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">above</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c"># e.b == 1.0 </span>
+            <span class="n">yl</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">c</span> <span class="o">-</span> <span class="n">e</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">yl</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">topsite</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">t3</span> <span class="o">=</span> <span class="n">yl</span> <span class="o">-</span> <span class="n">topsite</span><span class="o">.</span><span class="n">y</span>
+            <span class="n">above</span> <span class="o">=</span> <span class="n">t1</span><span class="o">*</span><span class="n">t1</span> <span class="o">&gt;</span> <span class="n">t2</span><span class="o">*</span><span class="n">t2</span> <span class="o">+</span> <span class="n">t3</span><span class="o">*</span><span class="n">t3</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">==</span><span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">above</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="n">above</span>
+
+    <span class="c">#--------------------------</span>
+    <span class="c"># create a new site where the Halfedges el1 and el2 intersect</span></div>
+<div class="viewcode-block" id="Halfedge.intersect"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.Halfedge.intersect">[docs]</a>    <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">other</span><span class="p">):</span>
+        <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span>
+        <span class="n">e2</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">edge</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">e1</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">e2</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="c"># if the two edges bisect the same parent return None</span>
+        <span class="k">if</span> <span class="n">e1</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="n">e2</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">e1</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">e2</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="n">e1</span><span class="o">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">e2</span><span class="o">.</span><span class="n">a</span>
+        <span class="k">if</span> <span class="n">isEqual</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="mf">0.0</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">xint</span> <span class="o">=</span> <span class="p">(</span><span class="n">e1</span><span class="o">.</span><span class="n">c</span><span class="o">*</span><span class="n">e2</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="n">e2</span><span class="o">.</span><span class="n">c</span><span class="o">*</span><span class="n">e1</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="n">d</span>
+        <span class="n">yint</span> <span class="o">=</span> <span class="p">(</span><span class="n">e2</span><span class="o">.</span><span class="n">c</span><span class="o">*</span><span class="n">e1</span><span class="o">.</span><span class="n">a</span> <span class="o">-</span> <span class="n">e1</span><span class="o">.</span><span class="n">c</span><span class="o">*</span><span class="n">e2</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">d</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">cmp</span><span class="p">(</span><span class="n">e1</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">e2</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">e1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">he</span> <span class="o">=</span> <span class="n">other</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">e2</span>
+
+        <span class="n">rightOfSite</span> <span class="o">=</span> <span class="n">xint</span> <span class="o">&gt;=</span> <span class="n">e</span><span class="o">.</span><span class="n">reg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+        <span class="k">if</span><span class="p">((</span><span class="n">rightOfSite</span>     <span class="ow">and</span> <span class="n">he</span><span class="o">.</span><span class="n">pm</span> <span class="o">==</span> <span class="n">Edge</span><span class="o">.</span><span class="n">LE</span><span class="p">)</span> <span class="ow">or</span>
+           <span class="p">(</span><span class="ow">not</span> <span class="n">rightOfSite</span> <span class="ow">and</span> <span class="n">he</span><span class="o">.</span><span class="n">pm</span> <span class="o">==</span> <span class="n">Edge</span><span class="o">.</span><span class="n">RE</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="c"># create a new site at the point of intersection - this is a new </span>
+        <span class="c"># vector event waiting to happen</span>
+        <span class="k">return</span> <span class="n">Site</span><span class="p">(</span><span class="n">xint</span><span class="p">,</span><span class="n">yint</span><span class="p">)</span>
+
+        
+
+<span class="c">#------------------------------------------------------------------</span></div></div>
+<div class="viewcode-block" id="EdgeList"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.EdgeList">[docs]</a><span class="k">class</span> <span class="nc">EdgeList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">nsites</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">xmin</span> <span class="o">&gt;</span> <span class="n">xmax</span><span class="p">:</span> <span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">xmax</span><span class="p">,</span><span class="n">xmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nsites</span><span class="o">+</span><span class="mi">4</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span>   <span class="o">=</span> <span class="n">xmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deltax</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span>   <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">leftend</span>  <span class="o">=</span> <span class="n">Halfedge</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rightend</span> <span class="o">=</span> <span class="n">Halfedge</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leftend</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rightend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rightend</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leftend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leftend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rightend</span>
+
+<div class="viewcode-block" id="EdgeList.insert"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.EdgeList.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">left</span><span class="p">,</span><span class="n">he</span><span class="p">):</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">left</span>  <span class="o">=</span> <span class="n">left</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">right</span>
+        <span class="n">left</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">he</span>
+        <span class="n">left</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">he</span>
+</div>
+<div class="viewcode-block" id="EdgeList.delete"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.EdgeList.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">he</span><span class="p">):</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">right</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">left</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">edge</span> <span class="o">=</span> <span class="n">Edge</span><span class="o">.</span><span class="n">DELETED</span>
+
+    <span class="c"># Get entry from hash table, pruning any deleted nodes </span></div>
+<div class="viewcode-block" id="EdgeList.gethash"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.EdgeList.gethash">[docs]</a>    <span class="k">def</span> <span class="nf">gethash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">he</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">he</span><span class="o">.</span><span class="n">edge</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Edge</span><span class="o">.</span><span class="n">DELETED</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">he</span>
+
+        <span class="c">#  Hash table points to deleted half edge.  Patch as necessary.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="EdgeList.leftbnd"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.EdgeList.leftbnd">[docs]</a>    <span class="k">def</span> <span class="nf">leftbnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pt</span><span class="p">):</span>
+        <span class="c"># Use hash table to get close to desired halfedge </span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">deltax</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="p">))</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">bucket</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span> 
+            <span class="n">bucket</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="n">bucket</span> <span class="o">&gt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="p">):</span> 
+            <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gethash</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">he</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gethash</span><span class="p">(</span><span class="n">bucket</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">he</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span> <span class="k">break</span><span class="p">;</span>
+                <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gethash</span><span class="p">(</span><span class="n">bucket</span><span class="o">+</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">he</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span> <span class="k">break</span><span class="p">;</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+        <span class="c"># Now search linear list of halfedges for the corect one</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">he</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">leftend</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">he</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rightend</span> <span class="ow">and</span> <span class="n">he</span><span class="o">.</span><span class="n">isPointRightOf</span><span class="p">(</span><span class="n">pt</span><span class="p">)):</span>
+            <span class="n">he</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">right</span>
+            <span class="k">while</span> <span class="n">he</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rightend</span> <span class="ow">and</span> <span class="n">he</span><span class="o">.</span><span class="n">isPointRightOf</span><span class="p">(</span><span class="n">pt</span><span class="p">):</span>
+                <span class="n">he</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">right</span>
+            <span class="n">he</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">left</span><span class="p">;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">he</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">left</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">he</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">leftend</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">he</span><span class="o">.</span><span class="n">isPointRightOf</span><span class="p">(</span><span class="n">pt</span><span class="p">)):</span>
+                <span class="n">he</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">left</span>
+
+        <span class="c"># Update hash table and reference counts</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">bucket</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">bucket</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="n">bucket</span><span class="p">]</span> <span class="o">=</span> <span class="n">he</span>
+        <span class="k">return</span> <span class="n">he</span>
+
+
+<span class="c">#------------------------------------------------------------------</span></div></div>
+<div class="viewcode-block" id="PriorityQueue"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.PriorityQueue">[docs]</a><span class="k">class</span> <span class="nc">PriorityQueue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span><span class="p">,</span><span class="n">nsites</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">ymin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deltay</span> <span class="o">=</span> <span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nsites</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minidx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Halfedge</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span>
+
+<div class="viewcode-block" id="PriorityQueue.isEmpty"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.PriorityQueue.isEmpty">[docs]</a>    <span class="k">def</span> <span class="nf">isEmpty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="PriorityQueue.insert"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.PriorityQueue.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">he</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">offset</span><span class="p">):</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">vertex</span> <span class="o">=</span> <span class="n">site</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">ystar</span>  <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">offset</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getBucket</span><span class="p">(</span><span class="n">he</span><span class="p">)]</span>
+        <span class="nb">next</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">qnext</span>
+        <span class="k">while</span><span class="p">((</span><span class="nb">next</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">cmp</span><span class="p">(</span><span class="n">he</span><span class="p">,</span><span class="nb">next</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="nb">next</span>
+            <span class="nb">next</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">qnext</span>
+        <span class="n">he</span><span class="o">.</span><span class="n">qnext</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">qnext</span>
+        <span class="n">last</span><span class="o">.</span><span class="n">qnext</span> <span class="o">=</span> <span class="n">he</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+</div>
+<div class="viewcode-block" id="PriorityQueue.delete"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.PriorityQueue.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">he</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">he</span><span class="o">.</span><span class="n">vertex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getBucket</span><span class="p">(</span><span class="n">he</span><span class="p">)]</span>
+            <span class="k">while</span> <span class="n">last</span><span class="o">.</span><span class="n">qnext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">he</span><span class="p">:</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">qnext</span>
+            <span class="n">last</span><span class="o">.</span><span class="n">qnext</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">qnext</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">he</span><span class="o">.</span><span class="n">vertex</span> <span class="o">=</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="PriorityQueue.getBucket"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.PriorityQueue.getBucket">[docs]</a>    <span class="k">def</span> <span class="nf">getBucket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">he</span><span class="p">):</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(((</span><span class="n">he</span><span class="o">.</span><span class="n">ystar</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltay</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bucket</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">bucket</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">bucket</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="p">:</span> <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hashsize</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">bucket</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minidx</span><span class="p">:</span>  <span class="bp">self</span><span class="o">.</span><span class="n">minidx</span> <span class="o">=</span> <span class="n">bucket</span>
+        <span class="k">return</span> <span class="n">bucket</span>
+</div>
+<div class="viewcode-block" id="PriorityQueue.getMinPt"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.PriorityQueue.getMinPt">[docs]</a>    <span class="k">def</span> <span class="nf">getMinPt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">minidx</span><span class="p">]</span><span class="o">.</span><span class="n">qnext</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">minidx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">he</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">minidx</span><span class="p">]</span><span class="o">.</span><span class="n">qnext</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">vertex</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">he</span><span class="o">.</span><span class="n">ystar</span>
+        <span class="k">return</span> <span class="n">Site</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PriorityQueue.popMinHalfedge"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.PriorityQueue.popMinHalfedge">[docs]</a>    <span class="k">def</span> <span class="nf">popMinHalfedge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">minidx</span><span class="p">]</span><span class="o">.</span><span class="n">qnext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">minidx</span><span class="p">]</span><span class="o">.</span><span class="n">qnext</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">qnext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">curr</span>
+
+
+<span class="c">#------------------------------------------------------------------</span></div></div>
+<div class="viewcode-block" id="SiteList"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.SiteList">[docs]</a><span class="k">class</span> <span class="nc">SiteList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pointList</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sites</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sitenum</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__xmin</span> <span class="o">=</span> <span class="n">pointList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ymin</span> <span class="o">=</span> <span class="n">pointList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__xmax</span> <span class="o">=</span> <span class="n">pointList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ymax</span> <span class="o">=</span> <span class="n">pointList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">pt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pointList</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Site</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmin</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmin</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span>
+            <span class="k">if</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymin</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymin</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span>
+            <span class="k">if</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmax</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmax</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span>
+            <span class="k">if</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymax</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymax</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SiteList.setSiteNumber"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.SiteList.setSiteNumber">[docs]</a>    <span class="k">def</span> <span class="nf">setSiteNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">site</span><span class="p">):</span>
+        <span class="n">site</span><span class="o">.</span><span class="n">sitenum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sitenum</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sitenum</span> <span class="o">+=</span> <span class="mi">1</span>
+</div>
+<div class="viewcode-block" id="SiteList.Iterator"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.SiteList.Iterator">[docs]</a>    <span class="k">class</span> <span class="nc">Iterator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">this</span><span class="p">,</span><span class="n">lst</span><span class="p">):</span>  <span class="n">this</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="n">this</span><span class="p">):</span>      <span class="k">return</span> <span class="n">this</span>
+<div class="viewcode-block" id="SiteList.Iterator.next"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.SiteList.Iterator.next">[docs]</a>        <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="n">this</span><span class="p">):</span> 
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">None</span>
+</div></div>
+<div class="viewcode-block" id="SiteList.iterator"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.SiteList.iterator">[docs]</a>    <span class="k">def</span> <span class="nf">iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SiteList</span><span class="o">.</span><span class="n">Iterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SiteList</span><span class="o">.</span><span class="n">Iterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sites</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_getxmin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmin</span>
+    <span class="k">def</span> <span class="nf">_getymin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymin</span>
+    <span class="k">def</span> <span class="nf">_getxmax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xmax</span>
+    <span class="k">def</span> <span class="nf">_getymax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ymax</span>
+    <span class="n">xmin</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_getxmin</span><span class="p">)</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_getymin</span><span class="p">)</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_getxmax</span><span class="p">)</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_getymax</span><span class="p">)</span>
+
+
+<span class="c">#------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="computeVoronoiDiagram"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.computeVoronoiDiagram">[docs]</a><span class="k">def</span> <span class="nf">computeVoronoiDiagram</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Takes a list of point objects (which must have x and y fields).</span>
+<span class="sd">        Returns a 3-tuple of:</span>
+
+<span class="sd">           (1) a list of 2-tuples, which are the x,y coordinates of the </span>
+<span class="sd">               Voronoi diagram vertices</span>
+<span class="sd">           (2) a list of 3-tuples (a,b,c) which are the equations of the</span>
+<span class="sd">               lines in the Voronoi diagram: a*x + b*y = c</span>
+<span class="sd">           (3) a list of 3-tuples, (l, v1, v2) representing edges of the </span>
+<span class="sd">               Voronoi diagram.  l is the index of the line, v1 and v2 are</span>
+<span class="sd">               the indices of the vetices at the end of the edge.  If </span>
+<span class="sd">               v1 or v2 is -1, the line extends to infinity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">siteList</span> <span class="o">=</span> <span class="n">SiteList</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">context</span>  <span class="o">=</span> <span class="n">Context</span><span class="p">()</span>
+    <span class="n">voronoi</span><span class="p">(</span><span class="n">siteList</span><span class="p">,</span><span class="n">context</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="n">context</span><span class="o">.</span><span class="n">lines</span><span class="p">,</span><span class="n">context</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+
+<span class="c">#------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="computeDelaunayTriangulation"><a class="viewcode-back" href="../../../modules/pylayers.util.voronoi.html#pylayers.util.voronoi.computeDelaunayTriangulation">[docs]</a><span class="k">def</span> <span class="nf">computeDelaunayTriangulation</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Takes a list of point objects (which must have x and y fields).</span>
+<span class="sd">        Returns a list of 3-tuples: the indices of the points that form a</span>
+<span class="sd">        Delaunay triangle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">siteList</span> <span class="o">=</span> <span class="n">SiteList</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">context</span>  <span class="o">=</span> <span class="n">Context</span><span class="p">()</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">triangulate</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">voronoi</span><span class="p">(</span><span class="n">siteList</span><span class="p">,</span><span class="n">context</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">triangles</span>
+
+<span class="c">#-----------------------------------------------------------------------------</span></div>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    <span class="k">pass</span>
+<span class="c">#    try:</span>
+<span class="c">#        optlist,args = getopt.getopt(sys.argv[1:],&quot;thdp&quot;)</span>
+<span class="c">#    except getopt.GetoptError:</span>
+<span class="c">#        usage()</span>
+<span class="c">#        sys.exit(2)</span>
+<span class="c">#</span>
+<span class="c">#    doHelp = 0</span>
+<span class="c">#    c = Context()</span>
+<span class="c">#    c.doPrint = 1</span>
+<span class="c">#    for opt in optlist:</span>
+<span class="c">#        if opt[0] == &quot;-d&quot;:  c.debug = 1</span>
+<span class="c">#        if opt[0] == &quot;-p&quot;:  c.plot  = 1</span>
+<span class="c">#        if opt[0] == &quot;-t&quot;:  c.triangulate = 1</span>
+<span class="c">#        if opt[0] == &quot;-h&quot;:  doHelp = 1</span>
+<span class="c">#</span>
+<span class="c">#    if not doHelp:</span>
+<span class="c">#        pts = []</span>
+<span class="c">#        fp = sys.stdin</span>
+<span class="c">#        if len(args) &gt; 0:</span>
+<span class="c">#            fp = open(args[0],&#39;r&#39;)</span>
+<span class="c">#        for line in fp:</span>
+<span class="c">#            fld = line.split()</span>
+<span class="c">#            x = float(fld[0])</span>
+<span class="c">#            y = float(fld[1])</span>
+<span class="c">#            pts.append(Site(x,y))</span>
+<span class="c">#        if len(args) &gt; 0: fp.close()</span>
+<span class="c">#</span>
+<span class="c">#    if doHelp or len(pts) == 0:</span>
+<span class="c">#        usage()</span>
+<span class="c">#        sys.exit(2)</span>
+<span class="c">#</span>
+<span class="c">#    sl = SiteList(pts)</span>
+<span class="c">#    voronoi(sl,c)</span>
+<span class="c">#</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

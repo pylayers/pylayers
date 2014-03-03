@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.util.mayautil &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.util.mayautil</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">HasTraits</span><span class="p">,</span> <span class="n">Instance</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> \
+    <span class="n">on_trait_change</span>
+<span class="kn">from</span> <span class="nn">traitsui.api</span> <span class="kn">import</span> <span class="n">View</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="n">HGroup</span><span class="p">,</span> <span class="n">Group</span>
+
+<span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="kn">import</span> <span class="n">tvtk</span>
+<span class="kn">from</span> <span class="nn">tvtk.pyface.scene</span> <span class="kn">import</span> <span class="n">Scene</span>
+
+<span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="kn">from</span> <span class="nn">mayavi.core.api</span> <span class="kn">import</span> <span class="n">PipelineBase</span><span class="p">,</span> <span class="n">Source</span>
+<span class="kn">from</span> <span class="nn">mayavi.core.ui.api</span> <span class="kn">import</span> <span class="n">SceneEditor</span><span class="p">,</span> <span class="n">MayaviScene</span><span class="p">,</span> \
+                                <span class="n">MlabSceneModel</span>
+
+<div class="viewcode-block" id="VolumeSlicer"><a class="viewcode-back" href="../../../modules/pylayers.util.mayautil.html#pylayers.util.mayautil.VolumeSlicer">[docs]</a><span class="k">class</span> <span class="nc">VolumeSlicer</span><span class="p">(</span><span class="n">HasTraits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    adapted from &gt;http://docs.enthought.com/mayavi/mayavi/auto/example_volume_slicer.html</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">        &gt;&gt;&gt; x, y, z = np.ogrid[-5:5:64j, -5:5:64j, -5:5:64j]</span>
+<span class="sd">        &gt;&gt;&gt; data = np.sin(3*x)/x + 0.05*z**2 + np.cos(3*y)</span>
+<span class="sd">        &gt;&gt;&gt; m = VolumeSlicer(data=data)</span>
+<span class="sd">        &gt;&gt;&gt; m.configure_traits()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># The data to plot</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+
+    <span class="c"># The 4 views displayed</span>
+    <span class="n">scene3d</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">MlabSceneModel</span><span class="p">,</span> <span class="p">())</span>
+    <span class="n">scene_x</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">MlabSceneModel</span><span class="p">,</span> <span class="p">())</span>
+    <span class="n">scene_y</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">MlabSceneModel</span><span class="p">,</span> <span class="p">())</span>
+    <span class="n">scene_z</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">MlabSceneModel</span><span class="p">,</span> <span class="p">())</span>
+
+    <span class="c"># The data source</span>
+    <span class="n">data_src3d</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">Source</span><span class="p">)</span>
+
+    <span class="c"># The image plane widgets of the 3D scene</span>
+    <span class="n">ipw_3d_x</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">PipelineBase</span><span class="p">)</span>
+    <span class="n">ipw_3d_y</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">PipelineBase</span><span class="p">)</span>
+    <span class="n">ipw_3d_z</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">PipelineBase</span><span class="p">)</span>
+
+    <span class="n">_axis_names</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+    <span class="c">#---------------------------------------------------------------------------</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">traits</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">VolumeSlicer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">traits</span><span class="p">)</span>
+        <span class="c"># Force the creation of the image_plane_widgets:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipw_3d_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipw_3d_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipw_3d_z</span>
+
+
+    <span class="c">#---------------------------------------------------------------------------</span>
+    <span class="c"># Default values</span>
+    <span class="c">#---------------------------------------------------------------------------</span>
+    <span class="k">def</span> <span class="nf">_data_src3d_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">scalar_field</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                            <span class="n">figure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene3d</span><span class="o">.</span><span class="n">mayavi_scene</span><span class="p">)</span>
+
+<div class="viewcode-block" id="VolumeSlicer.make_ipw_3d"><a class="viewcode-back" href="../../../modules/pylayers.util.mayautil.html#pylayers.util.mayautil.VolumeSlicer.make_ipw_3d">[docs]</a>    <span class="k">def</span> <span class="nf">make_ipw_3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">):</span>
+        <span class="n">ipw</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">image_plane_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_src3d</span><span class="p">,</span>
+                        <span class="n">figure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene3d</span><span class="o">.</span><span class="n">mayavi_scene</span><span class="p">,</span>
+                        <span class="n">plane_orientation</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">_axes&#39;</span> <span class="o">%</span> <span class="n">axis_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ipw</span>
+</div>
+    <span class="k">def</span> <span class="nf">_ipw_3d_x_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_ipw_3d</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_ipw_3d_y_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_ipw_3d</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_ipw_3d_z_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_ipw_3d</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">)</span>
+
+
+    <span class="c">#---------------------------------------------------------------------------</span>
+    <span class="c"># Scene activation callbaks</span>
+    <span class="c">#---------------------------------------------------------------------------</span>
+    <span class="nd">@on_trait_change</span><span class="p">(</span><span class="s">&#39;scene3d.activated&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="VolumeSlicer.display_scene3d"><a class="viewcode-back" href="../../../modules/pylayers.util.mayautil.html#pylayers.util.mayautil.VolumeSlicer.display_scene3d">[docs]</a>    <span class="k">def</span> <span class="nf">display_scene3d</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">outline</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">outline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_src3d</span><span class="p">,</span>
+                        <span class="n">figure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene3d</span><span class="o">.</span><span class="n">mayavi_scene</span><span class="p">,</span>
+                        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scene3d</span><span class="o">.</span><span class="n">mlab</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="c"># Interaction properties can only be changed after the scene</span>
+        <span class="c"># has been created, and thus the interactor exists</span>
+        <span class="k">for</span> <span class="n">ipw</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ipw_3d_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipw_3d_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipw_3d_z</span><span class="p">):</span>
+            <span class="c"># Turn the interaction off</span>
+            <span class="n">ipw</span><span class="o">.</span><span class="n">ipw</span><span class="o">.</span><span class="n">interaction</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scene3d</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c"># Keep the view always pointing up</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scene3d</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">interactor</span><span class="o">.</span><span class="n">interactor_style</span> <span class="o">=</span> \
+                                 <span class="n">tvtk</span><span class="o">.</span><span class="n">InteractorStyleTerrain</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="VolumeSlicer.make_side_view"><a class="viewcode-back" href="../../../modules/pylayers.util.mayautil.html#pylayers.util.mayautil.VolumeSlicer.make_side_view">[docs]</a>    <span class="k">def</span> <span class="nf">make_side_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">):</span>
+        <span class="n">scene</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;scene_</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">axis_name</span><span class="p">)</span>
+
+        <span class="c"># To avoid copying the data, we take a reference to the</span>
+        <span class="c"># raw VTK dataset, and pass it on to mlab. Mlab will create</span>
+        <span class="c"># a Mayavi source from the VTK without copying it.</span>
+        <span class="c"># We have to specify the figure so that the data gets</span>
+        <span class="c"># added on the figure we are interested in.</span>
+        <span class="n">outline</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">outline</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">data_src3d</span><span class="o">.</span><span class="n">mlab_source</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span>
+                            <span class="n">figure</span><span class="o">=</span><span class="n">scene</span><span class="o">.</span><span class="n">mayavi_scene</span><span class="p">,</span>
+                            <span class="p">)</span>
+        <span class="n">ipw</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">image_plane_widget</span><span class="p">(</span>
+                            <span class="n">outline</span><span class="p">,</span>
+                            <span class="n">plane_orientation</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">_axes&#39;</span> <span class="o">%</span> <span class="n">axis_name</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;ipw_</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">axis_name</span><span class="p">,</span> <span class="n">ipw</span><span class="p">)</span>
+
+        <span class="c"># Synchronize positions between the corresponding image plane</span>
+        <span class="c"># widgets on different views.</span>
+        <span class="n">ipw</span><span class="o">.</span><span class="n">ipw</span><span class="o">.</span><span class="n">sync_trait</span><span class="p">(</span><span class="s">&#39;slice_position&#39;</span><span class="p">,</span>
+                            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;ipw_3d_</span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span> <span class="n">axis_name</span><span class="p">)</span><span class="o">.</span><span class="n">ipw</span><span class="p">)</span>
+
+        <span class="c"># Make left-clicking create a crosshair</span>
+        <span class="n">ipw</span><span class="o">.</span><span class="n">ipw</span><span class="o">.</span><span class="n">left_button_action</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c"># Add a callback on the image plane widget interaction to</span>
+        <span class="c"># move the others</span>
+        <span class="k">def</span> <span class="nf">move_view</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">evt</span><span class="p">):</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">GetCurrentCursorPosition</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">other_axis</span><span class="p">,</span> <span class="n">axis_number</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis_names</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">other_axis</span> <span class="o">==</span> <span class="n">axis_name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">ipw3d</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;ipw_3d_</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">other_axis</span><span class="p">)</span>
+                <span class="n">ipw3d</span><span class="o">.</span><span class="n">ipw</span><span class="o">.</span><span class="n">slice_position</span> <span class="o">=</span> <span class="n">position</span><span class="p">[</span><span class="n">axis_number</span><span class="p">]</span>
+
+        <span class="n">ipw</span><span class="o">.</span><span class="n">ipw</span><span class="o">.</span><span class="n">add_observer</span><span class="p">(</span><span class="s">&#39;InteractionEvent&#39;</span><span class="p">,</span> <span class="n">move_view</span><span class="p">)</span>
+        <span class="n">ipw</span><span class="o">.</span><span class="n">ipw</span><span class="o">.</span><span class="n">add_observer</span><span class="p">(</span><span class="s">&#39;StartInteractionEvent&#39;</span><span class="p">,</span> <span class="n">move_view</span><span class="p">)</span>
+
+        <span class="c"># Center the image plane widget</span>
+        <span class="n">ipw</span><span class="o">.</span><span class="n">ipw</span><span class="o">.</span><span class="n">slice_position</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_axis_names</span><span class="p">[</span><span class="n">axis_name</span><span class="p">]]</span>
+
+        <span class="c"># Position the view for the scene</span>
+        <span class="n">views</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span>
+                     <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span>
+                     <span class="n">z</span><span class="o">=</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">),</span>
+                     <span class="p">)</span>
+        <span class="n">scene</span><span class="o">.</span><span class="n">mlab</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="n">views</span><span class="p">[</span><span class="n">axis_name</span><span class="p">])</span>
+        <span class="c"># 2D interaction: only pan and zoom</span>
+        <span class="n">scene</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">interactor</span><span class="o">.</span><span class="n">interactor_style</span> <span class="o">=</span> \
+                                 <span class="n">tvtk</span><span class="o">.</span><span class="n">InteractorStyleImage</span><span class="p">()</span>
+        <span class="n">scene</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+</div>
+    <span class="nd">@on_trait_change</span><span class="p">(</span><span class="s">&#39;scene_x.activated&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="VolumeSlicer.display_scene_x"><a class="viewcode-back" href="../../../modules/pylayers.util.mayautil.html#pylayers.util.mayautil.VolumeSlicer.display_scene_x">[docs]</a>    <span class="k">def</span> <span class="nf">display_scene_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_side_view</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+</div>
+    <span class="nd">@on_trait_change</span><span class="p">(</span><span class="s">&#39;scene_y.activated&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="VolumeSlicer.display_scene_y"><a class="viewcode-back" href="../../../modules/pylayers.util.mayautil.html#pylayers.util.mayautil.VolumeSlicer.display_scene_y">[docs]</a>    <span class="k">def</span> <span class="nf">display_scene_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_side_view</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+</div>
+    <span class="nd">@on_trait_change</span><span class="p">(</span><span class="s">&#39;scene_z.activated&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="VolumeSlicer.display_scene_z"><a class="viewcode-back" href="../../../modules/pylayers.util.mayautil.html#pylayers.util.mayautil.VolumeSlicer.display_scene_z">[docs]</a>    <span class="k">def</span> <span class="nf">display_scene_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_side_view</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">)</span>
+
+
+    <span class="c">#---------------------------------------------------------------------------</span>
+    <span class="c"># The layout of the dialog created</span>
+    <span class="c">#---------------------------------------------------------------------------</span></div>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">View</span><span class="p">(</span><span class="n">HGroup</span><span class="p">(</span>
+                  <span class="n">Group</span><span class="p">(</span>
+                       <span class="n">Item</span><span class="p">(</span><span class="s">&#39;scene_y&#39;</span><span class="p">,</span>
+                            <span class="n">editor</span><span class="o">=</span><span class="n">SceneEditor</span><span class="p">(</span><span class="n">scene_class</span><span class="o">=</span><span class="n">Scene</span><span class="p">),</span>
+                            <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>
+                       <span class="n">Item</span><span class="p">(</span><span class="s">&#39;scene_z&#39;</span><span class="p">,</span>
+                            <span class="n">editor</span><span class="o">=</span><span class="n">SceneEditor</span><span class="p">(</span><span class="n">scene_class</span><span class="o">=</span><span class="n">Scene</span><span class="p">),</span>
+                            <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>
+                       <span class="n">show_labels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                  <span class="p">),</span>
+                  <span class="n">Group</span><span class="p">(</span>
+                       <span class="n">Item</span><span class="p">(</span><span class="s">&#39;scene_x&#39;</span><span class="p">,</span>
+                            <span class="n">editor</span><span class="o">=</span><span class="n">SceneEditor</span><span class="p">(</span><span class="n">scene_class</span><span class="o">=</span><span class="n">Scene</span><span class="p">),</span>
+                            <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>
+                       <span class="n">Item</span><span class="p">(</span><span class="s">&#39;scene3d&#39;</span><span class="p">,</span>
+                            <span class="n">editor</span><span class="o">=</span><span class="n">SceneEditor</span><span class="p">(</span><span class="n">scene_class</span><span class="o">=</span><span class="n">MayaviScene</span><span class="p">),</span>
+                            <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">300</span><span class="p">),</span>
+                       <span class="n">show_labels</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                  <span class="p">),</span>
+                <span class="p">),</span>
+                <span class="n">resizable</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s">&#39;Volume Slicer&#39;</span><span class="p">,</span>
+                <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

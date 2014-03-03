@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.antvsh &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.antprop.antvsh</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">as</span> <span class="nn">ant</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.spharm</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sphere</span> <span class="kn">import</span> <span class="n">spherepack</span><span class="p">,</span> <span class="n">Wrapec</span><span class="p">,</span> <span class="n">mathtogeo</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="vsh"><a class="viewcode-back" href="../../../modules/pylayers.antprop.antvsh.html#pylayers.antprop.antvsh.vsh">[docs]</a><span class="k">def</span> <span class="nf">vsh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Summary</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    This function calculates the Vector Spherical Harmonics coefficients</span>
+<span class="sd">    It makes use of the spherepack function vha</span>
+
+<span class="sd">        m : phi    longitude</span>
+<span class="sd">        n : theta  latitude</span>
+
+<span class="sd">    Antenna pattern are stored       (f theta phi)</span>
+<span class="sd">    Coeff are stored with this order (f , n , m )</span>
+
+<span class="sd">    The vsh coefficient are organized differently</span>
+<span class="sd">    should be better for compression along frequency axis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    A   :  antenna</span>
+<span class="sd">    dsf :  int</span>
+<span class="sd">        down sampling factor  &#39;default 1&#39;</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">th</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">[::</span><span class="n">dsf</span><span class="p">]</span>
+    <span class="n">ph</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">[::</span><span class="n">dsf</span><span class="p">]</span>
+
+    <span class="c">#th = A.theta[::dsf,0]</span>
+    <span class="c">#ph = A.phi[0,::dsf]</span>
+
+    <span class="n">nth</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
+    <span class="n">nph</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span>
+
+    <span class="n">nf</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Nf</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">nph</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">mdab</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="p">(</span><span class="n">nph</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mdab</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">ndab</span> <span class="o">=</span> <span class="n">nth</span>
+
+    <span class="n">Br</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
+    <span class="n">Bi</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
+    <span class="n">Cr</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
+    <span class="n">Ci</span> <span class="o">=</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nf</span><span class="p">,</span> <span class="n">ndab</span><span class="p">,</span> <span class="n">mdab</span><span class="p">))</span>
+
+    <span class="n">gridComp</span> <span class="o">=</span> <span class="n">Wrapec</span><span class="p">()</span>
+    <span class="n">wvha</span><span class="p">,</span> <span class="n">lvha</span> <span class="o">=</span> <span class="n">gridComp</span><span class="o">.</span><span class="n">vhai</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nf</span><span class="p">):</span>
+        <span class="c">#</span>
+        <span class="c"># Real part</span>
+        <span class="c">#</span>
+        <span class="n">Fpr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fphi</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">Ftr</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
+        <span class="c">#</span>
+        <span class="c"># Fpr     Ntheta,Nphi</span>
+        <span class="c">#</span>
+        <span class="n">brr</span><span class="p">,</span> <span class="n">bir</span><span class="p">,</span> <span class="n">crr</span><span class="p">,</span> <span class="n">cir</span> <span class="o">=</span> <span class="n">gridComp</span><span class="o">.</span><span class="n">vha</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                                          <span class="n">lvha</span><span class="p">,</span> <span class="n">wvha</span><span class="p">,</span>
+                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Fpr</span><span class="p">),</span>
+                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Ftr</span><span class="p">))</span>
+        <span class="c">#</span>
+        <span class="c"># Imaginary part</span>
+        <span class="c">#</span>
+        <span class="n">Fpi</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fphi</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
+        <span class="n">Fti</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[</span><span class="n">k</span><span class="p">][::</span><span class="n">dsf</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>
+        <span class="n">bri</span><span class="p">,</span> <span class="n">bii</span><span class="p">,</span> <span class="n">cri</span><span class="p">,</span> <span class="n">cii</span> <span class="o">=</span> <span class="n">gridComp</span><span class="o">.</span><span class="n">vha</span><span class="p">(</span><span class="n">nth</span><span class="p">,</span> <span class="n">nph</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                                          <span class="n">lvha</span><span class="p">,</span> <span class="n">wvha</span><span class="p">,</span>
+                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Fpi</span><span class="p">),</span>
+                                          <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Fti</span><span class="p">))</span>
+
+        <span class="n">Br</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">brr</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">bri</span>
+        <span class="n">Bi</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">bir</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">bii</span>
+        <span class="n">Cr</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">crr</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">cri</span>
+        <span class="n">Ci</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">cir</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">cii</span>
+
+    <span class="c">#</span>
+    <span class="c"># m=0 row is multiplied by 0.5</span>
+    <span class="c">#</span>
+
+    <span class="n">Br</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Br</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">Bi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Bi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">Cr</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Cr</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">Ci</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Ci</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="c">#print &quot;A.fa[0] = &quot;,A.fa[0]</span>
+    <span class="c">#print &quot;A.fa[-1] = &quot;,A.fa[-1]</span>
+
+    <span class="n">Br</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Br</span><span class="p">)</span>
+    <span class="n">Bi</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Bi</span><span class="p">)</span>
+    <span class="n">Cr</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Cr</span><span class="p">)</span>
+    <span class="n">Ci</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s1&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmax</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">Ci</span><span class="p">)</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">ant</span><span class="o">.</span><span class="n">VSHCoeff</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

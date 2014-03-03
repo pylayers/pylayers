@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.mobility.body.DeuxSeg &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../../index.html" />
+    <link rel="up" title="pylayers.mobility.body" href="../body.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../../index.html"><img src="../../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../mobility.html" >pylayers.mobility</a> &raquo;</li>
+          <li><a href="../body.html" accesskey="U">pylayers.mobility.body</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.mobility.body.DeuxSeg</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
+
+
+
+
+
+
+<div class="viewcode-block" id="dist"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.DeuxSeg.html#pylayers.mobility.body.DeuxSeg.dist">[docs]</a><span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    A</span>
+<span class="sd">    B</span>
+<span class="sd">    C</span>
+<span class="sd">    D</span>
+<span class="sd">    alpha</span>
+<span class="sd">    beta</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AC</span><span class="o">=</span><span class="n">C</span><span class="o">-</span><span class="n">A</span>
+    <span class="n">CD</span><span class="o">=</span><span class="n">D</span><span class="o">-</span><span class="n">C</span>
+    <span class="n">BA</span><span class="o">=</span><span class="n">A</span><span class="o">-</span><span class="n">B</span>
+
+    <span class="n">u0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">AC</span><span class="p">,</span><span class="n">AC</span><span class="p">)</span>
+    <span class="n">u4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">BA</span><span class="p">,</span><span class="n">BA</span><span class="p">)</span>
+    <span class="n">u5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CD</span><span class="p">,</span><span class="n">CD</span><span class="p">)</span>
+    <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">BA</span><span class="p">,</span><span class="n">AC</span><span class="p">)</span>
+    <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CD</span><span class="p">,</span><span class="n">AC</span><span class="p">)</span>
+    <span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CD</span><span class="p">,</span><span class="n">BA</span><span class="p">)</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">u0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">u1</span><span class="o">+</span><span class="n">beta</span><span class="o">*</span><span class="n">u2</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">*</span><span class="n">u4</span><span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u5</span>
+    <span class="n">M</span>  <span class="o">=</span> <span class="n">A</span> <span class="o">-</span> <span class="n">alpha</span><span class="o">*</span><span class="n">BA</span>
+    <span class="n">N</span>  <span class="o">=</span> <span class="n">C</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">CD</span>
+    <span class="n">g</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="o">-</span><span class="n">N</span><span class="p">,</span><span class="n">M</span><span class="o">-</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="dmin3d"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.DeuxSeg.html#pylayers.mobility.body.DeuxSeg.dmin3d">[docs]</a><span class="k">def</span> <span class="nf">dmin3d</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     dmin3d evaluate the minimal distance between 2 set of segments </span>
+
+<span class="sd">     this should be vectorized </span>
+
+<span class="sd">      A : (3xN) initial point segment 1</span>
+<span class="sd">      B   (3xN) end point segment 1</span>
+<span class="sd">      C   (3xN) starting point segment 2</span>
+<span class="sd">      D   (3xN) end point segment 2  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AC</span><span class="o">=</span><span class="n">C</span><span class="o">-</span><span class="n">A</span>
+    <span class="n">CD</span><span class="o">=</span><span class="n">D</span><span class="o">-</span><span class="n">C</span>
+    <span class="n">BA</span><span class="o">=</span><span class="n">A</span><span class="o">-</span><span class="n">B</span>
+
+    <span class="n">u0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">AC</span><span class="p">,</span><span class="n">AC</span><span class="p">)</span>
+    <span class="n">u4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">BA</span><span class="p">,</span><span class="n">BA</span><span class="p">)</span>
+    <span class="n">u5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CD</span><span class="p">,</span><span class="n">CD</span><span class="p">)</span>
+    <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">BA</span><span class="p">,</span><span class="n">AC</span><span class="p">)</span>
+    <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CD</span><span class="p">,</span><span class="n">AC</span><span class="p">)</span>
+    <span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CD</span><span class="p">,</span><span class="n">BA</span><span class="p">)</span> 
+
+
+    <span class="n">den</span>   <span class="o">=</span> <span class="n">u4</span><span class="o">*</span><span class="n">u5</span><span class="o">-</span><span class="n">u3</span><span class="o">*</span><span class="n">u3</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">u2</span><span class="o">*</span><span class="n">u3</span><span class="o">-</span><span class="n">u1</span><span class="o">*</span><span class="n">u5</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="n">den</span><span class="p">)</span>
+    <span class="n">beta</span>  <span class="o">=</span> <span class="p">(</span><span class="n">u1</span><span class="o">*</span><span class="n">u3</span><span class="o">-</span><span class="n">u2</span><span class="o">*</span><span class="n">u4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="n">den</span><span class="p">)</span>
+    <span class="c">#~ print &#39; dmin**2 &#39;, u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5</span>
+    <span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">u1</span><span class="o">+</span><span class="n">beta</span><span class="o">*</span><span class="n">u2</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">*</span><span class="n">u4</span><span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u5</span><span class="p">)</span> 
+    <span class="c">#~ print &#39;dmin&#39;, dmin</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">dmin</span><span class="p">)</span>
+
+<span class="c"># &lt;codecell&gt;</span></div>
+<span class="k">if</span> <span class="p">(</span><span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">dmin3d</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">f</span><span class="p">,</span> <span class="n">g</span>   <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">d</span>
+
+    <span class="k">print</span> <span class="n">f</span><span class="p">,</span><span class="n">g</span>
+
+    <span class="k">print</span> <span class="s">&#39;sqrt &#39;</span> <span class="p">,</span>  <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../mobility.html" >pylayers.mobility</a> &raquo;</li>
+          <li><a href="../body.html" >pylayers.mobility.body</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

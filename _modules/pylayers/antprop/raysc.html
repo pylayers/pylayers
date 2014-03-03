@@ -1,0 +1,1882 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.raysc &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.antprop.raysc</h1><div class="highlight"><pre>
+#!/usr/bin/python
+# -*- coding: latin1 -*-
+import pdb
+import os
+import pdb
+import glob
+import doctest
+import ConfigParser
+import networkx as nx
+import numpy as np
+import scipy as sp
+import matplotlib.pyplot as plt
+import struct as stru
+import pylayers.util.geomutil as geu
+import pylayers.util.pyutil as pyu
+from pylayers.util.project import *
+from pylayers.antprop.slab import *
+from pylayers.antprop.interactions import *
+
+<div class="viewcode-block" id="Ray3D"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D">[docs]</a>class Ray3D(object):
+    &quot;&quot;&quot; Ray3D class
+
+    This class handles a 3D ray
+
+    Attributes
+    ----------
+    nn      : int
+        number of nodes (number of interaction + 2)
+    pt      : np.array
+        point coordinates
+    nstr    : element of a signature
+        structure number (&gt;0 edge) (&lt;0 node) (0 Tx or Rx)
+    deep    : int
+    beta0   : float
+    phii    : float
+    phid    : float
+    length  : float
+    Bi   : interaction input basis    shape=( nn,3,3)
+    Bo   : intercation output basis   shape=( nn,3,3)
+
+    Bi(l,:,0) = s_in
+    Bi(l,:,1) = etheta_in
+    Bi(l,:,2) = ephi_in
+
+    Bo(l,:,0) = s_out
+    Bo(l,:,1) = etheta_out
+    Bo(l,:,2) = ephi_out
+
+    Methods
+    -------
+    show3(bdis=True,col=np.array([1,0,1]),id=0) : geomview visualization
+    info()  : Ray information
+
+    &quot;&quot;&quot;
+<div class="viewcode-block" id="Ray3D.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.info">[docs]</a>    def info(self):
+        &quot;&quot;&quot; info
+        &quot;&quot;&quot;
+        print &quot;Number of nodes : &quot; + str(self.nn)
+        print &quot;points : &quot;
+        print self.pt.transpose()
+        print &quot;nstr   : &quot;
+        print self.nstr
+        print &quot;B in     : &quot;
+        print self.Bi
+        print &quot;B out    : &quot;
+        print self.Bo
+        print &quot;AOD : &quot;
+        print &quot;thetat (deg)   : &quot; + str(self.tht * 180 / np.pi)
+        print &quot;phit   (deg)   : &quot; + str(self.pht * 180 / np.pi)
+        print &quot;AOA : &quot;
+        print &quot;thetar (deg)   : &quot; + str(self.thr * 180 / np.pi)
+        print &quot;phir   (deg)   : &quot; + str(self.phr * 180 / np.pi)
+</div>
+<div class="viewcode-block" id="Ray3D.locbas"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.locbas">[docs]</a>    def locbas(self, L):
+        &quot;&quot;&quot; evaluation of local basis over the ray
+
+        Parameters
+        -----------
+        L : Layout Structure Graph
+
+        Notes
+        -----
+            evaluate Bi and Bo
+        &quot;&quot;&quot;
+
+        # initialize RayTud
+        self.gt = RayTud()
+        self.gt.inter = []
+
+        nn = self.nn
+        #
+        # si : (N-1,3)
+        #
+        # si  = np.array(np.zeros([nn-1,3],dtype=np.float64))
+        # lsi = np.array(np.zeros(nn-1,dtype=np.float64))
+        #
+        # Calcul des vecteurs unitaires si
+        # .. todo:: remove this for loop
+        #   not tested
+
+        v = self.pt[1:, :] - self.pt[0:-1, :]
+        lsi = np.sqrt(np.sum(v * v, axis=1))
+        # reshape is required for broadcasting
+        lsir = lsi.reshape(nn - 1, 1)
+        si = v / lsir
+        # for k in range(nn-1):
+        #    v  = self.pt[k+1,:]-self.pt[k,:]
+        #    nv = np.sqrt(np.dot(v,v))
+        #    try:
+        #        si[k,:]  = v/nv
+        #        lsi[k,:] = nv
+        #    except:
+        #        print(&quot;error divide by 0 in Ray3D.geom &quot;)
+
+        self.Bi = np.array(np.zeros([nn - 1, 3, 3], dtype=np.float64))
+        self.Bo = np.array(np.zeros([nn - 1, 3, 3], dtype=np.float64))
+
+        nint = nn - 2
+
+        #
+        # Repere de sortie du Tx
+        #
+
+        BoO = np.array(np.zeros([3, 3]))
+        th = np.arccos(si[0, 2])
+        ph = np.arctan2(si[0, 1], si[0, 0])
+        eth = np.array([np.cos(th) * np.cos(ph),
+                        np.cos(th) * np.sin(ph),
+                        -np.sin(th)])
+        eph = np.array([-np.sin(ph),
+                        np.cos(ph),
+                        0.0])
+        Bo0 = np.array([si[0, :], eth, eph]).transpose()
+
+        self.Bo[0, :, :] = Bo0
+        #
+        # Ray AOD
+        #
+        self.tht = th
+        self.pht = ph
+        #
+        # Repere d&#39;entree du Rx
+        #
+        # input unitary vector  impose que le vecteur unitaire d&#39;entree sur
+        # le recepteur soit confondu avec le vecteur unitaire
+        # de sortie de la derniere interaction
+        #
+        th = np.arccos(si[nn - 2, 2])
+        ph = np.arctan2(si[nn - 2, 1], si[nn - 2, 0])
+        eth = np.array([np.cos(th) * np.cos(ph),
+                        np.cos(th) * np.sin(ph),
+                        -np.sin(th)])
+        eph = np.array([-np.sin(ph), np.cos(ph), 0.0])
+        Bini = np.array([si[nn - 2, :], eth, eph]).transpose()
+        self.Bi[nint, :, :] = Bini
+        #
+        # Ray AOA
+        #
+        self.thr = np.pi - th
+        self.phr = np.pi + ph
+        #
+        # loop over the nn-2 interactions
+        #
+
+        for l in range(nn - 2):
+            typ = self.etype[l + 1]
+            nstr = self.nstr[l + 1]
+
+            #
+            # Retrieve the interaction vector
+            #   normal (R or T) or edge direction (D)
+            #
+            if nstr &gt; 0:
+                # if wall
+                if nstr &lt;= L.Ne:
+                    vn = L.Gs.node[nstr][&#39;norm&#39;]
+                else:  # if ceil or floor
+                    if nstr == L.Ne + 1:
+                        # ceil
+                        vn = np.array([0., 0., -1.0])
+                    if nstr == L.Ne + 2:
+                        # floor
+                        vn = np.array([0., 0., 1.0])
+            else:  # diffaction
+                vn = np.array([0., 0., -1.0])
+
+            # .. todo:: regler le proble de nstr sur rayon 358 : sircut.str
+            # try:
+            #    ps = np.dot(vn,si[l,:])
+            # except:
+            #    pdb.set_trace()
+            #
+            ps = np.dot(vn, si[l, :])
+            # Si Reflexion ou Transmission inversion signe normale si.n &lt;0
+            #
+            if ((typ == 1) | (typ == 2)):
+                if (ps &lt; 0):
+                    vn = -1.0 * vn
+            #
+            # Si si et n sont colineaires, le plan d&#39;incidence n&#39;est pas defini
+            #
+            if (abs(ps) &gt; 1 - 1e-7):
+                self.Bi[l + 1, :] = self.Bo[l, :]
+            else:
+                s_in = si[l, :]
+                w = geu.pvecn(s_in, vn)
+                v = np.cross(w, s_in)
+                M = np.array([s_in, v, w]).transpose()
+                self.Bi[l, :, :] = M
+                s_out = si[l + 1, :]
+                w = geu.pvecn(s_out, vn)
+                v = np.cross(w, s_out)
+                M = np.array([s_out, v, w]).transpose()
+                self.Bo[l + 1, :, :] = M
+            #
+            # Create interaction
+            # see GetRayonPram de tratotud.c
+            #
+            if typ == 1:  # Reflexion
+                # theta  = np.arccos(abs(ps))  &#39;validated&#39;
+                theta = self.phii[l + 1]
+                siR = lsi[l]
+                srR = lsi[l + 1]
+                I = IntR([theta, siR, srR])
+            if typ == 2:  # Transmission
+                # theta  = np.arccos(abs(ps))  &#39;validated&#39;
+                theta = self.phii[l + 1]
+                siT = lsi[l]
+                srT = lsi[l + 1]
+                I = IntT([theta, siT, srT])
+            if typ == 3:  # Diffraction
+                theta = self.phii[l + 1]
+                thetad = self.phid[l + 1]
+                siD = lsi[l]
+                sdD = lsi[l + 1]
+                beta = self.beta0[l + 1]
+                #
+                # Attributes for nst &lt;0 of L.Gs
+                #
+                N = 0
+                typed = 0
+                I = IntD([theta, thetad, siD, sdD, beta, N], [typed])
+            #
+            # add a new interaction in raytud object
+            #
+            self.gt.inter.append(I)
+        #
+        # Insert rotation matrices between interaction
+        #
+        # M = np.zeros((nn-1,2,2))
+        # gt.inter.append(I=[)
+        for k in range(nn - 1):
+            M = np.dot(self.Bo[k, :, 1::].T, self.Bi[k, :, 1::])
+            I = IntB(M)
+            self.gt.inter.insert(2 * k, I)
+            # M[k,:,:] = np.dot(self.Bo[k,:,1::].T,self.Bi[k,:,1::])
+
+        self.gt.ni = 2 * nn - 3
+    # def show3(self,bdis=True,bbas=False,col=np.array([1,0,1]),id=0):
+</div>
+<div class="viewcode-block" id="Ray3D.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.delay">[docs]</a>    def delay(self):
+        &quot;&quot;&quot; delay
+
+        Returns
+        -------
+
+        delay : float
+            delay in ns for each segment of the ray
+
+        &quot;&quot;&quot;
+        pt = self.pt[0:-1, :].T
+        ph = self.pt[1::, :].T
+        d = pt - ph
+        d2 = d * d
+        delay = sum(np.sqrt(sum(d * d, axis=0)) / 0.3)
+        return(delay)
+</div>
+<div class="viewcode-block" id="Ray3D.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.show">[docs]</a>    def show(self, fig=[], ax=[], col=&#39;b&#39;, node=False):
+        &quot;&quot;&quot; show a Ray projection in 2D
+
+        &quot;&quot;&quot;
+        if fig == []:
+            fig = plt.gcf()
+        if ax == []:
+            ax = fig.gca()
+
+        Nseg = self.nn - 1
+        pt = self.pt[0:-1, 0:2].T
+        ph = self.pt[1::, 0:2].T
+        pz = np.empty((2,))
+        pn = np.zeros((2,))
+        for i in range(Nseg):
+            pz = np.vstack((pz, pt[:, i], ph[:, i], pn))
+        m1 = np.array([0, 0, 1])
+        mask = np.kron(np.ones((2, Nseg)), m1)
+        pzz = pz[1:, :].T
+        vertices = np.ma.masked_array(pzz, mask)
+        ax.plot(vertices[0, :], vertices[1, :], color=col)
+        if node:
+            ax.plot(self.pt[:, 0], self.pt[:, 1], &#39;ok&#39;)
+        return fig, ax
+</div>
+<div class="viewcode-block" id="Ray3D.show3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.show3">[docs]</a>    def show3(self, _filestr=&#39;defstr&#39;, bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
+        &quot;&quot;&quot; show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
+
+        Parameters
+        ----------
+
+        bdis :
+            display boolean - if False return .vect filename
+        bbas :
+            display local basis
+        bstruc :
+            display structure
+        col  :
+            color of the ray
+        id   :
+            id of the ray
+        linewidth :
+        &quot;&quot;&quot;
+        filerac = pyu.getlong(&quot;ray&quot; + str(id), pstruc[&#39;DIRGEOM&#39;])
+        _filerac = pyu.getshort(filerac)
+        filename_list = filerac + &#39;.list&#39;
+        filename_vect = filerac + &#39;.vect&#39;
+        try:
+            fo = open(filename_vect, &quot;w&quot;)
+        except:
+            raise NameError(filename)
+
+        fo.write(&quot;appearance { linewidth %d }\n&quot; % linewidth)
+
+        fo.write(&quot;VECT\n&quot;)
+
+        fo.write(&quot;1 %d 1\n\n&quot; % self.nn)
+        fo.write(&quot;%d\n&quot; % self.nn)
+        fo.write(&quot;1\n&quot;)
+        for i in range(self.nn):
+            fo.write(&quot;%g %g %g\n&quot; % (self.pt[i, 0], self.pt[i,
+                                                            1], self.pt[i, 2]))
+        # fo.write(&quot;%d %d %d 0\n&quot; % (col[0],col[1],col[2]))
+        fo.write(&quot;%g %g %g 0\n&quot; % (col[0], col[1], col[2]))
+        fo.close()
+
+        #
+        # Ajout des bases locales
+        #
+
+        fo = open(filename_list, &quot;w&quot;)
+        fo.write(&quot;LIST\n&quot;)
+        fo.write(&quot;{&lt;&quot; + filename_vect + &quot;}\n&quot;)
+        if (bstruc):
+            # fo.write(&quot;{&lt;strucTxRx.off}\n&quot;)
+            fo.write(&quot;{&lt;&quot; + _filestr + &quot;.off}\n&quot;)
+        if (bbas):
+            for i in range(self.nn - 1):
+                ptb = (self.pt[i + 1, :] + self.pt[i, :]) / 2
+                fibi = _filerac + &quot;Bi&quot; + str(i)
+                vfibi = GeomVect(fibi)
+                colbi = np.array([[1, 0, 0], [1, 0.25, 0.25], [1, 0.5, 0.5]])
+                vfibi.geomBase(self.Bi[i, :, :], ptb, colbi, 2)
+                fibo = _filerac + &quot;Bo&quot; + str(i)
+                vfibo = GeomVect(fibo)
+                colbo = np.array([[0, 0, 1], [0.25, 0.25, 1], [0.5, 0.5, 1]])
+                vfibo.geomBase(self.Bo[i, :, :], ptb, colbo, 2)
+                fo.write(&quot;{&lt;&quot; + fibi + &quot;.vect&quot; + &quot;}\n&quot;)
+                fo.write(&quot;{&lt;&quot; + fibo + &quot;.vect&quot; + &quot;}\n&quot;)
+
+        filename = filename_list
+        fo.close()
+
+        if (bdis):
+        #
+        # Geomview Visualisation
+        #
+            chaine = &quot;geomview -nopanel -b 1 1 1 &quot; + filename + \
+                &quot; 2&gt;/dev/null &amp;&quot;
+            os.system(chaine)
+        else:
+            return(filename)
+</div></div>
+<div class="viewcode-block" id="RayTud"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud">[docs]</a>class RayTud(object):
+    &quot;&quot;&quot; Ray Tud
+
+    Attributes
+    ----------
+
+    ni      :
+        number of interactions
+    inter   :
+        Interaction object
+    C       :
+        Ray Transfer function matrix :  np.array(np.zeros([nf,2,2]),dtype=complex)
+    nf      :
+        number of frequencies
+
+    Methods
+    -------
+    info         :
+        Ray informations
+    eval(f)      :
+        Evaluate C tilde matrix for a set of frequencies
+    comp(raytud) :
+        comparaison de deux rayons Tud
+
+    &quot;&quot;&quot;
+    def __init__(self):
+        self.ni = 0
+
+<div class="viewcode-block" id="RayTud.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.info">[docs]</a>    def info(self):
+        print &quot;Number of interactions : &quot;, self.ni
+        nbi = self.ni
+        for i in range(nbi):
+            print &quot;Interaction : &quot;, i
+            self.inter[i].info()
+</div>
+<div class="viewcode-block" id="RayTud.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.delay">[docs]</a>    def delay(self):
+        &quot;&quot;&quot;
+            calculate delay of the ray
+        &quot;&quot;&quot;
+        nbi = self.ni
+        d = 0
+        for i in range(nbi):
+            # LOS
+            if self.inter[i].typ == 0:
+                d = self.inter[i].dist
+            # Reflexion
+            if self.inter[i].typ == 1:
+                if d == 0:
+                    l1 = self.inter[i].si
+                    l2 = self.inter[i].sr
+                    d = d + l1 + l2
+                else:
+                    l = self.inter[i].sr
+                    d = d + l
+            # Transmission
+            if self.inter[i].typ == 2:
+                if d == 0:
+                    l1 = self.inter[i].si
+                    l2 = self.inter[i].st
+                    d = d + l1 + l2
+                else:
+                    l = self.inter[i].st
+                    d = d + l
+            # Diffraction
+            if self.inter[i].typ == 3:
+                if d == 0:
+                    l1 = self.inter[i].si
+                    l2 = self.inter[i].sd
+                    d = d + l1 + l2
+                else:
+                    l = self.inter[i].sd
+                    d = d + l
+        return(d / 0.3)
+</div>
+<div class="viewcode-block" id="RayTud.signature"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.signature">[docs]</a>    def signature(self):
+        &quot;&quot;&quot; returns ray signature
+        &quot;&quot;&quot;
+        Signature = []
+        for k in range(self.ni):
+            Signature.append(self.inter[k].typ)
+        return(Signature)
+</div>
+<div class="viewcode-block" id="RayTud.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.eval">[docs]</a>    def eval(self, fGHz=[2.4]):
+        &quot;&quot;&quot; evaluate the field over the ray
+
+        Parameters
+        ----------
+        fGHz : ndarray
+            frequency axis
+
+
+        &quot;&quot;&quot;
+        nf = len(fGHz)
+        self.C = np.zeros((2, 2), dtype=complex).reshape(1, 2, 2)
+        Co = np.eye(2, 2, dtype=complex).reshape(1, 2, 2)
+        #
+        # Loop over all the ray interactions
+        #   + left matrix multiplication
+        #   + broadcasting along frequency axis
+        #
+        for i in range(self.ni):
+            I = self.inter[i]
+            Ci = I.eval(fGHz)
+            Co = np.einsum(&#39;kpq,kqr-&gt;kpr&#39;, Ci, Co)
+        self.nf = nf
+        self.C = Co
+</div></div>
+<div class="viewcode-block" id="GrRayTud"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud">[docs]</a>class GrRayTud(dict):
+    &quot;&quot;&quot;  a cluster of Rays in Tud format
+
+    Attributes
+    ----------
+    nray    : number of rayTud
+
+    rayTud  : list of RayTud object DEPRECATED
+
+    I : class interaction which contrinats all the interactionn of The
+        GrRayTud ( see class Interactions help)
+
+    Methods
+    -------
+
+    load(_filetud,sl)  : load from a .tud file
+    eval()
+
+    &quot;&quot;&quot;
+    def __init__(self):
+        self.nray = 0
+        # Interactions instance
+        self.I = Interactions()
+
+    def __repr__(self):
+        s = &#39;&#39;
+        ni = 0
+        nl = 0
+        for k in self:
+            r = self[k][&#39;rayidx&#39;]
+            nr = len(r)
+            s = s + str(k)+&#39; / &#39;+str(nr)+ &#39; : &#39;+str(r)+&#39;\n&#39;
+            ni = ni + nr*k
+            nl = nl + nr*(2*k+1)
+        s = s + &#39;-----&#39;+&#39;\n&#39;
+        s = s+&#39;ni : &#39;+str(ni)+&#39;\n&#39;
+        s = s+&#39;nl : &#39;+str(nl)+&#39;\n&#39;
+        return(s)
+
+<div class="viewcode-block" id="GrRayTud.dir"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.dir">[docs]</a>    def dir(self):
+        &quot;&quot;&quot; list the available file in tuddir
+
+
+        Returns
+        -------
+        lfile_tud : list
+            sorted list of all the .tud file of tuddir
+        lfile_tang : list
+            sorted list of all the .tang file of tuddir
+        lfile_rang : list
+            sorted list of all the .rang file of tuddir
+        lfile_tauk : list
+            sorted list of all the .tauk file of tuddir
+
+        Notes
+        -----
+        tuddir is defined in the Project module
+
+        Example
+        -------
+
+        &gt;&gt;&gt; from pylayers.antprop.raysc import *
+        &gt;&gt;&gt; g = GrRay3D()
+
+        &quot;&quot;&quot;
+
+        pathname = tuddir + &#39;/*.tud&#39;
+        lfile_l = glob.glob(pathname)
+        lfile_tud = []
+        for fi in lfile_l:
+            fis = pyu.getshort(fi)
+            lfile_tud.append(fis)
+        lfile_tud.sort()
+
+        pathname = tuddir + &#39;/*.tang&#39;
+        lfile_l = glob.glob(pathname)
+        lfile_tang = []
+        for fi in lfile_l:
+            fis = pyu.getshort(fi)
+            lfile_tang.append(fis)
+        lfile_tang.sort()
+
+        pathname = tuddir + &#39;/*.rang&#39;
+        lfile_l = glob.glob(pathname)
+        lfile_rang = []
+        for fi in lfile_l:
+            fis = pyu.getshort(fi)
+            lfile_rang.append(fis)
+        lfile_rang.sort()
+
+        pathname = tuddir + &#39;/*.tauk&#39;
+        lfile_l = glob.glob(pathname)
+        lfile_tauk = []
+        for fi in lfile_l:
+            fis = pyu.getshort(fi)
+            lfile_tauk.append(fis)
+        lfile_tauk.sort()
+
+        return lfile_tud, lfile_tang, lfile_rang, lfile_tauk
+</div>
+<div class="viewcode-block" id="GrRayTud.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.delay">[docs]</a>    def delay(self):
+        &quot;&quot;&quot; return ray delays in an array
+        &quot;&quot;&quot;
+        dt = np.array([])
+        for nr in range(self.nray):
+            d = self.rayTud[nr].delay()
+            dt = np.hstack((dt, d))
+        return(dt)
+</div>
+<div class="viewcode-block" id="GrRayTud.choose"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.choose">[docs]</a>    def choose(self):
+        &quot;&quot;&quot; Choose a tud  file in tuddir
+        &quot;&quot;&quot;
+        import tkFileDialog
+        FD = tkFileDialog
+        filetud = FD.askopenfilename(filetypes=[(&quot;Fichiers  &quot;, &quot;*.tud&quot;),
+                                     (&quot;All&quot;, &quot;*&quot;)],
+                                     title=&quot;Please choose a Tracing file&quot;,
+                                     initialdir=tuddir)
+        _filetud = pyu.getshort(filetud)
+        tabc = _filetud.split(&#39;_&#39;)
+        _filestr = tabc[0] + &#39;.str&#39;
+        _fileslab = tabc[1] + &#39;.slab&#39;
+        _filemat = tabc[2] + &#39;.mat&#39;
+        sl = Slab.SlabDB()
+        sl.mat = Slab.MatDB()
+        sl.mat.load(_filemat)
+        sl.load(_fileslab)
+        # indoor = Indoor(sl,_filestr)
+        self.load(_filetud, sl)
+</div>
+<div class="viewcode-block" id="GrRayTud.save"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.save">[docs]</a>    def save(self, _filetud=&#39;ftud&#39;, _filetang=&#39;ftang&#39;, _filerang=&#39;frang&#39;):
+        &quot;&quot;&quot;
+            save .tud .tang .rang
+
+            Parameters
+            ----------
+
+            _filetud  :
+            _filetang :
+            _filerang :
+
+        &quot;&quot;&quot;
+
+        filetud = pyu.getlong(_filetud, pstruc[&#39;DIRTUD&#39;])
+        filetang = pyu.getlong(_filetang, pstruc[&#39;DIRTUD&#39;])
+        filerang = pyu.getlong(_filerang, pstruc[&#39;DIRTUD&#39;])
+
+        fo = open(filetud, &quot;wb&quot;)
+        data = stru.pack(&#39;i&#39;, self.nray)
+
+        for k in range(self.nray):
+            rk = self.rayTud[k]
+            ni = rk.ni
+            dt = stru.pack(&#39;i&#39;, ni)
+            data = data + dt
+            for it in rk.inter:
+                if (it.typ == -1):
+                    dt = stru.pack(&#39;i&#39;, it.typ)
+                    data = data + dt
+                    dt = stru.pack(&#39;4d&#39;, it.M[0, 0], it.M[
+                        0, 1], it.M[1, 0], it.M[1, 1])
+                    data = data + dt
+                elif (it.typ == 0):
+                    dt = stru.pack(&#39;i&#39;, it.typ)
+                    data = data + dt
+                    dt = stru.pack(&#39;d&#39;, it.dist)
+                    data = data + dt
+                elif (it.typ == 1):
+                    dt = stru.pack(&#39;i&#39;, it.typ)
+                    data = data + dt
+                    dt = stru.pack(&#39;3d&#39;, it.theta, it.si, it.sr)
+                    data = data + dt
+                elif (it.typ == 2):
+                    dt = stru.pack(&#39;i&#39;, it.typ)
+                    data = data + dt
+                    dt = stru.pack(&#39;3d&#39;, it.theta, it.si, it.st)
+                    data = data + dt
+                elif (it.typ == 3):
+                    dt = stru.pack(&#39;i&#39;, it.typ)
+                    data = data + dt
+                    dt = stru.pack(&#39;6d&#39;, it.theta, it.thetad,
+                                   it.si, it.sd, it.beta, it.N)
+                    data = data + dt
+                    dt = stru.pack(&#39;i&#39;, it.typed)
+                    data = data + dt
+                dt = stru.pack(
+                    &#39;8i&#39;, it.datMat[0], it.datMat[
+                        1], it.datMat[2], it.datMat[3],
+                               it.datMat[4], it.datMat[5], it.datMat[6], it.datMat[7])
+                data = data + dt
+        fo.write(data)
+        fo.close()
+
+        fo = open(filetang, &quot;wb&quot;)
+        fo.write(stru.pack(&#39;i&#39;, self.nray))
+        for ag in self.tang:
+            fo.write(stru.pack(&#39;2d&#39;, ag[0], ag[1]))
+        fo.close()
+
+        fo = open(filerang, &quot;wb&quot;)
+        fo.write(stru.pack(&#39;i&#39;, self.nray))
+        for ag in self.rang:
+            fo.write(stru.pack(&#39;2d&#39;, ag[0], ag[1]))
+        fo.close()
+</div>
+<div class="viewcode-block" id="GrRayTud.load"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.load">[docs]</a>    def load(self, _filetud, _filetang, _filerang, sl):
+        &quot;&quot;&quot; Load a set of Ray from the PulsRay .tud file
+
+        Parameters
+        ----------
+        _filename  : tud filename
+        _filetang  : tang filename
+        _filerang  : rang filename
+        sl         : slab database object
+
+        Notes
+        -----
+        a filename beginning with _ is a short filename
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            &gt;&gt;&gt; from pylayers.gis.layout import *
+            &gt;&gt;&gt; from pylayers.antprop.raysc import *
+
+
+
+        &quot;&quot;&quot;
+
+        valerr = False
+
+        filetud = pyu.getlong(_filetud, pstruc[&#39;DIRTUD&#39;])
+        filetang = pyu.getlong(_filetang, pstruc[&#39;DIRTUD&#39;])
+        filerang = pyu.getlong(_filerang, pstruc[&#39;DIRTUD&#39;])
+
+        fo = open(filetud, &quot;rb&quot;)
+        data = fo.read()
+        fo.close()
+
+        start = 0
+        stop = start + 4
+        dt = data[start:stop]
+        self.nray = stru.unpack(&#39;i&#39;, dt)[0]
+        self.rayTud = []
+
+        nimax = 0
+        index = 0
+        #
+        # in order to initialize all type of interaction with the correct
+        # frequencies
+
+        B = IntB()
+        L = IntL()
+        R = IntR()
+        T = IntT()
+        D = IntD()
+
+        self.mapp = np.zeros((3))
+        for k in range(self.nray):
+            nir = 0
+            raytud = RayTud()
+            start = stop
+            stop = start + 4
+            dt = data[start:stop]
+            #
+            # Interaction number over the ray
+            #
+            # if ni==0  : LOS case no interaction
+            #
+            nbint = stru.unpack(&#39;i&#39;, dt)[0]
+            nbi = nbint
+#            raytud.ni = nbint
+#            Inter = []
+
+            for i in range(nbint):
+                start = stop
+                stop = start + 4
+                dt = data[start:stop]
+                caract = stru.unpack(&#39;i&#39;, dt)[0]
+                ii = i
+                if i == 0:
+                    decal = False
+                    if (caract != -1):
+                        # check if first interaction is a IntB.
+                        # if not, this first interaction is forced to be
+                        # an identity matrix
+                        M = np.array((1, 0, 0, 1))
+                        try:
+                            B.stack(M, index)  # inter = IntB(M)
+                        except:
+                            B = IntB(data=M, idx=index)
+                        # because this id matrix, the ray has 1 extra interaction
+                        # so we need to
+                        # 1.create the correct key dictionnary
+                        # 2.remap the index
+                        # 3. use another variable loop (ii) incremented
+
+                        nbi = nbi+1
+
+                    try:
+                        self[nbi][&#39;rays&#39;] = np.vstack((self[nbi][&#39;rays&#39;],
+                                                       np.zeros((1, nbi), dtype=int)))
+                        self[nbi][&#39;nbrays&#39;] = self[nbi][&#39;nbrays&#39;]+1
+                        self[nbi][&#39;rayidx&#39;] = np.hstack((
+                            self[nbi][&#39;rayidx&#39;], np.array(([k]))))
+
+                    except:
+                        self[nbi] = {}
+                        self[nbi][&#39;rays&#39;] = np.zeros((1, nbi), dtype=int)
+                        self[nbi][&#39;nbrays&#39;] = 1
+                        self[nbi][&#39;rayidx&#39;] = np.array(([k]))
+
+                    try:
+                        self.rayidx = np.hstack((self.rayidx, np.array((nbi))))
+                    except:
+                        self.rayidx = np.array((nbi))
+
+                    if nbi != nbint:
+                        self[nbi][&#39;rays&#39;][-1][ii] = index
+                        self.mapp = np.vstack((
+                            self.mapp, np.array([index, k, -1])))
+                        index = index+1
+                        decal = True
+
+                # decal = True if an extra B interaction is added at the begining
+                # of the ray
+                if decal:
+                    ii = i + 1
+                self[nbi][&#39;rays&#39;][-1][ii] = index
+                # B interaction
+                if (caract == -1):
+                    start = stop
+                    stop = start + 32
+                    dt = data[start:stop]
+                    m = stru.unpack(&#39;4d&#39;, dt)
+                    M = np.array((m[0], m[1], m[2], m[3]))
+                    try:
+                        B.stack(data=M, idx=index)  # inter = IntB(M)
+                    except:
+                        print &#39;except B&#39;
+                        B = IntB(data=M, idx=index)
+                    index = index+1
+#                   M = np.array([[m[0], m[1]], [m[2], m[3]]])
+#                    inter = IntB(M)
+            #        inter.data = M
+
+                # Los Interaction
+                elif (caract == 0):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    dist = stru.unpack(&#39;d&#39;, dt)
+                    dist = np.array((dist))
+                    try:
+                        L.stack(data=dist, idx=index)  # inter = IntB(M)
+                    except:
+                        print &#39;except L&#39;
+                        L = IntL(dist, index)
+                    index = index+1
+#                    inter = IntL(dist[0])
+            #        inter.data = dist
+
+                # Reflexion Interaction
+                elif (caract == 1):
+                    start = stop
+                    stop = start + 24
+                    dt = data[start:stop]
+                    datR = stru.unpack(&#39;3d&#39;, dt)
+                    dat = np.array((datR[0], datR[1], datR[2]))
+                    try:
+                        R.stack(data=dat, idx=index)  # inter = IntB(M)
+                    except:
+                        print &#39;except R&#39;
+                        R = IntR(data=dat, idx=index)
+#                    inter = IntR(datR)
+#            #        inter.data = datR
+                    index = index+1
+
+                # Transmission interaction
+                elif (caract == 2):
+                    start = stop
+                    stop = start + 24
+                    dt = data[start:stop]
+                    datT = stru.unpack(&#39;3d&#39;, dt)
+                    dat = np.array((datT[0], datT[1], datT[2]))
+                    try:
+                        T.stack(data=dat, idx=index)
+                    except:
+                        print &#39;except T&#39;
+                        T = IntT(data=dat, idx=index)
+                    index = index+1
+#                    inter = IntT(datT)
+#            #        inter.data = datT
+
+                # Diffraction interaction
+######################## TODO AFTER THIS POINT !!!!!!!!!!!!!!
+                elif (caract == 3):
+                    print &#39;caract 3&#39;
+            #        inter.data = []
+                    start = stop
+                    stop = start + 48
+                    dt = data[start:stop]
+                    datD = stru.unpack(&#39;6d&#39;, dt)
+#            #        (inter.data).append(datD)
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    typD = stru.unpack(&#39;i&#39;, dt)
+                    index = index+1
+#                    inter = IntD(datD, typD)
+#            #        (inter.data).append(typD)
+
+                nir = nir+1
+                start = stop
+                stop = start + 32
+                dt = data[start:stop]
+                datMat = stru.unpack(&#39;8i&#39;, dt)
+                l1 = datMat[0]
+                c1 = datMat[1]
+                r1 = datMat[2]
+                s1 = datMat[3]
+
+                l2 = datMat[4]
+                c2 = datMat[5]
+                r2 = datMat[6]
+                s2 = datMat[7]
+
+#  if interaction is reflexion or transmission
+#                if caract == 1 or caract == 2 or caract == 3:
+
+                    ## find corresponding name
+#                    slname = self.I.slab.di[slidx]
+#                    # if the material hasn&#39;t be evaluated before
+#                    if not self.I.slab[slname][&#39;evaluated&#39;]:
+#                        # evaluate it
+#                        print &quot;evaluate&quot;,slname
+#                        self.I.slab[slname].ev(fGHz=self.I.f, theta=self.I.t)
+                ### fill slab index dictionnary for each type of interactions
+                if caract == 1:
+                    ## read material index
+
+                    slidx = c1
+                    ## find corresponding name
+                    slname = R.slab.di[slidx]
+                    try:
+                        R.dusl[slname].append(R.uslidx)
+                    except:
+                        R.dusl[slname] = [R.uslidx]
+                    R.uslidx = R.uslidx + 1
+                if caract == 2:
+                    slidx = c1
+                    slname = T.slab.di[slidx]
+                    try:
+                        T.dusl[slname].append(T.uslidx)
+                    except:
+                        T.dusl[slname] = [T.uslidx]
+                    T.uslidx = T.uslidx + 1
+            # in case of diffraction
+                if caract == 3:
+                    pass
+
+        ### the total number of interaction( for all rays)
+#        self.I.nimax=index
+        ### Add all type of interactions into the Interaction class
+        self.I.add([B, L, R, T, D])
+</div>
+<div class="viewcode-block" id="GrRayTud.ray"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.ray">[docs]</a>    def ray(self, r):
+        &quot;&quot;&quot;
+            Give the ray number and it returns the index of its interactions
+        &quot;&quot;&quot;
+        raypos = np.nonzero(self[self.rayidx[r]][&#39;rayidx&#39;] == r)
+        return(self[self.rayidx[r]][&#39;rays&#39;][raypos][0])
+</div>
+<div class="viewcode-block" id="GrRayTud.typ"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.typ">[docs]</a>    def typ(self, r):
+        &quot;&quot;&quot;
+            return the list of interaction type of a given ray
+        &quot;&quot;&quot;
+
+        a = self.ray(r)
+        return(self.I.typ[a])
+</div>
+<div class="viewcode-block" id="GrRayTud.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.eval">[docs]</a>    def eval(self):
+        &quot;&quot;&quot;
+        evaluation of Ctilde
+        &quot;&quot;&quot;
+        print &#39;GrRayTUD evaluation&#39;
+        if not self.I.evaluated:
+            self.I.eval()
+
+        self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
+        self.delays = np.zeros((self.nray))
+        self.dis = np.zeros((self.nray))
+        nf = self.I.nf  # number of frequence
+
+        for l in self.keys():
+            # l stands for the number of interactions
+            r = self[l][&#39;nbrays&#39;]
+            # reshape in order to have a 1D list of insde
+            # reshape ray index
+            rrl = self[l][&#39;rays&#39;].reshape(r*l)
+            # get the corresponding evaluated interactions
+            A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+            alpha = self.I.alpha[rrl].reshape(r, l)
+            gamma = self.I.gamma[rrl].reshape(r, l)
+            si0 = self.I.si0[rrl].reshape(r, l)
+            sout = self.I.sout[rrl].reshape(r, l)
+
+            try:
+                del Z
+            except:
+                pass
+
+            ## loop on the all the interactions of ray with l interactions
+            for i in range(1, l-1, 2):
+
+###########################################
+#                # Divergence factor D
+##                 not yet implementented
+###########################################
+#                if i == 1:
+#                    D0=1./si0[:,1]
+#                    rho1=si0[:,1]*alpha[:,i]
+#                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
+#                    D=np.sqrt(
+#                     ( (rho1 ) / (rho1 + sout[:,i]) )
+#                     *( (rho2) / (rho2 + sout[:,i])))
+#                    D=D*D0
+#                    rho1=rho1+(sout[:,i]*alpha[:,i])
+#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+#                    pdb.set_trace()
+##                     gerer le loss
+#                    if np.isnan(D).any():
+#                        p=np.nonzero(np.isnan(D))[0]
+#                        D[p]=1./sout[p,1]
+#                else :
+#                    D=np.sqrt(
+#                     ( (rho1 ) / (rho1 + sout[:,i]) )
+#                     *( (rho2) / (rho2 + sout[:,i])))
+
+#                    rho1=rho1+(sout[:,i]*alpha[:,i])
+#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+###########################################
+
+                #  A0  (X dot Y)
+                #  |    |     |
+                #  v    v     v
+                ##########################
+                ## B  # I  # B  # I  # B #
+                ##########################
+                #      \_____/   \______/
+                #         |         |
+                #       Atmp(i)   Atmp(i+1)
+                #
+                # Z=Atmp(i) dot Atmp(i+1)
+
+                X = A[:, :, i, :, :]
+                Y = A[:, :, i+1, :, :]
+                ## Dot product interaction X Basis
+                Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
+                              ..., np.newaxis, :, :], axis=-2)  # *D[np.newaxis,:,np.newaxis,np.newaxis]
+                if i == 1:
+                ## First Baspdis added
+                    A0 = A[:, :, i-1, :, :]
+                    Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
+                               ..., np.newaxis, :, :], axis=-2)
+                else:
+                    # dot product previous interaction with latest
+                    Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
+                               ..., np.newaxis, :, :], axis=-2)
+
+            # fill the C tilde
+            self.Ctilde[:, self[l][&#39;rayidx&#39;], :, :] = Z[:, :, :, :]
+
+            # delay computation:
+            self[l][&#39;dis&#39;] = self.I.si0[self[l][&#39;rays&#39;][
+                :, 1]] + np.sum(self.I.sout[self[l][&#39;rays&#39;]], axis=1)
+
+            # Power losses due to distances
+            # will be removed once the divergence factor will be implemented
+            self.Ctilde[:, self[l][&#39;rayidx&#39;], :, :] = self.Ctilde[:, self[l][
+                &#39;rayidx&#39;], :, :]*1./(self[l][&#39;dis&#39;][np.newaxis, :, np.newaxis, np.newaxis])
+            self.delays[self[l][&#39;rayidx&#39;]] = self[l][&#39;dis&#39;]/0.3
+            self.dis[self[l][&#39;rayidx&#39;]] = self[l][&#39;dis&#39;]
+</div>
+<div class="viewcode-block" id="GrRayTud.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.info">[docs]</a>    def info(self, r):
+        &#39;&#39;&#39;
+            information for a given ray r
+
+        Attributes
+        ----------
+        r : a ray number
+
+        &#39;&#39;&#39;
+        print &#39;-------------------------&#39;
+        print &#39;Informations of ray #&#39;, r
+        print &#39;-------------------------\n&#39;
+
+        ray = self.ray(r)
+        typ = self.typ(r)
+        print &#39;{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}&#39;.format(&#39;Index&#39;, &#39;type&#39;, &#39;material&#39;, &#39;th(rad)&#39;, &#39;alpha&#39;, &#39;gamma2&#39;)
+        for iidx, i in enumerate(typ):
+            if i == &#39;T&#39; or i == &#39;R&#39;:
+                I = getattr(self.I, i)
+                for m in I.dusl.keys():
+                    midx = I.dusl[m]
+                    Iidx = np.array((I.idx))[midx]
+                    th = I.data[I.dusl[m], 0]
+                    gamma = I.gamma[midx]
+                    alpha = I.alpha[midx]
+                    for ii, Ii in enumerate(Iidx):
+                        if Ii in ray:
+                            print &#39;{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}&#39;.format(Ii, i, m, th[ii], alpha[ii], gamma[ii])
+            else:
+                print &#39;{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}&#39;.format(ray[iidx], i, &#39;-&#39;, &#39;-&#39;, &#39;-&#39;, &#39;-&#39;)
+
+        print &#39;\n----------------------------------------&#39;
+        print &#39; Matrix of ray #&#39;, r, &#39;at f=&#39;, self.I.fGHz[0]
+        print &#39;----------------------------------------&#39;
+
+        for iidx, i in enumerate(typ):
+            print &#39;interaction #&#39;, ray[iidx], &#39;type:&#39;, i
+            print self.I.I[0, ray[iidx], :, :]
+</div>
+<div class="viewcode-block" id="GrRayTud.imshowinter"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.imshowinter">[docs]</a>    def imshowinter(self, r, f, evaluated=False, show=True):
+        &quot;&quot;&quot;
+            im show interactions for
+            a given ray r and
+            a given freq index f
+        &quot;&quot;&quot;
+        plt.ion()
+        nbinter = self.rayidx[r]
+        # find the position of the ray into the dictionnary of legnth of
+        # interactions
+        pray = np.nonzero(self[nbinter][&#39;rayidx&#39;] == r)
+        # get the interaciton idx
+        inter = self[nbinter][&#39;rays&#39;][pray][0]
+        fig, axs = plt.subplots(
+            nrows=2, ncols=nbinter, sharex=True, sharey=True)
+        for i, data in enumerate(self.I.I[f, inter]):
+            axs[0, i].imshow(np.imag(data), interpolation=&#39;none&#39;)
+            axs[1, i].imshow(np.real(data), interpolation=&#39;none&#39;)
+            axs[1, i].set_xlabel(&#39;inter&#39;+self.I.typ[inter[i]])
+            if i == 0:
+                axs[0, i].set_ylabel(&#39;imag&#39;)
+                axs[1, i].set_ylabel(&#39;real&#39;)
+            if i == nbinter-1:
+                axs[0, i].colorbar()
+
+        if self.I.evaluated and evaluated:
+            fig2, axs2 = plt.subplots(
+                nrows=2, ncols=1, sharex=True, sharey=True)
+            data = self[nbinter][&#39;Ctilde&#39;][f, pray, :, :]
+            data = data.reshape(2, 2)
+            axs2[0].imshow(np.imag(data), interpolation=&#39;none&#39;)
+            axs2[1].imshow(np.real(data), interpolation=&#39;none&#39;)
+            axs2[1].set_xlabel(&#39;Ctilde ray number :&#39; + str(r))
+            axs2[0].set_ylabel(&#39;imag&#39;)
+            axs2[1].set_ylabel(&#39;real&#39;)
+            if i == nbinter-1:
+                axs[0, i].colorbar()
+
+        if show:
+            plt.show()
+</div>
+<div class="viewcode-block" id="GrRayTud.get_thetas"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.get_thetas">[docs]</a>    def get_thetas(self):
+        &quot;&quot;&quot;
+        Get all thetas ( incidence angles ) from all computed RayTud
+
+        Returns
+        -------
+            np.array containg all incidence angles theta from all rays
+
+        &quot;&quot;&quot;
+        th = []
+        for r in self.rayTud:
+            for idx, i in enumerate(r.inter):
+                if not (isinstance(i, IntB) or isinstance(i, IntL)):
+                    th.append(r.inter[idx].theta)
+        return(np.unique(th))
+</div>
+<div class="viewcode-block" id="GrRayTud.get_mat"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.get_mat">[docs]</a>    def get_mat(self):
+        &quot;&quot;&quot;
+        Get all used materials from all computed Raytud
+
+        Returns
+        -------
+            np.array containg all materials involved in raytracing
+
+        &quot;&quot;&quot;
+        mat = []
+        for r in self.rayTud:
+            for idx, i in enumerate(r.inter):
+                if not (isinstance(i, IntB) or isinstance(i, IntL)):
+                    for midx, m in enumerate(r.inter[idx].Mat1):
+                        mat.append(r.inter[idx].Mat1[midx][&#39;name&#39;])
+        return(np.unique(mat))
+
+
+#    def info(self, n=-1):
+#        &quot;&quot;&quot; info
+#        Parameters
+#        ----------
+#        n : int
+#            ray index (default = -1 all rays)
+#        &quot;&quot;&quot;
+#        print &quot;Nb rayons : &quot;, self.nray
+#        if n == -1:
+#            for i in range(self.nray):
+#                print &quot;Rayon : &quot;, i
+#                self.rayTud[i].info()
+#                print &quot;\n&quot;
+#        else:
+#            print &quot;rayon no : &quot;, n
+#            self.rayTud[n].info()
+</div></div>
+<div class="viewcode-block" id="GrRay3D"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D">[docs]</a>class GrRay3D(object):
+    &quot;&quot;&quot; A set of Ray3D with the same Tx and Rx
+
+    Attributes
+    ----------
+
+    A GrRay is a group of rays sharing the same end points (Tx and Rx)
+    n     : number of ray3D
+    Tx    : Tx point (3x1)
+    Rx    : Rx point (3x1)
+    ray3d : list of Ray3D object
+
+    Methods
+    -------
+
+    choose()           : choose tra file
+    load(_filename,L)  : load a grRay3d from .tra file
+    save(_filename)    : load a grRay3d from .tra file
+    info(level)        : display information about GrRay3D
+    show3(self,bdis=True,bstruc=True,id=0) : geomview visualization
+    reciprocal(Gs)     :
+
+    &quot;&quot;&quot;
+    def __init__(self):
+        self.n = 0
+        self.Tx = np.array([0.0, 0.0, 0.0])
+        self.Rx = np.array([0.0, 0.0, 0.0])
+
+<div class="viewcode-block" id="GrRay3D.dir"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.dir">[docs]</a>    def dir(self):
+        &quot;&quot;&quot; list the available file in tradir
+
+
+        Returns
+        -------
+        lfile_s : list
+            sorted list of all the .str file of tradir
+
+        Notes
+        -----
+        tradir is defined in the Project module
+
+        Example
+        -------
+        &gt;&gt;&gt; from pylayers.antprop.raysc import *
+        &gt;&gt;&gt; g = GrRay3D()
+        &gt;&gt;&gt; lfile = g.dir()
+
+        .. todo:
+            limit to a given filestruc
+        &quot;&quot;&quot;
+
+        pathname = tradir + &#39;/*.tra&#39;
+        lfile_l = glob.glob(pathname)
+        lfile_s = []
+        for fi in lfile_l:
+            fis = pyu.getshort(fi)
+            lfile_s.append(fis)
+        lfile_s.sort()
+        return lfile_s
+</div>
+<div class="viewcode-block" id="GrRay3D.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.info">[docs]</a>    def info(self, level=1):
+        &quot;&quot;&quot;
+        Parameters
+        ----------
+        level : int
+            level of information
+
+        &quot;&quot;&quot;
+        print &quot;Number of Ray : &quot;, self.n
+        if level == 1:
+            for i in range(self.n):
+                self.ray3d[i].info()
+</div>
+<div class="viewcode-block" id="GrRay3D.choose"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.choose">[docs]</a>    def choose(self):
+        &quot;&quot;&quot; Choose a Tracing  file in tradir
+
+        &quot;&quot;&quot;
+        import tkFileDialog
+        FD = tkFileDialog
+        filetra = FD.askopenfilename(filetypes=[(&quot;Fichiers Launching &quot;, &quot;*.tra&quot;), (&quot;All&quot;, &quot;*&quot;)], title=&quot;Please choose a Tracing file&quot;, initialdir=tradir)
+        _filetra = pyu.getshort(filetra)
+        tabc = _filetra.split(&#39;_&#39;)
+        _filestr = tabc[0] + &#39;.str&#39;
+        _fileslab = tabc[1] + &#39;.slab&#39;
+        _filemat = tabc[2] + &#39;.mat&#39;
+        sl = Slab.SlabDB()
+        sl.mat = Slab.MatDB()
+        sl.mat.load(_filemat)
+        sl.load(_fileslab)
+        self.L = Layout()
+        self.L.loadstr(_filestr)
+</div>
+<div class="viewcode-block" id="GrRay3D.load"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.load">[docs]</a>    def load(self, _filename, L):
+        &quot;&quot;&quot; load a .tra de PulsRay
+
+        Parameters
+        ----------
+        _filename : PulsRay .tra data format  filename
+        L         : Layout object
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            &gt;&gt;&gt; from pylayers.antprop.raysc import *
+            &gt;&gt;&gt; from pylayers.util.project import *
+            &gt;&gt;&gt; from pylayers.gis.layout import *
+            &gt;&gt;&gt; import matplotlib.pyplot as plt
+            &gt;&gt;&gt; import numpy as np
+            &gt;&gt;&gt; import scipy as sp
+            &gt;&gt;&gt; g = GrRay3D()
+            &gt;&gt;&gt; lfile = g.dir()
+            &gt;&gt;&gt; n = len(lfile)
+            &gt;&gt;&gt; file0  = lfile[0]
+            &gt;&gt;&gt; s1 = file0.split(&#39;_&#39;)
+            &gt;&gt;&gt; _filestr = s1[0]+&#39;.str&#39;
+            &gt;&gt;&gt; L = Layout()
+            &gt;&gt;&gt; L.load(_filestr)
+            &gt;&gt;&gt; f,a = L.showGs()
+            &gt;&gt;&gt; g.load(file0,L)
+            &gt;&gt;&gt; f1 = g.show(f,a,np.arange(10))
+            &gt;&gt;&gt; plt.show()
+            &gt;&gt;&gt; f,a = L.showGs()
+            &gt;&gt;&gt; f2 = g.show(f,a,np.arange(100))
+            &gt;&gt;&gt; plt.show()
+            &gt;&gt;&gt; f,a = L.showGs()
+            &gt;&gt;&gt; f3 = g.show(f,a,np.arange(300))
+            &gt;&gt;&gt; plt.show()
+
+        &quot;&quot;&quot;
+        filename = pyu.getlong(_filename, pstruc[&#39;DIRTRA&#39;])
+        try:
+            fo = open(filename, &quot;rb&quot;)
+        except:
+            raise NameError(filename)
+
+        data = fo.read()
+        fo.close()
+        #
+        # decode read data
+        #
+        start = 0
+        stop = start + 1024
+        dt = data[start:stop]
+        self.flch = dt.replace(&quot;\x00&quot;, &quot;&quot;)
+
+        start = stop
+        stop = start + 1024
+        dt = data[start:stop]
+        self.fpatra = dt.replace(&quot;\x00&quot;, &quot;&quot;)
+
+        start = stop
+        stop = start + 1024
+        dt = data[start:stop]
+        self.fspa = dt.replace(&quot;\x00&quot;, &quot;&quot;)
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Tx[0] = stru.unpack(&#39;d&#39;, dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Tx[1] = stru.unpack(&#39;d&#39;, dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Tx[2] = stru.unpack(&#39;d&#39;, dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Rx[0] = stru.unpack(&#39;d&#39;, dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Rx[1] = stru.unpack(&#39;d&#39;, dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Rx[2] = stru.unpack(&#39;d&#39;, dt)[0]
+
+        start = stop
+        stop = start + 4
+        dt = data[start:stop]
+        self.Tracing_exist = stru.unpack(&#39;i&#39;, dt)[0]
+
+        if (self.Tracing_exist != 0):
+            start = stop
+            stop = start + 4
+            dt = data[start:stop]
+            self.n = stru.unpack(&#39;i&#39;, dt)[0]
+
+            self.ray3d = []
+
+            for i in range(self.n):
+                # print &quot;Rayon NÃÂ° : &quot;,i
+                ray3D = Ray3D()
+                start = stop
+                stop = start + 4
+                dt = data[start:stop]
+                ray3D.nn = stru.unpack(&#39;i&#39;, dt)[0]
+
+                ray3D.pt = np.array(np.zeros([ray3D.nn, 3]), dtype=np.float64)
+
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.pt[k, 0] = stru.unpack(&#39;d&#39;, dt)[0]
+
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.pt[k, 1] = stru.unpack(&#39;d&#39;, dt)[0]
+
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.pt[k, 2] = stru.unpack(&#39;d&#39;, dt)[0]
+
+                ray3D.nstr = np.array(np.zeros(ray3D.nn), dtype=int)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    ray3D.nstr[k] = stru.unpack(&#39;i&#39;, dt)[0]
+
+                ray3D.deep = np.array(np.zeros(ray3D.nn), dtype=int)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    ray3D.deep[k] = stru.unpack(&#39;i&#39;, dt)[0]
+
+                ray3D.beta0 = np.array(np.zeros(ray3D.nn), dtype=np.float64)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.beta0[k] = stru.unpack(&#39;d&#39;, dt)[0]
+
+                ray3D.phii = np.array(np.zeros(ray3D.nn), dtype=np.float64)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.phii[k] = stru.unpack(&#39;d&#39;, dt)[0]
+
+                ray3D.phid = np.array(np.zeros(ray3D.nn), dtype=np.float64)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.phid[k] = stru.unpack(&#39;d&#39;, dt)[0]
+
+                ray3D.elength = np.array(
+                    np.zeros(ray3D.nn - 1), dtype=np.float64)
+                for k in range(ray3D.nn - 1):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.elength[k] = stru.unpack(&#39;d&#39;, dt)[0]
+
+                ray3D.etype = np.array(np.zeros(ray3D.nn - 1), dtype=int)
+                for k in range(ray3D.nn - 1):
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    ray3D.etype[k] = stru.unpack(&#39;i&#39;, dt)[0]
+                ray3D.etype = np.append(ray3D.etype, [0])
+                #
+                # local basis creation
+                #
+                # DEBUG
+                # if i &lt; 410:
+                #    print ray3D.nstr
+                #    n1 = []
+                #    for kk in range(len(ray3D.nstr)-2):
+                #        p1 = ray3D.pt[kk+1,0:2]
+                #        nn = struc.onseg(p1,0.2)
+                #        try:
+                #            num = nn[0]+1
+                #            n1.append(num)
+                #        except:
+                #            n1.append(-7)
+                #    print n1
+                iz = np.nonzero(ray3D.nstr == 0)
+                niz = len(iz[0])
+                self.ray3d.append(ray3D)
+                # if niz==2:
+                #    ray3D.locbas(L)
+                #    self.ray3d.append(ray3D)
+                # else:
+                #    self.n = self.n-1
+                    # print &quot;Problem with ray : &quot;,i
+                    # print ray3D.nstr
+                    # print ray3D.pt
+        fo.close()
+#           except:
+#               print &quot;Le fichier&quot;, filename, &quot;est introuvable&quot;
+</div>
+<div class="viewcode-block" id="GrRay3D.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.delay">[docs]</a>    def delay(self):
+        &quot;&quot;&quot; delay
+
+        Returns
+        -------
+
+        td  : np.array
+            delays
+
+        &quot;&quot;&quot;
+        td = np.array([])
+        for n in range(self.n):
+            td = np.hstack((td, self.ray3d[n].delay()))
+        return(td)
+</div>
+<div class="viewcode-block" id="GrRay3D.save"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.save">[docs]</a>    def save(self, _filename):
+        &quot;&quot;&quot;
+        save
+
+        Parameters
+        ---------
+        _filename : str
+
+        Save a  GrRay3d object in a .tra de PulsRay
+        filename : PulsRay .tra data format  filename
+        &quot;&quot;&quot;
+
+        filename = pyu.getlong(_filename, pstruc[&#39;DIRTRA&#39;])
+        try:
+            fo = open(filename, &quot;wb&quot;)
+        except:
+            raise NameError(filename)
+
+        dt_lch = self.flch
+        L = len(dt_lch)
+        if L &lt; 1024:
+            for i in range(1024 - L):
+                dt_lch = dt_lch + &quot;\x00&quot;
+
+        dt_patra = self.fpatra
+        L = len(dt_patra)
+        if L &lt; 1024:
+            for i in range(1024 - L):
+                dt_patra = dt_patra + &quot;\x00&quot;
+
+        dt_spa = self.fspa
+        L = len(dt_spa)
+        if L &lt; 1024:
+            for i in range(1024 - L):
+                dt_spa = dt_spa + &quot;\x00&quot;
+
+        data = dt_lch + dt_patra + dt_spa
+
+        dt = stru.pack(&#39;d&#39;, self.Tx[0])
+        data = data + dt
+
+        dt = stru.pack(&#39;d&#39;, self.Tx[1])
+        data = data + dt
+
+        dt = stru.ack(&#39;d&#39;, self.Tx[2])
+        data = data + dt
+
+        dt = stru.pack(&#39;d&#39;, self.Rx[0])
+        data = data + dt
+
+        dt = stru.pack(&#39;d&#39;, self.Rx[1])
+        data = data + dt
+
+        dt = stru.pack(&#39;d&#39;, self.Rx[2])
+        data = data + dt
+
+        dt = stru.pack(&#39;i&#39;, self.Tracing_exist)
+        data = data + dt
+
+        if (self.Tracing_exist != 0):
+
+            dt = stru.pack(&#39;i&#39;, self.n)
+            data = data + dt
+
+            for i in range(self.n):
+                ray3D = self.ray3d[i]
+
+                dt = stru.pack(&#39;i&#39;, ray3D.nn)
+                data_ray = dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;d&#39;, ray3D.pt[k, 0])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;d&#39;, ray3D.pt[k, 1])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;d&#39;, ray3D.pt[k, 2])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;i&#39;, ray3D.nstr[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;i&#39;, ray3D.deep[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;d&#39;, ray3D.beta0[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;d&#39;, ray3D.phii[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack(&#39;d&#39;, ray3D.phid[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn - 1):
+                    dt = stru.pack(&#39;d&#39;, ray3D.elength[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn - 1):
+                    dt = stru.pack(&#39;i&#39;, ray3D.etype[k])
+                    data_ray = data_ray + dt
+
+                data = data + data_ray
+        fo.write(data)
+        fo.close()
+</div>
+<div class="viewcode-block" id="GrRay3D.reciprocal"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.reciprocal">[docs]</a>    def reciprocal(self, L):
+        &quot;&quot;&quot;  Reciprocity channel
+
+        Parameters
+        ----------
+        L   : Layout object
+        return a reciprocal GrRay3D
+        &quot;&quot;&quot;
+        G = GrRay3D()
+
+        G.Tx = self.Rx
+        print &quot;G.Tx = &quot;, G.Tx
+        G.Rx = self.Tx
+        print &quot;G.Rx = &quot;, G.Rx
+        G.n = self.n
+
+        print &quot;G.n = &quot;, G.n
+        print &quot;self.n = &quot;, self.n
+        ray3D = []
+        for i in range(G.n):
+            ray3d = Ray3D()
+            ray3d.nn = self.ray3d[i].nn
+            nn = ray3d.nn
+
+            ray3d.pht = self.ray3d[i].phr
+            ray3d.phr = self.ray3d[i].pht
+            ray3d.tht = self.ray3d[i].thr
+            ray3d.thr = self.ray3d[i].tht
+            ray3d.deep = self.ray3d[i].deep
+
+            ray3d.elength = np.array(np.zeros(ray3d.nn - 1))
+            ray3d.etype = np.array(np.zeros(ray3d.nn - 1))
+
+            for j in range(ray3d.nn - 1):
+                ray3d.elength[j] = self.ray3d[i].elength[nn - j - 2]
+                ray3d.etype[j] = self.ray3d[i].etype[nn - j - 2]
+
+            ray3d.pt = np.array(np.zeros([ray3d.nn, 3]))
+            ray3d.phii = np.array(np.zeros(ray3d.nn))
+            ray3d.phid = np.array(np.zeros(ray3d.nn))
+            ray3d.beta0 = np.array(np.zeros(ray3d.nn))
+            ray3d.nstr = np.array(np.zeros(ray3d.nn))
+
+            for j in range(nn):
+                ray3d.pt[j] = self.ray3d[i].pt[nn - j - 1]
+                ray3d.phid[j] = self.ray3d[i].phid[nn - j - 1]
+                ray3d.phii[j] = self.ray3d[i].phii[nn - j - 1]
+                ray3d.beta0[j] = self.ray3d[i].beta0[nn - j - 1]
+
+                ray3d.nstr[j] = self.ray3d[i].nstr[nn - j - 1]
+
+            ray3d.locbas(L.Gs)
+            ray3D.append(ray3d)
+        G.ray3d = ray3D
+        return(G)
+</div>
+<div class="viewcode-block" id="GrRay3D.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.show">[docs]</a>    def show(self,fig=[], ax=[], rayset=np.array([]), col=&#39;b&#39;, node=False):
+        &quot;&quot;&quot; show a cluster of rays 
+
+        Parameters
+        ----------
+        fig    : figure instance 
+        ax     : axes instance  
+        rayset :
+            set of rays np.array([])
+        col  : string
+            default  {&#39;b&#39;}
+        node : boolean
+
+        &quot;&quot;&quot;
+        if fig ==[]:
+            fig = plt.gcf()
+        if ax==[]:
+            ax = fig.gca()
+
+        for i in rayset:
+            r = self.ray3d[i]
+            fig,ax=r.show(fig=fig,ax=ax, col=col, node=node)
+        return fig, ax
+
+</div>
+<div class="viewcode-block" id="GrRay3D.show3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.show3">[docs]</a>    def show3(self, rayset=np.array([]), bdis=True, bstruc=True, id=0):
+        &quot;&quot;&quot; 3D show using geomview
+
+        Parameters
+        ----------
+        rayset : set of index of rays to be displayed
+        bdis : display boolean - if False return .vect filename
+        id   : id of the grRray
+
+        &quot;&quot;&quot;
+        if (len(rayset) == 0):
+            rayset = range(self.n)
+
+        filename = pyu.getlong(&quot;grRay&quot; + str(id) + &quot;.list&quot;, pstruc[&#39;DIRGEOM&#39;])
+        fo = open(filename, &quot;w&quot;)
+        fo.write(&quot;LIST\n&quot;)
+        if bstruc:
+            fo.write(&quot;{&lt;defstr.off}\n&quot;)
+            # fo.write(&quot;{&lt;strucTxRx.off}\n&quot;)
+            for i in rayset:
+                r = self.ray3d[i]
+                col = np.array([0, 0, 1])
+                fileray = r.show3(False, False, False, col, i)
+                fo.write(&quot;{&lt; &quot; + fileray + &quot; }\n&quot;)
+        fo.close()
+        if (bdis):
+            chaine = &quot;geomview &quot; + filename + &quot; 2&gt;/dev/null &amp;&quot;
+            os.system(chaine)
+        else:
+            return(filename)
+</div></div>
+if __name__ == &quot;__main__&quot;:
+    doctest.testmod()
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

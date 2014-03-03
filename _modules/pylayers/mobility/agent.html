@@ -103,11 +103,29 @@
 <div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../../../modules/pylayers.mobility.agent.html#pylayers.mobility.agent.Agent">[docs]</a><span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;   Agent </span>
 
+<span class="sd">    Members</span>
+<span class="sd">    -------</span>
 
-<span class="sd">    The init method is doing more than initializing the object</span>
-<span class="sd">    </span>
-<span class="sd">    </span>
-<span class="sd">    </span>
+<span class="sd">    args</span>
+<span class="sd">    ID</span>
+<span class="sd">    name</span>
+<span class="sd">    type</span>
+<span class="sd">    net </span>
+<span class="sd">    epwr </span>
+<span class="sd">    gcom</span>
+<span class="sd">    sim </span>
+<span class="sd">    RAT </span>
+<span class="sd">    sens</span>
+<span class="sd">    dcond </span>
+<span class="sd">    meca : transit.Person</span>
+<span class="sd">    net : pylayers.network.Network </span>
+<span class="sd">    sim : </span>
+<span class="sd">    PN :    </span>
+<span class="sd">    rxt</span>
+<span class="sd">    rxr </span>
+
+
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Mobile Agent Init</span>
@@ -213,7 +231,7 @@
 
 
         <span class="c"># check if node id already given</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;another agent has the ID: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s">&#39; .Please use an other ID&#39;</span> <span class="p">)</span>
 
@@ -253,10 +271,18 @@
             <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="s">&#39;comm_mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;synchro&#39;</span> <span class="ow">and</span>  <span class="n">args</span><span class="p">[</span><span class="s">&#39;network&#39;</span><span class="p">]:</span>
                 <span class="c">## The TOA requests are made every refreshTOA time ( can be modified in agent.ini)</span>
                 <span class="c">## This Mode will be deprecated in future version</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                              <span class="n">dcond</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">,</span> <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rxt</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
-                              <span class="n">dcond</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">,</span> <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
+                              <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+                              <span class="n">dcond</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">,</span>
+                              <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span>
+                              <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">rxt</span> <span class="o">=</span> <span class="n">RX</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span>
+                              <span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
+                              <span class="n">dcond</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">,</span>
+                              <span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="p">,</span>
+                              <span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxr</span><span class="o">.</span><span class="n">refresh_RSS</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxt</span><span class="o">.</span><span class="n">refresh_TOA</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
@@ -326,16 +352,16 @@
                                       <span class="n">loc_updt_time</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;loc_updt&#39;</span><span class="p">],</span>
                                       <span class="n">tx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">,</span>
                                       <span class="n">sim</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;sim&#39;</span><span class="p">])</span>
-            
+
             <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ploc</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="mf">1.5</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;General Agent info </span><span class="se">\n</span><span class="s">********************</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;name : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;ID: &#39;</span>  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;type: &#39;</span>  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> 
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;type: &#39;</span>  <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
 
-      
+
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s"> More Agent information about:&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">+ Mecanichal =&gt; self.meca&#39;</span>
 
@@ -345,7 +371,7 @@
 
         <span class="k">try</span> <span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
-        <span class="k">except</span><span class="p">:</span> 
+        <span class="k">except</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;No network simulated&#39;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">:</span>
@@ -386,7 +412,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 02, 2014.
+      Last updated on mars 03, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

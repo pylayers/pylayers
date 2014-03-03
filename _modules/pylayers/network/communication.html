@@ -1,0 +1,874 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.network.communication &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.network.communication</h1><div class="highlight"><pre>
+<span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="c">#####################################################################</span>
+<span class="c">#This file is part of Network.</span>
+
+<span class="c">#pylayers is free software: you can redistribute it and/or modify</span>
+<span class="c">#it under the terms of the GNU General Public License as published by</span>
+<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#(at your option) any later version.</span>
+
+<span class="c">#pylayers is distributed in the hope that it will be useful,</span>
+<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#GNU General Public License for more details.</span>
+
+<span class="c">#You should have received a copy of the GNU General Public License</span>
+<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c">#-------------------------------------------------------------------</span>
+<span class="c">#authors :</span>
+<span class="c">#Nicolas AMIOT        : nicolas.amiot@univ-rennes1.fr</span>
+<span class="c">#Bernard UGUEN        : bernard.uguen@univ-rennes1.fr</span>
+<span class="c">#####################################################################</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="c">#import scipy as sp</span>
+<span class="c">#import networkx as nx</span>
+<span class="c">#import itertools</span>
+<span class="c">#import pickle as pk</span>
+<span class="c">#import pkgutil</span>
+
+<span class="c">#import matplotlib.pyplot as plt</span>
+<span class="c">#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg</span>
+<span class="c">#import Tkinter as tk</span>
+
+<span class="c">#import ConfigParser</span>
+<span class="c">#import copy</span>
+<span class="c">#import pdb</span>
+<span class="c">##from PyLayers.Network.Node import Node</span>
+<span class="c">#import pylayers.util.pyutil as pyu</span>
+<span class="c">#from pylayers.network.emsolver import EMSolver</span>
+<span class="c">#from pylayers.network.show import ShowNet,ShowTable</span>
+<span class="c">#from pylayers.util.pymysqldb import Database</span>
+<span class="c">#import pylayers.util.pyutil as pyu</span>
+
+<span class="c">#import time</span>
+<span class="c">#from pylayers.mobility.agent import Agent</span>
+<span class="kn">from</span> <span class="nn">pylayers.network.emsolver</span> <span class="kn">import</span> <span class="n">EMSolver</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">import</span> <span class="nn">ConfigParser</span>
+<span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span><span class="n">hold</span><span class="p">,</span><span class="n">SimEvent</span><span class="p">,</span><span class="n">Simulation</span><span class="p">,</span><span class="n">waitevent</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span><span class="p">,</span><span class="n">gauss</span>
+<span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span>  <span class="n">Node</span><span class="p">,</span><span class="n">Network</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+
+
+
+<div class="viewcode-block" id="dcond"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.dcond">[docs]</a><span class="k">class</span> <span class="nc">dcond</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    may be obsolete</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ID</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">Cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">Cf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;agent.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ag_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">ID</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+
+<div class="viewcode-block" id="dcond.parse"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.dcond.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="s">&#39;condition&#39;</span>
+        <span class="n">C</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ag_opt</span><span class="p">[</span><span class="s">&#39;condition&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cit</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">C</span><span class="p">):</span>
+            <span class="n">items</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">it</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cit</span><span class="p">)]</span><span class="o">=</span><span class="p">{}</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cit</span><span class="p">)][</span><span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]]</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="c">#                elif it == &#39;message&#39;:</span>
+                <span class="k">elif</span> <span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;message&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cit</span><span class="p">)][</span><span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">it</span><span class="o">==</span><span class="s">&#39;and&quot;&#39;</span> <span class="ow">or</span> <span class="n">it</span><span class="o">==</span><span class="s">&#39;or&quot;&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cit</span><span class="p">)][</span><span class="s">&#39;and_or&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">it</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">cit</span><span class="p">)][</span><span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+
+
+</div></div>
+<div class="viewcode-block" id="TX"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.TX">[docs]</a><span class="k">class</span> <span class="nc">TX</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       TX process ( not used for now)</span>
+<span class="sd">        Each agent use the TX process for querying LDP/information/message passing data</span>
+<span class="sd">        to other agent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;sim&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                  <span class="s">&#39;net&#39;</span><span class="p">:</span> <span class="n">Network</span><span class="p">(),</span>
+                  <span class="s">&#39;gcom&#39;</span><span class="p">:</span> <span class="n">Gcom</span><span class="p">(),</span>
+                  <span class="s">&#39;ID&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="s">&#39;dec&#39;</span><span class="p">:{},</span>
+                  <span class="s">&#39;devt&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                  <span class="s">&#39;lcst&#39;</span><span class="p">:</span> <span class="p">[]</span>
+                  <span class="p">}</span>
+<span class="c">##       initialize attributes</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">=</span><span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s">&#39;gcom&#39;</span><span class="p">]</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmdrq</span><span class="o">=</span><span class="n">SimEvent</span><span class="p">(</span><span class="s">&#39;RQ&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">),</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span> <span class="c"># command request</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
+
+<span class="c">#        self.create_evt()</span>
+
+<span class="c">#        self.c_init()</span>
+        <span class="n">Process</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Tx&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">),</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+        <span class="n">Cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">Cf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;agent.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Cf</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">d</span><span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">refreshTOA</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;refreshtoa&#39;</span><span class="p">])</span>
+                    <span class="k">break</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="TX.run"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.TX.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">levt</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_interpret</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dcond</span><span class="p">[</span><span class="n">d</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">levt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dcste</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="k">print</span> <span class="s">&#39;Tx &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="s">&#39; @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span>
+
+</div>
+<div class="viewcode-block" id="TX.create_evt"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.TX.create_evt">[docs]</a>    <span class="k">def</span> <span class="nf">create_evt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create simpy events from communication gaph</span>
+
+<span class="sd">        The available reception event for the given id are pickup into the</span>
+<span class="sd">        communication graph to fill self.devt.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.network.communication import *</span>
+<span class="sd">        &gt;&gt;&gt; T = TX()</span>
+<span class="sd">        &gt;&gt;&gt; T.create_evt()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">keys</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">.</span><span class="n">devt</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+
+
+
+<span class="c">#    def request_TOA(self):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        Request TOA</span>
+
+
+<span class="c">#        Every self.refreshTOA time interval, send a devent signal to nodes</span>
+<span class="c">#        in visibility torefresh the TOA information</span>
+
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        self.create_evt()</span>
+<span class="c">#        while 1:</span>
+<span class="c">#            if self.sim.verbose:</span>
+<span class="c">#                print &#39;request TOA&#39;, self.ID</span>
+<span class="c">#            for rat in self.PN.SubNet.keys():</span>
+<span class="c">#                for n in self.PN.SubNet[rat].edge[self.ID].keys():</span>
+<span class="c">#                    # check nodes in visibility</span>
+<span class="c">#                    if self.net.edge[self.ID][n][rat][&#39;vis&#39;]:</span>
+<span class="c">#                        key=&#39;(\&#39;&#39;+self.ID+&#39;\&#39;, \&#39;&#39;+n+&#39;\&#39;, \&#39;&#39;+rat+&#39;\&#39;)&#39;</span>
+<span class="c">#                        self.devt[eval(key)].signal()</span>
+<span class="c">#            yield hold, self, self.refreshTOA</span>
+<span class="c">##                    devt[]</span>
+<span class="c">##                [self.PN.edge[self.ID][n][rat].update(</span>
+<span class="c">##                {&#39;TOA&#39;:self.net.edge[self.ID][n][rat][&#39;TOA&#39;],&#39;tTOA&#39;:self.sim.now()})</span>
+<span class="c">##                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat][&#39;vis&#39;]]</span>
+<span class="c">##            print &#39;refresh TOA node&#39;, self.ID, &#39; @&#39;,self.sim.now()</span>
+
+
+</div>
+<div class="viewcode-block" id="TX.interpret_dec"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.TX.interpret_dec">[docs]</a>    <span class="k">def</span> <span class="nf">interpret_dec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; interpret decision rule from self.dec</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># n dict{rat:np.array([node ids])}</span>
+        <span class="n">n</span><span class="o">=</span><span class="p">{}</span>
+        <span class="c"># loop on rat</span>
+        <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="s">&#39;rat&#39;</span><span class="p">]:</span>
+            <span class="k">try</span><span class="p">:</span>
+            <span class="c"># get all nodes connecteed to self.ID on subnetwork rat</span>
+                <span class="n">n</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">edges</span><span class="p">())[:,</span><span class="mi">1</span><span class="p">]</span>
+
+                <span class="c"># initialize remained nodes to True</span>
+                <span class="n">rn</span> <span class="o">=</span> <span class="p">[</span><span class="bp">True</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">rat</span><span class="p">])</span>
+                <span class="c"># loop on condition</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="s">&#39;rule&#39;</span><span class="p">]:</span>
+
+                    <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="s">&#39;always&#39;</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+                <span class="c"># mettre boolean dans variable pour condition a plus d41 regle</span>
+                    <span class="k">if</span> <span class="s">&#39;rssth&#39;</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+                        <span class="c"># rssth&lt;100</span>
+                        <span class="n">rntmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">],</span><span class="s">&#39;Pr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;&lt;&#39;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">rn</span> <span class="o">=</span> <span class="n">rn</span> <span class="ow">and</span> <span class="p">(</span> <span class="n">rntmp</span>  <span class="o">&lt;</span> <span class="nb">eval</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;&lt;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;&gt;&#39;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">rn</span> <span class="o">=</span> <span class="n">rn</span> <span class="ow">and</span> <span class="p">(</span> <span class="n">rntmp</span>  <span class="o">&gt;</span> <span class="nb">eval</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span>
+
+    <span class="c">#                elif &#39;distance&#39; in r :</span>
+    <span class="c">#                    # distance &lt; 10</span>
+    <span class="c">#                    rntmp = np.array(nx.get_edge_attributes(self.net.SubNet[rat],&#39;d&#39;).values())</span>
+    <span class="c">#                    if len(r.split(&#39;&lt;&#39;)) &gt; 1:</span>
+    <span class="c">#                        rn = rn and ( rntmp  &lt; eval(r.split(&#39;&lt;&#39;)[1]) )</span>
+    <span class="c">#                    elif len(r.split(&#39;&gt;&#39;)) &gt; 1:</span>
+    <span class="c">#                        rn = rn and ( rntmp  &gt; eval(r.split(&#39;&lt;&#39;)[1]) )</span>
+
+                <span class="n">n</span><span class="p">[</span><span class="n">rat</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rn</span><span class="p">)]</span>
+
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">n</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
+
+        <span class="c"># retrun only node id which are compliant with rules</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TX.request"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.TX.request">[docs]</a>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; request a transmission commanded by localizaiton</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_evt</span><span class="p">()</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c"># wait request localization from localization layer</span>
+            <span class="k">yield</span> <span class="n">waitevent</span><span class="p">,</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cmdrq</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;communication requested by node &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span>
+
+            <span class="c"># n = nodes compliant with the rules given in communication.py</span>
+            <span class="c">#     and in self.gcom.dec[self.ID]</span>
+            <span class="n">rn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpret_dec</span><span class="p">()</span>
+
+
+            <span class="c"># send a signal (a.k.a. request transmission) to nodes in n</span>
+            <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="n">rn</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">rn</span><span class="p">[</span><span class="n">rat</span><span class="p">]:</span>
+                    <span class="c"># check if nodes in visibility</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;vis&#39;</span><span class="p">]:</span>
+                        <span class="n">key</span><span class="o">=</span><span class="s">&#39;(</span><span class="se">\&#39;</span><span class="s">&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">, </span><span class="se">\&#39;</span><span class="s">&#39;</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">, </span><span class="se">\&#39;</span><span class="s">&#39;</span><span class="o">+</span><span class="n">rat</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\&#39;</span><span class="s">)&#39;</span>
+                        <span class="c"># WARNING : PLEASE LEAVE THE 2 FOLLOWING LINES</span>
+                        <span class="c"># this is not a bad copy paste. It is required</span>
+                        <span class="c"># to force signalization ( probably a SimPy bug)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span><span class="o">.</span><span class="n">signal</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span><span class="o">.</span><span class="n">signal</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="RX"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.RX">[docs]</a><span class="k">class</span> <span class="nc">RX</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; RX process</span>
+
+<span class="sd">    Each agent has a RX process to receive information asynchronously.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    sim : SimPy.SimulationRT()</span>
+<span class="sd">    ID : string</span>
+<span class="sd">        id of the agent</span>
+<span class="sd">    net : pylayers.network.network()</span>
+<span class="sd">    gcom : pylayers.network.communication()</span>
+<span class="sd">        a graph a communication</span>
+<span class="sd">    devt : dictionary</span>
+<span class="sd">        dictionnary of event</span>
+<span class="sd">    refreshRSS : float</span>
+<span class="sd">        time interval where RSS are refreshed</span>
+<span class="sd">    refreshTOA : float</span>
+<span class="sd">        time interval where TOA are refresh (if agent.comm_mode ==&#39;syncho&#39;)</span>
+<span class="sd">    mp : bool</span>
+<span class="sd">        message passing [Not yet implemented]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;sim&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                  <span class="s">&#39;ID&#39;</span><span class="p">:</span><span class="s">&#39;1&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;net&#39;</span><span class="p">:</span><span class="n">Network</span><span class="p">(),</span>
+                  <span class="s">&#39;gcom&#39;</span><span class="p">:</span> <span class="n">Gcom</span><span class="p">(),</span>
+                  <span class="s">&#39;devt&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                  <span class="s">&#39;refreshRSS&#39;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span>
+                  <span class="s">&#39;refreshTOA&#39;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span>
+                  <span class="s">&#39;mp&#39;</span><span class="p">:</span><span class="bp">False</span>
+                  <span class="p">}</span>
+<span class="c">##       initialize attributes</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">=</span><span class="n">args</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_evt</span><span class="p">()</span>
+
+        <span class="n">Process</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Rx-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">),</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+
+        <span class="n">Cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">Cf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;agent.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Cf</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">d</span><span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Cf</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">refreshRSS</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;refreshrss&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">refreshTOA</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;refreshtoa&#39;</span><span class="p">])</span>
+                    <span class="k">break</span>
+
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+
+
+<span class="c">#    def swap_lt(self,lt):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        For a list of tuple if the first element is self.ID,</span>
+<span class="c">#        it is swapped with the second element</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#        Examples</span>
+<span class="c">#        --------</span>
+
+<span class="c">#        &gt;&gt;&gt; from pylayers.network.communication import *</span>
+<span class="c">#        &gt;&gt;&gt; R = RX()</span>
+<span class="c">#        &gt;&gt;&gt; R.ID</span>
+<span class="c">#        &#39;1&#39;</span>
+<span class="c">#        &gt;&gt;&gt; lt= [(&#39;1&#39;,&#39;0&#39;,&#39;tuple1&#39;),(&#39;10&#39;,&#39;5&#39;,&#39;tuple2&#39;)]</span>
+<span class="c">#        &gt;&gt;&gt; R.swap_lt(lt) # only first tuple is swapped because R.ID=&#39;1&#39;</span>
+<span class="c">#        [(&#39;0&#39;, &#39;1&#39;, &#39;tuple1&#39;), (&#39;10&#39;, &#39;5&#39;, &#39;tuple2&#39;)]</span>
+
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        lto=[]</span>
+<span class="c">#        for t in lt :</span>
+<span class="c">#            if t[0] == self.ID:</span>
+<span class="c">#                lto.append((t[1],t[0],t[2]))</span>
+<span class="c">#            else :</span>
+<span class="c">#                lto.append((t[0],t[1],t[2]))</span>
+<span class="c">#        return lto</span>
+
+
+<div class="viewcode-block" id="RX.create_evt"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.RX.create_evt">[docs]</a>    <span class="k">def</span> <span class="nf">create_evt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create simpy events from communication gaph</span>
+
+<span class="sd">        The available reception event for the given id are pickup into the</span>
+<span class="sd">        communication graph to fill self.devt.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.network.communication import *</span>
+<span class="sd">        &gt;&gt;&gt; T = TX()</span>
+<span class="sd">        &gt;&gt;&gt; T.create_evt()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lev</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">.</span><span class="n">devt</span><span class="p">:</span>
+            <span class="c"># check if self.ID  is implied as a receiver in evt</span>
+            <span class="k">if</span> <span class="n">ev</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">:</span>
+                <span class="n">lev</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">lev</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">.</span><span class="n">devt</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+
+<span class="c">#    def create_evt(self):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        Create simpy events from communication gaph</span>
+
+<span class="c">#        The available reception event for the given id are pickup into the</span>
+<span class="c">#        communication graph to fill self.devt.</span>
+
+<span class="c">#        Examples</span>
+<span class="c">#        --------</span>
+
+<span class="c">#        &gt;&gt;&gt; from pylayers.network.communication import *</span>
+<span class="c">#        &gt;&gt;&gt; R = RX()</span>
+<span class="c">#        &gt;&gt;&gt; R.create_evt()</span>
+
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        rPNe = self.swap_lt(self.PN.edges(keys=True))</span>
+<span class="c">#        for e in rPNe:</span>
+<span class="c">#            self.devt[e]=self.gcom.devt[e]</span>
+<span class="c">#        if self.mp :</span>
+<span class="c">#            for e in rPNe:</span>
+<span class="c">#                self.devt[e]=self.gcom.devt[e+str(mp)]</span>
+
+</div>
+<div class="viewcode-block" id="RX.refresh_RSS"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.RX.refresh_RSS">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_RSS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Refresh RSS process</span>
+
+<span class="sd">            The RSS values on the edges of the Personnal Network of node self.ID</span>
+<span class="sd">            are refreshed every self.refreshRSS</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_evt</span><span class="p">()</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c"># 2 approach to determine visibility</span>
+            <span class="c">##  1) test visibility during the refresh</span>
+<span class="c">#                [self.PN.edge[self.ID][n][rat].update(</span>
+<span class="c">#                {&#39;Pr&#39;:self.net.edge[self.ID][n][rat][&#39;Pr&#39;],</span>
+<span class="c">#                &#39;tPr&#39;:self.sim.now(),</span>
+<span class="c">#                &#39;vis&#39;:self.net.edge[self.ID][n][rat][&#39;Pr&#39;][0]&gt;self.net.node[self.ID][&#39;sens&#39;][rat]})</span>
+<span class="c">#                for n in self.PN.SubNet[rat].edge[self.ID].keys()]</span>
+
+            <span class="c">#  2) copy the visibility information from network layer</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span><span class="s">&#39;Pr&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">],</span><span class="s">&#39;tPr&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span><span class="s">&#39;vis&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;vis&#39;</span><span class="p">]})</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;refresh RSS node&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39; @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">refreshRSS</span>
+
+
+<span class="c">#    def refresh_TOA(self):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+
+<span class="c">#            Refresh TOA process</span>
+
+<span class="c">#            The TOA values on the edges of the Personnal Network of node self.ID</span>
+<span class="c">#            are refreshed every self.refreshTOA</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        self.create_evt()</span>
+
+<span class="c">#        while 1:</span>
+<span class="c">#            for rat in self.PN.SubNet.keys():</span>
+
+<span class="c">#                # 2 approaches :</span>
+<span class="c">#                ## 1) that commented code allow refresh TOA only when visibility</span>
+<span class="c">##                [self.PN.edge[self.ID][n][rat].update(</span>
+<span class="c">##                {&#39;TOA&#39;:self.net.edge[self.ID][n][rat][&#39;TOA&#39;],&#39;tTOA&#39;:self.sim.now()})</span>
+<span class="c">##                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat][&#39;vis&#39;]]</span>
+
+<span class="c">#                # 2 refresj TOa whatever visibility or not</span>
+<span class="c">#                [self.PN.edge[self.ID][n][rat].update(</span>
+<span class="c">#                {&#39;TOA&#39;:self.net.edge[self.ID][n][rat][&#39;TOA&#39;],&#39;tTOA&#39;:self.sim.now()})</span>
+<span class="c">#                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]</span>
+
+<span class="c">#            if self.sim.verbose:</span>
+<span class="c">#                print &#39;refresh TOA node&#39;, self.ID, &#39; @&#39;,self.sim.now()</span>
+
+<span class="c">#            yield hold, self, self.refreshTOA</span>
+
+</div>
+<div class="viewcode-block" id="RX.fill_req"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.RX.fill_req">[docs]</a>    <span class="k">def</span> <span class="nf">fill_req</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">rat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update values of the personnal network of a requester in regard</span>
+<span class="sd">             with the action define in self.gcom.dec[requester.id]</span>
+
+<span class="sd">            Attributes</span>
+<span class="sd">            ----------</span>
+<span class="sd">                n   : id of the requester</span>
+<span class="sd">                rat : used rat</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+
+        <span class="c"># a is a list of action</span>
+        <span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gcom</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;action&#39;</span><span class="p">]</span>
+
+        <span class="c"># WARNING HERE self.ID send information to the requester.</span>
+        <span class="c"># fillin is reverse</span>
+
+        <span class="c"># update range</span>
+        <span class="k">if</span> <span class="s">&#39;range&#39;</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+            <span class="c"># WARNING here, the PN of the requester is filled</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span><span class="s">&#39;TOA&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">n</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">],</span><span class="s">&#39;tTOA&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()})</span>
+        <span class="c"># get position estimation from the requester</span>
+        <span class="k">if</span> <span class="s">&#39;pe&#39;</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;te&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="c"># ADD MORE ACTIONS HERE</span>
+
+
+</div>
+<div class="viewcode-block" id="RX.wait_request"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.RX.wait_request">[docs]</a>    <span class="k">def</span> <span class="nf">wait_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Wait request</span>
+
+<span class="sd">            The self.ID node wait a request from another node of its Personal network.</span>
+<span class="sd">            Once the request is received, self.ID reply to the requester node</span>
+<span class="sd">            and fill the PN of the requester in regards with the action define in</span>
+<span class="sd">            self.gcom.dec[requester.id]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_evt</span><span class="p">()</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">waitevent</span><span class="p">,</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">evt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">evt</span><span class="o">.</span><span class="n">occurred</span><span class="p">:</span>
+                    <span class="c"># evt.name[0] = requester</span>
+                    <span class="c"># evt.name[1] = requested ( = self.ID)</span>
+                    <span class="c"># evt.name[2] = rat</span>
+                    <span class="c"># update personal network</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fill_req</span><span class="p">(</span><span class="n">evt</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">evt</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&#39;Done request from&#39;</span><span class="p">,</span><span class="n">evt</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;to&#39;</span><span class="p">,</span><span class="n">evt</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;on rat&#39;</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+
+
+<span class="c">#    def wait_TOArq(self):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#            Wait TOA request</span>
+
+<span class="c">#            The self.ID node wait a TOA request from another node of its Personal network.</span>
+<span class="c">#            Once the request is received, self.ID reply to the requester node</span>
+<span class="c">#            and fill the PN edge with the measured TOA.</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        self.create_evt()</span>
+<span class="c">#        while 1:</span>
+<span class="c">#            yield waitevent,self,self.devt.values()</span>
+<span class="c">#            for evt in self.devt.values():</span>
+<span class="c">#                if evt.occurred:</span>
+<span class="c">#                    # evt.name[0] = requester</span>
+<span class="c">#                    # evt.name[1] = requested ( = self.ID)</span>
+<span class="c">#                    # evt.name[2] = rat</span>
+<span class="c">#                    # update personal network TOA value</span>
+<span class="c">#                    self.PN.edge[evt.name[1]][evt.name[0]][evt.name[2]].update(</span>
+<span class="c">#                    {&#39;TOA&#39;:self.net.edge[evt.name[1]][evt.name[0]][evt.name[2]][&#39;TOA&#39;],&#39;tTOA&#39;:self.sim.now()})</span>
+<span class="c">#                    if self.sim.verbose:</span>
+<span class="c">#                        print &#39;TOA requested by&#39;,evt.name[0],&#39;to&#39;,evt.name[1],&#39;has been updated&#39;</span>
+<span class="c">#                    break</span>
+
+
+
+</div></div>
+<span class="k">class</span> <span class="nc">Gcom</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Communication graph</span>
+
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    net : pylayers.network.network()</span>
+<span class="sd">    sim : SimPy.SimulationRT()</span>
+<span class="sd">    devt : dictionary</span>
+<span class="sd">        dictionnary of event</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    That class inherits of networkx.MultiDiGraph().</span>
+<span class="sd">    Its nodes are the nodes of the passing Network object.</span>
+<span class="sd">    Its edge represents all the possbile communication bridge between thoses nodes.</span>
+<span class="sd">    On the edge, timestamped message can be passed between nodes</span>
+
+<span class="sd">    Contrary to pylayers.network, which is an undirected graph, here edge are directed.</span>
+
+<span class="sd">    Hence the dictionnary of simpy events (devt) can be created.</span>
+<span class="sd">    The keys of devt are a tuple (nodeid#1, nodeid#2 , rat).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">net</span><span class="o">=</span><span class="n">Network</span><span class="p">(),</span><span class="n">sim</span><span class="o">=</span><span class="n">Simulation</span><span class="p">()):</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">=</span><span class="n">net</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">=</span><span class="n">sim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="o">=</span><span class="s">&#39;communication.ini&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="o">=</span><span class="p">{}</span>
+<div class="viewcode-block" id="Gcom.load_dec_file"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.Gcom.load_dec_file">[docs]</a>    <span class="k">def</span> <span class="nf">load_dec_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span>     <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
+        <span class="n">ntype</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="s">&#39;type&#39;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ntype</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;ag&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+                    <span class="n">di</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;rat&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">n</span><span class="p">))[</span><span class="s">&#39;rat&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;action&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">n</span><span class="p">))[</span><span class="s">&#39;action&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;rule&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">n</span><span class="p">))[</span><span class="s">&#39;rule&#39;</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">nconfig</span>     <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+                <span class="n">nconfig</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="s">&#39;rat&#39;</span><span class="p">,[</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;RAT&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="s">&#39;rule&#39;</span><span class="p">,[</span><span class="s">&#39;always&#39;</span><span class="p">])</span>
+                <span class="n">nconfig</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="s">&#39;action&#39;</span><span class="p">,[</span><span class="s">&#39;range&#39;</span><span class="p">])</span>
+                <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
+                <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">)</span>
+                <span class="n">nconfig</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> 
+                <span class="k">print</span> <span class="p">(</span><span class="s">&#39;Warning: Communication of node &#39;</span><span class="o">+</span><span class="n">n</span> <span class="o">+</span> <span class="s">&#39;set with default values&#39;</span><span class="p">)</span>
+
+                
+
+
+</div>
+<div class="viewcode-block" id="Gcom.create"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.Gcom.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create the communication graph and the dictionnary of simpy events</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.network.communication import *</span>
+<span class="sd">        &gt;&gt;&gt; G=Gcom()</span>
+<span class="sd">        &gt;&gt;&gt; G.create()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_graph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_evt</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_dec_file</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Gcom.create_graph"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.Gcom.create_graph">[docs]</a>    <span class="k">def</span> <span class="nf">create_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create the communication graph from the Network graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">SubNet</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rat</span><span class="p">])</span>
+                <span class="n">le</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="n">ld</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;message&#39;</span><span class="p">:[],</span><span class="s">&#39;t&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">}]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">le</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">le</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">n</span> <span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges_iter</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">rat</span><span class="p">,</span><span class="n">ld</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="n">le</span><span class="p">)</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span><span class="o">.</span><span class="n">edges_iter</span><span class="p">(),</span><span class="n">rat</span><span class="p">,</span><span class="n">ld</span><span class="p">))</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;WARNING : no edge on rat&#39;</span><span class="p">,</span><span class="n">rat</span>
+
+
+</div>
+<div class="viewcode-block" id="Gcom.create_evt"><a class="viewcode-back" href="../../../modules/pylayers.network.communication.html#pylayers.network.communication.Gcom.create_evt">[docs]</a>    <span class="k">def</span> <span class="nf">create_evt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create the dictionnary of simpy event.</span>
+<span class="sd">            Hence each node of communication graph can send signal to others</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">devt</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">SimEvent</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">))</span>
+
+
+
+
+
+<span class="c">#    def fill_edge(self,le,rat,mess):</span>
+
+<span class="c">#        for i,r in enumerate(rat):</span>
+<span class="c">#            self.add_edges_from(self.net.Gen_tuple(le[i],r,mess[i]))</span>
+
+
+<span class="c">#        Z=self.dcond[&#39;1&#39;][&#39;message&#39;]*len(le[1])</span>
+<span class="c">#        self.gmp.add_edges_from(self.net.Gen_tuple(le,&#39;rat1&#39;,Z))</span>
+
+
+<span class="c">#if (__name__ == &quot;__main__&quot;):</span>
+
+<span class="c">#    sim =Simulation()</span>
+<span class="c">#    sim.initialize()</span>
+
+
+<span class="c">#    L=Layout(&#39;TA-Office.str&#39;)</span>
+<span class="c">#    L.build(&#39;str&#39;) # build &#39;s&#39;tructure, &#39;t&#39;opological and &#39;r&#39;oom graphs</span>
+<span class="c">#    N=Network()</span>
+
+<span class="c">#    Ag=[]</span>
+<span class="c">#    Cf = ConfigParser.ConfigParser()</span>
+<span class="c">#    Cf.read(pyu.getlong(&#39;agent.ini&#39;,&#39;ini&#39;))</span>
+<span class="c">#    agents=eval(dict(Cf.items(&#39;used_agent&#39;))[&#39;list&#39;])</span>
+<span class="c">#    for i, ag in enumerate(agents):</span>
+<span class="c">#        ag_opt = dict(Cf.items(ag))</span>
+<span class="c">#        print ag_opt[&#39;id&#39;]</span>
+<span class="c">#        Ag.append(Agent(</span>
+<span class="c">#                          ID=ag_opt[&#39;id&#39;],</span>
+<span class="c">#                          name=ag_opt[&#39;name&#39;],</span>
+<span class="c">#                          type=ag_opt[&#39;type&#39;],</span>
+<span class="c">#                          roomId=int(ag_opt[&#39;roomid&#39;]),</span>
+<span class="c">#                          pos=np.array(eval(ag_opt[&#39;pos&#39;])),</span>
+<span class="c">#                          Layout=L,</span>
+<span class="c">#                          net=N,</span>
+<span class="c">#                          RAT=eval(ag_opt[&#39;rat&#39;]),</span>
+<span class="c">#                          dcond=dcond(ag),</span>
+<span class="c">#                          epwr=dict([(eval((ag_opt[&#39;rat&#39;]))[ep],eval((ag_opt[&#39;epwr&#39;]))[ep]) for ep in range(len(eval((ag_opt[&#39;rat&#39;]))))]),</span>
+<span class="c">#                          sim=sim)</span>
+<span class="c">#                  )</span>
+
+
+<span class="c">#    N.create()</span>
+<span class="c">#    N.EMS=EMSolver(L)</span>
+
+<span class="c">#    for ldp in [&#39;Pr&#39;,&#39;TOA&#39;]:</span>
+<span class="c">#        N.compute_LDPs(N.nodes(),RAT=&#39;rat1&#39;,LDP=ldp)</span>
+
+
+<span class="c">#    N.update_PN()</span>
+
+
+<span class="c">#    gcom=Gcom(net=N,sim=sim)</span>
+<span class="c">#    gcom.create_graph()</span>
+<span class="c">#    gcom.create_evt()</span>
+<span class="c">#    tx=[]</span>
+<span class="c">#    rx=[]</span>
+<span class="c">#    for a in Ag:</span>
+<span class="c">##        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))</span>
+<span class="c">#        rx.append(RX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))</span>
+
+
+
+
+<span class="c">###    N.node[0][&#39;PN&#39;].node[0][&#39;pe&#39;]=np.array((4,4))</span>
+<span class="c">###    N.node[0][&#39;PN&#39;].node[1][&#39;pe&#39;]=np.array((8,8))</span>
+<span class="c">###    N.node[0][&#39;PN&#39;].node[2][&#39;pe&#39;]=np.array((30,8))</span>
+
+<span class="c">###    nbtx=2</span>
+<span class="c">###    tx=[]</span>
+<span class="c">###    evt=[]</span>
+<span class="c">###    b=[]</span>
+<span class="c">###    for t in range(nbtx):</span>
+<span class="c">###        evt.append(SimEvent(&#39;pos&#39;+str(t),sim=sim))</span>
+<span class="c">####        tx.append(TX(ID=t,sim=sim,evt=evt[t]))</span>
+<span class="c">###        b.append(Brain(ID=t,sim=sim,evt=evt[t]))</span>
+<span class="c">####        sim.activate (tx[t], tx[t].run(),0.0)</span>
+<span class="c">###        sim.activate (b[t], b[t].run(),0.0)</span>
+<span class="c">###</span>
+<span class="c">###    T=TX(ID=t,sim=sim,evt=evt)</span>
+<span class="c">###    sim.activate (T, T.run(),0.0)</span>
+<span class="c">###    sim.simulate(until=10)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

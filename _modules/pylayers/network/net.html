@@ -1,0 +1,537 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.network.net &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.network.net</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span> 
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">from</span> <span class="nn">prioritydict</span> <span class="kn">import</span> <span class="n">priorityDictionary</span>
+<span class="c">#</span>
+<span class="c"># This module is adapted from WSN-SIM from Berkeley</span>
+<span class="c">#</span>
+<span class="c">#   http://wsn.eecs.berkeley.edu/trac/simulation</span>
+<span class="c">#</span>
+<span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="s">&#39;m&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="s">&#39;m&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">]</span>
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numMotes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">numGateways</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loadBalance</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">dx</span><span class="o">=</span><span class="mi">316</span><span class="p">,</span><span class="n">dy</span><span class="o">=</span><span class="mi">316</span><span class="p">):</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numMotes</span> <span class="o">=</span> <span class="n">numMotes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numGateways</span> <span class="o">=</span> <span class="n">numGateways</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadFactor</span> <span class="o">=</span> <span class="n">loadBalance</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">packetCount</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c">#Set up Variables that will be filled in.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conModel</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gtwys</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">routes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c">#Packet Simulator Variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linkPDR</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activity</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">droppedPkts</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numGateways</span> <span class="o">+</span> <span class="n">numMotes</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="n">dx</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="n">dy</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numGateways</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">gateway</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">gateway</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Network.connect"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dmax</span><span class="o">=</span><span class="mi">175</span><span class="p">,</span><span class="n">pdrValue</span> <span class="o">=</span> <span class="mf">0.80</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sensitivitydBm</span><span class="o">=-</span><span class="mi">85</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">PtdBm</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;  connect nodes based on a connectivity model</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        dmax</span>
+<span class="sd">        pdrValue :</span>
+<span class="sd">            Packet Delivery Rate Value  (default 0.8)   (= 1 - PER)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="n">pA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">pB</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">dX</span> <span class="o">=</span> <span class="n">pA</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pB</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">dY</span> <span class="o">=</span> <span class="n">pA</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pB</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dX</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dY</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">d</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">)</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">)</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+                    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">dmax</span><span class="p">:</span>
+                        <span class="n">prob</span><span class="p">,</span><span class="n">rssi</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">connectModel</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
+                                         <span class="n">sensitivitydBm</span><span class="o">=</span><span class="n">sensitivitydBm</span><span class="p">,</span>
+                                         <span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span>
+                                         <span class="n">PtdBm</span><span class="o">=</span><span class="n">PtdBm</span><span class="p">)))</span>
+
+                        <span class="n">flip</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
+
+                        <span class="k">if</span> <span class="n">flip</span> <span class="o">&lt;=</span> <span class="n">prob</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">rssi</span><span class="o">=</span><span class="n">rssi</span><span class="p">,</span><span class="n">etx</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">pdrValue</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">pdrValue</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">pdrValue</span>
+</div>
+<div class="viewcode-block" id="Network.disconnect"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="Network.routing"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.routing">[docs]</a>    <span class="k">def</span> <span class="nf">routing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of node -&gt; final Costs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of node -&gt; Gateway</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of gateway -&gt; Load</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">priorityDictionary</span><span class="p">()</span>   <span class="c"># est.dist. of non-final vert.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of node -&gt; true Hop Counts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of node -&gt; Predecessor</span>
+
+        <span class="k">for</span> <span class="n">gateway</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">numGateways</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">gateway</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">gateway</span><span class="p">]</span> <span class="o">=</span> <span class="n">gateway</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">gateway</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">[</span><span class="n">gateway</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">():</span>
+                <span class="k">break</span>
+            <span class="c">#if v in self.cxns:</span>
+            <span class="n">neigh_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neigh_v</span><span class="p">)</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="c">#for w in self.cxns[v]:</span>
+                <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">neigh_v</span><span class="p">:</span>
+                    <span class="c">#Check that it is connected</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">w</span><span class="p">]:</span>
+                        <span class="n">gatewayLoad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span>
+
+                        <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">w</span><span class="p">]</span> <span class="c"># old method to calculate using D table.</span>
+                        <span class="n">cost</span> <span class="o">=</span> <span class="n">cost</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loadFactor</span> <span class="o">*</span> <span class="p">(</span><span class="n">gatewayLoad</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">200.</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="n">w</span><span class="p">]:</span>
+                                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Error Dijkstra: Better path to already-final vertex&quot;</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="ow">or</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">w</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>  <span class="c"># assign new cost to Q dictionary</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>  <span class="c"># assign predecessor for Parent</span>
+
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">w</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">w</span><span class="p">]]</span> <span class="o">-</span> <span class="mi">1</span>
+
+                            <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>  <span class="c"># assign same Gateway as Parent</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c"># increment Gateway load</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c"># assign true Hop Count as increment from Parent</span>
+<span class="c">#</span>
+<span class="c">#        print &quot;Hops[node]&quot;, H</span>
+<span class="c">#        print &quot;D: &quot;, D</span>
+<span class="c">#        HopsCounter = {}</span>
+<span class="c">#</span>
+<span class="c">#        for node in H.keys():</span>
+<span class="c">#    #               print &quot;Testing node: &quot;, n</span>
+<span class="c">#    #               print &quot;Adding 1 to: &quot;, H[n]</span>
+<span class="c">#    #       for node in H</span>
+<span class="c">#            if H[node] != 0:</span>
+<span class="c">#                HopsCounter[H[node]] = HopsCounter.get(H[node], 0) + 1</span>
+<span class="c">#    #       print &quot;Added, new total = &quot;, HopsCounter[H[n]]</span>
+<span class="c">#</span>
+<span class="c">#        return (P, G)</span>
+</div>
+<div class="viewcode-block" id="Network.scheduling"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.scheduling">[docs]</a>    <span class="k">def</span> <span class="nf">scheduling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numTimeSlots</span><span class="p">,</span> <span class="n">numOffsets</span><span class="p">,</span><span class="n">export</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        numTimeSlots</span>
+<span class="sd">        numOffsets</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pathsByHop</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">numSlots</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">routes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
+        <span class="c">#print &quot;routes&quot;</span>
+        <span class="c">#print routes</span>
+        <span class="c">#Step 1: For each node in network. Establish a list of links for packet delivery</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">routes</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">hopNode</span> <span class="o">=</span> <span class="n">node</span>
+            <span class="k">while</span> <span class="n">hopNode</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">numGateways</span><span class="p">:</span>
+                <span class="n">link</span> <span class="o">=</span> <span class="p">(</span><span class="n">hopNode</span><span class="p">,</span> <span class="n">routes</span><span class="p">[</span><span class="n">hopNode</span><span class="p">])</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+                <span class="n">numSlots</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">hopNode</span> <span class="o">=</span> <span class="n">routes</span><span class="p">[</span><span class="n">hopNode</span><span class="p">]</span>
+                <span class="c">#print &quot;link added&quot;, link</span>
+            <span class="n">pathLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pathsByHop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pathLen</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">pathsByHop</span><span class="p">[</span><span class="n">pathLen</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">pathsByHop</span><span class="p">[</span><span class="n">pathLen</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="c">#print &quot;PATHS (DICT): &quot;, pathsByHop</span>
+        <span class="n">pathKeys</span> <span class="o">=</span> <span class="n">pathsByHop</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="c">#print &quot;PATH KEYS: &quot;, pathKeys</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pathKeys</span><span class="p">)):</span>
+            <span class="n">pathList</span> <span class="o">=</span> <span class="n">pathsByHop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pathKeys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="c">#print &quot;PATH LIST: &quot;, pathList</span>
+            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">pathList</span><span class="p">:</span>
+                <span class="n">paths</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+        <span class="c">#print &quot;PATH LIST: &quot;, paths</span>
+        <span class="c">#print links</span>
+        <span class="c">#print &quot;Links to Schedule:&quot;, numSlots</span>
+        <span class="c">#TextBox.insert(END, &quot;Links to Schedule: %d \n&quot; % numSlots)</span>
+        <span class="c">#root.update()</span>
+        <span class="c">#interface.printText(&quot;Links to Schedule: %d \n&quot;, numSlots, 0)</span>
+        <span class="c">#global schedule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">numPass</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">maxPass</span> <span class="o">=</span> <span class="mi">3000</span>
+        <span class="c">#Step 2: Running through slots, assign schedules	</span>
+        <span class="n">pathSelect</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">prevPacketTime</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="c">#OPTION TO PACK OR SPREAD:</span>
+        <span class="c">#global pack</span>
+        <span class="c">#pack1 = pack.get()</span>
+        <span class="n">prevPacketTime</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">maxLinks</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">curLinks</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numTimeSlots</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#2a: Loop through all paths.</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c">#interface.root.update()</span>
+            <span class="c">#print &quot;l:&quot;, len(paths)</span>
+            <span class="c">#print &quot;pathSelect: &quot;, pathSelect</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">pathSelect</span><span class="p">]</span>
+            <span class="c">#2b: Loop through all links in the path.</span>
+            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+                <span class="n">linkSet</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">passes</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">slotsChecked</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">passes</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">passes</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">prevPacketTime</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="c">#2c: Visit time slots</span>
+                    <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">prevPacketTime</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">numTimeSlots</span><span class="p">):</span>
+                        <span class="c">#2d: Check if nodes are available during this time slot. Set used = False, change to True if not possible.</span>
+                        <span class="n">used</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">key</span><span class="p">])):</span>
+                                <span class="n">curLink</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">key</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                                <span class="c">#print &quot;curlink&quot;, curLink</span>
+                                <span class="n">a</span> <span class="o">=</span> <span class="n">curLink</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="n">b</span> <span class="o">=</span> <span class="n">curLink</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">link</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">b</span> <span class="o">==</span> <span class="n">link</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">a</span> <span class="o">==</span> <span class="n">link</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">b</span> <span class="o">==</span> <span class="n">link</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                                    <span class="n">used</span> <span class="o">=</span> <span class="bp">True</span>
+                                    <span class="k">break</span>
+                            <span class="k">if</span> <span class="n">used</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                                <span class="k">break</span>
+                        <span class="c">#2e: Nodes are available, locate first available offset.</span>
+                        <span class="k">if</span> <span class="n">used</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                            <span class="c">#Offset positions are available. Fill directly.</span>
+                            <span class="n">offset</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">offset</span> <span class="o">&lt;</span> <span class="n">numOffsets</span><span class="p">):</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">offset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                                <span class="n">linkSet</span> <span class="o">=</span> <span class="bp">True</span>
+                            <span class="c">#Offset positions are not available. </span>
+                            <span class="c">#Pick minimum slotted and check for interference</span>
+                            <span class="c">#Have to check either 0 or 1 for interference/connected links</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">offsetCount</span> <span class="o">=</span> <span class="p">[]</span>
+                                <span class="c">#Loop through all offsets and count current links in the offset.</span>
+                                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numOffsets</span><span class="p">):</span>
+                                    <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                                    <span class="n">offsetCount</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                                <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="n">offsetC</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">offsetCount</span><span class="p">),</span> <span class="mi">999</span><span class="p">)</span>
+                                    <span class="c">#Not ready to schedule extra link, keep searching...</span>
+                                    <span class="k">if</span> <span class="n">offsetC</span> <span class="o">&gt;</span> <span class="n">maxLinks</span><span class="p">:</span>
+                                        <span class="k">if</span> <span class="p">(</span><span class="n">slotsChecked</span> <span class="o">&lt;</span> <span class="n">numTimeSlots</span> <span class="o">*</span> <span class="mi">15</span><span class="p">):</span>
+                                            <span class="n">slotsChecked</span> <span class="o">+=</span> <span class="mi">1</span>
+                                            <span class="k">break</span>
+                                        <span class="k">else</span><span class="p">:</span>
+                                            <span class="n">slotsChecked</span> <span class="o">=</span> <span class="mi">0</span>
+                                            <span class="n">maxLinks</span> <span class="o">+=</span> <span class="mi">1</span>
+                                    <span class="k">if</span> <span class="n">offsetC</span> <span class="o">==</span> <span class="mi">999</span><span class="p">:</span>
+                                        <span class="k">break</span>
+                                    <span class="n">offset</span> <span class="o">=</span> <span class="n">offsetCount</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">offsetC</span><span class="p">)</span>
+                                    <span class="c">#2f For every link already in this time-offset slot, check for interference.</span>
+                                    <span class="n">interference</span> <span class="o">=</span> <span class="bp">False</span>
+                                    <span class="k">for</span> <span class="n">setLink</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">offset</span><span class="p">]:</span>
+                                        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                                            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                                                <span class="n">r1</span> <span class="o">=</span> <span class="n">cxns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">setLink</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                                                <span class="c">#print &quot;setlink/a/setlink[a]&quot;, setLink, &quot; &quot;, a,&quot; &quot;, setLink[a], &quot; r1: &quot;, r1</span>
+                                                <span class="k">if</span> <span class="n">r1</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                                                    <span class="k">if</span> <span class="n">r1</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                                                        <span class="n">interference</span> <span class="o">=</span> <span class="bp">True</span>
+                                    <span class="k">if</span> <span class="n">interference</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                                        <span class="n">linkSet</span> <span class="o">=</span> <span class="bp">True</span>
+                                        <span class="k">break</span>
+                                    <span class="n">offsetCount</span><span class="p">[</span><span class="n">offset</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span> 	<span class="c">#Some large number to never try again.</span>
+                            <span class="k">if</span> <span class="n">linkSet</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">offset</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+                                <span class="n">numScheduled</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">offset</span><span class="p">])</span>
+                                <span class="c">#interface.colorCells(time, offset, numScheduled)</span>
+                                <span class="n">linkSet</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="n">prevPacketTime</span> <span class="o">=</span> <span class="n">time</span>
+                                <span class="n">slotsChecked</span> <span class="o">=</span> <span class="mi">0</span>
+                                <span class="k">break</span>
+                    <span class="n">passes</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">linkSet</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="k">if</span> <span class="n">linkSet</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">paths</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                <span class="n">pathSelect</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">pathSelect</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">):</span>
+                <span class="c">#print &quot;Pass &quot;, numPass, &quot; complete.&quot;</span>
+                <span class="n">numPass</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">pathSelect</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">prevPacketTime</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="n">numPass</span> <span class="o">==</span> <span class="n">maxPass</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="c">#print &quot;Remaining Links: &quot;, len(links)</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">332</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c">#print &quot;t: &quot;, time</span>
+                <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+                    <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">[</span><span class="n">time</span><span class="p">][</span><span class="n">o</span><span class="p">]</span>
+                    <span class="c">#print &quot;offset: &quot;, o, &quot; links: &quot;, len(l)</span>
+                    <span class="c">#print len(l)</span>
+                    <span class="n">links</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+            <span class="n">slots</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">maxTime</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">)</span>
+        <span class="n">avgLpS</span> <span class="o">=</span> <span class="n">links</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">slots</span>
+        <span class="k">if</span> <span class="n">export</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;schedule.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numMotes</span><span class="p">))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numGateways</span><span class="p">))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numTimeSlots</span><span class="p">):</span>
+                <span class="n">first</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">timeSchedule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">timeSchedule</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">timeSchedule</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">timeSchedule</span><span class="p">[</span><span class="n">offset</span><span class="p">]:</span>
+                            <span class="n">link</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+                            <span class="n">link</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+                            <span class="c">#print &quot;Time: &quot;,time, &quot; Offset: &quot;,offset,&quot; Schedule: &quot;, link</span>
+
+                            <span class="k">if</span> <span class="n">first</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)</span>
+                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+                            <span class="n">first</span> <span class="o">=</span> <span class="mi">0</span>
+
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="Network.show"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">connectivity</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">routes</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conectivity</span>
+<span class="sd">        routes</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numMotes</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">numGateways</span><span class="p">)</span>
+        <span class="n">lg</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numGateways</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">connectivity</span><span class="p">:</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">nodelist</span><span class="o">=</span><span class="n">lg</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">nodelist</span><span class="o">=</span><span class="n">lm</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">routes</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+            <span class="n">tG</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">connected_component_subgraphs</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+            <span class="n">N</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tG</span><span class="p">))))</span>
+            <span class="n">M</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tG</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="n">N</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tG</span><span class="p">):</span>
+                <span class="c">#nx.draw(g,self.pos,node_color=col[k])</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="c">#for ig in range(self.numGateways):</span>
+            <span class="c">#    succcig = self.neighbors(ig)</span>
+            <span class="c">#    for </span>
+        <span class="c">#nx.draw_networkx_labels(self,self.pos)</span>
+        <span class="c">#plt.show()</span>
+
+<span class="c">#For all potentially interfering nodes (under 175 m) cxns of link = 2. For all connected, this value is 1.</span>
+
+</div></div>
+<div class="viewcode-block" id="connectModel"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.connectModel">[docs]</a><span class="k">def</span> <span class="nf">connectModel</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">sensitivitydBm</span><span class="o">=-</span><span class="mi">85</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">PtdBm</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; connectivity model</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    d  : distance in meters</span>
+<span class="sd">    fGHz : </span>
+<span class="sd">    sensitivitydBm : </span>
+<span class="sd">    ptdBm : </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lda</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
+    <span class="n">PL0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">lda</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+    <span class="n">Pr</span>  <span class="o">=</span> <span class="n">PtdBm</span> <span class="o">-</span> <span class="p">(</span><span class="n">PL0</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+
+    <span class="n">rssi</span> <span class="o">=</span> <span class="n">Pr</span> <span class="o">-</span> <span class="n">sensitivitydBm</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">rssi</span> <span class="o">&gt;</span> <span class="mi">40</span><span class="p">):</span>
+        <span class="n">cdf</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">elif</span> <span class="p">(</span> <span class="n">rssi</span>  <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">cdf</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cdf</span> <span class="o">=</span> <span class="p">(</span><span class="n">rssi</span> <span class="o">/</span> <span class="mf">40.</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="k">return</span> <span class="n">cdf</span><span class="p">,</span><span class="n">rssi</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;testing net.py&quot;</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;------------&quot;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
