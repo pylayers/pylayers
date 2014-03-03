@@ -150,4 +150,3 @@ if __name__ == "__main__":
     lv = [d0, d1]
     c = CDF(lv, 'fig')
     c.show()
-    plt.show()

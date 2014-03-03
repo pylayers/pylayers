@@ -1238,8 +1238,8 @@ class Antenna(object):
         r = minr + (maxr-minr) * u
 
         x = r * np.sin(th) * np.cos(phi) 
-        y = r * np.cos(th) 
-        z = r * np.sin(th) * np.sin(phi) 
+        y = r * np.sin(th) * np.sin(phi) 
+        z = r * np.cos(th) 
 
         p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
         #
@@ -1953,10 +1953,10 @@ class Antenna(object):
 
         Nf = len(self.fa)
         if theta==[]:
-            theta=np.linspace(0,np.pi,45)
+            theta=np.linspace(0,np.pi,25)
 
         if phi == []:
-            phi= np.linspace(0,2*np.pi,90)
+            phi= np.linspace(0,2*np.pi,50)
 
         Nt = len(theta)
         Np = len(phi)

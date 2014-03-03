@@ -1,31 +1,31 @@
 # -*- coding:Utf-8 -*-
-import numpy as np 
+import numpy as np
 import scipy as sp
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import cm
 import doctest
 import pdb
 
 
-            
+
 def cformat(x,y,**kwargs):
-    """ complex format 
+    """ complex format
 
     Parameters
     ----------
 
     x : ndarray   (,Nx)
     y : ndarray (Ny,Nx)
-    
+
     uy : ndarray()
-        select rows of y 
+        select rows of y
 
     Returns
     -------
 
-    xn 
-    yn 
+    xn
+    yn
     ylabels
 
     """
@@ -42,7 +42,7 @@ def cformat(x,y,**kwargs):
 
     # radians to degree coefficient   
     rtd = 180./np.pi
-    
+
     t = kwargs['typ']
 
     xn = x
@@ -78,28 +78,29 @@ def cformat(x,y,**kwargs):
     if t=='gdn':
         ylabels='Group delay (ns)'
         df  = x[1]-x[0]
-        xn  = x[0:-1]               
+        xn  = x[0:-1]
         yn  = -np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
     if t=='gdm':
         ylabels='Group distance (m)'
         df  = x[1]-x[0]
-        xn  = x[0:-1]               
+        xn  = x[0:-1]
         yn = -0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
     if 'ylabels'  in kwargs:
         ylabels = kwargs['ylabels']
 
-    return(xn,yn,ylabels)                           
+    return(xn,yn,ylabels)
+
 def mulcplot(x,y,**kwargs):
     """ handling multiple complex variable plots
 
     Parameters
     ----------
 
-    x : ndarray  
-        
-    y : ndarray  
+    x : ndarray  (,N)
 
-    types : 'm'   : modulus 
+    y : ndarray  (M,N)
+
+    types : 'm'   : modulus
             'v'   : value
             'l10' : dB (10 log10)
             'l20' : dB (20 log10)
@@ -112,7 +113,7 @@ def mulcplot(x,y,**kwargs):
             're'  : real part
             'im'  : imaginary part 
 
-    
+
     fig and ax are numpy arrays of fig and ax
 
     Examples
@@ -125,7 +126,7 @@ def mulcplot(x,y,**kwargs):
     -----
 
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
-    takes the priority over the passed values nlin and ncol 
+    takes the priority over the passed values nlin and ncol
 
 
     """
@@ -140,12 +141,12 @@ def mulcplot(x,y,**kwargs):
                 'figsize':(8,8)
                }
 
-    # radians to degree coefficient   
+    # radians to degree coefficient
     rtd = 180./np.pi
 
     # smart placement of legend box
     plt.rcParams['legend.loc'] = 'best'
-    
+
     grid = False
     if 'nlin' in kwargs:
         grid=True
@@ -154,7 +155,7 @@ def mulcplot(x,y,**kwargs):
         if key not in kwargs:
             kwargs[key] = value
     #
-    # ylabels is deduced from types 
+    # ylabels is deduced from types
     # ==> do not set any ylabels defaults
     #
     if 'ylabels' not in kwargs:
@@ -191,8 +192,8 @@ def mulcplot(x,y,**kwargs):
     ax = kwargs['ax']
     nlin = kwargs['nlin']
     ncol = kwargs['ncol']
-    types = kwargs['typ']
     titles = kwargs['titles']
+    types = kwargs['typ']
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
     figsize = kwargs['figsize']
@@ -204,7 +205,7 @@ def mulcplot(x,y,**kwargs):
     nylabels = np.prod(np.array(ylabels).shape,dtype='int')
 
 
-    # filtering kwargs argument for plot function 
+    # filtering kwargs argument for plot function
     args ={}
     for k in kwargs:
         if k not in defaults.keys():
@@ -216,24 +217,24 @@ def mulcplot(x,y,**kwargs):
     shx = x.shape
     shy = y.shape
 
-    # 
-    # This is for handling MDA of shape 
+    #
+    # This is for handling MDA of shape
     #
     if len(shy)>2: # 3
-        ydim = shy[0:-1]   
+        ydim = shy[0:-1]
         nlin = ydim[0]
         ncol = ydim[1]
     else:
         if not grid:
-            if len(shy)>1: #2   1 column 
+            if len(shy)>1: #2   1 column
                 nlin = shy[0]
                 ncol = 1
-            else:          #0   1 line / 1 column 
+            else:          #0   1 line / 1 column
                 nlin = 1
                 ncol = 1
                 y = y[np.newaxis,:]
 
-    
+
     # below is the same axis constraint as for Bsignal object
     assert(shx[0]==shy[-1]), "plotutil : x,y shape incompatibility"
 
@@ -245,13 +246,13 @@ def mulcplot(x,y,**kwargs):
     assert((nxlabels==nfigy) | (nxlabels==1))
     assert((nylabels==nfigy) | (nxlabels==1))
 
-    if ax==[]:    
-        # nlin , ncol subplot 
+    if ax==[]:
+        # nlin , ncol subplot
         fig,ax = plt.subplots(nlin,ncol,sharey=True,sharex=True,figsize=kwargs['figsize'])
 
         if (nlin==1)&(ncol==1):
             ax = np.array(ax)[np.newaxis,np.newaxis]
-        else:    
+        else:
             if nlin==1:
                 ax = ax[np.newaxis,:]
             if ncol==1:
@@ -259,7 +260,7 @@ def mulcplot(x,y,**kwargs):
     else:
         if (nlin==1)&(ncol==1):
             ax = np.array(ax)[np.newaxis,np.newaxis]
-   
+
     for l in range(nlin):
         for c in range(ncol):
             if len(shy)>2:
@@ -267,7 +268,7 @@ def mulcplot(x,y,**kwargs):
                     lablc = labels[l,c]
                 else:
                     lablc = labels[0]
-                
+
                 if types[0]=='v':
                         ax[l,c].plot(x,y[l,c,:],label=lablc,**args)
                 if types[0]=='r':
@@ -302,12 +303,12 @@ def mulcplot(x,y,**kwargs):
                     ax[l,c].set_ylabel(ylabels[l,c])
                 else:
                     ax[l,c].set_ylabel(ylabels[0])
-                if ntitles>1:    
+                if ntitles>1:
                     ax[l,c].set_title(titles[l,c])
                 else:
                     ax[l,c].set_title(titles[0])
                 ax[l,c].legend()
-                   
+
             else:
                 k = l*ncol+c
                 if types[k%ntypes]=='v':
@@ -348,7 +349,7 @@ def mulcplot(x,y,**kwargs):
 
     #plt.tight_layout()
 
-    return(fig,ax)                  
+    return(fig,ax)
 
 
 def displot(pt, ph, arrow=False, **kwargs ):
@@ -386,23 +387,26 @@ def displot(pt, ph, arrow=False, **kwargs ):
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
-    defaults = { 'arrow' : False }
+    defaults = { 'arrow' : False ,
+                 'fig' : [] ,
+                 'ax' : []  }
 
     for key, value in defaults.items():
         if key not in kwargs:
             kwargs[key] = value
+
 
     args ={}
     for k in kwargs:
         if k not in defaults.keys():
             args[k]=kwargs[k]
 
-    if 'fig' not in kwargs:
+    if kwargs['fig'] == []:
         fig = plt.gcf()
     else:
         fig = kwargs['fig']
 
-    if 'ax' not in kwargs:
+    if kwargs['ax'] == []:
         ax  = fig.gca()
     else:
         ax = kwargs['ax']

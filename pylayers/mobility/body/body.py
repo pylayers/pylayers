@@ -57,7 +57,7 @@ def dist(A, B):
 
 
 class Body(object):
-    """ Class to manage the Body model
+    """ Class to manage a Body model
 
     Members
     -------
@@ -84,18 +84,19 @@ class Body(object):
     cylinder_basis_k
     cyl_antenna
 
-    Notes
-    -----
 
-    nodes_Id = {0:'STRN',1:'CLAV',2:'RFHD',3:'RSHO',
-    4:'LSHO', 5:'RELB',6:'LELB', 7:'RWRB',8:'LWRB', 9:'RFWT',
-    10:'LFWT', 11:'RKNE', 12:'LKNE',13:'RANK', 14:'LANK' ,
-    15:'LFIN' ,16:'LELB', 17:'RUPA',18:'LUPA', 19:'RFRM',
-    20:'LFRM', 21:'LSHN', 22:'RSHN',23:'LTHI', 24:'RTHI',
-    25:'LHEE', 26:'RHEE', 27:'LTOE',28:'RTOE', 29:'RMT5'}
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
+        """
+        Parameters
+        ----------
+
+        _filebody : string
+        _filemocap : string
+
+        """
+
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
         self.loadC3D(filename=_filemocap,centered=True)
@@ -123,7 +124,7 @@ class Body(object):
         if 'topos' not in dir(self):
             st = st+ 'I am nowhere yet\n\n'
         else :
-            st = 'My centroid position is \n'+ str(self.centroid)+"\n"
+            st = st + 'My centroid position is \n'+ str(self.centroid)+"\n"
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):
@@ -147,6 +148,7 @@ class Body(object):
         ----------
 
         _filebody : body short filename
+
         Notes
         -----
 
@@ -155,7 +157,7 @@ class Body(object):
         + section [nodes]
         Node number = Node name
         + section [cylinder]
-        Cylinder number = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
+        CylinderId = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
         + section [antennas]
         Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
 
@@ -194,6 +196,8 @@ class Body(object):
             self.sl[i,:] = np.array([t,h,r])
 
         self.ncyl = len(di['cylinder'].values())
+        
+        # update devices dict 
         self.dev={}
         for dev in di['device'].keys():
             self.dev[dev]=di['device'][dev]
@@ -329,16 +333,18 @@ class Body(object):
 
             >>> import numpy as np
             >>> import pylayers.mobility.trajectory as tr
+            >>> import pylayers.mobility.body.body as body
             >>> import matplotlib.pyplot as plt
             >>> time = np.arange(0,10,0.1)
             >>> v = 4000/3600.
             >>> x = v*time
             >>> y = np.zeros(len(time))
             >>> traj = tr.Trajectory()
-            >>> bc = Body()
-            >>> bc.settopos(traj,2.3)
-            >>> nx.draw(bc.g,bc.g.pos)
-            >>> axe = plt.axis('scaled')
+            >>> traj.generate()
+            >>> John = body.Body()
+            >>> John.settopos(traj,2.3)
+            >>> fig,ax = John.show(plane='xz',color='b')
+            >>> plt.title('xz')
             >>> plt.show()
 
         Notes
@@ -422,7 +428,7 @@ class Body(object):
         topos : boolean
                 default : True
         frameId : int
-                default 0 
+                default 0
 
         Returns
         -------
@@ -431,21 +437,26 @@ class Body(object):
 
         Examples
         --------
-        >>> import numpy as np
-        >>> import pylayers.mobility.trajectory as tr
-        >>> import matplotlib.pyplot as plt
-        >>> time = np.arange(0,10,0.1)
-        >>> v = 4000/3600.
-        >>> x = v*time
-        >>> y = np.zeros(len(time))
-        >>> traj = tr.Trajectory()
-        >>> bc = Body()
-        >>> bc.settopos(traj,2.3,2)
-        >>> bc.setccs(topos=True)
-        >>> bc.setdcs()
-        >>> nx.draw(bc.g,bc.g.pos)
-        >>> axe = plt.axis('scaled')
-        >>> plt.show()
+
+        .. plot::
+            :include-source:
+
+            >>> import numpy as np
+            >>> import pylayers.mobility.trajectory as tr
+            >>> import pylayers.mobility.body.body as body
+            >>> import matplotlib.pyplot as plt
+            >>> time = np.arange(0,10,0.1)
+            >>> v = 4000/3600.
+            >>> x = v*time
+            >>> y = np.zeros(len(time))
+            >>> traj = tr.Trajectory()
+            >>> traj.generate()
+            >>> bc = body.Body()
+            >>> bc.settopos(traj,2.3,2)
+            >>> bc.setccs(topos=True)
+            >>> bc.setdcs()
+            >>> bc.show(plane='yz',color='b',widthfactor=80)
+            >>> plt.show()
 
         """
         self.dcs = {}
@@ -694,7 +705,17 @@ class Body(object):
         return(fig,ax)
 
     def _show3(self,**kwargs):
-        """
+        """ mayavi visualization
+
+        Parameters
+        ----------
+        iframe :
+        widthfactor :
+        topos : boolean
+        pattern : boolean
+        ccs : boolean
+        k : frame index
+
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
@@ -732,33 +753,39 @@ class Body(object):
             cc = (pta+phe)/2.
             l = np.sqrt(np.sum(ax**2))
             cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
-                        axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
-           
+                       axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+
             # if kwargs['ccs']:
 
             #     pt = pta+cylrad*self.ccs[k,:,0]
             #     import ipdb
             #     ipdb.set_trace()
             #     mlab.quiver3d(pt,pt,pt,self.ccs[k,0,:],self.ccs[k,1,:],self.ccs[k,2,:])
-    
-                    
+
+
 
 
         if kwargs['pattern']:
             self.setacs()
             for key in self.dcs.keys():
-                import ipdb
-                ipdb.set_trace()
                 Ant =  ant.Antenna(self.dev[key]['file'])
+
                 if not hasattr(Ant,'SqG'):
                     Ant.Fsynth()
+
                 U = self.dcs[key]
                 V = Ant.SqG[kwargs['k'],:,:]
-                T  = self.acs[key]
+                T = self.acs[key]
 
-                Ant._show3(po=U[:,0], T=T,ilog=False,minr=0.01,maxr=0.2,
-                            newfig=False,title=False,colorbar=False)
-                
+                Ant._show3(po=U[:,0],
+                           T=T,
+                           ilog=False,
+                           minr=0.01,
+                           maxr=0.2,
+                           newfig=False,
+                           title=False,
+                           colorbar=False)
+
 
 
     def show(self,**kwargs):
@@ -770,6 +797,11 @@ class Body(object):
         frameiId : int
         plane : string
             'yz' | 'xz' | 'xy'
+        widthfactor : int
+        topos : boolean
+            default False
+
+
 
         """
 
@@ -795,7 +827,7 @@ class Body(object):
             ax2 = 2
         if kwargs['plane'] == 'xy':
             ax1 = 0
-            ax2 = 2
+            ax2 = 1
 
         fId = kwargs['frameId']
 
@@ -1237,7 +1269,7 @@ class Body(object):
             B = self.dcs[link[1]][:,0]
 
             inter  = self.intersectBody(A,B, topos=topos,frameId = frameId, cyl =[])[0]
-            
+
 
             link_vis[k] =  sum(inter)
         return link_vis
@@ -1415,15 +1447,15 @@ def Global_Trajectory(cycle, traj):
 if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()
-    bd = Body(_filebody='Alex.ini')
+    bd = Body(_filebody='John.ini')
     lt = tr.importsn()
-    #traj = tr.Trajectory()
-    bd.settopos(lt[0],0.3,cs=True)
+    traj = tr.Trajectory()
+    traj.generate()
+    bd.settopos(traj,0.3,cs=True)
     #bd.setccs(topos=True)
     #bd.setdcs()
     #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
-    bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=True)
-    bd.show()
+    bd._show3(k=46,ccs=True,topos=True,pattern=True)
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
     #bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')

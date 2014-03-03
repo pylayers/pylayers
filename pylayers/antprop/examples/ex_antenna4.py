@@ -13,7 +13,7 @@ This test :
 """
 filename = 'S1R1.mat'
 
-A = Antenna(filename,'ant/UWBAN/Matfile')
+A = Antenna(filename,directory='ant/UWBAN/Matfile')
 
 #plot(freq,angle(A.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]*exp(2j*pi*freq.reshape(len(freq))*electricalDelay)))
 freq = A.fa.reshape(104,1,1)
