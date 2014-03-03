@@ -867,12 +867,14 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        type</span>
+
+<span class="sd">        typ</span>
 <span class="sd">               {&#39;moddB&#39; : modulus in dB ,</span>
 <span class="sd">                 &#39;mod&#39;, : modulus in linear scale,</span>
 <span class="sd">                 &#39;ang&#39;   : unwraped phase in radians}</span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
@@ -883,10 +885,13 @@
 <span class="sd">            &gt;&gt;&gt; F  = M.fdd</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; F.plot(&#39;moddB&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.tight_layout()</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; F.plot(&#39;mod&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.tight_layout()</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; F.plot(&#39;ang&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.tight_layout()</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
