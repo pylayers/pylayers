@@ -146,7 +146,7 @@ class Ctilde(object):
         self.load(filefield, transpose=False)
 
 
-    def save5(self,Lfilename,idx,a,b):
+    def saveh5(self,Lfilename,idx,a,b):
         """ save Ctilde object in hdf5 format
 
         Parameters
@@ -174,31 +174,35 @@ class Ctilde(object):
             self.locbas(b2g=True)
 
         f=h5py.File(filename,'w')
-        f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
-        f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
-        f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
-        f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
-        f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
+            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
+            f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
+            f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
 
-        f.create_dataset('fGHz',shape=np.shape(self.fGHz),data=self.fGHz)
-
-
-        f.create_dataset('Ctt_y',shape=np.shape(self.Ctt.y),data=self.Ctt.y)
-        f.create_dataset('Cpp_y',shape=np.shape(self.Cpp.y),data=self.Cpp.y)
-        f.create_dataset('Cpt_y',shape=np.shape(self.Cpt.y),data=self.Cpt.y)
-        f.create_dataset('Ctp_y',shape=np.shape(self.Ctp.y),data=self.Ctp.y)
-
-        f.create_dataset('Tx',shape=np.shape(a),data=a)
-        f.create_dataset('Rx',shape=np.shape(b),data=b)
-
-        f.close()
+            f.create_dataset('fGHz',shape=np.shape(self.fGHz),data=self.fGHz)
 
 
+            f.create_dataset('Ctt_y',shape=np.shape(self.Ctt.y),data=self.Ctt.y)
+            f.create_dataset('Cpp_y',shape=np.shape(self.Cpp.y),data=self.Cpp.y)
+            f.create_dataset('Cpt_y',shape=np.shape(self.Cpt.y),data=self.Cpt.y)
+            f.create_dataset('Ctp_y',shape=np.shape(self.Ctp.y),data=self.Ctp.y)
+
+            f.create_dataset('Tx',shape=np.shape(a),data=a)
+            f.create_dataset('Rx',shape=np.shape(b),data=b)
+
+            f.close()
+        except:
+            f.close()
+            raise NameError('Channel.Ctilde: issue when writting h5py file')
 
 
 
 
-    def load5(self,Lfilename,idx):
+    def loadh5(self,Lfilename,idx,output=True):
         """ load Ctilde object in hdf5 format
 
         Parameters
@@ -208,11 +212,13 @@ class Ctilde(object):
             Layout filename
         idx : int
             file identifier number
-
+        output : bool 
+            return an output precised in return
 
         Returns
         -------
 
+        if output:
         (Layout filename , Tx position, Rx position)
 
         """
@@ -222,35 +228,38 @@ class Ctilde(object):
         filename=pyu.getlong(_filename,pstruc['DIRCT'])
 
         f=h5py.File(filename,'r')
+        try:
+            self.fGHz = f['fGHz'][:]
+            self.tang = f['tang'][:]
+            self.rang = f['rang'][:]
+            self.tauk = f['tauk'][:]
 
-        self.fGHz = f['fGHz'][:]
-        self.tang = f['tang'][:]
-        self.rang = f['rang'][:]
-        self.tauk = f['tauk'][:]
+            self.Tt = f['Tt'][:]
+            self.Tr = f['Tr'][:]
 
-        self.Tt = f['Tt'][:]
-        self.Tr = f['Tr'][:]
+            Ctt = f['Ctt_y'][:]
+            Cpp = f['Cpp_y'][:]
+            Ctp = f['Ctp_y'][:]
+            Cpt = f['Cpt_y'][:]
 
-        Ctt = f['Ctt_y'][:]
-        Cpp = f['Cpp_y'][:]
-        Ctp = f['Ctp_y'][:]
-        Cpt = f['Cpt_y'][:]
-
-        self.Ctt = bs.FUsignal(self.fGHz, Ctt)
-        self.Ctp = bs.FUsignal(self.fGHz, Ctp)
-        self.Cpt = bs.FUsignal(self.fGHz, Cpt)
-        self.Cpp = bs.FUsignal(self.fGHz, Cpp)
-        tx = f['Tx'][:]
-        rx = f['Rx'][:]
-
-
-        self.nfreq = len(self.fGHz)
-        self.nray = np.shape(self.Cpp.y)[0]
-
-        f.close()
+            self.Ctt = bs.FUsignal(self.fGHz, Ctt)
+            self.Ctp = bs.FUsignal(self.fGHz, Ctp)
+            self.Cpt = bs.FUsignal(self.fGHz, Cpt)
+            self.Cpp = bs.FUsignal(self.fGHz, Cpp)
+            tx = f['Tx'][:]
+            rx = f['Rx'][:]
 
 
-        return (Lfilename ,tx,rx)
+            self.nfreq = len(self.fGHz)
+            self.nray = np.shape(self.Cpp.y)[0]
+
+            f.close()
+        except:
+            f.close()
+            raise NameError('Channel.Ctilde: issue when reading h5py file')
+
+        if output :
+            return (Lfilename ,tx,rx)
 
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
@@ -1320,7 +1329,12 @@ class Tchannel(bs.FUDAsignal):
 
 
     """
-    def __init__(self, fGHz, alpha, tau, dod, doa):
+    def __init__(self,
+                fGHz = np.array(([],)),
+                alpha= np.array(([],[])),
+                tau  = np.array(([],)),
+                dod  = np.array(([[],[]])).T,
+                doa  = np.array(([[],[]])).T):
         """
 
         Parameters
@@ -1343,6 +1357,104 @@ class Tchannel(bs.FUDAsignal):
         st = st + 'tau :'+str(min(self.tau0))+' '+str(max(self.tau0))+"\n"
         st = st + 'dist :'+str(min(0.3*self.tau0))+' '+str(max(0.3*self.tau0))+"\n"
         return(st)
+
+
+    def saveh5(self,Lfilename,idx,a,b,Ta,Tb):
+        """ save Ctilde object in hdf5 format
+
+        Parameters
+        ----------
+
+        Lfilename  : string
+            Layout filename
+        idx : int
+            file identifier number
+        a : np.ndarray
+            postion of point a (transmitter)
+        b : np.ndarray
+            postion of point b (receiver)
+        Ta : np.ndarray
+            rotation matrice of antenna a
+        Tb : np.ndarray
+            rotation matrice of antenna b
+
+        """
+        _Lfilename=Lfilename.split('.')[0]
+        filename= _Lfilename +'_' + str(idx).zfill(5) + '.h5'
+        filenameh5=pyu.getlong(filename,pstruc['DIRH'])
+
+        f=h5py.File(filenameh5,'w')
+                
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            f.attrs['a']=a
+            f.attrs['b']=b
+            f.attrs['Ta']=Ta
+            f.attrs['Tb']=Tb
+            # keys not saved as attribute of h5py file
+            for k,va in self.__dict__.items():
+                f.create_dataset(k,shape = np.shape(va),data=va)
+            f.close()
+        except:
+            f.close()
+            raise NameError('Channel Tchannel: issue when writting h5py file')
+
+    def loadh5(self,Lfilename,idx, output = True):
+        """ Load Ctilde object in hdf5 format
+
+        Parameters
+        ----------
+        Lfilename  : string
+            Layout filename
+        idx : int
+            file identifier number
+        output : bool 
+            return an output precised in return
+
+        Returns
+        -------
+        if output:
+        (a,b,Ta,Tb) 
+        
+        with 
+            a = np.ndarray
+                postion of point a (transmitter)
+            b = np.ndarray
+                postion of point b (receiver)
+            Ta = np.ndarray
+                rotation matrice of antenna a
+            Tb = np.ndarray
+                rotation matrice of antenna b
+
+
+        """    
+        filename = Lfilename.split('.')[0] +'_' + str(idx).zfill(5) + '.h5'
+        filenameh5 = pyu.getlong(filename,pstruc['DIRH'])
+        
+        f=h5py.File(filenameh5,'r')
+        try:
+            # keys not saved as attribute of h5py file
+            for k,va in f.items():
+                if k != 'tau1':
+                    setattr(self,str(k),va[:])
+                else :
+                    setattr(self,str(k),va)
+
+            a = f.attrs['a']
+            b = f.attrs['b']
+            Ta = f.attrs['Ta']
+            Tb = f.attrs['Tb']
+            f.close()
+
+            self.__init__(self.x, self.y, self.tau0, self.dod, self.doa)
+
+            if output :
+                return a,b,Ta,Tb
+
+        except:
+            f.close()
+            raise NameError('Channel Tchannel: issue when reading h5py file')
 
     def info(self):
         """ display information

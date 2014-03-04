@@ -489,8 +489,8 @@ class Body(object):
 
             #~ kta = ed[0]
             #~ khe = ed[1]
-            kta = self.sl[int(Id),0]
-            khe = self.sl[int(Id),1]
+            kta = int(self.sl[int(Id),0])
+            khe = int(self.sl[int(Id),1])
             Rcyl = self.sl[int(Id),2]
 
             if topos == True :
@@ -613,6 +613,8 @@ class Body(object):
             self.centered = False
             self.center()
 
+        
+
     def movie(self,**kwargs):
         """ creates a geomview movie
 
@@ -731,7 +733,7 @@ class Body(object):
                     'widthfactor' : 1.,
                     'topos':False,
                     'pattern':False,
-                    'ccs':True,
+                    'ccs':False,
                     'k':0}
 
         for k in defaults:
@@ -749,8 +751,8 @@ class Body(object):
 
         for k in range(self.ncyl):
 
-            kta = self.sl[k,0]
-            khe = self.sl[k,1]
+            kta = int(self.sl[k,0])
+            khe = int(self.sl[k,1])
             cylrad = self.sl[k,2]
             if kwargs['topos']:
                 pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
@@ -765,12 +767,11 @@ class Body(object):
             cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
                        axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
 
-            # if kwargs['ccs']:
+            if kwargs['ccs']:
 
-            #     pt = pta+cylrad*self.ccs[k,:,0]
-            #     import ipdb
-            #     ipdb.set_trace()
-            #     mlab.quiver3d(pt,pt,pt,self.ccs[k,0,:],self.ccs[k,1,:],self.ccs[k,2,:])
+                pt = pta+cylrad*kwargs['widthfactor']*self.ccs[k,:,0]
+                pte = np.repeat(pt[:,np.newaxis],3,axis=1)
+                mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)
 
 
 
@@ -1136,9 +1137,9 @@ class Body(object):
         self.ccs = np.empty((nc,3,3))
         for k in range(self.sl.shape[0]):
             # e0 : tail node of cylinder segment
-            e0 = self.sl[k,0]
+            e0 = int(self.sl[k,0])
             # e1 : head node of cylinder segment
-            e1 = self.sl[k,1]
+            e1 = int(self.sl[k,1])
 
             if not topos:
                 # pA : tail point

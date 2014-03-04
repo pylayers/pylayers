@@ -1,6 +1,5 @@
 #-*- coding:Utf-8 -*-
 """
-
 Class Signatures
 ================
 
@@ -83,11 +82,304 @@ import matplotlib.pyplot as plt
 from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.antprop.rays import Rays
+import h5py
 import copy
 import pickle
 import logging
 import time
 #from numba import autojit
+
+def showsig(L,s,tx=[],rx=[]):
+    """
+    
+    Parameters
+    ----------
+
+    L  : Layout 
+    s  : 
+    tx :
+    rx : 
+
+    """
+    L.display['thin']=True
+    fig,ax = L.showGs()
+    L.display['thin']=False
+    L.display['edlabel']=True
+    L.showGs(fig=fig,ax=ax,edlist=s,width=4)
+    if tx !=[]:
+        plt.plot(tx[0],tx[1],'x')
+    if rx !=[]:
+        plt.plot(rx[0],rx[1],'+')
+    plt.title(str(s))
+    plt.show()
+    L.display['edlabel']=False
+
+
+def gidl(g):
+    """ gi without diffraction
+
+   Returns
+   -------
+
+   gr 
+
+   """
+
+    edlist=[]
+    pos={}
+    for n in g.nodes():
+        en = eval(n)
+        if type(en) == tuple :
+            edlist.append(n)
+    gr=g.subgraph(edlist)
+    dpos = {k:g.pos[k] for k in edlist}
+    gr.pos=dpos
+    return(gr)
+
+
+def frontline(L,nc,v):
+    """ determine cycle frontline
+
+    This function calculates the scalar product of the normals of a cycle 
+    and returns the indev of segments whith are facing the given direction v.
+    scalar product < 0.
+
+    Parameters
+    ----------
+
+    L : Layout
+    nc : cycle number
+    v : direction vector
+
+    Returns
+    -------
+
+    nsegf : list 
+
+    Example
+    -------
+
+    >>> from pylayers.gis.layout import * 
+    >>> L = Layout()
+    >>> L.build()
+    >>> v = np.array([1,1])
+    >>> frontline(L,0,v)
+    [3, 4]
+
+    See Also
+    --------
+
+    run3
+
+    """
+    npt = filter(lambda x: x<0, L.Gt.node[nc]['cycle'].cycle)  # points 
+    nseg = filter(lambda x: x>0, L.Gt.node[nc]['cycle'].cycle) # segments
+    pt  = map(lambda npt : [L.Gs.pos[npt][0],L.Gs.pos[npt][1]],npt)
+    pt1 = np.array(pt)   # convert in ndarray
+    n1 = geu.Lr2n(pt1.T) # get the normals of the cycle
+    ps = np.sum(n1*v[:,np.newaxis],axis=0) # scalar product with vector v
+    u = np.where(ps<0)[0]   # keep segment if scalar product <0
+    nsegf = map(lambda n: nseg[n],u)
+    return nsegf
+
+
+def edgeout2(L,g):
+    """ filter authorized Gi edges output 
+
+    Parameters
+    ----------
+
+    L : Layout
+    g : Digraph Gi
+
+    Notes 
+    -----
+
+    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+    This function checks that this sequence is feasible
+    , whatever the type of nstr0 and nstr1.
+    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
+    edge (nstr0,nstr1)
+
+
+    """
+
+    # loop over all edges of Gi
+    for e in g.edges():
+        # extract  both termination interactions nodes
+        i0 = eval(e[0])
+        i1 = eval(e[1])
+        try:
+            nstr0 = i0[0]
+        except:
+            nstr0 = i0
+
+
+        try:
+            nstr1 = i1[0]
+            # Transmission
+            if len(i1)>2:
+                typ=2
+            # Reflexion    
+            else :
+                typ=1
+        # Diffraction        
+        except:
+            nstr1 = i1
+            typ = 3
+
+        # list of authorized outputs, initialized void
+        output = []
+        # nstr1 : segment number of final interaction
+        if nstr1>0:
+            pseg1 = L.seg2pts(nstr1).reshape(2,2).T
+            cn = cone.Cone()
+            if nstr0>0:
+                pseg0 = L.seg2pts(nstr0).reshape(2,2).T
+                # test if nstr0 and nstr1 are connected segments
+                if (len(np.intersect1d(nx.neighbors(L.Gs,nstr0),nx.neighbors(L.Gs,nstr1)))==0):
+                    # not connected
+                    cn.from2segs(pseg0,pseg1)
+                else:
+                    # connected 
+                    cn.from2csegs(pseg0,pseg1)
+            else:
+                pt = np.array(L.Gs.pos[nstr0])
+                cn.fromptseg(pt,pseg1)
+        
+            # list all potential successor of interaction i1
+            i2 = nx.neighbors(g,str(i1))
+            ipoints = filter(lambda x: eval(x)<0 ,i2)
+            istup = filter(lambda x : type(eval(x))==tuple,i2)
+            isegments = np.unique(map(lambda x : eval(x)[0],istup))
+            if len(isegments)>0:
+                points = L.seg2pts(isegments)
+                pta = points[0:2,:]
+                phe = points[2:,:]
+                #print points
+                #print segments 
+                #cn.show()
+                if len(i1)==3:
+                    bs = cn.belong_seg(pta,phe)
+                    #if bs.any():
+                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    #if ~bs.any():
+                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+                if len(i1)==2:    
+                    Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
+                    Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
+                    bs = cn.belong_seg(Mpta,Mphe)
+                    #print i0,i1
+                    #if ((i0 == (6, 0)) & (i1 == (7, 0))):
+                    #    pdb.set_trace()
+                    #if bs.any():
+                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    #if ~bs.any():
+                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+                    #    plt.show()
+                    #    pdb.set_trace()
+                
+                isegkeep = isegments[bs]     
+                output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
+                # keep all segment above nstr1 and in Cone if T 
+                # keep all segment below nstr1 and in Cone if R 
+
+        g.add_edge(str(i0),str(i1),output=output)
+
+    return(g)
+def edgeout(L,g):
+    """ filter authorized Gi edges output 
+
+    Parameters
+    ----------
+
+    L : Layout
+    g : Digraph Gi
+
+    Notes 
+    -----
+
+    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+    This function checks that this sequence is feasible
+    , whatever the type of nstr0 and nstr1.
+    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
+    edge (nstr0,nstr1)
+
+
+    """
+
+    # loop over all edges of Gi
+    for e in g.edges():
+        # extract  both termination interactions nodes
+        i0 = eval(e[0])
+        i1 = eval(e[1])
+        try:
+            nstr0 = i0[0]
+        except:
+            nstr0 = i0
+
+
+        try:
+            nstr1 = i1[0]
+            # Transmission
+            if len(i1)>2:
+                typ=2
+            # Reflexion    
+            else :
+                typ=1
+        # Diffraction        
+        except:
+            nstr1 = i1
+            typ = 3
+
+        # list of authorized outputs, initialized void
+        output = []
+        # nstr1 : segment number of final interaction
+        if nstr1>0:
+            #cn = cone.Cone()
+            #cn.from2segs(pseg0,pseg1)
+            # segment unitary vector
+            # l1 : unitary vector along structure segments  
+            l1 = L.seguv(np.array([nstr1]))
+            #
+            # unitary vector along the ray (nstr0,nstr1)
+            #
+            p0 = np.array(L.Gs.pos[nstr0])
+            p1 = np.array(L.Gs.pos[nstr1])
+            v01  = p1-p0
+            v01m = np.sqrt(np.dot(v01,v01))
+            v01n = v01/v01m
+            v10n = -v01n
+            # next interaction
+            # considering all neighbors of i1 in Gi 
+            for i2 in nx.neighbors(g,str(i1)):
+
+                i2 = eval(i2)
+                if type(i2)==int:
+                    nstr2 = i2
+                else:
+                    nstr2 = i2[0]
+                p2 = np.array(L.Gs.pos[nstr2])
+                v12 = p2-p1
+                v12m = np.sqrt(np.dot(v12,v12))
+                v12n = v12/v12m
+
+                d1 = np.dot(v01n,l1)
+                d2 = np.dot(l1,v12n)
+
+                # if (reflexion is forward) or (reflexion return to its origin)
+                if (d1*d2>=0) or (nstr0 == nstr2) and typ == 1:
+                    output.append(str(i2))
+#                elif d1*d2>=-0.2 and typ ==2:
+                elif typ == 2 :
+                    if abs(d1) <0.9 and abs(d2) <0.9 :
+                        if d1*d2 >= -0.2:
+                            output.append(str(i2))
+                else:
+                    pass
+        g.add_edge(str(i0),str(i1),output=output)
+
+    return(g)
 
 class Signatures(dict):
     """ gathers all signatures from a layout given tx and rx
@@ -207,12 +499,66 @@ class Signatures(dict):
 
                 # s = s + '   '+ str(a[i,1,:]) + '\n'
 
+    def saveh5(self):
+        """ Save signatures
+            h5py format
+        """
+
+        filename=pyu.getlong(self.filename+'.h5',pstruc['DIRSIG'])
+        f=h5py.File(filename,'w')
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            f.attrs['L']=self.L.filename
+            f.attrs['source']=self.source
+            f.attrs['target']=self.target
+            f.attrs['cutoff']=self.cutoff
+            for k in self.keys():
+                f.create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
+            f.close()
+        except:
+            f.close()
+            raise NameError('Signature: issue when writting h5py file')
+
+
+    def loadh5(self,filename=[]):
+        """ Load signatures
+            h5py format
+        """
+        if filename == []:
+            _filename = self.filename
+        else :
+            _filename = filename
+
+        filename=pyu.getlong(_filename+'.h5',pstruc['DIRSIG'])
+
+        f=h5py.File(filename,'r')
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            for k in f.keys():
+                self.update({eval(k):f[k][:]})
+            f.close()
+        except:
+            f.close()
+            raise NameError('Signature: issue when reading h5py file')
+
+
+        _fileL=pyu.getshort(filename).split('_')[0]+'.ini'
+        self.L=layout.Layout(_fileL)
+        try:
+            self.L.dumpr()
+        except:
+            self.L.build()
+            self.L.dumpw()
+
+
     def save(self):
         """ Save signatures
         """
         L=copy.deepcopy(self.L)
         del(self.L)
-        filename=pyu.getlong(self.filename,pstruc['DIRSIG'])
+        filename=pyu.getlong(self.filename+'.h5',pstruc['DIRSIG'])
         with open(filename, 'wb') as handle:
           pickle.dump(self, handle)
         self.L=L
@@ -2251,7 +2597,7 @@ class Signatures(dict):
                         rays[nint]['sig'][:, :, 0] = sig
 
         rays.nb_origin_sig = len(self)
-
+        rays.origin_sig_name = self.filename
         return rays
 
 class Signature(object):
@@ -3095,297 +3441,6 @@ class Signature(object):
 #        return rays
 
 
-def showsig(L,s,tx=[],rx=[]):
-    """
-    
-    Parameters
-    ----------
-
-    L  : Layout 
-    s  : 
-    tx :
-    rx : 
-
-    """
-    L.display['thin']=True
-    fig,ax = L.showGs()
-    L.display['thin']=False
-    L.display['edlabel']=True
-    L.showGs(fig=fig,ax=ax,edlist=s,width=4)
-    if tx !=[]:
-        plt.plot(tx[0],tx[1],'x')
-    if rx !=[]:
-        plt.plot(rx[0],rx[1],'+')
-    plt.title(str(s))
-    plt.show()
-    L.display['edlabel']=False
-
-
-def gidl(g):
-    """ gi without diffraction
-
-   Returns
-   -------
-
-   gr 
-
-   """
-
-    edlist=[]
-    pos={}
-    for n in g.nodes():
-        en = eval(n)
-        if type(en) == tuple :
-            edlist.append(n)
-    gr=g.subgraph(edlist)
-    dpos = {k:g.pos[k] for k in edlist}
-    gr.pos=dpos
-    return(gr)
-
-
-def frontline(L,nc,v):
-    """ determine cycle frontline
-
-    This function calculates the scalar product of the normals of a cycle 
-    and returns the indev of segments whith are facing the given direction v.
-    scalar product < 0.
-
-    Parameters
-    ----------
-
-    L : Layout
-    nc : cycle number
-    v : direction vector
-
-    Returns
-    -------
-
-    nsegf : list 
-
-    Example
-    -------
-
-    >>> from pylayers.gis.layout import * 
-    >>> L = Layout()
-    >>> L.build()
-    >>> v = np.array([1,1])
-    >>> frontline(L,0,v)
-    [3, 4]
-
-    See Also
-    --------
-
-    run3
-
-    """
-    npt = filter(lambda x: x<0, L.Gt.node[nc]['cycle'].cycle)  # points 
-    nseg = filter(lambda x: x>0, L.Gt.node[nc]['cycle'].cycle) # segments
-    pt  = map(lambda npt : [L.Gs.pos[npt][0],L.Gs.pos[npt][1]],npt)
-    pt1 = np.array(pt)   # convert in ndarray
-    n1 = geu.Lr2n(pt1.T) # get the normals of the cycle
-    ps = np.sum(n1*v[:,np.newaxis],axis=0) # scalar product with vector v
-    u = np.where(ps<0)[0]   # keep segment if scalar product <0
-    nsegf = map(lambda n: nseg[n],u)
-    return nsegf
-
-
-def edgeout2(L,g):
-    """ filter authorized Gi edges output 
-
-    Parameters
-    ----------
-
-    L : Layout
-    g : Digraph Gi
-
-    Notes 
-    -----
-
-    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
-    This function checks that this sequence is feasible
-    , whatever the type of nstr0 and nstr1.
-    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
-    edge (nstr0,nstr1)
-
-
-    """
-
-    # loop over all edges of Gi
-    for e in g.edges():
-        # extract  both termination interactions nodes
-        i0 = eval(e[0])
-        i1 = eval(e[1])
-        try:
-            nstr0 = i0[0]
-        except:
-            nstr0 = i0
-
-
-        try:
-            nstr1 = i1[0]
-            # Transmission
-            if len(i1)>2:
-                typ=2
-            # Reflexion    
-            else :
-                typ=1
-        # Diffraction        
-        except:
-            nstr1 = i1
-            typ = 3
-
-        # list of authorized outputs, initialized void
-        output = []
-        # nstr1 : segment number of final interaction
-        if nstr1>0:
-            pseg1 = L.seg2pts(nstr1).reshape(2,2).T
-            cn = cone.Cone()
-            if nstr0>0:
-                pseg0 = L.seg2pts(nstr0).reshape(2,2).T
-                # test if nstr0 and nstr1 are connected segments
-                if (len(np.intersect1d(nx.neighbors(L.Gs,nstr0),nx.neighbors(L.Gs,nstr1)))==0):
-                    # not connected
-                    cn.from2segs(pseg0,pseg1)
-                else:
-                    # connected 
-                    cn.from2csegs(pseg0,pseg1)
-            else:
-                pt = np.array(L.Gs.pos[nstr0])
-                cn.fromptseg(pt,pseg1)
-        
-            # list all potential successor of interaction i1
-            i2 = nx.neighbors(g,str(i1))
-            ipoints = filter(lambda x: eval(x)<0 ,i2)
-            istup = filter(lambda x : type(eval(x))==tuple,i2)
-            isegments = np.unique(map(lambda x : eval(x)[0],istup))
-            if len(isegments)>0:
-                points = L.seg2pts(isegments)
-                pta = points[0:2,:]
-                phe = points[2:,:]
-                #print points
-                #print segments 
-                #cn.show()
-                if len(i1)==3:
-                    bs = cn.belong_seg(pta,phe)
-                    #if bs.any():
-                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
-                    #if ~bs.any():
-                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
-                if len(i1)==2:    
-                    Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
-                    Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
-                    bs = cn.belong_seg(Mpta,Mphe)
-                    #print i0,i1
-                    #if ((i0 == (6, 0)) & (i1 == (7, 0))):
-                    #    pdb.set_trace()
-                    #if bs.any():
-                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
-                    #if ~bs.any():
-                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
-                    #    plt.show()
-                    #    pdb.set_trace()
-                
-                isegkeep = isegments[bs]     
-                output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
-                # keep all segment above nstr1 and in Cone if T 
-                # keep all segment below nstr1 and in Cone if R 
-
-        g.add_edge(str(i0),str(i1),output=output)
-
-    return(g)
-def edgeout(L,g):
-    """ filter authorized Gi edges output 
-
-    Parameters
-    ----------
-
-    L : Layout
-    g : Digraph Gi
-
-    Notes 
-    -----
-
-    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
-    This function checks that this sequence is feasible
-    , whatever the type of nstr0 and nstr1.
-    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
-    edge (nstr0,nstr1)
-
-
-    """
-
-    # loop over all edges of Gi
-    for e in g.edges():
-        # extract  both termination interactions nodes
-        i0 = eval(e[0])
-        i1 = eval(e[1])
-        try:
-            nstr0 = i0[0]
-        except:
-            nstr0 = i0
-
-
-        try:
-            nstr1 = i1[0]
-            # Transmission
-            if len(i1)>2:
-                typ=2
-            # Reflexion    
-            else :
-                typ=1
-        # Diffraction        
-        except:
-            nstr1 = i1
-            typ = 3
-
-        # list of authorized outputs, initialized void
-        output = []
-        # nstr1 : segment number of final interaction
-        if nstr1>0:
-            #cn = cone.Cone()
-            #cn.from2segs(pseg0,pseg1)
-            # segment unitary vector
-            # l1 : unitary vector along structure segments  
-            l1 = L.seguv(np.array([nstr1]))
-            #
-            # unitary vector along the ray (nstr0,nstr1)
-            #
-            p0 = np.array(L.Gs.pos[nstr0])
-            p1 = np.array(L.Gs.pos[nstr1])
-            v01  = p1-p0
-            v01m = np.sqrt(np.dot(v01,v01))
-            v01n = v01/v01m
-            v10n = -v01n
-            # next interaction
-            # considering all neighbors of i1 in Gi 
-            for i2 in nx.neighbors(g,str(i1)):
-
-                i2 = eval(i2)
-                if type(i2)==int:
-                    nstr2 = i2
-                else:
-                    nstr2 = i2[0]
-                p2 = np.array(L.Gs.pos[nstr2])
-                v12 = p2-p1
-                v12m = np.sqrt(np.dot(v12,v12))
-                v12n = v12/v12m
-
-                d1 = np.dot(v01n,l1)
-                d2 = np.dot(l1,v12n)
-
-                # if (reflexion is forward) or (reflexion return to its origin)
-                if (d1*d2>=0) or (nstr0 == nstr2) and typ == 1:
-                    output.append(str(i2))
-#                elif d1*d2>=-0.2 and typ ==2:
-                elif typ == 2 :
-                    if abs(d1) <0.9 and abs(d2) <0.9 :
-                        if d1*d2 >= -0.2:
-                            output.append(str(i2))
-                else:
-                    pass
-        g.add_edge(str(i0),str(i1),output=output)
-
-    return(g)
 if __name__ == "__main__":
     plt.ion()
     print "testing pylayers/antprop/signature.py"
