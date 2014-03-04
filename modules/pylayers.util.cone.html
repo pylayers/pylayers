@@ -25,7 +25,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="pylayers.util package" href="pylayers.util.html" />
-    <link rel="next" title="pylayers.util.geomutil module" href="pylayers.util.geomutil.html" />
     <link rel="prev" title="pylayers.util.CDF module" href="pylayers.util.CDF.html" /> 
   </head>
   <body>
@@ -47,9 +46,6 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.util.geomutil.html" title="pylayers.util.geomutil module"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
           <a href="pylayers.util.CDF.html" title="pylayers.util.CDF module"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
@@ -64,12 +60,17 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.util.cone module</a><ul>
+<li><a class="reference internal" href="#class-cone">Class Cone</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.util.CDF.html"
                         title="previous chapter">pylayers.util.CDF module</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.util.geomutil.html"
-                        title="next chapter">pylayers.util.geomutil module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.util.cone.txt"
@@ -98,197 +99,62 @@
             
   <div class="section" id="module-pylayers.util.cone">
 <span id="pylayers-util-cone-module"></span><h1>pylayers.util.cone module<a class="headerlink" href="#module-pylayers.util.cone" title="Permalink to this headline">¶</a></h1>
-<p>Module : Cone</p>
+<div class="section" id="class-cone">
+<h2>Class Cone<a class="headerlink" href="#class-cone" title="Permalink to this headline">¶</a></h2>
 <p>To facilitate algorithms implementation, the following conventions have been introduced.</p>
 <ul class="simple">
 <li>A Cone has an apex which is a point in the plane.</li>
 <li>A cone has two vectors which define the cone aperture. Those two vectors can always been distinguished as a right vector (u) and a left vector (v).</li>
 </ul>
-<p>The cone region is defined by the convex angular sector from right vector (u) to left vector (v) 
+<p>The cone region is defined by the convex angular sector from right vector (u) to left vector (v)
 rotating folllowing the trigonometric convention.
 The modulus of the cross product between u and v is positive.</p>
-<p>u ^ v = alpha z with alpha &gt; 0</p>
-<dl class="class">
-<dt id="pylayers.util.cone.Cone">
-<em class="property">class </em><tt class="descclassname">pylayers.util.cone.</tt><tt class="descname">Cone</tt><big>(</big><em>a=array([1</em>, <em>0])</em>, <em>b=array([0</em>, <em>1])</em>, <em>apex=array([0</em>, <em>0])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.above">
-<tt class="descname">above</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.above"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.above" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.aboveseg">
-<tt class="descname">aboveseg</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.aboveseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.aboveseg" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.belong_point">
-<tt class="descname">belong_point</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.belong_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.belong_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>test if p belongs to Cone</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p><img class="math" src="../_images/math/054010ac991ce2a73e633fabd0b96d96c19044bc.png" alt="u        imes v = \alpha z with \alpha &gt; 0"/></p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p</strong> : np.array (Ndim x Npoints)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.__init__.html#pylayers.util.cone.Cone.__init__" title="pylayers.util.cone.Cone.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.__init__</span></tt></a>([a,&nbsp;b,&nbsp;apex])</td>
+<td>a : np.array (,2)</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>b</strong> : np.array boolean (1xNpoints)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.upd_angle.html#pylayers.util.cone.Cone.upd_angle" title="pylayers.util.cone.Cone.upd_angle"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.upd_angle</span></tt></a>()</td>
+<td>update cone angle attribute</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.belong_seg.html#pylayers.util.cone.Cone.belong_seg" title="pylayers.util.cone.Cone.belong_seg"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.belong_seg</span></tt></a>(pta,&nbsp;phe[,&nbsp;prob])</td>
+<td>test if segment belong to cone</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.aboveseg.html#pylayers.util.cone.Cone.aboveseg" title="pylayers.util.cone.Cone.aboveseg"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.aboveseg</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.outside_point.html#pylayers.util.cone.Cone.outside_point" title="pylayers.util.cone.Cone.outside_point"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.outside_point</span></tt></a>(p)</td>
+<td>check if p is outside cone</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.belong_point2.html#pylayers.util.cone.Cone.belong_point2" title="pylayers.util.cone.Cone.belong_point2"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.belong_point2</span></tt></a>(p)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.belong_point.html#pylayers.util.cone.Cone.belong_point" title="pylayers.util.cone.Cone.belong_point"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.belong_point</span></tt></a>(p)</td>
+<td>test if p belongs to Cone</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.above.html#pylayers.util.cone.Cone.above" title="pylayers.util.cone.Cone.above"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.above</span></tt></a>(p)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.fromptseg.html#pylayers.util.cone.Cone.fromptseg" title="pylayers.util.cone.Cone.fromptseg"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.fromptseg</span></tt></a>(pt,&nbsp;seg)</td>
+<td>creates a Cone from one point and one segment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.from2segs.html#pylayers.util.cone.Cone.from2segs" title="pylayers.util.cone.Cone.from2segs"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.from2segs</span></tt></a>(seg0,&nbsp;seg1)</td>
+<td>creates a Cone from 2 segments</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.from2csegs.html#pylayers.util.cone.Cone.from2csegs" title="pylayers.util.cone.Cone.from2csegs"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.from2csegs</span></tt></a>(seg0,&nbsp;seg1)</td>
+<td>creates a Cone from 2 connected segments</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.cone.Cone.show.html#pylayers.util.cone.Cone.show" title="pylayers.util.cone.Cone.show"><tt class="xref py py-obj docutils literal"><span class="pre">Cone.show</span></tt></a>(**kwargs)</td>
+<td>show cone</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.belong_point2">
-<tt class="descname">belong_point2</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.belong_point2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.belong_point2" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.belong_seg">
-<tt class="descname">belong_seg</tt><big>(</big><em>pta</em>, <em>phe</em>, <em>prob=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.belong_seg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.belong_seg" title="Permalink to this definition">¶</a></dt>
-<dd><p>test if segment belong to cone</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pta</strong> : np.array (2xNseg)</p>
-<p><strong>phe</strong> : np.array (2xNseg)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>typ</strong> : int</p>
-<blockquote>
-<div><p>0 : no visibility 
-1 : full visibility 
-2 : he.v 
-3 : ta.v
-4 : ta.u  
-5 : he.u  
-6 : inside</p>
-</div></blockquote>
-<p><strong>proba</strong> : float</p>
-<blockquote class="last">
-<div><p>geometric probability</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>A segment belongs to the cone if not all termination points 
-lie in the same side outside the cone.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.from2csegs">
-<tt class="descname">from2csegs</tt><big>(</big><em>seg0</em>, <em>seg1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.from2csegs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.from2csegs" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a Cone from 2 connected segments</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seg0</strong> : 2 x 2  (Ndim x Npoints)</p>
-<p class="last"><strong>seg1</strong> : 2 x 2</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>The only way for the cone to be degenerated is when the two segments are on the same line.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.from2segs">
-<tt class="descname">from2segs</tt><big>(</big><em>seg0</em>, <em>seg1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.from2segs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.from2segs" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a Cone from 2 segments</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seg0</strong> : 2 x 2  (Ndim x Npoints)</p>
-<p class="last"><strong>seg1</strong> : 2 x 2</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>The only way for the cone to be degenerated is when the two segments are on the same line.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.fromptseg">
-<tt class="descname">fromptseg</tt><big>(</big><em>pt</em>, <em>seg</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.fromptseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.fromptseg" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a Cone from one point and one segment</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt</strong> : nd.array (,2)</p>
-<p class="last"><strong>seg</strong> : nd.array (2,2)</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.outside_point">
-<tt class="descname">outside_point</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.outside_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.outside_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>check if p is outside cone</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : np.array  (2xNp)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>~b1 &amp; ~b2</strong> : boolean (outside on the left)  (,Np)</p>
-<p class="last"><strong>b1 &amp; b2</strong> : boolean (outside on the right)  (,Np)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>If one of the two output booleans is True the point is outside 
-There are 2 output bits but only 3 states due to (uv) convention.</p>
-<blockquote>
-<div>v    u</div></blockquote>
-<dl class="docutils">
-<dt>p     /       lv &amp; lu</dt>
-<dd><blockquote class="first">
-<div>/</div></blockquote>
-<dl class="last docutils">
-<dt>p /  </dt>
-<dd>/        ~lv &amp; lu</dd>
-<dt> /  p </dt>
-<dd>/        ~lu &amp; ~lv</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.show">
-<tt class="descname">show</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>show cone</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>length</strong> : float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.cone.Cone.upd_angle">
-<tt class="descname">upd_angle</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/cone.html#Cone.upd_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.cone.Cone.upd_angle" title="Permalink to this definition">¶</a></dt>
-<dd><p>update cone angle attribute 
-and associated probability of the Cone object</p>
-</dd></dl>
-
-</dd></dl>
-
+</div>
 </div>
 
 
@@ -306,9 +172,6 @@ and associated probability of the Cone object</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.util.geomutil.html" title="pylayers.util.geomutil module"
-             >next</a> |</li>
         <li class="right" >
           <a href="pylayers.util.CDF.html" title="pylayers.util.CDF module"
              >previous</a> |</li>

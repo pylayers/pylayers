@@ -80,7 +80,102 @@
 <span class="c"># -*- coding:Utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">This module handles spherical harmonics in PyLayers</span>
+<span class="sd">This module handles Scalar and Vector Spherical Harmonics in PyLayers</span>
+
+<span class="sd">Class VectorCoeff</span>
+<span class="sd">==================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    VectorCoeff.__init__</span>
+<span class="sd">    VectorCoeff.inits1</span>
+
+<span class="sd">class SSHCoeff</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     SSHCoeff.__init__</span>
+<span class="sd">     SSHCoeff.s2tos3</span>
+<span class="sd">     SSHCoeff.sets3</span>
+
+
+<span class="sd">class SCoeff</span>
+<span class="sd">============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     SCoeff.__init__</span>
+<span class="sd">     SCoeff.__repr__</span>
+<span class="sd">     SCoeff.inits2</span>
+<span class="sd">     SCoeff.inits3</span>
+<span class="sd">     SCoeff.delete</span>
+<span class="sd">     SCoeff.put</span>
+<span class="sd">     SCoeff.delete3</span>
+<span class="sd">     SCoeff.put3</span>
+<span class="sd">     SCoeff.s3tos2</span>
+<span class="sd">     SCoeff.plot</span>
+<span class="sd">     SCoeff.show</span>
+
+<span class="sd">class VCoeff</span>
+<span class="sd">============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     VCoeff.__init__</span>
+<span class="sd">     VCoeff.__repr__</span>
+<span class="sd">     VCoeff.inits1</span>
+<span class="sd">     VCoeff.inits2</span>
+<span class="sd">     VCoeff.inits3</span>
+<span class="sd">     VCoeff.s1tos2</span>
+<span class="sd">     VCoeff.delete</span>
+<span class="sd">     VCoeff.put</span>
+<span class="sd">     VCoeff.delete3</span>
+<span class="sd">     VCoeff.put3</span>
+<span class="sd">     VCoeff.s3tos2</span>
+<span class="sd">     VCoeff.plot</span>
+<span class="sd">     VCoeff.show</span>
+
+<span class="sd">class VSHCoeff</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     VSHCoeff.__init__</span>
+<span class="sd">     VSHCoeff.__repr__</span>
+<span class="sd">     VSHCoeff.plot</span>
+<span class="sd">     VSHCoeff.show</span>
+<span class="sd">     VSHCoeff.s1tos2</span>
+<span class="sd">     VSHCoeff.s2tos3_new</span>
+<span class="sd">     VSHCoeff.s2tos3</span>
+<span class="sd">     VSHCoeff.s3tos2</span>
+<span class="sd">     VSHCoeff.strip3</span>
+<span class="sd">     VSHCoeff.ens3</span>
+<span class="sd">     VSHCoeff.drag3</span>
+<span class="sd">     VSHCoeff.put3</span>
+
+
+<span class="sd">Utility Functions</span>
+<span class="sd">=================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     indexssh</span>
+<span class="sd">     indexvsh</span>
+<span class="sd">     index_vsh</span>
+<span class="sd">     AFLegendre3</span>
+<span class="sd">     AFLegendre2</span>
+<span class="sd">     AFLegendre</span>
+<span class="sd">     VW2</span>
+<span class="sd">     VW</span>
+<span class="sd">     VW0</span>
+<span class="sd">     plotVW</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -132,9 +227,9 @@
 <span class="sd">               [ 1.,  1.],</span>
 <span class="sd">               [ 2.,  1.],</span>
 <span class="sd">               [ 2.,  2.],</span>
-<span class="sd">               [ 2., -2.],</span>
+<span class="sd">               [ 1., -1.],</span>
 <span class="sd">               [ 2., -1.],</span>
-<span class="sd">               [ 1., -1.]])</span>
+<span class="sd">               [ 2., -2.]])</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -245,7 +340,7 @@
 </div>
 <div class="viewcode-block" id="VectorCoeff"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VectorCoeff">[docs]</a><span class="k">class</span> <span class="nc">VectorCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+<div class="viewcode-block" id="VectorCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VectorCoeff.__init__.html#pylayers.antprop.spharm.VectorCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
                  <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">k</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
@@ -256,7 +351,7 @@
 
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;s1&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">inits1</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">ind</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="VectorCoeff.inits1"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VectorCoeff.inits1">[docs]</a>    <span class="k">def</span> <span class="nf">inits1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -270,7 +365,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </div></div>
 <div class="viewcode-block" id="SSHCoeff"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SSHCoeff">[docs]</a><span class="k">class</span> <span class="nc">SSHCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">):</span>
+<div class="viewcode-block" id="SSHCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SSHCoeff.__init__.html#pylayers.antprop.spharm.SSHCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -287,7 +382,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span> <span class="o">=</span> <span class="n">Cz</span>
 
 
-
+</div>
 <div class="viewcode-block" id="SSHCoeff.s2tos3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SSHCoeff.s2tos3">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        convert scalar spherical coefficients from shape 2 to shape 3</span>
@@ -326,7 +421,7 @@
 <div class="viewcode-block" id="SSHCoeff.sets3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SSHCoeff.sets3">[docs]</a>    <span class="k">def</span> <span class="nf">sets3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">         Parameters</span>
+<span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Cx : SCoeff</span>
@@ -362,7 +457,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">lmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>  <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+<div class="viewcode-block" id="SCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.__init__.html#pylayers.antprop.spharm.SCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">lmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>  <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
                  <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">k</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
 
     <span class="c">#~ def __init__(self, **kwargs):</span>
@@ -405,8 +500,8 @@
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;s3&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">inits3</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="SCoeff.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.__repr__.html#pylayers.antprop.spharm.SCoeff.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="n">st</span> <span class="o">=</span> <span class="s">&quot;Nf   : &quot;</span> <span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span>  <span class="s">&quot;fmin (GHz) : &quot;</span><span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fmin</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
@@ -425,7 +520,7 @@
 
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="SCoeff.inits2"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.SCoeff.inits2">[docs]</a>    <span class="k">def</span> <span class="nf">inits2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span><span class="n">ind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize shape 2 format</span>
 
@@ -778,7 +873,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+<div class="viewcode-block" id="VCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VCoeff.__init__.html#pylayers.antprop.spharm.VCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
                  <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">k</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
         <span class="sd">&quot;&quot;&quot; init VCoeff</span>
 
@@ -807,8 +902,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">inits2</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;s3&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">inits3</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="VCoeff.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VCoeff.__repr__.html#pylayers.antprop.spharm.VCoeff.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="n">st</span> <span class="o">=</span> <span class="s">&quot;Nf   : &quot;</span> <span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span>  <span class="s">&quot;fmin (GHz) : &quot;</span><span class="o">+</span>  <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fmin</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
@@ -828,7 +923,7 @@
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Ncoeff s3 : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ind3</span><span class="p">))</span><span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="VCoeff.inits1"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VCoeff.inits1">[docs]</a>    <span class="k">def</span> <span class="nf">inits1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; initialize shape 1 format</span>
 
@@ -1237,7 +1332,7 @@
 <span class="sd">    C  = VSHCoeff(Br,Bi,Cr,Ci)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">):</span>
+<div class="viewcode-block" id="VSHCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.__init__.html#pylayers.antprop.spharm.VSHCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1251,8 +1346,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Bi</span> <span class="o">=</span> <span class="n">Bi</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span> <span class="o">=</span> <span class="n">Cr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span> <span class="o">=</span> <span class="n">Ci</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="VSHCoeff.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.__repr__.html#pylayers.antprop.spharm.VSHCoeff.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&quot;Br&quot;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
@@ -1268,7 +1363,7 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;-------------&quot;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> 
-    
+</div>
 <div class="viewcode-block" id="VSHCoeff.plot"><a class="viewcode-back" href="../../../modules/pylayers.antprop.spharm.html#pylayers.antprop.spharm.VSHCoeff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">,</span><span class="n">titre</span><span class="o">=</span><span class="s">&#39;titre&#39;</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">subp</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1732,15 +1827,17 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        N : int</span>
-<span class="sd">            max order  (theta)   (also called l or level )</span>
-<span class="sd">        M : int</span>
-<span class="sd">            max degree (phi)</span>
-<span class="sd">        x : np.array</span>
+
+<span class="sd">    N : int</span>
+<span class="sd">        max order  (theta)   (also called l or level )</span>
+<span class="sd">    M : int</span>
+<span class="sd">        max degree (phi)</span>
+<span class="sd">    x : np.array</span>
 <span class="sd">            function argument</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+
 <span class="sd">    Pmm1l :  ndarray ( Ndir, M , L ) </span>
 
 <span class="sd">        :math:`\\bar{P}_{n}^{(m-1)}(x)`</span>
@@ -1765,7 +1862,6 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-
 
 <span class="sd">    &gt;&gt;&gt; Pmm1n,Pmp1n = AFLegendre(5,4,np.array([0,1]))</span>
 
@@ -2018,6 +2114,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    n,m   : integer values (m&lt;=n)</span>
 <span class="sd">    theta : ndarray</span>
 <span class="sd">    phi   : ndarray</span>
@@ -2027,17 +2124,18 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+
 <span class="sd">    .. plot::</span>
 <span class="sd">        :include-source:</span>
 
-<span class="sd">        &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
-<span class="sd">        &gt;&gt;&gt; import  matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">        &gt;&gt;&gt; n=5</span>
-<span class="sd">        &gt;&gt;&gt; m=3</span>
-<span class="sd">        &gt;&gt;&gt; theta = np.linspace(0,np.pi,30)</span>
-<span class="sd">        &gt;&gt;&gt; phi   = np.linspace(0,2*np.pi,60)</span>
-<span class="sd">        &gt;&gt;&gt; plotVW(n,m,theta,phi)</span>
+<span class="sd">        #&gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
+<span class="sd">        #&gt;&gt;&gt; import  matplotlib.pyplot as plt</span>
+<span class="sd">        #&gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        #&gt;&gt;&gt; n=5</span>
+<span class="sd">        #&gt;&gt;&gt; m=3</span>
+<span class="sd">        #&gt;&gt;&gt; theta = np.linspace(0,np.pi,30)</span>
+<span class="sd">        #&gt;&gt;&gt; phi   = np.linspace(0,2*np.pi,60)</span>
+<span class="sd">        #&gt;&gt;&gt; plotVW(n,m,theta,phi)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c"># calculate v and w</span>
