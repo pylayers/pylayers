@@ -1,3 +1,6 @@
+"""
+
+"""
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
@@ -85,7 +88,7 @@ class Coverage(object):
         self.temperaturek = eval(self.rxopt['temperaturek'])
         self.noisefactordb = eval(self.rxopt['noisefactordb'])
 
-        
+
         Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bandwidthmhz*1e3
         self.pndbm = 10*np.log10(Pn)+60
 
@@ -152,10 +155,10 @@ class Coverage(object):
 
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
-        
+
     def coverold(self):
         """ start the coverage calculation
-        
+
         Deprecated : slow implementation
 
         Examples
@@ -209,9 +212,15 @@ class Coverage(object):
         self.snrp = self.prdbmp - self.pndbm
 
 
-    
+
     def showEd(self,polar='o',**kwargs):
-        """ shows a map of direct path excess delay 
+        """ shows a map of direct path excess delay
+
+        Parameters
+        ----------
+
+        polar : string
+            'o' | 'p'
 
         Examples
         --------
@@ -223,7 +232,9 @@ class Coverage(object):
             >>> C = Coverage()
             >>> C.cover()
             >>> C.showEd(polar='o')
+
         """
+
         if not kwargs.has_key('alphacy'):
             kwargs['alphacy']=0.0
         if not kwargs.has_key('colorcy'):
@@ -254,7 +265,7 @@ class Coverage(object):
 
         if polar=='o':
             mcEdof = np.ma.masked_where(prdbm < self.rxsens,self.Edo)
-            
+
             cov=ax.imshow(mcEdof.reshape((self.nx,self.ny)).T,
                              extent=(l,r,b,t),cmap = 'jet',
                              origin='lower')
@@ -268,7 +279,7 @@ class Coverage(object):
 
         if polar=='p':
             mcEdpf = np.ma.masked_where(prdbm < self.rxsens,self.Edp)
-            
+
             cov=ax.imshow(mcEdpf.reshape((self.nx,self.ny)).T,
                              extent=(l,r,b,t),cmap = 'jet',
                              origin='lower')
@@ -358,10 +369,10 @@ class Coverage(object):
         if rxsens :
 
             ## values between the rx sensitivity and noise floor
-            mcPrf = np.ma.masked_where((prdbm > self.rxsens) 
+            mcPrf = np.ma.masked_where((prdbm > self.rxsens)
                                      & (prdbm < self.pndbm),prdbm)
             # mcPrf = np.ma.masked_where((prdbm > self.rxsens) ,prdbm)
-            
+
             cov1 = ax.imshow(mcPrf.reshape((self.nx,self.ny)).T,
                              extent=(l,r,b,t),cmap = cm.copper,
                              vmin=self.rxsens,origin='lower')
@@ -393,7 +404,7 @@ class Coverage(object):
             title=title + '\n white : Pr (dBm) < %.2f' % self.pndbm + ' dBm'
 
 
-        ax.scatter(self.tx[0],self.tx[1],s=10,linewidth=0)
+        ax.scatter(self.tx[0],self.tx[1],s=10,c='k',linewidth=0)
 
         ax.set_title(title)
         divider = make_axes_locatable(ax)
@@ -406,7 +417,7 @@ class Coverage(object):
 
         return fig,ax
 
-        
+
     def showTransistionRegion(self,polar='o'):
         """
 
@@ -472,13 +483,13 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-    def showLoss(self,polar='o'):
+    def showLoss(self,polar='o',**kwargs):
         """ show losses map
 
         Parameters
         ----------
 
-        polar : string 
+        polar : string
             'o'|'p'|'both'
 
         Examples
@@ -493,41 +504,46 @@ class Coverage(object):
             >>> C.showLoss(polar='o')
             >>> C.showLoss(polar='p')
         """
-        
+
         fig = plt.figure()
         fig,ax=self.L.showGs(fig=fig)
-        
-        # setting the grid 
+
+        # setting the grid
 
         l = self.grid[0,0]
         r = self.grid[-1,0]
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
+        Lo = self.freespace+self.Lwo
+        Lp = self.freespace+self.Lwp
         # orthogonal polarization
         if polar=='o':
-            cov = ax.imshow(self.Lwo.reshape((self.nx,self.ny)).T,
+            cov = ax.imshow(Lo.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
                             origin='lower',
-                            vmin = 0,
-                            vmax = 140)
-            title = ('Map of losses, orthogonal (V) polarization') 
+                            vmin = 40,
+                            vmax = 130)
+            str1 = 'Map of losses, orthogonal (V) polarization, fGHz='+str(self.fGHz)
+            title = (str1)
 
         # parallel polarization
         if polar=='p':
-            cov = ax.imshow(self.Lwp.reshape((self.nx,self.ny)).T,
+            cov = ax.imshow(Lp.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
                             origin='lower',
-                            vmin = 0,
-                            vmax = 140)
-            title = ('Map of losses, parallel (H) polarization') 
+                            vmin = 40,
+                            vmax = 130)
+            str2 = 'Map of losses, orthogonal (V) polarization, fGHz='+str(self.fGHz)
+            title = (str2)
 
-        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
+        ax.scatter(self.tx[0],self.tx[1],s=10,c='k',linewidth=0)
         ax.set_title(title)
 
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
-        fig.colorbar(cov,cax)
+        clb = fig.colorbar(cov,cax)
+        clb.set_label('Loss (dB)')
 
         if self.show:
             plt.show()

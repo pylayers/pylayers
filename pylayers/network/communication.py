@@ -200,7 +200,7 @@ class TX(Process):
 
 
     def interpret_dec(self):
-        """ interprete decision rule from self.dec
+        """ interpret decision rule from self.dec
         """
 
         # n dict{rat:np.array([node ids])}
@@ -275,13 +275,13 @@ class TX(Process):
 
 
 class RX(Process):
-    """
-    RX process
+    """ RX process
 
     Each agent has a RX process to receive information asynchronously.
 
     Attributes
     ----------
+
     sim : SimPy.SimulationRT()
     ID : string
         id of the agent
@@ -296,6 +296,7 @@ class RX(Process):
         time interval where TOA are refresh (if agent.comm_mode =='syncho')
     mp : bool
         message passing [Not yet implemented]
+
     """
 
     def __init__(self,**args):
@@ -579,7 +580,11 @@ class Gcom(nx.MultiDiGraph):
 
     """
 
-    def __init__(self,net=Network(),sim=Simulation()):
+    def __init__(self, net=Network(), sim=Simulation()):
+        """
+        net : pylayers.network.Network
+
+        """
         nx.MultiDiGraph.__init__(self)
         self.net=net
         self.sim=sim
@@ -591,7 +596,7 @@ class Gcom(nx.MultiDiGraph):
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
         nodes=self.config.sections()
         ntype=nx.get_node_attributes(self.net,'type')
-        
+
         for n in self:
             try:
                 if ntype[n]=='ag':

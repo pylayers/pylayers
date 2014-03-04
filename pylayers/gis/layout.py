@@ -1,8 +1,231 @@
 #-*- coding:Utf-8 -*-
-#
-# Class Layout
-#
-# This class handle the description of indoor layout
+"""
+.. currentmodule:: pylayers.gis.layout
+
+This class handle the description of an Indoor layout
+
+.. autosummary::
+    :toctree: generated
+
+Class Layout
+============
+
+Utility functions
+-----------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.__init__
+    Layout.__repr__
+    Layout.info
+    Layout.ls
+    Layout.delete
+    Layout.check
+    Layout.clip
+    Layout.help
+    Layout.g2npy
+    Layout.check2
+    Layout.cleanup
+    Layout.boundary
+    Layout.distwall
+    Layout.randTxRx
+    Layout.get_paths
+    Layout.get_zone
+    Layout.info_segment
+    Layout.find_edgelist
+
+Loading and Saving
+------------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.dumpw
+    Layout.dumpr
+    Layout.loadosm
+    Layout.saveosm
+    Layout.saveini
+    Layout.loadini
+    Layout.loadfur
+    Layout.load
+    Layout.loadstr
+    Layout.loadstr2
+    Layout.savestr2
+    Layout.save
+    Layout.saveold
+
+Layout editing
+--------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.editor
+    Layout.editorGtk
+    Layout.editorTk
+    Layout.add_pnod
+    Layout.add_fnod
+    Layout.add_nfpe
+    Layout.add_pons
+    Layout.add_segment
+    Layout.add_furniture
+    Layout.add_furniture_file
+    Layout.del_points
+    Layout.del_segment
+    Layout.thwall
+    Layout.edit_point
+    Layout.edit_segment
+    Layout.add_window
+    Layout.add_door
+
+Layout transformation 
+---------------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.translate
+    Layout.rotate
+    Layout.nairwall
+    Layout.del_cycle
+    Layout.chgmss
+    Layout.diag
+    Layout.nd2seg
+    Layout.ed2nd
+    Layout.seguv
+    Layout.segpt2
+    Layout.seg2pts
+    Layout.segpt
+    Layout.extrseg
+    Layout.seginframe2
+    Layout.seginframe
+    Layout.layerongrid
+    Layout.cycleinline
+    Layout.seginline
+
+Layout visibility  
+------------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.checkvis
+    Layout.visilist
+    Layout.closest_edge
+    Layout.visi_papb
+    Layout.angleonlink
+    Layout.angleonlinkold
+    Layout.layeronlink
+
+SubSegment Functions
+--------------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.subseg
+    Layout.have_subseg
+    Layout.del_subseg
+    Layout.add_subseg
+
+Vizualisation
+--------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.displaygui
+    Layout.show_nodes
+    Layout.show_seg1
+    Layout.plot_segments
+    Layout.show_segment
+    Layout.show_layer
+    Layout.facet3D
+    Layout.facets3D
+    Layout.geomfile
+    Layout._show3
+    Layout.show3
+
+Showing Graphs 
+---------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.showGi
+    Layout.showGt
+    Layout.showGs
+    Layout.show
+    Layout.showG
+    Layout.showGv
+
+Building Graphs 
+----------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.build
+    Layout.buildGc
+    Layout.buildGt
+    Layout.buildGw
+    Layout.buildGv
+    Layout.buildGi2
+    Layout.buildGi
+    Layout.outputGi
+    Layout.waypointGw
+    Layout.builGr2
+    Layout.buildGr
+    Layout.buildGr3
+
+Loading Graphs
+--------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.loadG
+
+Cycles and Rooms  Related Functions
+-----------------------------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.pt2cy
+    Layout.cy2pt
+    Layout.pt2ro
+    Layout.seg2ro
+
+    Layout.room2segments
+    Layout.room2nodes
+
+    Layout.waypoint
+    Layout.on_key_event
+
+Testing Functions
+------------------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.isseg
+    Layout.ispoint
+    Layout.onseg
+
+
+Signatures
+----------
+
+.. autosummary::
+    :toctree: genarated/
+
+    Layout.signature
+    Layout.showSig
+    Layout.get_Sg_pos
+
+"""
 #
 #
 import pdb
@@ -3826,7 +4049,7 @@ class Layout(object):
             Default 15
 
         """
-       
+
         defaults = {'edlist': [],
                     'alpha':1,
                     'width':1,
@@ -3842,11 +4065,13 @@ class Layout(object):
 
         clrlist = []
         cold = pyu.coldict()
-       
+
         # html color or string
         if kwargs['color'][0]<>'#':
             clrlist.append(cold[kwargs['color']])
         else:
+            if color=='#FFFFF0':
+                color = '#00000F'
             clrlist.append(color)
 
         ecmap = clr.ListedColormap(clrlist)
@@ -3981,7 +4206,7 @@ class Layout(object):
                 except:
                     pR = 0
 
-                try:    
+                try:
                     pT = dprobT[nse]
                 except:
                     pT = 0
@@ -3991,7 +4216,7 @@ class Layout(object):
                                   [pta[1],phe[1]],
                                    'g',linewidth=7, visible=True,alpha=alpha)
 
-        return(fig,ax)  
+        return(fig,ax)
 
     def showGt(self, ax=[], roomlist=[],mode='area'):
         """ show topological graph Gt
@@ -4029,6 +4254,7 @@ class Layout(object):
     def showGs(self,**kwargs):
         """ show structure graph Gs
 
+
         Parameters
         ----------
 
@@ -4038,11 +4264,14 @@ class Layout(object):
             set of edges to be displayed
         roomlist : list
             default : []
+        axis :
+        width : int
+            2
+        fGHz : float
         show    : boolean
             default True
         furniture : boolean
             default False
-        width : 2
 
         display parameters are defined in  display dictionnary
 
@@ -4050,6 +4279,11 @@ class Layout(object):
         -------
 
         ax
+
+        See Also
+        --------
+
+        pylayers.gis.layout.showG
 
         """
 

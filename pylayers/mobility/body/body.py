@@ -1455,7 +1455,7 @@ if __name__ == '__main__':
     #bd.setccs(topos=True)
     #bd.setdcs()
     #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
-    bd._show3(k=46,ccs=True,topos=True,pattern=True)
+    bd._show3(k=46,ccs=True,topos=True,pattern=True,newfig=False)
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
     #bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')

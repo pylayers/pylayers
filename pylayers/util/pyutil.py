@@ -968,7 +968,7 @@ def coldict():
     cold['OldLace']=  '#FDF5E6'
     cold['WhiteSmoke']=  '#F5F5F5'
     cold['gainsboro']=  '#DCDCDC'
-    cold['ivory']=  '#FFFFF0'
+    cold[' ivory']=  '#FFFFF0'
     cold['ivory1']=  '#FFFFF0'
     cold['ivory2']=  '#EEEEE0'
     cold['ivory3']=  '#CDCDC1'

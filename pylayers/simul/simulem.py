@@ -53,8 +53,10 @@ import pdb
 
 def rename(_filename,itx,irx,rep='./'):
     """ rename simulation file with proper itx/irx 
+
     Parameters
     ----------
+
     _filmename : short file name
     itx : transmitter index
     irx : transmitter index
@@ -62,6 +64,7 @@ def rename(_filename,itx,irx,rep='./'):
 
     See Also
     --------
+
     tratotud
 
     """

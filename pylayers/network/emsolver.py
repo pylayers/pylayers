@@ -47,12 +47,12 @@ class EMSolver(object):
     Attributes
     ----------
 
-    config 
-    fileini 
+    config
+    fileini
     ems_opt
-    toa_opt 
+    toa_opt
     EMS_method
-        
+       
     sigmaTOA
 
     Notes
@@ -61,7 +61,7 @@ class EMSolver(object):
     During dynamic simulation, on a regular basis nodes needs radio information
     about their neighbors. This radio information can be obtained with
     different technique from statistical model to site specific simulation
-    using ray tracing. 
+    using ray tracing.
 
     EMS_method = { 'multiwall','raytracing'}
 
@@ -90,12 +90,12 @@ class EMSolver(object):
         Parameters
         ----------
 
-        RAT : string 
-            RAT name 
+        RAT : string
+            RAT name
         model : dictionnary
-            parameters of the PL model 
-            
-            
+            parameters of the PL model
+           
+           
         """
 
         fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
@@ -113,20 +113,20 @@ class EMSolver(object):
 
 
     def load_model(self,RAT):
-        """ load a path loss shadowing model for a RAT 
+        """ load a path loss shadowing model for a RAT
 
         Parameters
         ----------
 
-        RAT  : string 
-            RAT name 
+        RAT  : string
+            RAT name
 
 
         """
 
         ratopt = dict(self.config.items(RAT+'_PLM'))
-        
-        # Path Loss Shadowing model 
+       
+        # Path Loss Shadowing model
         self.model[RAT] = PLSmodel(f = eval(ratopt['f']),
                                    rssnp = eval(ratopt['rssnp']),
                                    d0 = eval(ratopt['d0']),
@@ -139,19 +139,19 @@ class EMSolver(object):
 
         Parameters
         ----------
-        
+       
         p : np.array
         e : np.array
         LDP : string
             Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
-        epwr : list 
+        epwr : list
            nodes emmited power
-        sens : list 
+        sens : list
             nodes sensitivity
-                
+               
         Returns
         -------
-        
+       
         value : float
             A LDP value :     * A time in ns for LDP ='TOA'
                     * A received power in dBm for LDP ='Pr'
@@ -187,8 +187,8 @@ class EMSolver(object):
 #                    std = self.model.sigrss*sp.randn(len(d))
 #                    r=model.getPL(d,model.sigrss)
 #                    return ([[- r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)
-#                
-#            
+#               
+#           
 
 
 
@@ -204,7 +204,7 @@ class EMSolver(object):
             if len(e) > 0:
 
                 lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
-                # euclidian distance 
+                # euclidian distance
                 d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
                 slp = np.shape(lp)[1]
 
@@ -221,26 +221,26 @@ class EMSolver(object):
 
                     for i in range(lpa-1):
                         # excess time of flight + losses computation
-                        # 
-                        # Losst returns 4 parameters   
-                        #   Lo Lp Edo Edp 
+                        #
+                        # Losst returns 4 parameters  
+                        #   Lo Lp Edo Edp
                         #
                         #
-                        MW = mw.Losst(self.L,model.f,pa[i+1:lpa].T,pa[i]) 
-                        # MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) 
+                        MW = mw.Losst(self.L,model.f,pa[i+1:lpa].T,pa[i])
+                        # MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
                         # loss free space
                         frees=np.hstack((frees,mw.PL(model.f,pa[i+1:lpa],pa[i],model.rssnp) ))
                         # Pr.extend(lepwr - MW[0] - frees)
-                        
+                       
                         # WARNING : only one polarization is taken into
                         # account here
-                        # save losses computation 
+                        # save losses computation
 
                         loss = np.hstack((loss,MW[0][0]))
-                        # save excess tof computation 
+                        # save excess tof computation
                         TOA  = np.hstack((TOA,MW[2][0]))
 
-                    # emmited power for the first nodes of computed edges 
+                    # emmited power for the first nodes of computed edges
                     lepwr1 = [epwr[i[0]][RAT] for i in e]
                     lepwr2 = [epwr[i[1]][RAT] for i in e]
                     Pr = lepwr1 - loss - frees
@@ -251,7 +251,7 @@ class EMSolver(object):
                     P[:,1] = model.sigrss
                     lsens = [sens[i[0]][RAT] for i in e] + [sens[i[1]][RAT] for i in e]
 
-                    # visibility or not 
+                    # visibility or not
                     v = P[:,0] > lsens
 
                     # same toa for link and reverse link
@@ -277,7 +277,7 @@ class EMSolver(object):
 #                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
 #                        lepwr.extend(epwr[i+1:lpa])
 #                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
-#            
+#           
 #                elif LDP == 'TOA': #### NOT CORRECT !
 #                    std = self.sigmaTOA*sp.randn(len(d))
 #                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
