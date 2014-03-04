@@ -69,7 +69,12 @@ def getFloat(str):
 # CameraInfo         MarkerRelated CameraInfo [Nmarkers x NvideoFrames]
 # ResidualError      MarkerRelated ErrorInfo  [Nmarkers x NvideoFrames]
 def read_c3d(_filename='07_01.c3d',verbose=False):
-    """ read c3d file 
+    """ read c3d file
+
+    Parameters
+    ----------
+    _filename : string
+    verbose : boolean
     """
     FullFileName = pyu.getlong(_filename, 'body/c3d')
     Markers = []

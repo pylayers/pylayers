@@ -1,4 +1,56 @@
 # -*- coding:Utf-8 -*-
+"""
+
+Ctilde class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Ctilde.__init__
+    Ctilde.__repr__
+    Ctilde.info
+    Ctilde.choose
+    Ctilde.save5
+    Ctilde.load5
+    Ctilde.load
+    Ctilde.mobility
+    Ctilde.doadod
+    Ctilde.locbas
+    Ctilde.Cg2Cl
+    Ctilde.show
+    Ctilde.plotd
+    Ctilde.check_reciprocity
+    Ctilde.energy
+    Ctilde.sort
+    Ctilde.prop2tran
+    Ctilde.vec2scal
+    Ctilde.vec2scalA
+    Ctilde.PLoss
+
+Tchannel Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    Tchannel.__init__
+    Tchannel.__repr__
+    Tchannel.info
+    Tchannel.apply
+    Tchannel.applywavC
+    Tchannel.chantap
+    Tchannel.applywavB
+    Tchannel.applywavA
+    Tchannel.plotd
+    Tchannel.plotad
+    Tchannel.doadod
+    Tchannel.energy
+    Tchannel.wavefig
+    Tchannel.rayfig
+    Tchannel.RSSI
+
+"""
 import doctest
 import pdb
 import numpy as np

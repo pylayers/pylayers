@@ -1,11 +1,35 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
-""" Module Rays
+"""
 
-Summary
--------
+Class Rays
+==========
 
 This modules contains Rays class
+
+.. autosummary::
+    :toctree: generated
+
+    Rays.__init__
+    Rays.__len__
+    Rays.__repr__
+    Rays.sort
+    Rays.extract
+    Rays.mirror
+    Rays.to3D
+    Rays.locbas
+    Rays.fillinter
+    Rays.length
+    Rays.eval
+    Rays.ray
+    Rays.typ
+    Rays.info
+    Rays.signature
+    Rays.show
+    Rays.show3d
+    Rays._show3
+    Rays.reciprocal
+    Rays.check_reciprocity
 
 """
 import pdb

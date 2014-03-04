@@ -1,5 +1,21 @@
 """
 
+Class Coverage
+==============
+
+.. autosummarry::
+    :toctree:
+
+    Coverage.__init__
+    Coverage.__repr__
+    Coverage.creategrid
+    Coverage.coverold
+    Coverage.cover
+    Coverage.showEd
+    Coverage.showPower
+    Coverage.showTransistionRegion
+    Coverage.showLoss
+
 """
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu

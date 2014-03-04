@@ -1,16 +1,35 @@
 #-*- coding:Utf-8 -*-
 """
-Module : Cone
 
-To facilitate algorithms implementation, the following conventions have been introduced. 
+Class Cone
+==========
+
+To facilitate algorithms implementation, the following conventions have been introduced.
 
 + A Cone has an apex which is a point in the plane.
 + A cone has two vectors which define the cone aperture. Those two vectors can always been distinguished as a right vector (u) and a left vector (v).
-The cone region is defined by the convex angular sector from right vector (u) to left vector (v) 
+The cone region is defined by the convex angular sector from right vector (u) to left vector (v)
 rotating folllowing the trigonometric convention.
 The modulus of the cross product between u and v is positive.
 
-u ^ v = alpha z with alpha > 0 
+:math:`u \times v = \\alpha z with \\alpha > 0`
+
+.. autosummary::
+    :toctree:
+
+    Cone.__init__
+    Cone.upd_angle
+    Cone.belong_seg
+    Cone.aboveseg
+    Cone.outside_point
+    Cone.belong_point2
+    Cone.belong_point
+    Cone.above
+    Cone.fromptseg
+    Cone.from2segs
+    Cone.from2csegs
+    Cone.show
+
 
 """
 import numpy as np

@@ -1,3 +1,47 @@
+"""
+
+Body Class
+===========
+
+This class implements the body model
+
+.. autosummary::
+    :toctree: /generated
+
+    Body.__init__
+    Body.__repr__
+    Body.load
+    Body.center
+    Body.posvel
+    Body.settopos
+    Body.setccs
+    Body.setdcs
+    Body.setacs
+    Body.loadC3D
+    Body.plot3d
+    Body._show3
+    Body.show
+    Body.show3
+    Body.geomfile
+    Body.movie
+    Body.intersectBody
+    Body.body_link
+    Body.cylinder_basis_k
+    Body.cyl_antenna
+    Body.translate
+
+Miscelianous Functions
+======================
+
+.. autosummary::
+    :toctree: /generated
+
+    ChangeBasis
+    rotation
+    dist
+    Global_Trajectory
+
+"""
 import numpy as np
 import scipy.stats as sp
 import ConfigParser
@@ -20,40 +64,6 @@ try:
 
 except:
     print 'mayavi not installed'
-
-
-def ChangeBasis(u0, v0, w0, v1):
-    """
-
-    Parameters
-    ----------
-
-    u0
-    v0
-    w0
-    v1
-
-    """
-
-    # Rotate with respect to axe w
-
-    v2 = v1 - np.dot(np.dot(v1, w0), w0)  # projection of v1 on plan (u,v)
-    v2 = v2 / np.linalg.norm(v2)
-    c = np.dot(v2, u0)
-    s = np.dot(v2, v0)
-    u1 = np.dot(s, u0) - np.dot(c, v0)
-    u1 = u1 / np.linalg.norm(u1)
-    w1 = np.cross(u1, v1)
-    return u1, v1, w1
-
-
-def dist(A, B):
-    """
-    evaluate the distance between two points A and B
-    """
-
-    d = np.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2)
-    return d
 
 
 class Body(object):
@@ -506,7 +516,7 @@ class Body(object):
             self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
     def setacs(self):
-        """ set antenna coordinate system (dcs) from a topos or a set of frames
+        """ set antenna coordinate system (acs) from a topos or a set of frames
 
         """
 
@@ -1443,7 +1453,37 @@ def Global_Trajectory(cycle, traj):
 
     return data
 
+def ChangeBasis(u0, v0, w0, v1):
+    """
 
+    Parameters
+    ----------
+
+    u0
+    v0
+    w0
+    v1
+
+    """
+
+    # Rotate with respect to axe w
+
+    v2 = v1 - np.dot(np.dot(v1, w0), w0)  # projection of v1 on plan (u,v)
+    v2 = v2 / np.linalg.norm(v2)
+    c = np.dot(v2, u0)
+    s = np.dot(v2, v0)
+    u1 = np.dot(s, u0) - np.dot(c, v0)
+    u1 = u1 / np.linalg.norm(u1)
+    w1 = np.cross(u1, v1)
+    return u1, v1, w1
+
+def dist(A, B):
+    """
+    evaluate the distance between two points A and B
+    """
+
+    d = np.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2)
+    return d
 if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()

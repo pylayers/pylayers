@@ -14,7 +14,7 @@ Utility functions
 -----------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.__init__
     Layout.__repr__
@@ -39,7 +39,7 @@ Loading and Saving
 ------------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.dumpw
     Layout.dumpr
@@ -59,7 +59,7 @@ Layout editing
 --------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.editor
     Layout.editorGtk
@@ -83,11 +83,10 @@ Layout transformation
 ---------------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.translate
     Layout.rotate
-    Layout.nairwall
     Layout.del_cycle
     Layout.chgmss
     Layout.diag
@@ -108,7 +107,7 @@ Layout visibility
 ------------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.checkvis
     Layout.visilist
@@ -122,7 +121,7 @@ SubSegment Functions
 --------------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.subseg
     Layout.have_subseg
@@ -133,7 +132,7 @@ Vizualisation
 --------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.displaygui
     Layout.show_nodes
@@ -151,7 +150,7 @@ Showing Graphs
 ---------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.showGi
     Layout.showGt
@@ -164,7 +163,7 @@ Building Graphs
 ----------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.build
     Layout.buildGc
@@ -183,7 +182,7 @@ Loading Graphs
 --------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.loadG
 
@@ -191,7 +190,7 @@ Cycles and Rooms  Related Functions
 -----------------------------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.pt2cy
     Layout.cy2pt
@@ -202,13 +201,12 @@ Cycles and Rooms  Related Functions
     Layout.room2nodes
 
     Layout.waypoint
-    Layout.on_key_event
 
 Testing Functions
 ------------------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.isseg
     Layout.ispoint
@@ -219,7 +217,7 @@ Signatures
 ----------
 
 .. autosummary::
-    :toctree: genarated/
+    :toctree: generated/
 
     Layout.signature
     Layout.showSig
@@ -5521,30 +5519,31 @@ class Layout(object):
             False
         fig : matplotlib figure
             []
-        ax
+        ax : matplotlib figure
             []
         nodes : boolean
             False
-        eded :
+        eded : boolean
             True
-        ndnd :
+        ndnd : boolean
             True
-        nded :
+        nded : boolean
             True
-        linewidth
+        linewidth : int
             2
-        nodelist
+        nodelist : list
             []
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
             >>> from pylayers.gis.layout import  *
             >>> import matplotlib.pyplot as plt
-            >>> L = Layout('example.ini')
-            >>> L.build()
+            >>> L = Layout('TA-Office.ini')
+            >>> L.dumpr()
             >>> fig = plt.figure(figsize=(10,10))
             >>> ax = fig.add_subplot(221)
             >>> fig,ax = L.showG('s',fig=fig,ax=ax)
