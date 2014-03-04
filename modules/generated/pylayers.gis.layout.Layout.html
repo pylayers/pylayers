@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.gis.layout.Layout &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.gis.layout.Layout.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-gis-layout-layout">
+<h1>pylayers.gis.layout.Layout<a class="headerlink" href="#pylayers-gis-layout-layout" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.gis.layout.Layout">
+<em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handling Layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>Gs</strong> : Structure graph</p>
+<p><strong>Gt</strong> : Topological graph  (indicates topological relationships between rooms)</p>
+<p><strong>Gr</strong> : Graph of room</p>
+<p><strong>Gv</strong> : Graph of visibility</p>
+<p><strong>Gc</strong> : Connection graph (indicates visbility relationships)</p>
+<p><strong>Nnode</strong> : Number of nodes of Gs</p>
+<p><strong>Nedge</strong> : Number of edges of Gs</p>
+<p><strong>pt</strong> : points sequence</p>
+<p><strong>tahe</strong> : tail head</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>add_door</strong> :</p>
+<p><strong>add_fnod</strong> :</p>
+<p><strong>add_furniture</strong> :</p>
+<p><strong>add_furniture_file</strong> :</p>
+<p><strong>add_nfpe</strong> :</p>
+<p><strong>add_pnod</strong> :</p>
+<p><strong>add_pons</strong> :</p>
+<p><strong>add_segment</strong> :</p>
+<p><strong>add_subseg</strong> :</p>
+<p><strong>add_window</strong> :</p>
+<p><strong>angleonlink</strong> :</p>
+<p><strong>boundary</strong> :</p>
+<p><strong>build</strong> :</p>
+<p><strong>buildGc</strong> :</p>
+<p><strong>buildGi</strong> :</p>
+<p><strong>buildGi2</strong> :</p>
+<p><strong>buildGr</strong> :</p>
+<p><strong>buildGr3</strong> :</p>
+<p><strong>buildGt</strong> :</p>
+<p><strong>buildGv</strong> :</p>
+<p><strong>buildGw</strong> :</p>
+<p><strong>builGr2</strong> :</p>
+<p><strong>check</strong> :</p>
+<p><strong>check2</strong> :</p>
+<p><strong>checkvis</strong> :</p>
+<p><strong>cleanup</strong> :</p>
+<p><strong>clip</strong> :</p>
+<p><strong>closest_edge</strong> :</p>
+<p><strong>cycleinline</strong> :</p>
+<p><strong>del_cycle</strong> :</p>
+<p><strong>delete</strong> :</p>
+<p><strong>del_points</strong> :</p>
+<p><strong>del_segment</strong> :</p>
+<p><strong>del_subseg</strong> :</p>
+<p><strong>diag</strong> :</p>
+<p><strong>displaygui</strong> :</p>
+<p><strong>distwall</strong> :</p>
+<p><strong>dumpr</strong> :</p>
+<p><strong>dumpw</strong> :</p>
+<p><strong>ed2nd</strong> :</p>
+<p><strong>editor</strong> :</p>
+<p><strong>edit_point</strong> :</p>
+<p><strong>edit_segment</strong> :</p>
+<p><strong>facet3D</strong> :</p>
+<p><strong>facets3D</strong> :</p>
+<p><strong>find_edgelist</strong> :</p>
+<p><strong>g2npy</strong> :</p>
+<p><strong>geomfile</strong> :</p>
+<p><strong>get_paths</strong> :</p>
+<p><strong>get_Sg_pos</strong> :</p>
+<p><strong>get_zone</strong> :</p>
+<p><strong>have_subseg</strong> :</p>
+<p><strong>help</strong> :</p>
+<p><strong>info</strong> :</p>
+<p><strong>info_edge</strong> :</p>
+<p><strong>ispoint</strong> :</p>
+<p><strong>layerongrid</strong> :</p>
+<p><strong>layeronlink</strong> :</p>
+<p><strong>load</strong> :</p>
+<p><strong>loadfur</strong> :</p>
+<p><strong>loadG</strong> :</p>
+<p><strong>loadini</strong> :</p>
+<p><strong>loadstr</strong> :</p>
+<p><strong>loadstr2</strong> :</p>
+<p><strong>ls</strong> :</p>
+<p><strong>nd2seg</strong> :</p>
+<p><strong>onseg</strong> :</p>
+<p><strong>plot_segments</strong> :</p>
+<p><strong>pt2cy</strong> :</p>
+<p><strong>pt2ro</strong> :</p>
+<p><strong>randTxRx</strong> :</p>
+<p><strong>room2nodes</strong> :</p>
+<p><strong>room2segments</strong> :</p>
+<p><strong>save</strong> :</p>
+<p><strong>saveini</strong> :</p>
+<p><strong>savestr2</strong> :</p>
+<p><strong>seg2ro</strong> :</p>
+<p><strong>seginframe</strong> :</p>
+<p><strong>seginline</strong> :</p>
+<p><strong>segpt</strong> :</p>
+<p><strong>seguv</strong> :</p>
+<p><strong>show3</strong> :</p>
+<p><strong>showG</strong> :</p>
+<p><strong>showGs</strong> :</p>
+<p><strong>showGt</strong> :</p>
+<p><strong>showGv</strong> :</p>
+<p><strong>show_layer</strong> :</p>
+<p><strong>show_nodes</strong> :</p>
+<p><strong>show_seg1</strong> :</p>
+<p><strong>show_segment</strong> :</p>
+<p><strong>showSig</strong> :</p>
+<p><strong>signature</strong> :</p>
+<p><strong>subseg</strong> :</p>
+<p><strong>thwall</strong> :</p>
+<p><strong>visilist</strong> :</p>
+<p><strong>visi_papb</strong> :</p>
+<p><strong>waypoint</strong> :</p>
+<p class="last"><strong>waypointGw</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This class exploits <cite>networkx</cite> to store Layout information</p>
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<blockquote>
+<div><p>layout file name</p>
+</div></blockquote>
+<p><strong>_filematini :</strong> :</p>
+<blockquote>
+<div><p>material dB file name</p>
+</div></blockquote>
+<p><strong>_fileslabini :</strong> :</p>
+<blockquote>
+<div><p>slab dB file name</p>
+</div></blockquote>
+<p><strong>_filefur :</strong> :</p>
+<blockquote class="last">
+<div><p>furniture file name</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
