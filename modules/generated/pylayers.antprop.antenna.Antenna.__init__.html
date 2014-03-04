@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.antenna.Antenna.Fsynth &mdash; PyLayers</title>
+    <title>pylayers.antprop.antenna.Antenna.__init__ &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.antenna" href="../pylayers.antprop.antenna.html" />
+    <link rel="next" title="pylayers.antprop.antenna.Antenna.__repr__" href="pylayers.antprop.antenna.Antenna.__repr__.html" />
+    <link rel="prev" title="pylayers.antprop.antenna.show3D" href="pylayers.antprop.antenna.show3D.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,19 +46,34 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.Antenna.__repr__.html" title="pylayers.antprop.antenna.Antenna.__repr__"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.show3D.html" title="pylayers.antprop.antenna.show3D"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.html" >pylayers.antprop package</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.antenna.html" accesskey="U">pylayers.antprop.antenna</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.show3D.html"
+                        title="previous chapter">pylayers.antprop.antenna.show3D</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.Antenna.__repr__.html"
+                        title="next chapter">pylayers.antprop.antenna.Antenna.__repr__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.Fsynth.txt"
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.__init__.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -79,13 +97,49 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-antprop-antenna-antenna-fsynth">
-<h1>pylayers.antprop.antenna.Antenna.Fsynth<a class="headerlink" href="#pylayers-antprop-antenna-antenna-fsynth" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-antprop-antenna-antenna-init">
+<h1>pylayers.antprop.antenna.Antenna.__init__<a class="headerlink" href="#pylayers-antprop-antenna-antenna-init" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pylayers.antprop.antenna.Antenna.Fsynth">
-<tt class="descclassname">Antenna.</tt><tt class="descname">Fsynth</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform Antenna synthesis
-call Antenna.Fpatt or Antenna.Fsynth3</p>
+<dt id="pylayers.antprop.antenna.Antenna.__init__">
+<tt class="descclassname">Antenna.</tt><tt class="descname">__init__</tt><big>(</big><em>typ='S2R2.sh3'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
+<blockquote>
+<div><p>antenna file name</p>
+</div></blockquote>
+<p><strong>directory</strong> : str</p>
+<blockquote>
+<div><p>subdirectory of the current project where to find the antenna file
+the file is seek in the $PyProject/ant directory</p>
+</div></blockquote>
+<p><strong>nf</strong> : integer</p>
+<blockquote>
+<div><p>number of frequency (default 104)</p>
+</div></blockquote>
+<p><strong>ntheta</strong> : integer</p>
+<blockquote>
+<div><p>number of theta (default 181)</p>
+</div></blockquote>
+<p><strong>nph</strong> : integer</p>
+<blockquote class="last">
+<div><p>number of phi (default 90)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>There are various supported data formats for storing antenna patterns</p>
+<p>&#8216;mat&#8217;: Matlab File
+&#8216;vsh2&#8217;: un thresholdes vector spherical coefficients
+&#8216;vsh3&#8217;: thresholded vector spherical cpoefficients
+&#8216;trx&#8217; : Satimo NFC raw data
+&#8216;trx1&#8217; : Satimo NFC raw data  (deprecated)</p>
+<blockquote>
+<div>A = Antenna(&#8216;my_antenna.mat&#8217;)</div></blockquote>
 </dd></dl>
 
 </div>
@@ -105,11 +159,20 @@ call Antenna.Fpatt or Antenna.Fsynth3</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.Antenna.__repr__.html" title="pylayers.antprop.antenna.Antenna.__repr__"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.show3D.html" title="pylayers.antprop.antenna.show3D"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.html" >pylayers.antprop package</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.antenna.html" >pylayers.antprop.antenna</a> &raquo;</li> 
       </ul>
     </div>
 

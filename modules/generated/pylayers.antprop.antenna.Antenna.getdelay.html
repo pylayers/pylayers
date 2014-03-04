@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.antenna.Antenna.Fsynth &mdash; PyLayers</title>
+    <title>pylayers.antprop.antenna.Antenna.getdelay &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.antenna" href="../pylayers.antprop.antenna.html" />
+    <link rel="next" title="pylayers.antprop.antenna.Antenna.elec_delay" href="pylayers.antprop.antenna.Antenna.elec_delay.html" />
+    <link rel="prev" title="pylayers.antprop.antenna.Antenna.mse" href="pylayers.antprop.antenna.Antenna.mse.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,19 +46,34 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.Antenna.elec_delay.html" title="pylayers.antprop.antenna.Antenna.elec_delay"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.Antenna.mse.html" title="pylayers.antprop.antenna.Antenna.mse"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.html" >pylayers.antprop package</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.antenna.html" accesskey="U">pylayers.antprop.antenna</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.Antenna.mse.html"
+                        title="previous chapter">pylayers.antprop.antenna.Antenna.mse</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.Antenna.elec_delay.html"
+                        title="next chapter">pylayers.antprop.antenna.Antenna.elec_delay</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.Fsynth.txt"
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.getdelay.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -79,13 +97,31 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-antprop-antenna-antenna-fsynth">
-<h1>pylayers.antprop.antenna.Antenna.Fsynth<a class="headerlink" href="#pylayers-antprop-antenna-antenna-fsynth" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-antprop-antenna-antenna-getdelay">
+<h1>pylayers.antprop.antenna.Antenna.getdelay<a class="headerlink" href="#pylayers-antprop-antenna-antenna-getdelay" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pylayers.antprop.antenna.Antenna.Fsynth">
-<tt class="descclassname">Antenna.</tt><tt class="descname">Fsynth</tt><big>(</big><em>theta=</em>, <span class="optional">[</span><span class="optional">]</span><em>phi=</em>, <span class="optional">[</span><span class="optional">]</span><em>pattern=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform Antenna synthesis
-call Antenna.Fpatt or Antenna.Fsynth3</p>
+<dt id="pylayers.antprop.antenna.Antenna.getdelay">
+<tt class="descclassname">Antenna.</tt><tt class="descname">getdelay</tt><big>(</big><em>freq</em>, <em>delayCandidates=array([-10.</em>, <em>-9.999</em>, <em>-9.998</em>, <em>...</em>, <em>9.997</em>, <em>9.998</em>, <em>9.999])</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.getdelay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.getdelay" title="Permalink to this definition">¶</a></dt>
+<dd><p>getelectrical delay</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delayCandidates</strong> : ndarray</p>
+<blockquote>
+<div><p>default np.arange(-10,10,0.001)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>electricalDelay</strong> : float</p>
+<p><strong>Author</strong> : Troels Pedersen (Aalborg University)</p>
+<blockquote class="last">
+<div><p>B.Uguen</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -105,11 +141,20 @@ call Antenna.Fpatt or Antenna.Fsynth3</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.Antenna.elec_delay.html" title="pylayers.antprop.antenna.Antenna.elec_delay"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.Antenna.mse.html" title="pylayers.antprop.antenna.Antenna.mse"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.html" >pylayers.antprop package</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.antenna.html" >pylayers.antprop.antenna</a> &raquo;</li> 
       </ul>
     </div>
 

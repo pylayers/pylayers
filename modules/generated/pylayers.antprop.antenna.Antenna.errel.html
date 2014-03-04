@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.antenna.Antenna.__repr__ &mdash; PyLayers</title>
+    <title>pylayers.antprop.antenna.Antenna.errel &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="pylayers.antprop.antenna" href="../pylayers.antprop.antenna.html" />
-    <link rel="next" title="pylayers.antprop.antenna.Antenna.ls" href="pylayers.antprop.antenna.Antenna.ls.html" />
-    <link rel="prev" title="pylayers.antprop.antenna.Antenna.__init__" href="pylayers.antprop.antenna.Antenna.__init__.html" /> 
+    <link rel="next" title="pylayers.antprop.antenna.Antenna.checkpole" href="pylayers.antprop.antenna.Antenna.checkpole.html" />
+    <link rel="prev" title="pylayers.antprop.antenna.Antenna.demo" href="pylayers.antprop.antenna.Antenna.demo.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -47,10 +47,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.antenna.Antenna.ls.html" title="pylayers.antprop.antenna.Antenna.ls"
+          <a href="pylayers.antprop.antenna.Antenna.checkpole.html" title="pylayers.antprop.antenna.Antenna.checkpole"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.antenna.Antenna.__init__.html" title="pylayers.antprop.antenna.Antenna.__init__"
+          <a href="pylayers.antprop.antenna.Antenna.demo.html" title="pylayers.antprop.antenna.Antenna.demo"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -66,14 +66,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.antprop.antenna.Antenna.__init__.html"
-                        title="previous chapter">pylayers.antprop.antenna.Antenna.__init__</a></p>
+  <p class="topless"><a href="pylayers.antprop.antenna.Antenna.demo.html"
+                        title="previous chapter">pylayers.antprop.antenna.Antenna.demo</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.antenna.Antenna.ls.html"
-                        title="next chapter">pylayers.antprop.antenna.Antenna.ls</a></p>
+  <p class="topless"><a href="pylayers.antprop.antenna.Antenna.checkpole.html"
+                        title="next chapter">pylayers.antprop.antenna.Antenna.checkpole</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.__repr__.txt"
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.Antenna.errel.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -97,12 +97,47 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-antprop-antenna-antenna-repr">
-<h1>pylayers.antprop.antenna.Antenna.__repr__<a class="headerlink" href="#pylayers-antprop-antenna-antenna-repr" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-antprop-antenna-antenna-errel">
+<h1>pylayers.antprop.antenna.Antenna.errel<a class="headerlink" href="#pylayers-antprop-antenna-antenna-errel" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pylayers.antprop.antenna.Antenna.__repr__">
-<tt class="descclassname">Antenna.</tt><tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="pylayers.antprop.antenna.Antenna.errel">
+<tt class="descclassname">Antenna.</tt><tt class="descname">errel</tt><big>(</big><em>kf=-1</em>, <em>dsf=1</em>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.errel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.errel" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates error between antenna pattern and reference pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kf</strong> : integer</p>
+<blockquote>
+<div><p>frequency index. If k=-1 integration over all frequency</p>
+</div></blockquote>
+<p><strong>dsf</strong> : down sampling factor</p>
+<p><strong>typ :</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>errelTh</strong> : float</p>
+<blockquote>
+<div><p>relative error on <img class="math" src="../../_images/math/0e31c8f84652d7ba21ff8bca08a0e4d8e14bccc5.png" alt="F_{\theta}"/></p>
+</div></blockquote>
+<p><strong>errelPh</strong> : float</p>
+<blockquote>
+<div><p>relative error on <img class="math" src="../../_images/math/25ec171b8cd2533076b18a6196dd5f139999b5bb.png" alt="F_{\phi}"/></p>
+</div></blockquote>
+<p class="last"><strong>errel</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<div class="math">
+<p><img src="../../_images/math/b6322b0bcc107b3a9d49d628e1bff10ca4132aff.png" alt="\epsilon_r^{\theta} =
+\frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta)(\phi)|^2}
+     {|F_{\theta}(\theta,\phi)|^2}
+
+\epsilon_r^{\phi} =
+\frac{|F_{\phi}(\theta,\phi)-\hat{F}_{\phi}(\theta)(\phi)|^2}
+     {|F_{\theta}(\theta,\phi)|^2}"/></p>
+</div></dd></dl>
 
 </div>
 
@@ -122,10 +157,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.antenna.Antenna.ls.html" title="pylayers.antprop.antenna.Antenna.ls"
+          <a href="pylayers.antprop.antenna.Antenna.checkpole.html" title="pylayers.antprop.antenna.Antenna.checkpole"
              >next</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.antenna.Antenna.__init__.html" title="pylayers.antprop.antenna.Antenna.__init__"
+          <a href="pylayers.antprop.antenna.Antenna.demo.html" title="pylayers.antprop.antenna.Antenna.demo"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>

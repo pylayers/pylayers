@@ -105,8 +105,23 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
+<span class="sd">    Antenna.__init__</span>
 <span class="sd">    Antenna.__repr__</span>
 <span class="sd">    Antenna.ls</span>
+
+<span class="sd">    Antenna.demo</span>
+
+<span class="sd">    Antenna.errel</span>
+<span class="sd">    Antenna.checkpole</span>
+<span class="sd">    Antenna.info</span>
+
+
+<span class="sd">    Antenna.pol2cart</span>
+<span class="sd">    Antenna.cart2pol</span>
+<span class="sd">    Antenna.minsh3</span>
+<span class="sd">    Antenna.mse</span>
+<span class="sd">    Antenna.getdelay</span>
+<span class="sd">    Antenna.elec_delay</span>
 
 <span class="sd">Synthesis Functions</span>
 <span class="sd">-------------------</span>
@@ -114,14 +129,49 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    Antenna.Fsynth</span>
-<span class="sd">    Antenna.Fsynth3</span>
+<span class="sd">Antenna.Fsynth</span>
+<span class="sd">Antenna.Fsynth1</span>
+<span class="sd">Antenna.Fsynth2s</span>
+<span class="sd">Antenna.Fsynth2b</span>
+<span class="sd">Antenna.Fsynth2</span>
+<span class="sd">Antenna.Fsynth3</span>
+<span class="sd">Antenna.Fpatt</span>
+
+<span class="sd">Visualization functions</span>
+<span class="sd">-----------------------</span>
 
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">Helping functions</span>
-<span class="sd">=================</span>
+<span class="sd">Antenna.pattern</span>
+<span class="sd">Antenna.polar</span>
+<span class="sd">Antenna._show3</span>
+<span class="sd">Antenna.show3</span>
+<span class="sd">Antenna.plot3d</span>
+<span class="sd">Antenna.pol3d</span>
+<span class="sd">Antenna.load_trx</span>
+<span class="sd">Antenna.movie_vsh</span>
+
+<span class="sd">Loading and Saving</span>
+<span class="sd">------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">Antenna.loadhfss</span>
+<span class="sd">Antenna.loadtrx</span>
+<span class="sd">Antenna.loadmat</span>
+<span class="sd">Antenna.savevsh3</span>
+<span class="sd">Antenna.savesh2</span>
+<span class="sd">Antenna.savesh3</span>
+<span class="sd">Antenna.loadvsh3</span>
+<span class="sd">Antenna.loadsh3</span>
+<span class="sd">Antenna.savevsh2</span>
+<span class="sd">Antenna.loadsh2</span>
+<span class="sd">Antenna.loadvsh2</span>
+
+<span class="sd">Miscellianous  functions</span>
+<span class="sd">========================</span>
 
 
 <span class="sd">.. autosummary::</span>
@@ -208,7 +258,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="Antenna.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.html#pylayers.antprop.antenna.Antenna.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;S2R2.sh3&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.__init__.html#pylayers.antprop.antenna.Antenna.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;S2R2.sh3&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -729,7 +779,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">FTh</span><span class="p">,</span><span class="n">FPh</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">errel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">kf</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.errel"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.errel.html#pylayers.antprop.antenna.Antenna.errel">[docs]</a>    <span class="k">def</span> <span class="nf">errel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">kf</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculates error between antenna pattern and reference pattern</span>
 
 <span class="sd">        Parameters</span>
@@ -837,7 +887,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">errelTh</span><span class="p">,</span> <span class="n">errelPh</span><span class="p">,</span> <span class="n">errel</span><span class="p">)</span>
 
-
+</div>
     <span class="k">def</span> <span class="nf">loadhfss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lfa</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">Nt</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span><span class="n">Np</span><span class="o">=</span><span class="mi">37</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -1057,7 +1107,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">True</span>
 
-    <span class="k">def</span> <span class="nf">checkpole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.checkpole"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.checkpole.html#pylayers.antprop.antenna.Antenna.checkpole">[docs]</a>    <span class="k">def</span> <span class="nf">checkpole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kf</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display the reconstructed field on pole for integrity verification</span>
 
 <span class="sd">        Parameters</span>
@@ -1094,8 +1144,8 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Eyp</span><span class="p">))</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">Eyp</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Antenna.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.info.html#pylayers.antprop.antenna.Antenna.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gives info about antenna object</span>
 
 
@@ -1127,7 +1177,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;No vsh coefficient calculated yet&quot;</span>
-
+</div>
     <span class="k">def</span> <span class="nf">polar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; antenna 2D polar plot</span>
 
@@ -1543,7 +1593,7 @@
             <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">mse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.mse"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.mse.html#pylayers.antprop.antenna.Antenna.mse">[docs]</a>    <span class="k">def</span> <span class="nf">mse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; mean square error</span>
 
 <span class="sd">        Parameters</span>
@@ -1608,8 +1658,8 @@
         <span class="n">Err_rel</span> <span class="o">=</span> <span class="n">Err</span> <span class="o">/</span> <span class="n">Eo</span>
 
         <span class="k">return</span> <span class="n">Err_rel</span><span class="p">,</span> <span class="n">Errth_rel</span><span class="p">,</span> <span class="n">Errph_rel</span>
-
-    <span class="k">def</span> <span class="nf">getdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">delayCandidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.001</span><span class="p">)):</span>
+</div>
+<div class="viewcode-block" id="Antenna.getdelay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.getdelay.html#pylayers.antprop.antenna.Antenna.getdelay">[docs]</a>    <span class="k">def</span> <span class="nf">getdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">delayCandidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.001</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; getelectrical delay</span>
 
 <span class="sd">        Parameters</span>
@@ -1632,8 +1682,8 @@
                   <span class="o">*</span><span class="n">delayCandidates</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">delayCandidates</span><span class="p">))))</span>
                 <span class="p">))]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">electricalDelay</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">elec_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Antenna.elec_delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.elec_delay.html#pylayers.antprop.antenna.Antenna.elec_delay">[docs]</a>    <span class="k">def</span> <span class="nf">elec_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; apply an electrical delay</span>
 
 <span class="sd">         Notes</span>
@@ -1656,8 +1706,8 @@
         <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fphi</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="n">EFph</span> <span class="o">=</span> <span class="n">Fph</span> <span class="o">*</span> <span class="n">E</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span> <span class="o">=</span> <span class="n">EFph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-
-    <span class="k">def</span> <span class="nf">demo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Antenna.demo"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.demo.html#pylayers.antprop.antenna.Antenna.demo">[docs]</a>    <span class="k">def</span> <span class="nf">demo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display few commands for executing little demo</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s">&quot;A.C.s1tos2(30)&quot;</span>
@@ -1666,7 +1716,7 @@
         <span class="k">print</span> <span class="s">&quot;FPh = Fph.reshape(A.Nf,A.Nt,A.Np)&quot;</span>
         <span class="k">print</span> <span class="s">&quot;compdiag(20,A,A.theta,A.phi,FTh,FPh) &quot;</span>
 
-
+</div>
 <div class="viewcode-block" id="Antenna.Fsynth"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.Fsynth.html#pylayers.antprop.antenna.Antenna.Fsynth">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Perform Antenna synthesis</span>
 <span class="sd">            call Antenna.Fpatt or Antenna.Fsynth3</span>
@@ -2231,7 +2281,7 @@
                    <span class="s">&#39;vshcoeff.avi&#39;</span><span class="p">)</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">minsh3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.minsh3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.minsh3.html#pylayers.antprop.antenna.Antenna.minsh3">[docs]</a>    <span class="k">def</span> <span class="nf">minsh3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates vsh3 with significant coeff until given relative reconstruction error</span>
 
 <span class="sd">        Parameters</span>
@@ -2276,7 +2326,7 @@
                 <span class="n">Err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mse</span><span class="p">(</span><span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
-
+</div>
     <span class="k">def</span> <span class="nf">savevsh3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save antenna in vsh3 format</span>
 
@@ -2658,7 +2708,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="n">_filevsh3</span><span class="p">,</span> <span class="s">&#39; does not exist&#39;</span>
 
-    <span class="k">def</span> <span class="nf">pol2cart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ith</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.pol2cart"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.pol2cart.html#pylayers.antprop.antenna.Antenna.pol2cart">[docs]</a>    <span class="k">def</span> <span class="nf">pol2cart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ith</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Conversion FTheta, FPhi to Fx,Fy,Fz for theta=ith</span>
 
@@ -2676,8 +2726,8 @@
         <span class="n">Fz</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Fth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">Fx</span><span class="p">,</span> <span class="n">Fy</span><span class="p">,</span> <span class="n">Fz</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">cart2pol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Fx</span><span class="p">,</span> <span class="n">Fy</span><span class="p">,</span> <span class="n">Fz</span><span class="p">,</span> <span class="n">ith</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Antenna.cart2pol"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.cart2pol.html#pylayers.antprop.antenna.Antenna.cart2pol">[docs]</a>    <span class="k">def</span> <span class="nf">cart2pol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Fx</span><span class="p">,</span> <span class="n">Fy</span><span class="p">,</span> <span class="n">Fz</span><span class="p">,</span> <span class="n">ith</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith</span>
 
@@ -2701,7 +2751,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">SqG</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fph</span>
-</div>
+</div></div>
 <div class="viewcode-block" id="forcesympol"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.forcesympol.html#pylayers.antprop.antenna.forcesympol">[docs]</a><span class="k">def</span> <span class="nf">forcesympol</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot VSH transform vsh basis in 3D plot</span>
 
