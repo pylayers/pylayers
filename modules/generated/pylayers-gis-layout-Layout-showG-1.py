@@ -1,7 +1,7 @@
 from pylayers.gis.layout import  *
 import matplotlib.pyplot as plt
-L = Layout('example.ini')
-L.build()
+L = Layout('TA-Office.ini')
+L.dumpr()
 fig = plt.figure(figsize=(10,10))
 ax = fig.add_subplot(221)
 fig,ax = L.showG('s',fig=fig,ax=ax)
