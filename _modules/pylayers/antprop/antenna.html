@@ -126,7 +126,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.antssh</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span> 
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
 
@@ -829,8 +829,6 @@
         <span class="n">SqG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lfa</span><span class="p">)):</span>
-
-
 
             <span class="n">fGHz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">lfa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.csv&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">4</span><span class="p">]))</span>
             <span class="n">lacsv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">lfa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">,</span><span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;th&#39;</span><span class="p">,</span><span class="s">&#39;ph&#39;</span><span class="p">,</span><span class="s">&#39;abs_grlz&#39;</span><span class="p">,</span><span class="s">&#39;th_absdB&#39;</span><span class="p">,</span><span class="s">&#39;th_phase&#39;</span><span class="p">,</span><span class="s">&#39;ph_absdB&#39;</span><span class="p">,</span><span class="s">&#39;ph_phase&#39;</span><span class="p">,</span><span class="s">&#39;ax_ratio&#39;</span><span class="p">],</span><span class="n">index_col</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
@@ -3248,7 +3246,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 04, 2014.
+      Last updated on mars 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
