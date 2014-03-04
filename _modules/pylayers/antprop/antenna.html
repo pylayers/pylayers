@@ -105,7 +105,7 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    forcesymbol</span>
+<span class="sd">    forcesympol</span>
 <span class="sd">    compdiag</span>
 <span class="sd">    show3D</span>
 
@@ -2680,12 +2680,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fph</span>
 
-<span class="k">def</span> <span class="nf">forcesympol</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+<div class="viewcode-block" id="forcesympol"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.forcesympol.html#pylayers.antprop.antenna.forcesympol">[docs]</a><span class="k">def</span> <span class="nf">forcesympol</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot VSH transform vsh basis in 3D plot</span>
-<span class="sd">        (V in fig1 and W in fig2)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    n,m   : integer values (m&lt;=n)</span>
 <span class="sd">    theta : ndarray</span>
 <span class="sd">    phi   : ndarray</span>
@@ -2695,6 +2695,7 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+
 <span class="sd">    .. plot::</span>
 <span class="sd">        :include-source:</span>
 
@@ -2898,7 +2899,7 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;Error: m&gt;n!!!&quot;</span>
-
+</div>
 <div class="viewcode-block" id="compdiag"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.compdiag.html#pylayers.antprop.antenna.compdiag">[docs]</a><span class="k">def</span> <span class="nf">compdiag</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="n">Fthr</span><span class="p">,</span> <span class="n">Fphr</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;modulus&#39;</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="s">&#39;english&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
