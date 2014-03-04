@@ -79,10 +79,231 @@
             
   <h1>Source code for pylayers.gis.layout</h1><div class="highlight"><pre>
 <span class="c">#-*- coding:Utf-8 -*-</span>
-<span class="c">#</span>
-<span class="c"># Class Layout</span>
-<span class="c">#</span>
-<span class="c"># This class handle the description of indoor layout</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.gis.layout</span>
+
+<span class="sd">This class handle the description of an Indoor layout</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated</span>
+
+<span class="sd">Class Layout</span>
+<span class="sd">============</span>
+
+<span class="sd">Utility functions</span>
+<span class="sd">-----------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.__init__</span>
+<span class="sd">    Layout.__repr__</span>
+<span class="sd">    Layout.info</span>
+<span class="sd">    Layout.ls</span>
+<span class="sd">    Layout.delete</span>
+<span class="sd">    Layout.check</span>
+<span class="sd">    Layout.clip</span>
+<span class="sd">    Layout.help</span>
+<span class="sd">    Layout.g2npy</span>
+<span class="sd">    Layout.check2</span>
+<span class="sd">    Layout.cleanup</span>
+<span class="sd">    Layout.boundary</span>
+<span class="sd">    Layout.distwall</span>
+<span class="sd">    Layout.randTxRx</span>
+<span class="sd">    Layout.get_paths</span>
+<span class="sd">    Layout.get_zone</span>
+<span class="sd">    Layout.info_segment</span>
+<span class="sd">    Layout.find_edgelist</span>
+
+<span class="sd">Loading and Saving</span>
+<span class="sd">------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.dumpw</span>
+<span class="sd">    Layout.dumpr</span>
+<span class="sd">    Layout.loadosm</span>
+<span class="sd">    Layout.saveosm</span>
+<span class="sd">    Layout.saveini</span>
+<span class="sd">    Layout.loadini</span>
+<span class="sd">    Layout.loadfur</span>
+<span class="sd">    Layout.load</span>
+<span class="sd">    Layout.loadstr</span>
+<span class="sd">    Layout.loadstr2</span>
+<span class="sd">    Layout.savestr2</span>
+<span class="sd">    Layout.save</span>
+<span class="sd">    Layout.saveold</span>
+
+<span class="sd">Layout editing</span>
+<span class="sd">--------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.editor</span>
+<span class="sd">    Layout.editorGtk</span>
+<span class="sd">    Layout.editorTk</span>
+<span class="sd">    Layout.add_pnod</span>
+<span class="sd">    Layout.add_fnod</span>
+<span class="sd">    Layout.add_nfpe</span>
+<span class="sd">    Layout.add_pons</span>
+<span class="sd">    Layout.add_segment</span>
+<span class="sd">    Layout.add_furniture</span>
+<span class="sd">    Layout.add_furniture_file</span>
+<span class="sd">    Layout.del_points</span>
+<span class="sd">    Layout.del_segment</span>
+<span class="sd">    Layout.thwall</span>
+<span class="sd">    Layout.edit_point</span>
+<span class="sd">    Layout.edit_segment</span>
+<span class="sd">    Layout.add_window</span>
+<span class="sd">    Layout.add_door</span>
+
+<span class="sd">Layout transformation </span>
+<span class="sd">---------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.translate</span>
+<span class="sd">    Layout.rotate</span>
+<span class="sd">    Layout.del_cycle</span>
+<span class="sd">    Layout.chgmss</span>
+<span class="sd">    Layout.diag</span>
+<span class="sd">    Layout.nd2seg</span>
+<span class="sd">    Layout.ed2nd</span>
+<span class="sd">    Layout.seguv</span>
+<span class="sd">    Layout.segpt2</span>
+<span class="sd">    Layout.seg2pts</span>
+<span class="sd">    Layout.segpt</span>
+<span class="sd">    Layout.extrseg</span>
+<span class="sd">    Layout.seginframe2</span>
+<span class="sd">    Layout.seginframe</span>
+<span class="sd">    Layout.layerongrid</span>
+<span class="sd">    Layout.cycleinline</span>
+<span class="sd">    Layout.seginline</span>
+
+<span class="sd">Layout visibility  </span>
+<span class="sd">------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.checkvis</span>
+<span class="sd">    Layout.visilist</span>
+<span class="sd">    Layout.closest_edge</span>
+<span class="sd">    Layout.visi_papb</span>
+<span class="sd">    Layout.angleonlink</span>
+<span class="sd">    Layout.angleonlinkold</span>
+<span class="sd">    Layout.layeronlink</span>
+
+<span class="sd">SubSegment Functions</span>
+<span class="sd">--------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.subseg</span>
+<span class="sd">    Layout.have_subseg</span>
+<span class="sd">    Layout.del_subseg</span>
+<span class="sd">    Layout.add_subseg</span>
+
+<span class="sd">Vizualisation</span>
+<span class="sd">--------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.displaygui</span>
+<span class="sd">    Layout.show_nodes</span>
+<span class="sd">    Layout.show_seg1</span>
+<span class="sd">    Layout.plot_segments</span>
+<span class="sd">    Layout.show_segment</span>
+<span class="sd">    Layout.show_layer</span>
+<span class="sd">    Layout.facet3D</span>
+<span class="sd">    Layout.facets3D</span>
+<span class="sd">    Layout.geomfile</span>
+<span class="sd">    Layout._show3</span>
+<span class="sd">    Layout.show3</span>
+
+<span class="sd">Showing Graphs </span>
+<span class="sd">---------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.showGi</span>
+<span class="sd">    Layout.showGt</span>
+<span class="sd">    Layout.showGs</span>
+<span class="sd">    Layout.show</span>
+<span class="sd">    Layout.showG</span>
+<span class="sd">    Layout.showGv</span>
+
+<span class="sd">Building Graphs </span>
+<span class="sd">----------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.build</span>
+<span class="sd">    Layout.buildGc</span>
+<span class="sd">    Layout.buildGt</span>
+<span class="sd">    Layout.buildGw</span>
+<span class="sd">    Layout.buildGv</span>
+<span class="sd">    Layout.buildGi2</span>
+<span class="sd">    Layout.buildGi</span>
+<span class="sd">    Layout.outputGi</span>
+<span class="sd">    Layout.waypointGw</span>
+<span class="sd">    Layout.builGr2</span>
+<span class="sd">    Layout.buildGr</span>
+<span class="sd">    Layout.buildGr3</span>
+
+<span class="sd">Loading Graphs</span>
+<span class="sd">--------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.loadG</span>
+
+<span class="sd">Cycles and Rooms  Related Functions</span>
+<span class="sd">-----------------------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.pt2cy</span>
+<span class="sd">    Layout.cy2pt</span>
+<span class="sd">    Layout.pt2ro</span>
+<span class="sd">    Layout.seg2ro</span>
+
+<span class="sd">    Layout.room2segments</span>
+<span class="sd">    Layout.room2nodes</span>
+
+<span class="sd">    Layout.waypoint</span>
+
+<span class="sd">Testing Functions</span>
+<span class="sd">------------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.isseg</span>
+<span class="sd">    Layout.ispoint</span>
+<span class="sd">    Layout.onseg</span>
+
+
+<span class="sd">Signatures</span>
+<span class="sd">----------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: genarated/</span>
+
+<span class="sd">    Layout.signature</span>
+<span class="sd">    Layout.showSig</span>
+<span class="sd">    Layout.get_Sg_pos</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="c">#</span>
 <span class="c">#</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
@@ -352,7 +573,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
 </div>
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.__repr__.html#pylayers.gis.layout.Layout.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;----------------</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
@@ -397,7 +618,7 @@
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;degree : degree of nodes &quot;</span> <span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
 
 
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
 <div class="viewcode-block" id="Layout.ls"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.html#pylayers.gis.layout.Layout.ls">[docs]</a>    <span class="k">def</span> <span class="nf">ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; list the available file in dirstruc</span>
 
@@ -6711,7 +6932,7 @@
         <span class="k">return</span> <span class="n">pg</span>
 </div>
     <span class="nd">@mlab.show</span>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._show3.html#pylayers.gis.layout.Layout._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a .off geomview file</span>
 
 <span class="sd">        Parameters</span>
@@ -6923,7 +7144,7 @@
                                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
 
 
-
+</div>
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
