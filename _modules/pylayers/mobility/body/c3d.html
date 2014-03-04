@@ -150,7 +150,12 @@
 <span class="c"># CameraInfo         MarkerRelated CameraInfo [Nmarkers x NvideoFrames]</span>
 <span class="c"># ResidualError      MarkerRelated ErrorInfo  [Nmarkers x NvideoFrames]</span></div>
 <div class="viewcode-block" id="read_c3d"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.c3d.html#pylayers.mobility.body.c3d.read_c3d">[docs]</a><span class="k">def</span> <span class="nf">read_c3d</span><span class="p">(</span><span class="n">_filename</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; read c3d file </span>
+    <span class="sd">&quot;&quot;&quot; read c3d file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _filename : string</span>
+<span class="sd">    verbose : boolean</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">FullFileName</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="s">&#39;body/c3d&#39;</span><span class="p">)</span>
     <span class="n">Markers</span> <span class="o">=</span> <span class="p">[]</span>

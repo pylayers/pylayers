@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="pylayers.antprop package" href="pylayers.antprop.html" />
-    <link rel="next" title="pylayers.antprop.signew module" href="pylayers.antprop.signew.html" />
+    <link rel="next" title="pylayers.antprop.signature.Signatures.__init__" href="generated/pylayers.antprop.signature.Signatures.__init__.html" />
     <link rel="prev" title="pylayers.antprop.raysc module" href="pylayers.antprop.raysc.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.signew.html" title="pylayers.antprop.signew module"
+          <a href="generated/pylayers.antprop.signature.Signatures.__init__.html" title="pylayers.antprop.signature.Signatures.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.antprop.raysc.html" title="pylayers.antprop.raysc module"
@@ -64,12 +64,22 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.antprop.signature module</a><ul>
+<li><a class="reference internal" href="#class-signatures">Class Signatures</a></li>
+<li><a class="reference internal" href="#class-signature">Class Signature</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility functions</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.antprop.raysc.html"
                         title="previous chapter">pylayers.antprop.raysc module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.signew.html"
-                        title="next chapter">pylayers.antprop.signew module</a></p>
+  <p class="topless"><a href="generated/pylayers.antprop.signature.Signatures.__init__.html"
+                        title="next chapter">pylayers.antprop.signature.Signatures.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.antprop.signature.txt"
@@ -98,825 +108,203 @@
             
   <div class="section" id="module-pylayers.antprop.signature">
 <span id="pylayers-antprop-signature-module"></span><h1>pylayers.antprop.signature module<a class="headerlink" href="#module-pylayers.antprop.signature" title="Permalink to this headline">¶</a></h1>
-<p>Module : signature</p>
-<p>functions</p>
-<p>showsig</p>
-<dl class="class">
-<dt id="pylayers.antprop.signature.Signature">
-<em class="property">class </em><tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">Signature</tt><big>(</big><em>sig</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>class Signature</p>
-<table class="docutils field-list" frame="void" rules="none">
+<div class="section" id="class-signatures">
+<h2>Class Signatures<a class="headerlink" href="#class-signatures" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__init__.html#pylayers.antprop.signature.Signatures.__init__" title="pylayers.antprop.signature.Signatures.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.__init__</span></tt></a>(L,&nbsp;source,&nbsp;target[,&nbsp;cutoff])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>seq</strong> : list  of interaction point (edges (&gt;0)  or vertices (&lt;0) [int]</p>
-<p><strong>typ</strong> : list of interaction type 1-R 2-T 3-D  [int]</p>
-<p><strong>pa</strong> : tail point of interaction segmenti (2xN) ndarray</p>
-<p><strong>pb</strong> : head point of interaction segment  (2xN) ndarray</p>
-<p class="last"><strong>pc</strong> : center point of interaction segment (2xN) ndarray</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.backtrace">
-<tt class="descname">backtrace</tt><big>(</big><em>tx</em>, <em>rx</em>, <em>M</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.backtrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.backtrace" title="Permalink to this definition">¶</a></dt>
-<dd><p>backtrace given image, tx, and rx</p>
-<p>this function
-traces the 2D ray.</p>
-<table class="docutils field-list" frame="void" rules="none">
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__repr__.html#pylayers.antprop.signature.Signatures.__repr__" title="pylayers.antprop.signature.Signatures.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.__len__.html#pylayers.antprop.signature.Signatures.__len__" title="pylayers.antprop.signature.Signatures.__len__"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.__len__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.num.html#pylayers.antprop.signature.Signatures.num" title="pylayers.antprop.signature.Signatures.num"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.num</span></tt></a>()</td>
+<td>determine the number of signatures</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.info.html#pylayers.antprop.signature.Signatures.info" title="pylayers.antprop.signature.Signatures.info"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.info</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.save.html#pylayers.antprop.signature.Signatures.save" title="pylayers.antprop.signature.Signatures.save"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.save</span></tt></a>()</td>
+<td>Save signatures</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.load.html#pylayers.antprop.signature.Signatures.load" title="pylayers.antprop.signature.Signatures.load"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.load</span></tt></a>([filename])</td>
+<td>Load signatures</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.sp.html#pylayers.antprop.signature.Signatures.sp" title="pylayers.antprop.signature.Signatures.sp"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.sp</span></tt></a>(G,&nbsp;source,&nbsp;target[,&nbsp;cutoff])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone.html#pylayers.antprop.signature.Signatures.procone" title="pylayers.antprop.signature.Signatures.procone"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.procone</span></tt></a>(L,&nbsp;G,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek all simple_path from source to target looking backward</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths.html#pylayers.antprop.signature.Signatures.propaths" title="pylayers.antprop.signature.Signatures.propaths"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.propaths</span></tt></a>(G,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek all simple_path from source to target</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.propaths2.html#pylayers.antprop.signature.Signatures.propaths2" title="pylayers.antprop.signature.Signatures.propaths2"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.propaths2</span></tt></a>(G,&nbsp;di,&nbsp;source,&nbsp;target)</td>
+<td>seek all simple_path from source to target</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.procone2.html#pylayers.antprop.signature.Signatures.procone2" title="pylayers.antprop.signature.Signatures.procone2"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.procone2</span></tt></a>(L,&nbsp;G,&nbsp;source,&nbsp;target[,&nbsp;...])</td>
+<td>seek all simple_path from source to target looking backward</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.calsig.html#pylayers.antprop.signature.Signatures.calsig" title="pylayers.antprop.signature.Signatures.calsig"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.calsig</span></tt></a>(G[,&nbsp;dia,&nbsp;cutoff])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tx</strong> :  ndarray (2x1)</p>
-<blockquote>
-<div><p>transmitter</p>
-</div></blockquote>
-<p><strong>rx</strong> :  ndarray (2x1)</p>
-<blockquote>
-<div><p>receiver</p>
-</div></blockquote>
-<p><strong>M</strong> :  ndarray (2xN)</p>
-<blockquote>
-<div><p>N image points obtained using self.image method</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>isvalid</strong> : bool</p>
-<blockquote>
-<div><p>True if the backtrace ends successfully</p>
-</div></blockquote>
-<p><strong>Y</strong> : ndarray (2 x (N+2))</p>
-<blockquote class="last">
-<div><p>sequence of points corresponding to the seek ray</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>For mathematical details see :</p>
-<p>&#64;INPROCEEDINGS{6546704, 
-author={Laaraiedh, Mohamed and Amiot, Nicolas and Uguen, Bernard}, 
-booktitle={Antennas and Propagation (EuCAP), 2013 7th European Conference on}, 
-title={Efficient ray tracing tool for UWB propagation and</p>
-<blockquote>
-<div>localization modeling},</div></blockquote>
-<p>year={2013}, 
-pages={2307-2311},}</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGr</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Signature</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;og&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l3</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l4</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;xk&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">tx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">Y</span><span class="p">)),</span><span class="n">rx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l5</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ray</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">ray</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;#999999&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run.html#pylayers.antprop.signature.Signatures.run" title="pylayers.antprop.signature.Signatures.run"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.run</span></tt></a>([cutoff,&nbsp;dcut])</td>
+<td>run signature calculation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run1.html#pylayers.antprop.signature.Signatures.run1" title="pylayers.antprop.signature.Signatures.run1"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.run1</span></tt></a>([cutoff])</td>
+<td>get signatures (in one list of arrays) between tx and rx</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run4.html#pylayers.antprop.signature.Signatures.run4" title="pylayers.antprop.signature.Signatures.run4"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.run4</span></tt></a>([cutoff,&nbsp;algo,&nbsp;bt,&nbsp;progress])</td>
+<td>get signatures (in one list of arrays) between tx and rx</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run5.html#pylayers.antprop.signature.Signatures.run5" title="pylayers.antprop.signature.Signatures.run5"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.run5</span></tt></a>([cutoff,&nbsp;algo,&nbsp;bt,&nbsp;progress])</td>
+<td>get signatures (in one list of arrays) between tx and rx</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run2.html#pylayers.antprop.signature.Signatures.run2" title="pylayers.antprop.signature.Signatures.run2"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.run2</span></tt></a>([cutoff,&nbsp;dcut])</td>
+<td>get signatures (in one list of arrays) between tx and rx</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.run3.html#pylayers.antprop.signature.Signatures.run3" title="pylayers.antprop.signature.Signatures.run3"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.run3</span></tt></a>([cutoff,&nbsp;dcut])</td>
+<td>get signatures (in one list of arrays) between tx and rx</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.meta.html#pylayers.antprop.signature.Signatures.meta" title="pylayers.antprop.signature.Signatures.meta"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.meta</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.lineofcycle.html#pylayers.antprop.signature.Signatures.lineofcycle" title="pylayers.antprop.signature.Signatures.lineofcycle"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.lineofcycle</span></tt></a>([cs,&nbsp;ct])</td>
+<td>shortest path between 2 cycle</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.cones.html#pylayers.antprop.signature.Signatures.cones" title="pylayers.antprop.signature.Signatures.cones"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.cones</span></tt></a>(L[,&nbsp;i,&nbsp;s,&nbsp;fig,&nbsp;ax,&nbsp;figsize])</td>
+<td>display cones of an unfolded signature</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.unfold.html#pylayers.antprop.signature.Signatures.unfold" title="pylayers.antprop.signature.Signatures.unfold"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.unfold</span></tt></a>(L[,&nbsp;i,&nbsp;s])</td>
+<td>unfold a given signature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.show.html#pylayers.antprop.signature.Signatures.show" title="pylayers.antprop.signature.Signatures.show"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.show</span></tt></a>(L,&nbsp;**kwargs)</td>
+<td>plot signatures within the simulated environment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.showi.html#pylayers.antprop.signature.Signatures.showi" title="pylayers.antprop.signature.Signatures.showi"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.showi</span></tt></a>([uni,&nbsp;us])</td>
+<td>interactive show</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signatures.rays.html#pylayers.antprop.signature.Signatures.rays" title="pylayers.antprop.signature.Signatures.rays"><tt class="xref py py-obj docutils literal"><span class="pre">Signatures.rays</span></tt></a>([ptx,&nbsp;prx])</td>
+<td>from signatures dict to 2D rays</td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>(<a class="reference external" href="../modules/pylayers-antprop-signature-1.py">Source code</a>)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.ev">
-<tt class="descname">ev</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.ev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.ev" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluation of Signature</p>
-<table class="docutils field-list" frame="void" rules="none">
+<div class="section" id="class-signature">
+<h2>Class Signature<a class="headerlink" href="#class-signature" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__init__.html#pylayers.antprop.signature.Signature.__init__" title="pylayers.antprop.signature.Signature.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.__init__</span></tt></a>(sig)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>L</strong> : Layout</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>This function converts the sequence of interactions into numpy arrays
-which contains coordinates of segments extremities involved in the 
-signature. At that level the coordinates of extremities (tx and rx) is 
-not known yet.</p>
-<p>members data</p>
-<p>pa  tail of segment  (2xN) 
-pb  head of segment  (2xN)  
-pc  the center of segment (2xN)</p>
-<p>norm normal to the segment if segment 
-in case the interaction is a point the normal is undefined and then
-set to 0.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.ev2">
-<tt class="descname">ev2</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.ev2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.ev2" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluation of Signature</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>L</strong> : Layout</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>This function converts the sequence of interactions into numpy arrays
-which contains coordinates of segments extremities involved in the 
-signature. At that level the coordinates of extremities (tx and rx) is 
-not known yet.</p>
-<p>members data</p>
-<p>pa  tail of segment  (2xN) 
-pb  head of segment  (2xN)  
-pc  the center of segment (2xN)</p>
-<p>norm normal to the segment if segment 
-in case the interaction is a point the normal is undefined and then
-set to 0.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.evf">
-<tt class="descname">evf</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.evf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.evf" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluation of Signature (fast version)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>L</strong> : Layout</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>This function converts the sequence of interactions into numpy arrays
-which contains coordinates of segments extremities involved in the 
-signature.</p>
-<p>members data</p>
-<p>pa  tail of segment  (2xN) 
-pb  head of segment  (2xN)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.evtx">
-<tt class="descname">evtx</tt><big>(</big><em>L</em>, <em>tx</em>, <em>rx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.evtx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.evtx" title="Permalink to this definition">¶</a></dt>
-<dd><p>evtx ( deprecated )</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>tx</strong> : np.array (2xN)</p>
-<p class="last"><strong>rx</strong> : np.array (2xM)</p>
 </td>
 </tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.image">
-<tt class="descname">image</tt><big>(</big><em>tx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the tx&#8217;s images with respect to the signature segments</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tx</strong> : numpy.ndarray</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.__repr__.html#pylayers.antprop.signature.Signature.__repr__" title="pylayers.antprop.signature.Signature.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.__repr__</span></tt></a>()</td>
+<td></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>M</strong> : numpy.ndarray</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.info.html#pylayers.antprop.signature.Signature.info" title="pylayers.antprop.signature.Signature.info"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.info</span></tt></a>()</td>
+<td></td>
 </tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.info">
-<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.sig2beam">
-<tt class="descname">sig2beam</tt><big>(</big><em>L</em>, <em>p</em>, <em>mode='incremental'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.sig2beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2beam" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.sig2ray">
-<tt class="descname">sig2ray</tt><big>(</big><em>L</em>, <em>pTx</em>, <em>pRx</em>, <em>mode='incremental'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.sig2ray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2ray" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert a signature to a 2D ray</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>pTx</strong> : ndarray</p>
-<blockquote>
-<div><p>2D transmitter position</p>
-</div></blockquote>
-<p><strong>pRx</strong> : ndarray</p>
-<blockquote>
-<div><p>2D receiver position</p>
-</div></blockquote>
-<p><strong>mod</strong> : if mod==&#8217;incremental&#8217; a set of alternative signatures is return</p>
-</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.split.html#pylayers.antprop.signature.Signature.split" title="pylayers.antprop.signature.Signature.split"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.split</span></tt></a>()</td>
+<td>split signature</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Y</strong> : ndarray (2x(N+2))</p>
-</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev2.html#pylayers.antprop.signature.Signature.ev2" title="pylayers.antprop.signature.Signature.ev2"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.ev2</span></tt></a>(L)</td>
+<td>evaluation of Signature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evf.html#pylayers.antprop.signature.Signature.evf" title="pylayers.antprop.signature.Signature.evf"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.evf</span></tt></a>(L)</td>
+<td>evaluation of Signature (fast version)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.ev.html#pylayers.antprop.signature.Signature.ev" title="pylayers.antprop.signature.Signature.ev"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.ev</span></tt></a>(L)</td>
+<td>evaluation of Signature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.unfold.html#pylayers.antprop.signature.Signature.unfold" title="pylayers.antprop.signature.Signature.unfold"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.unfold</span></tt></a>()</td>
+<td>unfold a given signature</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.evtx.html#pylayers.antprop.signature.Signature.evtx" title="pylayers.antprop.signature.Signature.evtx"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.evtx</span></tt></a>(L,&nbsp;tx,&nbsp;rx)</td>
+<td>evtx ( deprecated )</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.image.html#pylayers.antprop.signature.Signature.image" title="pylayers.antprop.signature.Signature.image"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.image</span></tt></a>(tx)</td>
+<td>Compute the tx&#8217;s images with respect to the signature segments</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.backtrace.html#pylayers.antprop.signature.Signature.backtrace" title="pylayers.antprop.signature.Signature.backtrace"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.backtrace</span></tt></a>(tx,&nbsp;rx,&nbsp;M)</td>
+<td>backtrace given image, tx, and rx</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.sig2beam.html#pylayers.antprop.signature.Signature.sig2beam" title="pylayers.antprop.signature.Signature.sig2beam"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.sig2beam</span></tt></a>(L,&nbsp;p[,&nbsp;mode])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.Signature.sig2ray.html#pylayers.antprop.signature.Signature.sig2ray" title="pylayers.antprop.signature.Signature.sig2ray"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.sig2ray</span></tt></a>(L,&nbsp;pTx,&nbsp;pRx[,&nbsp;mode])</td>
+<td>convert a signature to a 2D ray</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#pylayers.antprop.signature.Signature.image" title="pylayers.antprop.signature.Signature.image"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.image</span></tt></a>, <a class="reference internal" href="#pylayers.antprop.signature.Signature.backtrace" title="pylayers.antprop.signature.Signature.backtrace"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.backtrace</span></tt></a></p>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.split">
-<tt class="descname">split</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.split" title="Permalink to this definition">¶</a></dt>
-<dd><p>split signature</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signature.unfold">
-<tt class="descname">unfold</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.unfold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.unfold" title="Permalink to this definition">¶</a></dt>
-<dd><p>unfold a given signature</p>
-<p>return 2 np.ndarray of pta and phe &#8220;aligned&#8221; 
-reflexion interactions are mirrored</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="pylayers.antprop.signature.Signatures">
-<em class="property">class </em><tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">Signatures</tt><big>(</big><em>L</em>, <em>source</em>, <em>target</em>, <em>cutoff=3</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
-<p>gathers all signatures from a layout given tx and rx</p>
-<table class="docutils field-list" frame="void" rules="none">
+<div class="section" id="utility-functions">
+<h2>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.showsig.html#pylayers.antprop.signature.showsig" title="pylayers.antprop.signature.showsig"><tt class="xref py py-obj docutils literal"><span class="pre">showsig</span></tt></a>(L,&nbsp;s[,&nbsp;tx,&nbsp;rx])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>L</strong> : gis.Layout</p>
-<p><strong>pTx</strong> : numpy.ndarray</p>
-<blockquote>
-<div><p>position of Tx</p>
-</div></blockquote>
-<p><strong>pRx</strong> : numpy.ndarray</p>
-<blockquote class="last">
-<div><p>position of Rx</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.calsig">
-<tt class="descname">calsig</tt><big>(</big><em>G</em>, <em>dia={}</em>, <em>cutoff=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.calsig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.calsig" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : graph</p>
-<p><strong>dia</strong> : dictionnary of interactions</p>
-<p class="last"><strong>cutoff</strong> : integer</p>
 </td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.gidl.html#pylayers.antprop.signature.gidl" title="pylayers.antprop.signature.gidl"><tt class="xref py py-obj docutils literal"><span class="pre">gidl</span></tt></a>(g)</td>
+<td>gi without diffraction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.frontline.html#pylayers.antprop.signature.frontline" title="pylayers.antprop.signature.frontline"><tt class="xref py py-obj docutils literal"><span class="pre">frontline</span></tt></a>(L,&nbsp;nc,&nbsp;v)</td>
+<td>determine cycle frontline</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.signature.edgeout2.html#pylayers.antprop.signature.edgeout2" title="pylayers.antprop.signature.edgeout2"><tt class="xref py py-obj docutils literal"><span class="pre">edgeout2</span></tt></a>(L,&nbsp;g)</td>
+<td>filter authorized Gi edges output</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.signature.edgeout.html#pylayers.antprop.signature.edgeout" title="pylayers.antprop.signature.edgeout"><tt class="xref py py-obj docutils literal"><span class="pre">edgeout</span></tt></a>(L,&nbsp;g)</td>
+<td>filter authorized Gi edges output</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.cones">
-<tt class="descname">cones</tt><big>(</big><em>L</em>, <em>i=0</em>, <em>s=0</em>, <em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em>, <span class="optional">[</span><span class="optional">]</span><em>figsize=(10</em>, <em>10)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.cones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.cones" title="Permalink to this definition">¶</a></dt>
-<dd><p>display cones of an unfolded signature</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>i</strong> : int</p>
-<blockquote>
-<div><p>the interaction block</p>
-</div></blockquote>
-<p><strong>s</strong> : int</p>
-<blockquote class="last">
-<div><p>the signature number in the block</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.info">
-<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.lineofcycle">
-<tt class="descname">lineofcycle</tt><big>(</big><em>cs=</em>, <span class="optional">[</span><span class="optional">]</span><em>ct=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.lineofcycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.lineofcycle" title="Permalink to this definition">¶</a></dt>
-<dd><p>shortest path between 2 cycle</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.load">
-<tt class="descname">load</tt><big>(</big><em>filename=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load signatures</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.meta">
-<tt class="descname">meta</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.meta" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.num">
-<tt class="descname">num</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.num"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.num" title="Permalink to this definition">¶</a></dt>
-<dd><p>determine the number of signatures</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.procone">
-<tt class="descname">procone</tt><big>(</big><em>L</em>, <em>G</em>, <em>source</em>, <em>target</em>, <em>cutoff=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.procone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.procone" title="Permalink to this definition">¶</a></dt>
-<dd><p>seek all simple_path from source to target looking backward</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>G</strong> : networkx Graph Gi</p>
-<p><strong>source</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p><strong>target</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p class="last"><strong>cutoff</strong> : int</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>adapted from all_simple_path of networkx</p>
-<p>1- Determine all nodes connected to Gi</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.procone2">
-<tt class="descname">procone2</tt><big>(</big><em>L</em>, <em>G</em>, <em>source</em>, <em>target</em>, <em>dout={}</em>, <em>cutoff=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.procone2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.procone2" title="Permalink to this definition">¶</a></dt>
-<dd><p>seek all simple_path from source to target looking backward</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>G</strong> : networkx Graph Gi</p>
-<p><strong>dout</strong> : dictionnary</p>
-<blockquote>
-<div><p>ouput dictionnary</p>
-</div></blockquote>
-<p><strong>source</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p><strong>target</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p class="last"><strong>cutoff</strong> : int</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>adapted from all_simple_path of networkx</p>
-<p>1- Determine all nodes connected to Gi</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.propaths">
-<tt class="descname">propaths</tt><big>(</big><em>G</em>, <em>source</em>, <em>target</em>, <em>cutoff=1</em>, <em>bt=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.propaths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.propaths" title="Permalink to this definition">¶</a></dt>
-<dd><p>seek all simple_path from source to target</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : networkx Graph Gi</p>
-<p><strong>source</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p><strong>target</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p><strong>cutoff</strong> : int</p>
-<p><strong>bt</strong> : bool</p>
-<blockquote class="last">
-<div><p>allow backtrace (visite nodes already visited)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>adapted from all_simple_path of networkx</p>
-<p>1- Determine all nodes connected to Gi</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.propaths2">
-<tt class="descname">propaths2</tt><big>(</big><em>G</em>, <em>di</em>, <em>source</em>, <em>target</em>, <em>dout={}</em>, <em>cutoff=1</em>, <em>bt=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.propaths2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.propaths2" title="Permalink to this definition">¶</a></dt>
-<dd><p>seek all simple_path from source to target</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : networkx Graph Gi</p>
-<p><strong>di</strong> : dictionnary that map tuple to signature</p>
-<blockquote>
-<div><p>see Layout.di</p>
-</div></blockquote>
-<p><strong>dout</strong> : dictionnary</p>
-<blockquote>
-<div><p>ouput dictionnary</p>
-</div></blockquote>
-<p><strong>source</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p><strong>target</strong> : tuple</p>
-<blockquote>
-<div><p>interaction (node of Gi)</p>
-</div></blockquote>
-<p><strong>cutoff</strong> : int</p>
-<p><strong>bt</strong> : bool</p>
-<blockquote class="last">
-<div><p>allow backtrace (visite nodes already visited)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>adapted from all_simple_path of networkx</p>
-<p>1- Determine all nodes connected to Gi</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.rays">
-<tt class="descname">rays</tt><big>(</big><em>ptx=0</em>, <em>prx=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.rays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.rays" title="Permalink to this definition">¶</a></dt>
-<dd><p>from signatures dict to 2D rays</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tx</strong> : numpy.array or int</p>
-<blockquote>
-<div><p>Tx coordinates is the center of gravity of the cycle number if
-type(tx)=int</p>
-</div></blockquote>
-<p><strong>rx</strong> :  numpy.array or int</p>
-<blockquote>
-<div><p>Rx coordinates is the center of gravity of the cycle number if
-type(rx)=int</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>rays</strong> : Rays</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#pylayers.antprop.signature.Signature.sig2ray" title="pylayers.antprop.signature.Signature.sig2ray"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.sig2ray</span></tt></a></p>
 </div>
-<p class="rubric">Notes</p>
-<p>In the same time the signature of the ray is stored in the Rays object</p>
-<p>Todo : Find the best memory implemntation</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.run">
-<tt class="descname">run</tt><big>(</big><em>cutoff=1</em>, <em>dcut=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>run signature calculation</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.run1">
-<tt class="descname">run1</tt><big>(</big><em>cutoff=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run1" title="Permalink to this definition">¶</a></dt>
-<dd><p>get signatures (in one list of arrays) between tx and rx</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cutoff</strong> : int</p>
-<blockquote>
-<div><p>limit the exploration of all_simple_path</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sigslist</strong> :  numpy.ndarray</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.run2">
-<tt class="descname">run2</tt><big>(</big><em>cutoff=1</em>, <em>dcut=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run2" title="Permalink to this definition">¶</a></dt>
-<dd><p>get signatures (in one list of arrays) between tx and rx</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cutoff</strong> : limit the exploration of all_simple_path</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>sigslist = numpy.ndarray</strong> :</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.run3">
-<tt class="descname">run3</tt><big>(</big><em>cutoff=1</em>, <em>dcut=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run3" title="Permalink to this definition">¶</a></dt>
-<dd><p>get signatures (in one list of arrays) between tx and rx</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cutoff</strong> : limit the exploration of all_simple_path</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>sigslist = numpy.ndarray</strong> :</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.run4">
-<tt class="descname">run4</tt><big>(</big><em>cutoff=2</em>, <em>algo='old'</em>, <em>bt=False</em>, <em>progress=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run4" title="Permalink to this definition">¶</a></dt>
-<dd><p>get signatures (in one list of arrays) between tx and rx</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cutoff</strong> : int</p>
-<blockquote>
-<div><p>limit the exploration of all_simple_path</p>
-</div></blockquote>
-<p><strong>bt</strong> : bool</p>
-<blockquote>
-<div><p>backtrace (allow visit already visited nodes in simple path algorithm)</p>
-</div></blockquote>
-<p><strong>progress</strong> : bool</p>
-<blockquote>
-<div><p>display the time passed in the loop</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sigslist</strong> :  numpy.ndarray</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.run5">
-<tt class="descname">run5</tt><big>(</big><em>cutoff=2</em>, <em>algo='old'</em>, <em>bt=False</em>, <em>progress=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run5" title="Permalink to this definition">¶</a></dt>
-<dd><p>get signatures (in one list of arrays) between tx and rx</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cutoff</strong> : int</p>
-<blockquote>
-<div><p>limit the exploration of all_simple_path</p>
-</div></blockquote>
-<p><strong>bt</strong> : bool</p>
-<blockquote>
-<div><p>backtrace (allow visit already visited nodes in simple path algorithm)</p>
-</div></blockquote>
-<p><strong>progress</strong> : bool</p>
-<blockquote>
-<div><p>display the time passed in the loop</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>sigslist</strong> :  numpy.ndarray</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.save">
-<tt class="descname">save</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save signatures</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.show">
-<tt class="descname">show</tt><big>(</big><em>L</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot signatures within the simulated environment</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>i</strong> : list or -1 (default = all groups)</p>
-<blockquote>
-<div><p>list of interaction group numbers</p>
-</div></blockquote>
-<p><strong>s</strong> : list or -1 (default = all sig)</p>
-<blockquote>
-<div><p>list of indices of signature in interaction group</p>
-</div></blockquote>
-<p><strong>ctx</strong> : cycle of tx (optional)</p>
-<p><strong>crx</strong> : cycle of rx (optional)</p>
-<p class="last"><strong>graph</strong> : type of graph to be displayed</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.showi">
-<tt class="descname">showi</tt><big>(</big><em>uni=0</em>, <em>us=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.showi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.showi" title="Permalink to this definition">¶</a></dt>
-<dd><p>interactive show</p>
-<p>press n to visit signatures sequentially</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>uni</strong> : index of interaction dictionnary keys</p>
-<blockquote class="last">
-<div><p>us : signature index</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.sp">
-<tt class="descname">sp</tt><big>(</big><em>G</em>, <em>source</em>, <em>target</em>, <em>cutoff=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.sp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.sp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.signature.Signatures.unfold">
-<tt class="descname">unfold</tt><big>(</big><em>L</em>, <em>i=0</em>, <em>s=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.unfold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.unfold" title="Permalink to this definition">¶</a></dt>
-<dd><p>unfold a given signature</p>
-<blockquote>
-<div>return 2 np.ndarray of pta and phe &#8220;aligned&#8221; (reflexion interaction are mirrored)</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>i</strong> : int</p>
-<blockquote>
-<div><p>the interaction block</p>
-</div></blockquote>
-<p><strong>s</strong> : int</p>
-<blockquote class="last">
-<div><p>the signature number in the block</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#pylayers.antprop.signature.Signature.unfold" title="pylayers.antprop.signature.Signature.unfold"><tt class="xref py py-obj docutils literal"><span class="pre">Signature.unfold</span></tt></a></p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.signature.edgeout">
-<tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">edgeout</tt><big>(</big><em>L</em>, <em>g</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#edgeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.edgeout" title="Permalink to this definition">¶</a></dt>
-<dd><p>filter authorized Gi edges output</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p class="last"><strong>g</strong> : Digraph Gi</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
-This function checks that this sequence is feasible
-, whatever the type of nstr0 and nstr1.
-The feasible outputs from nstr0 to nstr1 are stored in an output field of 
-edge (nstr0,nstr1)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.signature.edgeout2">
-<tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">edgeout2</tt><big>(</big><em>L</em>, <em>g</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#edgeout2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.edgeout2" title="Permalink to this definition">¶</a></dt>
-<dd><p>filter authorized Gi edges output</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p class="last"><strong>g</strong> : Digraph Gi</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
-This function checks that this sequence is feasible
-, whatever the type of nstr0 and nstr1.
-The feasible outputs from nstr0 to nstr1 are stored in an output field of 
-edge (nstr0,nstr1)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.signature.frontline">
-<tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">frontline</tt><big>(</big><em>L</em>, <em>nc</em>, <em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#frontline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.frontline" title="Permalink to this definition">¶</a></dt>
-<dd><p>determine cycle frontline</p>
-<p>This function calculates the scalar product of the normals of a cycle 
-and returns the indev of segments whith are facing the given direction v.
-scalar product &lt; 0.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>nc</strong> : cycle number</p>
-<p><strong>v</strong> : direction vector</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>nsegf</strong> : list</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">run3</span></tt></p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.signature.gidl">
-<tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">gidl</tt><big>(</big><em>g</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#gidl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.gidl" title="Permalink to this definition">¶</a></dt>
-<dd><p>gi without diffraction</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>gr</strong> :</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.signature.showsig">
-<tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">showsig</tt><big>(</big><em>L</em>, <em>s</em>, <em>tx=</em>, <span class="optional">[</span><span class="optional">]</span><em>rx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#showsig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.showsig" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<p><strong>s  :</strong> :</p>
-<p><strong>tx :</strong> :</p>
-<p class="last"><strong>rx :</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 
 
@@ -935,7 +323,7 @@ scalar product &lt; 0.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.signew.html" title="pylayers.antprop.signew module"
+          <a href="generated/pylayers.antprop.signature.Signatures.__init__.html" title="pylayers.antprop.signature.Signatures.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.antprop.raysc.html" title="pylayers.antprop.raysc module"

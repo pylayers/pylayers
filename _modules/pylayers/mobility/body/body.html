@@ -147,7 +147,7 @@
     <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
 
 
-<div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.Body">[docs]</a><span class="k">class</span> <span class="nc">Body</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Body</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Class to manage a Body model</span>
 
 <span class="sd">    Members</span>
@@ -597,7 +597,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dcs</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">neworigin</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="n">CCSr</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="Body.setacs"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.Body.setacs.html#pylayers.mobility.body.body.Body.setacs">[docs]</a>    <span class="k">def</span> <span class="nf">setacs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set antenna coordinate system (dcs) from a topos or a set of frames</span>
+        <span class="sd">&quot;&quot;&quot; set antenna coordinate system (acs) from a topos or a set of frames</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1422,8 +1422,8 @@
                    <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">w0</span> <span class="o">+</span> \
                    <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">v0</span>
 
-</div></div>
-<div class="viewcode-block" id="translate"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.translate">[docs]</a><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="n">new_origin</span><span class="p">):</span>
+</div>
+<span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="n">new_origin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  rotate a cycle of frames by an angle alpha</span>
 
 <span class="sd">    Parameters</span>
@@ -1450,7 +1450,7 @@
 
     <span class="k">return</span> <span class="n">cycle_tr</span>
 
-</div>
+
 <div class="viewcode-block" id="rotation"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.rotation.html#pylayers.mobility.body.body.rotation">[docs]</a><span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  rotate a cycle of frames by an angle alpha</span>
 

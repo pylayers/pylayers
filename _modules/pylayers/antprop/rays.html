@@ -79,12 +79,36 @@
   <h1>Source code for pylayers.antprop.rays</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: latin1 -*-</span>
-<span class="sd">&quot;&quot;&quot; Module Rays</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">Summary</span>
-<span class="sd">-------</span>
+<span class="sd">Class Rays</span>
+<span class="sd">==========</span>
 
 <span class="sd">This modules contains Rays class</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated</span>
+
+<span class="sd">    Rays.__init__</span>
+<span class="sd">    Rays.__len__</span>
+<span class="sd">    Rays.__repr__</span>
+<span class="sd">    Rays.sort</span>
+<span class="sd">    Rays.extract</span>
+<span class="sd">    Rays.mirror</span>
+<span class="sd">    Rays.to3D</span>
+<span class="sd">    Rays.locbas</span>
+<span class="sd">    Rays.fillinter</span>
+<span class="sd">    Rays.length</span>
+<span class="sd">    Rays.eval</span>
+<span class="sd">    Rays.ray</span>
+<span class="sd">    Rays.typ</span>
+<span class="sd">    Rays.info</span>
+<span class="sd">    Rays.signature</span>
+<span class="sd">    Rays.show</span>
+<span class="sd">    Rays.show3d</span>
+<span class="sd">    Rays._show3</span>
+<span class="sd">    Rays.reciprocal</span>
+<span class="sd">    Rays.check_reciprocity</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
@@ -112,7 +136,7 @@
 <span class="k">except</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
 
-<div class="viewcode-block" id="Rays"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays">[docs]</a><span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A set af rays</span>
 
 <span class="sd">    Attributes</span>
@@ -168,7 +192,7 @@
 <span class="sd">    Once the interaction are informed the field along rays can</span>
 <span class="sd">    be evaluated via the **eval** method</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pTx</span><span class="p">,</span> <span class="n">pRx</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.__init__.html#pylayers.antprop.rays.Rays.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pTx</span><span class="p">,</span> <span class="n">pRx</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pTx</span> <span class="o">=</span> <span class="n">pTx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pRx</span> <span class="o">=</span> <span class="n">pRx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nray</span> <span class="o">=</span> <span class="mi">0</span>
@@ -178,16 +202,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">isbased</span><span class="o">=</span><span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
-       
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+       </div>
+<div class="viewcode-block" id="Rays.__len__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.__len__.html#pylayers.antprop.rays.Rays.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">Nray</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;sig&#39;</span><span class="p">])</span>
             <span class="n">Nray</span> <span class="o">=</span> <span class="n">Nray</span><span class="o">+</span><span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">Nray</span>
 
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Rays.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.__repr__.html#pylayers.antprop.rays.Rays.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
         <span class="n">ni</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">nl</span> <span class="o">=</span> <span class="mi">0</span>
@@ -224,8 +248,8 @@
             <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Rays.reciprocal"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.reciprocal">[docs]</a>    <span class="k">def</span> <span class="nf">reciprocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Rays.reciprocal"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.reciprocal.html#pylayers.antprop.rays.Rays.reciprocal">[docs]</a>    <span class="k">def</span> <span class="nf">reciprocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; switch tx and rx</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -243,7 +267,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Rays.check_reciprocity"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.check_reciprocity">[docs]</a>    <span class="k">def</span> <span class="nf">check_reciprocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.check_reciprocity"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.check_reciprocity.html#pylayers.antprop.rays.Rays.check_reciprocity">[docs]</a>    <span class="k">def</span> <span class="nf">check_reciprocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; check ray reciprocity</span>
 
 <span class="sd">        Parameters</span>
@@ -292,12 +316,12 @@
 
 
 </div>
-<div class="viewcode-block" id="Rays.sort"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.sort"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.sort.html#pylayers.antprop.rays.Rays.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sort rays</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dis</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Rays.extract"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ni</span><span class="p">,</span><span class="n">nr</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.extract.html#pylayers.antprop.rays.Rays.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ni</span><span class="p">,</span><span class="n">nr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Extract a single ray</span>
 
 <span class="sd">        Parameters</span>
@@ -320,7 +344,7 @@
         <span class="n">r</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="s">&#39;nrays&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
         <span class="k">return</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Rays.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.show.html#pylayers.antprop.rays.Rays.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  plot 2D rays within the simulated environment</span>
 
 <span class="sd">        Parameters</span>
@@ -385,7 +409,7 @@
                     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;rays index :&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;rayidx&#39;</span><span class="p">][</span><span class="n">lray</span><span class="p">]))</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>      
 </div>
-<div class="viewcode-block" id="Rays.mirror"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.mirror">[docs]</a>    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.mirror"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.mirror.html#pylayers.antprop.rays.Rays.mirror">[docs]</a>    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; mirror</span>
 
 <span class="sd">        Parameters</span>
@@ -458,7 +482,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Rays.to3D"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.to3D">[docs]</a>    <span class="k">def</span> <span class="nf">to3D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.to3D"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.to3D.html#pylayers.antprop.rays.Rays.to3D">[docs]</a>    <span class="k">def</span> <span class="nf">to3D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform 2D ray to 3D ray</span>
 
 <span class="sd">        Parameters</span>
@@ -937,7 +961,7 @@
            
         <span class="k">return</span><span class="p">(</span><span class="n">r3d</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Rays.length"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.length">[docs]</a>    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.length"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.length.html#pylayers.antprop.rays.Rays.length">[docs]</a>    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate length of rays</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -954,7 +978,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">dk</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Rays.locbas"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.locbas">[docs]</a>    <span class="k">def</span> <span class="nf">locbas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.locbas"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.locbas.html#pylayers.antprop.rays.Rays.locbas">[docs]</a>    <span class="k">def</span> <span class="nf">locbas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate ray local basis</span>
 
 <span class="sd">        Parameters</span>
@@ -1311,7 +1335,7 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">isbased</span><span class="o">=</span><span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="Rays.fillinter"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.fillinter">[docs]</a>    <span class="k">def</span> <span class="nf">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">append</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.fillinter"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.fillinter.html#pylayers.antprop.rays.Rays.fillinter">[docs]</a>    <span class="k">def</span> <span class="nf">fillinter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">append</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  fill ray interactions</span>
 
 <span class="sd">        Parameters</span>
@@ -1577,7 +1601,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filled</span> <span class="o">=</span> <span class="bp">True</span>
 </div>
-<div class="viewcode-block" id="Rays.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span><span class="n">ib</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Rays.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.eval.html#pylayers.antprop.rays.Rays.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span><span class="n">ib</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;  docstring for eval</span>
 
 <span class="sd">        Parameters</span>
@@ -1793,7 +1817,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">Cn</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Rays.ray"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.ray">[docs]</a>    <span class="k">def</span> <span class="nf">ray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.ray"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.ray.html#pylayers.antprop.rays.Rays.ray">[docs]</a>    <span class="k">def</span> <span class="nf">ray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -1812,7 +1836,7 @@
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ray2nbi</span><span class="p">[</span><span class="n">r</span><span class="p">]][</span><span class="s">&#39;rays&#39;</span><span class="p">][:,</span><span class="n">raypos</span><span class="p">][:,</span><span class="mi">0</span><span class="p">])</span>
 
 </div>
-<div class="viewcode-block" id="Rays.typ"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.typ">[docs]</a>    <span class="k">def</span> <span class="nf">typ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.typ"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.typ.html#pylayers.antprop.rays.Rays.typ">[docs]</a>    <span class="k">def</span> <span class="nf">typ</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns interactions list type of a given ray</span>
 
 <span class="sd">        Parameters</span>
@@ -1824,7 +1848,7 @@
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ray</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">typ</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
 </div>
-<div class="viewcode-block" id="Rays.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span><span class="n">ifGHz</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.info.html#pylayers.antprop.rays.Rays.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span><span class="n">ifGHz</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            provides information for a given ray r</span>
 
@@ -1880,7 +1904,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&#39;Rays have not been evaluated yet&#39;</span>
 </div>
-<div class="viewcode-block" id="Rays.signature"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ni</span> <span class="p">,</span><span class="n">nr</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays.signature"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.signature.html#pylayers.antprop.rays.Rays.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ni</span> <span class="p">,</span><span class="n">nr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; extract ray signature</span>
 
 <span class="sd">        Parameters</span>
@@ -1905,7 +1929,7 @@
         <span class="n">sig</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ni</span><span class="p">][</span><span class="s">&#39;sig&#39;</span><span class="p">][:,:,</span><span class="n">nr</span><span class="p">]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Rays.show3d"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.show3d">[docs]</a>    <span class="k">def</span> <span class="nf">show3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="Rays.show3d"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.show3d.html#pylayers.antprop.rays.Rays.show3d">[docs]</a>    <span class="k">def</span> <span class="nf">show3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                <span class="n">ray</span><span class="p">,</span>
                <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                <span class="n">bbas</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -1985,7 +2009,7 @@
             <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </div>
     <span class="nd">@mlab.show</span>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="p">[],</span><span class="n">ilist</span><span class="o">=</span><span class="p">[],</span><span class="n">rlist</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays._show3.html#pylayers.antprop.rays.Rays._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="p">[],</span><span class="n">ilist</span><span class="o">=</span><span class="p">[],</span><span class="n">rlist</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot 3D rays within the simulated environment</span>
 <span class="sd">            using Mayavi</span>
 
@@ -2044,8 +2068,8 @@
             <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">mesh</span><span class="p">),</span>
                                                  <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
 
-
-<div class="viewcode-block" id="Rays.show3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.rays.html#pylayers.antprop.rays.Rays.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+</div>
+    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
               <span class="n">L</span><span class="o">=</span><span class="p">[],</span>
               <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
               <span class="n">bstruc</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -2217,7 +2241,7 @@
    <span class="c">#      else:</span>
    <span class="c">#          return(filename)</span>
 
-</div></div>
+
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
