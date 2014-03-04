@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="pylayers.util package" href="pylayers.util.html" />
-    <link rel="next" title="pylayers.util.graphutil module" href="pylayers.util.graphutil.html" />
+    <link rel="next" title="pylayers.util.geomutil.Geomview" href="generated/pylayers.util.geomutil.Geomview.html" />
     <link rel="prev" title="pylayers.util.cone module" href="pylayers.util.cone.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.util.graphutil.html" title="pylayers.util.graphutil module"
+          <a href="generated/pylayers.util.geomutil.Geomview.html" title="pylayers.util.geomutil.Geomview"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.util.cone.html" title="pylayers.util.cone module"
@@ -78,8 +78,8 @@
   <p class="topless"><a href="pylayers.util.cone.html"
                         title="previous chapter">pylayers.util.cone module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.util.graphutil.html"
-                        title="next chapter">pylayers.util.graphutil module</a></p>
+  <p class="topless"><a href="generated/pylayers.util.geomutil.Geomview.html"
+                        title="next chapter">pylayers.util.geomutil.Geomview</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.util.geomutil.txt"
@@ -110,12 +110,77 @@
 <span id="pylayers-util-geomutil-module"></span><h1>pylayers.util.geomutil module<a class="headerlink" href="#module-pylayers.util.geomutil" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="geomview-class">
 <h2>Geomview Class<a class="headerlink" href="#geomview-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.Geomview.html#pylayers.util.geomutil.Geomview" title="pylayers.util.geomutil.Geomview"><tt class="xref py py-obj docutils literal"><span class="pre">Geomview</span></tt></a>(_filename[,&nbsp;clear])</td>
+<td>Geomview file class</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.Geomlist.html#pylayers.util.geomutil.Geomlist" title="pylayers.util.geomutil.Geomlist"><tt class="xref py py-obj docutils literal"><span class="pre">Geomlist</span></tt></a>(_filename[,&nbsp;clear])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.Geomoff.html#pylayers.util.geomutil.Geomoff" title="pylayers.util.geomutil.Geomoff"><tt class="xref py py-obj docutils literal"><span class="pre">Geomoff</span></tt></a>([_filename])</td>
+<td><p class="rubric">Notes</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.GeomVect.html#pylayers.util.geomutil.GeomVect" title="pylayers.util.geomutil.GeomVect"><tt class="xref py py-obj docutils literal"><span class="pre">GeomVect</span></tt></a>([_filename,&nbsp;clear])</td>
+<td>Geomview VECT file class     + NPolylines  NVertices  NColors    + Nv[0] ...</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="functions1">
 <h2>Functions1<a class="headerlink" href="#functions1" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">SignedArea</span></tt>((p=array([[&nbsp;0,&nbsp;10,&nbsp;10,&nbsp;...)</td>
+<td>Calculate the signed area of a sequence of points in a  plane   :Parameters:      <strong>p</strong> : array 2 x Np            ..</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Centroid</span></tt>((p=array([[&nbsp;0,&nbsp;10,&nbsp;10,&nbsp;...)</td>
+<td>Determine the centroid of the polygon defined by a sequence of points in a plane   :Parameters:      <strong>p</strong> : np array polygon (2xNp)            :Returns:      <strong>pc = Centroid()</strong> :             ..</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Lr2n</span></tt>((p=array([[&nbsp;0,&nbsp;10,&nbsp;10,&nbsp;&nbsp;0],
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;0,&nbsp;...)</td>
+<td>Linear Ring to normal   :Parameters:      <strong>p</strong> : np.array (2xN)          closed : boolean             default True  :Returns:      <strong>n</strong> : np.array (2xN)          normal  ..</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.isBetween.html#pylayers.util.geomutil.isBetween" title="pylayers.util.geomutil.isBetween"><tt class="xref py py-obj docutils literal"><span class="pre">isBetween</span></tt></a>(p1,&nbsp;p2,&nbsp;p[,&nbsp;epsilon])</td>
+<td>test if p is between p1 and p2</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="functions2">
 <h2>Functions2<a class="headerlink" href="#functions2" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.pvec.html#pylayers.util.geomutil.pvec" title="pylayers.util.geomutil.pvec"><tt class="xref py py-obj docutils literal"><span class="pre">pvec</span></tt></a>(v1,&nbsp;v2)</td>
+<td>cross product between v1 and v2</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.pvecn.html#pylayers.util.geomutil.pvecn" title="pylayers.util.geomutil.pvecn"><tt class="xref py py-obj docutils literal"><span class="pre">pvecn</span></tt></a>(v1,&nbsp;v2)</td>
+<td>cross product and normalization</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.vec_sph.html#pylayers.util.geomutil.vec_sph" title="pylayers.util.geomutil.vec_sph"><tt class="xref py py-obj docutils literal"><span class="pre">vec_sph</span></tt></a>(th,ph)</td>
+<td>return Spherical orthonormal frame</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ellipse.html#pylayers.util.geomutil.ellipse" title="pylayers.util.geomutil.ellipse"><tt class="xref py py-obj docutils literal"><span class="pre">ellipse</span></tt></a>(fd,&nbsp;p,&nbsp;vth,&nbsp;vph,&nbsp;Eth,&nbsp;Eph,&nbsp;N)</td>
+<td>build a geomview file of an ellipse</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.util.geomutil.ptonseg.html#pylayers.util.geomutil.ptonseg" title="pylayers.util.geomutil.ptonseg"><tt class="xref py py-obj docutils literal"><span class="pre">ptonseg</span></tt></a>(pta,&nbsp;phe,&nbsp;pt)</td>
+<td>return a point on the segment (pta,pte)</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -135,7 +200,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.util.graphutil.html" title="pylayers.util.graphutil module"
+          <a href="generated/pylayers.util.geomutil.Geomview.html" title="pylayers.util.geomutil.Geomview"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.util.cone.html" title="pylayers.util.cone module"
