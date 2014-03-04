@@ -79,6 +79,50 @@
           <div class="body">
             
   <h1>Source code for pylayers.mobility.body.body</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Body Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">This class implements the body model</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: /generated</span>
+
+<span class="sd">    Body.__init__</span>
+<span class="sd">    Body.__repr__</span>
+<span class="sd">    Body.load</span>
+<span class="sd">    Body.center</span>
+<span class="sd">    Body.posvel</span>
+<span class="sd">    Body.settopos</span>
+<span class="sd">    Body.setccs</span>
+<span class="sd">    Body.setdcs</span>
+<span class="sd">    Body.setacs</span>
+<span class="sd">    Body.loadC3D</span>
+<span class="sd">    Body.plot3d</span>
+<span class="sd">    Body._show3</span>
+<span class="sd">    Body.show</span>
+<span class="sd">    Body.show3</span>
+<span class="sd">    Body.geomfile</span>
+<span class="sd">    Body.movie</span>
+<span class="sd">    Body.intersectBody</span>
+<span class="sd">    Body.body_link</span>
+<span class="sd">    Body.cylinder_basis_k</span>
+<span class="sd">    Body.cyl_antenna</span>
+<span class="sd">    Body.translate</span>
+
+<span class="sd">Miscelianous Functions</span>
+<span class="sd">======================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: /generated</span>
+
+<span class="sd">    ChangeBasis</span>
+<span class="sd">    rotation</span>
+<span class="sd">    dist</span>
+<span class="sd">    Global_Trajectory</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
@@ -103,40 +147,6 @@
     <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
 
 
-<div class="viewcode-block" id="ChangeBasis"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.ChangeBasis">[docs]</a><span class="k">def</span> <span class="nf">ChangeBasis</span><span class="p">(</span><span class="n">u0</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">v1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    u0</span>
-<span class="sd">    v0</span>
-<span class="sd">    w0</span>
-<span class="sd">    v1</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c"># Rotate with respect to axe w</span>
-
-    <span class="n">v2</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">w0</span><span class="p">),</span> <span class="n">w0</span><span class="p">)</span>  <span class="c"># projection of v1 on plan (u,v)</span>
-    <span class="n">v2</span> <span class="o">=</span> <span class="n">v2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">u0</span><span class="p">)</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v0</span><span class="p">)</span>
-    <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">u0</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">v0</span><span class="p">)</span>
-    <span class="n">u1</span> <span class="o">=</span> <span class="n">u1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span>
-    <span class="n">w1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">u1</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">w1</span>
-
-</div>
-<div class="viewcode-block" id="dist"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.dist">[docs]</a><span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    evaluate the distance between two points A and B</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">B</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">d</span>
-
-</div>
 <div class="viewcode-block" id="Body"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.Body">[docs]</a><span class="k">class</span> <span class="nc">Body</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Class to manage a Body model</span>
 
@@ -168,7 +178,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;John.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Body.__init__"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.Body.__init__.html#pylayers.mobility.body.body.Body.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;John.ini&#39;</span><span class="p">,</span><span class="n">_filemocap</span><span class="o">=</span><span class="s">&#39;07_01.c3d&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -181,8 +191,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">_filebody</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
         <span class="n">di</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filebody</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loadC3D</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">_filemocap</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Body.__repr__"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.Body.__repr__.html#pylayers.mobility.body.body.Body.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
 
         <span class="n">st</span> <span class="o">=</span> <span class="s">&quot;My name is : &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
@@ -221,7 +231,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
-
+</div>
 <div class="viewcode-block" id="Body.load"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.Body.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filebody</span><span class="o">=</span><span class="s">&#39;John.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a body ini file</span>
 
@@ -785,7 +795,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Body._show3"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.Body._show3.html#pylayers.mobility.body.body.Body._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; mayavi visualization</span>
 
 <span class="sd">        Parameters</span>
@@ -868,7 +878,7 @@
                            <span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 
-
+</div>
 <div class="viewcode-block" id="Body.show"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.Body.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show a 2D plane projection of the body</span>
 
@@ -1523,8 +1533,38 @@
                 <span class="n">fr_start_index</span> <span class="o">=</span> <span class="n">fr_start_index</span> <span class="o">+</span> <span class="n">Nfr</span> <span class="o">-</span> <span class="mi">126</span>
 
     <span class="k">return</span> <span class="n">data</span>
-
 </div>
+<div class="viewcode-block" id="ChangeBasis"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.ChangeBasis">[docs]</a><span class="k">def</span> <span class="nf">ChangeBasis</span><span class="p">(</span><span class="n">u0</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">v1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    u0</span>
+<span class="sd">    v0</span>
+<span class="sd">    w0</span>
+<span class="sd">    v1</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Rotate with respect to axe w</span>
+
+    <span class="n">v2</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">w0</span><span class="p">),</span> <span class="n">w0</span><span class="p">)</span>  <span class="c"># projection of v1 on plan (u,v)</span>
+    <span class="n">v2</span> <span class="o">=</span> <span class="n">v2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">u0</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v0</span><span class="p">)</span>
+    <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">u0</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">v0</span><span class="p">)</span>
+    <span class="n">u1</span> <span class="o">=</span> <span class="n">u1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span>
+    <span class="n">w1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">u1</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">w1</span>
+</div>
+<div class="viewcode-block" id="dist"><a class="viewcode-back" href="../../../../modules/pylayers.mobility.body.body.html#pylayers.mobility.body.body.dist">[docs]</a><span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    evaluate the distance between two points A and B</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">B</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">d</span></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="c"># plt.ion()</span>
     <span class="c"># doctest.testmod()</span>
