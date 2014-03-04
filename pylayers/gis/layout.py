@@ -6823,14 +6823,14 @@ class Layout(object):
 
         if newfig:
             mlab.clf()
-            mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+            f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
-            mlab.gcf()
+            f = mlab.gcf()
 
         surf = mlab.pipeline.surface(mesh, opacity=opacity)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )
-
+        f.children[-1].name='Layout ' + self.filename
 
 
     def show3(self, bdis=True,centered=True):
