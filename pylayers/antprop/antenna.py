@@ -1198,7 +1198,8 @@ class Antenna(object):
                      'ilog' : False,
                      'title':True,
                      'colorbar':True,
-                     'ilog':False
+                     'ilog':False,
+                     'name':[]
                      }
 
 
@@ -1260,9 +1261,16 @@ class Antenna(object):
 
         if kwargs['newfig']:
             mlab.clf()
+            f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
-            mlab.gcf()
+            f=mlab.gcf()
         mlab.mesh(x, y, z)
+
+        if kwargs['name'] == []:
+            f.children[-1].name = 'Antenna ' + self._filename
+        else :
+            f.children[-1].name = kwargs['name'] + self._filename
+
         if kwargs['colorbar'] :
             mlab.colorbar()
         if kwargs['title']:
@@ -1953,10 +1961,10 @@ class Antenna(object):
 
         Nf = len(self.fa)
         if theta==[]:
-            theta=np.linspace(0,np.pi,25)
+            theta=np.linspace(0,np.pi,45)
 
         if phi == []:
-            phi= np.linspace(0,2*np.pi,50)
+            phi= np.linspace(0,2*np.pi,90)
 
         Nt = len(theta)
         Np = len(phi)

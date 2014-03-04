@@ -1928,8 +1928,10 @@ class Simul(object):
         prx = self.rx.position
 
         self.L._show3(newfig=False,opacity=0.7)
-        Atx._show3(newfig=False,T=Ttx.reshape(3,3),po=ptx,title=False,colorbar=False)
-        Arx._show3(newfig=False,T=Trx.reshape(3,3),po=prx,title=False,colorbar=False)
+        Atx._show3(T=Ttx.reshape(3,3),po=ptx,
+            title=False,colorbar=False,newfig=False,name = 'Antenna Tx')
+        Arx._show3(T=Trx.reshape(3,3),po=prx,
+            title=False,colorbar=False,newfig=False,name = 'Antenna Rx')
         if rays != []:
             rays._show3(**kwargs)
 

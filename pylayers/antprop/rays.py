@@ -25,7 +25,9 @@ from pylayers.util.project import *
 from pylayers.antprop.interactions import *
 from pylayers.antprop.slab import *
 from pylayers.antprop.channel import Ctilde
+from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
+import h5py
 try:
     from tvtk.api import tvtk
     from mayavi.sources.vtk_data_source import VTKDataSource
@@ -145,6 +147,85 @@ class Rays(dict):
             return(s)
 
         return(s)
+
+
+    def saveh5(self,idx=0):
+        """ save rays 
+            pyh5 format
+        """
+
+        filename = self.filename+'_'+str(idx) 
+        filenameh5=pyu.getlong(filename+'.h5',pstruc['DIRR3D'])
+        f=h5py.File(filenameh5,'w')
+        
+        
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            # keys not saved as attribute of h5py file
+            notattr = ['I','B','B0','delays','dis']
+            for a in self.__dict__.keys():
+                if a not in notattr:
+                    f.attrs[a]=getattr(self,a)
+
+            for k in self.keys():
+                f.create_group(str(k))
+                for kk in self[k].keys():
+                    if kk == 'sig2d':
+                        # Need to find an efficient way to save the signatures
+                        # 2d which have created the rays
+                        pass
+                    elif kk == 'nbrays':
+                        f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
+                    else:    
+                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
+            f.close()
+        except:
+            f.close()
+            raise NameError('Rays: issue when writting h5py file')
+        
+        
+
+    def loadh5(self,filename=[],idx=0):
+        """ save rays 
+            pyh5 format
+        """ 
+        if filename == []:
+            filenameh5 = self.filename+'_'+str(idx)+'.h5' 
+        else :
+            filenameh5 = filename
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRR3D'])
+
+        f=h5py.File(filename,'r')
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            for k in f.keys():
+                self.update({eval(k):{}})
+                for kk in f[k].keys():
+                    self[eval(k)].update({kk:f[k][str(kk)][:]})
+
+            for a,va in f.attrs.items():
+                setattr(self,a,va)
+            f.close()
+
+        except:
+
+            f.close()
+            raise NameError('Rays: issue when reading h5py file')
+            
+        # fill if save was filled
+
+        # temporary solution in order to avoir 
+        # creating save for Interactions classes
+        if self.filled:
+            Lname = self.filename.split('_')[0] + '.ini'
+            L=Layout(Lname)
+            self.fillinter(L)
+
+        if self.evaluated:
+            return self.eval(self.fGHz)
 
     def reciprocal(self):
         """ switch tx and rx
@@ -408,7 +489,7 @@ class Rays(dict):
 
         tx = self.pTx
         rx = self.pRx
-
+        
         #
         # Phase 1 : calculate Tx images height and parameterization in the
         # vertical plane
@@ -855,7 +936,10 @@ class Rays(dict):
             # si : (i+1) x r
             r3d[k]['si']  = lsi[:,u]
             r3d[k]['dis'] = rlength[u]
-           
+
+        r3d.origin_sig_name = self.origin_sig_name
+        r3d.Lfilename = L.filename
+        r3d.filename = L.filename.split('.')[0] + '_' + str(r3d.nray)
         return(r3d)
 
     def length(self,typ=2):
@@ -1511,7 +1595,7 @@ class Rays(dict):
         """
 
         #print 'Rays evaluation'
-       
+        self.fGHz=fGHz
         # evaluation of interaction
         self.I.eval(fGHz)
         # evaluation of base B  (2x2)
@@ -1536,7 +1620,6 @@ class Rays(dict):
         #nf : number of frequency point
         nf = self.I.nf
 
-        self.drayidx = {}
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
         # loop on interaction blocks   
@@ -1926,9 +2009,9 @@ class Rays(dict):
         """
         if newfig:
             mlab.clf()
-            mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+            f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
         else :
-            mlab.gcf()
+            f = mlab.gcf()
 
         
         if L != []:
@@ -1964,7 +2047,7 @@ class Rays(dict):
             mesh = tvtk.PolyData(points=pt.T, polys=lines)
             mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
                                                  color=(0, 0, 0), )
-
+            f.children[-1].name='Rays with ' + str(i) + 'interactions'
 
     def show3(self,
               L=[],
