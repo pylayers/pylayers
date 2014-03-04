@@ -102,12 +102,18 @@
 <span class="sd">Utility Functions</span>
 <span class="sd">-----------------</span>
 
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
 <span class="sd">    Antenna.__repr__</span>
 <span class="sd">    Antenna.ls</span>
 
 <span class="sd">Synthesis Functions</span>
 <span class="sd">-------------------</span>
-<span class="sd">    </span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
 <span class="sd">    Antenna.Fsynth</span>
 <span class="sd">    Antenna.Fsynth3</span>
 
@@ -322,7 +328,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;antenna typ is not known&#39;</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.__repr__.html#pylayers.antprop.antenna.Antenna.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="n">rtd</span> <span class="o">=</span> <span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
@@ -381,8 +387,8 @@
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;sqrt G :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqG</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;vsh3&#39;</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Antenna.ls"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.ls.html#pylayers.antprop.antenna.Antenna.ls">[docs]</a>    <span class="k">def</span> <span class="nf">ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;vsh3&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; list the available file in dirant</span>
 
 <span class="sd">        Parameters</span>
@@ -418,7 +424,7 @@
         <span class="k">return</span> <span class="n">lfile_s</span>
 
 
-
+</div>
     <span class="k">def</span> <span class="nf">Fpatt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">th</span><span class="o">=</span><span class="p">[],</span><span class="n">ph</span><span class="o">=</span><span class="p">[],</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  generate antenna pattern</span>
 
@@ -1661,7 +1667,7 @@
         <span class="k">print</span> <span class="s">&quot;compdiag(20,A,A.theta,A.phi,FTh,FPh) &quot;</span>
 
 
-    <span class="k">def</span> <span class="nf">Fsynth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.Fsynth"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.Fsynth.html#pylayers.antprop.antenna.Antenna.Fsynth">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Perform Antenna synthesis</span>
 <span class="sd">            call Antenna.Fpatt or Antenna.Fsynth3</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1672,7 +1678,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Fpatt</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="p">)</span>
 
 
-    <span class="c">#def Fsynth1(self, theta, phi, k=0):</span>
+    <span class="c">#def Fsynth1(self, theta, phi, k=0):</span></div>
     <span class="k">def</span> <span class="nf">Fsynth1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate complex antenna pattern  from VSH Coefficients (shape 1)</span>
 
@@ -2006,7 +2012,7 @@
         <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
 
 
-    <span class="k">def</span> <span class="nf">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.Fsynth3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.Fsynth3.html#pylayers.antprop.antenna.Antenna.Fsynth3">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; synthesis of a complex antenna pattern from VSH coefficients (shape 3)</span>
 
 <span class="sd">        Ndir is the number of directions</span>
@@ -2158,7 +2164,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
 
-
+</div>
     <span class="k">def</span> <span class="nf">movie_vsh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            movie_vsh</span>
