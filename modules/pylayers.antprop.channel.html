@@ -127,11 +127,11 @@
 <tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.Ctilde.choose" title="pylayers.antprop.channel.Ctilde.choose"><tt class="xref py py-obj docutils literal"><span class="pre">Ctilde.choose</span></tt></a>()</td>
 <td>Choose a field file in tud directory</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.Ctilde.save5" title="pylayers.antprop.channel.Ctilde.save5"><tt class="xref py py-obj docutils literal"><span class="pre">Ctilde.save5</span></tt></a>(Lfilename,&nbsp;idx,&nbsp;a,&nbsp;b)</td>
-<td>save Ctilde object in hdf5 format</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Ctilde.save5</span></tt></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.channel.Ctilde.load5" title="pylayers.antprop.channel.Ctilde.load5"><tt class="xref py py-obj docutils literal"><span class="pre">Ctilde.load5</span></tt></a>(Lfilename,&nbsp;idx)</td>
-<td>load Ctilde object in hdf5 format</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Ctilde.load5</span></tt></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.channel.Ctilde.load" title="pylayers.antprop.channel.Ctilde.load"><tt class="xref py py-obj docutils literal"><span class="pre">Ctilde.load</span></tt></a>(filefield[,&nbsp;transpose])</td>
 <td>load a Ctilde from a .field file</td>
@@ -194,7 +194,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.__init__.html#pylayers.antprop.channel.Tchannel.__init__" title="pylayers.antprop.channel.Tchannel.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Tchannel.__init__</span></tt></a>(fGHz,&nbsp;alpha,&nbsp;tau,&nbsp;dod,&nbsp;doa)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.channel.Tchannel.__init__.html#pylayers.antprop.channel.Tchannel.__init__" title="pylayers.antprop.channel.Tchannel.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Tchannel.__init__</span></tt></a>([fGHz,&nbsp;shape,&nbsp;dtype,&nbsp;...])</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -435,8 +435,8 @@ delay , angle of departure , angle of arrival.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.antprop.channel.Ctilde.load5">
-<tt class="descname">load5</tt><big>(</big><em>Lfilename</em>, <em>idx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.load5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.load5" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.antprop.channel.Ctilde.loadh5">
+<tt class="descname">loadh5</tt><big>(</big><em>Lfilename</em>, <em>idx</em>, <em>output=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.loadh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.loadh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>load Ctilde object in hdf5 format</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -450,9 +450,14 @@ delay , angle of departure , angle of arrival.</p>
 <blockquote>
 <div><p>file identifier number</p>
 </div></blockquote>
+<p><strong>output</strong> : bool</p>
+<blockquote>
+<div><p>return an output precised in return</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>(Layout filename , Tx position, Rx position)</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>if output:</strong> :</p>
+<p class="last"><strong>(Layout filename , Tx position, Rx position)</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -599,8 +604,8 @@ v en m/s (vitesse de changement de Rx)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.antprop.channel.Ctilde.save5">
-<tt class="descname">save5</tt><big>(</big><em>Lfilename</em>, <em>idx</em>, <em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.save5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.save5" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.antprop.channel.Ctilde.saveh5">
+<tt class="descname">saveh5</tt><big>(</big><em>Lfilename</em>, <em>idx</em>, <em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.saveh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.saveh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>save Ctilde object in hdf5 format</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -706,7 +711,7 @@ with realistic antennas transfer function</p>
 
 <dl class="class">
 <dt id="pylayers.antprop.channel.Tchannel">
-<em class="property">class </em><tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">Tchannel</tt><big>(</big><em>fGHz</em>, <em>alpha</em>, <em>tau</em>, <em>dod</em>, <em>doa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">Tchannel</tt><big>(</big><em>fGHz=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>shape=(1</em>, <em>0)</em>, <em>dtype=float64)</em>, <em>alpha=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>shape=(2</em>, <em>0)</em>, <em>dtype=float64)</em>, <em>tau=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>shape=(1</em>, <em>0)</em>, <em>dtype=float64)</em>, <em>dod=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>shape=(0</em>, <em>2)</em>, <em>dtype=float64)</em>, <em>doa=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>shape=(0</em>, <em>2)</em>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pylayers.signal.bsignal.html#pylayers.signal.bsignal.FUDAsignal" title="pylayers.signal.bsignal.FUDAsignal"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.signal.bsignal.FUDAsignal</span></tt></a></p>
 <p>Handle the transmission channel</p>
 <p>The transmission channel TChannel is obtained through combination of the propagation
@@ -942,6 +947,53 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.loadh5">
+<tt class="descname">loadh5</tt><big>(</big><em>Lfilename</em>, <em>idx</em>, <em>output=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.loadh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.loadh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load Ctilde object in hdf5 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Lfilename</strong> : string</p>
+<blockquote>
+<div><p>Layout filename</p>
+</div></blockquote>
+<p><strong>idx</strong> : int</p>
+<blockquote>
+<div><p>file identifier number</p>
+</div></blockquote>
+<p><strong>output</strong> : bool</p>
+<blockquote>
+<div><p>return an output precised in return</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>if output:</strong> :</p>
+<p><strong>(a,b,Ta,Tb)</strong> :</p>
+<p><strong>with</strong> :</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>a = np.ndarray</dt>
+<dd><p class="first last">postion of point a (transmitter)</p>
+</dd>
+<dt>b = np.ndarray</dt>
+<dd><p class="first last">postion of point b (receiver)</p>
+</dd>
+<dt>Ta = np.ndarray</dt>
+<dd><p class="first last">rotation matrice of antenna a</p>
+</dd>
+<dt>Tb = np.ndarray</dt>
+<dd><p class="first last">rotation matrice of antenna b</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.channel.Tchannel.plotad">
 <tt class="descname">plotad</tt><big>(</big><em>a='phi'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.plotad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.plotad" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot angular delays</p>
@@ -1066,6 +1118,44 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.saveh5">
+<tt class="descname">saveh5</tt><big>(</big><em>Lfilename</em>, <em>idx</em>, <em>a</em>, <em>b</em>, <em>Ta</em>, <em>Tb</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.saveh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.saveh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>save Ctilde object in hdf5 format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Lfilename</strong> : string</p>
+<blockquote>
+<div><p>Layout filename</p>
+</div></blockquote>
+<p><strong>idx</strong> : int</p>
+<blockquote>
+<div><p>file identifier number</p>
+</div></blockquote>
+<p><strong>a</strong> : np.ndarray</p>
+<blockquote>
+<div><p>postion of point a (transmitter)</p>
+</div></blockquote>
+<p><strong>b</strong> : np.ndarray</p>
+<blockquote>
+<div><p>postion of point b (receiver)</p>
+</div></blockquote>
+<p><strong>Ta</strong> : np.ndarray</p>
+<blockquote>
+<div><p>rotation matrice of antenna a</p>
+</div></blockquote>
+<p><strong>Tb</strong> : np.ndarray</p>
+<blockquote class="last">
+<div><p>rotation matrice of antenna b</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.channel.Tchannel.wavefig">
 <tt class="descname">wavefig</tt><big>(</big><em>w</em>, <em>Nray=5</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.wavefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.wavefig" title="Permalink to this definition">¶</a></dt>
 <dd><p>display</p>
@@ -1122,7 +1212,7 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

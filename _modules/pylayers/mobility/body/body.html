@@ -570,8 +570,8 @@
 
             <span class="c">#~ kta = ed[0]</span>
             <span class="c">#~ khe = ed[1]</span>
-            <span class="n">kta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Id</span><span class="p">),</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">khe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Id</span><span class="p">),</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">kta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Id</span><span class="p">),</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">khe</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Id</span><span class="p">),</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">Rcyl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">Id</span><span class="p">),</span><span class="mi">2</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">topos</span> <span class="o">==</span> <span class="bp">True</span> <span class="p">:</span>
@@ -693,6 +693,8 @@
         <span class="k">if</span> <span class="n">centered</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">centered</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+
+        
 </div>
 <div class="viewcode-block" id="Body.movie"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.Body.movie.html#pylayers.mobility.body.body.Body.movie">[docs]</a>    <span class="k">def</span> <span class="nf">movie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; creates a geomview movie</span>
@@ -812,7 +814,7 @@
                     <span class="s">&#39;widthfactor&#39;</span> <span class="p">:</span> <span class="mf">1.</span><span class="p">,</span>
                     <span class="s">&#39;topos&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;pattern&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                    <span class="s">&#39;ccs&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;ccs&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;k&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
@@ -830,8 +832,8 @@
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncyl</span><span class="p">):</span>
 
-            <span class="n">kta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">khe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">kta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">khe</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">cylrad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;topos&#39;</span><span class="p">]:</span>
                 <span class="n">pta</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">topos</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">kta</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">topos</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">kta</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">topos</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">kta</span><span class="p">]])</span>
@@ -846,12 +848,11 @@
             <span class="n">cyl</span> <span class="o">=</span> <span class="n">visual</span><span class="o">.</span><span class="n">Cylinder</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">pta</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
                        <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">radius</span><span class="o">=</span><span class="n">cylrad</span><span class="o">*</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;widthfactor&#39;</span><span class="p">],</span><span class="n">length</span><span class="o">=</span><span class="n">l</span><span class="p">)</span>
 
-            <span class="c"># if kwargs[&#39;ccs&#39;]:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ccs&#39;</span><span class="p">]:</span>
 
-            <span class="c">#     pt = pta+cylrad*self.ccs[k,:,0]</span>
-            <span class="c">#     import ipdb</span>
-            <span class="c">#     ipdb.set_trace()</span>
-            <span class="c">#     mlab.quiver3d(pt,pt,pt,self.ccs[k,0,:],self.ccs[k,1,:],self.ccs[k,2,:])</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="n">pta</span><span class="o">+</span><span class="n">cylrad</span><span class="o">*</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;widthfactor&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="n">k</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">pte</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">pt</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="mi">3</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">mlab</span><span class="o">.</span><span class="n">quiver3d</span><span class="p">(</span><span class="n">pte</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pte</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">pte</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">ccs</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
 
 
@@ -1217,9 +1218,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ccs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nc</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="c"># e0 : tail node of cylinder segment</span>
-            <span class="n">e0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">e0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
             <span class="c"># e1 : head node of cylinder segment</span>
-            <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">e1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">topos</span><span class="p">:</span>
                 <span class="c"># pA : tail point</span>
@@ -1609,7 +1610,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

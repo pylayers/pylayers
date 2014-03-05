@@ -79,7 +79,6 @@
   <h1>Source code for pylayers.antprop.signature</h1><div class="highlight"><pre>
 <span class="c">#-*- coding:Utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-
 <span class="sd">Class Signatures</span>
 <span class="sd">================</span>
 
@@ -162,12 +161,305 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="n">Rays</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="c">#from numba import autojit</span>
 
+<div class="viewcode-block" id="showsig"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.showsig.html#pylayers.antprop.signature.showsig">[docs]</a><span class="k">def</span> <span class="nf">showsig</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="p">[],</span><span class="n">rx</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    L  : Layout </span>
+<span class="sd">    s  : </span>
+<span class="sd">    tx :</span>
+<span class="sd">    rx : </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;thin&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;thin&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edlabel&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">edlist</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tx</span> <span class="o">!=</span><span class="p">[]:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rx</span> <span class="o">!=</span><span class="p">[]:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;+&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edlabel&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+
+</div>
+<div class="viewcode-block" id="gidl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.gidl.html#pylayers.antprop.signature.gidl">[docs]</a><span class="k">def</span> <span class="nf">gidl</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; gi without diffraction</span>
+
+<span class="sd">   Returns</span>
+<span class="sd">   -------</span>
+
+<span class="sd">   gr </span>
+
+<span class="sd">   &quot;&quot;&quot;</span>
+
+    <span class="n">edlist</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">pos</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="n">en</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">en</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span> <span class="p">:</span>
+            <span class="n">edlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">gr</span><span class="o">=</span><span class="n">g</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="n">edlist</span><span class="p">)</span>
+    <span class="n">dpos</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">edlist</span><span class="p">}</span>
+    <span class="n">gr</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="n">dpos</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="frontline"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.frontline.html#pylayers.antprop.signature.frontline">[docs]</a><span class="k">def</span> <span class="nf">frontline</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">nc</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; determine cycle frontline</span>
+
+<span class="sd">    This function calculates the scalar product of the normals of a cycle </span>
+<span class="sd">    and returns the indev of segments whith are facing the given direction v.</span>
+<span class="sd">    scalar product &lt; 0.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    L : Layout</span>
+<span class="sd">    nc : cycle number</span>
+<span class="sd">    v : direction vector</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    nsegf : list </span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &gt;&gt;&gt; from pylayers.gis.layout import * </span>
+<span class="sd">    &gt;&gt;&gt; L = Layout()</span>
+<span class="sd">    &gt;&gt;&gt; L.build()</span>
+<span class="sd">    &gt;&gt;&gt; v = np.array([1,1])</span>
+<span class="sd">    &gt;&gt;&gt; frontline(L,0,v)</span>
+<span class="sd">    [3, 4]</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    run3</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">npt</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nc</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>  <span class="c"># points </span>
+    <span class="n">nseg</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nc</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span> <span class="c"># segments</span>
+    <span class="n">pt</span>  <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">npt</span> <span class="p">:</span> <span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">][</span><span class="mi">1</span><span class="p">]],</span><span class="n">npt</span><span class="p">)</span>
+    <span class="n">pt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>   <span class="c"># convert in ndarray</span>
+    <span class="n">n1</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Lr2n</span><span class="p">(</span><span class="n">pt1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c"># get the normals of the cycle</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">n1</span><span class="o">*</span><span class="n">v</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c"># scalar product with vector v</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ps</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>   <span class="c"># keep segment if scalar product &lt;0</span>
+    <span class="n">nsegf</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">nseg</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="n">u</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nsegf</span>
+
+</div>
+<div class="viewcode-block" id="edgeout2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.edgeout2.html#pylayers.antprop.signature.edgeout2">[docs]</a><span class="k">def</span> <span class="nf">edgeout2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">g</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; filter authorized Gi edges output </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    L : Layout</span>
+<span class="sd">    g : Digraph Gi</span>
+
+<span class="sd">    Notes </span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.</span>
+<span class="sd">    This function checks that this sequence is feasible</span>
+<span class="sd">    , whatever the type of nstr0 and nstr1.</span>
+<span class="sd">    The feasible outputs from nstr0 to nstr1 are stored in an output field of </span>
+<span class="sd">    edge (nstr0,nstr1)</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># loop over all edges of Gi</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="c"># extract  both termination interactions nodes</span>
+        <span class="n">i0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">i1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span>
+
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c"># Transmission</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">typ</span><span class="o">=</span><span class="mi">2</span>
+            <span class="c"># Reflexion    </span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">typ</span><span class="o">=</span><span class="mi">1</span>
+        <span class="c"># Diffraction        </span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="mi">3</span>
+
+        <span class="c"># list of authorized outputs, initialized void</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c"># nstr1 : segment number of final interaction</span>
+        <span class="k">if</span> <span class="n">nstr1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">pseg1</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">nstr1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">cn</span> <span class="o">=</span> <span class="n">cone</span><span class="o">.</span><span class="n">Cone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">nstr0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">pseg0</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">nstr0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+                <span class="c"># test if nstr0 and nstr1 are connected segments</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">nstr0</span><span class="p">),</span><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">nstr1</span><span class="p">)))</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="c"># not connected</span>
+                    <span class="n">cn</span><span class="o">.</span><span class="n">from2segs</span><span class="p">(</span><span class="n">pseg0</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c"># connected </span>
+                    <span class="n">cn</span><span class="o">.</span><span class="n">from2csegs</span><span class="p">(</span><span class="n">pseg0</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr0</span><span class="p">])</span>
+                <span class="n">cn</span><span class="o">.</span><span class="n">fromptseg</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
+        
+            <span class="c"># list all potential successor of interaction i1</span>
+            <span class="n">i2</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">))</span>
+            <span class="n">ipoints</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span> <span class="p">,</span><span class="n">i2</span><span class="p">)</span>
+            <span class="n">istup</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">==</span><span class="nb">tuple</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
+            <span class="n">isegments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="n">istup</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">isegments</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">points</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">isegments</span><span class="p">)</span>
+                <span class="n">pta</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span>
+                <span class="n">phe</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">:,:]</span>
+                <span class="c">#print points</span>
+                <span class="c">#print segments </span>
+                <span class="c">#cn.show()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+                    <span class="n">bs</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
+                    <span class="c">#if bs.any():</span>
+                    <span class="c">#    plu.displot(pta[:,bs],phe[:,bs],color=&#39;g&#39;)</span>
+                    <span class="c">#if ~bs.any():</span>
+                    <span class="c">#    plu.displot(pta[:,~bs],phe[:,~bs],color=&#39;k&#39;)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>    
+                    <span class="n">Mpta</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">Mphe</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">phe</span><span class="p">,</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">bs</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">Mpta</span><span class="p">,</span><span class="n">Mphe</span><span class="p">)</span>
+                    <span class="c">#print i0,i1</span>
+                    <span class="c">#if ((i0 == (6, 0)) &amp; (i1 == (7, 0))):</span>
+                    <span class="c">#    pdb.set_trace()</span>
+                    <span class="c">#if bs.any():</span>
+                    <span class="c">#    plu.displot(pta[:,bs],phe[:,bs],color=&#39;g&#39;)</span>
+                    <span class="c">#if ~bs.any():</span>
+                    <span class="c">#    plu.displot(pta[:,~bs],phe[:,~bs],color=&#39;m&#39;)</span>
+                    <span class="c">#    plt.show()</span>
+                    <span class="c">#    pdb.set_trace()</span>
+                
+                <span class="n">isegkeep</span> <span class="o">=</span> <span class="n">isegments</span><span class="p">[</span><span class="n">bs</span><span class="p">]</span>     
+                <span class="n">output</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">isegkeep</span> <span class="p">,</span><span class="n">istup</span><span class="p">)</span>
+                <span class="c"># keep all segment above nstr1 and in Cone if T </span>
+                <span class="c"># keep all segment below nstr1 and in Cone if R </span>
+
+        <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i0</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">),</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">g</span><span class="p">)</span></div>
+<div class="viewcode-block" id="edgeout"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.edgeout.html#pylayers.antprop.signature.edgeout">[docs]</a><span class="k">def</span> <span class="nf">edgeout</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">g</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; filter authorized Gi edges output </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    L : Layout</span>
+<span class="sd">    g : Digraph Gi</span>
+
+<span class="sd">    Notes </span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.</span>
+<span class="sd">    This function checks that this sequence is feasible</span>
+<span class="sd">    , whatever the type of nstr0 and nstr1.</span>
+<span class="sd">    The feasible outputs from nstr0 to nstr1 are stored in an output field of </span>
+<span class="sd">    edge (nstr0,nstr1)</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># loop over all edges of Gi</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="c"># extract  both termination interactions nodes</span>
+        <span class="n">i0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">i1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span>
+
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c"># Transmission</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">typ</span><span class="o">=</span><span class="mi">2</span>
+            <span class="c"># Reflexion    </span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">typ</span><span class="o">=</span><span class="mi">1</span>
+        <span class="c"># Diffraction        </span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="mi">3</span>
+
+        <span class="c"># list of authorized outputs, initialized void</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c"># nstr1 : segment number of final interaction</span>
+        <span class="k">if</span> <span class="n">nstr1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="c">#cn = cone.Cone()</span>
+            <span class="c">#cn.from2segs(pseg0,pseg1)</span>
+            <span class="c"># segment unitary vector</span>
+            <span class="c"># l1 : unitary vector along structure segments  </span>
+            <span class="n">l1</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seguv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nstr1</span><span class="p">]))</span>
+            <span class="c">#</span>
+            <span class="c"># unitary vector along the ray (nstr0,nstr1)</span>
+            <span class="c">#</span>
+            <span class="n">p0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr0</span><span class="p">])</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr1</span><span class="p">])</span>
+            <span class="n">v01</span>  <span class="o">=</span> <span class="n">p1</span><span class="o">-</span><span class="n">p0</span>
+            <span class="n">v01m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v01</span><span class="p">,</span><span class="n">v01</span><span class="p">))</span>
+            <span class="n">v01n</span> <span class="o">=</span> <span class="n">v01</span><span class="o">/</span><span class="n">v01m</span>
+            <span class="n">v10n</span> <span class="o">=</span> <span class="o">-</span><span class="n">v01n</span>
+            <span class="c"># next interaction</span>
+            <span class="c"># considering all neighbors of i1 in Gi </span>
+            <span class="k">for</span> <span class="n">i2</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">)):</span>
+
+                <span class="n">i2</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">:</span>
+                    <span class="n">nstr2</span> <span class="o">=</span> <span class="n">i2</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nstr2</span> <span class="o">=</span> <span class="n">i2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr2</span><span class="p">])</span>
+                <span class="n">v12</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-</span><span class="n">p1</span>
+                <span class="n">v12m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v12</span><span class="p">,</span><span class="n">v12</span><span class="p">))</span>
+                <span class="n">v12n</span> <span class="o">=</span> <span class="n">v12</span><span class="o">/</span><span class="n">v12m</span>
+
+                <span class="n">d1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v01n</span><span class="p">,</span><span class="n">l1</span><span class="p">)</span>
+                <span class="n">d2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">v12n</span><span class="p">)</span>
+
+                <span class="c"># if (reflexion is forward) or (reflexion return to its origin)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">d1</span><span class="o">*</span><span class="n">d2</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">nstr0</span> <span class="o">==</span> <span class="n">nstr2</span><span class="p">)</span> <span class="ow">and</span> <span class="n">typ</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i2</span><span class="p">))</span>
+<span class="c">#                elif d1*d2&gt;=-0.2 and typ ==2:</span>
+                <span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">d1</span><span class="p">)</span> <span class="o">&lt;</span><span class="mf">0.9</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span> <span class="o">&lt;</span><span class="mf">0.9</span> <span class="p">:</span>
+                        <span class="k">if</span> <span class="n">d1</span><span class="o">*</span><span class="n">d2</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">:</span>
+                            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i2</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i0</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">),</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</div>
 <span class="k">class</span> <span class="nc">Signatures</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; gathers all signatures from a layout given tx and rx</span>
 
@@ -286,12 +578,66 @@
 
                 <span class="c"># s = s + &#39;   &#39;+ str(a[i,1,:]) + &#39;\n&#39;</span>
 </div>
+    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save signatures</span>
+<span class="sd">            h5py format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;.h5&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIG&#39;</span><span class="p">])</span>
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># read/write error</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;L&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;target&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;cutoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Signature: issue when writting h5py file&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot; Load signatures</span>
+<span class="sd">            h5py format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">_filename</span> <span class="o">=</span> <span class="n">filename</span>
+
+        <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="o">+</span><span class="s">&#39;.h5&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIG&#39;</span><span class="p">])</span>
+
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># read/write error</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):</span><span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">][:]})</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Signature: issue when reading h5py file&#39;</span><span class="p">)</span>
+
+
+        <span class="n">_fileL</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getshort</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">layout</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">_fileL</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+
+
 <div class="viewcode-block" id="Signatures.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.save.html#pylayers.antprop.signature.Signatures.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save signatures</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">L</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
         <span class="k">del</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
-        <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIG&#39;</span><span class="p">])</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;.h5&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIG&#39;</span><span class="p">])</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
           <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">L</span>
@@ -2330,7 +2676,7 @@
                         <span class="n">rays</span><span class="p">[</span><span class="n">nint</span><span class="p">][</span><span class="s">&#39;sig&#39;</span><span class="p">][:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sig</span>
 
         <span class="n">rays</span><span class="o">.</span><span class="n">nb_origin_sig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
+        <span class="n">rays</span><span class="o">.</span><span class="n">origin_sig_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
         <span class="k">return</span> <span class="n">rays</span>
 </div>
 <span class="k">class</span> <span class="nc">Signature</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -3174,297 +3520,6 @@
 <span class="c">#        return rays</span>
 
 </div>
-<div class="viewcode-block" id="showsig"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.showsig.html#pylayers.antprop.signature.showsig">[docs]</a><span class="k">def</span> <span class="nf">showsig</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">tx</span><span class="o">=</span><span class="p">[],</span><span class="n">rx</span><span class="o">=</span><span class="p">[]):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    L  : Layout </span>
-<span class="sd">    s  : </span>
-<span class="sd">    tx :</span>
-<span class="sd">    rx : </span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;thin&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
-    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;thin&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edlabel&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
-    <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">edlist</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">tx</span> <span class="o">!=</span><span class="p">[]:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rx</span> <span class="o">!=</span><span class="p">[]:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">rx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;+&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edlabel&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-
-</div>
-<div class="viewcode-block" id="gidl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.gidl.html#pylayers.antprop.signature.gidl">[docs]</a><span class="k">def</span> <span class="nf">gidl</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; gi without diffraction</span>
-
-<span class="sd">   Returns</span>
-<span class="sd">   -------</span>
-
-<span class="sd">   gr </span>
-
-<span class="sd">   &quot;&quot;&quot;</span>
-
-    <span class="n">edlist</span><span class="o">=</span><span class="p">[]</span>
-    <span class="n">pos</span><span class="o">=</span><span class="p">{}</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-        <span class="n">en</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">en</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span> <span class="p">:</span>
-            <span class="n">edlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="n">gr</span><span class="o">=</span><span class="n">g</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="n">edlist</span><span class="p">)</span>
-    <span class="n">dpos</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">edlist</span><span class="p">}</span>
-    <span class="n">gr</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="n">dpos</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">gr</span><span class="p">)</span>
-
-</div>
-<div class="viewcode-block" id="frontline"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.frontline.html#pylayers.antprop.signature.frontline">[docs]</a><span class="k">def</span> <span class="nf">frontline</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">nc</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; determine cycle frontline</span>
-
-<span class="sd">    This function calculates the scalar product of the normals of a cycle </span>
-<span class="sd">    and returns the indev of segments whith are facing the given direction v.</span>
-<span class="sd">    scalar product &lt; 0.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    L : Layout</span>
-<span class="sd">    nc : cycle number</span>
-<span class="sd">    v : direction vector</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    nsegf : list </span>
-
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    &gt;&gt;&gt; from pylayers.gis.layout import * </span>
-<span class="sd">    &gt;&gt;&gt; L = Layout()</span>
-<span class="sd">    &gt;&gt;&gt; L.build()</span>
-<span class="sd">    &gt;&gt;&gt; v = np.array([1,1])</span>
-<span class="sd">    &gt;&gt;&gt; frontline(L,0,v)</span>
-<span class="sd">    [3, 4]</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-
-<span class="sd">    run3</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">npt</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nc</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>  <span class="c"># points </span>
-    <span class="n">nseg</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nc</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span> <span class="c"># segments</span>
-    <span class="n">pt</span>  <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">npt</span> <span class="p">:</span> <span class="p">[</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">][</span><span class="mi">1</span><span class="p">]],</span><span class="n">npt</span><span class="p">)</span>
-    <span class="n">pt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>   <span class="c"># convert in ndarray</span>
-    <span class="n">n1</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Lr2n</span><span class="p">(</span><span class="n">pt1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c"># get the normals of the cycle</span>
-    <span class="n">ps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">n1</span><span class="o">*</span><span class="n">v</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c"># scalar product with vector v</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ps</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>   <span class="c"># keep segment if scalar product &lt;0</span>
-    <span class="n">nsegf</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">nseg</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="n">u</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">nsegf</span>
-
-</div>
-<div class="viewcode-block" id="edgeout2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.edgeout2.html#pylayers.antprop.signature.edgeout2">[docs]</a><span class="k">def</span> <span class="nf">edgeout2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">g</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; filter authorized Gi edges output </span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    L : Layout</span>
-<span class="sd">    g : Digraph Gi</span>
-
-<span class="sd">    Notes </span>
-<span class="sd">    -----</span>
-
-<span class="sd">    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.</span>
-<span class="sd">    This function checks that this sequence is feasible</span>
-<span class="sd">    , whatever the type of nstr0 and nstr1.</span>
-<span class="sd">    The feasible outputs from nstr0 to nstr1 are stored in an output field of </span>
-<span class="sd">    edge (nstr0,nstr1)</span>
-
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c"># loop over all edges of Gi</span>
-    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
-        <span class="c"># extract  both termination interactions nodes</span>
-        <span class="n">i0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">i1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span>
-
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c"># Transmission</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
-                <span class="n">typ</span><span class="o">=</span><span class="mi">2</span>
-            <span class="c"># Reflexion    </span>
-            <span class="k">else</span> <span class="p">:</span>
-                <span class="n">typ</span><span class="o">=</span><span class="mi">1</span>
-        <span class="c"># Diffraction        </span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span>
-            <span class="n">typ</span> <span class="o">=</span> <span class="mi">3</span>
-
-        <span class="c"># list of authorized outputs, initialized void</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c"># nstr1 : segment number of final interaction</span>
-        <span class="k">if</span> <span class="n">nstr1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">pseg1</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">nstr1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-            <span class="n">cn</span> <span class="o">=</span> <span class="n">cone</span><span class="o">.</span><span class="n">Cone</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">nstr0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">pseg0</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">nstr0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-                <span class="c"># test if nstr0 and nstr1 are connected segments</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">nstr0</span><span class="p">),</span><span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">nstr1</span><span class="p">)))</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
-                    <span class="c"># not connected</span>
-                    <span class="n">cn</span><span class="o">.</span><span class="n">from2segs</span><span class="p">(</span><span class="n">pseg0</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="c"># connected </span>
-                    <span class="n">cn</span><span class="o">.</span><span class="n">from2csegs</span><span class="p">(</span><span class="n">pseg0</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr0</span><span class="p">])</span>
-                <span class="n">cn</span><span class="o">.</span><span class="n">fromptseg</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
-        
-            <span class="c"># list all potential successor of interaction i1</span>
-            <span class="n">i2</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">))</span>
-            <span class="n">ipoints</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span> <span class="p">,</span><span class="n">i2</span><span class="p">)</span>
-            <span class="n">istup</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">==</span><span class="nb">tuple</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
-            <span class="n">isegments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="n">istup</span><span class="p">))</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">isegments</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">points</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">isegments</span><span class="p">)</span>
-                <span class="n">pta</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span>
-                <span class="n">phe</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">:,:]</span>
-                <span class="c">#print points</span>
-                <span class="c">#print segments </span>
-                <span class="c">#cn.show()</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
-                    <span class="n">bs</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">phe</span><span class="p">)</span>
-                    <span class="c">#if bs.any():</span>
-                    <span class="c">#    plu.displot(pta[:,bs],phe[:,bs],color=&#39;g&#39;)</span>
-                    <span class="c">#if ~bs.any():</span>
-                    <span class="c">#    plu.displot(pta[:,~bs],phe[:,~bs],color=&#39;k&#39;)</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>    
-                    <span class="n">Mpta</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">Mphe</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">phe</span><span class="p">,</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">bs</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">Mpta</span><span class="p">,</span><span class="n">Mphe</span><span class="p">)</span>
-                    <span class="c">#print i0,i1</span>
-                    <span class="c">#if ((i0 == (6, 0)) &amp; (i1 == (7, 0))):</span>
-                    <span class="c">#    pdb.set_trace()</span>
-                    <span class="c">#if bs.any():</span>
-                    <span class="c">#    plu.displot(pta[:,bs],phe[:,bs],color=&#39;g&#39;)</span>
-                    <span class="c">#if ~bs.any():</span>
-                    <span class="c">#    plu.displot(pta[:,~bs],phe[:,~bs],color=&#39;m&#39;)</span>
-                    <span class="c">#    plt.show()</span>
-                    <span class="c">#    pdb.set_trace()</span>
-                
-                <span class="n">isegkeep</span> <span class="o">=</span> <span class="n">isegments</span><span class="p">[</span><span class="n">bs</span><span class="p">]</span>     
-                <span class="n">output</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">isegkeep</span> <span class="p">,</span><span class="n">istup</span><span class="p">)</span>
-                <span class="c"># keep all segment above nstr1 and in Cone if T </span>
-                <span class="c"># keep all segment below nstr1 and in Cone if R </span>
-
-        <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i0</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">),</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
-
-    <span class="k">return</span><span class="p">(</span><span class="n">g</span><span class="p">)</span></div>
-<div class="viewcode-block" id="edgeout"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.edgeout.html#pylayers.antprop.signature.edgeout">[docs]</a><span class="k">def</span> <span class="nf">edgeout</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">g</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; filter authorized Gi edges output </span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    L : Layout</span>
-<span class="sd">    g : Digraph Gi</span>
-
-<span class="sd">    Notes </span>
-<span class="sd">    -----</span>
-
-<span class="sd">    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.</span>
-<span class="sd">    This function checks that this sequence is feasible</span>
-<span class="sd">    , whatever the type of nstr0 and nstr1.</span>
-<span class="sd">    The feasible outputs from nstr0 to nstr1 are stored in an output field of </span>
-<span class="sd">    edge (nstr0,nstr1)</span>
-
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c"># loop over all edges of Gi</span>
-    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
-        <span class="c"># extract  both termination interactions nodes</span>
-        <span class="n">i0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">i1</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">nstr0</span> <span class="o">=</span> <span class="n">i0</span>
-
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c"># Transmission</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
-                <span class="n">typ</span><span class="o">=</span><span class="mi">2</span>
-            <span class="c"># Reflexion    </span>
-            <span class="k">else</span> <span class="p">:</span>
-                <span class="n">typ</span><span class="o">=</span><span class="mi">1</span>
-        <span class="c"># Diffraction        </span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">nstr1</span> <span class="o">=</span> <span class="n">i1</span>
-            <span class="n">typ</span> <span class="o">=</span> <span class="mi">3</span>
-
-        <span class="c"># list of authorized outputs, initialized void</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c"># nstr1 : segment number of final interaction</span>
-        <span class="k">if</span> <span class="n">nstr1</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-            <span class="c">#cn = cone.Cone()</span>
-            <span class="c">#cn.from2segs(pseg0,pseg1)</span>
-            <span class="c"># segment unitary vector</span>
-            <span class="c"># l1 : unitary vector along structure segments  </span>
-            <span class="n">l1</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">seguv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nstr1</span><span class="p">]))</span>
-            <span class="c">#</span>
-            <span class="c"># unitary vector along the ray (nstr0,nstr1)</span>
-            <span class="c">#</span>
-            <span class="n">p0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr0</span><span class="p">])</span>
-            <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr1</span><span class="p">])</span>
-            <span class="n">v01</span>  <span class="o">=</span> <span class="n">p1</span><span class="o">-</span><span class="n">p0</span>
-            <span class="n">v01m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v01</span><span class="p">,</span><span class="n">v01</span><span class="p">))</span>
-            <span class="n">v01n</span> <span class="o">=</span> <span class="n">v01</span><span class="o">/</span><span class="n">v01m</span>
-            <span class="n">v10n</span> <span class="o">=</span> <span class="o">-</span><span class="n">v01n</span>
-            <span class="c"># next interaction</span>
-            <span class="c"># considering all neighbors of i1 in Gi </span>
-            <span class="k">for</span> <span class="n">i2</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">)):</span>
-
-                <span class="n">i2</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">:</span>
-                    <span class="n">nstr2</span> <span class="o">=</span> <span class="n">i2</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">nstr2</span> <span class="o">=</span> <span class="n">i2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr2</span><span class="p">])</span>
-                <span class="n">v12</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-</span><span class="n">p1</span>
-                <span class="n">v12m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v12</span><span class="p">,</span><span class="n">v12</span><span class="p">))</span>
-                <span class="n">v12n</span> <span class="o">=</span> <span class="n">v12</span><span class="o">/</span><span class="n">v12m</span>
-
-                <span class="n">d1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v01n</span><span class="p">,</span><span class="n">l1</span><span class="p">)</span>
-                <span class="n">d2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">v12n</span><span class="p">)</span>
-
-                <span class="c"># if (reflexion is forward) or (reflexion return to its origin)</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">d1</span><span class="o">*</span><span class="n">d2</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">nstr0</span> <span class="o">==</span> <span class="n">nstr2</span><span class="p">)</span> <span class="ow">and</span> <span class="n">typ</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i2</span><span class="p">))</span>
-<span class="c">#                elif d1*d2&gt;=-0.2 and typ ==2:</span>
-                <span class="k">elif</span> <span class="n">typ</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span>
-                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">d1</span><span class="p">)</span> <span class="o">&lt;</span><span class="mf">0.9</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">d2</span><span class="p">)</span> <span class="o">&lt;</span><span class="mf">0.9</span> <span class="p">:</span>
-                        <span class="k">if</span> <span class="n">d1</span><span class="o">*</span><span class="n">d2</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">:</span>
-                            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i2</span><span class="p">))</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">pass</span>
-        <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i0</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">),</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
-
-    <span class="k">return</span><span class="p">(</span><span class="n">g</span><span class="p">)</span></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="k">print</span> <span class="s">&quot;testing pylayers/antprop/signature.py&quot;</span>
@@ -3497,7 +3552,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

@@ -225,7 +225,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filefield</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Ctilde.save5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.save5">[docs]</a>    <span class="k">def</span> <span class="nf">save5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.saveh5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save Ctilde object in hdf5 format</span>
 
 <span class="sd">        Parameters</span>
@@ -253,31 +253,35 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">b2g</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Tt&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tt</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tt</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Tr&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tr</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tr</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;tang&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;rang&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;tauk&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">)</span>
+        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># read/write error</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Tt&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tt</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tt</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Tr&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tr</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Tr</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;tang&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;rang&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;tauk&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">)</span>
 
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;fGHz&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
-
-
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Ctt_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Cpp_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Cpt_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Ctp_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Tx&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Rx&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
-
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;fGHz&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 
 
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Ctt_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Cpp_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Cpt_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Ctp_y&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Tx&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&#39;Rx&#39;</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">b</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Channel.Ctilde: issue when writting h5py file&#39;</span><span class="p">)</span>
 
 
 
 </div>
-<div class="viewcode-block" id="Ctilde.load5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.load5">[docs]</a>    <span class="k">def</span> <span class="nf">load5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.loadh5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load Ctilde object in hdf5 format</span>
 
 <span class="sd">        Parameters</span>
@@ -287,11 +291,13 @@
 <span class="sd">            Layout filename</span>
 <span class="sd">        idx : int</span>
 <span class="sd">            file identifier number</span>
-
+<span class="sd">        output : bool </span>
+<span class="sd">            return an output precised in return</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
+<span class="sd">        if output:</span>
 <span class="sd">        (Layout filename , Tx position, Rx position)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -301,35 +307,38 @@
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRCT&#39;</span><span class="p">])</span>
 
         <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">][:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;tang&#39;</span><span class="p">][:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;rang&#39;</span><span class="p">][:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;tauk&#39;</span><span class="p">][:]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">][:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;tang&#39;</span><span class="p">][:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;rang&#39;</span><span class="p">][:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;tauk&#39;</span><span class="p">][:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Tt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Tt&#39;</span><span class="p">][:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Tr</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Tr&#39;</span><span class="p">][:]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Tt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Tt&#39;</span><span class="p">][:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Tr</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Tr&#39;</span><span class="p">][:]</span>
+            <span class="n">Ctt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Ctt_y&#39;</span><span class="p">][:]</span>
+            <span class="n">Cpp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Cpp_y&#39;</span><span class="p">][:]</span>
+            <span class="n">Ctp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Ctp_y&#39;</span><span class="p">][:]</span>
+            <span class="n">Cpt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Cpt_y&#39;</span><span class="p">][:]</span>
 
-        <span class="n">Ctt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Ctt_y&#39;</span><span class="p">][:]</span>
-        <span class="n">Cpp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Cpp_y&#39;</span><span class="p">][:]</span>
-        <span class="n">Ctp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Ctp_y&#39;</span><span class="p">][:]</span>
-        <span class="n">Cpt</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Cpt_y&#39;</span><span class="p">][:]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ctt</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ctp</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cpt</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cpp</span><span class="p">)</span>
-        <span class="n">tx</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Tx&#39;</span><span class="p">][:]</span>
-        <span class="n">rx</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Rx&#39;</span><span class="p">][:]</span>
-
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ctt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ctp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cpt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cpp</span><span class="p">)</span>
+            <span class="n">tx</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Tx&#39;</span><span class="p">][:]</span>
+            <span class="n">rx</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;Rx&#39;</span><span class="p">][:]</span>
 
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">Lfilename</span> <span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Channel.Ctilde: issue when reading h5py file&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">output</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">Lfilename</span> <span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Ctilde.load"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Ctilde.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filefield</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a Ctilde from a .field file</span>
@@ -1399,7 +1408,12 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Tchannel.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.__init__.html#pylayers.antprop.channel.Tchannel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dod</span><span class="p">,</span> <span class="n">doa</span><span class="p">):</span>
+<div class="viewcode-block" id="Tchannel.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.__init__.html#pylayers.antprop.channel.Tchannel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([],)),</span>
+                <span class="n">alpha</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([],[])),</span>
+                <span class="n">tau</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([],)),</span>
+                <span class="n">dod</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([[],[]]))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                <span class="n">doa</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([[],[]]))</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -1422,6 +1436,104 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;tau :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;dist :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="Tchannel.saveh5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Tchannel.saveh5">[docs]</a>    <span class="k">def</span> <span class="nf">saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">Ta</span><span class="p">,</span><span class="n">Tb</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; save Ctilde object in hdf5 format</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Lfilename  : string</span>
+<span class="sd">            Layout filename</span>
+<span class="sd">        idx : int</span>
+<span class="sd">            file identifier number</span>
+<span class="sd">        a : np.ndarray</span>
+<span class="sd">            postion of point a (transmitter)</span>
+<span class="sd">        b : np.ndarray</span>
+<span class="sd">            postion of point b (receiver)</span>
+<span class="sd">        Ta : np.ndarray</span>
+<span class="sd">            rotation matrice of antenna a</span>
+<span class="sd">        Tb : np.ndarray</span>
+<span class="sd">            rotation matrice of antenna b</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_Lfilename</span><span class="o">=</span><span class="n">Lfilename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">filename</span><span class="o">=</span> <span class="n">_Lfilename</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.h5&#39;</span>
+        <span class="n">filenameh5</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRH&#39;</span><span class="p">])</span>
+
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+                
+        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># read/write error</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">a</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">b</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;Ta&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">Ta</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;Tb&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">Tb</span>
+            <span class="c"># keys not saved as attribute of h5py file</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">va</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">va</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="n">va</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Channel Tchannel: issue when writting h5py file&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Tchannel.loadh5"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Tchannel.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load Ctilde object in hdf5 format</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Lfilename  : string</span>
+<span class="sd">            Layout filename</span>
+<span class="sd">        idx : int</span>
+<span class="sd">            file identifier number</span>
+<span class="sd">        output : bool </span>
+<span class="sd">            return an output precised in return</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        if output:</span>
+<span class="sd">        (a,b,Ta,Tb) </span>
+<span class="sd">        </span>
+<span class="sd">        with </span>
+<span class="sd">            a = np.ndarray</span>
+<span class="sd">                postion of point a (transmitter)</span>
+<span class="sd">            b = np.ndarray</span>
+<span class="sd">                postion of point b (receiver)</span>
+<span class="sd">            Ta = np.ndarray</span>
+<span class="sd">                rotation matrice of antenna a</span>
+<span class="sd">            Tb = np.ndarray</span>
+<span class="sd">                rotation matrice of antenna b</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">Lfilename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.h5&#39;</span>
+        <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRH&#39;</span><span class="p">])</span>
+        
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># keys not saved as attribute of h5py file</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">va</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s">&#39;tau1&#39;</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">va</span><span class="p">[:])</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">va</span><span class="p">)</span>
+
+            <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span>
+            <span class="n">Ta</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;Ta&#39;</span><span class="p">]</span>
+            <span class="n">Tb</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;Tb&#39;</span><span class="p">]</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dod</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">doa</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">output</span> <span class="p">:</span>
+                <span class="k">return</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">Ta</span><span class="p">,</span><span class="n">Tb</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Channel Tchannel: issue when reading h5py file&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Tchannel.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channel.html#pylayers.antprop.channel.Tchannel.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display information</span>
@@ -2289,7 +2401,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

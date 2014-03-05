@@ -80,17 +80,278 @@
 <span class="c">#!/usr/bin/python</span>
 <span class="c">#-*- coding:Utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Module Bsignal</span>
 
-<span class="sd">Summary</span>
-<span class="sd">=======</span>
+<span class="sd">Bsignal Class</span>
+<span class="sd">=============</span>
 
-<span class="sd">Bsignal</span>
-<span class="sd">Usignal</span>
-<span class="sd">TUsignal</span>
-<span class="sd">FUsignal</span>
-<span class="sd">FHsignal</span>
 
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Bsignal.__init__</span>
+<span class="sd">    Bsignal.__repr__</span>
+<span class="sd">    Bsignal.extract</span>
+<span class="sd">    Bsignal.save</span>
+<span class="sd">    Bsignal.load</span>
+<span class="sd">    Bsignal.setx</span>
+<span class="sd">    Bsignal.sety</span>
+<span class="sd">    Bsignal.stem</span>
+<span class="sd">    Bsignal.step</span>
+<span class="sd">    Bsignal.cformat</span>
+<span class="sd">    Bsignal.imshow</span>
+<span class="sd">    Bsignal.plot</span>
+<span class="sd">    Bsignal.flatteny</span>
+<span class="sd">    Bsignal.gating</span>
+<span class="sd">    Bsignal.len</span>
+
+<span class="sd">Usignal Class</span>
+<span class="sd">=============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Usignal.__init__</span>
+<span class="sd">    Usignal.__repr__</span>
+<span class="sd">    Usignal.__add__</span>
+<span class="sd">    Usignal.__sub__</span>
+<span class="sd">    Usignal.__mul__</span>
+<span class="sd">    Usignal.setx</span>
+<span class="sd">    Usignal.dx</span>
+<span class="sd">    Usignal.width</span>
+<span class="sd">    Usignal.expand</span>
+<span class="sd">    Usignal.max</span>
+<span class="sd">    Usignal.min</span>
+<span class="sd">    Usignal.truncate</span>
+<span class="sd">    Usignal.align</span>
+<span class="sd">    Usignal.abs</span>
+<span class="sd">    Usignal.eprfl</span>
+<span class="sd">    Usignal.energy</span>
+<span class="sd">    Usignal.fftshift</span>
+<span class="sd">    Usignal.zright</span>
+<span class="sd">    Usignal.zleft</span>
+<span class="sd">    Usignal.zlr</span>
+
+<span class="sd">TBsignal Class     </span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TBsignal.__init__</span>
+<span class="sd">    TBsignal.__repr__</span>
+<span class="sd">    TBsignal.plot</span>
+<span class="sd">    TBsignal.translate</span>
+<span class="sd">    TBsignal.b2u</span>
+
+<span class="sd">TUsignal Class</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUsignal.__init__</span>
+<span class="sd">    TUsignal.__repr__</span>
+<span class="sd">    TUsignal.diff</span>
+<span class="sd">    TUsignal.info</span>
+
+<span class="sd">Fourier Functions</span>
+<span class="sd">-----------------</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUsignal.ft</span>
+<span class="sd">    TUsignal.fft</span>
+<span class="sd">    TUsignal.fftsh</span>
+<span class="sd">    TUsignal.ftshift</span>
+<span class="sd">    TUsignal.psd</span>
+<span class="sd">    TUsignal.Yadd_zeros2l</span>
+<span class="sd">    TUsignal.Yadd_zeros2r</span>
+<span class="sd">    TUsignal.esd</span>
+
+<span class="sd">Visualization Functions</span>
+<span class="sd">-----------------------</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUsignal.show</span>
+<span class="sd">    TUsignal.shift</span>
+<span class="sd">    TUsignal.filter</span>
+<span class="sd">    TUsignal.correlate</span>
+<span class="sd">    TUsignal.corrgauss</span>
+<span class="sd">    TUsignal.resample</span>
+<span class="sd">    TUsignal.convolve</span>
+
+<span class="sd">Energy Functions</span>
+<span class="sd">----------------</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUsignal.Epercent</span>
+<span class="sd">    TUsignal.Etau0</span>
+<span class="sd">    TUsignal.Ewin</span>
+<span class="sd">    TUsignal.Etot</span>
+<span class="sd">    TUsignal.Efirst</span>
+<span class="sd">    TUsignal.Efirst_loc</span>
+<span class="sd">    TUsignal.Efirst_corr</span>
+<span class="sd">    TUsignal.Efirst_toath</span>
+<span class="sd">    TUsignal.Emax</span>
+
+<span class="sd">TOA Estimation Functions</span>
+<span class="sd">------------------------</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUsignal.tau_Emax</span>
+<span class="sd">    TUsignal.toa_max2</span>
+<span class="sd">    TUsignal.toa_new</span>
+<span class="sd">    TUsignal.toa_win</span>
+<span class="sd">    TUsignal.toa_max</span>
+<span class="sd">    TUsignal.toa_th</span>
+<span class="sd">    TUsignal.toa_cum</span>
+<span class="sd">    TUsignal.toa_th_tmtm</span>
+<span class="sd">    TUsignal.toa_th_tm</span>
+<span class="sd">    TUsignal.toa_th_tmt</span>
+<span class="sd">    TUsignal.toa_cum_tm</span>
+<span class="sd">    TUsignal.toa_cum_tmtm</span>
+<span class="sd">    TUsignal.toa_cum_tmt</span>
+<span class="sd">    TUsignal.taumax</span>
+<span class="sd">    TUsignal.tau_moy</span>
+<span class="sd">    TUsignal.delays</span>
+<span class="sd">    TUsignal.tau_rms</span>
+
+<span class="sd">Input Output Functions</span>
+<span class="sd">-----------------------</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUsignal.readcir</span>
+<span class="sd">    TUsignal.readuwb</span>
+<span class="sd">    TUsignal.ecdf</span>
+
+<span class="sd">TUDsignal Class</span>
+<span class="sd">===============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUDsignal.__init__</span>
+<span class="sd">    TUDsignal.__repr__</span>
+<span class="sd">    TUDsignal.fig</span>
+<span class="sd">    TUDsignal.__init__</span>
+<span class="sd">    TUDsignal.__repr__</span>
+<span class="sd">    TUDsignal.plotri</span>
+<span class="sd">    TUDsignal.plot</span>
+<span class="sd">    TUDsignal.plotdB</span>
+<span class="sd">    TUDsignal.stem</span>
+
+<span class="sd">FBsignal Class</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    FBsignal.__init__</span>
+<span class="sd">    FBsignal.__repr__</span>
+<span class="sd">    FBsignal.__add__</span>
+<span class="sd">    FBsignal.__sub__</span>
+<span class="sd">    FBsignal.__mul__</span>
+<span class="sd">    FBsignal.__div__</span>
+<span class="sd">    FBsignal.window</span>
+<span class="sd">    FBsignal.get</span>
+<span class="sd">    FBsignal.info</span>
+<span class="sd">    FBsignal.energy</span>
+<span class="sd">    FBsignal.applyFriis</span>
+<span class="sd">    FBsignal.enthrsh</span>
+<span class="sd">    FBsignal.dBthrsh</span>
+<span class="sd">    FBsignal.zp</span>
+<span class="sd">    FBsignal.newdf</span>
+<span class="sd">    FBsignal.dftresamp</span>
+<span class="sd">    FBsignal.resample</span>
+<span class="sd">    FBsignal.symH</span>
+<span class="sd">    FBsignal.symHz</span>
+<span class="sd">    FBsignal.align</span>
+<span class="sd">    FBsignal.ifft</span>
+<span class="sd">    FBsignal.ift</span>
+<span class="sd">    FBsignal.iftshift</span>
+<span class="sd">    FBsignal.show</span>
+<span class="sd">    FBsignal.decimate</span>
+<span class="sd">    FBsignal.tap</span>
+
+<span class="sd">FUDsignal Class</span>
+<span class="sd">===============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    FBsignal.__init__</span>
+<span class="sd">    FBsignal.__repr__</span>
+<span class="sd">    FBsignal.minphas</span>
+<span class="sd">    FBsignal.totud</span>
+<span class="sd">    FBsignal.iftd</span>
+<span class="sd">    FBsignal.ft1</span>
+<span class="sd">    FBsignal.ftau</span>
+<span class="sd">    FBsignal.cir</span>
+<span class="sd">    FBsignal.plot3d</span>
+<span class="sd">    FBsignal.ft2</span>
+
+
+<span class="sd">FUDAsignal Class</span>
+<span class="sd">===============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    FBsignal.__init__</span>
+<span class="sd">    FBsignal.__repr__</span>
+<span class="sd">    FBsignal.cut</span>
+<span class="sd">    FBsignal.sort</span>
+<span class="sd">    FBsignal.showtap</span>
+<span class="sd">    FBsignal.tap</span>
+
+<span class="sd">FUDAsignal Class</span>
+<span class="sd">================</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    FBsignal.__init__</span>
+<span class="sd">    FBsignal.__repr__</span>
+<span class="sd">    FBsignal.__mul__</span>
+<span class="sd">    FBsignal.ifft</span>
+<span class="sd">    FBsignal.unrex</span>
+
+<span class="sd">Noise Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+<span class="sd">    </span>
+<span class="sd">    Noise.__init__</span>
+<span class="sd">    Noise.amplify</span>
+<span class="sd">    Noise.gating</span>
+
+<span class="sd">EnImpulse Class</span>
+<span class="sd">===============</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    EnImpulse.__init__</span>
+<span class="sd">    EnImpulse.demo</span>
+
+<span class="sd">MaskImpulse Class</span>
+<span class="sd">=================</span>
+
+<span class="sd">.. autosummary: </span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    MaskImpulse.__init__</span>
+<span class="sd">    MaskImpulse.show</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -1545,30 +1806,7 @@
 
 
 
-
-<span class="c">#       def waterfall(self,N,typ=&#39;l&#39;):</span>
-<span class="c">#          &quot;&quot;&quot;</span>
-<span class="c">#          &quot;&quot;&quot;</span>
-<span class="c">#          min   = self.y.min()</span>
-<span class="c">#          max   = self.y.max()</span>
-<span class="c">#          ec    = max-min</span>
-<span class="c">#          ecmax = ec.max()</span>
-<span class="c">#          sh = np.shape(self.y)</span>
-<span class="c">#          Nmax    = sh[0]</span>
-<span class="c">#          N1    = int(minimum(N,Nmax))</span>
-<span class="c">#</span>
-<span class="c">#          x     = self.x</span>
-<span class="c">#          r.postscript(&#39;waterfall.eps&#39;)</span>
-<span class="c">#          y1    = self.y[0,:] + (N1-1)*ecmax</span>
-<span class="c">#          yN1   = self.y[N1-1,:]</span>
-<span class="c">#          r.plot(x, yN1,  main=&#39;Waterfall&#39;, xlab=&#39;Time (ns)&#39;, ylab=&#39;y&#39;, type=typ, col=&#39;black&#39; ,  ylim=r.range(y1,yN1) )</span>
-<span class="c">#          for i in range(N1-1):</span>
-<span class="c">#              yi = self.y[i+1,:] + (N1-i)*ecmax</span>
-<span class="c">#          #       stem(self.x,self.y[i+1,:]+(i+1)*ecmax)</span>
-<span class="c">#              if (typ==&#39;o&#39;):</span>
-<span class="c">#                  r.points(x,yi,col=&#39;black&#39;)</span>
-<span class="c">#              r.lines(x,yi,col=&#39;black&#39;)</span>
-<span class="c">#          #show()</span></div>
+</div>
 <div class="viewcode-block" id="TUsignal.shift"><a class="viewcode-back" href="../../../modules/pylayers.signal.bsignal.html#pylayers.signal.bsignal.TUsignal.shift">[docs]</a>    <span class="k">def</span> <span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; shift the Usignal by tau (expressed in the same unit as Bsignal.x)</span>
 
@@ -1650,7 +1888,6 @@
         <span class="n">Ns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         <span class="n">Nxc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xcorr</span><span class="p">)</span>
         <span class="n">t_left</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))[</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="c">#print shape(t_left),shape(x)</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">t_left</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
         <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">Nright</span> <span class="o">=</span> <span class="n">Nxc</span> <span class="o">-</span> <span class="n">Nt</span>
@@ -1761,11 +1998,13 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        N : integer</span>
 <span class="sd">            number of additinal zero values</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        Yadd_zeros2r</span>
 
 
@@ -1779,11 +2018,18 @@
 </div>
 <div class="viewcode-block" id="TUsignal.Yadd_zeros2r"><a class="viewcode-back" href="../../../modules/pylayers.signal.bsignal.html#pylayers.signal.bsignal.TUsignal.Yadd_zeros2r">[docs]</a>    <span class="k">def</span> <span class="nf">Yadd_zeros2r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; time domain extension on right with N zeros</span>
-<span class="sd">       </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        N : integer</span>
 <span class="sd">            number of additinal zero values</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Yadd_zeros2l</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">te</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)))</span>
@@ -1791,15 +2037,13 @@
         <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">aux</span> <span class="o">-</span> <span class="p">(</span><span class="n">aux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">te</span><span class="p">)))</span>
 
-
-<span class="c">#-------------------------------------------------------------</span>
-<span class="c"># Energy content</span>
-<span class="c">#</span></div>
+</div>
 <div class="viewcode-block" id="TUsignal.Epercent"><a class="viewcode-back" href="../../../modules/pylayers.signal.bsignal.html#pylayers.signal.bsignal.TUsignal.Epercent">[docs]</a>    <span class="k">def</span> <span class="nf">Epercent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return N percentile delay of a cdf</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        N : 10</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1824,7 +2068,7 @@
 <span class="sd">        sym   : symetrie factor 0.5 = symetric (0.25)</span>
 <span class="sd">        dB    : logscale indicator (True)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-<span class="c">#       u  = nonzero((tau0 + Tint*(1-sym) &gt; self.x) &amp; (self.x &gt; tau0 - Tint*sym))</span>
+        <span class="c">#u  = nonzero((tau0 + Tint*(1-sym) &gt; self.x) &amp; (self.x &gt; tau0 - Tint*sym))</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">nonzero</span><span class="p">((</span><span class="n">tau0</span> <span class="o">+</span> <span class="n">Tint</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">tau0</span><span class="p">))</span>
         <span class="n">etau0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">]))</span>
         <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
@@ -2208,7 +2452,7 @@
 </div>
 <div class="viewcode-block" id="TUsignal.toa_max"><a class="viewcode-back" href="../../../modules/pylayers.signal.bsignal.html#pylayers.signal.bsignal.TUsignal.toa_max">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nint</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate time of arrival</span>
-<span class="sd">       </span>
+
 <span class="sd">        descendant threshold based toa estimation</span>
 
 <span class="sd">        Parameters</span>
@@ -4470,7 +4714,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
