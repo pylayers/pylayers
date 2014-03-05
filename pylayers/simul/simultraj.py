@@ -43,8 +43,8 @@ from pylayers.util.project import *
 from pylayers.measures import mesuwb as muwb
 import pdb
 import pylayers.mobility.trajectory as tr
-from pylayers.mobility.body.body1 import *
-from pylayers.antprop.delaydispersion import *
+from pylayers.mobility.body.body import *
+from pylayers.antprop.statModel import *
 
 class Simul(object):
     """
@@ -155,10 +155,11 @@ class Simul(object):
         lAP = self.ap
         lperson = self.dpersons.values()
         llink = []
+        #pdb.set_trace()
         for person in lperson:
             if bOB:
                 for dev1 in person.dev:
-                    if person.dev[dev1]['typ']=='mobile':
+                    if person.dev[dev1]['typ']=='dynamic':
                         for dev2 in person.dev:
                             if dev2<> dev1:
                                 llink.append(((person.name,dev1),(person.name,dev2)))
@@ -336,15 +337,7 @@ class Simul(object):
                 print 't = ', time[kt]
           
             for kp, person in enumerate(self.dpersons.values()):
-                person.settopos(self.traj[kp],t=time[kt],cs=True)
-                
-            if show:
-               
-                plt.figure()
-                self.dpersons['Alex'].show(color='b',plane='xz',topos=True)
-                plt.show()    
-
-                
+                person.settopos(self.traj[kp],t=time[kt],cs=True)             
             
 
             for kl in range(0,n_links):
@@ -420,8 +413,6 @@ class Simul(object):
 
 
         for kt in range(0,n_time):          
-
-           
          
             for kp, person in enumerate(self.dpersons.values()):
                 person.settopos(self.traj[kp],t=time[kt],cs=True)
@@ -446,15 +437,18 @@ class Simul(object):
                 condition ='nlos'
                 if interA==1:
                     condition = 'los'
-                empA = A[1]
-                empB = B[1]
+                devIdA = A[1]
+                devIdB = B[1]
+                empA =self.dpersons[A[0]].dev[devIdA]['cyl']
+                empB =self.dpersons[B[0]].dev[devIdB]['cyl']
+                
                 emp  = empA
-                if empA == 'accelerometer':
+                if empA == 'trunkb':
                     emp = empB
-                if emp == 'left_watch':
-                    emp = 'right_watch'
+                if emp == 'forearml':
+                    emp = 'forearmr'
                     
-                if emp == 'front_chest':
+                if emp == 'trunku':
                     condition = 'los'
                 
                
