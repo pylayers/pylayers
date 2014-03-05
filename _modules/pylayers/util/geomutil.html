@@ -91,34 +91,136 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    Geomview</span>
-<span class="sd">    Geomlist</span>
-<span class="sd">    Geomoff</span>
-<span class="sd">    GeomVect</span>
+<span class="sd">Geomview.__init__</span>
+<span class="sd">Geomview.show3</span>
 
-
-<span class="sd">2 points functions</span>
-<span class="sd">===================</span>
+<span class="sd">Geomlist Class</span>
+<span class="sd">==============</span>
 
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    SignedArea</span>
-<span class="sd">    Centroid</span>
-<span class="sd">    Lr2n</span>
-<span class="sd">    isBetween</span>
+<span class="sd">    Geomlist.__init__</span>
+<span class="sd">    Geomlist.append</span>
 
-<span class="sd">Functions2</span>
-<span class="sd">==========</span>
+<span class="sd">GeomVect Class</span>
+<span class="sd">==============</span>
 
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    pvec</span>
-<span class="sd">    pvecn</span>
-<span class="sd">    vec_sph</span>
-<span class="sd">    ellipse</span>
-<span class="sd">    ptonseg</span>
+<span class="sd">    GeomVect.__init__</span>
+<span class="sd">    GeomVect.segments</span>
+<span class="sd">    GeomVect.geomBase</span>
+<span class="sd">    GeomVect.points</span>
+
+<span class="sd">Geomoff Class</span>
+<span class="sd">=============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Geomoff.__init__</span>
+<span class="sd">    Geomoff.loadpt</span>
+<span class="sd">    Geomoff.savept</span>
+<span class="sd">    Geomoff.polygon</span>
+<span class="sd">    Geomoff.polygons</span>
+<span class="sd">    Geomoff.cylinder</span>
+<span class="sd">    Geomoff.box</span>
+<span class="sd">    Geomoff.pattern</span>
+
+<span class="sd">LineString Class</span>
+<span class="sd">================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    LineString.__init__</span>
+<span class="sd">    LineString.plot_coords</span>
+<span class="sd">    LineString.plot_ligne</span>
+<span class="sd">    LineString.plot_polygon</span>
+<span class="sd">    LineString.plot_multi</span>
+
+<span class="sd">PolyGon Class</span>
+<span class="sd">=============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Polygon.__init__</span>
+<span class="sd">    Polygon.plot</span>
+<span class="sd">    Polygon.__init__</span>
+<span class="sd">    Polygon.__add__</span>
+<span class="sd">    Polygon.__repr__</span>
+<span class="sd">    Polygon.ndarray</span>
+<span class="sd">    Polygon.signedarea</span>
+<span class="sd">    Polygon.plot</span>
+<span class="sd">    Polygon.simplify</span>
+<span class="sd">    Polygon.buildGv</span>
+<span class="sd">    Polygon.showGv</span>
+<span class="sd">    Polygon.ptconvex</span>
+
+
+<span class="sd">Utility Functions</span>
+<span class="sd">=================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     angular</span>
+<span class="sd">     SignedArea</span>
+<span class="sd">     Centroid</span>
+<span class="sd">     Lr2n</span>
+<span class="sd">     isBetween</span>
+<span class="sd">     pvec</span>
+<span class="sd">     pvecn</span>
+<span class="sd">     onb</span>
+<span class="sd">     vec_sph</span>
+<span class="sd">     ellipse</span>
+<span class="sd">     normalize</span>
+<span class="sd">     ptonseg</span>
+<span class="sd">     dptseg</span>
+<span class="sd">     linet</span>
+<span class="sd">     ccw</span>
+<span class="sd">     intersect</span>
+<span class="sd">     isaligned</span>
+<span class="sd">     isleft</span>
+<span class="sd">     isleftorequal</span>
+<span class="sd">     affine</span>
+<span class="sd">     cylmap</span>
+<span class="sd">     mul3</span>
+<span class="sd">     MRot3</span>
+<span class="sd">     MEulerAngle</span>
+<span class="sd">     SphericalBasis</span>
+<span class="sd">     angledir</span>
+<span class="sd">     BTB_rx</span>
+<span class="sd">     BTB_tx</span>
+
+<span class="sd">     plot_coords</span>
+<span class="sd">     plot_bounds</span>
+<span class="sd">     plot_line</span>
+<span class="sd">     v_color</span>
+
+<span class="sd">     plotPolygon</span>
+<span class="sd">     shrinkPolygon</span>
+<span class="sd">     shrinkPolygon2</span>
+<span class="sd">     simplifyPolygon</span>
+<span class="sd">     wall_delta</span>
+<span class="sd">     plot_coords2</span>
+<span class="sd">     plot_bounds2</span>
+<span class="sd">     plot_line2</span>
+<span class="sd">     plot_coords3</span>
+<span class="sd">     plot_bounds3</span>
+<span class="sd">     plot_line3</span>
+<span class="sd">     valid_wedge</span>
+<span class="sd">     sector</span>
+<span class="sd">     dist</span>
+<span class="sd">     line_intersection</span>
+<span class="sd">     linepoly_intersection</span>
+<span class="sd">     mirror</span>
+<span class="sd">     distseg</span>
+<span class="sd">     dmin3d</span>
+
 
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -186,11 +288,11 @@
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Geomlist.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomlist.html#pylayers.util.geomutil.Geomlist.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Geomlist.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomlist.__init__.html#pylayers.util.geomutil.Geomlist.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">_filename</span> <span class="o">=</span> <span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39;.list&#39;</span>
         <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="n">clear</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strg</span><span class="p">):</span>
+<div class="viewcode-block" id="Geomlist.append"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomlist.append.html#pylayers.util.geomutil.Geomlist.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">           append a line in .list file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -198,7 +300,7 @@
         <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">strg</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="GeomVect"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.GeomVect.html#pylayers.util.geomutil.GeomVect">[docs]</a><span class="k">class</span> <span class="nc">GeomVect</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Geomview VECT file class</span>
 
@@ -254,11 +356,11 @@
 <span class="sd">        display a set of points</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="GeomVect.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.GeomVect.html#pylayers.util.geomutil.GeomVect.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span><span class="s">&#39;geomdef&#39;</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="GeomVect.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.GeomVect.__init__.html#pylayers.util.geomutil.GeomVect.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span><span class="s">&#39;geomdef&#39;</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">_filename</span> <span class="o">=</span> <span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39;.vect&#39;</span>
         <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="n">clear</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">segments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">i2d</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="GeomVect.segments"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.GeomVect.segments.html#pylayers.util.geomutil.GeomVect.segments">[docs]</a>    <span class="k">def</span> <span class="nf">segments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">i2d</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -293,7 +395,7 @@
                 <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pta</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
                 <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">phe</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phe</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">phe</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
+</div>
     <span class="k">def</span> <span class="nf">geomBase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span> <span class="n">col</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Construct a geomview vect file for vizualisation of a frame</span>
@@ -348,7 +450,7 @@
 
 
 
-    <span class="k">def</span> <span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">colorname</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="GeomVect.points"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.GeomVect.points.html#pylayers.util.geomutil.GeomVect.points">[docs]</a>    <span class="k">def</span> <span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">colorname</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Geomview display a set of points with color</span>
 
 <span class="sd">        Parameters</span>
@@ -424,7 +526,7 @@
                 <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> 1</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="Geomoff"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.html#pylayers.util.geomutil.Geomoff">[docs]</a><span class="k">class</span> <span class="nc">Geomoff</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -462,11 +564,11 @@
 <span class="sd">    # 3 or 4 integers RGB[A] values 0..255</span>
 <span class="sd">    #</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Geomoff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.html#pylayers.util.geomutil.Geomoff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span> <span class="s">&#39;geomoff&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Geomoff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.__init__.html#pylayers.util.geomutil.Geomoff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span> <span class="s">&#39;geomoff&#39;</span><span class="p">):</span>
         <span class="n">_filename</span> <span class="o">=</span> <span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
         <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">loadpt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Geomoff.loadpt"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.loadpt.html#pylayers.util.geomutil.Geomoff.loadpt">[docs]</a>    <span class="k">def</span> <span class="nf">loadpt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load points</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -486,8 +588,8 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">t</span> <span class="o">=</span> <span class="n">pt</span>
         <span class="k">return</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">savept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptnew</span><span class="p">,</span><span class="n">_fileoff</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Geomoff.savept"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.savept.html#pylayers.util.geomutil.Geomoff.savept">[docs]</a>    <span class="k">def</span> <span class="nf">savept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptnew</span><span class="p">,</span><span class="n">_fileoff</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
@@ -512,8 +614,8 @@
         <span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="n">lis</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">2</span><span class="p">:]:</span>
             <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">polygon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">poly</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Geomoff.polygon"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.polygon.html#pylayers.util.geomutil.Geomoff.polygon">[docs]</a>    <span class="k">def</span> <span class="nf">polygon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">poly</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  create geomview off for polygon</span>
 
 <span class="sd">        Parameters</span>
@@ -538,8 +640,8 @@
         <span class="c">#fo.write(%6.3f %6.3f %6.3f 0.4\n&quot; % (col[0],col[1],col[2]))</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;1.0 1.0 1.0 0.4</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">polygons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">polys</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Geomoff.polygons"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.polygons.html#pylayers.util.geomutil.Geomoff.polygons">[docs]</a>    <span class="k">def</span> <span class="nf">polygons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">polys</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a gemoff file for a list of polygons</span>
 
 <span class="sd">        Parameters</span>
@@ -572,8 +674,8 @@
             <span class="c">#fo.write(%6.3f %6.3f %6.3f 0.4\n&quot; % (col[0],col[1],col[2]))</span>
             <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;1.0 0.0 1.0 0.4</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">nphi</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">nl</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Geomoff.cylinder"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.cylinder.html#pylayers.util.geomutil.Geomoff.cylinder">[docs]</a>    <span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">nphi</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">nl</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a cylinder</span>
 
 <span class="sd">        Parameters</span>
@@ -613,8 +715,8 @@
             <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span>
 
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extrem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])):</span>
+</div>
+<div class="viewcode-block" id="Geomoff.box"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.box.html#pylayers.util.geomutil.Geomoff.box">[docs]</a>    <span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extrem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; create a box</span>
 
 <span class="sd">        Parameters</span>
@@ -658,8 +760,8 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;4 3 2 6 7 1 0 0 0.3</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;4 6 5 4 7 1 0 0 0.3</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Geomoff.pattern"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.pattern.html#pylayers.util.geomutil.Geomoff.pattern">[docs]</a>    <span class="k">def</span> <span class="nf">pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; export antenna pattern in a geomview format</span>
 
 <span class="sd">        Parameters</span>
@@ -780,8 +882,8 @@
                 <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</div>
-<span class="k">def</span> <span class="nf">angular</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
+</div></div>
+<div class="viewcode-block" id="angular"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.angular.html#pylayers.util.geomutil.angular">[docs]</a><span class="k">def</span> <span class="nf">angular</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; determine angle between p1 and p2 in [0 2pi]</span>
 
 <span class="sd">    Parameters</span>
@@ -831,7 +933,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
 
-
+</div>
 <span class="k">def</span> <span class="nf">SignedArea</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]])):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1073,7 +1175,7 @@
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;error divide by zero in pvecn&quot;</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">v4</span><span class="p">)</span>
 </div>
-<span class="k">def</span> <span class="nf">onb</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+<div class="viewcode-block" id="onb"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.onb.html#pylayers.util.geomutil.onb">[docs]</a><span class="k">def</span> <span class="nf">onb</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; orthonormal basis from 2 points defining an axe and a vector</span>
 
 <span class="sd">    Parameters</span>
@@ -1146,7 +1248,7 @@
     <span class="n">T</span>  <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">T</span>
 
-
+</div>
 <div class="viewcode-block" id="vec_sph"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.vec_sph.html#pylayers.util.geomutil.vec_sph">[docs]</a><span class="k">def</span> <span class="nf">vec_sph</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    vec_sph(th,ph)</span>
@@ -1234,7 +1336,7 @@
         <span class="n">v</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%g</span><span class="s"> </span><span class="si">%g</span><span class="s"> </span><span class="si">%g</span><span class="s"> </span><span class="si">%g</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 </div>
-<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.normalize.html#pylayers.util.geomutil.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; normalize an array of N ndim  vectors</span>
 
 <span class="sd">    Parameters</span>
@@ -1268,7 +1370,7 @@
     <span class="n">vecn</span> <span class="o">=</span> <span class="n">vec</span><span class="o">/</span><span class="n">m</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">vecn</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="ptonseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.ptonseg.html#pylayers.util.geomutil.ptonseg">[docs]</a><span class="k">def</span> <span class="nf">ptonseg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span> <span class="n">phe</span><span class="p">,</span> <span class="n">pt</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; return a point on the segment (pta,pte)</span>
 
@@ -1302,7 +1404,7 @@
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
     <span class="k">return</span> <span class="n">p</span>
 </div>
-<span class="k">def</span> <span class="nf">dptseg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">):</span>
+<div class="viewcode-block" id="dptseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.dptseg.html#pylayers.util.geomutil.dptseg">[docs]</a><span class="k">def</span> <span class="nf">dptseg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; distance between a set of points and a segment</span>
 
 <span class="sd">    Parameters</span>
@@ -1349,8 +1451,8 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span><span class="n">h</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">al</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="linet"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.linet.html#pylayers.util.geomutil.linet">[docs]</a><span class="k">def</span> <span class="nf">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">al</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  draw a short line segment</span>
 
 <span class="sd">    Parameters</span>
@@ -1403,8 +1505,8 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="ccw"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.ccw.html#pylayers.util.geomutil.ccw">[docs]</a><span class="k">def</span> <span class="nf">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; counter clock wise order</span>
 
 <span class="sd">    Parameters</span>
@@ -1439,8 +1541,8 @@
     <span class="k">return</span><span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">&gt;</span>
            <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span>
 
-
-<span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="intersect"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.intersect.html#pylayers.util.geomutil.intersect">[docs]</a><span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; check if segment AB intersects segment CD</span>
 
 <span class="sd">    Parameters</span>
@@ -1494,15 +1596,15 @@
     <span class="k">return</span> <span class="p">((</span><span class="n">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)))</span>
 
 
-
-<span class="k">def</span> <span class="nf">isaligned</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="isaligned"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.isaligned.html#pylayers.util.geomutil.isaligned">[docs]</a><span class="k">def</span> <span class="nf">isaligned</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
     <span class="c">#return abs(((b[0,:]-a[0,:])*(c[1,:]-a[1,:]) - (b[1,:]-a[1,:])*(c[0,:]-a[0,:])))&lt;1e-8</span>
     <span class="n">val</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
     <span class="n">cond</span> <span class="o">=</span> <span class="n">val</span><span class="o">&lt;</span><span class="mf">1e-2</span>
     <span class="c">#print val</span>
     <span class="k">return</span> <span class="n">cond</span>
-
-<span class="k">def</span> <span class="nf">isleft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="isleft"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.isleft.html#pylayers.util.geomutil.isleft">[docs]</a><span class="k">def</span> <span class="nf">isleft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Test point c is at left of the vector a--&gt;b</span>
 
 
@@ -1548,12 +1650,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span> <span class="o">-</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span><span class="o">&gt;</span><span class="mi">0</span>
-
-<span class="k">def</span> <span class="nf">isleftorequal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="isleftorequal"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.isleftorequal.html#pylayers.util.geomutil.isleftorequal">[docs]</a><span class="k">def</span> <span class="nf">isleftorequal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span> <span class="o">-</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span><span class="o">&gt;=</span><span class="mi">0</span>
 
-
-<span class="k">def</span> <span class="nf">affine</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="affine"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.affine.html#pylayers.util.geomutil.affine">[docs]</a><span class="k">def</span> <span class="nf">affine</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; find affine transformation</span>
 
 <span class="sd">    Parameters</span>
@@ -1586,8 +1688,8 @@
     <span class="n">pX</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Yc</span><span class="p">,</span><span class="n">pX</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">cylmap</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mf">0.0625</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="cylmap"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.cylmap.html#pylayers.util.geomutil.cylmap">[docs]</a><span class="k">def</span> <span class="nf">cylmap</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mf">0.0625</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; find affine transformation for a specific cylinder</span>
 
 <span class="sd">    Parameters</span>
@@ -1617,8 +1719,8 @@
     <span class="n">pX</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Yc</span><span class="p">,</span><span class="n">pX</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">mul3</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="mul3"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.mul3.html#pylayers.util.geomutil.mul3">[docs]</a><span class="k">def</span> <span class="nf">mul3</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  matrix multiplication</span>
 
 <span class="sd">    Parameters</span>
@@ -1670,8 +1772,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;wrong shape&quot;</span><span class="p">,</span> <span class="n">sa</span><span class="p">,</span> <span class="n">sb</span>
 
-
-<span class="k">def</span> <span class="nf">MRot3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axe</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="MRot3"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.MRot3.html#pylayers.util.geomutil.MRot3">[docs]</a><span class="k">def</span> <span class="nf">MRot3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axe</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a 3D rotation matrix along axe 0|1|2</span>
 
@@ -1692,8 +1794,8 @@
         <span class="n">M3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">M2</span>
     <span class="k">return</span><span class="p">(</span><span class="n">M3</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">MEulerAngle</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="MEulerAngle"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.MEulerAngle.html#pylayers.util.geomutil.MEulerAngle">[docs]</a><span class="k">def</span> <span class="nf">MEulerAngle</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Calculate a rotation matrix from 3 Euler angles</span>
 
 <span class="sd">    Parameters</span>
@@ -1736,8 +1838,8 @@
     <span class="c">#T  = np.dot(np.dot(Rg,Rb),Ra)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">SphericalBasis</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="SphericalBasis"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.SphericalBasis.html#pylayers.util.geomutil.SphericalBasis">[docs]</a><span class="k">def</span> <span class="nf">SphericalBasis</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    SphericalBasis(a):</span>
 
@@ -1756,8 +1858,8 @@
     <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">tha</span><span class="p">,</span> <span class="n">pha</span><span class="p">,</span> <span class="n">sa</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
     <span class="k">return</span> <span class="n">M</span>
 
-
-<span class="k">def</span> <span class="nf">angledir</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="angledir"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.angledir.html#pylayers.util.geomutil.angledir">[docs]</a><span class="k">def</span> <span class="nf">angledir</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; evaluate (theta,phi) from direction vector</span>
 
 
@@ -1822,8 +1924,8 @@
     <span class="n">a_new</span><span class="p">[</span><span class="n">inull</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
     <span class="k">return</span><span class="p">(</span><span class="n">a_new</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">BTB_rx</span><span class="p">(</span><span class="n">a_g</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="BTB_rx"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.BTB_rx.html#pylayers.util.geomutil.BTB_rx">[docs]</a><span class="k">def</span> <span class="nf">BTB_rx</span><span class="p">(</span><span class="n">a_g</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Produce a set of rotation matrices for passage between global and local frame</span>
 
 <span class="sd">    Parameters</span>
@@ -1868,8 +1970,8 @@
 
     <span class="k">return</span> <span class="n">R</span><span class="p">,</span> <span class="n">al</span>
 
-
-<span class="k">def</span> <span class="nf">BTB_tx</span><span class="p">(</span><span class="n">a_g</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="BTB_tx"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.BTB_tx.html#pylayers.util.geomutil.BTB_tx">[docs]</a><span class="k">def</span> <span class="nf">BTB_tx</span><span class="p">(</span><span class="n">a_g</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Produce a set of rotation matrices for passage between global and local frame</span>
 
 <span class="sd">    Parameters</span>
@@ -1899,7 +2001,7 @@
     <span class="n">R</span> <span class="o">=</span> <span class="n">mul3</span><span class="p">(</span><span class="n">B_gT</span><span class="p">,</span> <span class="n">mul3</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">B_l</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">R</span><span class="p">,</span> <span class="n">al</span>
-
+</div>
 <span class="k">class</span> <span class="nc">Plot_shapely</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;draw Shapely with matplotlib - pylab</span>
 <span class="sd">     Plot_shapely.py</span>
@@ -1977,7 +2079,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;inconnu au bataillon: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">plot_coords</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;#999999&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_coords"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_coords.html#pylayers.util.geomutil.plot_coords">[docs]</a><span class="k">def</span> <span class="nf">plot_coords</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;#999999&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plotting coord of a `shapely` object</span>
 
 <span class="sd">    Parameters</span>
@@ -1995,8 +2097,8 @@
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">xy</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c"># color=&#39;#999999&#39;</span>
 
-
-<span class="k">def</span> <span class="nf">plot_bounds</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_bounds"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_bounds.html#pylayers.util.geomutil.plot_bounds">[docs]</a><span class="k">def</span> <span class="nf">plot_bounds</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2015,8 +2117,8 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c"># &#39;#000000&#39;</span>
     <span class="c">#ax.plot(x, y, &#39;o&#39;, color=&#39;#000000&#39;, zorder=0.1)   #&#39;#000000&#39;</span>
 
-
-<span class="k">def</span> <span class="nf">plot_line</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;#999999&quot;</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_line"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_line.html#pylayers.util.geomutil.plot_line">[docs]</a><span class="k">def</span> <span class="nf">plot_line</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;#999999&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -2054,8 +2156,8 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="n">solid_capstyle</span><span class="o">=</span><span class="s">&#39;round&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">v_color</span><span class="p">(</span><span class="n">ob</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="v_color"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.v_color.html#pylayers.util.geomutil.v_color">[docs]</a><span class="k">def</span> <span class="nf">v_color</span><span class="p">(</span><span class="n">ob</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -2067,11 +2169,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">COLOR</span><span class="p">[</span><span class="n">ob</span><span class="o">.</span><span class="n">is_simple</span><span class="p">]</span>
 
-
+</div>
 <span class="k">class</span> <span class="nc">LineString</span><span class="p">(</span><span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Overloaded shapely LineString class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="LineString.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.LineString.__init__.html#pylayers.util.geomutil.LineString.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">shg</span><span class="o">.</span><span class="n">polygon</span><span class="o">.</span><span class="n">Polygon</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
@@ -2092,7 +2194,7 @@
             <span class="n">tp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">tu</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
             <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tu</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot LineString</span>
 
@@ -2185,7 +2287,7 @@
 <span class="sd">        get the signed area of the polygon</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">vnodes</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Polygon.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__init__.html#pylayers.util.geomutil.Polygon.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">vnodes</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -2247,22 +2349,22 @@
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__add__.html#pylayers.util.geomutil.Polygon.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
         <span class="n">pnew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pnew</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pnew</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="n">p2</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__repr__.html#pylayers.util.geomutil.Polygon.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndarray</span><span class="p">()</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;(&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;)</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.ndarray"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.ndarray.html#pylayers.util.geomutil.Polygon.ndarray">[docs]</a>    <span class="k">def</span> <span class="nf">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get a ndarray from a Polygon</span>
 
 <span class="sd">        Returns</span>
@@ -2280,15 +2382,15 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lring</span><span class="o">.</span><span class="n">xy</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
         <span class="k">return</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">signedarea</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.signedarea"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.signedarea.html#pylayers.util.geomutil.Polygon.signedarea">[docs]</a>    <span class="k">def</span> <span class="nf">signedarea</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get the signed area of the polygon</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndarray</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">::],</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]))</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">::],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]))</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]))</span> <span class="o">/</span> <span class="mf">2.</span>
-
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.plot.html#pylayers.util.geomutil.Polygon.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot function</span>
 
 <span class="sd">        Parameters</span>
@@ -2359,8 +2461,8 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
-
-    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.simplify"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.simplify.html#pylayers.util.geomutil.Polygon.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Simplify polygon - suppress adjacent colinear segments</span>
 
 <span class="sd">        Returns</span>
@@ -2397,8 +2499,8 @@
         <span class="n">ls</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">asLineString</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
         <span class="n">poly2</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">poly2</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">buildGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.buildGv"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.buildGv.html#pylayers.util.geomutil.Polygon.buildGv">[docs]</a>    <span class="k">def</span> <span class="nf">buildGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create  visibility graph for a polygon</span>
 
 <span class="sd">        Parameters</span>
@@ -2756,8 +2858,8 @@
             <span class="c">#edge_label=nx.draw_networkx_edge_labels(Gv,Gv.pos,edge_labels=label)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">Gv</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">showGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.showGv"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.showGv.html#pylayers.util.geomutil.Polygon.showGv">[docs]</a>    <span class="k">def</span> <span class="nf">showGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show graph Gv</span>
 
 <span class="sd">        Parameters</span>
@@ -2838,8 +2940,8 @@
                                    <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">ptconvex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Polygon.ptconvex"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.ptconvex.html#pylayers.util.geomutil.Polygon.ptconvex">[docs]</a>    <span class="k">def</span> <span class="nf">ptconvex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a list of booleans indicating points convexity</span>
 
 <span class="sd">        Parameters</span>
@@ -2965,8 +3067,8 @@
         <span class="k">return</span><span class="p">(</span><span class="n">tcc</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
 
-<span class="c">#def createPolygons(</span>
-<span class="k">def</span> <span class="nf">plotPolygon</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;#abcdef&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+<span class="c">#def createPolygons(</span></div>
+<div class="viewcode-block" id="plotPolygon"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plotPolygon.html#pylayers.util.geomutil.plotPolygon">[docs]</a><span class="k">def</span> <span class="nf">plotPolygon</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;#abcdef&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plot a shapely Polygon</span>
 
 <span class="sd">    Parameters</span>
@@ -2986,8 +3088,8 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-
-<span class="k">def</span> <span class="nf">shrinkPolygon</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="shrinkPolygon"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.shrinkPolygon.html#pylayers.util.geomutil.shrinkPolygon">[docs]</a><span class="k">def</span> <span class="nf">shrinkPolygon</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; shrink polygon</span>
 
 <span class="sd">    Parameters</span>
@@ -3024,8 +3126,8 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">poly2</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">shrinkPolygon2</span><span class="p">(</span><span class="n">poly1</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="shrinkPolygon2"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.shrinkPolygon2.html#pylayers.util.geomutil.shrinkPolygon2">[docs]</a><span class="k">def</span> <span class="nf">shrinkPolygon2</span><span class="p">(</span><span class="n">poly1</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    shrinkPolygon(poly1,d=0.1)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3066,8 +3168,8 @@
     <span class="n">poly2</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">poly2</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">simplifyPolygon</span><span class="p">(</span><span class="n">poly1</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="simplifyPolygon"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.simplifyPolygon.html#pylayers.util.geomutil.simplifyPolygon">[docs]</a><span class="k">def</span> <span class="nf">simplifyPolygon</span><span class="p">(</span><span class="n">poly1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simplify polygon : suppress adjacent colinear segments</span>
 <span class="sd">    Parameters</span>
@@ -3100,8 +3202,8 @@
 <span class="c"># Taguhi</span>
 <span class="c">#----------------------</span>
 
-
-<span class="k">def</span> <span class="nf">wall_delta</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="wall_delta"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.wall_delta.html#pylayers.util.geomutil.wall_delta">[docs]</a><span class="k">def</span> <span class="nf">wall_delta</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Identification of new points</span>
 
 <span class="sd">    After defining a tolerance length those points which are situated in</span>
@@ -3163,8 +3265,8 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">plot_coords2</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_coords2"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_coords2.html#pylayers.util.geomutil.plot_coords2">[docs]</a><span class="k">def</span> <span class="nf">plot_coords2</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  plot point from coordinates</span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -3174,8 +3276,8 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;#999999&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">plot_bounds2</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_bounds2"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_bounds2.html#pylayers.util.geomutil.plot_bounds2">[docs]</a><span class="k">def</span> <span class="nf">plot_bounds2</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -3184,8 +3286,8 @@
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ob</span><span class="o">.</span><span class="n">boundary</span><span class="p">))</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">plot_line2</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_line2"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_line2.html#pylayers.util.geomutil.plot_line2">[docs]</a><span class="k">def</span> <span class="nf">plot_line2</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -3195,8 +3297,8 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">v_color</span><span class="p">(</span>
         <span class="n">ob</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">solid_capstyle</span><span class="o">=</span><span class="s">&#39;round&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">plot_coords3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_coords3"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_coords3.html#pylayers.util.geomutil.plot_coords3">[docs]</a><span class="k">def</span> <span class="nf">plot_coords3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -3206,8 +3308,8 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">plot_bounds3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_bounds3"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_bounds3.html#pylayers.util.geomutil.plot_bounds3">[docs]</a><span class="k">def</span> <span class="nf">plot_bounds3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -3216,8 +3318,8 @@
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ob</span><span class="o">.</span><span class="n">boundary</span><span class="p">))</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">plot_line3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="plot_line3"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.plot_line3.html#pylayers.util.geomutil.plot_line3">[docs]</a><span class="k">def</span> <span class="nf">plot_line3</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -3230,8 +3332,8 @@
 <span class="c">## wedge functions</span>
 <span class="c">##</span>
 
-
-<span class="k">def</span> <span class="nf">valid_wedge</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">pw</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">grazing</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="valid_wedge"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.valid_wedge.html#pylayers.util.geomutil.valid_wedge">[docs]</a><span class="k">def</span> <span class="nf">valid_wedge</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">pw</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">grazing</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; check set of N wedge sector validity for point ps</span>
 
 <span class="sd">     Parameters</span>
@@ -3317,8 +3419,8 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">sector</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">pt</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="sector"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.sector.html#pylayers.util.geomutil.sector">[docs]</a><span class="k">def</span> <span class="nf">sector</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">pt</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; angular sector  p1 pt p2</span>
 
 <span class="sd">    Parameters</span>
@@ -3346,8 +3448,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
 
-
-<span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="dist"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.dist.html#pylayers.util.geomutil.dist">[docs]</a><span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculates distance between two arrays along a given axis</span>
 <span class="sd">        Parameters</span>
@@ -3373,8 +3475,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">ax</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">d</span>
-
-<span class="k">def</span> <span class="nf">line_intersection</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="line_intersection"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.line_intersection.html#pylayers.util.geomutil.line_intersection">[docs]</a><span class="k">def</span> <span class="nf">line_intersection</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; intersection between two 2D lines using shapely</span>
 
 <span class="sd">    Parameters</span>
@@ -3395,8 +3497,8 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">psh</span><span class="o">.</span><span class="n">x</span><span class="p">],[</span><span class="n">psh</span><span class="o">.</span><span class="n">y</span><span class="p">]])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">None</span>
-
-<span class="k">def</span> <span class="nf">linepoly_intersection</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">poly</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="linepoly_intersection"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.linepoly_intersection.html#pylayers.util.geomutil.linepoly_intersection">[docs]</a><span class="k">def</span> <span class="nf">linepoly_intersection</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">poly</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; intersection between a 2D line and a 2D polygon using shapely</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -3413,8 +3515,8 @@
     <span class="n">shpoly</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">polygon</span><span class="p">((</span><span class="n">poly</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">poly</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">poly</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]))</span>
     <span class="n">psh</span> <span class="o">=</span> <span class="n">shl</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">shpoly</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">psh</span><span class="o">.</span><span class="n">x</span><span class="p">],[</span><span class="n">psh</span><span class="o">.</span><span class="n">y</span><span class="p">]])</span>
-
-<span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">pa</span><span class="p">,</span><span class="n">pb</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="mirror"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.mirror.html#pylayers.util.geomutil.mirror">[docs]</a><span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">pa</span><span class="p">,</span><span class="n">pb</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Compute the image of p wrt the segment pa pb</span>
 
 <span class="sd">    Parameters</span>
@@ -3482,8 +3584,8 @@
     <span class="n">v0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">S</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">vc0</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">v0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span>
-
-<span class="k">def</span> <span class="nf">distseg</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="distseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.distseg.html#pylayers.util.geomutil.distseg">[docs]</a><span class="k">def</span> <span class="nf">distseg</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; distance to segments</span>
 
 <span class="sd">    Parameters</span>
@@ -3544,8 +3646,8 @@
     <span class="c"># g = np.dot(m-n,m-n)</span>
 
     <span class="k">return</span> <span class="n">f</span>
-
-<span class="k">def</span> <span class="nf">dmin3d</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="dmin3d"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.dmin3d.html#pylayers.util.geomutil.dmin3d">[docs]</a><span class="k">def</span> <span class="nf">dmin3d</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; evaluate the minimal distance between 2 set of segments</span>
 
 <span class="sd">    Parameters</span>
@@ -3585,7 +3687,7 @@
     <span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">u1</span><span class="o">+</span><span class="n">beta</span><span class="o">*</span><span class="n">u2</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">*</span><span class="n">u4</span><span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u5</span><span class="p">)</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">dmin</span><span class="p">)</span>
-
+</div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
@@ -3616,7 +3718,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 05, 2014.
+      Last updated on mars 06, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

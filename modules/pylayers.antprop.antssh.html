@@ -97,104 +97,6 @@
             
   <div class="section" id="module-pylayers.antprop.antssh">
 <span id="pylayers-antprop-antssh-module"></span><h1>pylayers.antprop.antssh module<a class="headerlink" href="#module-pylayers.antprop.antssh" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pylayers.antprop.antssh.CartToSphere">
-<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">CartToSphere</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>ex</em>, <em>ey</em>, <em>ez</em>, <em>bfreq=True</em>, <em>pattern=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#CartToSphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.CartToSphere" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> :</p>
-<p><strong>phi</strong> :</p>
-<p><strong>ex</strong> :</p>
-<p><strong>ey</strong> :</p>
-<p><strong>ez</strong> :</p>
-<p><strong>bfreq</strong> : boolean</p>
-<p><strong>pattern</strong> : boolean</p>
-<p><strong>Convert from cartesian to spherical  coordinates</strong> :</p>
-<p class="last"><strong>bfreq</strong> : boolean parameter to indicate if the conversion is done for all frequencies of only one.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.SSHFunc">
-<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">SSHFunc</tt><big>(</big><em>L</em>, <em>theta</em>, <em>phi</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SSHFunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SSHFunc" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : integer,</p>
-<blockquote>
-<div><p>spherical harmonics order</p>
-</div></blockquote>
-<p><strong>theta: numpy array(1, nth)</strong> :</p>
-<p class="last"><strong>phi: numpy array(1,nph)</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Compute the spherical harmonic functions for the order L
-return a spherical matrix ((1+L)*(2+L)/2,nth*nph) and the index (l,m) of the shperical harmonics</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.SSHFunc2">
-<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">SSHFunc2</tt><big>(</big><em>L</em>, <em>theta</em>, <em>phi</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SSHFunc2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SSHFunc2" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L</strong> : integer,</p>
-<blockquote>
-<div><p>spherical harmonics order</p>
-</div></blockquote>
-<p><strong>theta: numpy array(1, ndir)</strong> :</p>
-<p class="last"><strong>phi: numpy array(1,ndir)</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>theta and phi should have the same dimensions which represents the rays
-Compute the spherical harmonic functions for the order L
-return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.SphereToCart">
-<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">SphereToCart</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>eth</em>, <em>eph</em>, <em>bfreq</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#SphereToCart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.SphereToCart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert from spherical to cartesian coordinates
-bfreq : boolean parameter to indicate if the conversion is done for all frequencies of only one.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.antssh.ssh">
-<tt class="descclassname">pylayers.antprop.antssh.</tt><tt class="descname">ssh</tt><big>(</big><em>A</em>, <em>dsf=1</em>, <em>L=20</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antssh.html#ssh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antssh.ssh" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function calculates the Scalar Spherical Harmonics coefficients</p>
-<blockquote>
-<div>m : phi    longitude
-l : theta  latitude</div></blockquote>
-<p>Antenna pattern are stored       (f theta phi)
-Coeff are stored with this order (f , l , m )</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> :  antenna</p>
-<p><strong>dsf</strong> :  int</p>
-<blockquote class="last">
-<div><p>down sampling factor  &#8216;default 1&#8217;</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 
 
@@ -229,7 +131,7 @@ Coeff are stored with this order (f , l , m )</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 05, 2014.
+      Last updated on mars 06, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

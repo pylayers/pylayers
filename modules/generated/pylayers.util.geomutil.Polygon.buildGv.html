@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.util.geomutil.Polygon.buildGv &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.util.geomutil module" href="../pylayers.util.geomutil.html" />
+    <link rel="next" title="pylayers.util.geomutil.Polygon.showGv" href="pylayers.util.geomutil.Polygon.showGv.html" />
+    <link rel="prev" title="pylayers.util.geomutil.Polygon.simplify" href="pylayers.util.geomutil.Polygon.simplify.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.geomutil.Polygon.showGv.html" title="pylayers.util.geomutil.Polygon.showGv"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.geomutil.Polygon.simplify.html" title="pylayers.util.geomutil.Polygon.simplify"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.util.geomutil.html" accesskey="U">pylayers.util.geomutil module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.util.geomutil.Polygon.simplify.html"
+                        title="previous chapter">pylayers.util.geomutil.Polygon.simplify</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.util.geomutil.Polygon.showGv.html"
+                        title="next chapter">pylayers.util.geomutil.Polygon.showGv</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.util.geomutil.Polygon.buildGv.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-util-geomutil-polygon-buildgv">
+<h1>pylayers.util.geomutil.Polygon.buildGv<a class="headerlink" href="#pylayers-util-geomutil-polygon-buildgv" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.util.geomutil.Polygon.buildGv">
+<tt class="descclassname">Polygon.</tt><tt class="descname">buildGv</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/util/geomutil.html#Polygon.buildGv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Polygon.buildGv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create  visibility graph for a polygon</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>display</strong> : boolean</p>
+<blockquote>
+<div><p>default : False</p>
+</div></blockquote>
+<p><strong>fig</strong> : matplotlib.figure.pyplot</p>
+<p><strong>ax</strong> : axes</p>
+<p><strong>udeg1</strong> : np.array indexes of points of degree 1</p>
+<blockquote>
+<div><p>default = []</p>
+</div></blockquote>
+<p><strong>udeg2</strong> : np.array indexes of points of degree 2</p>
+<blockquote class="last">
+<div><p>default = []</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../pylayers.gis.layout.html#module-pylayers.gis.layout" title="pylayers.gis.layout"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Segment k and (k+1)%N share segment (k+1)%N
+The degree of a point is dependent from other polygons around</p>
+<p>Topological error can be raised if the point coordinates accuracy
+is not limited.</p>
+<p>Nodes of polygon are numbered in the global graph in vnodes member.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>                                           <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span>                                           <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Gv</span>      <span class="o">=</span> <span class="n">polyg</span><span class="o">.</span><span class="n">buildGv</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="go">(-0.5, 4.0, -0.5, 2.5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Testing buildGv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-geomutil-Polygon-buildGv-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-geomutil-Polygon-buildGv-1.png" src="../../_images/pylayers-util-geomutil-Polygon-buildGv-1.png" />
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.geomutil.Polygon.showGv.html" title="pylayers.util.geomutil.Polygon.showGv"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.util.geomutil.Polygon.simplify.html" title="pylayers.util.geomutil.Polygon.simplify"
+             >previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.util.geomutil.html" >pylayers.util.geomutil module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 06, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
