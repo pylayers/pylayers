@@ -788,12 +788,15 @@ class Fdd(object):
 
         Parameters
         ----------
-        type
-               {'moddB' : modulus in dB ,
-                 'mod', : modulus in linear scale,
-                 'ang'   : unwraped phase in radians}
+
+        typ : string
+            'moddB' : modulus in dB ,
+            'mod', : modulus in linear scale,
+            'ang'   : unwraped phase in radians
+
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -804,10 +807,13 @@ class Fdd(object):
             >>> F  = M.fdd
             >>> fig = plt.figure()
             >>> F.plot('moddB')
+            >>> plt.tight_layout()
             >>> fig = plt.figure()
             >>> F.plot('mod')
+            >>> plt.tight_layout()
             >>> fig = plt.figure()
             >>> F.plot('ang')
+            >>> plt.tight_layout()
             >>> plt.show()
 
         """

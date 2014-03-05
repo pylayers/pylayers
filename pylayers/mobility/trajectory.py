@@ -1,12 +1,12 @@
-import numpy as np 
-import scipy as sp 
+import numpy as np
+import scipy as sp
 import pdb
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import pylayers.util.pyutil as pyu
-from matplotlib.path import Path 
+from matplotlib.path import Path
 from pylayers.util.project import *
 from pylayers.gis.layout import Layout
-import pandas as pd 
+import pandas as pd
 import copy
 import time
 import doctest
@@ -14,115 +14,13 @@ from matplotlib.widgets import Slider,CheckButtons
 
 
 
-
-# class Trajectories(list):
-#     """  Define a list of trajectory
-
-
-#     """
-#     def __init__(self):
-#         """ initialization 
-#         """
-#         super(list,self).__init__()  
-        
-
-
-
-#     def importh5(self,_filename='simulnet_TA-Office.h5'):
-
-#         """ import simulnet h5 file
-        
-#         Parameters
-#         ----------
-
-#         filename : string 
-#             default simulnet + Layout_filename . h5
-
-#         Returns
-#         -------
-
-#         lt : list of trajectory
-
-#         """
-
-#         self.Lfilename = _filename.split('_')[1].split('.')[0] +'.ini'
-#         filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
-#         fil = pd.HDFStore(filename)
-
-        
-
-#         for k in fil.keys():
-#             df = fil[k]
-#             df = df.set_index('t')
-#             v=np.array((df.vx.values,df.vy.values))
-#             d = np.sqrt(np.sum(v*v,axis=0))
-#             s = np.cumsum(d)
-#             df['s'] = s
-#             self.append(Trajectory(df))
-#         fil.close()
-
-
-
-#     def show(self):
-#         """
-#             interactive show of trajectories
-#         """
-
-
-#         fig, ax = plt.subplots()
-#         fig.subplots_adjust(bottom=0.2, left=0.2)
-
-#         t = np.arange(0, len(self[0].index), self[0].ts)
-#         L=Layout(self.Lfilename)
-#         fig,ax = L.showG('s',fig=fig,ax=ax)
-
-
-#         valinit=0
-#         lines=[]
-#         labels=[]
-#         colors = "bgrcmykw"
-
-#         for iT,T in enumerate(self):
-#             lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
-#             labels.append('node' + T.id[0])
-
-#         time=self[0].time()       
-
-#         # init boolean value for visible in checkbutton    
-#         blabels=[False]*len(labels)
-
-        
-                
-            
-#         # slider 
-#         slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
-#         slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax, valinit=valinit, color='#AAAAAA')
-#         slider.on_changed(on_change)
-
-#         # choose
-#         rax = plt.axes([0.02, 0.4, 0.13, 0.2], aspect='equal')
-#         # check (ax.object, name of the object , bool value for the obsject)
-#         check = CheckButtons(rax, labels, tuple(blabels))
-#         check.on_clicked(func)
-
-#     def on_change(val,fig,ax):
-#         print val
-#         pval=np.where(val>time)[0]
-#         ax.set_title(str(D[0].index[pval[-1]].time())[:11].ljust(12),loc='left')
-#         for iT,T in enumerate(D):
-#             lines[iT].set_xdata(T['x'][pval])
-#             lines[iT].set_ydata(T['y'][pval])
-
-#     def func(label):
-#         i = labels.index(label)
-#         lines[i].set_visible(not lines[i].get_visible())
-#         fig.canvas.draw()
-
-
 class Trajectory(pd.DataFrame):
     """  Define a trajectory
 
-    This class derives from pandas.DataFrame
+    This class derives from pandas.DataFrame. It handles a full 3D trajectory
+    description.
+
+    A trajectory is time-stamped and contains 3D coordinates of position, velocity and acceleration.
 
     Attributes
     ----------
@@ -138,8 +36,12 @@ class Trajectory(pd.DataFrame):
 
     time
     space
+    update
     rescale
+    generate
+    distance
     plot
+    replay
 
 
     """
@@ -166,13 +68,22 @@ class Trajectory(pd.DataFrame):
     def update(self):
         """ update class member data
 
+        This method updates the following data members
+
+        + tmin (s)
+        + tmax (s)
+        + ts   time step in second
+        + ttime (s) trajectory duration
+        + measnsp
+
         Returns
         -------
 
         bool :
-            True if Trajectroy has values, False otherwise
+            True if Trajectory has values, False otherwise
 
         """
+
         if len(self.values) != 0:
             N = len(self.index)
             self.tmin = self.index.min().value*1e-9
@@ -195,16 +106,25 @@ class Trajectory(pd.DataFrame):
         ----------
 
         pt : np.ndarray:
-            (npt x x x y) 
-            with 
+            (npt x x x y)
+            with
                 npt : number of samples
-                x : x values 
-                y : y values 
+                x : x values
+                y : y values
         t = np.ndarray
             (1 x npt)
 
         unit : str
             time unity ('s'|'ns',...)
+
+        Examples
+        --------
+
+        >>> from pylayers.mobility.trajectory import *
+        >>> traj = Trajectory()
+        >>> traj.generate()
+        >>> traj.plot()
+
 
         """
 
@@ -215,12 +135,12 @@ class Trajectory(pd.DataFrame):
         v = pt[1:,:]-pt[0:-1,:]
         # acceleration vector
         a = v[1:,:]-v[0:-1,:]
-        # 
+        #
         d = np.sqrt(np.sum(v*v,axis=1))
         s = np.cumsum(d)
-        s[-1] = 0 
+        s[-1] = 0
         s = np.roll(s,1)
-        
+
         df = {'x':pt[:-2,0],
             'y':pt[:-2,1],
             'z':pt[:-2,2],
@@ -231,18 +151,18 @@ class Trajectory(pd.DataFrame):
             'ay':a[:,1],
             'az':a[:,2],
             's':s[:-1]}
-        super(Trajectory,self).__init__(df,columns=['x','y','z','vx','vy','vz','ax','ay','az','s'],index=td[:-2])  
+        super(Trajectory,self).__init__(df,columns=['x','y','z','vx','vy','vz','ax','ay','az','s'],index=td[:-2])
         self.update()
         return self
 
 
     def rescale(self,speedkmph=3):
-        """ same length but specified speed 
+        """ same length but specified speed
 
         Parameters
         ----------
 
-        speedkmph : float 
+        speedkmph : float
             targeted mean speed in km/h
 
         Returns
@@ -262,6 +182,18 @@ class Trajectory(pd.DataFrame):
 
     def distance(self,tk):
         """ recover distance at time tk
+
+        Parameters
+        ----------
+
+        tk :
+
+        Example
+        -------
+
+        >>> from pylayers.mobility.trajectory import *
+        >>> bc = body.Body()
+
         """
         t = self.time()
         u = np.where((t>=tk-self.ts/2.)&(t<=tk+self.ts/2.))[0][0]
@@ -283,19 +215,19 @@ class Trajectory(pd.DataFrame):
         pt : nd.array()
 
         """
-        if ndim==2:                     
+        if ndim==2:
             pt = np.vstack((self['x'].values,self['y'].values)).T
         if ndim==3:
             pt = np.vstack((self['x'].values,self['y'].values,self['z'].values)).T
-        return(pt)                  
+        return(pt)
 
     def time(self,unit=0):
-        """ extract time 
+        """ extract time
 
-        Parameters 
+        Parameters
         ----------
 
-        unit : integer 
+        unit : integer
             default 0 (s) - 3 (ms) 6 (mus) 9 (ns)
 
         Returns
@@ -317,24 +249,24 @@ class Trajectory(pd.DataFrame):
         Parameters
         ----------
 
-        fig 
-        ax 
-        Nlabels : int 
+        fig
+        ax
+        Nlabels : int
         typ : 'plot'|'scatter'
         L : pylayers.gis.layout.Layout object to be displayed
-        
+
         Examples
         --------
-        
+
         .. plot::
             :include-source:
-            
+
             >>> from pylayers.mobility.trajectory import *
-            >>> import matplotlib.pyplot as plt 
-            >>> import numpy as np 
+            >>> import matplotlib.pyplot as plt
+            >>> import numpy as np
             >>> t = np.arange(0,10,0.01)
             >>> x = 2*t*np.cos(t)
-            >>> y = 3*t*np.sin(t) 
+            >>> y = 3*t*np.sin(t)
             >>> z = 0*t
             >>> pt =np.vstack((x,y,z)).T
             >>> traj = Trajectory()
@@ -357,7 +289,7 @@ class Trajectory(pd.DataFrame):
             ax.plot(self['x'],self['y'])
         elif typ == 'scatter':
             ax.scatter(self['x'],self['y'])
-        
+
         for k in np.linspace(0,len(self),Nlabels,endpoint=False):
             k = int(k)
 
@@ -367,7 +299,7 @@ class Trajectory(pd.DataFrame):
         plt.xlabel('x (meters)')
         plt.ylabel('y (meters)')
 
-        return fig,ax 
+        return fig,ax
 
     def replay(self,fig=[],ax=[],Nlabels=5,typ='plot',L=[],speed=1,**kwargs):
         """
@@ -376,12 +308,16 @@ class Trajectory(pd.DataFrame):
         Parameters
         ----------
 
-        fig 
-        ax 
-        Nlabels : int 
-        typ : 'plot'|'scatter'
-        L : pylayers.gis.layout.Layout object to be displayed
-        speed : speed ratio 
+        fig
+        ax
+        Nlabels : int
+            default 5
+        typ : string
+            'plot'|'scatter'
+        L : pylayers.gis.layout.Layout
+            Layout for body to be displayed in
+        speed : float
+            speed ratio
 
         """
 
@@ -404,7 +340,7 @@ class Trajectory(pd.DataFrame):
         if ('c' or 'color') not in kwargs:
             kwargs['color']='b'
 
-        
+
         if L!=[]:
             if isinstance(L,Layout):
                 fig,ax=L.showGs(fig=fig,ax=ax,**kwargs)
@@ -422,28 +358,25 @@ class Trajectory(pd.DataFrame):
                 labels.pop(0)
             plt.draw()
 
-  
+
         plt.ioff()
         # for k in :
         #     k = int(k)
         #     ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
         #     ax.plot(self['x'][k],self['y'][k],'*r')
         #     plt.draw()
-        
-
-
 
 def importsn(_filename='pos.csv'):
-    """ 
+    """
     ****DEPRECATED
     import simulnet csv file
 
     ****DEPRECATED
-    
+
     Parameters
     ----------
 
-    filename : string 
+    filename : string
         default 'pos.csv'
 
     Returns
@@ -461,21 +394,20 @@ def importsn(_filename='pos.csv'):
     for it in range(Ntraj):
         x = dt[dtk[3*it+1]].values
         y = dt[dtk[3*it+2]].values
-        z = np.zeros(len(x)) 
+        z = np.zeros(len(x))
         pt = np.vstack((x,y,z))
-        T=Trajectory()        
+        T=Trajectory()
         lt.append(T.generate(t=dt['time'].values,pt=pt.T,unit='s'))
-        
-    return(lt)    
+
+    return(lt)
 
 def importh5(self,_filename='simulnet_TA-Office.h5'):
-
         """ import simulnet h5 file
-        
+
         Parameters
         ----------
 
-        filename : string 
+        filename : string
             default simulnet + Layout_filename . h5
 
         Returns
@@ -500,20 +432,6 @@ def importh5(self,_filename='simulnet_TA-Office.h5'):
             lt.append(Trajectory(df))
         fil.close()
         return lt
-
-#     dt = pd.read_csv(filename)
-#     dtk = dt.keys()
-#     N = len(dtk)
-#     Ntraj = (N-1)/3
-#     lt = []
-#     for it in range(Ntraj):
-#         x = dt[dtk[3*it+1]].values
-#         y = dt[dtk[3*it+2]].values
-#         z = np.zeros(len(x))
-#         pt = np.vstack((x,y,z))
-#         lt.append(Trajectory(dt['time'].values,pt=pt.T,unit='s'))
-#     return(lt)
-
 
 if __name__ == '__main__':
     plt.ion()

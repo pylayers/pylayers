@@ -42,13 +42,21 @@ from pylayers.antprop import channelc,signature
 from pylayers.util.project import *
 # Handle UWB measurements
 from pylayers.measures import mesuwb as muwb
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
 import pdb
 
 
 def rename(_filename,itx,irx,rep='./'):
     """ rename simulation file with proper itx/irx 
+
     Parameters
     ----------
+
     _filmename : short file name
     itx : transmitter index
     irx : transmitter index
@@ -56,6 +64,7 @@ def rename(_filename,itx,irx,rep='./'):
 
     See Also
     --------
+
     tratotud
 
     """
@@ -1892,6 +1901,44 @@ class Simul(object):
         gr.show3()
 
         return(gr)
+
+    def _show3(self,rays=[],newfig = False,**kwargs):
+        """ display of the simulation configuration
+            using Mayavi
+
+        Parameters
+        ----------
+
+        rays: Ray3d object :
+            display the rays of the simulation
+        newfig : boolean (default : False)
+        kwargs of Rays.show3()
+
+
+        see also
+        --------
+
+        pylayers.gis.layout
+        pylayers.antprop.antenna
+        pylayers.antprop.rays
+
+        """
+        Atx = self.tx.A
+        Arx = self.rx.A
+        Ttx = self.tx.orientation
+        Trx = self.rx.orientation
+        ptx = self.tx.position
+        prx = self.rx.position
+
+        self.L._show3(newfig=False,opacity=0.7)
+        Atx._show3(T=Ttx.reshape(3,3),po=ptx,
+            title=False,colorbar=False,newfig=False,name = 'Antenna Tx')
+        Arx._show3(T=Trx.reshape(3,3),po=prx,
+            title=False,colorbar=False,newfig=False,name = 'Antenna Rx')
+        if rays != []:
+            rays._show3(**kwargs)
+
+
 
     def show3(self,rays=[],**kwargs):
         """ geomview display of the simulation configuration

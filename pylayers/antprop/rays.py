@@ -1,11 +1,35 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
-""" Module Rays
+"""
 
-Summary
--------
+Class Rays
+==========
 
 This modules contains Rays class
+
+.. autosummary::
+    :toctree: generated
+
+    Rays.__init__
+    Rays.__len__
+    Rays.__repr__
+    Rays.sort
+    Rays.extract
+    Rays.mirror
+    Rays.to3D
+    Rays.locbas
+    Rays.fillinter
+    Rays.length
+    Rays.eval
+    Rays.ray
+    Rays.typ
+    Rays.info
+    Rays.signature
+    Rays.show
+    Rays.show3d
+    Rays._show3
+    Rays.reciprocal
+    Rays.check_reciprocity
 
 """
 import pdb
@@ -25,7 +49,15 @@ from pylayers.util.project import *
 from pylayers.antprop.interactions import *
 from pylayers.antprop.slab import *
 from pylayers.antprop.channel import Ctilde
+from pylayers.gis.layout import Layout
 import pylayers.signal.bsignal as bs
+import h5py
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
 
 class Rays(dict):
     """ A set af rays
@@ -129,23 +161,102 @@ class Rays(dict):
                 s = s + '#Rays/#Sig: '+ str( len(self)/(1.*self.nb_origin_sig) )
 
                 s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
-               
+
                 for k in self:
                     #sk = np.shape(self[k]['sig'])[2]
                     s = s + str(k) + ': '+ str(self[k]['sig'][0,:])+'\n'
-                    #s = s + str(sk) + 'rays with' + str(k) + ' interactions'                    
+                    #s = s + str(sk) + 'rays with' + str(k) + ' interactions'
         except:
             print "problem"
             return(s)
 
         return(s)
-   
-    def reciprocal(self):
-        """ switch tx and rx
-       
+
+
+    def saveh5(self,idx=0):
+        """ save rays 
+            pyh5 format
         """
 
-       
+        filename = self.filename+'_'+str(idx) 
+        filenameh5=pyu.getlong(filename+'.h5',pstruc['DIRR3D'])
+        f=h5py.File(filenameh5,'w')
+        
+        
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            # keys not saved as attribute of h5py file
+            notattr = ['I','B','B0','delays','dis']
+            for a in self.__dict__.keys():
+                if a not in notattr:
+                    f.attrs[a]=getattr(self,a)
+
+            for k in self.keys():
+                f.create_group(str(k))
+                for kk in self[k].keys():
+                    if kk == 'sig2d':
+                        # Need to find an efficient way to save the signatures
+                        # 2d which have created the rays
+                        pass
+                    elif kk == 'nbrays':
+                        f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
+                    else:    
+                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
+            f.close()
+        except:
+            f.close()
+            raise NameError('Rays: issue when writting h5py file')
+        
+        
+
+    def loadh5(self,filename=[],idx=0):
+        """ save rays 
+            pyh5 format
+        """ 
+        if filename == []:
+            filenameh5 = self.filename+'_'+str(idx)+'.h5' 
+        else :
+            filenameh5 = filename
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRR3D'])
+
+        f=h5py.File(filename,'r')
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            for k in f.keys():
+                self.update({eval(k):{}})
+                for kk in f[k].keys():
+                    self[eval(k)].update({kk:f[k][str(kk)][:]})
+
+            for a,va in f.attrs.items():
+                setattr(self,a,va)
+            f.close()
+
+        except:
+
+            f.close()
+            raise NameError('Rays: issue when reading h5py file')
+            
+        # fill if save was filled
+
+        # temporary solution in order to avoir 
+        # creating save for Interactions classes
+        if self.filled:
+            Lname = self.filename.split('_')[0] + '.ini'
+            L=Layout(Lname)
+            self.fillinter(L)
+
+        if self.evaluated:
+            return self.eval(self.fGHz)
+
+    def reciprocal(self):
+        """ switch tx and rx
+
+        """
+
+
         r = Rays(self.pRx,self.pTx)
         r.is3D = self.is3D
         r.nray = self.nray
@@ -189,7 +300,7 @@ class Rays(dict):
         if self.evaluated :
 
             for ir in range(self.nray):
-               
+
                 iint1 = self.ray(ir)
                 iint2 = r.ray(ir)
 
@@ -197,7 +308,7 @@ class Rays(dict):
                 A1 = self.I.I[:, iint1, :, :]
                 A2 = r.I.I[:, iint2, :, :][:,::-1,:,:]
                 assert np.allclose(A1,A2),pdb.set_trace()
-               
+
                 # check bases
                 #  ray 1 : B0   | B[0]   | B[1] | B[2] | B[3] | B[4]
                 #  ray 2 : B[4] | B[3]  | B[2]  | B[1] | B[0] | B0
@@ -208,7 +319,7 @@ class Rays(dict):
 
 
     def sort(self):
-        """
+        """ sort rays
         """
         u = np.argsort(self.dis)
 
@@ -402,7 +513,7 @@ class Rays(dict):
 
         tx = self.pTx
         rx = self.pRx
-
+        
         #
         # Phase 1 : calculate Tx images height and parameterization in the
         # vertical plane
@@ -477,7 +588,7 @@ class Rays(dict):
             #print "----"
             sigsave = copy.copy(sig)
             # add parameterization of tx and rx (0,1)
-            a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))  
+            a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))
 
             # reshape signature in adding tx and rx
             sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
@@ -488,10 +599,10 @@ class Rays(dict):
             Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
 
             # pte is the sequence of point in 3D ndim =3   ( ndim x k x Nrayk)
-            pte = self[k]['pt']           
+            pte = self[k]['pt']
 
             # ndim x k+2 x Nrayk
-            pte = np.hstack((Tx, pte, Rx)) 
+            pte = np.hstack((Tx, pte, Rx))
 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 #print k,l,d[l]
@@ -505,18 +616,18 @@ class Rays(dict):
                     # get sorted indices
                     ks = np.argsort(a1e, axis=0)
                     # a1es : extended sorted horizontal + vertical parameterization
-                    a1es = np.sort(a1e, axis=0) 
+                    a1es = np.sort(a1e, axis=0)
 
                     # #### Check if it exist same parameter value  in horizontal plane
                     # #### and vertical plane. Move parameter is so.
                     da1es = np.diff(a1es,axis=0)
                     pda1es = np.where(da1es<1e-10)
                     a1es[pda1es]=a1es[pda1es]-1e-3
-                   
+
 
                     # prepare an extended sequence of points ( ndim x  (Nint+k+2) x Nrayk )
-                    ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))    
-                   
+                    ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))
+
                     #
                     # Boolean ceil/floor detector
                     #
@@ -849,7 +960,10 @@ class Rays(dict):
             # si : (i+1) x r
             r3d[k]['si']  = lsi[:,u]
             r3d[k]['dis'] = rlength[u]
-           
+
+        r3d.origin_sig_name = self.origin_sig_name
+        r3d.Lfilename = L.filename
+        r3d.filename = L.filename.split('.')[0] + '_' + str(r3d.nray)
         return(r3d)
 
     def length(self,typ=2):
@@ -888,7 +1002,7 @@ class Rays(dict):
 
         # nsegment x k
         key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
-       
+
         # maximum number for refering to segment
         # not to be confused with a number of segment
 
@@ -1003,7 +1117,7 @@ class Rays(dict):
                 # si : (i+1) x r
                 #self[k]['si'] = lsi
                 #self[k]['dis'] = np.sum(lsi,axis=0)
-               
+
                 # normal : 3 x i x r
                 vn = self[k]['norm']
                 # s_in : 3 x i x r
@@ -1305,17 +1419,17 @@ class Rays(dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-       
+
         tsl = np.array(())
         rsl = np.array(())
-       
+
         # loop on group of interactions
         for k in self:
 
             if k !=0:
-               
+
                 uR = uT = uD = uRf = uRc = 0.
-               
+
                 # structure number (segment or point)
                 # nstr : i x r
                 nstr = self[k]['sig'][0, 1:-1, :]
@@ -1505,7 +1619,7 @@ class Rays(dict):
         """
 
         #print 'Rays evaluation'
-       
+        self.fGHz=fGHz
         # evaluation of interaction
         self.I.eval(fGHz)
         # evaluation of base B  (2x2)
@@ -1530,7 +1644,6 @@ class Rays(dict):
         #nf : number of frequency point
         nf = self.I.nf
 
-        self.drayidx = {}
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
         # loop on interaction blocks   
@@ -1898,6 +2011,67 @@ class Rays(dict):
             os.system(chaine)
         else:
             return(filename)
+
+    @mlab.show
+    def _show3(self,L=[],ilist=[],rlist=[],newfig=False):
+        """ plot 3D rays within the simulated environment
+            using Mayavi
+
+        Parameters
+        ----------
+
+        L : Layout object
+            Layout to be displayed
+        ilist : list 
+            list of group of interactions
+        rlist : list
+            list of index rays
+        newfig : boolean (default: False)
+            if true create a new mayavi figure 
+            else : use the current
+
+        """
+        if newfig:
+            mlab.clf()
+            f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+        else :
+            f = mlab.gcf()
+
+        
+        if L != []:
+            try:
+                L.filename
+            except:
+                raise NameError('L argument must be a layout object')
+
+            L._show3()
+
+        if ilist == []:
+            nbi = self.keys()
+        else :
+            if not isinstance(ilist,list):
+                nbi = np.array(([ilist]))
+            else :
+                nbi = np.array((ilist))
+
+        if not isinstance(rlist,list):
+            rlist=[rlist]
+
+        for i in nbi:
+            if rlist == []:
+                r = range(np.shape(self[i]['pt'])[2])
+            else :
+                r = np.array((rlist)) 
+            # number of rays
+            nbr = len(r) 
+            # current number of interactions
+            cnbi = i + 2
+            pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
+            lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+            mesh = tvtk.PolyData(points=pt.T, polys=lines)
+            mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
+                                                 color=(0, 0, 0), )
+            f.children[-1].name='Rays with ' + str(i) + 'interactions'
 
     def show3(self,
               L=[],

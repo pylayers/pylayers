@@ -8,13 +8,6 @@ import numpy as np
 def vsh(A, dsf=1):
     """
 
-    Parameters
-    ----------
-
-    A   :  antenna
-    dsf :  int
-        down sampling factor  'default 1'
-
     Summary
     -------
 
@@ -29,6 +22,13 @@ def vsh(A, dsf=1):
 
     The vsh coefficient are organized differently
     should be better for compression along frequency axis
+
+    Parameters
+    ----------
+
+    A   :  antenna
+    dsf :  int
+        down sampling factor  'default 1'
 
 
     """

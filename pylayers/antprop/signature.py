@@ -1,10 +1,69 @@
 #-*- coding:Utf-8 -*-
 """
-Module : signature
+Class Signatures
+================
 
-functions
+.. autosummary::
+    :toctree: generated/
 
-showsig
+    Signatures.__init__
+    Signatures.__repr__
+    Signatures.__len__
+    Signatures.num
+    Signatures.info
+    Signatures.save
+    Signatures.load
+    Signatures.sp
+    Signatures.procone
+    Signatures.propaths
+    Signatures.propaths2
+    Signatures.procone2
+    Signatures.calsig
+    Signatures.run
+    Signatures.run1
+    Signatures.run4
+    Signatures.run5
+    Signatures.run2
+    Signatures.run3
+    Signatures.meta
+    Signatures.lineofcycle
+    Signatures.cones
+    Signatures.unfold
+    Signatures.show
+    Signatures.showi
+    Signatures.rays
+
+Class Signature
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+    Signature.__init__
+    Signature.__repr__
+    Signature.info
+    Signature.split
+    Signature.ev2
+    Signature.evf
+    Signature.ev
+    Signature.unfold
+    Signature.evtx
+    Signature.image
+    Signature.backtrace
+    Signature.sig2beam
+    Signature.sig2ray
+
+Utility functions
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+    showsig
+    gidl
+    frontline
+    edgeout2
+    edgeout
 
 """
 import doctest
@@ -23,6 +82,7 @@ import matplotlib.pyplot as plt
 from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.antprop.rays import Rays
+import h5py
 import copy
 import pickle
 import logging
@@ -320,6 +380,7 @@ def edgeout(L,g):
         g.add_edge(str(i0),str(i1),output=output)
 
     return(g)
+
 class Signatures(dict):
     """ gathers all signatures from a layout given tx and rx
 
@@ -438,12 +499,66 @@ class Signatures(dict):
 
                 # s = s + '   '+ str(a[i,1,:]) + '\n'
 
+    def saveh5(self):
+        """ Save signatures
+            h5py format
+        """
+
+        filename=pyu.getlong(self.filename+'.h5',pstruc['DIRSIG'])
+        f=h5py.File(filename,'w')
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            f.attrs['L']=self.L.filename
+            f.attrs['source']=self.source
+            f.attrs['target']=self.target
+            f.attrs['cutoff']=self.cutoff
+            for k in self.keys():
+                f.create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
+            f.close()
+        except:
+            f.close()
+            raise NameError('Signature: issue when writting h5py file')
+
+
+    def loadh5(self,filename=[]):
+        """ Load signatures
+            h5py format
+        """
+        if filename == []:
+            _filename = self.filename
+        else :
+            _filename = filename
+
+        filename=pyu.getlong(_filename+'.h5',pstruc['DIRSIG'])
+
+        f=h5py.File(filename,'r')
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            for k in f.keys():
+                self.update({eval(k):f[k][:]})
+            f.close()
+        except:
+            f.close()
+            raise NameError('Signature: issue when reading h5py file')
+
+
+        _fileL=pyu.getshort(filename).split('_')[0]+'.ini'
+        self.L=layout.Layout(_fileL)
+        try:
+            self.L.dumpr()
+        except:
+            self.L.build()
+            self.L.dumpw()
+
+
     def save(self):
         """ Save signatures
         """
         L=copy.deepcopy(self.L)
         del(self.L)
-        filename=pyu.getlong(self.filename,pstruc['DIRSIG'])
+        filename=pyu.getlong(self.filename+'.h5',pstruc['DIRSIG'])
         with open(filename, 'wb') as handle:
           pickle.dump(self, handle)
         self.L=L
@@ -2482,7 +2597,7 @@ class Signatures(dict):
                         rays[nint]['sig'][:, :, 0] = sig
 
         rays.nb_origin_sig = len(self)
-
+        rays.origin_sig_name = self.filename
         return rays
 
 class Signature(object):

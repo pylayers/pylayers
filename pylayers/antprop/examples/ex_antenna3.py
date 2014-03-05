@@ -8,7 +8,7 @@ import pdb
 #
 filename = 'S1R1.mat'
 
-A = Antenna(filename,'ant/UWBAN/Matfile')
+A = Antenna(filename,directory='ant/UWBAN/Matfile')
 
 #plot(freq,angle(A.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]*exp(2j*pi*freq.reshape(len(freq))*electricalDelay)))
 freq = A.fa.reshape(104,1,1)/1e9
@@ -26,12 +26,12 @@ dsf = 2
 #
 A = vsh(A,dsf)
 plt.ion()
-A.C.info()
+A.C
 A.C.s1tos2(15)
-A.C.info()
+A.C
 A.C.s2tos3(1e-2)
-A.C.info()
-A.C.show(typ='s2',titre=filename)
+A.C
+A.C.show(typ='vsh2',titre=filename)
 plt.show()
-A.C.show(typ='s3',titre=filename)
+A.C.show(typ='vsh3',titre=filename)
 plt.show()

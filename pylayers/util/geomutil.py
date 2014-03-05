@@ -1,65 +1,54 @@
 # -*- coding:Utf-8 -*-
+"""
+.. currentmodule:: pylayers.util.geomutil
+
+=================================================
+Geometry Module (:mod:`pylayers.util.geomutil`)
+================================================
+
+Geomview Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    Geomview
+    Geomlist
+    Geomoff
+    GeomVect
+
+
+2 points functions
+===================
+
+.. autosummary::
+    :toctree: generated/
+
+    SignedArea
+    Centroid
+    Lr2n
+    isBetween
+
+Functions2
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+    pvec
+    pvecn
+    vec_sph
+    ellipse
+    ptonseg
+
+
+"""
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 import shapely.geometry as sh
 import scipy.linalg as la
 import pdb
 import logging
-#! /usr/bin/python
-# geomutil.py
-""" functions related to geometry
-
- Routines
- --------
-
-     SignedArea(p=np.array([[0,10,10,0],[0,0,-2,-2]]))
-
-     Centroid(p=np.array([[0,10,10,0],[0,0,-2,-2]]))
-
-     Lr2n(p=np.array([[0,10,10,0],[0,0,-2,-2]]),closed=True)
-
-     isBetween(p1, p2, p,epsilon=1e-5)
-
-     pvec(v1,v2)
-
-     pvecn(v1,v2)
-
-     vec_sph(th,ph)
-
-     ellipse(fd,p,vth,vph,Eth,Eph,N)
-
-     ptonseg(pta,phe,pt)
-
-     linet(sp,p1,p2,al,col,lwidth)
-
-     ccw(a,b,c)
-
-     intersect(a,b,c,d)
-
-     mul3(A,B)
-
-     MRot3(a,axe)
-
-     MEulerAngle(alpha,beta,gamma)
-
-     SphericalBasis(a)
-
-     angledir(s)
-
-     BTB_rx(a_g,T)
-
-     BTB_tx(a_g,T)
-
-     plotPolygon(poly,color="#abcdef",alpha=0.8)
-
-     simplifyPolygon(poly1)
-
-     shrinkPolygon(poly,d=0.1)
-
-     shrinkPolygon2(poly1,d=0.1)
-
-
-"""
 import networkx as nx
 import doctest
 import os
@@ -597,8 +586,8 @@ class Geomoff(Geomview):
         Parameters
         ----------
 
-        theta : np.array (Nt x 1 )
-        phi   : np.array (1 x Np)
+        theta : np.array (,Nt)
+        phi   : np.array (,Np)
         E     : np.array complex  (Nt,Np)
         po    : origin (1x3)
         T     : rotation matrix (3x3)
@@ -611,9 +600,9 @@ class Geomoff(Geomview):
 
            >>> from pylayers.util.geomutil import *
            >>> import numpy as np
-           >>> th = np.arange(0,np.pi,0.05)[:,np.newaxis]
-           >>> ph = np.arange(0,2*np.pi,0.05)[np.newaxis,:]
-           >>> E = 1.5*np.sin(th)*np.cos(0*ph)
+           >>> th = np.arange(0,np.pi,0.05)
+           >>> ph = np.arange(0,2*np.pi,0.05)
+           >>> E = 1.5*np.sin(th[:,np.newaxis])*np.cos(0*ph[np.newaxis,:])
            >>> g = Geomoff('dipole')
            >>> g.pattern(th,ph,E)
            >>> g.show3()
@@ -713,24 +702,6 @@ class Geomoff(Geomview):
 
         fd.close()
 
-#class Polygon2(object):
-#        def __init__(self,p):
-#                self.p = p
-#
-#        def SignedArea(self,p):
-#                """
-#                area  = P.SignedArea()
-#                p : coordinates of the polygon vertices (2 x Np)
-#                R eferences: [O'Rourke (C)] Thm. 1.3.3, p. 21; [Gems II] pp. 5-6:
-#                       "The Area of a Simple Polygon", Jon Rokne. Dan Sunday's
-#                       explanation:
-#                http://www.cgafaq.info/wiki/Polygon_Area
-#                """
-#                self.area = sum(np.hstack((self.p[0,1::],self.p[0:0]))*(np.hstack((self.p[1,2::],self.p[1,0:2]))-self.p[1,:])/2.
-#
-#
-
-
 def angular(p1, p2):
     """ determine angle between p1 and p2 in [0 2pi]
 
@@ -743,10 +714,12 @@ def angular(p1, p2):
 
     Notes
     -----
-        weird the origin is p2
+
+    weird the origin is p2
 
     Examples
     --------
+
     >>> import numpy as np
     >>> p1 = np.array([0,0])
     >>> p21 = np.array([1,0])
@@ -1472,7 +1445,7 @@ def isleft(a,b,c):
     .. plot::
         :include-source:
 
-        >>>from pylayers.util.plotutil import *
+        >>> from pylayers.util.plotutil import *
         >>> import scipy as sp
         >>> import numpy as np
         >>> from pylayers.util.geomutil import *
@@ -3385,16 +3358,17 @@ def mirror(p,pa,pb):
 
     .. plot::
         :include-source:
+
         >>> from pylayers.util.geomutil import *
         >>> from pylayers.util.plotutil import *
+        >>> import matplotlib.pyplot as plt
         >>> import numpy as np
-        >>> p = np.random.randn((2,1000))
+        >>> p = np.random.randn(2,1000)
         >>> pa  = np.array([0,0])
         >>> pb  = np.array([0,1])
         >>> M = mirror(p,pa,pb)
-        >>> displot(pa,pb)
-        >>> plot(p[0,:],p[1,:],'or',alpha=0.2)
-        >>> plot(M[0,:],M[1,:],'ob',alpha=0.2)
+        >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
+        >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
 
     """
 

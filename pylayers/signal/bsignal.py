@@ -1,17 +1,288 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
 """
-Module Bsignal
+.. currentmodule:: pylayers.signal.bsignal
 
-Summary
-=======
+.. autosummary::
+    :toctree: generated
 
-Bsignal
-Usignal
-TUsignal
-FUsignal
-FHsignal
+Bsignal Class
+=============
 
+.. autosummary::
+    :toctree: generated/
+
+    Bsignal.__init__
+    Bsignal.__repr__
+    Bsignal.extract
+    Bsignal.save
+    Bsignal.load
+    Bsignal.setx
+    Bsignal.sety
+    Bsignal.stem
+    Bsignal.step
+    Bsignal.cformat
+    Bsignal.imshow
+    Bsignal.plot
+    Bsignal.flatteny
+    Bsignal.gating
+    Bsignal.len
+
+Usignal Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Usignal.__init__
+    Usignal.__repr__
+    Usignal.__add__
+    Usignal.__sub__
+    Usignal.__mul__
+    Usignal.setx
+    Usignal.dx
+    Usignal.width
+    Usignal.expand
+    Usignal.max
+    Usignal.min
+    Usignal.truncate
+    Usignal.align
+    Usignal.abs
+    Usignal.eprfl
+    Usignal.energy
+    Usignal.fftshift
+    Usignal.zright
+    Usignal.zleft
+    Usignal.zlr
+
+TBsignal Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    TBsignal.__init__
+    TBsignal.__repr__
+    TBsignal.plot
+    TBsignal.translate
+    TBsignal.b2u
+
+TUsignal Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.__init__
+    TUsignal.__repr__
+    TUsignal.diff
+    TUsignal.info
+
+Fourier Functions
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.ft
+    TUsignal.fft
+    TUsignal.fftsh
+    TUsignal.ftshift
+    TUsignal.psd
+    TUsignal.Yadd_zeros2l
+    TUsignal.Yadd_zeros2r
+    TUsignal.esd
+
+Visualization Functions
+-----------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.show
+    TUsignal.shift
+    TUsignal.filter
+    TUsignal.correlate
+    TUsignal.corrgauss
+    TUsignal.resample
+    TUsignal.convolve
+
+Energy Functions
+----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.Epercent
+    TUsignal.Etau0
+    TUsignal.Ewin
+    TUsignal.Etot
+    TUsignal.Efirst
+    TUsignal.Efirst_loc
+    TUsignal.Efirst_corr
+    TUsignal.Efirst_toath
+    TUsignal.Emax
+
+TOA Estimation Functions
+------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.tau_Emax
+    TUsignal.toa_max2
+    TUsignal.toa_new
+    TUsignal.toa_win
+    TUsignal.toa_max
+    TUsignal.toa_th
+    TUsignal.toa_cum
+    TUsignal.toa_th_tmtm
+    TUsignal.toa_th_tm
+    TUsignal.toa_th_tmt
+    TUsignal.toa_cum_tm
+    TUsignal.toa_cum_tmtm
+    TUsignal.toa_cum_tmt
+    TUsignal.taumax
+    TUsignal.tau_moy
+    TUsignal.delays
+    TUsignal.tau_rms
+
+Input Output Functions
+-----------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.readcir
+    TUsignal.readuwb
+    TUsignal.ecdf
+
+TUDsignal Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+    TUDsignal.__init__
+    TUDsignal.__repr__
+    TUDsignal.fig
+
+FBsignal Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    FBsignal.__init__
+    FBsignal.__repr__
+    FBsignal.plotri
+    FBsignal.plot
+    FBsignal.plotdB
+    FBsignal.stem
+
+FUsignal Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    FUsignal.__init__
+    FUsignal.__repr__
+    FUsignal.__add__
+    FUsignal.__sub__
+    FUsignal.__mul__
+    FUsignal.__div__
+    FUsignal.window
+    FUsignal.get
+    FUsignal.info
+    FUsignal.energy
+    FUsignal.applyFriis
+    FUsignal.enthrsh
+    FUsignal.dBthrsh
+    FUsignal.zp
+    FUsignal.newdf
+    FUsignal.dftresamp
+    FUsignal.resample
+    FUsignal.symH
+    FUsignal.symHz
+    FUsignal.align
+    FUsignal.ifft
+    FUsignal.ift
+    FUsignal.iftshift
+    FUsignal.show
+    FUsignal.decimate
+    FUsignal.tap
+
+FUDsignal Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+    FUDsignal.__init__
+    FUDsignal.__repr__
+    FUDsignal.minphas
+    FUDsignal.totud
+    FUDsignal.iftd
+    FUDsignal.ft1
+    FUDsignal.ftau
+    FUDsignal.cir
+    FUDsignal.plot3d
+    FUDsignal.ft2
+
+
+FUDAsignal Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+    FUDAsignal.__init__
+    FUDAsignal.__repr__
+    FUDAsignal.cut
+    FUDAsignal.sort
+    FUDAsignal.showtap
+    FUDAsignal.tap
+
+FHsignal Class
+================
+
+.. autosummary::
+    :toctree: generated/
+
+    FHsignal.__init__
+    FHsignal.__repr__
+    FHsignal.__mul__
+    FHsignal.ifft
+    FHsignal.unrex
+
+Noise Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    Noise.__init__
+    Noise.amplify
+    Noise.gating
+
+EnImpulse Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+    EnImpulse.__init__
+    EnImpulse.demo
+
+MaskImpulse Class
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+    MaskImpulse.__init__
+    MaskImpulse.show
 """
 import doctest
 import os
@@ -521,6 +792,7 @@ class Bsignal(object):
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -997,13 +1269,13 @@ class Usignal(Bsignal):
         .. plot::
             :include-source:
 
-            >>> from pylayers.signal import *
-            >>> from matplotlib.pylab import *
-            >>> ip = EnImpulse()
-            >>> fig,ax = ip.plot(typ=['v'])
-            >>> ip.zlr(-10,10)
-            >>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
-            >>> show()
+            #>>> from pylayers.signal import *
+            #>>> from matplotlib.pylab import *
+            #>>> ip = EnImpulse()
+            #>>> fig,ax = ip.plot(typ=['v'])
+            #>>> ip.zlr(-10,10)
+            #>>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
+            #>>> show()
 
         """
         dx = self.dx()
@@ -1163,6 +1435,7 @@ class TBsignal(Bsignal):
 
         Notes
         -----
+
         This function exploits linear interp1d
 
         Examples
@@ -1171,19 +1444,19 @@ class TBsignal(Bsignal):
         .. plot::
             :include-source:
 
-            >>> from pylayers.signal.bsignal import *
-            >>> import matplotlib.pyplot as plt
-            >>> x = np.array( [ 1, 3 , 6 , 11 , 18])
-            >>> y = np.array( [ 0,1 ,-5, 8 , 10])
-            >>> sb = TBsignal(x,y)
-            >>> su20 = sb.b2u(20)
-            >>> su100 = sb.b2u(100)
-            >>> fi = plt.figure()
-            >>> sb.stem()
-            >>> fig,ax=su20.plot(color='k')
-            >>> fig,ax=su100.plot(color='r',fig=fig,ax=ax)
-            >>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
-            >>> plt.show()
+            #>>> from pylayers.signal.bsignal import *
+            #>>> import matplotlib.pyplot as plt
+            #>>> x = np.array( [ 1, 3 , 6 , 11 , 18])
+            #>>> y = np.array( [ 0,1 ,-5, 8 , 10])
+            #>>> sb = TBsignal(x,y)
+            #>>> su20 = sb.b2u(20)
+            #>>> su100 = sb.b2u(100)
+            #>>> fi = plt.figure()
+            #>>> sb.stem()
+            #>>> fig,ax = su20.plot(color='k')
+            #>>> fig,ax = su100.plot(color='r',fig=fig,ax=ax)
+            #>>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
+            #>>> plt.show()
 
         """
 
@@ -1221,22 +1494,22 @@ class TUsignal(TBsignal, Usignal):
         .. plot::
             :source-include:
 
-            >>> import numpy as np
-            >>> from pylayers.signal.bsignal import *
-            >>> from matplotlib.pyplot import *
-            >>> x  = np.arange(0,1.0,0.1)
-            >>> y  = x**3
-            >>> su = TUsignal(x,y)
-            >>> dsu   = su.diff()
-            >>> ddsu  = dsu.diff()
-            >>> dddsu = ddsu.diff()
-            >>> fi = plt.figure()
-            >>> fig,ax=su.plot(typ=['v'] ,color='k')
-            >>> fig,ax=dsu.plot(typ=['v'],color='g',fig=fig,ax=ax)
-            >>> fig,ax=ddsu.plot(typ=['v'],color='r',fig=fig,ax=ax)
-            >>> fig,ax=dddsu.plot(typ=['v'],color='b',fig=fig,ax=ax)
-            >>> ti = plt.title('TUsignal : diff')
-            >>> plt.show()
+            #>>> import numpy as np
+            #>>> from pylayers.signal.bsignal import *
+            #>>> from matplotlib.pyplot import *
+            #>>> x  = np.arange(0,1.0,0.1)
+            #>>> y  = x**3
+            #>>> su = TUsignal(x,y)
+            #>>> dsu   = su.diff()
+            #>>> ddsu  = dsu.diff()
+            #>>> dddsu = ddsu.diff()
+            #>>> fi = plt.figure()
+            #>>> fig,ax=su.plot(typ=['v'] ,color='k')
+            #>>> fig,ax=dsu.plot(typ=['v'],color='g',fig=fig,ax=ax)
+            #>>> fig,ax=ddsu.plot(typ=['v'],color='r',fig=fig,ax=ax)
+            #>>> fig,ax=dddsu.plot(typ=['v'],color='b',fig=fig,ax=ax)
+            #>>> ti = plt.title('TUsignal : diff')
+            #>>> plt.show()
 
         """
         V = TUsignal()
@@ -1340,8 +1613,6 @@ class TUsignal(TBsignal, Usignal):
         -------
         O : Output filetered TUsignal
 
-        Examples
-        --------
 
         """
         O = TUsignal()
@@ -1357,10 +1628,6 @@ class TUsignal(TBsignal, Usignal):
     def ftshift(self):
         """ return the associated FUsignal
 
-        Examples
-        --------
-
-        >>> from pylayers.signal.bsignal import *
 
         """
         A  = self.fftsh()
@@ -1467,29 +1734,6 @@ class TUsignal(TBsignal, Usignal):
 
 
 
-#       def waterfall(self,N,typ='l'):
-#          """
-#          """
-#          min   = self.y.min()
-#          max   = self.y.max()
-#          ec    = max-min
-#          ecmax = ec.max()
-#          sh = np.shape(self.y)
-#          Nmax    = sh[0]
-#          N1    = int(minimum(N,Nmax))
-#
-#          x     = self.x
-#          r.postscript('waterfall.eps')
-#          y1    = self.y[0,:] + (N1-1)*ecmax
-#          yN1   = self.y[N1-1,:]
-#          r.plot(x, yN1,  main='Waterfall', xlab='Time (ns)', ylab='y', type=typ, col='black' ,  ylim=r.range(y1,yN1) )
-#          for i in range(N1-1):
-#              yi = self.y[i+1,:] + (N1-i)*ecmax
-#          #       stem(self.x,self.y[i+1,:]+(i+1)*ecmax)
-#              if (typ=='o'):
-#                  r.points(x,yi,col='black')
-#              r.lines(x,yi,col='black')
-#          #show()
     def shift(self, tau):
         """ shift the Usignal by tau (expressed in the same unit as Bsignal.x)
 
@@ -1571,7 +1815,6 @@ class TUsignal(TBsignal, Usignal):
         Ns = len(s.x)
         Nxc = len(xcorr)
         t_left = x[0] + dx * (-np.arange(Ns / 2))[-1:0:-1]
-#print shape(t_left),shape(x)
         t = np.concatenate((t_left, x))
         Nt = len(t)
         Nright = Nxc - Nt
@@ -1682,11 +1925,13 @@ class TUsignal(TBsignal, Usignal):
 
         Parameters
         ----------
+
         N : integer
             number of additinal zero values
 
         See Also
         --------
+
         Yadd_zeros2r
 
 
@@ -1700,11 +1945,18 @@ class TUsignal(TBsignal, Usignal):
 
     def Yadd_zeros2r(self, N):
         """ time domain extension on right with N zeros
-       
+
         Parameters
         ----------
+
         N : integer
             number of additinal zero values
+
+        See Also
+        --------
+
+        Yadd_zeros2l
+
         """
         te = self.dx()
         self.y = np.hstack((self.y, np.zeros(N)))
@@ -1713,14 +1965,12 @@ class TUsignal(TBsignal, Usignal):
         self.x = np.hstack((self.x, aux - (aux[0] - t1 - te)))
 
 
-#-------------------------------------------------------------
-# Energy content
-#
     def Epercent(self, N=10):
         """ return N percentile delay of a cdf
 
         Parameters
         ----------
+
         N : 10
 
         """
@@ -1745,7 +1995,7 @@ class TUsignal(TBsignal, Usignal):
         sym   : symetrie factor 0.5 = symetric (0.25)
         dB    : logscale indicator (True)
         """
-#       u  = nonzero((tau0 + Tint*(1-sym) > self.x) & (self.x > tau0 - Tint*sym))
+        #u  = nonzero((tau0 + Tint*(1-sym) > self.x) & (self.x > tau0 - Tint*sym))
         u = nonzero((tau0 + Tint > self.x) & (self.x > tau0))
         etau0 = self.dx() * sum(self.y[u] * np.conj(self.y[u]))
         if dB:
@@ -2129,7 +2379,7 @@ class TUsignal(TBsignal, Usignal):
 
     def toa_max(self, nint):
         """ calculate time of arrival
-       
+
         descendant threshold based toa estimation
 
         Parameters
@@ -3474,10 +3724,11 @@ class FUDsignal(FUsignal):
 
     Attributes
     ----------
-        x    : ndarray 1xN
-        y    : ndarray MxN
-        tau0 : delay
-        tau1 : additional delay
+
+    x    : ndarray 1xN
+    y    : ndarray MxN
+    tau0 : delay
+    tau1 : additional delay
 
     Methods
     -------
@@ -3487,6 +3738,7 @@ class FUDsignal(FUsignal):
     iftd    : inverse Fourier transform
     ft1     : construct CIR from ifft(RTF)
     ft2     :
+
     """
     def __init__(self, x=np.array([]), y=np.array([]), tau0=np.array([])):
         FUsignal.__init__(self, x, y)
@@ -4133,10 +4385,8 @@ class EnImpulse(TUsignal):
           thresh (dB)    (def = 10dB)
           fe     (GHz)   (def = 100GHz)
 
-    Example
-    -------
 
-        """
+    """
     def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, fe=20):
         TUsignal.__init__(self)
         Tp = (2 / (band * np.pi)) * np.sqrt(abs(thresh) * np.log(10) /20.)
@@ -4183,12 +4433,15 @@ class MaskImpulse(TUsignal):
           thresh (dB)    (def = 10dB)
           fe     (GHz)   (def = 100GHz)
 
-    >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=20)
-    >>> Eip1  = ip.energy()
-    >>> ESDip = ip.esd()
-    >>> df    = ESDip.dx()
-    >>> Eip2  = sum(ESDip.y)*df
-    >>> err   = Eip1-Eip2
+    Examples
+    --------
+
+        >>> ip    = EnImpulse(fc=4,band=3,thresh=10,fe=20)
+        >>> Eip1  = ip.energy()
+        >>> ESDip = ip.esd()
+        >>> df    = ESDip.dx()
+        >>> Eip2  = sum(ESDip.y)*df
+        >>> err   = Eip1-Eip2
 
     """
     def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):

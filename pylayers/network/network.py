@@ -116,8 +116,9 @@ class Node(nx.MultiGraph):
 
 
 class Network(nx.MultiDiGraph):
-    """Network class
-    inherit of networkx.Graph()
+    """ Network class
+
+    inherits of networkx.Graph()
 
     Attributes
     ----------
@@ -138,9 +139,9 @@ class Network(nx.MultiDiGraph):
     Methods
     -------
 
-    get_RAT(self)                    : Get RAT from nodes of the network
-    connect(self)                    : Connect each node from a rat together
-    create(self)                    : compute get_RAT(),get_pos() and connect()
+    get_RAT(self)  : Get RAT from nodes of the network
+    connect(self)  : Connect each node from a rat together
+    create(self)   : compute get_RAT(),get_pos() and connect()
     update_LDP(self,n1,n2,RAT,LDP=None,value=[])    : update Location Dependent Parameter  
     compute_LDP(self,RAT) : compute the LDP value thanks to a ElectroMag Solver 
     update_pos(self,n,p=np.array)            : update node (or node list) position
@@ -175,8 +176,6 @@ class Network(nx.MultiDiGraph):
             s = s + 'number of agents: ' + str(len(self.nodes())) +'\n'
             s = s + str(self.nodes()) + '\n'
 
-
-            
             typ = nx.get_node_attributes(self,'type').values() 
 
             nodes = np.array(nx.get_node_attributes(self,'type').items())
@@ -206,11 +205,11 @@ class Network(nx.MultiDiGraph):
             for e1,e2 in self.edges():
                 for r in self.edge[e1][e2].keys():
                     rat = r
-                    TOA = self.edge[e1][e2][r]['TOA'][0]          
-                    stdTOA = self.edge[e1][e2][r]['TOA'][1]          
-                    pr = self.edge[e1][e2][r]['Pr'][0]          
-                    stdpr = self.edge[e1][e2][r]['Pr'][1]  
-                    try :        
+                    TOA = self.edge[e1][e2][r]['TOA'][0]
+                    stdTOA = self.edge[e1][e2][r]['TOA'][1]
+                    pr = self.edge[e1][e2][r]['Pr'][0]
+                    stdpr = self.edge[e1][e2][r]['Pr'][1]
+                    try :
                         tTOA = self.edge[e1][e2][r]['tTOA']
                     except:
                         tTOA = 'nan'
@@ -229,11 +228,11 @@ class Network(nx.MultiDiGraph):
 
 
     def perm(self,iterable,r,key,d=dict()):
-        """ combi = itertools.permutation(iterable,r) adapted 
-    
+        """ combi = itertools.permutation(iterable,r) adapted
+
         This is an adapted version of itertools.permutations in order to be complient with the networkx.add_edges_from method.
         itertools.permutations(range(4), 3) --> 012 013 021 023 031 302 102 103 ...
-    
+
         self.perm([10,11],2,'wifi') -->     (10, 11, 'wifi', {'Pr': [], 'TOA': []}) 
                                 (11, 10, 'wifi', {'Pr': [], 'TOA': []})
 
@@ -247,10 +246,10 @@ class Network(nx.MultiDiGraph):
 
 
         Returns
-        ------     
+        --------
 
         out : tuple(node_list,r,RAT,d):
-        node_list    : list of node1        
+        node_list    : list of node1
         r        : gather r node in the tuple
         RAT        : the specified RAT
         d        : dictionnary of RAT attribute
@@ -262,11 +261,11 @@ class Network(nx.MultiDiGraph):
         >>> N=Network()
         >>> l= [0,1,2]
         >>> key='toto'
-        >>> d=dict(key1=1,key2=2) 
+        >>> d=dict(key1=1,key2=2)
         >>> perm=N.perm(l,2,key,d)
-        >>> perm.next()        
+        >>> perm.next()
         (0, 1, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
-        >>> perm.next()        
+        >>> perm.next()
         (0, 2, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})        for l in self.LDP:
         >>> perm.next()
         (1, 0, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
@@ -306,11 +305,11 @@ class Network(nx.MultiDiGraph):
 
     def combi(self,iterable,r,key,d=dict()):
         """ combi = itertools.combination(iterable,r) adapted 
-    
+
         This is an adapted version of itertools.combinations in order to be complient with the networkx.add_edges_from method.
         itertools.combinations('ABCD', 2) --> AB AC AD BC BD CD
         itertools.combinations(range(4), 3) --> 012 013 023 123
-    
+
         self.combi([10,11,12],2,'wifi') -->     (10, 11, 'wifi', {'Pr': [], 'TOA': []}) 
                                 (10, 12, 'wifi', {'Pr': [], 'TOA': []})
                             (11, 12, 'wifi', {'Pr': [], 'TOA': []})
@@ -352,7 +351,7 @@ class Network(nx.MultiDiGraph):
 #        for l in self.LDP:
 #            d[l]=[]
 
-            
+
 
         pool = iterable
         n = len(pool)

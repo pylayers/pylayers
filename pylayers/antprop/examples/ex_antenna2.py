@@ -1,10 +1,10 @@
 from pylayers.antprop.antenna import *
 from pylayers.antprop.antvsh import *
-import matplotlib.pylab as plt 
+import matplotlib.pylab as plt
 from numpy import *
 import pdb
 """
-This test : 
+This test :
 
     1 : loads a measured antenna
     2 : applies an electrical delay obtained from data with getdelay method
@@ -13,7 +13,7 @@ This test :
 """
 filename = 'S1R1.mat'
 
-A = Antenna(filename,'ant/UWBAN/Matfile')
+A = Antenna(filename,directory='ant/UWBAN/Matfile')
 
 #plot(freq,angle(A.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]*exp(2j*pi*freq.reshape(len(freq))*electricalDelay)))
 freq = A.fa.reshape(104,1,1)

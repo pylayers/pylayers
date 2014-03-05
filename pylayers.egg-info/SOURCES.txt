@@ -16,6 +16,7 @@ pylayers/antprop/coeffModel.py
 pylayers/antprop/coverage.py
 pylayers/antprop/delaydispersion.py
 pylayers/antprop/interactions.py
+pylayers/antprop/loadTMP.py
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
@@ -23,20 +24,16 @@ pylayers/antprop/signature.py
 pylayers/antprop/signew.py
 pylayers/antprop/slab.py
 pylayers/antprop/spharm.py
+pylayers/antprop/testnico.py
 pylayers/exploit/__init__.py
 pylayers/exploit/simnet.py
 pylayers/gis/__init__.py
-pylayers/gis/basemapexample.py
 pylayers/gis/cycles.py
 pylayers/gis/furniture.py
 pylayers/gis/layout.py
-pylayers/gis/lireifc.py
-pylayers/gis/lireifc2.py
 pylayers/gis/osmparser.py
-pylayers/gis/readHGT.py
 pylayers/gis/readvrml.py
 pylayers/gis/selectl.py
-pylayers/gis/selectl2.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
@@ -60,11 +57,8 @@ pylayers/location/geometric/util/model.py
 pylayers/location/geometric/util/scene.py
 pylayers/location/learning/__init__.py
 pylayers/location/learning/loclearn.py
-pylayers/measures/1-Description.py
 pylayers/measures/__init__.py
-pylayers/measures/mesmimo.py
 pylayers/measures/mesuwb.py
-pylayers/measures/ptin.py
 pylayers/mobility/__init__.py
 pylayers/mobility/agent.py
 pylayers/mobility/trajectory.py
@@ -74,9 +68,7 @@ pylayers/mobility/body/body.py
 pylayers/mobility/body/body1.py
 pylayers/mobility/body/c3d.py
 pylayers/mobility/body/c3dtools.py
-pylayers/mobility/body/cylinder.py
 pylayers/mobility/body/dist.py
-pylayers/mobility/body/raycyl.py
 pylayers/mobility/transit/Person.py
 pylayers/mobility/transit/SteeringBehavior.py
 pylayers/mobility/transit/World.py
@@ -92,50 +84,40 @@ pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
 pylayers/signal/DF.py
-pylayers/signal/EnergyDetector.py
-pylayers/signal/Fading.py
-pylayers/signal/GUI.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
-<<<<<<< HEAD
-=======
 pylayers/signal/chi2.py
 pylayers/signal/detect_quad.py
 pylayers/signal/invfreq.py
->>>>>>> 4a1eb3d95a65c01981b8b751565db8b4115a6031
 pylayers/signal/invfreqz.py
 pylayers/signal/waveform.py
+pylayers/simul/Monitor.py
 pylayers/simul/__init__.py
 pylayers/simul/exploit.py
 pylayers/simul/exploit_simulnet.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
-<<<<<<< HEAD
 pylayers/simul/simultraj.py
-=======
->>>>>>> 4a1eb3d95a65c01981b8b751565db8b4115a6031
+pylayers/simul/tmp.py
+pylayers/simul/toto.py
 pylayers/util/CDF.py
 pylayers/util/__init__.py
 pylayers/util/cone.py
 pylayers/util/easygui.py
 pylayers/util/geomutil.py
 pylayers/util/graphutil.py
-<<<<<<< HEAD
-=======
 pylayers/util/mayautil.py
->>>>>>> 4a1eb3d95a65c01981b8b751565db8b4115a6031
+pylayers/util/plot_simulation_loc.py
 pylayers/util/plotutil.py
 pylayers/util/project.py
 pylayers/util/pydb.py
 pylayers/util/pymysqldb.py
 pylayers/util/pyutil.py
 pylayers/util/save.py
+pylayers/util/thesesave.py
 pylayers/util/utilnet.py
 pylayers/util/vect.py
-<<<<<<< HEAD
-pylayers/util/versions.py
-=======
 pylayers/util/versions.py
 pylayers/util/voronoi.py
->>>>>>> 4a1eb3d95a65c01981b8b751565db8b4115a6031
+

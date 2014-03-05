@@ -1,3 +1,14 @@
+#-*- coding:Utf-8 -*-
+#
+# Module OSMParser
+#
+# This module provides classes to handle open stree map objects
+#
+#
+#
+#
+
+
 import pylayers.util.geomutil as geu
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
@@ -22,6 +33,15 @@ class Way(object):
 
     """
     def __init__(self,refs,tags,coords):
+        """
+        Parameters
+        ----------
+
+        refs  :
+        tags  :
+        coords :
+
+        """
         self.refs  = refs
         self.tags = tags
         N = len(refs)
@@ -49,7 +69,8 @@ class Way(object):
         return(st)
 
     def show(self,fig=[],ax=[]):
-        """
+        """ show way
+
         """
         fig,ax = self.shp.plot(fig=fig,ax=ax)
         return(fig,ax)
@@ -257,11 +278,13 @@ class Ways(object):
 
         tpt=np.empty((2,))
         mask=np.ones((2,))
-
-        for b in self.way:
+        N = len(self.way.keys())
+        for k,b in enumerate(self.way):
             # retrieve PolyGon or LineString
+            if k%1000==0:
+                print k,N
             shp = self.way[b].shp
-            if type(shp==geu.Polygon):
+            if type(shp)==geu.Polygon:
                 pa = self.way[b].shp.ndarray()
                 Np = np.shape(pa)[1]
                 for ip in range(Np+1):

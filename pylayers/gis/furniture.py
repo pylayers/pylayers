@@ -2,26 +2,6 @@
 """ Handle Furnitures
 
 
-Summary
--------
-
-This module handle the description of furnitures
-For now furnitures are rectangular objects.
-In the future it should be able to accept any polygon as a furniture element
-
-Furniture are stored in an ini file of dirstruc.
-
-    from pylayers.gis.layout import *
-    import matplotlib.pylab as plt
-    L = Layout()
-    L.loadstr('where1.ini')
-    L.showGs()
-    L.loadfur('Furw1.ini')
-    fig = plt.gcf()
-    ax  = fig.get_axes()[0]
-    for fur in L.lfur:
-        fur.show(fig,ax)
-
 
 """
 
@@ -29,7 +9,6 @@ import numpy as np
 import re
 import doctest
 import ConfigParser
-#import Graph
 from   matplotlib.path import Path
 from   matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt
@@ -56,7 +35,23 @@ class Furniture(object):
     Notes
     -----
 
-    A piece of furniture is a rectangular object with the following parameters
+    This class handle the description of furnitures.
+    Until now furnitures are limited to rectangular objects.
+    A possible evolution would be to authorize any polygon as a furniture element
+
+    Furniture are stored in an ini file of dirstruc.
+
+    from pylayers.gis.layout import *
+    import matplotlib.pylab as plt
+    L = Layout()
+    L.loadstr('where1.ini')
+    L.showGs()
+    L.loadfur('Furw1.ini')
+    fig = plt.gcf()
+    ax  = fig.get_axes()[0]
+    for fur in L.lfur:
+        fur.show(fig,ax)
+
 
     """
     def __init__(self, name='',

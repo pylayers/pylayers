@@ -168,16 +168,16 @@ class Database:
                             'NULL'))
 
 if __name__=="__main__":
+    pass
 
-    HOST='localhost'
-    USER='root'
-    PASSWD='sqlsql'
-    DATABASE='TEST'
-
-
-    ldp=read_mat(1,1)
-    #Connection to DB
-    db = DB(HOST, USER, PASSWD,DATABASE)
-#    db.connectdb()
-    pdb.set_trace()
-    db.insertitem1("TruePosition", (1,10,13.0,-12.5,15.0,5))
+#    HOST='localhost'
+#    USER='root'
+#    PASSWD='sqlsql'
+#    DATABASE='TEST'
+#
+#
+#    ldp = read_mat(1,1)
+#    #Connection to DB
+#    db = DB(HOST, USER, PASSWD,DATABASE)
+##    db.connectdb()
+#    db.insertitem1("TruePosition", (1,10,13.0,-12.5,15.0,5))
