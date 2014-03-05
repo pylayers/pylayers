@@ -1555,72 +1555,7 @@ class Tchannel(bs.FUDAsignal):
             f.close()
             raise NameError('Channel Tchannel: issue when reading h5py file')
 
-    def _saveh5(self,filenameh5,grpname):
-        """ save Tchannel object in hdf5 format compliant with Link Class
-
-        
-        Parameters
-        ----------
-
-        filenameh5  : str
-            file name of h5py file Link format
-        grpname  : int
-            groupname in filenameh5
-
-        """
-
-
-        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-                
-        # try/except to avoid loosing the h5 file if 
-        # read/write error
-        try:
-            fh5=h5py.File(filename,'a')
-            if not grpname in fh5['H'].keys(): 
-                fh5['H'].create_group(grpname)
-            else :
-                print 'Warning : H/'+grpname +'already exists in '+filenameh5
-            f=fh5['H/'+grpname]
-            
-            for k,va in self.__dict__.items():
-                f.create_dataset(k,shape = np.shape(va),data=va)
-            fh5.close()
-        except:
-            fh5.close()
-            raise NameError('Channel Tchannel: issue when writting h5py file')
-
-    def _loadh5(self,filenameh5,grpname):
-        """ Load Ctilde object in hdf5 format compliant with Link Class
-
-        Parameters
-        ----------
-
-        filenameh5  : str
-            file name of h5py file Link format
-        grpname  : int
-            groupname in filenameh5
-
-        """    
-        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-
-        try:
-            fh5=h5py.File(filename,'r')
-            f = fh5['H/'+grpname]
-
-            # keys not saved as attribute of h5py file
-            for k,va in f.items():
-                if k != 'tau1':
-                    setattr(self,str(k),va[:])
-                else :
-                    setattr(self,str(k),va)
-
-            
-            fh5.close()
-            self.__init__(self.x, self.y, self.tau0, self.dod, self.doa)
-
-        except:
-            fh5.close()
-            raise NameError('Channel Tchannel: issue when reading h5py file')
+    
 
 
     def info(self):
