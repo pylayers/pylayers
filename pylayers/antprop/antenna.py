@@ -47,7 +47,7 @@ from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
 import pandas as pd
 try:
-    import mayavi.mlab as myv
+    from mayavi import mlab 
 except:
     print 'mayavi not installed'
 
@@ -197,13 +197,14 @@ class Antenna(object):
                 self.p3 = kwargs['p3']#np.pi/6. # 30 degrees
                 self.t3 = kwargs['t3']#np.pi/6. # 30 degrees
                 self.G  = 16/(self.t3*self.p3) # gain 16/\theta^{2}
-                self.GdB  =10*np.log10(self.G)
+                self.GdB = 10*np.log10(self.G)
                 self.sqG = np.sqrt(self.G)
                 self.evaluated = False
             elif typ == 'WirePlate':
                 self.typ = typ
                 self.p0 = kwargs['p0']
-                self.t0 = kwargs['t0'] # 5*np.pi/6.
+                kwargs['t0'] = 5*np.pi/6.
+                self.t0 =  kwargs['t0']# 
                 self.GdB = 5. # gain
                 self.G  = pow(10.,self.GdB/10.) # gain
                 self.sqG = np.sqrt(self.G)
@@ -246,10 +247,12 @@ class Antenna(object):
             GdB = 20*np.log10(S)
             st = st + "GmaxDB : %4.2f dB \n" % (GdB)
             st = st + "   f = %4.2f GHz \n" % (self.fa[u[0]])
-            st = st + "   theta = %4.2f (degrees) \n" % (self.theta[u[1],0]*rtd)
-            st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[0,u[2]]*rtd)
+            #st = st + "   theta = %4.2f (degrees) \n" % (self.theta[u[1],0]*rtd)
+            #st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[0,u[2]]*rtd)
+            st = st + "   theta = %4.2f (degrees) \n" % (self.theta[u[1]]*rtd)
+            st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[u[2]]*rtd)
         else:
-            st = st + 'Not evaluated'
+            st = st + 'Not evaluated\n'
 
 
         if self.typ == 'mat':
@@ -349,26 +352,26 @@ class Antenna(object):
 
 
         if (th == []) and (ph == []):
-            self.th = np.linspace(0,np.pi,self.Nt)
-            self.ph = np.linspace(0,2*np.pi,self.Np,endpoint=False)
+            self.theta = np.linspace(0,np.pi,self.Nt)
+            self.phi = np.linspace(0,2*np.pi,self.Np,endpoint=False)
         else :
-            self.th = th
-            self.ph = ph
+            self.theta = th
+            self.phi = ph
 
         if self.typ == 'Gauss':
 
 
-            argth = ((self.th-self.t0)**2)/self.t3
-            e1 = np.mod(self.ph-self.p0,2*np.pi)
-            e2 = np.mod(self.p0-self.ph,2*np.pi)
+            argth = ((self.theta-self.t0)**2)/self.t3
+            e1 = np.mod(self.phi-self.p0,2*np.pi)
+            e2 = np.mod(self.p0-self.phi,2*np.pi)
             e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
             argphi = (e**2)/self.p3
 
             if pattern :
                 Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
                 Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
-                self.theta=self.th[:,np.newaxis]
-                self.phi=self.ph[np.newaxis,:]
+                #self.theta=self.th[:,np.newaxis]
+                #self.phi=self.ph[np.newaxis,:]
                 self.SqG=np.ones((self.Nf,self.Nt,self.Np))
                 self.SqG[:]=Fap
                 self.evaluated = True
@@ -380,26 +383,26 @@ class Antenna(object):
 
         if self.typ == 'WirePlate':
 
-            uth1 = np.where(self.th < self.t0)[0]
-            uth2 = np.where(self.th >= self.t0)[0]
+            uth1 = np.where(self.theta < self.t0)[0]
+            uth2 = np.where(self.theta >= self.t0)[0]
             p = self.t0
             q = np.pi/2.
             A=np.array(([[3*p**2,2*p,1],[p**3,p**2,p],[q**3,q**2,q]]))
             Y=np.array(([0,1,1/(1.*self.sqG)]))
             self.poly = la.solve(A,Y)
 
-            argth1 = np.abs(self.poly[0]*self.th[uth1]**3
-                     + self.poly[1]*self.th[uth1]**2
-                             + self.poly[2]*self.th[uth1])
+            argth1 = np.abs(self.poly[0]*self.theta[uth1]**3
+                     + self.poly[1]*self.theta[uth1]**2
+                             + self.poly[2]*self.theta[uth1])
 
-            argth2 = -(1/(np.pi-self.t0)**2)*(self.th[uth2]-self.t0)**2+1
+            argth2 = -(1/(np.pi-self.t0)**2)*(self.theta[uth2]-self.t0)**2+1
             argth = np.hstack((argth1,argth2))[::-1]
 
             if pattern :
                 Fat = self.sqG * (argth[:,np.newaxis])
                 Fap = self.sqG * (argth[:,np.newaxis])
-                self.theta=self.th[:,np.newaxis]
-                self.phi=self.ph[np.newaxis,:]
+                #self.theta=self.theta[:,np.newaxis]
+                #self.phi=self.ph[np.newaxis,:]
                 self.SqG=np.ones((self.Nf,self.Nt,self.Np))
                 self.SqG[:]=Fap
                 self.evaluated = True
@@ -414,15 +417,15 @@ class Antenna(object):
             if pattern :
 
                 self.SqG = self.sqG * np.ones((self.Nf,self.Nt,self.Np))
-                self.theta = self.th[:,np.newaxis]
-                self.phi = self.ph[np.newaxis,:]
+                #self.theta = self.theta[:,np.newaxis]
+                #self.phi = self.ph[np.newaxis,:]
                 self.evaluated = True
-                Fat = self.sqG 
-                Fap = self.sqG 
+                Fat = self.sqG
+                Fap = self.sqG
 
             else:
-                Fat = self.sqG * np.ones((len(self.th),self.Nf))
-                Fap = self.sqG * np.zeros((len(self.th),self.Nf))
+                Fat = self.sqG * np.ones((len(self.theta),self.Nf))
+                Fap = self.sqG * np.zeros((len(self.theta),self.Nf))
 
         # TODO create 2 separate functions
         if not pattern:
@@ -447,10 +450,9 @@ class Antenna(object):
 
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
-            >>> A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
-            >>> pol1 = plt.polar(A.phi,abs(A.Ftheta[10,45,:]),'b')
-            >>> pol2 = plt.polar(A.phi,abs(A.Ftheta[20,45,:]),'r')
-            >>> pol3 = plt.polar(A.phi,abs(A.Ftheta[30,45,:]),'g')
+            >>> A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
+            >>> f,a = A.polar(phd=0)
+            >>> A.polar(thd=90,fig=f,ax=a)
             >>> txt = plt.title('S1R1 antenna : st loadmat')
             >>> plt.show()
 
@@ -475,6 +477,8 @@ class Antenna(object):
         self.AntennaName = str(d.AntennaName)
 
         self.fa = d.freq/1.e9
+        #self.theta = d.theta[:,np.newaxis]
+        #self.phi = d.phi[np.newaxis,:]
         self.theta = d.theta
         self.phi = d.phi
         self.Ftheta = d.Ftheta
@@ -482,12 +486,17 @@ class Antenna(object):
         Gr = np.real(self.Fphi * np.conj(self.Fphi) + \
                      self.Ftheta * np.conj(self.Ftheta))
         self.SqG = np.sqrt(Gr)
+        #self.Nt = np.shape(self.theta)[0]
+        #self.Np = np.shape(self.phi)[1]
         self.Nt = len(self.theta)
         self.Np = len(self.phi)
+
         if type(self.fa) ==  float:
             self.Nf = 1
         else:
             self.Nf = len(self.fa)
+
+        self.evaluated = True
 
     def load_trx(self, directory="ant", nf=104, ntheta=181, nphi=90, ncol=6):
         """ load a trx file (deprecated)
@@ -721,6 +730,14 @@ class Antenna(object):
 
     def loadhfss(self,lfa = [], Nt=72,Np=37):
         """
+        Parameters
+        ----------
+
+        lfa :
+        Nt  : int
+            Number of angle theta
+        Np  : int
+            Number of angle phi
 
         """
 
@@ -733,6 +750,7 @@ class Antenna(object):
         SqG = np.empty((self.Nf,self.Nt,self.Np))
 
         for i in range (len(lfa)):
+
 
 
             fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
@@ -757,8 +775,10 @@ class Antenna(object):
 
 
         self.fa = np.array(fGHz)
-        self.theta = th[0,:].reshape(Nt,1)
-        self.phi = ph[:,0].reshape(1,Np)
+        #self.theta = th[0,:].reshape(Nt,1)
+        #self.phi = ph[:,0].reshape(1,Np)
+        self.theta = th[0,:]
+        self.phi = ph[:,0]
         self.Fphi=Fphi
         self.Ftheta=Ftheta
         self.SqG=SqG
@@ -1030,6 +1050,8 @@ class Antenna(object):
             >>> fig,ax = A.polar(fGHz=[2,3,4],thd=90)
 
         """
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
 
         dtr = np.pi/180.
 
@@ -1081,8 +1103,10 @@ class Antenna(object):
         cpt = 0
 
         fstep = self.fa[1]-self.fa[0]
-        dtheta = self.theta[1,0]-self.theta[0,0]
-        dphi = self.phi[0,1]-self.phi[0,0]
+        #dtheta = self.theta[1,0]-self.theta[0,0]
+        #dphi = self.phi[0,1]-self.phi[0,0]
+        dtheta = self.theta[1]-self.theta[0]
+        dphi = self.phi[1]-self.phi[0]
 
         for f in kwargs['fGHz']:
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
@@ -1090,7 +1114,8 @@ class Antenna(object):
             # all theta
             if 'phd' in kwargs:
                 itheta = np.arange(self.Nt)
-                iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
+                #iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
+                iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
                 Np = self.Np
 
                 if np.mod(Np, 2) == 0:
@@ -1099,13 +1124,15 @@ class Antenna(object):
                     iphi2 = np.mod(iphi1 + (Np - 1) / 2, Np)
 
                 #   0 < theta < pi/2
-                u1 = np.where((self.theta[:,0] <= np.pi / 2) &
-                              (self.theta[:,0] >= 0))[0]
+                #u1 = np.where((self.theta[:,0] <= np.pi / 2) &
+                #              (self.theta[:,0] >= 0))[0]
+                u1 = np.where((self.theta <= np.pi / 2.) & (self.theta >= 0))[0]
                 #   0:Nt-1
                 u2 = np.arange(self.Nt)
                 #   pi/2 < theta < pi
-                u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
-                                                              > np.pi / 2))[0]
+                #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
+                #                                              > np.pi / 2))[0]
+                u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
                 r1 = -GmindB + 20 * np.log10(  self.SqG[ik, u1, iphi1]+1e-12)
                 #r1  = self.SqG[k,u1[0],iphi1]
                 negr1 = np.nonzero(r1 < 0)
@@ -1129,8 +1156,11 @@ class Antenna(object):
 
             if 'thd' in kwargs:
                 iphi = np.arange(self.Np)
-                itheta = np.where(abs(self.theta[:,0]-kwargs['thd']*dtr)<dtheta)[0][0]
-                angle = self.phi[0,iphi]
+                #itheta = np.where(abs(self.theta[:,0]-kwargs['thd']*dtr)<dtheta)[0][0]
+                #angle = self.phi[0,iphi]
+                itheta = np.where(abs(self.theta-kwargs['thd']*dtr)<dtheta)[0][0]
+                #angle = self.phi[0,iphi]
+                angle = self.phi[iphi]
                 r = -GmindB + 20 * np.log10(self.SqG[ik, itheta, iphi])
                 neg = np.nonzero(r < 0)
                 r[neg] = 0
@@ -1146,16 +1176,48 @@ class Antenna(object):
             ax.legend()
         return(fig,ax)
 
-    def _show3(self,fGHz=[],title=True,colorbar=True):
+    @mlab.show
+    def _show3(self,**kwargs):
         """ show3 mayavi
 
         fGHz : float
-            frequency 
+            frequency
         title : bool
             display title
         colorbar :
             display colorbar
         """
+
+        defaults = { 'newfig':True, 
+                     'fGHz' :[],
+                     'po': np.array([0,0,0]),
+                     'T' : np.eye(3),
+                     'minr' : 0.1,
+                     'maxr' : 1 ,
+                     'tag' : 'Pat',
+                     'ilog' : False,
+                     'title':True,
+                     'colorbar':True,
+                     'ilog':False
+                     }
+
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        fGHz = kwargs['fGHz']
+        minr = kwargs['minr']
+        maxr = kwargs['maxr']
+        tag  = kwargs['tag']
+        ilog = kwargs['ilog']
+        po = kwargs['po']
+        # T is an unitary matrix
+        T  = kwargs['T']
+
+
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
 
         if fGHz == []:
             k = len(self.fa)/2
@@ -1163,19 +1225,48 @@ class Antenna(object):
             k = np.where(fGHz>self.fa)[0]
 
         r = self.SqG[k,:,:]
-        phi = self.phi
-        th = self.theta
+        th = self.theta[:,np.newaxis]
+        phi = self.phi[np.newaxis,:]
 
-        
-        x = r * np.sin(phi) * np.cos(th)
-        y = r * np.cos(phi)
-        z = r * np.sin(phi) * np.sin(th)
+        if ilog :
+            r = 10*np.log10(abs(r))
+        else:
+            r = abs(r)
 
-        myv.mesh(x, y, z)
-        if colorbar :
-            myv.colorbar()
-        if title:
-            myv.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
+        u = (r - r.min()) /(r.max() - r.min())
+
+        r = minr + (maxr-minr) * u
+
+        x = r * np.sin(th) * np.cos(phi) 
+        y = r * np.cos(th) 
+        z = r * np.sin(th) * np.sin(phi) 
+
+        p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
+        #
+        # antenna cs -> glogal cs
+        # q : Nt x Np x 3
+        q = np.einsum('ij,klj->kli',T,p)
+        #
+        # translation
+        #
+        q[...,0]=q[...,0]+po[0]
+        q[...,1]=q[...,1]+po[1]
+        q[...,2]=q[...,2]+po[2]
+
+        x = q[...,0]
+        y = q[...,1]
+        z = q[...,2]
+
+
+        if kwargs['newfig']:
+            mlab.clf()
+        else :
+            mlab.gcf()
+        mlab.mesh(x, y, z)
+        if kwargs['colorbar'] :
+            mlab.colorbar()
+        if kwargs['title']:
+            mlab.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
 
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
@@ -1205,6 +1296,9 @@ class Antenna(object):
 
         """
 
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
+
         f = self.fa[k]
 
         if typ == 'Gain':
@@ -1225,14 +1319,17 @@ class Antenna(object):
         # geo.pattern requires the following shapes
         # theta (Ntx1)
         # phi (1xNp)
-        if len(np.shape(self.theta))==1:
-            theta = self.theta[:,np.newaxis]
-        else:
-            theta=self.theta
-        if len(np.shape(self.phi))==1:
-            phi = self.phi[np.newaxis,:]
-        else:
-            phi=self.phi
+        #if len(np.shape(self.theta))==1:
+        #    theta = self.theta[:,np.newaxis]
+        #else:
+        #    theta=self.theta
+        theta = self.theta
+        #if len(np.shape(self.phi))==1:
+        #    phi = self.phi[np.newaxis,:]
+        #else:
+        #    phi=self.phi
+        phi = self.phi
+
         geo.pattern(theta,phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
@@ -1285,6 +1382,7 @@ class Antenna(object):
                             cmap=cm.hot_r,shade=True)
         else:
             ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
+        plt.show()
 
     def pol3d(self, k=0, R=50, St=1, Sp=1, silent=False):
         """ Display polarisation diagram  in 3D
@@ -1320,9 +1418,11 @@ class Antenna(object):
 
         for m in plph:
             for n in plth:
-                theta = self.theta[n,0]
+                #theta = self.theta[n,0]
+                theta = self.theta[n]
                 #print "m,theta= :",m,theta*180/np.pi
-                phi = self.phi[0,m]
+                #phi = self.phi[0,m]
+                phi = self.phi[m]
                 #print "n,phi=:",n,phi*180/np.pi
                 B = geu.vec_sph(theta, phi)
                 p = R * np.array((np.cos(phi) * np.sin(theta),
@@ -1459,6 +1559,18 @@ class Antenna(object):
         print "FPh = Fph.reshape(A.Nf,A.Nt,A.Np)"
         print "compdiag(20,A,A.theta,A.phi,FTh,FPh) "
 
+
+    def Fsynth(self, theta = [], phi=[], pattern=True):
+        """ Perform Antenna synthesis
+            call Antenna.Fpatt or Antenna.Fsynth3
+        """
+
+        if self.fromfile:
+            self.Fsynth3(theta,phi,pattern)
+        else :
+            self.Fpatt(theta,phi,pattern)
+
+
     #def Fsynth1(self, theta, phi, k=0):
     def Fsynth1(self, theta, phi,pattern=False):
         """ calculate complex antenna pattern  from VSH Coefficients (shape 1)
@@ -1541,6 +1653,7 @@ class Antenna(object):
             Fph = Fph.reshape(Nf, Nt, Np)
 
         return Fth, Fph
+
 
 
     def Fsynth2s(self,dsf=1):
@@ -1852,8 +1965,10 @@ class Antenna(object):
         self.Np = len(phi)
 
         if pattern:
-            self.theta = theta[:,np.newaxis]
-            self.phi = phi[np.newaxis,:]
+            #self.theta = theta[:,np.newaxis]
+            #self.phi = phi[np.newaxis,:]
+            self.theta = theta
+            self.phi = phi
             theta = np.kron(theta, np.ones(Np))
             phi = np.kron(np.ones(Nt),phi)
 

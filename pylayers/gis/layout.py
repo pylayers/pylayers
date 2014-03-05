@@ -54,6 +54,13 @@ import pdb
 import ast
 import pylayers.util.graphutil as gph
 from mpl_toolkits.basemap import Basemap
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
+
 #
 #
 
@@ -494,6 +501,7 @@ class Layout(object):
         self.dca
         self.lsss : list of subsegments
 
+        assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]
         """
 
 
@@ -503,6 +511,12 @@ class Layout(object):
 
         useg  = filter(lambda x : x>0,nodes)
         upnt  = filter(lambda x : x<0,nodes)
+        self.upnt = np.array((upnt))
+        utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
+        mutmp = max(utmp[:,0])
+        self.iupnt = -np.ones((mutmp+1),dtype='int')
+        self.iupnt[utmp[:,0]]=utmp[:,1]
+        
 
         # degree of segment nodes
         degseg = map(lambda x : nx.degree(self.Gs,x),useg)
@@ -563,6 +577,9 @@ class Layout(object):
 
         self.pt[0,:]= np.array([self.Gs.pos[k][0] for k in upnt])  
         self.pt[1,:]= np.array([self.Gs.pos[k][1] for k in upnt]) 
+
+
+        self.pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
 
         ntail = map(lambda x : nx.neighbors(self.Gs,x)[0],useg)  
         nhead = map(lambda x : nx.neighbors(self.Gs,x)[1],useg)    
@@ -6578,6 +6595,7 @@ class Layout(object):
 #            else:
 #                core = self.ce[subseg[i-en]][0]
 #                name = sl.di[core]
+
             colname = sl[name]['color']
             colhex = cold[colname]
             col = pyu.rgb(colhex) / 255.
@@ -6585,6 +6603,220 @@ class Layout(object):
                 1, q + 2, q + 3, q + 4, col[0], col[1], col[2]))
         fos.close()
         return pg 
+
+    @mlab.show
+    def _show3(self,centered=False,newfig=False):
+        """ create a .off geomview file 
+
+        Parameters
+        ----------
+
+        centered : Boolean
+            if True the layout is centered around its center of gravity
+
+        Notes
+        -----
+
+        The `.off` file can be vizualized through the show3 method
+
+        Examples
+        --------
+
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('DLR.ini')
+        >>> pg = L.mayafile()
+
+        """
+
+        # calculate center of gravity
+        if centered:
+            pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
+        else:
+            pg = np.array([0,0])
+
+        #en  = self.Ns # number of segments
+        en  = len(np.where(np.array(self.Gs.node.keys())>0)[0])
+        if en != self.Ns:
+            logging.warning("wrong number of segment consistency problem in layout")
+        #cen = self.Nss
+        # d : dictionnary of layout sub segments
+        #
+        d = self.subseg()
+        cen = 0
+        for k in d:
+            lss = d[k]
+            cen = cen + len(lss)
+
+        if cen != self.Nss:
+            logging.warning("wrong number of subsegment consistency problem in layout")
+
+        sl = self.sl
+#
+#        Create a polygon for each segment and subsegment
+#
+        P1 = np.array(np.zeros([3, en + cen], dtype=np.float64))
+        P2 = np.array(np.zeros([3, en + cen], dtype=np.float64))
+        P3 = np.array(np.zeros([3, en + cen], dtype=np.float64))
+        P4 = np.array(np.zeros([3, en + cen], dtype=np.float64))
+
+        ik   = 0
+        dikn = {}
+
+        for i in self.Gs.node.keys():
+            if i > 0:  # segment
+                if self.Gs.node[i]['name']<>'AIR':
+                    nebr = self.Gs.neighbors(i)
+                    n1 = nebr[0]
+                    n2 = nebr[1]
+                    P1[0:2, ik] = np.array(self.Gs.pos[n1])-pg
+                    P1[2, ik] = self.Gs.node[i]['z'][0]
+
+                    P2[0:2, ik] = np.array(self.Gs.pos[n1])-pg
+                    P2[2, ik] = self.Gs.node[i]['z'][1]
+
+                    P3[0:2, ik] = np.array(self.Gs.pos[n2])-pg
+                    P3[2, ik] = self.Gs.node[i]['z'][1]
+
+                    P4[0:2, ik] = np.array(self.Gs.pos[n2])-pg
+                    P4[2, ik] = self.Gs.node[i]['z'][0]
+
+                    dikn[ik]=i
+                    ik = ik + 1
+
+                else:
+
+                    en = en-1
+
+
+        # d = self.subseg()
+        # k : ss_name v: seg number 
+        cpt = 0
+        subseg = {}
+        #pdb.set_trace()
+        for k in d.keys():
+            for l in d[k]:
+                ids = l[0]
+                subseg[cpt] = ids
+                order = l[1]
+                cpt = cpt + 1
+                nebr = self.Gs.neighbors(l[0])
+                n1 = nebr[0]
+                n2 = nebr[1]
+                #print ik,n1,n2
+
+                P1[0:2, ik] = np.array(self.Gs.pos[n1])-pg
+                P1[2, ik] = self.Gs.node[ids]['ss_z'][order][0]
+                #print P1[:,ik]
+
+                P2[0:2, ik] = np.array(self.Gs.pos[n2])-pg
+                P2[2, ik] = self.Gs.node[ids]['ss_z'][order][0]
+                #print P2[:,ik]
+
+                P3[0:2, ik] = np.array(self.Gs.pos[n2])-pg 
+                P3[2, ik] = self.Gs.node[ids]['ss_z'][order][1]
+                #print P3[:,ik]
+
+                P4[0:2, ik] = np.array(self.Gs.pos[n1])-pg
+                P4[2, ik] = self.Gs.node[ids]['ss_z'][order][1]
+                #print P4[:,ik]
+
+                dikn[ik] = l
+                ik = ik + 1
+
+        npt = 4 * (en + cen)
+        npt_s = (en + cen) 
+
+        points = np.hstack((P1[:,0:npt_s],P2[:,0:npt_s]))
+        points = np.hstack((points,P3[:,0:npt_s]))
+        points = np.hstack((points,P4[:,0:npt_s]))
+        points=points.T
+        boxes=np.empty((npt/4,4),dtype='int')
+        b = np.arange(npt/4)
+        boxes[:,0]=b
+        boxes[:,1]=b+npt_s
+        boxes[:,2]=b+2*npt_s
+        boxes[:,3]=b+3*npt_s
+
+        # manage floor
+        floorx= np.array((points[:,0].min(),points[:,0].max()))
+        floory= np.array((points[:,1].min(),points[:,1].max()))
+        zmin= np.min(points[:,2])
+        Pf = np.array([floorx[0],floory[0],zmin])
+        Pf = np.vstack((Pf,np.array([floorx[0],floory[1],zmin]))) 
+        Pf = np.vstack((Pf,np.array([floorx[1],floory[1],zmin]))) 
+        Pf = np.vstack((Pf,np.array([floorx[1],floory[0],zmin]))) 
+
+        points = np.vstack((points,Pf))
+        bf =np.arange(npt,npt+4)
+        boxes = np.vstack((boxes,bf))
+
+        
+
+
+        
+#         _filename,ext = os.path.splitext(self.filename)
+#         _filegeom = _filename+'.off'
+#         self.filegeom=_filegeom
+#         filegeom = pyu.getlong(_filegeom, pstruc['DIRGEOM'])
+#         fos = open(filegeom, "w")
+#         fos.write("OFF\n")
+#         fos.write("%d %d \n\n" % (npt + 1, en + cen))
+#         fos.write("0.000 0.000 0.000\n")
+#         for i in range(en + cen):
+#             fos.write("%6.3f %6.3f %6.3f \n" % (P1[0, i], P1[1, i], P1[2, i]))
+#             fos.write("%6.3f %6.3f %6.3f \n" % (P2[0, i], P2[1, i], P2[2, i]))
+#             fos.write("%6.3f %6.3f %6.3f \n" % (P3[0, i], P3[1, i], P3[2, i]))
+#             fos.write("%6.3f %6.3f %6.3f \n" % (P4[0, i], P4[1, i], P4[2, i]))
+
+        cold = pyu.coldict()
+        color=np.zeros((4*(cen+en),3))
+        for i in range(en + cen):
+            q = 4 * i
+            if i < en:
+                ne = dikn[i]
+                name = self.Gs.node[ne]['name']
+            else:
+                ne = dikn[i][0]
+                order = dikn[i][1]
+                name = self.Gs.node[ne]['ss_name'][order]
+
+            colname = sl[name]['color']
+            colhex = cold[colname]
+            color[i,:] = pyu.rgb(colhex) 
+            color[i+npt_s,:] = pyu.rgb(colhex) 
+            color[i+2*npt_s,:] = pyu.rgb(colhex) 
+            color[i+3*npt_s,:] = pyu.rgb(colhex) 
+
+
+
+        colname = sl['FLOOR']['color']
+        colhex = cold[colname]
+        colf = np.repeat((pyu.rgb(colhex))[np.newaxis,:],4,axis=0)
+        color = np.vstack((color,colf))
+
+        # trick for correcting  color assignement
+
+        sc=tvtk.UnsignedCharArray()
+        sc.from_array(color)
+        
+        
+               
+        mesh = tvtk.PolyData(points=points, polys=boxes)
+        mesh.point_data.scalars = sc
+        mesh.point_data.scalars.name = 'scalars'
+        
+        
+        if newfig:
+            mlab.clf()
+            mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+        else :
+            mlab.gcf()
+        
+        surf = mlab.pipeline.surface(mesh, opacity=1)
+        mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
+                                    color=(0, 0, 0), )
+
+
 
     def show3(self, bdis=True,centered=True):
         """ geomview display of the indoor structure
@@ -6594,10 +6826,10 @@ class Layout(object):
 
         bdis boolean (default True)
             boolean display (call geowview if True)
-        centered : boolean     
+        centered : boolean
             if True center the layout before display
-        
-        
+
+
         """
 
         pg = self.geomfile(centered=centered)
