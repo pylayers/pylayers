@@ -79,6 +79,84 @@
   <h1>Source code for pylayers.antprop.interactions</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: utf8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">.. currentmodule:: pylayers.antprop.interactions</span>
+
+<span class="sd">Inters Class</span>
+<span class="sd">============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Inter.__init__</span>
+<span class="sd">    Inter.__repr__</span>
+<span class="sd">    Inter.create_dusl</span>
+<span class="sd">    Inter.sinsout</span>
+<span class="sd">    Inter.stack</span>
+
+<span class="sd">Interactions Class</span>
+<span class="sd">==================</span>
+
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Interactions.__init__</span>
+<span class="sd">    Interactions.add</span>
+<span class="sd">    Interactions.addi</span>
+<span class="sd">    Interactions.eval</span>
+
+<span class="sd">IntB Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    IntB.__init__</span>
+<span class="sd">    IntB.__repr__</span>
+<span class="sd">    IntB.eval</span>
+
+<span class="sd">IntL Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    IntL.__init__</span>
+<span class="sd">    IntL.__repr__</span>
+<span class="sd">    IntL.eval</span>
+
+<span class="sd">IntR Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    IntR.__init__</span>
+<span class="sd">    IntR.__repr__</span>
+<span class="sd">    IntR.eval</span>
+
+<span class="sd">IntT Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    IntT.__init__</span>
+<span class="sd">    IntT.__repr__</span>
+<span class="sd">    IntT.eval</span>
+
+<span class="sd">IntD Class</span>
+<span class="sd">===========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    IntD.__init__</span>
+<span class="sd">    IntD.__repr__</span>
+<span class="sd">    IntD.eval</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
@@ -126,7 +204,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[],</span>
+<div class="viewcode-block" id="Inter.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Inter.__init__.html#pylayers.antprop.interactions.Inter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[],</span>
                  <span class="n">_filemat</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslab</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -152,13 +230,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Inter.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Inter.__repr__.html#pylayers.antprop.interactions.Inter.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> :  </span><span class="si">%s</span><span class="s">  </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)),</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">)))</span>
-
+</div>
 <div class="viewcode-block" id="Inter.create_dusl"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Inter.create_dusl">[docs]</a>    <span class="k">def</span> <span class="nf">create_dusl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create dictionnary of used slab.</span>
 
@@ -293,7 +371,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Interactions.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.Interactions.__init__.html#pylayers.antprop.interactions.Interactions.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">                &quot;&quot;&quot;</span>
@@ -305,7 +383,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nimax</span> <span class="o">=</span> <span class="mi">0</span>
-
+</div>
 <div class="viewcode-block" id="Interactions.add"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.Interactions.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">li</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a list of interactions</span>
 
@@ -476,13 +554,13 @@
 <span class="sd">        The interaction object is np.array with shape (nf,ninter 2, 2)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span> 
+<div class="viewcode-block" id="IntB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntB.__init__.html#pylayers.antprop.interactions.IntB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span> 
         <span class="n">Inter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">typ</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="IntB.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntB.__repr__.html#pylayers.antprop.interactions.IntB.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">Inter</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="IntB.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntB.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; evaluation of B interactions</span>
 
@@ -551,13 +629,13 @@
 <span class="sd">        np.array:</span>
 <span class="sd">            (nf ,ninter, 2, 2)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="IntL.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntL.__init__.html#pylayers.antprop.interactions.IntL.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span>
         <span class="n">Inter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="IntL.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntL.__repr__.html#pylayers.antprop.interactions.IntL.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">Inter</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="IntL.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntL.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            evaluation of B interactions</span>
@@ -608,7 +686,7 @@
     <span class="sd">&quot;&quot;&quot; Reflexion interaction class</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="IntR.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntR.__init__.html#pylayers.antprop.interactions.IntR.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span>
 <span class="c">#        self.theta = data[0]</span>
 <span class="c">#        self.si = data[1]</span>
 <span class="c">#        self.sr = data[2]</span>
@@ -623,11 +701,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="IntR.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntR.__repr__.html#pylayers.antprop.interactions.IntR.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">Inter</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="IntR.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntR.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; evaluation of reflexion interactions</span>
 
@@ -744,7 +822,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="IntT.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntT.__init__.html#pylayers.antprop.interactions.IntT.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[]):</span>
 
         <span class="n">Inter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="c">## index for used slab</span>
@@ -755,11 +833,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="p">[]</span>
 
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="IntT.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntT.__repr__.html#pylayers.antprop.interactions.IntT.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">Inter</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="IntT.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntT.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        example given for</span>
@@ -868,7 +946,7 @@
     <span class="sd">&quot;&quot;&quot; Diffraction interaction class</span>
 <span class="sd">        .. todo to be implemented</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="IntD.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntD.__init__.html#pylayers.antprop.interactions.IntD.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">idx</span><span class="o">=</span><span class="p">[],</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
 <span class="c">#        self.theta = data1[0]</span>
 <span class="c">#        self.thetad = data1[1]</span>
 <span class="c">#        self.si = data1[2]</span>
@@ -877,13 +955,13 @@
 <span class="c">#        self.N = data1[5]</span>
 <span class="c">#        self.typed = data2[0]</span>
         <span class="n">Inter</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="IntD.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.interactions.IntD.__repr__.html#pylayers.antprop.interactions.IntD.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> :  </span><span class="si">%s</span><span class="s">  </span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)),</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">)))</span>
-
+</div>
 <div class="viewcode-block" id="IntD.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.interactions.html#pylayers.antprop.interactions.IntD.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span>

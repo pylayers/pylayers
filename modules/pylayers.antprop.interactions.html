@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.antprop.signature module" href="pylayers.antprop.signature.html" />
+    <link rel="next" title="pylayers.antprop.interactions.Inter.__init__" href="generated/pylayers.antprop.interactions.Inter.__init__.html" />
     <link rel="prev" title="pylayers.antprop.raysc module" href="pylayers.antprop.raysc.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.signature.html" title="pylayers.antprop.signature module"
+          <a href="generated/pylayers.antprop.interactions.Inter.__init__.html" title="pylayers.antprop.interactions.Inter.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.antprop.raysc.html" title="pylayers.antprop.raysc module"
@@ -63,12 +63,26 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.antprop.interactions module</a><ul>
+<li><a class="reference internal" href="#inters-class">Inters Class</a></li>
+<li><a class="reference internal" href="#interactions-class">Interactions Class</a></li>
+<li><a class="reference internal" href="#intb-class">IntB Class</a></li>
+<li><a class="reference internal" href="#intl-class">IntL Class</a></li>
+<li><a class="reference internal" href="#intr-class">IntR Class</a></li>
+<li><a class="reference internal" href="#intt-class">IntT Class</a></li>
+<li><a class="reference internal" href="#intd-class">IntD Class</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.antprop.raysc.html"
                         title="previous chapter">pylayers.antprop.raysc module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.signature.html"
-                        title="next chapter">pylayers.antprop.signature module</a></p>
+  <p class="topless"><a href="generated/pylayers.antprop.interactions.Inter.__init__.html"
+                        title="next chapter">pylayers.antprop.interactions.Inter.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.antprop.interactions.txt"
@@ -97,6 +111,162 @@
             
   <div class="section" id="module-pylayers.antprop.interactions">
 <span id="pylayers-antprop-interactions-module"></span><h1>pylayers.antprop.interactions module<a class="headerlink" href="#module-pylayers.antprop.interactions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="inters-class">
+<h2>Inters Class<a class="headerlink" href="#inters-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.__init__.html#pylayers.antprop.interactions.Inter.__init__" title="pylayers.antprop.interactions.Inter.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Inter.__init__</span></tt></a>([typ,&nbsp;data,&nbsp;dtype,&nbsp;idx,&nbsp;...])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.Inter.__repr__.html#pylayers.antprop.interactions.Inter.__repr__" title="pylayers.antprop.interactions.Inter.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Inter.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.Inter.create_dusl" title="pylayers.antprop.interactions.Inter.create_dusl"><tt class="xref py py-obj docutils literal"><span class="pre">Inter.create_dusl</span></tt></a>(a)</td>
+<td>create dictionnary of used slab.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.interactions.Inter.sinsout" title="pylayers.antprop.interactions.Inter.sinsout"><tt class="xref py py-obj docutils literal"><span class="pre">Inter.sinsout</span></tt></a>()</td>
+<td>calculate sin sout of the interaction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.Inter.stack" title="pylayers.antprop.interactions.Inter.stack"><tt class="xref py py-obj docutils literal"><span class="pre">Inter.stack</span></tt></a>([data,&nbsp;dtype,&nbsp;idx,&nbsp;isdata])</td>
+<td>stack data and the associated idx</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="interactions-class">
+<h2>Interactions Class<a class="headerlink" href="#interactions-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.Interactions.__init__.html#pylayers.antprop.interactions.Interactions.__init__" title="pylayers.antprop.interactions.Interactions.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Interactions.__init__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.add" title="pylayers.antprop.interactions.Interactions.add"><tt class="xref py py-obj docutils literal"><span class="pre">Interactions.add</span></tt></a>(li)</td>
+<td>add a list of interactions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.addi" title="pylayers.antprop.interactions.Interactions.addi"><tt class="xref py py-obj docutils literal"><span class="pre">Interactions.addi</span></tt></a>(i)</td>
+<td>Add interactions as a member of Interactions class</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pylayers.antprop.interactions.Interactions.eval" title="pylayers.antprop.interactions.Interactions.eval"><tt class="xref py py-obj docutils literal"><span class="pre">Interactions.eval</span></tt></a>([fGHz])</td>
+<td>evaluate all the interactions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="intb-class">
+<h2>IntB Class<a class="headerlink" href="#intb-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.__init__.html#pylayers.antprop.interactions.IntB.__init__" title="pylayers.antprop.interactions.IntB.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">IntB.__init__</span></tt></a>([data,&nbsp;dtype,&nbsp;idx])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntB.__repr__.html#pylayers.antprop.interactions.IntB.__repr__" title="pylayers.antprop.interactions.IntB.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">IntB.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntB.eval" title="pylayers.antprop.interactions.IntB.eval"><tt class="xref py py-obj docutils literal"><span class="pre">IntB.eval</span></tt></a>([fGHz])</td>
+<td>evaluation of B interactions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="intl-class">
+<h2>IntL Class<a class="headerlink" href="#intl-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntL.__init__.html#pylayers.antprop.interactions.IntL.__init__" title="pylayers.antprop.interactions.IntL.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">IntL.__init__</span></tt></a>([data,&nbsp;dtype,&nbsp;idx])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntL.__repr__.html#pylayers.antprop.interactions.IntL.__repr__" title="pylayers.antprop.interactions.IntL.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">IntL.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntL.eval" title="pylayers.antprop.interactions.IntL.eval"><tt class="xref py py-obj docutils literal"><span class="pre">IntL.eval</span></tt></a>([fGHz])</td>
+<td>evaluation of B interactions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="intr-class">
+<h2>IntR Class<a class="headerlink" href="#intr-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.__init__.html#pylayers.antprop.interactions.IntR.__init__" title="pylayers.antprop.interactions.IntR.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">IntR.__init__</span></tt></a>([data,&nbsp;dtype,&nbsp;idx])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntR.__repr__.html#pylayers.antprop.interactions.IntR.__repr__" title="pylayers.antprop.interactions.IntR.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">IntR.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntR.eval" title="pylayers.antprop.interactions.IntR.eval"><tt class="xref py py-obj docutils literal"><span class="pre">IntR.eval</span></tt></a>([fGHz])</td>
+<td>evaluation of reflexion interactions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="intt-class">
+<h2>IntT Class<a class="headerlink" href="#intt-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.__init__.html#pylayers.antprop.interactions.IntT.__init__" title="pylayers.antprop.interactions.IntT.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">IntT.__init__</span></tt></a>([data,&nbsp;dtype,&nbsp;idx])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntT.__repr__.html#pylayers.antprop.interactions.IntT.__repr__" title="pylayers.antprop.interactions.IntT.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">IntT.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntT.eval" title="pylayers.antprop.interactions.IntT.eval"><tt class="xref py py-obj docutils literal"><span class="pre">IntT.eval</span></tt></a>([fGHz])</td>
+<td>example given for</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="intd-class">
+<h2>IntD Class<a class="headerlink" href="#intd-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.__init__.html#pylayers.antprop.interactions.IntD.__init__" title="pylayers.antprop.interactions.IntD.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">IntD.__init__</span></tt></a>([data,&nbsp;dtype,&nbsp;idx,&nbsp;fGHz])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.interactions.IntD.__repr__.html#pylayers.antprop.interactions.IntD.__repr__" title="pylayers.antprop.interactions.IntD.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">IntD.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pylayers.antprop.interactions.IntD.eval" title="pylayers.antprop.interactions.IntD.eval"><tt class="xref py py-obj docutils literal"><span class="pre">IntD.eval</span></tt></a>([fGHz])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="class">
 <dt id="pylayers.antprop.interactions.IntB">
 <em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">IntB</tt><big>(</big><em>data=array(</em>, <span class="optional">[</span><span class="optional">]</span><em>dtype=float64)</em>, <em>idx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntB" title="Permalink to this definition">¶</a></dt>
@@ -587,6 +757,7 @@ self.nimax : the total number of interactions ( of all rays)</dd>
 </dd></dl>
 
 </div>
+</div>
 
 
           </div>
@@ -604,7 +775,7 @@ self.nimax : the total number of interactions ( of all rays)</dd>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.signature.html" title="pylayers.antprop.signature module"
+          <a href="generated/pylayers.antprop.interactions.Inter.__init__.html" title="pylayers.antprop.interactions.Inter.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.antprop.raysc.html" title="pylayers.antprop.raysc module"
