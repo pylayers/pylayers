@@ -28,7 +28,6 @@ This class implements the body model
     Body.body_link
     Body.cylinder_basis_k
     Body.cyl_antenna
-    Body.translate
 
 Miscelianous Functions
 ======================
@@ -37,6 +36,7 @@ Miscelianous Functions
     :toctree: /generated
 
     ChangeBasis
+    translate
     rotation
     dist
     Global_Trajectory

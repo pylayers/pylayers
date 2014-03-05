@@ -11,8 +11,8 @@ Ctilde class
     Ctilde.__repr__
     Ctilde.info
     Ctilde.choose
-    Ctilde.save5
-    Ctilde.load5
+    Ctilde.saveh5
+    Ctilde.loadh5
     Ctilde.load
     Ctilde.mobility
     Ctilde.doadod
@@ -49,6 +49,8 @@ Tchannel Class
     Tchannel.wavefig
     Tchannel.rayfig
     Tchannel.RSSI
+    Tchannel.saveh5
+    Tchannel.loadh5
 
 """
 import doctest
