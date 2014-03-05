@@ -78,6 +78,48 @@
             
   <h1>Source code for pylayers.antprop.channelc</h1><div class="highlight"><pre>
 <span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.antprop.channelc</span>
+
+<span class="sd">VectChannel Class</span>
+<span class="sd">=================</span>
+
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    VectChannel.__init__</span>
+<span class="sd">    VectChannel.show3_old</span>
+<span class="sd">    VectChannel.show3</span>
+
+<span class="sd">ScalChannel Class</span>
+<span class="sd">=================</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    ScalChannel.__init__</span>
+<span class="sd">    ScalChannel.info</span>
+<span class="sd">    ScalChannel.imshow</span>
+<span class="sd">    ScalChannel.apply</span>
+<span class="sd">    ScalChannel.applywavC</span>
+<span class="sd">    ScalChannel.applywavB</span>
+<span class="sd">    ScalChannel.applywavA</span>
+<span class="sd">    ScalChannel.doddoa</span>
+<span class="sd">    ScalChannel.wavefig</span>
+<span class="sd">    ScalChannel.rayfig</span>
+
+<span class="sd">VectLOS Class</span>
+<span class="sd">=============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    VectLOS.__init__</span>
+<span class="sd">    VectLOS.cir</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -130,7 +172,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="VectChannel.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channelc.VectChannel.__init__.html#pylayers.antprop.channelc.VectChannel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">itx</span><span class="p">,</span> <span class="n">irx</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -236,7 +278,7 @@
         <span class="c">#self.Ftp = FUsignal(fGHz,np.zeros(sh))</span>
         <span class="c">#self.Frt = FUsignal(fGHz,np.ones(sh))</span>
         <span class="c">#self.Frp = FUsignal(fGHz,np.zeros(sh))</span>
-
+</div>
 <div class="viewcode-block" id="VectChannel.show3_old"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channelc.html#pylayers.antprop.channelc.VectChannel.show3_old">[docs]</a>    <span class="k">def</span> <span class="nf">show3_old</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview visualization old version</span>
 
@@ -389,7 +431,7 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">VC</span><span class="p">,</span> <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span><span class="p">,</span> <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span><span class="p">):</span>
+<div class="viewcode-block" id="ScalChannel.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channelc.ScalChannel.__init__.html#pylayers.antprop.channelc.ScalChannel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">VC</span><span class="p">,</span> <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span><span class="p">,</span> <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftt</span> <span class="o">=</span> <span class="n">Ftt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftp</span> <span class="o">=</span> <span class="n">Ftp</span>
@@ -412,7 +454,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dod</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">doa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doa</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span>
-
+</div>
 <div class="viewcode-block" id="ScalChannel.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channelc.html#pylayers.antprop.channelc.ScalChannel.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display information</span>
 
@@ -673,7 +715,7 @@
 
 </div></div>
 <div class="viewcode-block" id="VectLOS"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channelc.html#pylayers.antprop.channelc.VectLOS">[docs]</a><span class="k">class</span> <span class="nc">VectLOS</span><span class="p">(</span><span class="n">Ctilde</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">Nf</span><span class="o">=</span><span class="mi">180</span><span class="p">):</span>
+<div class="viewcode-block" id="VectLOS.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channelc.VectLOS.__init__.html#pylayers.antprop.channelc.VectLOS.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">Nf</span><span class="o">=</span><span class="mi">180</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">d</span> <span class="o">/</span> <span class="mf">0.3</span><span class="p">])</span>
         <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
         <span class="n">c1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">d</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">))</span>
@@ -688,7 +730,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nray</span> <span class="o">=</span> <span class="mi">1</span>
-
+</div>
 <div class="viewcode-block" id="VectLOS.cir"><a class="viewcode-back" href="../../../modules/pylayers.antprop.channelc.html#pylayers.antprop.channelc.VectLOS.cir">[docs]</a>    <span class="k">def</span>  <span class="nf">cir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wav</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Channel Impulse Response</span>
 
