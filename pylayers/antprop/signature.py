@@ -552,65 +552,6 @@ class Signatures(dict):
             self.L.dumpw()
 
 
-    def _saveh5(self,filenameh5,grpname):
-        """ Save H5py compliant with Links
-        """
-
-
-        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-        # if grpname == '':
-        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff) 
-        try:
-            # file management
-            fh5=h5py.File(filename,'a')
-            if not grpname in fh5['sig'].keys(): 
-                fh5['sig'].create_group(grpname)
-            else :
-                raise NameError('sig/'+grpname +'already exists in '+filenameh5)    
-            f=fh5['sig/'+grpname]
-
-            # write data
-            f.attrs['L']=self.L.filename
-            f.attrs['source']=self.source
-            f.attrs['target']=self.target
-            f.attrs['cutoff']=self.cutoff
-            for k in self.keys():
-                f.create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
-            fh5.close()
-        except:
-            fh5.close()
-            raise NameError('Signature: issue when writting h5py file')
-
-
-    def _loadh5(self,filenameh5,grpname):
-        """ Load signatures h5py format compliant w Links
-        """
-        
-
-        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-        # if grpname =='':
-        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff) 
-    
-        # try/except to avoid loosing the h5 file if 
-        # read/write error
-        try:    
-            fh5=h5py.File(filename,'r')
-            f=fh5['sig/'+grpname]
-            for k in f.keys():
-                self.update({eval(k):f[k][:]})
-            fh5.close()
-        except:
-            fh5.close()
-            raise NameError('Signature: issue when reading h5py file')
-
-        fileL=filenameh5.split('_',2)[-1].split('.h5')[0]
-        _fileL=pyu.getshort(fileL)
-        self.L=layout.Layout(_fileL)
-        try:
-            self.L.dumpr()
-        except:
-            self.L.build()
-            self.L.dumpw()
 
 
     def save(self):
