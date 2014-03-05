@@ -252,7 +252,81 @@ class Rays(dict):
 
         if self.evaluated:
             return self.eval(self.fGHz)
- 
+
+    def _saveh5(self,filenameh5,grpname):
+        """ save rays pyh5 format compliant links
+        """
+
+        filenameh5=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            
+            fh5=h5py.File(filenameh5,'a')
+            if not grpname in fh5['ray'].keys(): 
+                fh5['ray'].create_group(grpname)
+            else :
+                print 'ray/'+grpname +'already exists in '+filenameh5
+            f = fh5['ray/'+grpname]
+            # keys not saved as attribute of h5py file
+            notattr = ['I','B','B0','delays','dis']
+            for a in self.__dict__.keys():
+                if a not in notattr:
+                    f.attrs[a]=getattr(self,a)
+
+            for k in self.keys():
+                f.create_group(str(k))
+                for kk in self[k].keys():
+                    if kk == 'sig2d':
+                        # Need to find an efficient way to save the signatures
+                        # 2d which have created the rays
+                        pass
+                    elif kk == 'nbrays':
+                        f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
+                    else:    
+                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Rays: issue when writting h5py file')
+
+    def _loadh5(self,filenameh5,grpname):
+        """ save rays 
+            pyh5 format
+        """ 
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            fh5=h5py.File(filename,'r')
+            f = fh5['ray/'+grpname]
+            for k in f.keys():
+                self.update({eval(k):{}})
+                for kk in f[k].keys():
+                    self[eval(k)].update({kk:f[k][str(kk)][:]})
+
+            for a,va in f.attrs.items():
+                setattr(self,a,va)
+            fh5.close()
+
+        except:
+
+            fh5.close()
+            raise NameError('Rays: issue when reading h5py file')
+            
+        # fill if save was filled
+
+        # temporary solution in order to avoir 
+        # creating save for Interactions classes
+        if self.filled:
+            fileL=filenameh5.split('_',2)[-1].split('.h5')[0]
+            _fileL=pyu.getshort(fileL)
+            L=Layout(_fileL)
+            self.fillinter(L)
+
+        if self.evaluated:
+            return self.eval(self.fGHz) 
 
 
     def reciprocal(self):
