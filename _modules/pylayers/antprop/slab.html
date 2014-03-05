@@ -93,6 +93,8 @@
 
 <span class="sd">.. currentmodule:: pylayers.antprop.slab</span>
 
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
 
 <span class="sd">Interface Class</span>
 <span class="sd">===============</span>
@@ -176,7 +178,6 @@
 
 <span class="sd">    SlabDB.__init__</span>
 <span class="sd">    SlabDB.showall</span>
-<span class="sd">    SlabDB.help</span>
 <span class="sd">    SlabDB.info</span>
 <span class="sd">    SlabDB.dass</span>
 <span class="sd">    SlabDB.maxindex</span>
@@ -215,7 +216,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.easygui</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 
-<div class="viewcode-block" id="Interface"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface">[docs]</a><span class="k">class</span> <span class="nc">Interface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Interface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Interface between 2 medium</span>
 
 <span class="sd">    Attributes</span>
@@ -261,7 +262,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 </div>
-<div class="viewcode-block" id="Interface.RT"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface.RT">[docs]</a>    <span class="k">def</span> <span class="nf">RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metalic</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.RT"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.RT.html#pylayers.antprop.slab.Interface.RT">[docs]</a>    <span class="k">def</span> <span class="nf">RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metalic</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate Reflection and Transmission matrix</span>
 
 <span class="sd">        .. math::</span>
@@ -299,7 +300,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
 </div>
-<div class="viewcode-block" id="Interface.pcolor"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface.pcolor">[docs]</a>    <span class="k">def</span> <span class="nf">pcolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.pcolor"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.pcolor.html#pylayers.antprop.slab.Interface.pcolor">[docs]</a>    <span class="k">def</span> <span class="nf">pcolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display of R &amp; T coefficients wrt frequency an angle</span>
 
 <span class="sd">        Parameters</span>
@@ -357,7 +358,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Interface.tocolor"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.tocolor"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.tocolor.html#pylayers.antprop.slab.Interface.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert transmission into color</span>
 
 <span class="sd">        Parameters</span>
@@ -409,7 +410,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Interface.loss0"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.loss0"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.loss0.html#pylayers.antprop.slab.Interface.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluate Loss at normal incidence theta=0</span>
 
 <span class="sd">        Parameters</span>
@@ -443,7 +444,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Interface.losst"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.losst.html#pylayers.antprop.slab.Interface.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluate Loss</span>
 
 <span class="sd">        Parameters</span>
@@ -482,7 +483,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Interface.plotwrt"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Interface.plotwrt">[docs]</a>    <span class="k">def</span> <span class="nf">plotwrt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.plotwrt"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.plotwrt.html#pylayers.antprop.slab.Interface.plotwrt">[docs]</a>    <span class="k">def</span> <span class="nf">plotwrt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot R &amp; T coefficients with respect to angle or frequency</span>
 
 <span class="sd">        Parameters</span>
@@ -636,8 +637,8 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
-</div></div>
-<div class="viewcode-block" id="MatInterface"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatInterface">[docs]</a><span class="k">class</span> <span class="nc">MatInterface</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">MatInterface</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; MatInterface : Class for Interface between two materials</span>
 
 <span class="sd">    l distance from the next Interface</span>
@@ -767,8 +768,8 @@
         <span class="c">#print &#39;Slab MatInterface Io10&#39;,self.Io[15,31,1,0]</span>
         <span class="c">#print &#39;Slab MatInterface Io11&#39;,self.Io[15,31,1,1]</span>
 
-</div></div>
-<div class="viewcode-block" id="Mat"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Mat">[docs]</a><span class="k">class</span> <span class="nc">Mat</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">Mat</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle constitutive materials dictionnary</span>
 
 <span class="sd">    Attributes</span>
@@ -809,7 +810,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;roughness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roughness</span>
 </div>
-<div class="viewcode-block" id="Mat.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Mat.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">):</span>
+<div class="viewcode-block" id="Mat.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.eval.html#pylayers.antprop.slab.Mat.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate Mat at given frequencies</span>
 
 <span class="sd">        Parameters</span>
@@ -839,7 +840,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">epsc</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Mat.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Mat.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Mat.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.info.html#pylayers.antprop.slab.Mat.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display material properties</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -854,7 +855,7 @@
         <span class="c">#print &quot;sigma :&quot;,self.sigma</span>
         <span class="c">#print &quot;roughness : &quot;,self.roughness</span>
 </div>
-<div class="viewcode-block" id="Mat.R"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Mat.R">[docs]</a>    <span class="k">def</span> <span class="nf">R</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+<div class="viewcode-block" id="Mat.R"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.R.html#pylayers.antprop.slab.Mat.R">[docs]</a>    <span class="k">def</span> <span class="nf">R</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate Reflection coefficient on the air|mat interface</span>
 
 <span class="sd">        Parameters</span>
@@ -881,8 +882,8 @@
 
         <span class="k">return</span> <span class="n">Ro</span><span class="p">,</span> <span class="n">Rp</span>
 
-</div></div>
-<div class="viewcode-block" id="MatDB"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB">[docs]</a><span class="k">class</span> <span class="nc">MatDB</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">MatDB</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; MatDB Class : Material database</span>
 
 
@@ -905,14 +906,14 @@
 
 
 </div>
-<div class="viewcode-block" id="MatDB.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.info.html#pylayers.antprop.slab.MatDB.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get MatDB info</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="MatDB.dass"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.dass">[docs]</a>    <span class="k">def</span> <span class="nf">dass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.dass"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.dass.html#pylayers.antprop.slab.MatDB.dass">[docs]</a>    <span class="k">def</span> <span class="nf">dass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a dictionnary to associate index | name</span>
 
 <span class="sd">        Example of created dictionnary</span>
@@ -952,7 +953,7 @@
         <span class="c"># update Class variable key association dictionnary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">di</span> <span class="o">=</span> <span class="n">di</span>
 </div>
-<div class="viewcode-block" id="MatDB.maxindex"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.maxindex">[docs]</a>    <span class="k">def</span> <span class="nf">maxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.maxindex"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.maxindex.html#pylayers.antprop.slab.MatDB.maxindex">[docs]</a>    <span class="k">def</span> <span class="nf">maxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; find the max value of the index in DB</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -963,7 +964,7 @@
                 <span class="n">maxi</span> <span class="o">=</span> <span class="n">v</span>
         <span class="k">return</span><span class="p">(</span><span class="n">maxi</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="MatDB.delete"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.delete.html#pylayers.antprop.slab.MatDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Delete a material in the DB</span>
 
 <span class="sd">        Parameters</span>
@@ -973,7 +974,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__delitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="MatDB.edit"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.edit"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.edit.html#pylayers.antprop.slab.MatDB.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Edit a material in the DB</span>
 
 <span class="sd">        Parameters</span>
@@ -998,7 +999,7 @@
         <span class="c"># update keys association dictionnary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="MatDB.add"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;MAT&#39;</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">0</span> <span class="o">*</span> <span class="mi">1j</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha_cmm1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mur</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.add"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.add.html#pylayers.antprop.slab.MatDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;MAT&#39;</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">0</span> <span class="o">*</span> <span class="mi">1j</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha_cmm1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mur</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add a material in the DB</span>
 
 <span class="sd">        Parameters</span>
@@ -1082,7 +1083,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">M</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="MatDB.addgui"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.addgui">[docs]</a>    <span class="k">def</span> <span class="nf">addgui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;MAT&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.addgui"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.addgui.html#pylayers.antprop.slab.MatDB.addgui">[docs]</a>    <span class="k">def</span> <span class="nf">addgui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;MAT&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add a material in the DB</span>
 
 <span class="sd">        Parameters</span>
@@ -1106,7 +1107,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="MatDB.choose"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.choose"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.choose.html#pylayers.antprop.slab.MatDB.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Choose a mat from matdir</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">tkFileDialog</span>
@@ -1120,7 +1121,7 @@
 
 
 </div>
-<div class="viewcode-block" id="MatDB.load"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.load.html#pylayers.antprop.slab.MatDB.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a Material from a .ini file</span>
 
 <span class="sd">        Parameters</span>
@@ -1152,7 +1153,7 @@
         <span class="c"># PULSRAY compatibility : save in the old .mat format </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filemat</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="MatDB.loadmat"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.loadmat">[docs]</a>    <span class="k">def</span> <span class="nf">loadmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filemat</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.loadmat"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.loadmat.html#pylayers.antprop.slab.MatDB.loadmat">[docs]</a>    <span class="k">def</span> <span class="nf">loadmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filemat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Load a Material from a .mat file</span>
 
 <span class="sd">        Parameters</span>
@@ -1210,7 +1211,7 @@
             <span class="k">print</span> <span class="s">&quot;file : &quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s">&quot;is unreachable&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="MatDB.save"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.save.html#pylayers.antprop.slab.MatDB.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save MatDB in an ini file</span>
 
 <span class="sd">        [dict]</span>
@@ -1258,7 +1259,7 @@
         <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="MatDB.savemat"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.MatDB.savemat">[docs]</a>    <span class="k">def</span> <span class="nf">savemat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filemat</span><span class="p">):</span>
+<div class="viewcode-block" id="MatDB.savemat"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.savemat.html#pylayers.antprop.slab.MatDB.savemat">[docs]</a>    <span class="k">def</span> <span class="nf">savemat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filemat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save a .mat file (PulsRay format)</span>
 
 <span class="sd">        Parameters</span>
@@ -1311,8 +1312,8 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-</div></div>
-<div class="viewcode-block" id="Slab"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab">[docs]</a><span class="k">class</span> <span class="nc">Slab</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Interface</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">Slab</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Interface</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle slab</span>
 
 <span class="sd">    Summary</span>
@@ -1385,7 +1386,7 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
                 </div>
-<div class="viewcode-block" id="Slab.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Slab.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.info.html#pylayers.antprop.slab.Slab.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display Slab Info</span>
 
 
@@ -1440,7 +1441,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">print</span> <span class="s">&quot;th (rad) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Slab.conv"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab.conv">[docs]</a>    <span class="k">def</span> <span class="nf">conv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Slab.conv"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.conv.html#pylayers.antprop.slab.Slab.conv">[docs]</a>    <span class="k">def</span> <span class="nf">conv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build lmat and thick</span>
 
 <span class="sd">        Warnings</span>
@@ -1622,7 +1623,7 @@
 
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 
-<div class="viewcode-block" id="Slab.filter"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">win</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Slab.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.filter.html#pylayers.antprop.slab.Slab.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">win</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; filtering waveform</span>
 
 <span class="sd">        Parameters</span>
@@ -1693,7 +1694,7 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">delayo</span><span class="p">,</span><span class="n">delayp</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Slab.tocolor"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="Slab.tocolor"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.tocolor.html#pylayers.antprop.slab.Slab.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1714,7 +1715,7 @@
         <span class="n">color</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Slab.loss0"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">):</span>
+<div class="viewcode-block" id="Slab.loss0"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.loss0.html#pylayers.antprop.slab.Slab.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate loss for theta=0 at frequency (fGHz)</span>
 
 <span class="sd">        Parameters</span>
@@ -1749,7 +1750,7 @@
         <span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Slab.losst"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+<div class="viewcode-block" id="Slab.losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.losst.html#pylayers.antprop.slab.Slab.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculate loss w.r.t angle and frequency</span>
 
 <span class="sd">        Parameters</span>
@@ -1779,7 +1780,7 @@
         <span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Slab.editgui"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.Slab.editgui">[docs]</a>    <span class="k">def</span> <span class="nf">editgui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Slab.editgui"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.editgui.html#pylayers.antprop.slab.Slab.editgui">[docs]</a>    <span class="k">def</span> <span class="nf">editgui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; edit a Slab in the DB</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1843,8 +1844,8 @@
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
-</div>
-<div class="viewcode-block" id="SlabDB"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB">[docs]</a><span class="k">class</span> <span class="nc">SlabDB</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">SlabDB</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Slab data base</span>
 
 <span class="sd">    Attributes</span>
@@ -1873,7 +1874,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileslab</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.showall"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.showall">[docs]</a>    <span class="k">def</span> <span class="nf">showall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.showall"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.showall.html#pylayers.antprop.slab.SlabDB.showall">[docs]</a>    <span class="k">def</span> <span class="nf">showall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show all</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1887,7 +1888,7 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.info.html#pylayers.antprop.slab.SlabDB.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s">&quot;fileslab : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span>
@@ -1896,7 +1897,7 @@
             <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.dass"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.dass">[docs]</a>    <span class="k">def</span> <span class="nf">dass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.dass"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.dass.html#pylayers.antprop.slab.SlabDB.dass">[docs]</a>    <span class="k">def</span> <span class="nf">dass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update conversion dictionnary</span>
 
 <span class="sd">        code &lt;--&gt; name</span>
@@ -1908,7 +1909,7 @@
             <span class="n">di</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">di</span> <span class="o">=</span> <span class="n">di</span>
 </div>
-<div class="viewcode-block" id="SlabDB.maxindex"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.maxindex">[docs]</a>    <span class="k">def</span> <span class="nf">maxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.maxindex"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.maxindex.html#pylayers.antprop.slab.SlabDB.maxindex">[docs]</a>    <span class="k">def</span> <span class="nf">maxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; find the max value of the index in DB</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1919,13 +1920,13 @@
                 <span class="n">maxi</span> <span class="o">=</span> <span class="n">v</span>
         <span class="k">return</span><span class="p">(</span><span class="n">maxi</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="SlabDB.delete"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.delete.html#pylayers.antprop.slab.SlabDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete an element from the database</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__delitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.edit"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.edit"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.edit.html#pylayers.antprop.slab.SlabDB.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; edit a Slab in the DB</span>
 
 <span class="sd">        Parameters</span>
@@ -1936,7 +1937,7 @@
         <span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="n">slab</span><span class="o">.</span><span class="n">edit</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+<div class="viewcode-block" id="SlabDB.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.show.html#pylayers.antprop.slab.SlabDB.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; show</span>
 
 <span class="sd">        Parameters</span>
@@ -1951,7 +1952,7 @@
         <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
-<div class="viewcode-block" id="SlabDB.add"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">lmatname</span><span class="p">,</span> <span class="n">lthick</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.add"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.add.html#pylayers.antprop.slab.SlabDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">lmatname</span><span class="p">,</span> <span class="n">lthick</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a slab in dB</span>
 
 
@@ -2057,7 +2058,7 @@
         <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.addgui"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.addgui">[docs]</a>    <span class="k">def</span> <span class="nf">addgui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.addgui"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.addgui.html#pylayers.antprop.slab.SlabDB.addgui">[docs]</a>    <span class="k">def</span> <span class="nf">addgui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a slab in the DB</span>
 
 <span class="sd">        Parameters</span>
@@ -2097,7 +2098,7 @@
 <span class="c"># _fileslab = pyu.getshort(fileslab)</span>
 <span class="c"># self.load(_fileslab)</span>
 </div>
-<div class="viewcode-block" id="SlabDB.load"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.load.html#pylayers.antprop.slab.SlabDB.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a Material from a .ini file</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2132,7 +2133,7 @@
 
 
 </div>
-<div class="viewcode-block" id="SlabDB.loadsl"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.loadsl">[docs]</a>    <span class="k">def</span> <span class="nf">loadsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.loadsl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.loadsl.html#pylayers.antprop.slab.SlabDB.loadsl">[docs]</a>    <span class="k">def</span> <span class="nf">loadsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a .slab file (PulsRay format)</span>
 
 <span class="sd">        Parameters</span>
@@ -2229,7 +2230,7 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.save"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.save.html#pylayers.antprop.slab.SlabDB.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save SlabDB in an ini file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -2262,7 +2263,7 @@
         <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlabDB.savesl"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.SlabDB.savesl">[docs]</a>    <span class="k">def</span> <span class="nf">savesl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">):</span>
+<div class="viewcode-block" id="SlabDB.savesl"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.savesl.html#pylayers.antprop.slab.SlabDB.savesl">[docs]</a>    <span class="k">def</span> <span class="nf">savesl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Save a Slab database in a .slab file (PulsRay format)</span>
 
 <span class="sd">        Parameters</span>
@@ -2350,8 +2351,8 @@
 <span class="c"># f2 = _filename.replace(&#39;.sl&#39;, pstruc[&#39;DIRSLAB&#39;])</span>
 <span class="c"># self.save(f2)</span>
 
-</div></div>
-<div class="viewcode-block" id="calsig"><a class="viewcode-back" href="../../../modules/pylayers.antprop.slab.html#pylayers.antprop.slab.calsig">[docs]</a><span class="k">def</span> <span class="nf">calsig</span><span class="p">(</span><span class="n">cval</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="calsig"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.calsig.html#pylayers.antprop.slab.calsig">[docs]</a><span class="k">def</span> <span class="nf">calsig</span><span class="p">(</span><span class="n">cval</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; evaluate sigma from epsr or index at a given frequency</span>
 
 <span class="sd">    Parameters</span>
