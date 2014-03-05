@@ -79,6 +79,10 @@
   <h1>Source code for pylayers.antprop.channel</h1><div class="highlight"><pre>
 <span class="c"># -*- coding:Utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">..currentmodule:: pylayers.antprop.channel</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
 
 <span class="sd">Ctilde class</span>
 <span class="sd">============</span>
@@ -363,7 +367,7 @@
 <span class="sd">        &gt;&gt;&gt; S = Simul()</span>
 <span class="sd">        &gt;&gt;&gt; S.load(&#39;default.ini&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; C = Ctilde()</span>
-<span class="sd">        &gt;&gt;&gt; C.load(pyu.getlong(S.dtud[1][1],&#39;output&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; out = C.load(pyu.getlong(S.dtud[1][1],&#39;output&#39;))</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filetauk</span> <span class="o">=</span> <span class="n">filefield</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.field&#39;</span><span class="p">,</span> <span class="s">&#39;.tauk&#39;</span><span class="p">)</span>
@@ -376,9 +380,7 @@
 
         <span class="c"># decode filename (*.field file obtained from evalfield simulation)</span>
         <span class="n">nray</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">print</span> <span class="s">&quot;nray : &quot;</span><span class="p">,</span> <span class="n">nray</span>
         <span class="n">nfreq</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">print</span> <span class="s">&quot;nfreq : &quot;</span><span class="p">,</span> <span class="n">nfreq</span>
         <span class="k">if</span> <span class="n">nfreq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot; Error : incorrect number of frequency points in .field&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">True</span>
@@ -425,14 +427,14 @@
         <span class="c"># decode filetauk</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">:</span>
             <span class="n">nray_tauk</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">print</span> <span class="s">&quot;nb rays in .tauk file: &quot;</span><span class="p">,</span> <span class="n">nray_tauk</span>
+            <span class="c">#print &quot;nb rays in .tauk file: &quot;, nray_tauk</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="n">nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span>
-            <span class="k">print</span> <span class="s">&quot;nb rays 2: &quot;</span><span class="p">,</span> <span class="n">nray</span>
+            <span class="c">#print &quot;nb rays 2: &quot;, nray</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">nray</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">nray_tauk</span> <span class="o">!=</span> <span class="n">nray</span><span class="p">:</span>
-                <span class="k">print</span> <span class="n">nray_tauk</span> <span class="o">-</span> <span class="n">nray</span>
+            <span class="c">#if nray_tauk != nray:</span>
+            <span class="c">#    print nray_tauk - nray</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span>
 
         <span class="c"># decode the angular files (.tang and .rang)</span>

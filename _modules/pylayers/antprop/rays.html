@@ -780,7 +780,7 @@
                         <span class="n">iintp_c</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="p">(</span><span class="n">siges</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:,</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;&gt;</span><span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">siges</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]:,</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;&gt;</span><span class="mi">5</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">zip</span><span class="p">(</span><span class="n">iint_c</span><span class="p">,</span><span class="n">iray_c</span><span class="p">))</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
-                  
+
                     <span class="c"># Update coordinate in the horizontal plane</span>
                     <span class="c">#</span>
                     <span class="c">#</span>
@@ -790,7 +790,7 @@
                     <span class="c"># parameterization of the point with respect to the two</span>
                     <span class="c"># known adjascent interaction point j-1 and j+1 (Thales)</span>
                     <span class="c">#</span>
-                    
+
                     <span class="c">#iintm_f = iint_f - 1</span>
                     <span class="c">#iintp_f = iint_f + 1</span>
 
@@ -802,14 +802,14 @@
                         <span class="n">a1esm_f</span> <span class="o">=</span> <span class="n">a1es</span><span class="p">[</span><span class="n">iintm_f</span><span class="p">,</span> <span class="n">iray_f</span><span class="p">]</span>
                         <span class="n">a1esc_f</span> <span class="o">=</span> <span class="n">a1es</span><span class="p">[</span><span class="n">iint_f</span><span class="p">,</span> <span class="n">iray_f</span><span class="p">]</span>
                         <span class="n">a1esp_f</span> <span class="o">=</span> <span class="n">a1es</span><span class="p">[</span><span class="n">iintp_f</span><span class="p">,</span> <span class="n">iray_f</span><span class="p">]</span>
-       
+
 
                         <span class="n">pteesm_f</span> <span class="o">=</span> <span class="n">ptees</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">iintm_f</span><span class="p">,</span> <span class="n">iray_f</span><span class="p">]</span>
                         <span class="n">pteesp_f</span> <span class="o">=</span> <span class="n">ptees</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">iintp_f</span><span class="p">,</span> <span class="n">iray_f</span><span class="p">]</span>
-                       
+
                         <span class="n">coeff_f</span> <span class="o">=</span> <span class="p">(</span><span class="n">a1esc_f</span><span class="o">-</span><span class="n">a1esm_f</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">a1esp_f</span><span class="o">-</span><span class="n">a1esm_f</span><span class="p">)</span>
                         <span class="n">ptees</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="n">iint_f</span><span class="p">,</span> <span class="n">iray_f</span><span class="p">]</span> <span class="o">=</span> <span class="n">pteesm_f</span> <span class="o">+</span> <span class="n">coeff_f</span><span class="o">*</span><span class="p">(</span><span class="n">pteesp_f</span><span class="o">-</span><span class="n">pteesm_f</span><span class="p">)</span>
-       
+
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">iint_c</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
                         <span class="n">a1esm_c</span> <span class="o">=</span> <span class="n">a1es</span><span class="p">[</span><span class="n">iintm_c</span><span class="p">,</span> <span class="n">iray_c</span><span class="p">]</span>
                         <span class="n">a1esc_c</span> <span class="o">=</span> <span class="n">a1es</span><span class="p">[</span><span class="n">iint_c</span><span class="p">,</span> <span class="n">iray_c</span><span class="p">]</span>
@@ -850,13 +850,13 @@
                     <span class="n">ptees</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">z</span>
                 <span class="c"># recopy old 2D parameterization (no extension)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">a1es</span> <span class="o">=</span> <span class="n">a1</span>                      
+                    <span class="n">a1es</span> <span class="o">=</span> <span class="n">a1</span>
                     <span class="n">ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">a1es</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                     <span class="n">ptees</span> <span class="o">=</span> <span class="n">pte</span>
                     <span class="c"># fixing bug</span>
                     <span class="n">siges</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
                     <span class="c">#print siges</span>
-              
+
                 <span class="c">#---------------------------------</span>
                 <span class="c"># handling subsegments (if any)</span>
                 <span class="c">#---------------------------------</span>
@@ -872,15 +872,15 @@
                     <span class="n">u</span>   <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">siges</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:]</span><span class="o">==</span><span class="n">x</span><span class="p">)),</span><span class="n">lsss</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
                     <span class="c"># dimension extension of index u for :</span>
-                    <span class="c">#    z coordinate extraction (append line 2 on dimension 0)   </span>
-                    <span class="c">#    0 signature extraction  (append line 0 on  dimension 0)   </span>
+                    <span class="c">#    z coordinate extraction (append line 2 on dimension 0)</span>
+                    <span class="c">#    0 signature extraction  (append line 0 on  dimension 0)</span>
 
                     <span class="c"># v : index 2 is for getting z coordinate</span>
                     <span class="c"># w : index 0 is for getting segment number (first line of</span>
                     <span class="c"># siges)</span>
                     <span class="n">v</span>   <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)]</span><span class="o">+</span><span class="n">u</span>
                     <span class="n">w</span>   <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)]</span><span class="o">+</span><span class="n">u</span>
-                  
+
                     <span class="c"># zss : height of interactions on subsegments</span>
                     <span class="n">zss</span> <span class="o">=</span> <span class="n">ptees</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
                     <span class="c">#if k==1:</span>
@@ -914,7 +914,7 @@
                     <span class="c"># zss = array([ 2.62590637,  2.62589727,  1.34152518,</span>
                     <span class="c"># 2.0221785 ,  0.23706671, 0.2378053])</span>
                     <span class="c">#</span>
-                    <span class="c"># tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]  </span>
+                    <span class="c"># tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]</span>
                     <span class="c">#</span>
                     <span class="n">tab</span> <span class="o">=</span> <span class="nb">map</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">z</span><span class="p">:</span> <span class="p">((</span><span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
                                                            <span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">zip</span><span class="p">(</span><span class="n">zinterval</span><span class="p">,</span><span class="n">zss</span><span class="p">))</span>
@@ -942,7 +942,7 @@
                     <span class="n">siges</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">indexnew</span>
                     <span class="c">#if k==3:</span>
                     <span class="c">#    print siges</span>
-                   
+
                     <span class="c">#if k==1:</span>
                     <span class="c">#    print &quot;indexss:&quot;,indexss</span>
                     <span class="c">#    print &quot;indexnew:&quot;,indexnew</span>
@@ -992,7 +992,7 @@
             <span class="n">r3d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;pt&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
             <span class="n">r3d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;pt&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">,:]</span><span class="o">=</span><span class="n">tx</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
             <span class="n">r3d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;pt&#39;</span><span class="p">][:,</span><span class="mi">1</span><span class="p">,:]</span><span class="o">=</span><span class="n">rx</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-       
+
         <span class="c"># r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x][&#39;sig&#39;])[2],lnint)</span>
         <span class="c"># count total number of ray</span>
         <span class="c"># evaluate length of ray segment</span>
@@ -1823,15 +1823,15 @@
                         <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Atmp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
                                   <span class="o">*</span><span class="n">B00</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">Atmp</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>                   
+                        <span class="n">Atmp</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
                         <span class="n">BB</span> <span class="o">=</span> <span class="n">Bl</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
                         <span class="n">Ztmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Atmp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
                                   <span class="o">*</span><span class="n">BB</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
-    
+
 
                         <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Ztmp</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
                                   <span class="o">*</span><span class="n">Z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
-                       
+
                     <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                         <span class="n">BB</span> <span class="o">=</span> <span class="n">Bl</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
                         <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">BB</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
@@ -2092,7 +2092,7 @@
             <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </div>
     <span class="nd">@mlab.show</span>
-<div class="viewcode-block" id="Rays._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays._show3.html#pylayers.antprop.rays.Rays._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="p">[],</span><span class="n">ilist</span><span class="o">=</span><span class="p">[],</span><span class="n">rlist</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="p">[],</span><span class="n">ilist</span><span class="o">=</span><span class="p">[],</span><span class="n">rlist</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot 3D rays within the simulated environment</span>
 <span class="sd">            using Mayavi</span>
 
@@ -2151,7 +2151,7 @@
             <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">mesh</span><span class="p">),</span>
                                                  <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Rays with &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;interactions&#39;</span>
-</div>
+
     <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
               <span class="n">L</span><span class="o">=</span><span class="p">[],</span>
               <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
