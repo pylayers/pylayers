@@ -1,0 +1,4 @@
+#!/bin/bash
+cd $PYLAYERS/doc/modules
+sphinx-autogen -o generated *.rst
+
