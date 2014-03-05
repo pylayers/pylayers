@@ -26,6 +26,7 @@ sys.path.insert(0,os.path.abspath('./sphinxext'))
 
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'numpydoc',
 #    'numpydoc.plot_directive',

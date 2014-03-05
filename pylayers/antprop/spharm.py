@@ -1,7 +1,102 @@
 # -*- coding:Utf-8 -*-
 """
 
-This module handles spherical harmonics in PyLayers
+This module handles Scalar and Vector Spherical Harmonics in PyLayers
+
+Class VectorCoeff
+==================
+
+.. autosummary::
+    :toctree: generated/
+
+    VectorCoeff.__init__
+    VectorCoeff.inits1
+
+class SSHCoeff
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+     SSHCoeff.__init__
+     SSHCoeff.s2tos3
+     SSHCoeff.sets3
+
+
+class SCoeff
+============
+
+.. autosummary::
+    :toctree: generated/
+
+     SCoeff.__init__
+     SCoeff.__repr__
+     SCoeff.inits2
+     SCoeff.inits3
+     SCoeff.delete
+     SCoeff.put
+     SCoeff.delete3
+     SCoeff.put3
+     SCoeff.s3tos2
+     SCoeff.plot
+     SCoeff.show
+
+class VCoeff
+============
+
+.. autosummary::
+    :toctree: generated/
+
+     VCoeff.__init__
+     VCoeff.__repr__
+     VCoeff.inits1
+     VCoeff.inits2
+     VCoeff.inits3
+     VCoeff.s1tos2
+     VCoeff.delete
+     VCoeff.put
+     VCoeff.delete3
+     VCoeff.put3
+     VCoeff.s3tos2
+     VCoeff.plot
+     VCoeff.show
+
+class VSHCoeff
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+     VSHCoeff.__init__
+     VSHCoeff.__repr__
+     VSHCoeff.plot
+     VSHCoeff.show
+     VSHCoeff.s1tos2
+     VSHCoeff.s2tos3_new
+     VSHCoeff.s2tos3
+     VSHCoeff.s3tos2
+     VSHCoeff.strip3
+     VSHCoeff.ens3
+     VSHCoeff.drag3
+     VSHCoeff.put3
+
+
+Utility Functions
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+     indexssh
+     indexvsh
+     index_vsh
+     AFLegendre3
+     AFLegendre2
+     AFLegendre
+     VW2
+     VW
+     VW0
+     plotVW
 
 
 """
@@ -53,9 +148,9 @@ def indexssh(L,mirror=True):
                [ 1.,  1.],
                [ 2.,  1.],
                [ 2.,  2.],
-               [ 2., -2.],
+               [ 1., -1.],
                [ 2., -1.],
-               [ 1., -1.]])
+               [ 2., -2.]])
 
     """
 
@@ -247,7 +342,7 @@ class SSHCoeff(object):
     def sets3(self,Cx,Cy,Cz):
         """
 
-         Parameters
+        Parameters
         ----------
 
         Cx : SCoeff
@@ -1189,7 +1284,7 @@ class VSHCoeff(object):
         st = st + "-------------"+'\n'
         st = st + self.Ci.__repr__()
         return(st) 
-    
+
     def plot(self,typ='s3',titre='titre',log=False,stem=True,subp=True):
         """
         """
@@ -1653,15 +1748,17 @@ def AFLegendre(N, M, x):
 
     Parameters
     ----------
-        N : int
-            max order  (theta)   (also called l or level )
-        M : int
-            max degree (phi)
-        x : np.array
+
+    N : int
+        max order  (theta)   (also called l or level )
+    M : int
+        max degree (phi)
+    x : np.array
             function argument
 
     Returns
     -------
+
     Pmm1l :  ndarray ( Ndir, M , L ) 
 
         :math:`\\bar{P}_{n}^{(m-1)}(x)`
@@ -1686,7 +1783,6 @@ def AFLegendre(N, M, x):
 
     Examples
     --------
-
 
     >>> Pmm1n,Pmp1n = AFLegendre(5,4,np.array([0,1]))
 
@@ -1939,6 +2035,7 @@ def plotVW(l, m, theta, phi, sf=False):
 
     Parameters
     ----------
+
     n,m   : integer values (m<=n)
     theta : ndarray
     phi   : ndarray
@@ -1948,17 +2045,18 @@ def plotVW(l, m, theta, phi, sf=False):
 
     Examples
     --------
+
     .. plot::
         :include-source:
 
-        >>> from pylayers.antprop.antenna import *
-        >>> import  matplotlib.pyplot as plt
-        >>> import numpy as np
-        >>> n=5
-        >>> m=3
-        >>> theta = np.linspace(0,np.pi,30)
-        >>> phi   = np.linspace(0,2*np.pi,60)
-        >>> plotVW(n,m,theta,phi)
+        #>>> from pylayers.antprop.antenna import *
+        #>>> import  matplotlib.pyplot as plt
+        #>>> import numpy as np
+        #>>> n=5
+        #>>> m=3
+        #>>> theta = np.linspace(0,np.pi,30)
+        #>>> phi   = np.linspace(0,2*np.pi,60)
+        #>>> plotVW(n,m,theta,phi)
 
     """
     # calculate v and w

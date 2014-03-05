@@ -23,11 +23,29 @@ import pdb
 class Agent(object):
     """   Agent 
 
+    Members
+    -------
 
-    The init method is doing more than initializing the object
-    
-    
-    
+    args
+    ID
+    name
+    type
+    net 
+    epwr 
+    gcom
+    sim 
+    RAT 
+    sens
+    dcond 
+    meca : transit.Person
+    net : pylayers.network.Network 
+    sim : 
+    PN :    
+    rxt
+    rxr 
+
+
+
     """
     def __init__(self, **args):
         """ Mobile Agent Init
@@ -133,7 +151,7 @@ class Agent(object):
 
 
         # check if node id already given
-        
+
         if self.ID in self.net.nodes():
             raise NameError('another agent has the ID: ' + self.ID + ' .Please use an other ID' )
 
@@ -173,10 +191,18 @@ class Agent(object):
             if args['comm_mode'] == 'synchro' and  args['network']:
                 ## The TOA requests are made every refreshTOA time ( can be modified in agent.ini)
                 ## This Mode will be deprecated in future version
-                self.rxr = RX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
-                self.rxt = RX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
+
+                self.rxr = RX(net=self.net,
+                              ID=self.ID,
+                              dcond=self.dcond,
+                              gcom=self.gcom,
+                              sim=self.sim)
+
+                self.rxt = RX(net=self.net,
+                              ID=self.ID,
+                              dcond=self.dcond,
+                              gcom=self.gcom,
+                              sim=self.sim)
 
                 self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
                 self.sim.activate(self.rxt, self.rxt.refresh_TOA(), 0.0)
@@ -246,16 +272,16 @@ class Agent(object):
                                       loc_updt_time=args['loc_updt'],
                                       tx=self.tx,
                                       sim=args['sim'])
-            
+
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
         s = 'General Agent info \n********************\n'
         s = s + 'name : ' + self.name + '\n'
         s = s + 'ID: '  + self.ID + '\n'
-        s = s + 'type: '  + self.type 
+        s = s + 'type: '  + self.type
 
-      
+
         s = s + '\n\n More Agent information about:'
         s = s + '\n+ Mecanichal => self.meca'
 
@@ -265,7 +291,7 @@ class Agent(object):
 
         try :
             s = s+ self.PN.__repr__() + '\n\n'
-        except: 
+        except:
             s = s + 'No network simulated'
 
         if self.type != 'ap':

@@ -1,65 +1,54 @@
 # -*- coding:Utf-8 -*-
+"""
+.. currentmodule:: pylayers.util.geomutil
+
+=================================================
+Geometry Module (:mod:`pylayers.util.geomutil`)
+================================================
+
+Geomview Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    Geomview
+    Geomlist
+    Geomoff
+    GeomVect
+
+
+2 points functions
+===================
+
+.. autosummary::
+    :toctree: generated/
+
+    SignedArea
+    Centroid
+    Lr2n
+    isBetween
+
+Functions2
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+    pvec
+    pvecn
+    vec_sph
+    ellipse
+    ptonseg
+
+
+"""
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 import shapely.geometry as sh
 import scipy.linalg as la
 import pdb
 import logging
-#! /usr/bin/python
-# geomutil.py
-""" functions related to geometry
-
- Routines
- --------
-
-     SignedArea(p=np.array([[0,10,10,0],[0,0,-2,-2]]))
-
-     Centroid(p=np.array([[0,10,10,0],[0,0,-2,-2]]))
-
-     Lr2n(p=np.array([[0,10,10,0],[0,0,-2,-2]]),closed=True)
-
-     isBetween(p1, p2, p,epsilon=1e-5)
-
-     pvec(v1,v2)
-
-     pvecn(v1,v2)
-
-     vec_sph(th,ph)
-
-     ellipse(fd,p,vth,vph,Eth,Eph,N)
-
-     ptonseg(pta,phe,pt)
-
-     linet(sp,p1,p2,al,col,lwidth)
-
-     ccw(a,b,c)
-
-     intersect(a,b,c,d)
-
-     mul3(A,B)
-
-     MRot3(a,axe)
-
-     MEulerAngle(alpha,beta,gamma)
-
-     SphericalBasis(a)
-
-     angledir(s)
-
-     BTB_rx(a_g,T)
-
-     BTB_tx(a_g,T)
-
-     plotPolygon(poly,color="#abcdef",alpha=0.8)
-
-     simplifyPolygon(poly1)
-
-     shrinkPolygon(poly,d=0.1)
-
-     shrinkPolygon2(poly1,d=0.1)
-
-
-"""
 import networkx as nx
 import doctest
 import os
@@ -713,24 +702,6 @@ class Geomoff(Geomview):
 
         fd.close()
 
-#class Polygon2(object):
-#        def __init__(self,p):
-#                self.p = p
-#
-#        def SignedArea(self,p):
-#                """
-#                area  = P.SignedArea()
-#                p : coordinates of the polygon vertices (2 x Np)
-#                R eferences: [O'Rourke (C)] Thm. 1.3.3, p. 21; [Gems II] pp. 5-6:
-#                       "The Area of a Simple Polygon", Jon Rokne. Dan Sunday's
-#                       explanation:
-#                http://www.cgafaq.info/wiki/Polygon_Area
-#                """
-#                self.area = sum(np.hstack((self.p[0,1::],self.p[0:0]))*(np.hstack((self.p[1,2::],self.p[1,0:2]))-self.p[1,:])/2.
-#
-#
-
-
 def angular(p1, p2):
     """ determine angle between p1 and p2 in [0 2pi]
 
@@ -743,10 +714,12 @@ def angular(p1, p2):
 
     Notes
     -----
-        weird the origin is p2
+
+    weird the origin is p2
 
     Examples
     --------
+
     >>> import numpy as np
     >>> p1 = np.array([0,0])
     >>> p21 = np.array([1,0])

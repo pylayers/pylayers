@@ -173,27 +173,43 @@ default False
         plt.show()
 
     def tocolor(self,fGHz):
+        """ convert transmission into color
+
+        Parameters
+        ----------
+
+        fGHz : np.array
+
+        Returns
+        -------
+
+        col : string
+            hexadecimal color
+
+
+        See Also 
+        ---------
+
+        pylayers.gis.layout.showGs
+
         """
-
-Parameters
-----------
-
-fGHz : np.array
-
-
-"""
         # nf x nt x 2 x 2
         modTo = abs(self.T[:, 0, 0, 0])
         modTp = abs(self.T[:, 0, 1, 1])
         N = len(fGHz)
+
         if N>3:
             M = N/3
+
             ared = (sum(modTo[0:M])+sum(modTp[0:M]))/(2*M)
             agreen = (sum(modTo[M:2*M])+sum(modTp[M:2*M]))/(2*M)
             ablue = (sum(modTo[2*M:])+sum(modTp[2*M:]))/(2*(N-2*M))
+
+            # hexadsecimal convert
             vred = hex(int(np.floor(ared*255))).replace('0x','')
             vgreen = hex(int(np.floor(agreen*255))).replace('0x','')
             vblue = hex(int(np.floor(ablue*255))).replace('0x','')
+
             if len(vred)==1:
                 vred = '0'+vred
             if len(vgreen)==1:

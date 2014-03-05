@@ -46,7 +46,7 @@ import pdb
 class ShowNet(Process):
     '''
     Show network process
-   
+
     Process which update the plot from the dynamic information from the network
 
     Method

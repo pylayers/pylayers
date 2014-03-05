@@ -1,26 +1,107 @@
 # -*- coding:Utf-8 -*-
 """
 
-This module handles antennas in pylayers
+.. currentmodule:: pylayers.antprop.antenna
 
-.. python::
-
-    A = Antenna(_filename,directory,nf,ntheta,nphi,fromfile=True)
-
-
-Examples
---------
-
-    >>> from pylayers.antprop.antenna import *
-    >>> A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
-
-The antenna can be represented in various formats
+This module handles antennas
+The antenna can be loaded from various specific file formats
 
 .vsh2
 .vsh3
 .sh2
 .sh3
 .mat
+
+
+Antenna Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+
+Utility Functions
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Antenna.__init__
+    Antenna.__repr__
+    Antenna.ls
+
+    Antenna.demo
+
+    Antenna.errel
+    Antenna.checkpole
+    Antenna.info
+
+
+    Antenna.pol2cart
+    Antenna.cart2pol
+    Antenna.minsh3
+    Antenna.mse
+    Antenna.getdelay
+    Antenna.elec_delay
+
+Synthesis Functions
+-------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Antenna.Fsynth
+    Antenna.Fsynth1
+    Antenna.Fsynth2s
+    Antenna.Fsynth2b
+    Antenna.Fsynth2
+    Antenna.Fsynth3
+    Antenna.Fpatt
+
+Visualization functions
+-----------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Antenna.pattern
+    Antenna.polar
+    Antenna._show3
+    Antenna.show3
+    Antenna.plot3d
+    Antenna.pol3d
+    Antenna.load_trx
+    Antenna.movie_vsh
+
+Loading and Saving
+------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Antenna.loadhfss
+    Antenna.loadtrx
+    Antenna.loadmat
+    Antenna.savevsh3
+    Antenna.savesh2
+    Antenna.savesh3
+    Antenna.loadvsh3
+    Antenna.loadsh3
+    Antenna.savevsh2
+    Antenna.loadsh2
+    Antenna.loadvsh2
+
+Miscellianous  functions
+========================
+
+
+.. autosummary::
+    :toctree: generated/
+
+    forcesympol
+    compdiag
+    show3D
+
 
 """
 import doctest
@@ -47,7 +128,7 @@ from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
 import pandas as pd
 try:
-    from mayavi import mlab 
+    from mayavi import mlab
 except:
     print 'mayavi not installed'
 
@@ -750,8 +831,6 @@ class Antenna(object):
         SqG = np.empty((self.Nf,self.Nt,self.Np))
 
         for i in range (len(lfa)):
-
-
 
             fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
             lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio'],index_col=False))
@@ -2604,10 +2683,10 @@ class Antenna(object):
 
 def forcesympol(A):
     """ plot VSH transform vsh basis in 3D plot
-        (V in fig1 and W in fig2)
 
     Parameters
     ----------
+
     n,m   : integer values (m<=n)
     theta : ndarray
     phi   : ndarray
@@ -2617,6 +2696,7 @@ def forcesympol(A):
 
     Examples
     --------
+
     .. plot::
         :include-source:
 

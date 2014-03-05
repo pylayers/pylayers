@@ -5178,7 +5178,7 @@ Both type of file will be exploited in the following.
 
 To ease electromagnetic simulation a simplification of the motion
 capture data structure is necessary. Generally there is a large number
-of captutred points, not all of them being useful for our modeling.
+of captured points, not all of them being useful for the modeling.
 
 The body model is a restriction of key body segments which are
 transformed into :math:`K` cylinders of radius :math:`r_k`.

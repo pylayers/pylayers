@@ -77,7 +77,7 @@ pstruc['DIRR2D'] = 'output/r2d'
 pstruc['DIRR3D'] = 'output/r3d'
 pstruc['DIRCT'] = 'output/Ct'
 pstruc['DIRH'] = 'output/H'
-
+pstruc['DIRLNK'] = 'output'
 
 # if basename directory does not exit it is created 
 try:
