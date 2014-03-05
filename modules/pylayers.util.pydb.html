@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="up" title="pylayers.util package" href="pylayers.util.html" />
+    <link rel="up" title="PyLayers" href="pylayers.html" />
     <link rel="next" title="pylayers.util.pymysqldb module" href="pylayers.util.pymysqldb.html" />
     <link rel="prev" title="pylayers.util.project module" href="pylayers.util.project.html" /> 
   </head>
@@ -57,8 +57,7 @@
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.util.html" accesskey="U">pylayers.util package</a> &raquo;</li> 
+          <li><a href="pylayers.html" accesskey="U">PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -98,61 +97,6 @@
             
   <div class="section" id="module-pylayers.util.pydb">
 <span id="pylayers-util-pydb-module"></span><h1>pylayers.util.pydb module<a class="headerlink" href="#module-pylayers.util.pydb" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.util.pydb.pysql">
-<em class="property">class </em><tt class="descclassname">pylayers.util.pydb.</tt><tt class="descname">pysql</tt><big>(</big><em>server='localhost'</em>, <em>dbname=''</em>, <em>userid=''</em>, <em>passwd=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class manages connection between PyLayers and MS SQL Server
-database</p>
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.connect_mssql">
-<tt class="descname">connect_mssql</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.connect_mssql"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.connect_mssql" title="Permalink to this definition">¶</a></dt>
-<dd><p>connect to MS SQL Server database and return a cursor</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.connect_mysql">
-<tt class="descname">connect_mysql</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.connect_mysql"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.connect_mysql" title="Permalink to this definition">¶</a></dt>
-<dd><p>connect to MySQL database and return a cursor</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.disconnect">
-<tt class="descname">disconnect</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.disconnect" title="Permalink to this definition">¶</a></dt>
-<dd><p>close the connexion with database</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.getcolumns">
-<tt class="descname">getcolumns</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.getcolumns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.getcolumns" title="Permalink to this definition">¶</a></dt>
-<dd><p>get columns from a table</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.gettables">
-<tt class="descname">gettables</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.gettables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.gettables" title="Permalink to this definition">¶</a></dt>
-<dd><p>get tables names</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.rundeletecmd">
-<tt class="descname">rundeletecmd</tt><big>(</big><em>cmd</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.rundeletecmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.rundeletecmd" title="Permalink to this definition">¶</a></dt>
-<dd><p>run an insert sql command cmd</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.runinsertcmd">
-<tt class="descname">runinsertcmd</tt><big>(</big><em>cmd</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.runinsertcmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.runinsertcmd" title="Permalink to this definition">¶</a></dt>
-<dd><p>run an insert sql command cmd</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.pydb.pysql.runselectcmd">
-<tt class="descname">runselectcmd</tt><big>(</big><em>cmd</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pydb.html#pysql.runselectcmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pydb.pysql.runselectcmd" title="Permalink to this definition">¶</a></dt>
-<dd><p>run a select sql command cmd</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -181,14 +125,13 @@ database</p>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.util.html" >pylayers.util package</a> &raquo;</li> 
+          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

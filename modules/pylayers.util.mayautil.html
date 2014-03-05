@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="up" title="pylayers.util package" href="pylayers.util.html" />
+    <link rel="up" title="PyLayers" href="pylayers.html" />
     <link rel="next" title="pylayers.util.plotutil module" href="pylayers.util.plotutil.html" />
     <link rel="prev" title="pylayers.util.graphutil module" href="pylayers.util.graphutil.html" /> 
   </head>
@@ -57,8 +57,7 @@
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.util.html" accesskey="U">pylayers.util package</a> &raquo;</li> 
+          <li><a href="pylayers.html" accesskey="U">PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -98,50 +97,6 @@
             
   <div class="section" id="module-pylayers.util.mayautil">
 <span id="pylayers-util-mayautil-module"></span><h1>pylayers.util.mayautil module<a class="headerlink" href="#module-pylayers.util.mayautil" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.util.mayautil.VolumeSlicer">
-<em class="property">class </em><tt class="descclassname">pylayers.util.mayautil.</tt><tt class="descname">VolumeSlicer</tt><big>(</big><em>**traits</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">traits.has_traits.HasTraits</span></tt></p>
-<p>adapted from &gt;http://docs.enthought.com/mayavi/mayavi/auto/example_volume_slicer.html</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ogrid</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">64j</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">64j</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">64j</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.05</span><span class="o">*</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">VolumeSlicer</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">configure_traits</span><span class="p">()</span>
-</pre></div>
-</div>
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene3d">
-<tt class="descname">display_scene3d</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene3d" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene_x">
-<tt class="descname">display_scene_x</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_x" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene_y">
-<tt class="descname">display_scene_y</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_y" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.display_scene_z">
-<tt class="descname">display_scene_z</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.display_scene_z"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.display_scene_z" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.make_ipw_3d">
-<tt class="descname">make_ipw_3d</tt><big>(</big><em>axis_name</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.make_ipw_3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.make_ipw_3d" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.mayautil.VolumeSlicer.make_side_view">
-<tt class="descname">make_side_view</tt><big>(</big><em>axis_name</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/mayautil.html#VolumeSlicer.make_side_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.mayautil.VolumeSlicer.make_side_view" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -170,14 +125,13 @@
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.util.html" >pylayers.util package</a> &raquo;</li> 
+          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

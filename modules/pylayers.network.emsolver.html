@@ -24,9 +24,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="up" title="pylayers.network package" href="pylayers.network.html" />
-    <link rel="next" title="pylayers.network.model module" href="pylayers.network.model.html" />
-    <link rel="prev" title="pylayers.network.communication module" href="pylayers.network.communication.html" /> 
+    <link rel="up" title="PyLayers" href="pylayers.html" />
+    <link rel="next" title="pylayers.network.model" href="pylayers.network.model.html" />
+    <link rel="prev" title="pylayers.network.communication" href="pylayers.network.communication.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -47,18 +47,17 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.network.model.html" title="pylayers.network.model module"
+          <a href="pylayers.network.model.html" title="pylayers.network.model"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pylayers.network.communication.html" title="pylayers.network.communication module"
+          <a href="pylayers.network.communication.html" title="pylayers.network.communication"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.network.html" accesskey="U">pylayers.network package</a> &raquo;</li> 
+          <li><a href="pylayers.html" accesskey="U">PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -66,10 +65,10 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.network.communication.html"
-                        title="previous chapter">pylayers.network.communication module</a></p>
+                        title="previous chapter">pylayers.network.communication</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pylayers.network.model.html"
-                        title="next chapter">pylayers.network.model module</a></p>
+                        title="next chapter">pylayers.network.model</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.network.emsolver.txt"
@@ -98,185 +97,6 @@
             
   <div class="section" id="module-pylayers.network.emsolver">
 <span id="pylayers-network-emsolver-module"></span><h1>pylayers.network.emsolver module<a class="headerlink" href="#module-pylayers.network.emsolver" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt>
-<tt class="descname">EMSolver(L=</tt></dt>
-<dt>
-<tt class="descname">----------------</tt></dt>
-<dt id="pylayers.network.emsolver.defstr.ini">
-<em class="property">class </em><tt class="descclassname">defstr.</tt><tt class="descname">ini</tt><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini" title="Permalink to this definition">¶</a></dt>
-<dt>
-<tt class="descname">----------------</tt></dt>
-<dt>
-<tt class="descname"></tt></dt>
-<dt>
-<tt class="descname">Number of points  : 8</tt></dt>
-<dt>
-<tt class="descname">Number of segments  : 9</tt></dt>
-<dt>
-<tt class="descname">Number of sub segments  : 3</tt></dt>
-<dt>
-<tt class="descname">Number of cycles  : 0</tt></dt>
-<dt>
-<tt class="descname">Number of rooms  : 0</tt></dt>
-<dt>
-<tt class="descname">degree 0 : []</tt></dt>
-<dt>
-<tt class="descname">degree 1 : [-8 -7]</tt></dt>
-<dt>
-<tt class="descname">degree 2 : 4</tt></dt>
-<dt>
-<tt class="descname">degree 3 : 2</tt></dt>
-<dt>
-<tt class="descname"></tt></dt>
-<dt>
-<tt class="descname">xrange :(758.49, 768.516)</tt></dt>
-<dt>
-<tt class="descname">yrange :(1111.9, 1115.963)</tt></dt>
-<dt>
-<tt class="descname"></tt></dt>
-<dt>
-<tt class="descname">Useful dictionnaries</tt></dt>
-<dt>
-<tt class="descname">----------------</tt></dt>
-<dt>
-<tt class="descname">sl {slab name : slab dictionary}</tt></dt>
-<dt>
-<tt class="descname">name :  {slab :seglist}</tt></dt>
-<dt>
-<tt class="descname"></tt></dt>
-<dt>
-<tt class="descname">Useful arrays</tt></dt>
-<dt>
-<tt class="descname">----------------</tt></dt>
-<dt>
-<tt class="descname">tsg : get segment index in Gs from tahe</tt></dt>
-<dt>
-<tt class="descname">isss :  sub-segment index above Nsmax</tt></dt>
-<dt>
-<tt class="descname">tgs : get segment index in tahe from Gs</tt></dt>
-<dt>
-<tt class="descname">lsss : list of segments with sub-segment</tt></dt>
-<dt>
-<tt class="descname">sla : list of all slab names (Nsmax+Nss+1)</tt></dt>
-<dt>
-<tt class="descname">degree : degree of nodes</tt></dt>
-<dt>
-<tt class="descname">)</tt></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Invoque an electromagnetic solver</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>config</strong> :</p>
-<p><strong>fileini</strong> :</p>
-<p><strong>ems_opt</strong> :</p>
-<p><strong>toa_opt</strong> :</p>
-<p><strong>EMS_method</strong> :</p>
-<p class="last"><strong>sigmaTOA</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>During dynamic simulation, on a regular basis nodes needs radio information
-about their neighbors. This radio information can be obtained with
-different technique from statistical model to site specific simulation
-using ray tracing.</p>
-<p>EMS_method = { &#8216;multiwall&#8217;,&#8217;raytracing&#8217;}</p>
-<dl class="method">
-<dt id="pylayers.network.emsolver.defstr.ini.EMSolver.load_model">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">load_model</tt><big>(</big><em>RAT</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini.EMSolver.load_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>load a path loss shadowing model for a RAT</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>RAT</strong> : string</p>
-<blockquote class="last">
-<div><p>RAT name</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.emsolver.defstr.ini.EMSolver.save_model">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">save_model</tt><big>(</big><em>RAT</em>, <em>model</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini.EMSolver.save_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>save a RAT model</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>RAT</strong> : string</p>
-<blockquote>
-<div><p>RAT name</p>
-</div></blockquote>
-<p><strong>model</strong> : dictionnary</p>
-<blockquote class="last">
-<div><p>parameters of the PL model</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.emsolver.defstr.ini.EMSolver.solve">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">solve</tt><big>(</big><em>p</em>, <em>e</em>, <em>LDP</em>, <em>RAT</em>, <em>epwr</em>, <em>sens</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini.EMSolver.solve" title="Permalink to this definition">¶</a></dt>
-<dd><p>computes and returns a LDP value a given method</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : np.array</p>
-<p><strong>e</strong> : np.array</p>
-<p><strong>LDP</strong> : string</p>
-<blockquote>
-<div><p>Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</p>
-</div></blockquote>
-<p><strong>epwr</strong> : list</p>
-<blockquote>
-<div><p>nodes emmited power</p>
-</div></blockquote>
-<p><strong>sens</strong> : list</p>
-<blockquote>
-<div><p>nodes sensitivity</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>A LDP value <span class="classifier-delimiter">:</span> <span class="classifier">* A time in ns for LDP =&#8217;TOA&#8217;</span></dt>
-<dd><ul class="first last simple">
-<li>A received power in dBm for LDP =&#8217;Pr&#8217;</li>
-</ul>
-</dd>
-</dl>
-</div></blockquote>
-<p><strong>std</strong> : float</p>
-<blockquote class="last">
-<div><dl class="docutils">
-<dt>A LDP value standard deviation:     * A time in ns for LDP =&#8217;TOA&#8217;</dt>
-<dd><ul class="first last simple">
-<li>A received power in dBm for LDP =&#8217;Pr&#8217;</li>
-</ul>
-</dd>
-</dl>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -295,24 +115,23 @@ using ray tracing.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.network.model.html" title="pylayers.network.model module"
+          <a href="pylayers.network.model.html" title="pylayers.network.model"
              >next</a> |</li>
         <li class="right" >
-          <a href="pylayers.network.communication.html" title="pylayers.network.communication module"
+          <a href="pylayers.network.communication.html" title="pylayers.network.communication"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.network.html" >pylayers.network package</a> &raquo;</li> 
+          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

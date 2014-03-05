@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="up" title="pylayers.util package" href="pylayers.util.html" />
+    <link rel="up" title="PyLayers" href="pylayers.html" />
     <link rel="next" title="pylayers.util.utilnet module" href="pylayers.util.utilnet.html" />
     <link rel="prev" title="pylayers.util.pyutil module" href="pylayers.util.pyutil.html" /> 
   </head>
@@ -57,8 +57,7 @@
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.util.html" accesskey="U">pylayers.util package</a> &raquo;</li> 
+          <li><a href="pylayers.html" accesskey="U">PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -98,76 +97,6 @@
             
   <div class="section" id="module-pylayers.util.save">
 <span id="pylayers-util-save-module"></span><h1>pylayers.util.save module<a class="headerlink" href="#module-pylayers.util.save" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pylayers.util.save.Save">
-<em class="property">class </em><tt class="descclassname">pylayers.util.save.</tt><tt class="descname">Save</tt><big>(</big><em>**args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SimPy.Lib.Process</span></tt></p>
-<p>Save all variable of a simulnet simulation.
-Save process can be setup with the save.ini file from /&lt;project&gt;/ini</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>net</strong> : pylayers.network.network()</p>
-<p><strong>sim</strong> : SimPy.SimulationRT()</p>
-<p><strong>savemat</strong> : dictionnary with all the saved results from a simulation</p>
-<blockquote>
-<div><p>( obtained after self.export() )</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>run ():</strong> :</p>
-<blockquote>
-<div><p>save the current simulation evey k step (setup into save.ini)</p>
-</div></blockquote>
-<p><strong>load():</strong> :</p>
-<blockquote>
-<div><p>Load saved results of a simulation. file extension  .pck</p>
-</div></blockquote>
-<p><strong>export(etype) :</strong> :</p>
-<blockquote class="last">
-<div><p>export the results into the etype format.
-available format : 
-- &#8216;python&#8217;
-- &#8216;matlab&#8217;</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="pylayers.util.save.Save.load">
-<tt class="descname">load</tt><big>(</big><em>filename=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a saved trace simulation</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.save</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">Save</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.save.Save.mat_export">
-<tt class="descname">mat_export</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.mat_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.mat_export" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>export save simulation to a matlab file</div></blockquote>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.save</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">Save</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">mat_export</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.util.save.Save.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/save.html#Save.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.save.Save.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run the save Result process</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -196,14 +125,13 @@ available format :
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="pylayers.util.html" >pylayers.util package</a> &raquo;</li> 
+          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on mars 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
