@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.slab.MatDB.add &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.slab module" href="../pylayers.antprop.slab.html" />
+    <link rel="next" title="pylayers.antprop.slab.MatDB.addgui" href="pylayers.antprop.slab.MatDB.addgui.html" />
+    <link rel="prev" title="pylayers.antprop.slab.MatDB.edit" href="pylayers.antprop.slab.MatDB.edit.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.MatDB.addgui.html" title="pylayers.antprop.slab.MatDB.addgui"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.MatDB.edit.html" title="pylayers.antprop.slab.MatDB.edit"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.slab.html" accesskey="U">pylayers.antprop.slab module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.slab.MatDB.edit.html"
+                        title="previous chapter">pylayers.antprop.slab.MatDB.edit</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.slab.MatDB.addgui.html"
+                        title="next chapter">pylayers.antprop.slab.MatDB.addgui</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.slab.MatDB.add.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-antprop-slab-matdb-add">
+<h1>pylayers.antprop.slab.MatDB.add<a class="headerlink" href="#pylayers-antprop-slab-matdb-add" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.slab.MatDB.add">
+<tt class="descclassname">MatDB.</tt><tt class="descname">add</tt><big>(</big><em>name='MAT'</em>, <em>cval=(1+0j)</em>, <em>sigma=0</em>, <em>alpha_cmm1=1</em>, <em>mur=1</em>, <em>fGHz=1</em>, <em>typ='epsr'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#MatDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.MatDB.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a material in the DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<p><strong>material name</strong> :</p>
+<p><strong>cval</strong> : float or complex</p>
+<p><strong>epsilon or index</strong> :</p>
+<p><strong>sigma</strong> : float or complex</p>
+<p><strong>permeability</strong> :</p>
+<p><strong>mur</strong> : float</p>
+<p><strong>typ</strong> : string</p>
+<p class="last"><strong>{&#8216;epsr&#8217;|&#8217;ind&#8217;|,&#8217;reim&#8217;,|&#8217;THz&#8217;}</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Different ways to enter a material are :</p>
+<p>i) epsr : epsr and sigma
+cval = epsr
+sigma = sigma
+ii) ind : indice &#64; fGHz
+cval = indice
+iii) reim : real(epsr) and imag(epsr) &#64;fGHz
+iv) THZ</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&#39;Jacob.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.MatDB.addgui.html" title="pylayers.antprop.slab.MatDB.addgui"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.MatDB.edit.html" title="pylayers.antprop.slab.MatDB.edit"
+             >previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.slab.html" >pylayers.antprop.slab module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 05, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

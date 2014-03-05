@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.slab.Slab.ev &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.slab module" href="../pylayers.antprop.slab.html" />
+    <link rel="next" title="pylayers.antprop.slab.Slab.filter" href="pylayers.antprop.slab.Slab.filter.html" />
+    <link rel="prev" title="pylayers.antprop.slab.Slab.conv" href="pylayers.antprop.slab.Slab.conv.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.Slab.filter.html" title="pylayers.antprop.slab.Slab.filter"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.Slab.conv.html" title="pylayers.antprop.slab.Slab.conv"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.slab.html" accesskey="U">pylayers.antprop.slab module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.slab.Slab.conv.html"
+                        title="previous chapter">pylayers.antprop.slab.Slab.conv</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.slab.Slab.filter.html"
+                        title="next chapter">pylayers.antprop.slab.Slab.filter</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.slab.Slab.ev.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-antprop-slab-slab-ev">
+<h1>pylayers.antprop.slab.Slab.ev<a class="headerlink" href="#pylayers-antprop-slab-slab-ev" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt>
+<tt class="descname">Slab.ev(fGHz=array([ 1.]), theta=array([ 0.        ,  0.03205707,  0.06411414,  0.0961712 ,  0.12822827,</tt></dt>
+<dt>
+<tt class="descname">0.16028534,  0.19234241,  0.22439948,  0.25645654,  0.28851361,</tt></dt>
+<dt>
+<tt class="descname">0.32057068,  0.35262775,  0.38468481,  0.41674188,  0.44879895,</tt></dt>
+<dt>
+<tt class="descname">0.48085602,  0.51291309,  0.54497015,  0.57702722,  0.60908429,</tt></dt>
+<dt>
+<tt class="descname">0.64114136,  0.67319843,  0.70525549,  0.73731256,  0.76936963,</tt></dt>
+<dt>
+<tt class="descname">0.8014267 ,  0.83348377,  0.86554083,  0.8975979 ,  0.92965497,</tt></dt>
+<dt>
+<tt class="descname">0.96171204,  0.9937691 ,  1.02582617,  1.05788324,  1.08994031,</tt></dt>
+<dt>
+<tt class="descname">1.12199738,  1.15405444,  1.18611151,  1.21816858,  1.25022565,</tt></dt>
+<dt>
+<tt class="descname">1.28228272,  1.31433978,  1.34639685,  1.37845392,  1.41051099,</tt></dt>
+<dt>
+<tt class="descname">1.44256806,  1.47462512,  1.50668219,  1.53873926,  1.57079633]), compensate=False, RT='RT')</tt></dt>
+<dd><p>Evaluation of the slab</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency GHz ( np.array([1.0]) )</p>
+<p><strong>theta</strong> : np.array</p>
+<p class="last"><strong>incidence angle (from normal) radians</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.Slab.filter.html" title="pylayers.antprop.slab.Slab.filter"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.Slab.conv.html" title="pylayers.antprop.slab.Slab.conv"
+             >previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.slab.html" >pylayers.antprop.slab module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 05, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
