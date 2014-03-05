@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.location.geometric.constraints.constraint module" href="pylayers.location.geometric.constraints.constraint.html" />
+    <link rel="next" title="pylayers.location.geometric.constraints.cla.CLA.__init__" href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html" />
     <link rel="prev" title="pylayers.location.algebraic.algebraic module" href="pylayers.location.algebraic.algebraic.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.location.geometric.constraints.constraint.html" title="pylayers.location.geometric.constraints.constraint module"
+          <a href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html" title="pylayers.location.geometric.constraints.cla.CLA.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.location.algebraic.algebraic.html" title="pylayers.location.algebraic.algebraic module"
@@ -63,12 +63,20 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.location.geometric.constraints.cla module</a><ul>
+<li><a class="reference internal" href="#constraint-layer-array-cla-class">Constraint Layer Array (CLA) Class</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.location.algebraic.algebraic.html"
                         title="previous chapter">pylayers.location.algebraic.algebraic module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.location.geometric.constraints.constraint.html"
-                        title="next chapter">pylayers.location.geometric.constraints.constraint module</a></p>
+  <p class="topless"><a href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html"
+                        title="next chapter">pylayers.location.geometric.constraints.cla.CLA.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.location.geometric.constraints.cla.txt"
@@ -97,6 +105,77 @@
             
   <div class="section" id="module-pylayers.location.geometric.constraints.cla">
 <span id="pylayers-location-geometric-constraints-cla-module"></span><h1>pylayers.location.geometric.constraints.cla module<a class="headerlink" href="#module-pylayers.location.geometric.constraints.cla" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="constraint-layer-array-cla-class">
+<h2>Constraint Layer Array (CLA) Class<a class="headerlink" href="#constraint-layer-array-cla-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html#pylayers.location.geometric.constraints.cla.CLA.__init__" title="pylayers.location.geometric.constraints.cla.CLA.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.__init__</span></tt></a>([parmsh])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.__repr__.html#pylayers.location.geometric.constraints.cla.CLA.__repr__" title="pylayers.location.geometric.constraints.cla.CLA.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.info.html#pylayers.location.geometric.constraints.cla.CLA.info" title="pylayers.location.geometric.constraints.cla.CLA.info"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.info</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.update.html#pylayers.location.geometric.constraints.cla.CLA.update" title="pylayers.location.geometric.constraints.cla.CLA.update"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.update</span></tt></a>()</td>
+<td>update all constraints of the CLA</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.compute.html#pylayers.location.geometric.constraints.cla.CLA.compute" title="pylayers.location.geometric.constraints.cla.CLA.compute"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.compute</span></tt></a>([pe,&nbsp;mergeRSS,&nbsp;refineRSS,&nbsp;...])</td>
+<td>Compute the cla to estimate the postion   :Parameters:      <strong>pe</strong> : boolean          set to True to compute the position estimation store into self.pe               <strong>mergeRSS</strong> : boolean          True : if there is RSS in cla, they are used to find the smallest merge         False (default): even if there is RSS in cla, they are neglected during the merge process               <strong>refineRSS :boolean</strong> :           True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous                         during the refine process         False: if there is RSS in cla, they are ignore during the refine process                <strong>NBOXMAX</strong> : integer          Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)               <strong>NVOLMIN</strong> : float          Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)               <strong>HT</strong> : boolean          True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied                 in estpos2 method          False : no HT methos is applied                   Description of the hypothesis testing (HT) method in:         Hybrid positioning based on hypothesis thesting         N.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.rescale.html#pylayers.location.geometric.constraints.cla.CLA.rescale" title="pylayers.location.geometric.constraints.cla.CLA.rescale"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.rescale</span></tt></a>(f_vcw[,&nbsp;cid])</td>
+<td>idem setvcw but update current vcw with a multiplier factor</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.annulus_bound.html#pylayers.location.geometric.constraints.cla.CLA.annulus_bound" title="pylayers.location.geometric.constraints.cla.CLA.annulus_bound"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.annulus_bound</span></tt></a>([cid])</td>
+<td>adapt cmin and cmax of constraints</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.append.html#pylayers.location.geometric.constraints.cla.CLA.append" title="pylayers.location.geometric.constraints.cla.CLA.append"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.append</span></tt></a>(c)</td>
+<td>add a constraint into the CLA</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.remove.html#pylayers.location.geometric.constraints.cla.CLA.remove" title="pylayers.location.geometric.constraints.cla.CLA.remove"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.remove</span></tt></a>(k)</td>
+<td>OBSOLETE/ TO BE DEVELOPPED</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.setvcw.html#pylayers.location.geometric.constraints.cla.CLA.setvcw" title="pylayers.location.geometric.constraints.cla.CLA.setvcw"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.setvcw</span></tt></a>(vcw)</td>
+<td>update scale factor of all constraint</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.merge2.html#pylayers.location.geometric.constraints.cla.CLA.merge2" title="pylayers.location.geometric.constraints.cla.CLA.merge2"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.merge2</span></tt></a>([vcw_init,&nbsp;RSS])</td>
+<td>Merge all constraints from the CLA2_reduc2  Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.valid_v.html#pylayers.location.geometric.constraints.cla.CLA.valid_v" title="pylayers.location.geometric.constraints.cla.CLA.valid_v"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.valid_v</span></tt></a>(lv,&nbsp;N[,&nbsp;RSS])</td>
+<td>test a vertex list with constraints</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.refine.html#pylayers.location.geometric.constraints.cla.CLA.refine" title="pylayers.location.geometric.constraints.cla.CLA.refine"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.refine</span></tt></a>(l[,&nbsp;NBOXMAX,&nbsp;VOLMIN,&nbsp;RSS])</td>
+<td>refine the l layer of the CLA</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.show3.html#pylayers.location.geometric.constraints.cla.CLA.show3" title="pylayers.location.geometric.constraints.cla.CLA.show3"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.show3</span></tt></a>([l,&nbsp;amb,&nbsp;sc])</td>
+<td>Display constraints and theirs boxes through geomview.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.prob.html#pylayers.location.geometric.constraints.cla.CLA.prob" title="pylayers.location.geometric.constraints.cla.CLA.prob"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.prob</span></tt></a>(c,&nbsp;d)</td>
+<td>determine probability of list of vertex</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect" title="pylayers.location.geometric.constraints.cla.CLA.gapdetect"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.gapdetect</span></tt></a>(l,&nbsp;dlindx)</td>
+<td>basic gap detection</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.gapdetect2.html#pylayers.location.geometric.constraints.cla.CLA.gapdetect2" title="pylayers.location.geometric.constraints.cla.CLA.gapdetect2"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.gapdetect2</span></tt></a>(l,&nbsp;dlindx)</td>
+<td>basic gap detection</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.min_dist.html#pylayers.location.geometric.constraints.cla.CLA.min_dist" title="pylayers.location.geometric.constraints.cla.CLA.min_dist"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.min_dist</span></tt></a>(a,&nbsp;b)</td>
+<td>OBSOLETE</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.estpos.html#pylayers.location.geometric.constraints.cla.CLA.estpos" title="pylayers.location.geometric.constraints.cla.CLA.estpos"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.estpos</span></tt></a>([l,&nbsp;amb,&nbsp;test])</td>
+<td>DEPRECATED !</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.location.geometric.constraints.cla.CLA.estpos2.html#pylayers.location.geometric.constraints.cla.CLA.estpos2" title="pylayers.location.geometric.constraints.cla.CLA.estpos2"><tt class="xref py py-obj docutils literal"><span class="pre">CLA.estpos2</span></tt></a>([l,&nbsp;amb,&nbsp;HT])</td>
+<td>Position estimation  estimate position from the enclosed or/and ambibuous boxes  :Parameters:      <strong>l</strong> : Layer of the estimation.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -115,7 +194,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.location.geometric.constraints.constraint.html" title="pylayers.location.geometric.constraints.constraint module"
+          <a href="generated/pylayers.location.geometric.constraints.cla.CLA.__init__.html" title="pylayers.location.geometric.constraints.cla.CLA.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.location.algebraic.algebraic.html" title="pylayers.location.algebraic.algebraic module"
