@@ -109,7 +109,6 @@
 <span class="sd">    Body.body_link</span>
 <span class="sd">    Body.cylinder_basis_k</span>
 <span class="sd">    Body.cyl_antenna</span>
-<span class="sd">    Body.translate</span>
 
 <span class="sd">Miscelianous Functions</span>
 <span class="sd">======================</span>
@@ -118,6 +117,7 @@
 <span class="sd">    :toctree: /generated</span>
 
 <span class="sd">    ChangeBasis</span>
+<span class="sd">    translate</span>
 <span class="sd">    rotation</span>
 <span class="sd">    dist</span>
 <span class="sd">    Global_Trajectory</span>
@@ -1424,7 +1424,7 @@
                    <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">v0</span>
 
 </div>
-<span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="n">new_origin</span><span class="p">):</span>
+<div class="viewcode-block" id="translate"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.translate.html#pylayers.mobility.body.body.translate">[docs]</a><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="n">new_origin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  rotate a cycle of frames by an angle alpha</span>
 
 <span class="sd">    Parameters</span>
@@ -1451,7 +1451,7 @@
 
     <span class="k">return</span> <span class="n">cycle_tr</span>
 
-
+</div>
 <div class="viewcode-block" id="rotation"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.body.body.rotation.html#pylayers.mobility.body.body.rotation">[docs]</a><span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  rotate a cycle of frames by an angle alpha</span>
 
