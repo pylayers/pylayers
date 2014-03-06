@@ -259,12 +259,13 @@
 
         <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> 
         <span class="n">filenameh5</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;.h5&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRR3D&#39;</span><span class="p">])</span>
-        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        
         
         
         <span class="c"># try/except to avoid loosing the h5 file if </span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
             <span class="c"># keys not saved as attribute of h5py file</span>
             <span class="n">notattr</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;I&#39;</span><span class="p">,</span><span class="s">&#39;B&#39;</span><span class="p">,</span><span class="s">&#39;B0&#39;</span><span class="p">,</span><span class="s">&#39;delays&#39;</span><span class="p">,</span><span class="s">&#39;dis&#39;</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -300,10 +301,11 @@
 
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRR3D&#39;</span><span class="p">])</span>
 
-        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        
         <span class="c"># try/except to avoid loosing the h5 file if </span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):{}})</span>
                 <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -329,6 +331,82 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; save rays pyh5 format compliant links</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">filenameh5</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># read/write error</span>
+        <span class="k">try</span><span class="p">:</span>
+            
+            <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">grpname</span> <span class="ow">in</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span> 
+                <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">grpname</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;ray/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;ray/&#39;</span><span class="o">+</span><span class="n">grpname</span><span class="p">]</span>
+            <span class="c"># keys not saved as attribute of h5py file</span>
+            <span class="n">notattr</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;I&#39;</span><span class="p">,</span><span class="s">&#39;B&#39;</span><span class="p">,</span><span class="s">&#39;B0&#39;</span><span class="p">,</span><span class="s">&#39;delays&#39;</span><span class="p">,</span><span class="s">&#39;dis&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">a</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">notattr</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">kk</span> <span class="o">==</span> <span class="s">&#39;sig2d&#39;</span><span class="p">:</span>
+                        <span class="c"># Need to find an efficient way to save the signatures</span>
+                        <span class="c"># 2d which have created the rays</span>
+                        <span class="k">pass</span>
+                    <span class="k">elif</span> <span class="n">kk</span> <span class="o">==</span> <span class="s">&#39;nbrays&#39;</span><span class="p">:</span>
+                        <span class="n">f</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">kk</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">kk</span><span class="p">]]))</span>
+                    <span class="k">else</span><span class="p">:</span>    
+                        <span class="n">f</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">kk</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">kk</span><span class="p">]),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">kk</span><span class="p">])</span>
+            <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Rays: issue when writting h5py file&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; save rays </span>
+<span class="sd">            pyh5 format</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+
+        <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
+        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># read/write error</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;ray/&#39;</span><span class="o">+</span><span class="n">grpname</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">):{}})</span>
+                <span class="k">for</span> <span class="n">kk</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">kk</span><span class="p">:</span><span class="n">f</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">kk</span><span class="p">)][:]})</span>
+
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">va</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">va</span><span class="p">)</span>
+            <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">except</span><span class="p">:</span>
+
+            <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Rays: issue when reading h5py file&#39;</span><span class="p">)</span>
+            
+        <span class="c"># fill if save was filled</span>
+
+        <span class="c"># temporary solution in order to avoir </span>
+        <span class="c"># creating save for Interactions classes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">:</span>
+            <span class="n">fileL</span><span class="o">=</span><span class="n">filenameh5</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.h5&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">_fileL</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getshort</span><span class="p">(</span><span class="n">fileL</span><span class="p">)</span>
+            <span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="n">_fileL</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span> 
+
 
 <div class="viewcode-block" id="Rays.reciprocal"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.reciprocal.html#pylayers.antprop.rays.Rays.reciprocal">[docs]</a>    <span class="k">def</span> <span class="nf">reciprocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; switch tx and rx</span>

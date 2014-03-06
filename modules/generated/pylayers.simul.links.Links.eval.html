@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.simul.links.Links.eval &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.simul.simultraj module" href="../pylayers.simul.links.html" />
+    <link rel="next" title="pylayers.simul.links.Links._show3" href="pylayers.simul.links.Links._show3.html" />
+    <link rel="prev" title="pylayers.simul.links.Links.array_exist" href="pylayers.simul.links.Links.array_exist.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.links.Links._show3.html" title="pylayers.simul.links.Links._show3"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.links.Links.array_exist.html" title="pylayers.simul.links.Links.array_exist"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.simul.links.html" accesskey="U">pylayers.simul.simultraj module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.simul.links.Links.array_exist.html"
+                        title="previous chapter">pylayers.simul.links.Links.array_exist</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.simul.links.Links._show3.html"
+                        title="next chapter">pylayers.simul.links.Links._show3</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.simul.links.Links.eval.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-simul-links-links-eval">
+<h1>pylayers.simul.links.Links.eval<a class="headerlink" href="#pylayers-simul-links-links-eval" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.links.Links.eval">
+<tt class="descclassname">Links.</tt><tt class="descname">eval</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/links.html#Links.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.links.Links.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the link</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>si.cutoff</strong> : int</p>
+<blockquote>
+<div><p>siganture.run cutoff</p>
+</div></blockquote>
+<p><strong>si.algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;)</p>
+<blockquote>
+<div><p>siganture.run algo type</p>
+</div></blockquote>
+<p><strong>ra.ceil_height_meter</strong> : int</p>
+<blockquote>
+<div><p>rays.to3D ceil height in mteres</p>
+</div></blockquote>
+<p><strong>ra.number_mirror_cf</strong> : int</p>
+<blockquote class="last">
+<div><p>rays.to3D number of ceil/floor reflexions</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../pylayers.antprop.signature.html#module-pylayers.antprop.signature" title="pylayers.antprop.signature"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature</span></tt></a>, <a class="reference internal" href="../pylayers.antprop.rays.html#module-pylayers.antprop.rays" title="pylayers.antprop.rays"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.rays</span></tt></a></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.links.Links._show3.html" title="pylayers.simul.links.Links._show3"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.links.Links.array_exist.html" title="pylayers.simul.links.Links.array_exist"
+             >previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.simul.links.html" >pylayers.simul.simultraj module</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 06, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
