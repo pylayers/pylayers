@@ -254,7 +254,21 @@ class Rays(dict):
             return self.eval(self.fGHz)
 
     def _saveh5(self,filenameh5,grpname):
-        """ save rays pyh5 format compliant links
+        """ Save rays h5py format compliant with Links Class
+
+        Parameters
+        ----------
+
+        filenameh5 : string
+            filename of the h5py file (from Links Class)
+        grpname : string 
+            groupname of the h5py file (from Links Class)
+        
+        See Also
+        --------
+
+        pylayers.simul.links
+
         """
 
         filenameh5=pyu.getlong(filenameh5,pstruc['DIRLNK'])
@@ -291,9 +305,24 @@ class Rays(dict):
             raise NameError('Rays: issue when writting h5py file')
 
     def _loadh5(self,filenameh5,grpname):
-        """ save rays 
-            pyh5 format
-        """ 
+        """ Load rays  h5py format compliant with Links Class
+
+        Parameters
+        ----------
+
+        filenameh5 : string
+            filename of the h5py file (from Links Class)
+        grpname : string 
+            groupname of the h5py file (from Links Class)
+        
+
+        See Also
+        --------
+
+        pylayers.simul.links
+
+        """
+                
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         # try/except to avoid loosing the h5 file if 
@@ -319,10 +348,9 @@ class Rays(dict):
 
         # temporary solution in order to avoir 
         # creating save for Interactions classes
+
         if self.filled:
-            fileL=filenameh5.split('_',2)[-1].split('.h5')[0]
-            _fileL=pyu.getshort(fileL)
-            L=Layout(_fileL)
+            L=Layout(Lfilename)
             self.fillinter(L)
 
         if self.evaluated:

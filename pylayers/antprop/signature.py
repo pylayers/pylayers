@@ -583,7 +583,22 @@ class Signatures(dict):
 
 
     def _loadh5(self,filenameh5,grpname):
-        """ Load signatures h5py format compliant w Links
+        """ Load signatures h5py format compliant with Links Class
+
+        Parameters
+        ----------
+
+        filenameh5 : string
+            filename of the h5py file (from Links Class)
+        grpname : string 
+            groupname of the h5py file (from Links Class)
+        
+
+        See Also
+        --------
+
+        pylayers.simul.links
+
         """
         
 
@@ -598,14 +613,13 @@ class Signatures(dict):
             f=fh5['sig/'+grpname]
             for k in f.keys():
                 self.update({eval(k):f[k][:]})
+            Lname=f.attrs['L']
             fh5.close()
         except:
             fh5.close()
             raise NameError('Signature: issue when reading h5py file')
 
-        fileL=filenameh5.split('_',2)[-1].split('.h5')[0]
-        _fileL=pyu.getshort(fileL)
-        self.L=layout.Layout(_fileL)
+        self.L=layout.Layout(Lname)
         try:
             self.L.dumpr()
         except:
