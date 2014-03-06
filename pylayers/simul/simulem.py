@@ -53,8 +53,10 @@ import pdb
 
 def rename(_filename,itx,irx,rep='./'):
     """ rename simulation file with proper itx/irx 
+
     Parameters
     ----------
+
     _filmename : short file name
     itx : transmitter index
     irx : transmitter index
@@ -62,6 +64,7 @@ def rename(_filename,itx,irx,rep='./'):
 
     See Also
     --------
+    
     tratotud
 
     """
@@ -1931,7 +1934,7 @@ class Simul(object):
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
             title=False,colorbar=False,newfig=False)
         Arx._show3(T=Trx.reshape(3,3),po=prx,
-            title=False,colorbar=False,newfig=False,name = '')
+            title=False,colorbar=False,newfig=False)
         if rays != []:
             rays._show3(**kwargs)
 

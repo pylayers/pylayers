@@ -39,8 +39,8 @@ import pdb
 
 
 
-class Links(object):
-    """ Links Simulation Class
+class Link(object):
+    """ Link Simulation Class
 
     
     
@@ -223,8 +223,39 @@ class Links(object):
 
         self.updcfg()
 
-        
     
+    def __repr__(self):
+        """ __repr__
+        """
+        
+        s = 'filename: ' + self.filename +'\n'
+
+        s = s + 'Actual Link considered is:\n' 
+        s = s + '--------------------------\n' 
+        s = s + 'Layout: ' + self.Lname + '\n\n'
+        s = s + 'Device a:  \n'
+        s = s + '---------  \n'
+        s = s + 'position: ' + str (self.a) + '\n' 
+        s = s + 'Antenna: ' + str (self.Aa._filename) + '\n'
+        s = s + 'Antenna rotation matrice : \n ' + str (self.Ta) + '\n\n'
+        s = s + 'Device b:  \n'
+        s = s + '---------  \n'
+        s = s + 'position: ' + str (self.b) + '\n' 
+        s = s + 'Antenna: ' + str (self.Ab._filename) + '\n'
+        s = s + 'Antenna rotation matrice : \n ' + str (self.Tb) + '\n\n'
+        s = s + 'Link evaluation information : \n '
+        s = s + '------------------ \n'
+        s = s + 'distance: ' + str(np.sqrt(np.sum((self.a-self.b)**2))) + 'm \n'
+        s = s + 'delay:' + str(np.sqrt(np.sum((self.a-self.b)**2))/0.3) + 'ns\n'
+        s = s + 'Frequency range :  \n'
+        s = s + 'fmin (fGHz):' + str(self.fGHz[0]) +'\n'
+        s = s + 'fmax (fGHz):' + str(self.fGHz[-1]) +'\n'
+        s = s + 'fstep (fGHz):' + str(self.fGHz[1]-self.fGHz[0]) +'\n '
+
+        return s
+
+
+
 
     def updcfg(self):
         """ update configuration
