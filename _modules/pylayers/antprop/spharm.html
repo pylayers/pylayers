@@ -342,11 +342,29 @@
 <span class="k">class</span> <span class="nc">VectorCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <div class="viewcode-block" id="VectorCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VectorCoeff.__init__.html#pylayers.antprop.spharm.VectorCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
-                 <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">k</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+                 <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
+<span class="sd">        typ :</span>
+<span class="sd">        fmin :</span>
+<span class="sd">            min frequency GHz</span>
+<span class="sd">        fmax :</span>
+<span class="sd">        data : np.array</span>
+<span class="sd">        ind : np.array</span>
+
+<span class="sd">        Notes </span>
+<span class="sd">        -----</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            seems deprecated</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="n">fmin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="n">fmax</span>
 
@@ -356,8 +374,11 @@
 <div class="viewcode-block" id="VectorCoeff.inits1"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VectorCoeff.inits1.html#pylayers.antprop.spharm.VectorCoeff.inits1">[docs]</a>    <span class="k">def</span> <span class="nf">inits1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
 <span class="sd">        data :</span>
-<span class="sd">        ind</span>
+<span class="sd">        ind :</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>

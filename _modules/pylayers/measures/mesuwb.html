@@ -79,6 +79,108 @@
   <h1>Source code for pylayers.measures.mesuwb</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
 <span class="c">#-*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.measures.mesuwb</span>
+
+
+<span class="sd">RAW_DATA Class</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     RAW_DAT.__init__</span>
+
+<span class="sd">CAL_DATA Class</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    CAL_DATA.__init__</span>
+<span class="sd">    CAL_DATA.plot</span>
+<span class="sd">    CAL_DATA.getwave</span>
+
+<span class="sd">Fdd Class</span>
+<span class="sd">=========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     Fdd.__init__</span>
+<span class="sd">     Fdd.plot</span>
+
+<span class="sd">Tdd Class</span>
+<span class="sd">=========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     Tdd.__init__</span>
+<span class="sd">     Tdd.PL</span>
+<span class="sd">     Tdd.show</span>
+<span class="sd">     Tdd.show_span</span>
+<span class="sd">     Tdd.box</span>
+<span class="sd">     Tdd.plot</span>
+
+<span class="sd">TFP Class</span>
+<span class="sd">=========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     TFP.__init__</span>
+<span class="sd">     TFP.append</span>
+
+<span class="sd">FP Class</span>
+<span class="sd">========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     FP.__init__</span>
+
+<span class="sd">UWBMeasure</span>
+<span class="sd">==========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    UWBMeasure.__init__</span>
+<span class="sd">    UWBMeasure.info</span>
+<span class="sd">    UWBMeasure.show</span>
+<span class="sd">    UWBMeasure.Epercent</span>
+<span class="sd">    UWBMeasure.toa_max2</span>
+<span class="sd">    UWBMeasure.tau_Emax</span>
+<span class="sd">    UWBMeasure.tau_moy</span>
+<span class="sd">    UWBMeasure.tau_rms</span>
+<span class="sd">    UWBMeasure.toa_new</span>
+<span class="sd">    UWBMeasure.toa_win</span>
+<span class="sd">    UWBMeasure.toa_max</span>
+<span class="sd">    UWBMeasure.toa_th</span>
+<span class="sd">    UWBMeasure.toa_cum</span>
+<span class="sd">    UWBMeasure.taumax</span>
+<span class="sd">    UWBMeasure.Emax</span>
+<span class="sd">    UWBMeasure.Etot</span>
+<span class="sd">    UWBMeasure.Efirst</span>
+<span class="sd">    UWBMeasure.Etau0</span>
+<span class="sd">    UWBMeasure.ecdf</span>
+<span class="sd">    UWBMeasure.tdelay</span>
+<span class="sd">    UWBMeasure.fp</span>
+<span class="sd">    UWBMeasure.outlatex</span>
+
+
+<span class="sd">Utility Functions</span>
+<span class="sd">=================</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">    mesname</span>
+<span class="sd">    ptw1</span>
+<span class="sd">    visibility</span>
+<span class="sd">    trait</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
@@ -95,7 +197,7 @@
 <span class="c">#</span>
 <span class="c"># Utility functions</span>
 <span class="c">#</span>
-<div class="viewcode-block" id="mesname"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.mesname">[docs]</a><span class="k">def</span> <span class="nf">mesname</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">mesname</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; get the measurement data filename</span>
 
 <span class="sd">    Parameters</span>
@@ -129,8 +231,8 @@
 
     <span class="n">filename</span> <span class="o">=</span> <span class="n">mesdir</span> <span class="o">+</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">stn</span> <span class="o">+</span> <span class="s">&#39;.mat&#39;</span>
     <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="ptw1"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.ptw1">[docs]</a><span class="k">def</span> <span class="nf">ptw1</span><span class="p">():</span>
+
+<span class="k">def</span> <span class="nf">ptw1</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; return W1 Tx and Rx points</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -532,8 +634,8 @@
     <span class="n">Tx</span><span class="p">[</span><span class="mi">376</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">298627.5638</span><span class="p">,</span> <span class="mf">2354088.4844</span><span class="p">])</span> <span class="o">-</span> <span class="n">p0</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">Tx</span><span class="p">,</span> <span class="n">Rx</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="visibility"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.visibility">[docs]</a><span class="k">def</span> <span class="nf">visibility</span><span class="p">():</span>
+
+<span class="k">def</span> <span class="nf">visibility</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; determine visibility type of WHERE1 measurements campaign points</span>
 
 <span class="sd">    Returns</span>
@@ -653,8 +755,8 @@
     <span class="n">visi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R3</span><span class="p">)</span>
     <span class="n">visi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R4</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">visi</span>
-</div>
-<div class="viewcode-block" id="trait"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.trait">[docs]</a><span class="k">def</span> <span class="nf">trait</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">dico</span><span class="o">=</span><span class="p">{},</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">trait</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">itx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">dico</span><span class="o">=</span><span class="p">{},</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; evaluate various parameters for all measures in itx array</span>
 
 <span class="sd">    Parameters</span>
@@ -741,8 +843,8 @@
     <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">F</span><span class="p">)</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="RAW_DATA"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.RAW_DATA">[docs]</a><span class="k">class</span> <span class="nc">RAW_DATA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">RAW_DATA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Members</span>
@@ -773,8 +875,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timetx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
-</div>
-<div class="viewcode-block" id="CAL_DATA"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.CAL_DATA">[docs]</a><span class="k">class</span> <span class="nc">CAL_DATA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">CAL_DATA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    CAL_DATA</span>
 
@@ -787,7 +889,7 @@
 <span class="sd">    vna_freq</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="CAL_DATA.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.CAL_DATA.__init__.html#pylayers.measures.mesuwb.CAL_DATA.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            depending of the version of scipy</span>
 <span class="sd">            io.loadma do not give the same output</span>
@@ -807,12 +909,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vna_freq</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vna_att1</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vna_att2</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
-
-<div class="viewcode-block" id="CAL_DATA.plot"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.CAL_DATA.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="CAL_DATA.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.CAL_DATA.plot.html#pylayers.measures.mesuwb.CAL_DATA.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ch1</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="CAL_DATA.getwave"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.CAL_DATA.getwave">[docs]</a>    <span class="k">def</span> <span class="nf">getwave</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CAL_DATA.getwave"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.CAL_DATA.getwave.html#pylayers.measures.mesuwb.CAL_DATA.getwave">[docs]</a>    <span class="k">def</span> <span class="nf">getwave</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        getwave</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -821,8 +923,8 @@
         <span class="c">#</span>
         <span class="n">s1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span>
         <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span>
-</div></div>
-<div class="viewcode-block" id="Fdd"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Fdd">[docs]</a><span class="k">class</span> <span class="nc">Fdd</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">Fdd</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Frequency Domain Deconv Data</span>
 
 <span class="sd">    Attributes</span>
@@ -844,7 +946,7 @@
 <span class="sd">        plot</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="Fdd.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Fdd.__init__.html#pylayers.measures.mesuwb.Fdd.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -861,8 +963,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-
-<div class="viewcode-block" id="Fdd.plot"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Fdd.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;moddB&#39;</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Fdd.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Fdd.plot.html#pylayers.measures.mesuwb.Fdd.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;moddB&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot Fdd</span>
 
 <span class="sd">        Parameters</span>
@@ -931,8 +1033,8 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Freq (GHz)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;CH4&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</div></div>
-<div class="viewcode-block" id="Tdd"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Tdd">[docs]</a><span class="k">class</span> <span class="nc">Tdd</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">Tdd</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Time Domain Deconv Data</span>
 
@@ -963,7 +1065,7 @@
 <span class="sd">        display the 4 channels</span>
 <span class="sd">    show_span(delay,wide)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Tdd.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.__init__.html#pylayers.measures.mesuwb.Tdd.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="p">[]):</span>
         <span class="k">if</span> <span class="n">d</span> <span class="o">!=</span> <span class="p">[]:</span>
             <span class="c">#t = d.Time[0]*1e9</span>
             <span class="c">#self.ch1  = bs.TUsignal(t,d.CH1[0])</span>
@@ -981,8 +1083,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">pass</span>
-
-<div class="viewcode-block" id="Tdd.PL"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Tdd.PL">[docs]</a>    <span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Tdd.PL"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.PL.html#pylayers.measures.mesuwb.Tdd.PL">[docs]</a>    <span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  Calculate NB Path Loss on a given UWB frequency band</span>
 
 <span class="sd">        Parameters</span>
@@ -1151,7 +1253,7 @@
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Tdd.show_span"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Tdd.show_span">[docs]</a>    <span class="k">def</span> <span class="nf">show_span</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">wide</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>
+<div class="viewcode-block" id="Tdd.show_span"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.show_span.html#pylayers.measures.mesuwb.Tdd.show_span">[docs]</a>    <span class="k">def</span> <span class="nf">show_span</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">wide</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; show span</span>
 
 <span class="sd">        Examples</span>
@@ -1197,7 +1299,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Tdd.box"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Tdd.box">[docs]</a>    <span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tdd.box"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.box.html#pylayers.measures.mesuwb.Tdd.box">[docs]</a>    <span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate min and max of the 4 channels</span>
 
 <span class="sd">        Examples</span>
@@ -1227,7 +1329,7 @@
         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mi</span><span class="p">,</span> <span class="n">ma</span><span class="p">])</span>
         <span class="k">return</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Tdd.plot"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.Tdd.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;raw&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Tdd.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.Tdd.plot.html#pylayers.measures.mesuwb.Tdd.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;raw&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        type : raw | filter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1276,8 +1378,8 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;CH4&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span> <span class="n">show</span><span class="p">()</span>
-</div></div>
-<div class="viewcode-block" id="TFP"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.TFP">[docs]</a><span class="k">class</span> <span class="nc">TFP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">TFP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tx</span>
 <span class="sd">    Rx</span>
@@ -1296,7 +1398,7 @@
 <span class="sd">    angular</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TFP.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.TFP.__init__.html#pylayers.measures.mesuwb.TFP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s">&#39;Tx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s">&#39;Rx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -1317,8 +1419,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s">&#39;toa_win&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s">&#39;toa_seu&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chan_param</span><span class="p">[</span><span class="s">&#39;angular&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-
-<div class="viewcode-block" id="TFP.append"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.TFP.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FP</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="TFP.append"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.TFP.append.html#pylayers.measures.mesuwb.TFP.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FP</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1365,8 +1467,8 @@
         <span class="c">#self.chan_param[&#39;toa_th_tmtm&#39;]=hstack((self.chan_param[&#39;toa_th_tmtm&#39;],FP.chan_param[&#39;toa_th_tmtm&#39;]))</span>
         <span class="c">#self.chan_param[&#39;toa_th_tm&#39;]=hstack((self.chan_param[&#39;toa_th_tm&#39;],FP.chan_param[&#39;toa_th_tm&#39;]))</span>
         <span class="c">#self .chan_param[&#39;toa_th_tmt&#39;]=hstack((self.chan_param[&#39;toa_th_tmt&#39;],FP.chan_param[&#39;toa_th_tmt&#39;]))</span>
-</div></div>
-<div class="viewcode-block" id="FP"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.FP">[docs]</a><span class="k">class</span> <span class="nc">FP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">FP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fingerprint</span>
 
@@ -1401,7 +1503,7 @@
 <span class="sd">                    toa_th</span>
 <span class="sd">                    toa_cum</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mf">0.225</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">nint</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">thlos</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">thnlos</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">thcum</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+<div class="viewcode-block" id="FP.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.FP.__init__.html#pylayers.measures.mesuwb.FP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mf">0.225</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">nint</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">thlos</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">thnlos</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">thcum</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -1555,7 +1657,7 @@
 <span class="c">#\bigskip</span>
 
 </div>
-<div class="viewcode-block" id="UWBMesure"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure">[docs]</a><span class="k">class</span> <span class="nc">UWBMesure</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UWBMeasure</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; UWBMesure class</span>
 
 <span class="sd">    Attributes</span>
@@ -1590,7 +1692,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nTx</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.__init__.html#pylayers.measures.mesuwb.UWBMeasure.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nTx</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -1697,8 +1799,8 @@
 <span class="c">#            del self.F3</span>
 <span class="c">#            del self.F4</span>
 <span class="c">#            print &quot;Detruit: &quot;,self.Tx_position</span>
-
-<div class="viewcode-block" id="UWBMesure.info"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="UWBMeasure.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.info.html#pylayers.measures.mesuwb.UWBMeasure.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">print</span> <span class="s">&quot;Date_Time :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Date_Time</span>
         <span class="k">print</span> <span class="s">&quot;Operators : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Operators</span>
         <span class="k">print</span> <span class="s">&quot;Tx_height :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tx_height</span>
@@ -1835,7 +1937,7 @@
                       <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">,</span>
                       <span class="n">NC</span><span class="o">=</span><span class="n">NC</span><span class="p">)</span>
 
-<div class="viewcode-block" id="UWBMesure.Epercent"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.Epercent">[docs]</a>    <span class="k">def</span> <span class="nf">Epercent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.Epercent"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Epercent.html#pylayers.measures.mesuwb.UWBMeasure.Epercent">[docs]</a>    <span class="k">def</span> <span class="nf">Epercent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1876,7 +1978,7 @@
                 <span class="c">##err14 = t14-tdoa14</span>
                 <span class="c">#tdoa = np.array([t12,t13,t14])</span>
                 <span class="c">#return tdoa</span></div>
-<div class="viewcode-block" id="UWBMesure.toa_max2"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.toa_max2">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.toa_max2"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_max2.html#pylayers.measures.mesuwb.UWBMeasure.toa_max2">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate toa_max (meth2)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">toa_max21</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">toa_max2</span><span class="p">()</span>
@@ -1884,7 +1986,7 @@
         <span class="n">toa_max23</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">toa_max2</span><span class="p">()</span>
         <span class="n">toa_max24</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">toa_max2</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.tau_Emax"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.tau_Emax">[docs]</a>    <span class="k">def</span> <span class="nf">tau_Emax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.tau_Emax"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.tau_Emax.html#pylayers.measures.mesuwb.UWBMeasure.tau_Emax">[docs]</a>    <span class="k">def</span> <span class="nf">tau_Emax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the delay of energy peak</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1897,7 +1999,7 @@
 
         <span class="k">return</span> <span class="n">tau_Emax</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.tau_moy"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.tau_moy">[docs]</a>    <span class="k">def</span> <span class="nf">tau_moy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.tau_moy"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.tau_moy.html#pylayers.measures.mesuwb.UWBMeasure.tau_moy">[docs]</a>    <span class="k">def</span> <span class="nf">tau_moy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            calculate mean excess delay</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1912,7 +2014,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">taum</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">taum</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.tau_rms"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.tau_rms">[docs]</a>    <span class="k">def</span> <span class="nf">tau_rms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.tau_rms"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.tau_rms.html#pylayers.measures.mesuwb.UWBMeasure.tau_rms">[docs]</a>    <span class="k">def</span> <span class="nf">tau_rms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate the RMS delay spread</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1926,7 +2028,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show_span</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">taurms</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">taurms</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.toa_new"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.toa_new">[docs]</a>    <span class="k">def</span> <span class="nf">toa_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.toa_new"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_new.html#pylayers.measures.mesuwb.UWBMeasure.toa_new">[docs]</a>    <span class="k">def</span> <span class="nf">toa_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; descendant threshold based toa estimation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">toa1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">toa_new</span><span class="p">()</span>
@@ -1939,7 +2041,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toa</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.toa_win"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.toa_win">[docs]</a>    <span class="k">def</span> <span class="nf">toa_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.toa_win"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_win.html#pylayers.measures.mesuwb.UWBMeasure.toa_win">[docs]</a>    <span class="k">def</span> <span class="nf">toa_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; descendant threshold based toa estimation</span>
 
 <span class="sd">        Parameters</span>
@@ -1958,7 +2060,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toa</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.toa_max"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.toa_max">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.toa_max"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_max.html#pylayers.measures.mesuwb.UWBMeasure.toa_max">[docs]</a>    <span class="k">def</span> <span class="nf">toa_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            descendant threshold based toa estimation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1973,7 +2075,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toa</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.toa_th"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.toa_th">[docs]</a>    <span class="k">def</span> <span class="nf">toa_th</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.toa_th"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_th.html#pylayers.measures.mesuwb.UWBMeasure.toa_th">[docs]</a>    <span class="k">def</span> <span class="nf">toa_th</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            threshold based toa estimation using energy pic</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2005,7 +2107,7 @@
             <span class="c">#self.tdd.show(toa)</span>
         <span class="c">#return toa</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.toa_cum"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.toa_cum">[docs]</a>    <span class="k">def</span> <span class="nf">toa_cum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.toa_cum"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.toa_cum.html#pylayers.measures.mesuwb.UWBMeasure.toa_cum">[docs]</a>    <span class="k">def</span> <span class="nf">toa_cum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; threshold based toa estimation using cumulative energy</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -2034,7 +2136,7 @@
             <span class="c">#self.tdd.show(toa)</span>
         <span class="c">#return toa</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.taumax"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.taumax">[docs]</a>    <span class="k">def</span> <span class="nf">taumax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.taumax"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.taumax.html#pylayers.measures.mesuwb.UWBMeasure.taumax">[docs]</a>    <span class="k">def</span> <span class="nf">taumax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2045,7 +2147,7 @@
         <span class="n">taumx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">tmax1</span><span class="p">,</span> <span class="n">tmax2</span><span class="p">,</span> <span class="n">tmax3</span><span class="p">,</span> <span class="n">tmax4</span><span class="p">])</span>
         <span class="k">return</span>  <span class="n">taumx</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.Emax"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.Emax">[docs]</a>    <span class="k">def</span> <span class="nf">Emax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.Emax"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Emax.html#pylayers.measures.mesuwb.UWBMeasure.Emax">[docs]</a>    <span class="k">def</span> <span class="nf">Emax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Emax(Tint=0.225,sym=0.25)</span>
 <span class="sd">            calculate maximum energy</span>
@@ -2060,7 +2162,7 @@
         <span class="n">emax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Emax1</span><span class="p">,</span> <span class="n">Emax2</span><span class="p">,</span> <span class="n">Emax3</span><span class="p">,</span> <span class="n">Emax4</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">emax</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.Etot"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.Etot">[docs]</a>    <span class="k">def</span> <span class="nf">Etot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.Etot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Etot.html#pylayers.measures.mesuwb.UWBMeasure.Etot">[docs]</a>    <span class="k">def</span> <span class="nf">Etot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Etot</span>
 
@@ -2080,7 +2182,7 @@
 
         <span class="k">return</span> <span class="n">etot</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.Efirst"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.Efirst">[docs]</a>    <span class="k">def</span> <span class="nf">Efirst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.Efirst"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Efirst.html#pylayers.measures.mesuwb.UWBMeasure.Efirst">[docs]</a>    <span class="k">def</span> <span class="nf">Efirst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># ???</span>
@@ -2104,7 +2206,7 @@
         <span class="n">efirst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Ef1</span><span class="p">,</span> <span class="n">Ef2</span><span class="p">,</span> <span class="n">Ef3</span><span class="p">,</span> <span class="n">Ef4</span><span class="p">])</span>
         <span class="k">return</span>  <span class="n">efirst</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.Etau0"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.Etau0">[docs]</a>    <span class="k">def</span> <span class="nf">Etau0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.Etau0"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Etau0.html#pylayers.measures.mesuwb.UWBMeasure.Etau0">[docs]</a>    <span class="k">def</span> <span class="nf">Etau0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        calculate the energy around delay tau0</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2117,7 +2219,7 @@
 
         <span class="k">return</span> <span class="n">etau0</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.ecdf"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.ecdf">[docs]</a>    <span class="k">def</span> <span class="nf">ecdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tnoise</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rem_noise</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">in_positivity</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.ecdf"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.ecdf.html#pylayers.measures.mesuwb.UWBMeasure.ecdf">[docs]</a>    <span class="k">def</span> <span class="nf">ecdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tnoise</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rem_noise</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">in_positivity</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ecdf</span>
 
@@ -2134,7 +2236,7 @@
 
         <span class="k">return</span> <span class="n">ecdf</span><span class="p">,</span> <span class="n">var</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.tdelay"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.tdelay">[docs]</a>    <span class="k">def</span> <span class="nf">tdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.tdelay"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.tdelay.html#pylayers.measures.mesuwb.UWBMeasure.tdelay">[docs]</a>    <span class="k">def</span> <span class="nf">tdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build an array with delay values</span>
 
@@ -2172,7 +2274,7 @@
         <span class="n">t2</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">T</span>
         <span class="k">return</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.fp"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.fp">[docs]</a>    <span class="k">def</span> <span class="nf">fp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.fp"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.fp.html#pylayers.measures.mesuwb.UWBMeasure.fp">[docs]</a>    <span class="k">def</span> <span class="nf">fp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Build fingerprint</span>
 
@@ -2184,7 +2286,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">F3</span> <span class="o">=</span> <span class="n">FP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">F4</span> <span class="o">=</span> <span class="n">FP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="UWBMesure.outlatex"><a class="viewcode-back" href="../../../modules/pylayers.measures.mesuwb.html#pylayers.measures.mesuwb.UWBMesure.outlatex">[docs]</a>    <span class="k">def</span> <span class="nf">outlatex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S</span><span class="p">):</span>
+<div class="viewcode-block" id="UWBMeasure.outlatex"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.outlatex.html#pylayers.measures.mesuwb.UWBMeasure.outlatex">[docs]</a>    <span class="k">def</span> <span class="nf">outlatex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Measurement output latex</span>
 
@@ -2328,7 +2430,7 @@
 <span class="c">#        fd.write(l11)</span>
 <span class="c">#        fd.close()</span>
 
-</div></div>
+</div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
