@@ -1,4 +1,4 @@
-pylayers.antprop.slab module
-============================
+pylayers.antprop.slab 
+=====================
 
 .. automodule:: pylayers.antprop.slab

@@ -1,4 +1,4 @@
-pylayers.antprop.antvsh module
-==============================
+pylayers.antprop.antvsh 
+=======================
 
 .. automodule:: pylayers.antprop.antvsh
