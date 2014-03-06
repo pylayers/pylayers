@@ -25,7 +25,6 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.antprop.interactions" href="pylayers.antprop.interactions.html" />
     <link rel="prev" title="pylayers.antprop.rays.Rays.check_reciprocity" href="generated/pylayers.antprop.rays.Rays.check_reciprocity.html" /> 
   </head>
   <body>
@@ -47,9 +46,6 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.interactions.html" title="pylayers.antprop.interactions"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
           <a href="generated/pylayers.antprop.rays.Rays.check_reciprocity.html" title="pylayers.antprop.rays.Rays.check_reciprocity"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
@@ -63,12 +59,20 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.antprop.raysc</a><ul>
+<li><a class="reference internal" href="#ray3d-class">Ray3D class</a></li>
+<li><a class="reference internal" href="#raytud-class">RayTud class</a></li>
+<li><a class="reference internal" href="#grraytud-class">GrRayTud class</a></li>
+<li><a class="reference internal" href="#grray3d-class">GrRay3D class</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="generated/pylayers.antprop.rays.Rays.check_reciprocity.html"
                         title="previous chapter">pylayers.antprop.rays.Rays.check_reciprocity</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.interactions.html"
-                        title="next chapter">pylayers.antprop.interactions</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.antprop.raysc.txt"
@@ -97,6 +101,185 @@
             
   <div class="section" id="module-pylayers.antprop.raysc">
 <span id="pylayers-antprop-raysc"></span><h1>pylayers.antprop.raysc<a class="headerlink" href="#module-pylayers.antprop.raysc" title="Permalink to this headline">¶</a></h1>
+<p>This modules contains classes for old code PulsRay</p>
+<div class="section" id="ray3d-class">
+<h2>Ray3D class<a class="headerlink" href="#ray3d-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Ray3D.info</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Ray3D.locbas</span></tt>(L)</td>
+<td>evaluation of local basis over the ray</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Ray3D.delay</span></tt>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Ray3D.show</span></tt>([fig,&nbsp;ax,&nbsp;col,&nbsp;node])</td>
+<td>show a Ray projection in 2D</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Ray3D.show3</span></tt>([bdis])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="raytud-class">
+<h2>RayTud class<a class="headerlink" href="#raytud-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">RayTud.__init__</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">RayTud.info</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">RayTud.delay</span></tt>()</td>
+<td>calculate delay of the ray</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">RayTud.signature</span></tt>()</td>
+<td>returns ray signature</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">RayTud.eval</span></tt>([fGHz])</td>
+<td>evaluate the field over the ray</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="grraytud-class">
+<h2>GrRayTud class<a class="headerlink" href="#grraytud-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.__init__</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.__repr__</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.dir</span></tt>()</td>
+<td>list the available file in tuddir</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.delay</span></tt>()</td>
+<td>return ray delays in an array</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.choose</span></tt>()</td>
+<td>Choose a tud  file in tuddir</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.save</span></tt>([_filetud,&nbsp;_filetang,&nbsp;_filerang])</td>
+<td>save .tud .tang .rang</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.load</span></tt>(_filetud,&nbsp;_filetang,&nbsp;_filerang,&nbsp;sl)</td>
+<td>Load a set of Ray from the PulsRay .tud file   :Parameters:      <strong>_filename</strong> : tud filename                <strong>_filetang</strong> : tang filename                <strong>_filerang</strong> : rang filename                <strong>sl</strong> : slab database object            ..</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.ray</span></tt>(r)</td>
+<td>Give the ray number and it returns the index of its interactions</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.typ</span></tt>(r)</td>
+<td>return the list of interaction type of a given ray</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.eval</span></tt>()</td>
+<td>evaluation of Ctilde</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.info</span></tt>(r)</td>
+<td>information for a given ray r</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.imshowinter</span></tt>(r,&nbsp;f[,&nbsp;evaluated,&nbsp;show])</td>
+<td>im show interactions for</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.get_thetas</span></tt>()</td>
+<td>Get all thetas ( incidence angles ) from all computed RayTud</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRayTud.get_mat</span></tt>()</td>
+<td>Get all used materials from all computed Raytud</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="grray3d-class">
+<h2>GrRay3D class<a class="headerlink" href="#grray3d-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.__init__</span></tt>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.dir</span></tt>()</td>
+<td>list the available file in tradir</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.info</span></tt>([level])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.choose</span></tt>()</td>
+<td>Choose a Tracing  file in tradir</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.load</span></tt>(_filename,&nbsp;L)</td>
+<td>load a .tra de PulsRay</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.delay</span></tt>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.save</span></tt>(_filename)</td>
+<td>Parameters</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.reciprocal</span></tt>(L)</td>
+<td>Reciprocity channel</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.show</span></tt>([fig,&nbsp;ax,&nbsp;rayset,&nbsp;dtype,&nbsp;col,&nbsp;node])</td>
+<td>show a cluster of rays</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">GrRay3D.show3</span></tt>([rayset,&nbsp;dtype,&nbsp;bdis,&nbsp;bstruc,&nbsp;id])</td>
+<td>3D show using geomview</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -114,9 +297,6 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.interactions.html" title="pylayers.antprop.interactions"
-             >next</a> |</li>
         <li class="right" >
           <a href="generated/pylayers.antprop.rays.Rays.check_reciprocity.html" title="pylayers.antprop.rays.Rays.check_reciprocity"
              >previous</a> |</li>

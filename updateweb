@@ -1,0 +1,15 @@
+cd $WEBSITE/html
+cd ./notebook
+git add *.html 
+cd ../_images
+git add *
+cd ../modules
+git add *
+cd ../_modules
+git add *.html
+cd ../_static
+git add *
+cd ../_templates
+git add *
+git commit -a -m "Updating Website"
+git push origin gh-pages
