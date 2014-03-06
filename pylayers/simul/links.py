@@ -71,6 +71,75 @@ class Links(object):
     
 
 
+    Notes
+    -----
+
+    Dataset organisation:
+
+    Links_<idx>_<Layout_name>.h5
+        |
+        |/sig/si_ID#0/
+        |    /si_ID#1/
+        |    ...
+        |
+        |/ray/ray_ID#0/
+        |    /ray_ID#1/
+        |    ...
+        |
+        |/Ct/Ct_ID#0/
+        |   /Ct_ID#1/
+        |    ...
+        |
+        |/H/H_ID#0/
+        |  /H_ID#1/
+        |    ...
+        |
+        |
+        |p_map
+        |c_map
+        |f_map
+        |A_map
+        |T_map
+
+
+
+    Roots Dataset :
+
+    c_map : Cycles (Nc x 3) 
+    p_map : Positions (Np x 3) 
+    f_map : Frequency (Nf x 3) 
+    T_map : Rotation matrices (Nt x 3)
+    A_map : Antenna name (Na x 3) 
+
+    Groups and subgroups:
+
+     
+        Signature identifier (si_ID#N):
+            ca_cb_cutoff
+
+        Ray identifier (ray_ID#N):
+            ua_ub
+
+        Ctilde identifier (Ct_ID#N):
+            ua_ub_uf
+
+        H identifier (H_ID#N):
+            ua_ub_uf_uTa_uTb_uAa_uAb
+
+        with 
+        ca : cycle number of a 
+        cb : cycle number of b
+        cutoff : signature.run cutoff
+        ua : indice of a position in 'p_map' position dataset
+        ub : indice of a position in 'p_map' position dataset
+        uf : indice of freq position in 'f_map' frequency dataset
+        uTa : indice of a position in 'T_map' Rotation dataset
+        uTb : indice of b position in 'T_map' Rotation dataset
+        uAa : indice of a position in 'A_map' Antenna name dataset
+        uAb : indice of b position in 'A_map' Antenna name dataset
+
+
+
     Attributes
     ----------
 
@@ -220,90 +289,21 @@ class Links(object):
             f.create_group('Ct')
             f.create_group('H')
             # mapping point a 
-            f.create_dataset('p_map',shape=(1,3), maxshape=(None,3),dtype='float64')
+            f.create_dataset('p_map',shape=(0,3), maxshape=(None,3),dtype='float64')
             # mapping cycles  
-            f.create_dataset('c_map',shape=(1,3), maxshape=(None,3),dtype='int')
-            # number of ray mapping
-            f.create_dataset('ray_map',shape=(1,1), maxshape=(None,1),dtype='int')
-            # f mapping (fmin,fmax,fstep)
-            f.create_dataset('f_map',shape=(1,3), maxshape=(None,3),dtype='float64')
-            
+            f.create_dataset('c_map',shape=(0,3), maxshape=(None,3),dtype='int')
+            # mapping (fmin,fmax,fstep)
+            f.create_dataset('f_map',shape=(0,3), maxshape=(None,3),dtype='float64')
+            # mapping Antenna name
+            f.create_dataset('A_map',shape=(0,1), maxshape=(None,1),dtype="S10")
+            # mapping rotation matrices Antenna
+            f.create_dataset('T_map',shape=(0,3,3), maxshape=(None,3,3),dtype='float64')
             f.close()
         except:
             f.close()
             raise NameError('Links: issue when initializing h5py file')
 
 
-
-
-    # def cy_exist(self):
-    #     """ check if cycle dev_a, cycle dev_b with correct cutoff exists
-    #     """
-
-    # def cy_exist(self):
-    #     """ check if cycle dev_a, cycle dev_b with correct cutoff exists
-    #     """        
-
-
-    # def check_exists(self,todo,tol = 1e-3):
-    #     """ check if link already exists
-
-    #     Parameters
-    #     ----------
-
-    #     todo : list
-    #         list of information to check in h5py file
-    #     tol : float
-    #         tolerance on distance between poitns
-    
-    
-    #     """
-
-    #     filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
-    #     f=h5py.File(filenameh5,'r')
-    #     dexist = {'sig':[],'ray':[],'Ct':[],'H':[]}
-    #     try:
-   
-    #         # compute distance between current points
-    #         # and database points 
-    #         fa = f['a_map'][:]
-    #         fb = f['b_map'][:]
-
-    #         da = np.sqrt(np.sum((self.a-fa)**2,axis=1))
-    #         db = np.sqrt(np.sum((self.b-fb)**2,axis=1))
-    #         # indice points candidate in db for a
-    #         ua = np.where(da<tol)[0]    
-    #         # indice points candidate in db for b
-    #         ub = np.where(db<tol)[0]
-
-    #         # if 'sig' in todo:
-
-
-    #         # seek if frequency exists            
-          
-            
-    #         fmap_mi = f['f_map'][:,0]
-    #         fmap_ma = f['f_map'][:,1]
-    #         fmap_st = f['f_map'][:,2]
-
-
-
-    #         ufmi = np.where(abs(fmin-fmap_mi))
-    #         ufma = np.where(abs(fmax-fmap_ma)<tolf)
-    #         ufstep = np.where(abs(fstep-fmap_st)<tolf)
-
-    #         import ipdb
-    #         ipdb.set_trace()
-
-    #         rmap = f['ray_map'][:]
-
-    #         f.close()
-    #     except:
-    #         f.close()
-    #         raise NameError('Links check_exist : error in reading h5py file')
-
-
-    #     return (todo)
 
     def stack(self,key,array):
         """ stack new array in h5py file 
@@ -325,60 +325,254 @@ class Links(object):
         try : 
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f=h5py.File(lfilename,'a')
-            sc = f[key].shape
-            f[key].resize((sc[0]+1,sc[1]))
-            f[key][-1,:]=array
+            if key != 'T_map':
+                sc = f[key].shape
+                f[key].resize((sc[0]+1,sc[1]))
+                f[key][-1,:]=array
+            else:
+                sc = f[key].shape
+                f[key].resize((sc[0]+1,sc[1],sc[2]))
+                f[key][-1,:,:]=array
             f.close()
             return sc[0]+1
         except:
             f.close()
             raise NameError('Link stack: issue during stacking')
 
+
+
     def save(self,obj,**kwargs):
-        """ save Link of the corresponsing object
-
-
-
-        Notes:
-        -----
+        """ Save data
+            
         
+        Parameters
+        ----------
 
-        Sig identifier :
-        ca_cb_cutoff
-
-        with 
-        ca : cycle number of a 
-        cb : cycle number of b
-        cutoff : signature.run cutoff
-
-        Ray identifier :
-        ua_ub_H_N_uf
-
-        with 
-        ua : indice of a position in 'a_map' dataset
-        ub : indice of a position in 'b_map' dataset
-        uf : indice of a position in 'f_map' dataset
-        H : ra.ceil_height_meter value 
-        N : ra.number_mirror_cf value
-
+        obj : Object (Signatures|Rays|Ctilde|Tchannel)
+        
 
         """
 
         if isinstance(obj,Signatures):
-            grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(kwargs['cutoff'])
-            obj._saveh5(self.filename,grpname)
             array = np.array(([self.ca,self.cb,kwargs['cutoff']]))
-            self.stack('c_map',array)
-        if isinstance(obj,Rays):
-            ua = self.stack('p_map',self.a)
-            ub = self.stack('p_map',self.b)
-            farray = np.array(([self.fmin,self.fmax,self.fstep]))
-            uf = self.stack('f_map',farray)
-            grpname = str(ua) + '_' +str(ub) 
-            obj._saveh5(self.filename,grpname)
+            umap = self.array_exist('c_map',array)
+            if len(umap) == 0:
+                self.stack('c_map',array)
+                grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(kwargs['cutoff'])
+                obj._saveh5(self.filename,grpname)
+            else :
+                print 'sig already exists'
 
+        elif isinstance(obj,Rays):
+            ##############
+            # check existence of self.a in h5py file
+            ##############
+            lua, ua = self.get_idx('p_map',self.a)
+            ##############
+            # check existence of self.b in h5py file
+            ##############
+            lub, ub = self.get_idx('p_map',self.b)
+            ##############
+            # Write in h5py if no prior a-b link
+            ##############
+            if (lua != 0)  and (lub != 0):
+                print 'Ray already exists'
+            else :
+                grpname = str(ua) + '_' +str(ub)
+                obj._saveh5(self.filename,grpname)
+                
+
+
+        elif isinstance(obj,Ctilde):
+            ##############
+            # check existence of self.a in h5py file
+            ##############
+            lua, ua= self.get_idx('p_map',self.a)
+
+            ##############
+            # check existence of self.b in h5py file
+            ##############
+            lub, ub = self.get_idx('p_map',self.b)
+            ##############
+            # check existence of frequency in h5py file
+            ##############
+            farray = np.array(([self.fmin,self.fmax,self.fstep]))
+            luf, uf = self.get_idx('f_map',farray)
+
+            if (lua != 0)  and (lub != 0) and (luf != 0):
+                print 'Ctilde already exists'
+            else :
+                grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
+                obj._saveh5(self.filename,grpname)
+
+
+        elif isinstance(obj,Tchannel):
+            ##############
+            # check existence of self.a in h5py file
+            ##############
+            lua, ua = self.get_idx('p_map',self.a)
+            ##############
+            # check existence of self.b in h5py file
+            ##############
+            lub, ub = self.get_idx('p_map',self.b)
+            ##############
+            # check existence of frequency in h5py file
+            ##############
+            farray = np.array(([self.fmin,self.fmax,self.fstep]))
+            luf, uf = self.get_idx('f_map',farray)
+            ##############
+            # check existence of Rot a (Ta) in h5py file
+            ##############
+            luTa, uTa = self.get_idx('T_map',self.Ta)
+            ##############
+            # check existence of Rot b (Tb) in h5py file
+            ##############
+            luTb, uTb = self.get_idx('T_map',self.Tb)
+            ##############
+            # check existence of Antenna a (Aa) in h5py file
+            ##############
+            luAa, uAa = self.get_idx('A_map',self.Aa._filename)
+            ##############
+            # check existence of Antenna b (Ab) in h5py file
+            ##############
+            luAb, uAb = self.get_idx('A_map',self.Ab._filename)
+
+            if (lua != 0)  and (lub != 0) and (luf != 0) and (luTa != 0) \
+               and (luTb != 0) and (luAa != 0) and (luAb != 0):
+                print 'H already exists'
+            else :
+                grpname = str(ua) + '_' + str(ub) + '_' + str(uf) + \
+                          '_'  + str(uTa) + '_' + str(uTb) + \
+                          '_'  + str(uAa) + '_' + str(uAb) 
+                obj._saveh5(self.filename,grpname)
+
+        return (obj)
+
+    def get_idx(self,key,array,tol=1e-3):
+        """ try to get the index of the requested array in the group key
+            of the h5py file.
+            If array doesn't exist, the h5pyfile[key] array is stacked
+
+     
+        
+        Parameters
+        ----------
+        
+        key: string 
+            key of the h5py group
+        array : np.ndarray
+            array type to check existency
+        tol : np.float64
+            tolerance (in meter for key == 'p_map')
+
+        Returns
+        -------
+
+        (lu, u): tuple 
+
+        u : np.ndarray
+            the index in the array of the file[key] group
+        lu : int :
+            length of u
+        
             
 
+        See Also:
+        --------
+
+        Links.array_exist
+        """
+
+        umap = self.array_exist(key,array,tol=tol)
+        lu = len(umap)
+        # if exists take the existing one
+        # otherwise value is created
+        if lu != 0: 
+            u = umap
+        else :
+            u = self.stack(key,array)
+        return lu,u
+
+
+    def array_exist(self,key,array,tol=1e-3) :
+        """ check if an array of a given key (h5py group) 
+            has already been stored into the h5py file
+        
+    
+        Parameters
+        ----------
+    
+        key: string 
+            key of the h5py group
+        array : np.ndarray
+            array type to check existency
+        tol : np.float64
+            tolerance (in meter for key == 'p_map')
+
+        Returns
+        -------
+        (ua)
+
+        ua : np.ndarray
+            the indice in the array of the file[key] group
+            if the array is emtpy, value doesn't exist
+
+        TODO
+        ----
+
+        Add a tolerance on the rotation angle (T_map)
+        """
+
+        lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        try : 
+            f=h5py.File(lfilename,'a')
+            fa = f[key][...]
+            f.close()
+        except:
+            f.close()
+            raise NameError('Link check_exist: issue during reading')    
+
+        if key == 'c_map':
+            eq = array == fa
+            # sum eq = 3 means cy0,cy1 and cutoff are the same in fa and array
+            ua = np.where(np.sum(eq,axis=1)==3)[0]     
+
+        elif key == 'p_map':
+            da = np.sqrt(np.sum((array-fa)**2,axis=1))
+            # indice points candidate in db for a
+            ua = np.where(da<tol)[0]     
+
+        elif key == 'f_map':
+            # fmin_h5 < fmin_rqst
+            ufmi = np.where(fa[:,0]<=array[0])[0]
+            lufmi = len(ufmi)
+            # fmax_h5 > fmax_rqst
+            ufma = np.where(fa[:,1]>=array[1])[0]
+            lufma = len(ufma)
+            # fstep_h5 < fstep_rqst
+            ufst = np.where(fa[:,2]<=array[2])[0]
+            lufst = len(ufst)
+            # if fmin, fmax or fstep 
+            if (lufmi==0) and (lufma==0) and (lufst==0):
+                ua = np.array([]) 
+            else :
+                # find comon lines of fmin and fmax
+                ufmima = np.where(np.in1d(ufmi,ufma))[0]
+                # find comon lines of fmin, fmax and fstep
+                ua = np.where(np.in1d(ufmima,ufst))[0]
+
+        elif key == 'A_map':
+            ua = np.where(fa==array)[0]
+
+        elif key == 'T_map':
+            eq = array == fa
+            seq = np.sum(np.sum(eq,axis=1),axis=1)
+            ua = np.where(seq==9)[0]
+
+        else :
+            raise NameError('Link.array_exist : invalid key')
+
+        return ua
 
     def eval(self,**kwargs):
         """ Evaluate the link
@@ -424,25 +618,26 @@ class Links(object):
 
         Si=Signatures(self.L,self.ca,self.cb,cutoff=kwargs['si.cutoff'])
         Si.run5(cutoff=kwargs['si.cutoff'],algo=kwargs['si.algo'])
-        self.save(Si,cutoff=kwargs['si.cutoff'])
+        # save sig
+        Si = self.save(Si,cutoff=kwargs['si.cutoff'])
         
         #rays
         r2d = Si.rays(self.a,self.b)
         r3d = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
         r3d.locbas(self.L)
-        self.save(r3d)
-
-
+        # save ray
+        r3d = self.save(r3d)
         r3d.fillinter(self.L)
         #Ctilde
         C=r3d.eval(self.fGHz)
-        r3d._saveh5(self.filename,'test')
+        # save Ct
+        C = self.save(C)
         # Ctilde antenna
         Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
-        Cl._saveh5(self.filename,'test')
         #T channel
-        H=C.prop2tran(a=self.Aa,b=self.Ab,)
-        H._saveh5(self.filename,'test')
+        H=C.prop2tran(a=self.Aa,b=self.Ab)
+        H = self.save(H)
+        
 
 
     def _show3(self,rays=[],newfig = False,**kwargs):
