@@ -1148,19 +1148,12 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">pl</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-             <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span>
-             <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-             <span class="n">titre</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rx1&#39;</span><span class="p">,</span> <span class="s">&#39;Rx2&#39;</span><span class="p">,</span> <span class="s">&#39;Rx3&#39;</span><span class="p">,</span> <span class="s">&#39;Rx4&#39;</span><span class="p">],</span>
-             <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span>
-             <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-             <span class="n">xmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-             <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-             <span class="n">NC</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">display</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">titre</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Rx1&#39;</span><span class="p">,</span> <span class="s">&#39;Rx2&#39;</span><span class="p">,</span> <span class="s">&#39;Rx3&#39;</span><span class="p">,</span> <span class="s">&#39;Rx4&#39;</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">NC</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show the 4 Impulse Radio Impulse responses</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        delay</span>
 <span class="sd">            delay values to be displayed vertically [tau0 - toa_th toa_cum toa_max , taum-taurms taum+taurms]</span>
 <span class="sd">        display</span>
@@ -1210,8 +1203,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sp1</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span>
-                      <span class="n">showlabel</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">],</span> <span class="n">unit1</span><span class="o">=</span><span class="s">&#39;V&#39;</span><span class="p">,</span> <span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">sp1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span><span class="n">ax</span><span class="o">=</span><span class="n">sp1</span><span class="p">)</span>
+        <span class="c">#              showlabel=[False, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp1)</span>
         <span class="c">#self.ch1.plot(col=col[0],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp1,logx=False,logy=False)</span>
         <span class="c">#plt.show()</span>
         <span class="c">#axis([0,200,-2,2])</span>
@@ -1222,8 +1215,8 @@
             <span class="n">sp2</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sp2</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span>
-                      <span class="n">showlabel</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">],</span> <span class="n">unit1</span><span class="o">=</span><span class="s">&#39;V&#39;</span><span class="p">,</span> <span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">sp2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span><span class="n">ax</span><span class="o">=</span><span class="n">sp2</span><span class="p">)</span>
+        <span class="c">#              showlabel=[False, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp2)</span>
         <span class="c">#self.ch2.plot(col=col[1],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp2,logx=False,logy=False)</span>
         <span class="c">#plt.show()</span>
         <span class="c">#plt.axis([0,200,-2,2])</span>
@@ -1234,8 +1227,8 @@
             <span class="n">sp3</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sp3</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">2</span><span class="p">]]),</span>
-                      <span class="n">showlabel</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">],</span> <span class="n">unit1</span><span class="o">=</span><span class="s">&#39;V&#39;</span><span class="p">,</span> <span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">sp3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">2</span><span class="p">]]),</span><span class="n">ax</span><span class="o">=</span><span class="n">sp3</span><span class="p">)</span>
+        <span class="c">#              showlabel=[False, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp3)</span>
         <span class="c">#self.ch3.plot(col=col[2],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp3,logx=False,logy=False)</span>
         <span class="c">#plt.show()</span>
         <span class="c">#plt.title(titre[2])</span>
@@ -1245,8 +1238,8 @@
             <span class="n">sp4</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sp4</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">3</span><span class="p">]]),</span>
-                      <span class="n">showlabel</span><span class="o">=</span><span class="p">[</span><span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">],</span> <span class="n">unit1</span><span class="o">=</span><span class="s">&#39;V&#39;</span><span class="p">,</span> <span class="n">unit2</span><span class="o">=</span><span class="s">&#39;mV&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">sp4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vline</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delay</span><span class="p">[</span><span class="mi">3</span><span class="p">]]),</span> <span class="n">ax</span><span class="o">=</span><span class="n">sp4</span><span class="p">)</span>
+        <span class="c">#              showlabel=[True, True], unit1=&#39;V&#39;, unit2=&#39;mV&#39;, ax=sp4)</span>
         <span class="c">#self.ch4.plot(col=col[3],unit1=&#39;V&#39;,unit2=&#39;mV&#39;,ax=sp4,logx=False,logy=False)</span>
         <span class="c">#plt.show()</span>
         <span class="c">#plt.axis([0,200,-2,2])</span>
@@ -1897,9 +1890,10 @@
              <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
              <span class="n">NC</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show measurement in time domain</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        delay</span>
+<span class="sd">        delay : np.array(1,4)</span>
 <span class="sd">        display</span>
 <span class="sd">            optional</span>
 <span class="sd">        col</span>
