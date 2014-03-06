@@ -1,7 +1,7 @@
 from pylayers.util.project import *
 from pylayers.measures.mesuwb import *
 import matplotlib.pylab as plt
-M  = UWBMesure(1)
+M  = UWBMeasure(1)
 F  = M.fdd
 fig = plt.figure()
 F.plot('moddB')
