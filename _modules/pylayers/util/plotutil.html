@@ -203,12 +203,12 @@
 <span class="sd">            &#39;l20&#39; : dB (20 log10)</span>
 <span class="sd">            &#39;d&#39;   : phase degrees</span>
 <span class="sd">            &#39;r&#39;   : phase radians</span>
-<span class="sd">            &#39;du&#39;  : phase degrees unwrap </span>
-<span class="sd">            &#39;ru&#39;  : phase radians unwrap </span>
-<span class="sd">            &#39;gdn&#39; : group delay (ns) </span>
-<span class="sd">            &#39;gdm&#39; : group distance (m) </span>
+<span class="sd">            &#39;du&#39;  : phase degrees unwrap</span>
+<span class="sd">            &#39;ru&#39;  : phase radians unwrap</span>
+<span class="sd">            &#39;gdn&#39; : group delay (ns)</span>
+<span class="sd">            &#39;gdm&#39; : group distance (m)</span>
 <span class="sd">            &#39;re&#39;  : real part</span>
-<span class="sd">            &#39;im&#39;  : imaginary part </span>
+<span class="sd">            &#39;im&#39;  : imaginary part</span>
 
 
 <span class="sd">    fig and ax are numpy arrays of fig and ax</span>
@@ -219,6 +219,28 @@
 
 <span class="sd">    If len(y.shape) &gt; 2 the two first axes are used as nlin and ncol this</span>
 <span class="sd">    takes the priority over the passed values nlin and ncol</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :include-source:</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import pylayers.util.plotutil as plu</span>
+<span class="sd">        &gt;&gt;&gt; x = np.arange(0,10,.01)</span>
+<span class="sd">        &gt;&gt;&gt; z1 = np.cos(2*x)*np.sin(10*x) + 1j * np.cos(3*x)*np.sin(11*x)</span>
+<span class="sd">        &gt;&gt;&gt; z2 = np.cos(3*x)*np.sin(11*x) + 1j * np.cos(4*x)*np.sin(10*x)</span>
+<span class="sd">        &gt;&gt;&gt; z3 = np.cos(4*x)*np.sin(12*x) + 1j * np.cos(5*x)*np.sin(12*x)</span>
+<span class="sd">        &gt;&gt;&gt; z4 = np.cos(5*x)*np.sin(13*x) + 1j * np.cos(6*x)*np.sin(13*x)</span>
+<span class="sd">        &gt;&gt;&gt; y = np.vstack((z1,z2,z3,z4))</span>
+<span class="sd">        &gt;&gt;&gt; plu.mulcplot(x,y)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        &gt;&gt;&gt; plu.mulcplot(x,y,typ=&#39;v&#39;,)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        &gt;&gt;&gt; plu.mulcplot(x,y,typ=&#39;r&#39;,ncol=2,nlin=2,color=&#39;k&#39;,linewidth=2)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
 
 
 <span class="sd">    &quot;&quot;&quot;</span>

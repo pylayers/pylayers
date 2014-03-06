@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.antprop.antvsh &mdash; PyLayers</title>
+    <title>pylayers.antprop.antvsh.vsh &mdash; PyLayers</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '../../',
         VERSION:     '1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="prev" title="pylayers.antprop.antssh.CartToSphere" href="generated/pylayers.antprop.antssh.CartToSphere.html" /> 
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
     PyLayers
 <!--
-<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
     alt="pylayers"/></a>
 -->
 </div>
@@ -40,36 +38,29 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="generated/pylayers.antprop.antssh.CartToSphere.html" title="pylayers.antprop.antssh.CartToSphere"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="pylayers.html" accesskey="U">PyLayers</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pylayers.antprop.antssh.CartToSphere.html"
-                        title="previous chapter">pylayers.antprop.antssh.CartToSphere</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/modules/pylayers.antprop.antvsh.txt"
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.antvsh.vsh.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -88,19 +79,35 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-pylayers.antprop.antvsh">
-<span id="pylayers-antprop-antvsh"></span><h1>pylayers.antprop.antvsh<a class="headerlink" href="#module-pylayers.antprop.antvsh" title="Permalink to this headline">¶</a></h1>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+  <div class="section" id="pylayers-antprop-antvsh-vsh">
+<h1>pylayers.antprop.antvsh.vsh<a class="headerlink" href="#pylayers-antprop-antvsh-vsh" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pylayers.antprop.antvsh.vsh">
+<tt class="descclassname">pylayers.antprop.antvsh.</tt><tt class="descname">vsh</tt><big>(</big><em>A</em>, <em>dsf=1</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antvsh.html#vsh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antvsh.vsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the Vector Spherical Harmonics coefficients
+It makes use of the spherepack function vha</p>
+<blockquote>
+<div>m : phi    longitude
+n : theta  latitude</div></blockquote>
+<p>Antenna pattern are stored       (f theta phi)
+Coeff are stored with this order (f , n , m )</p>
+<p>The vsh coefficient are organized differently
+should be better for compression along frequency axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.antvsh.vsh.html#pylayers.antprop.antvsh.vsh" title="pylayers.antprop.antvsh.vsh"><tt class="xref py py-obj docutils literal"><span class="pre">vsh</span></tt></a>(A[,&nbsp;dsf])</td>
-<td>This function calculates the Vector Spherical Harmonics coefficients</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> :  antenna</p>
+<p><strong>dsf</strong> :  int</p>
+<blockquote class="last">
+<div><p>down sampling factor  &#8216;default 1&#8217;</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 </div>
 
 
@@ -113,20 +120,16 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="generated/pylayers.antprop.antssh.CartToSphere.html" title="pylayers.antprop.antssh.CartToSphere"
-             >previous</a> |</li>
-        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
-        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="pylayers.html" >PyLayers</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

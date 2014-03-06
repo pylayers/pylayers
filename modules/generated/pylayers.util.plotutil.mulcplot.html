@@ -115,10 +115,10 @@
 &#8216;l20&#8217; : dB (20 log10)
 &#8216;d&#8217;   : phase degrees
 &#8216;r&#8217;   : phase radians
-&#8216;du&#8217;  : phase degrees unwrap 
-&#8216;ru&#8217;  : phase radians unwrap 
-&#8216;gdn&#8217; : group delay (ns) 
-&#8216;gdm&#8217; : group distance (m) 
+&#8216;du&#8217;  : phase degrees unwrap
+&#8216;ru&#8217;  : phase radians unwrap
+&#8216;gdn&#8217; : group delay (ns)
+&#8216;gdm&#8217; : group distance (m)
 &#8216;re&#8217;  : real part
 &#8216;im&#8217;  : imaginary part</p>
 </div></blockquote>
@@ -130,6 +130,39 @@
 <p class="rubric">Notes</p>
 <p>If len(y.shape) &gt; 2 the two first axes are used as nlin and ncol this
 takes the priority over the passed values nlin and ncol</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">as</span> <span class="nn">plu</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="o">.</span><span class="mo">01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">11</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">11</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">12</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">12</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">13</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">13</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">z3</span><span class="p">,</span><span class="n">z4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plu</span><span class="o">.</span><span class="n">mulcplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_00_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_00_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_00_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-plotutil-mulcplot-1_00_00.png" src="../../_images/pylayers-util-plotutil-mulcplot-1_00_00.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plu</span><span class="o">.</span><span class="n">mulcplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">,)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_01_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_01_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_01_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-plotutil-mulcplot-1_01_00.png" src="../../_images/pylayers-util-plotutil-mulcplot-1_01_00.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plu</span><span class="o">.</span><span class="n">mulcplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">nlin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_02_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_02_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-util-plotutil-mulcplot-1_02_00.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-util-plotutil-mulcplot-1_02_00.png" src="../../_images/pylayers-util-plotutil-mulcplot-1_02_00.png" />
+</div>
 </dd></dl>
 
 </div>
