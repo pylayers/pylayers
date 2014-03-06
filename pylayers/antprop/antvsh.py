@@ -1,5 +1,5 @@
 """
-.. currentmodule:: pylayers.antenna.antvsh
+.. currentmodule:: pylayers.antprop.antvsh
 
 
 .. autosummary::

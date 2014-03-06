@@ -653,7 +653,7 @@ class Bsignal(object):
             cb.set_label(ylabels)
             plt.axis('auto')
             fig.tight_layout()
-           
+
             return fig,ax
 
     def plot(self, **kwargs):
@@ -686,7 +686,7 @@ class Bsignal(object):
             default False
 
         """
-      
+
         defaults = {'iy'  :  -1,
                   'vline' : np.array([]),
                   'hline' : np.array([]),
@@ -717,7 +717,7 @@ class Bsignal(object):
         conversion = 1.0
         if ((kwargs['unit1'] == 'V') & (kwargs['unit2'] == 'mV')):
             conversion = 1000
-   
+
         # restriction of x support
         u = np.nonzero((self.x > kwargs['xmin']) & (self.x < kwargs['xmax']))[0]
 
@@ -746,18 +746,14 @@ class Bsignal(object):
         #
 
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
-        for i in range(len(vline)):
-            if ax != []:
-                ax.axvline(vline[i], color=tcolor[i])
-            else:
-                axvline(vline[i], color=tcolor[i])
-
-        for i in range(len(hline)):
-            if ax != []:
-                ax.axhline(hline[i] * conversion, color='red')
-            else:
-                axhline(hline[i] * conversion, color='red')
-       
+        nl,nc = np.shape(ax)
+        for l in range(nl):
+            for c in range(nc):
+                for i in range(len(vline)):
+                    ax[l,c].axvline(vline[i], color=tcolor[i])
+                for i in range(len(hline)):
+                    ax.axhline(hline[i] * conversion, color='red')
+        
         return(fig,ax)
 
     def flatteny(self,yrange=[],reversible=False):
@@ -852,7 +848,8 @@ class Usignal(Bsignal):
     """
 
     def __init__(self, x=np.array([]), y=np.array([])):
-        Bsignal.__init__(self, x, y)
+        super(Usignal,self).__init__(x,y)
+        #Bsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1308,7 +1305,8 @@ class TBsignal(Bsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        Bsignal.__init__(self, x, y)
+        super(TBsignal,self).__init__(x,y)
+        #Bsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1338,8 +1336,6 @@ class TBsignal(Bsignal):
         >>> show()
 
         """
-       
-       
         defaults = {'iy'  :  -1,
                   'vline' : np.array([]),
                   'hline' : np.array([]),
@@ -1351,7 +1347,7 @@ class TBsignal(Bsignal):
                   'logx'  : False,
                   'logy'  : False
                  }
-       
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
@@ -1385,6 +1381,7 @@ class TBsignal(Bsignal):
 #                plt.ylabel('Voltage (mV)')
 
         fig,ax = Bsignal.plot(self,**kwargs)
+        #fig,ax = self.plot(**kwargs)
 
         return(fig,ax)
 
@@ -1475,7 +1472,8 @@ class TUsignal(TBsignal, Usignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        Usignal.__init__(self, x, y)
+        super(TUsignal,self).__init__(x,y)
+        #Usignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Usignal.__repr__(self)
@@ -2779,7 +2777,8 @@ class TUDsignal(TUsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([]), tau=np.array([])):
-        TUsignal.__init__(self, x, y)
+        super(TUDsigal,self).__init__(x,y)
+        #TUsignal.__init__(self, x, y)
         self.tau = tau
 
     def __repr__(self):
@@ -2825,8 +2824,9 @@ class FBsignal(Bsignal):
     plotdB   : plot modulus in dB
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        Bsignal.__init__(self, x, y)
-   
+        super(FBsignal,self).__init__(x,y)
+        #Bsignal.__init__(self, x, y)
+
     def __repr__(self):
         s = Bsignal.__repr__(self)
         return(s)
@@ -3036,7 +3036,8 @@ class FUsignal(FBsignal, Usignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        FBsignal.__init__(self, x, y)
+        super(FUsignal,self).__init__(x,y)
+        #FBsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = FBsignal.__repr__(self)
@@ -4558,7 +4559,7 @@ def test():
 #
 
 if __name__ == "__main__":
-    plt.ion()
+    #plt.ion()
     doctest.testmod()
     #ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
