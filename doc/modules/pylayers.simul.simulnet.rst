@@ -1,4 +1,4 @@
-pylayers.simul.simulnet module
+pylayers.simul.simulnet
 ==============================
 
 .. automodule:: pylayers.simul.simulnet

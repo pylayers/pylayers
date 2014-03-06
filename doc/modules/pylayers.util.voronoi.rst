@@ -1,4 +1,4 @@
-pylayers.util.voronoi module
+pylayers.util.voronoi
 ============================
 
 .. automodule:: pylayers.util.voronoi

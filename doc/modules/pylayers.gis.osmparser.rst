@@ -1,4 +1,4 @@
-pylayers.gis.osmparser module
+pylayers.gis.osmparser
 =============================
 
 .. automodule:: pylayers.gis.osmparser

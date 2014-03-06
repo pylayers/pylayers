@@ -1,4 +1,4 @@
-pylayers.network.wsn module
+pylayers.network.wsn
 ===========================
 
 .. automodule:: pylayers.network.wsn

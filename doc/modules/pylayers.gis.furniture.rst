@@ -1,4 +1,4 @@
-pylayers.gis.furniture module
+pylayers.gis.furniture
 =============================
 
 .. automodule:: pylayers.gis.furniture

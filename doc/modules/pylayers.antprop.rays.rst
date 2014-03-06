@@ -1,4 +1,4 @@
-pylayers.antprop.rays module
+pylayers.antprop.rays
 ============================
 
 .. automodule:: pylayers.antprop.rays

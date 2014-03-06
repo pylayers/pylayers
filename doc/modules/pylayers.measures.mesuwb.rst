@@ -1,4 +1,4 @@
-pylayers.measures.mesuwb module
+pylayers.measures.mesuwb
 ===============================
 
 .. automodule:: pylayers.measures.mesuwb

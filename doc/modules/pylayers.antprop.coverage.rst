@@ -1,4 +1,4 @@
-pylayers.antprop.coverage module
+pylayers.antprop.coverage
 ================================
 
 .. automodule:: pylayers.antprop.coverage

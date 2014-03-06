@@ -1,4 +1,4 @@
-pylayers.location.geometric.constraints.rss module
+pylayers.location.geometric.constraints.rss
 ==================================================
 
 .. automodule:: pylayers.location.geometric.constraints.rss

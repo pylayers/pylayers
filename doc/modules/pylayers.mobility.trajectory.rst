@@ -1,4 +1,4 @@
-pylayers.mobility.trajectory module
+pylayers.mobility.trajectory
 ===================================
 
 .. automodule:: pylayers.mobility.trajectory

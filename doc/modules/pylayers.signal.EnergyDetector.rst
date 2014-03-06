@@ -1,4 +1,4 @@
-pylayers.signal.EnergyDetector module
+pylayers.signal.EnergyDetector
 =====================================
 
 .. automodule:: pylayers.signal.EnergyDetector

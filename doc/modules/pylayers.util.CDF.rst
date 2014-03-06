@@ -1,4 +1,4 @@
-pylayers.util.CDF module
+pylayers.util.CDF
 ========================
 
 .. automodule:: pylayers.util.CDF

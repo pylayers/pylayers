@@ -1,4 +1,4 @@
-pylayers.signal.waveform module
+pylayers.signal.waveform
 ===============================
 
 .. automodule:: pylayers.signal.waveform

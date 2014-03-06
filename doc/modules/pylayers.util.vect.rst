@@ -1,4 +1,4 @@
-pylayers.util.vect module
+pylayers.util.vect
 =========================
 
 .. automodule:: pylayers.util.vect

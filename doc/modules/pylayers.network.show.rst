@@ -1,4 +1,4 @@
-pylayers.network.show module
+pylayers.network.show
 ============================
 
 .. automodule:: pylayers.network.show

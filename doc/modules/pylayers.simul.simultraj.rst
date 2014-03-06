@@ -1,4 +1,4 @@
-pylayers.simul.simultraj module
+pylayers.simul.simultraj
 ===============================
 
 .. automodule:: pylayers.simul.simultraj

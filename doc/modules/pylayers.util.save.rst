@@ -1,4 +1,4 @@
-pylayers.util.save module
+pylayers.util.save
 =========================
 
 .. automodule:: pylayers.util.save

@@ -2,6 +2,7 @@ PyLayers
 ========
 
 .. contents::
+   :depth: 3
 
 Antenna and Propagation
 -----------------------
@@ -47,7 +48,6 @@ Ray Tracing
 
    pylayers.antprop.interactions
    pylayers.antprop.signature
-   pylayers.antprop.signew
 
 MultiWall
 ~~~~~~~~~

@@ -1,4 +1,4 @@
-pylayers.gis.cycles module
+pylayers.gis.cycles
 ==========================
 
 .. automodule:: pylayers.gis.cycles

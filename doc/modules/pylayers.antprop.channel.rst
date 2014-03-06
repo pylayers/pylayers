@@ -1,4 +1,4 @@
-pylayers.antprop.channel module
+pylayers.antprop.channel
 ===============================
 
 .. automodule:: pylayers.antprop.channel

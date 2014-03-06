@@ -1,4 +1,4 @@
-pylayers.util.project module
+pylayers.util.project
 ============================
 
 .. automodule:: pylayers.util.project

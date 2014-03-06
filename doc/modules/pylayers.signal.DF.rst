@@ -1,4 +1,4 @@
-pylayers.signal.DF module
+pylayers.signal.DF
 =========================
 
 .. automodule:: pylayers.signal.DF

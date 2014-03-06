@@ -1,4 +1,4 @@
-pylayers.signal.detect_quad module
+pylayers.signal.detect_quad
 ==================================
 
 .. automodule:: pylayers.signal.detect_quad

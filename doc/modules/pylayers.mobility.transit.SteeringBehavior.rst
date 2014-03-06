@@ -1,4 +1,4 @@
-pylayers.mobility.transit.SteeringBehavior module
+pylayers.mobility.transit.SteeringBehavior
 =================================================
 
 .. automodule:: pylayers.mobility.transit.SteeringBehavior

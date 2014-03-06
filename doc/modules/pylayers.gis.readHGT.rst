@@ -1,4 +1,4 @@
-pylayers.gis.readHGT module
+pylayers.gis.readHGT
 ===========================
 
 .. automodule:: pylayers.gis.readHGT

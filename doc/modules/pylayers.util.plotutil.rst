@@ -1,4 +1,4 @@
-pylayers.util.plotutil module
+pylayers.util.plotutil
 =============================
 
 .. automodule:: pylayers.util.plotutil

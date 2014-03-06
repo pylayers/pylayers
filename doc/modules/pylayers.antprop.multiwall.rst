@@ -1,4 +1,4 @@
-pylayers.antprop.multiwall module
+pylayers.antprop.multiwall
 =================================
 
 .. automodule:: pylayers.antprop.multiwall

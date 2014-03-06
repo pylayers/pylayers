@@ -1,4 +1,4 @@
-pylayers.network.network module
+pylayers.network.network
 ===============================
 
 .. automodule:: pylayers.network.network

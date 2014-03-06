@@ -1,4 +1,4 @@
-pylayers.mobility.agent module
+pylayers.mobility.agent
 ==============================
 
 .. automodule:: pylayers.mobility.agent

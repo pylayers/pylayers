@@ -1,4 +1,4 @@
-pylayers.location.geometric.constraints.tdoa module
+pylayers.location.geometric.constraints.tdoa
 ===================================================
 
 .. automodule:: pylayers.location.geometric.constraints.tdoa

@@ -1,4 +1,4 @@
-pylayers.util.versions module
+pylayers.util.versions
 =============================
 
 .. automodule:: pylayers.util.versions

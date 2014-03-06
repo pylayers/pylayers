@@ -1,4 +1,4 @@
-pylayers.antprop.raysc module
+pylayers.antprop.raysc
 =============================
 
 .. automodule:: pylayers.antprop.raysc
