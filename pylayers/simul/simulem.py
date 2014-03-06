@@ -64,7 +64,7 @@ def rename(_filename,itx,irx,rep='./'):
 
     See Also
     --------
-
+    
     tratotud
 
     """
@@ -1935,9 +1935,9 @@ class Simul(object):
 
         self.L._show3(newfig=False,opacity=0.7)
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-            title=False,colorbar=False,newfig=False,name = 'Antenna Tx')
+            title=False,colorbar=False,newfig=False)
         Arx._show3(T=Trx.reshape(3,3),po=prx,
-            title=False,colorbar=False,newfig=False,name = 'Antenna Rx')
+            title=False,colorbar=False,newfig=False)
         if rays != []:
             rays._show3(**kwargs)
 

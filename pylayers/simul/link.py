@@ -27,30 +27,12 @@ Links Class
 
 """
 import doctest
-import os
-import re
-import getopt
-import sys
-import shutil
-import Tkinter, tkFileDialog
-import time
-import ConfigParser
-import pdb
-import cPickle
 import numpy as np
-import scipy as sp
-import scipy.io as spio
 import matplotlib.pylab as plt
-import struct as stru
-import pylayers.util.pyutil as pyu
-import pylayers.util.geomutil as geu
-import pylayers.util.plotutil as plu
-import pylayers.signal.bsignal as bs
-
 import pylayers.signal.waveform as wvf
 
 from pylayers.util.project import *
-
+import pylayers.util.pyutil as pyu
 from pylayers.simul.radionode import RadioNode
 # Handle Layout
 from pylayers.gis.layout import Layout
@@ -76,8 +58,15 @@ import pdb
 
 
 
-class Links(object):
-    """ Links Simulation Class
+class Link(object):
+    """ Link Simulation Class
+
+    
+    
+
+
+    Notes
+    -----
 
     All simulation are stored into a unique file in your <PyProject>/output directory
     using the following convention:
@@ -87,11 +76,10 @@ class Links(object):
     where 
         <save_idx> is a integer number to be able to discriminate different links simulations 
     and <LayoutFilename> is the Layout used for the link simulation.
-    
 
 
-    Notes
-    -----
+
+
 
     Dataset organisation:
 
@@ -157,49 +145,44 @@ class Links(object):
         uAa : indice of a position in 'A_map' Antenna name dataset
         uAb : indice of b position in 'A_map' Antenna name dataset
 
-
-
-    Attributes
-    ----------
-
-    Basic
-
-    L : Layout
-        Layout to be used
-    a : np.ndarray (3,)
-        position of a device dev_a 
-    b : np.ndarray (3,)
-        position of a device dev_b  
-    Aa : Antenna
-        Antenna of device dev_a  
-    Ab : Antenna
-        Antenna of device dev_b 
-    Ta : np.ndarray (3,3)
-        Rotation matrice of Antenna of device dev_a relative to global Layout scene
-    Tb : np.ndarray (3,3)
-        Rotation matrice of Antenna of device dev_b relative to global Layout scene
-    fGHz : np.ndarray (Nptf,)
-        frequency range of Nptf poitns used for evaluation of channel in GHz
-    wav : Waform 
-        Waveform to be applied on the channel
-
-
-    Advanced (change only if you really know what you do !) 
-
-    save_opt : list (['sig','ray','Ct','H'])
-        information to be saved in the Links h5 file
-    save_idx : int
-        number to differenciate the h5 file generated
-    force_create : Boolean (False)
-        forcecreating the h5py file (if already exist, will be erased)
-
-
-    Methods
-    -------
-
     
     """
     def __init__(self, **kwargs):
+        """
+        Parameters
+        ----------
+
+        Basic
+
+        L : Layout
+            Layout to be used
+        a : np.ndarray (3,)
+            position of a device dev_a 
+        b : np.ndarray (3,)
+            position of a device dev_b  
+        Aa : Antenna
+            Antenna of device dev_a  
+        Ab : Antenna
+            Antenna of device dev_b 
+        Ta : np.ndarray (3,3)
+            Rotation matrice of Antenna of device dev_a relative to global Layout scene
+        Tb : np.ndarray (3,3)
+            Rotation matrice of Antenna of device dev_b relative to global Layout scene
+        fGHz : np.ndarray (Nptf,)
+            frequency range of Nptf poitns used for evaluation of channel in GHz
+        wav : Waform 
+            Waveform to be applied on the channel
+        save_idx : int
+            number to differenciate the h5 file generated
+
+        Advanced (change only if you really know what you do !) 
+
+        save_opt : list (['sig','ray','Ct','H'])
+            information to be saved in the Links h5 file. Should never be Modified !
+
+        force_create : Boolean (False)
+            forcecreating the h5py file (if already exist, will be erased)
+        """
 
         defaults={ 'L':Layout(),
                    'a':np.array(()),
@@ -210,9 +193,11 @@ class Links(object):
                    'Tb':np.eye(3),
                    'fGHz':np.linspace(2, 11, 181, endpoint=True),
                    'wav':wvf.Waveform(),
+                   'cutoff':3,
                    'save_opt':['sig','ray','Ct','H'],
                    'save_idx':0,
-                   'force_create':False
+                   'force_create':False,
+                   'verbose':True
                 }
 
 
@@ -224,6 +209,8 @@ class Links(object):
 
         force=self.force_create
         delattr(self,'force_create') 
+
+        self.Lname = self.L.filename
 
         self.tx = RadioNode(name = '',
                             typ = 'tx',
@@ -237,7 +224,7 @@ class Links(object):
                             _fileant = self.Ab._filename,
                             )
 
-        self.filename = 'Links_' + str(self.save_idx) + '_' + self.L.filename.split('.')[0] + '.h5'   
+        self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5'   
   
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
@@ -245,16 +232,64 @@ class Links(object):
             print 'Links save file for ' + self.L.filename + ' does not exist.'
             print 'It is beeing created. You\'ll see that message only once per Layout'
             self.save_init(filenameh5)
+
+        # dictionnary data exists
+        self.dexist={'sig':{'exist':False,'grpname':''},
+                     'ray':{'exist':False,'grpname':''},
+                     'Ct':{'exist':False,'grpname':''},
+                     'H':{'exist':False,'grpname':''}
+                    }
+
         self.updcfg()
 
-        
     
+    def __repr__(self):
+        """ __repr__
+        """
+        
+        s = 'filename: ' + self.filename +'\n'
+
+        s = s + 'Actual Link considered is:\n' 
+        s = s + '--------------------------\n' 
+        s = s + 'Layout: ' + self.Lname + '\n\n'
+        s = s + 'Device a:  \n'
+        s = s + '---------  \n'
+        s = s + 'position: ' + str (self.a) + '\n' 
+        s = s + 'Antenna: ' + str (self.Aa._filename) + '\n'
+        s = s + 'Antenna rotation matrice : \n ' + str (self.Ta) + '\n\n'
+        s = s + 'Device b:  \n'
+        s = s + '---------  \n'
+        s = s + 'position: ' + str (self.b) + '\n' 
+        s = s + 'Antenna: ' + str (self.Ab._filename) + '\n'
+        s = s + 'Antenna rotation matrice : \n ' + str (self.Tb) + '\n\n'
+        s = s + 'Link evaluation information : \n '
+        s = s + '------------------ \n'
+        s = s + 'distance: ' + str(np.sqrt(np.sum((self.a-self.b)**2))) + 'm \n'
+        s = s + 'delay:' + str(np.sqrt(np.sum((self.a-self.b)**2))/0.3) + 'ns\n'
+        s = s + 'Frequency range :  \n'
+        s = s + 'fmin (fGHz):' + str(self.fGHz[0]) +'\n'
+        s = s + 'fmax (fGHz):' + str(self.fGHz[-1]) +'\n'
+        s = s + 'fstep (fGHz):' + str(self.fGHz[1]-self.fGHz[0]) +'\n '
+
+        return s
+
+
+
 
     def updcfg(self):
         """ update configuration
 
         """
-        
+
+        if self.L.filename != self.Lname :
+            self.Lname=self.L.filename
+            # Layout has been changed:
+            self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5'   
+            filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
+            if not os.path.exists(filenameh5) :
+                print 'Links save file for ' + self.L.filename + ' does not exist.'
+                print 'It is beeing created. You\'ll see that message only once per Layout'
+                self.save_init(filenameh5)
 
         try:
             self.L.dumpr()
@@ -263,14 +298,24 @@ class Links(object):
             self.L.build()
             self.L.dumpw()
 
-        if len(self.a) == 0:
+
+        if len(self.a) == 0 :
             self.a = self.L.cy2pt(0)
-        if len(self.b) == 0:
+            
+        if len(self.b) == 0 :
             self.b = self.L.cy2pt(1)
+        
+
+        if not self.L.ptin(self.a):
+            raise NameError ('point a not inside the Layout')
+        if not self.L.ptin(self.b):
+            raise NameError ('point b not inside the Layout')
 
         self.ca = self.L.pt2cy(self.a)
         self.cb = self.L.pt2cy(self.b)
 
+
+        
 
         self.fmin = self.fGHz[0]
         self.fmax = self.fGHz[-1]
@@ -285,11 +330,19 @@ class Links(object):
         self.tx.A = self.Aa  
         self.rx.A = self.Ab  
 
+        # get identifier groupname in h5py file 
+        self.get_grpname()
+        # check if grpnamee exist in the h5py file
+        [self.exist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+
+        # save layout name in case of layout would be modified
+        self.Lname = self.L.filename
+
     def save_init(self,filename_long):
         """ initilaize save Link
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
 
 
         filename_long : str
@@ -328,7 +381,7 @@ class Links(object):
         """ stack new array in h5py file 
             for a given key (dataframe/group)
 
-        Parameters:
+        Parameters
         -----------
 
         key : string
@@ -353,119 +406,144 @@ class Links(object):
                 f[key].resize((sc[0]+1,sc[1],sc[2]))
                 f[key][-1,:,:]=array
             f.close()
-            return sc[0]+1
+            return np.array([sc[0]+1])
         except:
             f.close()
             raise NameError('Link stack: issue during stacking')
 
+    def save(self,obj,grpname):
+        """ Save a given object in the correct grp
 
-
-    def save(self,obj,**kwargs):
-        """ Save data
-            
-        
         Parameters
         ----------
 
-        obj : Object (Signatures|Rays|Ctilde|Tchannel)
-        
-
+        obj : Object 
+            (Signatures|Rays|Ctilde|Tchannel)
+        grpname : string
+            groupe name of the h5py file
         """
 
-        if isinstance(obj,Signatures):
-            array = np.array(([self.ca,self.cb,kwargs['cutoff']]))
-            umap = self.array_exist('c_map',array)
-            if len(umap) == 0:
-                self.stack('c_map',array)
-                grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(kwargs['cutoff'])
-                obj._saveh5(self.filename,grpname)
-            else :
-                print 'sig already exists'
+        obj._saveh5(self.filename,grpname)
+        if self.verbose :
+            print str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved'
 
-        elif isinstance(obj,Rays):
-            ##############
-            # check existence of self.a in h5py file
-            ##############
-            lua, ua = self.get_idx('p_map',self.a)
-            ##############
-            # check existence of self.b in h5py file
-            ##############
-            lub, ub = self.get_idx('p_map',self.b)
-            ##############
-            # Write in h5py if no prior a-b link
-            ##############
-            if (lua != 0)  and (lub != 0):
-                print 'Ray already exists'
-            else :
-                grpname = str(ua) + '_' +str(ub)
-                obj._saveh5(self.filename,grpname)
+
+    def load(self,obj,grpname):
+        """ Load a given object in the correct grp
+
+        Parameters
+        ----------
+
+        obj : Object 
+            (Signatures|Rays|Ctilde|Tchannel)
+        grpname : string
+            groupe name of the h5py file
+
+        
+        """
+
+        obj._loadh5(self.filename,grpname)
+        if self.verbose :
+            print str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' loaded'
+
+
+    def get_grpname(self):
+        """ Determine if the group name of the dataregarding the given configuration
+
+        Notes
+        -----
+
+        Update the key grpname of self.dexist[key] dictionnary 
+        """
+        ############
+        # Signatures
+        ############# 
+        array = np.array(([self.ca,self.cb,self.cutoff]))
+        ua_opt, ua = self.get_idx('c_map',array)
+        grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff)
+        self.dexist['sig']['grpname']=grpname        
+        
                 
 
+        ############
+        # Rays
+        ############# 
 
-        elif isinstance(obj,Ctilde):
-            ##############
-            # check existence of self.a in h5py file
-            ##############
-            lua, ua= self.get_idx('p_map',self.a)
+        # check existence of self.a in h5py file
 
-            ##############
-            # check existence of self.b in h5py file
-            ##############
-            lub, ub = self.get_idx('p_map',self.b)
-            ##############
-            # check existence of frequency in h5py file
-            ##############
-            farray = np.array(([self.fmin,self.fmax,self.fstep]))
-            luf, uf = self.get_idx('f_map',farray)
+        ua_opt, ua = self.get_idx('p_map',self.a)
+        # check existence of self.b in h5py file
+        ub_opt, ub = self.get_idx('p_map',self.b)
+        # Write in h5py if no prior a-b link
+        grpname = str(ua) + '_' +str(ub)
+        self.dexist['ray']['grpname']=grpname                
+    
 
-            if (lua != 0)  and (lub != 0) and (luf != 0):
-                print 'Ctilde already exists'
+        
+        ############
+        # Ctilde
+        ############# 
+
+        # check existence of frequency in h5py file
+        farray = np.array(([self.fmin,self.fmax,self.fstep]))
+        uf_opt, uf = self.get_idx('f_map',farray)
+
+        grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
+        self.dexist['Ct']['grpname']=grpname               
+
+        ############
+        # H
+        ############# 
+
+    
+    
+        # check existence of Rot a (Ta) in h5py file
+        uTa_opt, uTa = self.get_idx('T_map',self.Ta)
+        # check existence of Rot b (Tb) in h5py file
+        uTb_opt, uTb = self.get_idx('T_map',self.Tb)
+        # check existence of Antenna a (Aa) in h5py file
+        uAa_opt, uAa = self.get_idx('A_map',self.Aa._filename)
+        # check existence of Antenna b (Ab) in h5py file
+        uAb_opt, uAb = self.get_idx('A_map',self.Ab._filename)
+
+
+        grpname = str(ua) + '_' + str(ub) + '_' + str(uf) + \
+                  '_'  + str(uTa) + '_' + str(uTb) + \
+                  '_'  + str(uAa) + '_' + str(uAb) 
+
+        self.dexist['H']['grpname']=grpname    
+
+
+    def exist(self,key,grpname):
+        """Check if the data of a key with a given groupname 
+            already exists in the h5py file
+
+        Parameters
+        ----------
+        
+        key: string 
+            key of the h5py group
+        grpname : string
+            groupe name of the h5py file
+
+        Notes
+        -----
+
+        update the key grpname of self.dexist[key] dictionnary 
+
+        """
+        try : 
+            lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
+            f=h5py.File(lfilename,'r')
+            if grpname in f[key].keys():
+                self.dexist[key]['exist']=True
             else :
-                grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
-                obj._saveh5(self.filename,grpname)
+                self.dexist[key]['exist']=False
+            f.close()
+        except:
+            f.close()
+            raise NameError('Link exist: issue during stacking')
 
-
-        elif isinstance(obj,Tchannel):
-            ##############
-            # check existence of self.a in h5py file
-            ##############
-            lua, ua = self.get_idx('p_map',self.a)
-            ##############
-            # check existence of self.b in h5py file
-            ##############
-            lub, ub = self.get_idx('p_map',self.b)
-            ##############
-            # check existence of frequency in h5py file
-            ##############
-            farray = np.array(([self.fmin,self.fmax,self.fstep]))
-            luf, uf = self.get_idx('f_map',farray)
-            ##############
-            # check existence of Rot a (Ta) in h5py file
-            ##############
-            luTa, uTa = self.get_idx('T_map',self.Ta)
-            ##############
-            # check existence of Rot b (Tb) in h5py file
-            ##############
-            luTb, uTb = self.get_idx('T_map',self.Tb)
-            ##############
-            # check existence of Antenna a (Aa) in h5py file
-            ##############
-            luAa, uAa = self.get_idx('A_map',self.Aa._filename)
-            ##############
-            # check existence of Antenna b (Ab) in h5py file
-            ##############
-            luAb, uAb = self.get_idx('A_map',self.Ab._filename)
-
-            if (lua != 0)  and (lub != 0) and (luf != 0) and (luTa != 0) \
-               and (luTb != 0) and (luAa != 0) and (luAb != 0):
-                print 'H already exists'
-            else :
-                grpname = str(ua) + '_' + str(ub) + '_' + str(uf) + \
-                          '_'  + str(uTa) + '_' + str(uTb) + \
-                          '_'  + str(uAa) + '_' + str(uAb) 
-                obj._saveh5(self.filename,grpname)
-
-        return (obj)
 
     def get_idx(self,key,array,tol=1e-3):
         """ try to get the index of the requested array in the group key
@@ -487,12 +565,13 @@ class Links(object):
         Returns
         -------
 
-        (lu, u): tuple 
+        (u_opt, u): tuple 
 
         u : np.ndarray
             the index in the array of the file[key] group
-        lu : int :
-            length of u
+        u_opt : string ('r'|'s')
+            return 'r' if array has been read into h5py file
+            return 's' if array has been stacked into the array of group key
         
             
 
@@ -501,16 +580,18 @@ class Links(object):
 
         Links.array_exist
         """
-
+        
         umap = self.array_exist(key,array,tol=tol)
         lu = len(umap)
         # if exists take the existing one
         # otherwise value is created
         if lu != 0: 
             u = umap
+            u_opt='r'
         else :
             u = self.stack(key,array)
-        return lu,u
+            u_opt='s'
+        return u_opt,u[0]
 
 
     def array_exist(self,key,array,tol=1e-3) :
@@ -557,8 +638,10 @@ class Links(object):
             ua = np.where(np.sum(eq,axis=1)==3)[0]     
 
         elif key == 'p_map':
+
             da = np.sqrt(np.sum((array-fa)**2,axis=1))
             # indice points candidate in db for a
+
             ua = np.where(da<tol)[0]     
 
         elif key == 'f_map':
@@ -593,14 +676,14 @@ class Links(object):
 
         return ua
 
+    
     def eval(self,**kwargs):
         """ Evaluate the link
 
         Parameters
         ----------
 
-        si.cutoff : int
-            siganture.run cutoff
+       
         si.algo : str ('old'|'new')
             siganture.run algo type
         ra.ceil_height_meter : int
@@ -617,7 +700,6 @@ class Links(object):
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
-                   'si.cutoff':2,
                    'si.algo':'old',
                    'ra.ceil_height_meter':3,
                    'ra.number_mirror_cf':1,
@@ -628,38 +710,55 @@ class Links(object):
 
         self.updcfg()
 
-        # 
-        # todo = kwargs['output']
-        # dexists = self.check_exists(todo)
-
-
+        
+        
         #signatures
-
-        Si=Signatures(self.L,self.ca,self.cb,cutoff=kwargs['si.cutoff'])
-        Si.run5(cutoff=kwargs['si.cutoff'],algo=kwargs['si.algo'])
-        # save sig
-        Si = self.save(Si,cutoff=kwargs['si.cutoff'])
+        Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        if self.dexist['sig']['exist']:
+            self.load(Si,self.dexist['sig']['grpname'])
+        else :
+            
+            Si.run5(cutoff=self.cutoff,algo=kwargs['si.algo'])
+            # save sig
+            self.save(Si,self.dexist['sig']['grpname'])
         
-        #rays
-        r2d = Si.rays(self.a,self.b)
-        r3d = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
-        r3d.locbas(self.L)
-        # save ray
-        r3d = self.save(r3d)
-        r3d.fillinter(self.L)
-        #Ctilde
-        C=r3d.eval(self.fGHz)
-        # save Ct
-        C = self.save(C)
-        # Ctilde antenna
-        Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
-        #T channel
-        H=C.prop2tran(a=self.Aa,b=self.Ab)
-        H = self.save(H)
+        R = Rays(self.a,self.b)
+        if self.dexist['ray']['exist']:
+            self.load(R,self.dexist['ray']['grpname'])
+        else :
+            r2d = Si.rays(self.a,self.b)
+            R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
+            R.locbas(self.L)
+            # save ray
+            self.save(R,self.dexist['ray']['grpname'])    
         
+        C=Ctilde()
+        if self.dexist['Ct']['exist']:
+            self.load(C,self.dexist['Ct']['grpname'])
+        else :
+            R.fillinter(self.L)
+            #Ctilde
+            C=R.eval(self.fGHz)
+            # save Ct
+            self.save(C,self.dexist['Ct']['grpname'])    
+        
+        H=Tchannel()
+        if self.dexist['H']['exist']:
+            self.load(H,self.dexist['H']['grpname'])
+        else :
+            # Ctilde antenna
+            Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
+            #T channel
+            H=C.prop2tran(a=self.Aa,b=self.Ab)
+            self.save(H,self.dexist['H']['grpname'])
+
+        self.Si = Si        
+        self.R = R
+        self.C = C
+        self.H = H        
 
 
-    def _show3(self,rays=[],newfig = False,**kwargs):
+    def _show3(self,rays=True,newfig = False,**kwargs):
         """ display of the simulation configuration
             using Mayavi
 
@@ -687,7 +786,6 @@ class Links(object):
             centered = False
 
         if centered:
-            pdb.set_trace()
             pg =np.zeros((3))
             pg[:2]=self.L.pg
 
@@ -704,13 +802,24 @@ class Links(object):
             ptx = self.tx.position
             prx = self.rx.position
 
+        # evaluate antenna if required
+        if len(Atx.SqG.shape) == 2:
+            Atx.Fsynth()
+        if len(Arx.SqG.shape) == 2:
+            Arx.Fsynth()
+
         self.L._show3(newfig=False,opacity=0.7,centered=centered)
+
+        
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
             title=False,colorbar=False,newfig=False)
         Arx._show3(T=Trx.reshape(3,3),po=prx,
             title=False,colorbar=False,newfig=False,name = '')
-        if rays != []:
-            rays._show3(**kwargs)
+        if rays :
+            try:
+                self.R._show3(**kwargs)
+            except:
+                print 'Rays not computed yet'
     # def save(self):
     #     """ save simulation file
 
