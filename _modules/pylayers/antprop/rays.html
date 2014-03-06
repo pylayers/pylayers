@@ -333,7 +333,21 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; save rays pyh5 format compliant links</span>
+        <span class="sd">&quot;&quot;&quot; Save rays h5py format compliant with Links Class</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        filenameh5 : string</span>
+<span class="sd">            filename of the h5py file (from Links Class)</span>
+<span class="sd">        grpname : string </span>
+<span class="sd">            groupname of the h5py file (from Links Class)</span>
+<span class="sd">        </span>
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.simul.links</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">filenameh5</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
@@ -370,9 +384,24 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Rays: issue when writting h5py file&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; save rays </span>
-<span class="sd">            pyh5 format</span>
-<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="sd">&quot;&quot;&quot; Load rays  h5py format compliant with Links Class</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        filenameh5 : string</span>
+<span class="sd">            filename of the h5py file (from Links Class)</span>
+<span class="sd">        grpname : string </span>
+<span class="sd">            groupname of the h5py file (from Links Class)</span>
+<span class="sd">        </span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.simul.links</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+                
 
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
         <span class="c"># try/except to avoid loosing the h5 file if </span>
@@ -398,10 +427,9 @@
 
         <span class="c"># temporary solution in order to avoir </span>
         <span class="c"># creating save for Interactions classes</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">:</span>
-            <span class="n">fileL</span><span class="o">=</span><span class="n">filenameh5</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.h5&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">_fileL</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getshort</span><span class="p">(</span><span class="n">fileL</span><span class="p">)</span>
-            <span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="n">_fileL</span><span class="p">)</span>
+            <span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="n">Lfilename</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
