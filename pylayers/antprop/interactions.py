@@ -1,5 +1,83 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
+"""
+
+.. currentmodule:: pylayers.antprop.interactions
+
+Inters Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Inter.__init__
+    Inter.__repr__
+    Inter.create_dusl
+    Inter.sinsout
+    Inter.stack
+
+Interactions Class
+==================
+
+
+.. autosummary::
+    :toctree: generated/
+
+    Interactions.__init__
+    Interactions.add
+    Interactions.addi
+    Interactions.eval
+
+IntB Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntB.__init__
+    IntB.__repr__
+    IntB.eval
+
+IntL Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntL.__init__
+    IntL.__repr__
+    IntL.eval
+
+IntR Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntR.__init__
+    IntR.__repr__
+    IntR.eval
+
+IntT Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntT.__init__
+    IntT.__repr__
+    IntT.eval
+
+IntD Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntD.__init__
+    IntD.__repr__
+    IntD.eval
+"""
 import pdb
 import os
 import pdb

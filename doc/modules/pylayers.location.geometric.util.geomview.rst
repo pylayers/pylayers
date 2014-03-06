@@ -2,6 +2,3 @@ pylayers.location.geometric.util.geomview module
 ================================================
 
 .. automodule:: pylayers.location.geometric.util.geomview
-    :members:
-    :undoc-members:
-    :show-inheritance:

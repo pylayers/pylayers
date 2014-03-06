@@ -1,4 +1,46 @@
 # -*- coding:Utf-8 -*-
+"""
+.. currentmodule:: pylayers.antprop.channelc
+
+VectChannel Class
+=================
+
+
+.. autosummary::
+   :toctree: generated/
+
+   VectChannel.__init__
+   VectChannel.show3_old
+   VectChannel.show3
+
+ScalChannel Class
+=================
+
+.. autosummary::
+   :toctree: generated/
+
+   ScalChannel.__init__
+   ScalChannel.info
+   ScalChannel.imshow
+   ScalChannel.apply
+   ScalChannel.applywavC
+   ScalChannel.applywavB
+   ScalChannel.applywavA
+   ScalChannel.doddoa
+   ScalChannel.wavefig
+   ScalChannel.rayfig
+
+VectLOS Class
+=============
+
+.. autosummary::
+   :toctree: generated/
+
+   VectLOS.__init__
+   VectLOS.cir
+
+"""
+
 import doctest
 import pdb
 import numpy as np

@@ -1,4 +1,22 @@
 # -*- coding:Utf-8 -*-
+"""
+
+Ploting Utility functions
+
+.. currentmodule:: pylayers.util.plotutil
+
+
+.. autosummary::
+    :toctree: generated/
+
+    cformat
+    mulcplot
+    displot
+    pol3D
+    cylinder
+
+"""
+
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -40,7 +58,7 @@ def cformat(x,y,**kwargs):
     else:
         uy = kwargs['uy']
 
-    # radians to degree coefficient   
+    # radians to degree coefficient
     rtd = 180./np.pi
 
     t = kwargs['typ']
@@ -116,11 +134,6 @@ def mulcplot(x,y,**kwargs):
 
     fig and ax are numpy arrays of fig and ax
 
-    Examples
-    --------
-
-    >>> from pylayers.util.plotutil import *
-    >>> import numpy as np
 
     Notes
     -----
@@ -379,12 +392,13 @@ def displot(pt, ph, arrow=False, **kwargs ):
 
         >>> import scipy as sp
         >>> import matplotlib.pyplot as plt
-        >>> from pylayers.util.geomutil import *
+        >>> from pylayers.util.plotutil import *
         >>> N   = 10
         >>> pt  = sp.rand(2,N)
         >>> ph  = sp.rand(2,N)
         >>> f,a = displot(pt,ph)
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
+        >>> plt.show()
 
     """
     defaults = { 'arrow' : False ,
@@ -459,7 +473,8 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
     Examples
     --------
 
-    .. plot:: 
+    .. plot::
+        :include-source:
 
         >>> from pylayers.util.plotutil import *
         >>> import numpy as np
@@ -499,17 +514,24 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
 
 def cylinder(fig,pa,pb,R):
     """ plot a cylinder
-    pa : 3 x nc 
-    pb : 3 x nc 
-    R  : 1 x Nc
 
-    >>> from pylayers.util.plotutil import *
-    >>> import numpy as np
-    >>> pa = np.array([0,0,0])
-    >>> pb = np.array([0,0,10])
-    >>> fig = plt.figure()
-    >>> cylinder(fig,pa,pb,3)
-    >>> plt.show()
+    Parameters
+    ----------
+
+    pa : np.array 3 x nc
+    pb : np.array 3 x nc
+    R  : np.array 1 x Nc
+
+    .. plot::
+        :include-source:
+
+        >>> from pylayers.util.plotutil import *
+        >>> import numpy as np
+        >>> pa = np.array([0,0,0])
+        >>> pb = np.array([0,0,10])
+        >>> fig = plt.figure()
+        >>> cylinder(fig,pa,pb,3)
+        >>> plt.show()
 
     """
     try:
@@ -518,7 +540,8 @@ def cylinder(fig,pa,pb,R):
         nc = 1
         pa = pa.reshape(3,1)
         pb = pb.reshape(3,1)
-        ax = fig.gca(projection='3d') 
+        ax = fig.gca(projection='3d')
+
     theta = np.linspace(0, 2 * np.pi, 40)
     # 3 x nc
     v = (pb-pa)
@@ -547,5 +570,4 @@ def cylinder(fig,pa,pb,R):
 
 
 if (__name__ == "__main__"):
-    plt.ion()
     doctest.testmod()

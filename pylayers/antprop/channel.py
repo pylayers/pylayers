@@ -1,5 +1,9 @@
 # -*- coding:Utf-8 -*-
 """
+.. currentmodule:: pylayers.antprop.channel
+
+.. autosummary::
+    :toctree: generated/
 
 Ctilde class
 ============
@@ -284,7 +288,7 @@ class Ctilde(object):
         >>> S = Simul()
         >>> S.load('default.ini')
         >>> C = Ctilde()
-        >>> C.load(pyu.getlong(S.dtud[1][1],'output'))
+        >>> out = C.load(pyu.getlong(S.dtud[1][1],'output'))
 
         """
         filetauk = filefield.replace('.field', '.tauk')
@@ -297,9 +301,7 @@ class Ctilde(object):
 
         # decode filename (*.field file obtained from evalfield simulation)
         nray = stru.unpack('i', fo.read(4))[0]
-        print "nray : ", nray
         nfreq = stru.unpack('i', fo.read(4))[0]
-        print "nfreq : ", nfreq
         if nfreq == 0:
             print " Error : incorrect number of frequency points in .field"
             self.fail = True
@@ -346,14 +348,14 @@ class Ctilde(object):
         # decode filetauk
         if not self.fail:
             nray_tauk = stru.unpack('i', fo.read(4))[0]
-            print "nb rays in .tauk file: ", nray_tauk
+            #print "nb rays in .tauk file: ", nray_tauk
             buf = fo.read()
             fo.close()
             nray = len(buf) / 8
-            print "nb rays 2: ", nray
+            #print "nb rays 2: ", nray
             self.tauk = np.ndarray(shape=nray, buffer=buf)
-            if nray_tauk != nray:
-                print nray_tauk - nray
+            #if nray_tauk != nray:
+            #    print nray_tauk - nray
         self.tauk = self.tauk
 
         # decode the angular files (.tang and .rang)
