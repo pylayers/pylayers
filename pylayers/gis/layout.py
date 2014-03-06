@@ -6859,6 +6859,10 @@ class Layout(object):
         Parameters
         ----------
 
+        newfig : Boolean
+            create a new mayavi Figure
+        opacity : float ([0,1])
+            set slab opacity
         centered : Boolean
             if True the layout is centered around its center of gravity
 
@@ -6870,9 +6874,12 @@ class Layout(object):
         Examples
         --------
 
-        >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
-        >>> pg = L.mayafile()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.gis.layout import *
+            >>> L = Layout()
+            >>> L._show3()
 
         """
 
