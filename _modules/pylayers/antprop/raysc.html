@@ -79,6 +79,74 @@
   <h1>Source code for pylayers.antprop.raysc</h1><div class="highlight"><pre>
 #!/usr/bin/python
 # -*- coding: latin1 -*-
+&quot;&quot;&quot;
+
+This modules contains classes for old code PulsRay
+
+Ray3D class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    Ray3D.info
+    Ray3D.locbas
+    Ray3D.delay
+    Ray3D.show
+    Ray3D.show3
+
+RayTud class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    RayTud.__init__
+    RayTud.info
+    RayTud.delay
+    RayTud.signature
+    RayTud.eval
+
+
+GrRayTud class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    GrRayTud.__init__
+    GrRayTud.__repr__
+    GrRayTud.dir
+    GrRayTud.delay
+    GrRayTud.choose
+    GrRayTud.save
+    GrRayTud.load
+    GrRayTud.ray
+    GrRayTud.typ
+    GrRayTud.eval
+    GrRayTud.info
+    GrRayTud.imshowinter
+    GrRayTud.get_thetas
+    GrRayTud.get_mat
+
+GrRay3D class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    GrRay3D.__init__
+    GrRay3D.dir
+    GrRay3D.info
+    GrRay3D.choose
+    GrRay3D.load
+    GrRay3D.delay
+    GrRay3D.save
+    GrRay3D.reciprocal
+    GrRay3D.show
+    GrRay3D.show3
+
+&quot;&quot;&quot;
 import pdb
 import os
 import pdb
@@ -96,7 +164,7 @@ from pylayers.util.project import *
 from pylayers.antprop.slab import *
 from pylayers.antprop.interactions import *
 
-<div class="viewcode-block" id="Ray3D"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D">[docs]</a>class Ray3D(object):
+class Ray3D(object):
     &quot;&quot;&quot; Ray3D class
 
     This class handles a 3D ray
@@ -131,7 +199,7 @@ from pylayers.antprop.interactions import *
     info()  : Ray information
 
     &quot;&quot;&quot;
-<div class="viewcode-block" id="Ray3D.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.info">[docs]</a>    def info(self):
+<div class="viewcode-block" id="Ray3D.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.info.html#pylayers.antprop.raysc.Ray3D.info">[docs]</a>    def info(self):
         &quot;&quot;&quot; info
         &quot;&quot;&quot;
         print &quot;Number of nodes : &quot; + str(self.nn)
@@ -150,7 +218,7 @@ from pylayers.antprop.interactions import *
         print &quot;thetar (deg)   : &quot; + str(self.thr * 180 / np.pi)
         print &quot;phir   (deg)   : &quot; + str(self.phr * 180 / np.pi)
 </div>
-<div class="viewcode-block" id="Ray3D.locbas"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.locbas">[docs]</a>    def locbas(self, L):
+<div class="viewcode-block" id="Ray3D.locbas"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.locbas.html#pylayers.antprop.raysc.Ray3D.locbas">[docs]</a>    def locbas(self, L):
         &quot;&quot;&quot; evaluation of local basis over the ray
 
         Parameters
@@ -337,7 +405,7 @@ from pylayers.antprop.interactions import *
         self.gt.ni = 2 * nn - 3
     # def show3(self,bdis=True,bbas=False,col=np.array([1,0,1]),id=0):
 </div>
-<div class="viewcode-block" id="Ray3D.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.delay">[docs]</a>    def delay(self):
+<div class="viewcode-block" id="Ray3D.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.delay.html#pylayers.antprop.raysc.Ray3D.delay">[docs]</a>    def delay(self):
         &quot;&quot;&quot; delay
 
         Returns
@@ -354,7 +422,7 @@ from pylayers.antprop.interactions import *
         delay = sum(np.sqrt(sum(d * d, axis=0)) / 0.3)
         return(delay)
 </div>
-<div class="viewcode-block" id="Ray3D.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.show">[docs]</a>    def show(self, fig=[], ax=[], col=&#39;b&#39;, node=False):
+<div class="viewcode-block" id="Ray3D.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.show.html#pylayers.antprop.raysc.Ray3D.show">[docs]</a>    def show(self, fig=[], ax=[], col=&#39;b&#39;, node=False):
         &quot;&quot;&quot; show a Ray projection in 2D
 
         &quot;&quot;&quot;
@@ -379,7 +447,7 @@ from pylayers.antprop.interactions import *
             ax.plot(self.pt[:, 0], self.pt[:, 1], &#39;ok&#39;)
         return fig, ax
 </div>
-<div class="viewcode-block" id="Ray3D.show3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.Ray3D.show3">[docs]</a>    def show3(self, _filestr=&#39;defstr&#39;, bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
+<div class="viewcode-block" id="Ray3D.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.show3.html#pylayers.antprop.raysc.Ray3D.show3">[docs]</a>    def show3(self, _filestr=&#39;defstr&#39;, bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
         &quot;&quot;&quot; show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
 
         Parameters
@@ -456,8 +524,8 @@ from pylayers.antprop.interactions import *
             os.system(chaine)
         else:
             return(filename)
-</div></div>
-<div class="viewcode-block" id="RayTud"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud">[docs]</a>class RayTud(object):
+</div>
+class RayTud(object):
     &quot;&quot;&quot; Ray Tud
 
     Attributes
@@ -482,17 +550,17 @@ from pylayers.antprop.interactions import *
         comparaison de deux rayons Tud
 
     &quot;&quot;&quot;
-    def __init__(self):
+<div class="viewcode-block" id="RayTud.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.RayTud.__init__.html#pylayers.antprop.raysc.RayTud.__init__">[docs]</a>    def __init__(self):
         self.ni = 0
-
-<div class="viewcode-block" id="RayTud.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.info">[docs]</a>    def info(self):
+</div>
+<div class="viewcode-block" id="RayTud.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.RayTud.info.html#pylayers.antprop.raysc.RayTud.info">[docs]</a>    def info(self):
         print &quot;Number of interactions : &quot;, self.ni
         nbi = self.ni
         for i in range(nbi):
             print &quot;Interaction : &quot;, i
             self.inter[i].info()
 </div>
-<div class="viewcode-block" id="RayTud.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.delay">[docs]</a>    def delay(self):
+<div class="viewcode-block" id="RayTud.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.RayTud.delay.html#pylayers.antprop.raysc.RayTud.delay">[docs]</a>    def delay(self):
         &quot;&quot;&quot;
             calculate delay of the ray
         &quot;&quot;&quot;
@@ -531,7 +599,7 @@ from pylayers.antprop.interactions import *
                     d = d + l
         return(d / 0.3)
 </div>
-<div class="viewcode-block" id="RayTud.signature"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.signature">[docs]</a>    def signature(self):
+<div class="viewcode-block" id="RayTud.signature"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.RayTud.signature.html#pylayers.antprop.raysc.RayTud.signature">[docs]</a>    def signature(self):
         &quot;&quot;&quot; returns ray signature
         &quot;&quot;&quot;
         Signature = []
@@ -539,7 +607,7 @@ from pylayers.antprop.interactions import *
             Signature.append(self.inter[k].typ)
         return(Signature)
 </div>
-<div class="viewcode-block" id="RayTud.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.RayTud.eval">[docs]</a>    def eval(self, fGHz=[2.4]):
+<div class="viewcode-block" id="RayTud.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.RayTud.eval.html#pylayers.antprop.raysc.RayTud.eval">[docs]</a>    def eval(self, fGHz=[2.4]):
         &quot;&quot;&quot; evaluate the field over the ray
 
         Parameters
@@ -563,8 +631,8 @@ from pylayers.antprop.interactions import *
             Co = np.einsum(&#39;kpq,kqr-&gt;kpr&#39;, Ci, Co)
         self.nf = nf
         self.C = Co
-</div></div>
-<div class="viewcode-block" id="GrRayTud"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud">[docs]</a>class GrRayTud(dict):
+</div>
+class GrRayTud(dict):
     &quot;&quot;&quot;  a cluster of Rays in Tud format
 
     Attributes
@@ -583,12 +651,12 @@ from pylayers.antprop.interactions import *
     eval()
 
     &quot;&quot;&quot;
-    def __init__(self):
+<div class="viewcode-block" id="GrRayTud.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.__init__.html#pylayers.antprop.raysc.GrRayTud.__init__">[docs]</a>    def __init__(self):
         self.nray = 0
         # Interactions instance
         self.I = Interactions()
-
-    def __repr__(self):
+</div>
+<div class="viewcode-block" id="GrRayTud.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.__repr__.html#pylayers.antprop.raysc.GrRayTud.__repr__">[docs]</a>    def __repr__(self):
         s = &#39;&#39;
         ni = 0
         nl = 0
@@ -602,8 +670,8 @@ from pylayers.antprop.interactions import *
         s = s+&#39;ni : &#39;+str(ni)+&#39;\n&#39;
         s = s+&#39;nl : &#39;+str(nl)+&#39;\n&#39;
         return(s)
-
-<div class="viewcode-block" id="GrRayTud.dir"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.dir">[docs]</a>    def dir(self):
+</div>
+<div class="viewcode-block" id="GrRayTud.dir"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.dir.html#pylayers.antprop.raysc.GrRayTud.dir">[docs]</a>    def dir(self):
         &quot;&quot;&quot; list the available file in tuddir
 
 
@@ -664,7 +732,7 @@ from pylayers.antprop.interactions import *
 
         return lfile_tud, lfile_tang, lfile_rang, lfile_tauk
 </div>
-<div class="viewcode-block" id="GrRayTud.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.delay">[docs]</a>    def delay(self):
+<div class="viewcode-block" id="GrRayTud.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.delay.html#pylayers.antprop.raysc.GrRayTud.delay">[docs]</a>    def delay(self):
         &quot;&quot;&quot; return ray delays in an array
         &quot;&quot;&quot;
         dt = np.array([])
@@ -673,7 +741,7 @@ from pylayers.antprop.interactions import *
             dt = np.hstack((dt, d))
         return(dt)
 </div>
-<div class="viewcode-block" id="GrRayTud.choose"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.choose">[docs]</a>    def choose(self):
+<div class="viewcode-block" id="GrRayTud.choose"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.choose.html#pylayers.antprop.raysc.GrRayTud.choose">[docs]</a>    def choose(self):
         &quot;&quot;&quot; Choose a tud  file in tuddir
         &quot;&quot;&quot;
         import tkFileDialog
@@ -694,7 +762,7 @@ from pylayers.antprop.interactions import *
         # indoor = Indoor(sl,_filestr)
         self.load(_filetud, sl)
 </div>
-<div class="viewcode-block" id="GrRayTud.save"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.save">[docs]</a>    def save(self, _filetud=&#39;ftud&#39;, _filetang=&#39;ftang&#39;, _filerang=&#39;frang&#39;):
+<div class="viewcode-block" id="GrRayTud.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.save.html#pylayers.antprop.raysc.GrRayTud.save">[docs]</a>    def save(self, _filetud=&#39;ftud&#39;, _filetang=&#39;ftang&#39;, _filerang=&#39;frang&#39;):
         &quot;&quot;&quot;
             save .tud .tang .rang
 
@@ -769,7 +837,7 @@ from pylayers.antprop.interactions import *
             fo.write(stru.pack(&#39;2d&#39;, ag[0], ag[1]))
         fo.close()
 </div>
-<div class="viewcode-block" id="GrRayTud.load"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.load">[docs]</a>    def load(self, _filetud, _filetang, _filerang, sl):
+<div class="viewcode-block" id="GrRayTud.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.load.html#pylayers.antprop.raysc.GrRayTud.load">[docs]</a>    def load(self, _filetud, _filetang, _filerang, sl):
         &quot;&quot;&quot; Load a set of Ray from the PulsRay .tud file
 
         Parameters
@@ -1033,14 +1101,14 @@ from pylayers.antprop.interactions import *
         ### Add all type of interactions into the Interaction class
         self.I.add([B, L, R, T, D])
 </div>
-<div class="viewcode-block" id="GrRayTud.ray"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.ray">[docs]</a>    def ray(self, r):
+<div class="viewcode-block" id="GrRayTud.ray"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.ray.html#pylayers.antprop.raysc.GrRayTud.ray">[docs]</a>    def ray(self, r):
         &quot;&quot;&quot;
             Give the ray number and it returns the index of its interactions
         &quot;&quot;&quot;
         raypos = np.nonzero(self[self.rayidx[r]][&#39;rayidx&#39;] == r)
         return(self[self.rayidx[r]][&#39;rays&#39;][raypos][0])
 </div>
-<div class="viewcode-block" id="GrRayTud.typ"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.typ">[docs]</a>    def typ(self, r):
+<div class="viewcode-block" id="GrRayTud.typ"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.typ.html#pylayers.antprop.raysc.GrRayTud.typ">[docs]</a>    def typ(self, r):
         &quot;&quot;&quot;
             return the list of interaction type of a given ray
         &quot;&quot;&quot;
@@ -1048,7 +1116,7 @@ from pylayers.antprop.interactions import *
         a = self.ray(r)
         return(self.I.typ[a])
 </div>
-<div class="viewcode-block" id="GrRayTud.eval"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.eval">[docs]</a>    def eval(self):
+<div class="viewcode-block" id="GrRayTud.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.eval.html#pylayers.antprop.raysc.GrRayTud.eval">[docs]</a>    def eval(self):
         &quot;&quot;&quot;
         evaluation of Ctilde
         &quot;&quot;&quot;
@@ -1151,7 +1219,7 @@ from pylayers.antprop.interactions import *
             self.delays[self[l][&#39;rayidx&#39;]] = self[l][&#39;dis&#39;]/0.3
             self.dis[self[l][&#39;rayidx&#39;]] = self[l][&#39;dis&#39;]
 </div>
-<div class="viewcode-block" id="GrRayTud.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.info">[docs]</a>    def info(self, r):
+<div class="viewcode-block" id="GrRayTud.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.info.html#pylayers.antprop.raysc.GrRayTud.info">[docs]</a>    def info(self, r):
         &#39;&#39;&#39;
             information for a given ray r
 
@@ -1190,7 +1258,7 @@ from pylayers.antprop.interactions import *
             print &#39;interaction #&#39;, ray[iidx], &#39;type:&#39;, i
             print self.I.I[0, ray[iidx], :, :]
 </div>
-<div class="viewcode-block" id="GrRayTud.imshowinter"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.imshowinter">[docs]</a>    def imshowinter(self, r, f, evaluated=False, show=True):
+<div class="viewcode-block" id="GrRayTud.imshowinter"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.imshowinter.html#pylayers.antprop.raysc.GrRayTud.imshowinter">[docs]</a>    def imshowinter(self, r, f, evaluated=False, show=True):
         &quot;&quot;&quot;
             im show interactions for
             a given ray r and
@@ -1231,7 +1299,7 @@ from pylayers.antprop.interactions import *
         if show:
             plt.show()
 </div>
-<div class="viewcode-block" id="GrRayTud.get_thetas"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.get_thetas">[docs]</a>    def get_thetas(self):
+<div class="viewcode-block" id="GrRayTud.get_thetas"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.get_thetas.html#pylayers.antprop.raysc.GrRayTud.get_thetas">[docs]</a>    def get_thetas(self):
         &quot;&quot;&quot;
         Get all thetas ( incidence angles ) from all computed RayTud
 
@@ -1247,7 +1315,7 @@ from pylayers.antprop.interactions import *
                     th.append(r.inter[idx].theta)
         return(np.unique(th))
 </div>
-<div class="viewcode-block" id="GrRayTud.get_mat"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRayTud.get_mat">[docs]</a>    def get_mat(self):
+<div class="viewcode-block" id="GrRayTud.get_mat"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.get_mat.html#pylayers.antprop.raysc.GrRayTud.get_mat">[docs]</a>    def get_mat(self):
         &quot;&quot;&quot;
         Get all used materials from all computed Raytud
 
@@ -1281,8 +1349,8 @@ from pylayers.antprop.interactions import *
 #        else:
 #            print &quot;rayon no : &quot;, n
 #            self.rayTud[n].info()
-</div></div>
-<div class="viewcode-block" id="GrRay3D"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D">[docs]</a>class GrRay3D(object):
+</div>
+class GrRay3D(object):
     &quot;&quot;&quot; A set of Ray3D with the same Tx and Rx
 
     Attributes
@@ -1305,12 +1373,12 @@ from pylayers.antprop.interactions import *
     reciprocal(Gs)     :
 
     &quot;&quot;&quot;
-    def __init__(self):
+<div class="viewcode-block" id="GrRay3D.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.__init__.html#pylayers.antprop.raysc.GrRay3D.__init__">[docs]</a>    def __init__(self):
         self.n = 0
         self.Tx = np.array([0.0, 0.0, 0.0])
         self.Rx = np.array([0.0, 0.0, 0.0])
-
-<div class="viewcode-block" id="GrRay3D.dir"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.dir">[docs]</a>    def dir(self):
+</div>
+<div class="viewcode-block" id="GrRay3D.dir"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.dir.html#pylayers.antprop.raysc.GrRay3D.dir">[docs]</a>    def dir(self):
         &quot;&quot;&quot; list the available file in tradir
 
 
@@ -1342,7 +1410,7 @@ from pylayers.antprop.interactions import *
         lfile_s.sort()
         return lfile_s
 </div>
-<div class="viewcode-block" id="GrRay3D.info"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.info">[docs]</a>    def info(self, level=1):
+<div class="viewcode-block" id="GrRay3D.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.info.html#pylayers.antprop.raysc.GrRay3D.info">[docs]</a>    def info(self, level=1):
         &quot;&quot;&quot;
         Parameters
         ----------
@@ -1355,7 +1423,7 @@ from pylayers.antprop.interactions import *
             for i in range(self.n):
                 self.ray3d[i].info()
 </div>
-<div class="viewcode-block" id="GrRay3D.choose"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.choose">[docs]</a>    def choose(self):
+<div class="viewcode-block" id="GrRay3D.choose"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.choose.html#pylayers.antprop.raysc.GrRay3D.choose">[docs]</a>    def choose(self):
         &quot;&quot;&quot; Choose a Tracing  file in tradir
 
         &quot;&quot;&quot;
@@ -1374,7 +1442,7 @@ from pylayers.antprop.interactions import *
         self.L = Layout()
         self.L.loadstr(_filestr)
 </div>
-<div class="viewcode-block" id="GrRay3D.load"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.load">[docs]</a>    def load(self, _filename, L):
+<div class="viewcode-block" id="GrRay3D.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.load.html#pylayers.antprop.raysc.GrRay3D.load">[docs]</a>    def load(self, _filename, L):
         &quot;&quot;&quot; load a .tra de PulsRay
 
         Parameters
@@ -1592,7 +1660,7 @@ from pylayers.antprop.interactions import *
 #           except:
 #               print &quot;Le fichier&quot;, filename, &quot;est introuvable&quot;
 </div>
-<div class="viewcode-block" id="GrRay3D.delay"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.delay">[docs]</a>    def delay(self):
+<div class="viewcode-block" id="GrRay3D.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.delay.html#pylayers.antprop.raysc.GrRay3D.delay">[docs]</a>    def delay(self):
         &quot;&quot;&quot; delay
 
         Returns
@@ -1607,7 +1675,7 @@ from pylayers.antprop.interactions import *
             td = np.hstack((td, self.ray3d[n].delay()))
         return(td)
 </div>
-<div class="viewcode-block" id="GrRay3D.save"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.save">[docs]</a>    def save(self, _filename):
+<div class="viewcode-block" id="GrRay3D.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.save.html#pylayers.antprop.raysc.GrRay3D.save">[docs]</a>    def save(self, _filename):
         &quot;&quot;&quot;
         save
 
@@ -1721,7 +1789,7 @@ from pylayers.antprop.interactions import *
         fo.write(data)
         fo.close()
 </div>
-<div class="viewcode-block" id="GrRay3D.reciprocal"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.reciprocal">[docs]</a>    def reciprocal(self, L):
+<div class="viewcode-block" id="GrRay3D.reciprocal"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.reciprocal.html#pylayers.antprop.raysc.GrRay3D.reciprocal">[docs]</a>    def reciprocal(self, L):
         &quot;&quot;&quot;  Reciprocity channel
 
         Parameters
@@ -1777,13 +1845,14 @@ from pylayers.antprop.interactions import *
         G.ray3d = ray3D
         return(G)
 </div>
-<div class="viewcode-block" id="GrRay3D.show"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.show">[docs]</a>    def show(self,fig=[], ax=[], rayset=np.array([]), col=&#39;b&#39;, node=False):
-        &quot;&quot;&quot; show a cluster of rays 
+<div class="viewcode-block" id="GrRay3D.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.show.html#pylayers.antprop.raysc.GrRay3D.show">[docs]</a>    def show(self,fig=[], ax=[], rayset=np.array([]), col=&#39;b&#39;, node=False):
+        &quot;&quot;&quot; show a cluster of rays
 
         Parameters
         ----------
-        fig    : figure instance 
-        ax     : axes instance  
+
+        fig    : figure instance
+        ax     : axes instance
         rayset :
             set of rays np.array([])
         col  : string
@@ -1802,7 +1871,7 @@ from pylayers.antprop.interactions import *
         return fig, ax
 
 </div>
-<div class="viewcode-block" id="GrRay3D.show3"><a class="viewcode-back" href="../../../modules/pylayers.antprop.raysc.html#pylayers.antprop.raysc.GrRay3D.show3">[docs]</a>    def show3(self, rayset=np.array([]), bdis=True, bstruc=True, id=0):
+<div class="viewcode-block" id="GrRay3D.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.show3.html#pylayers.antprop.raysc.GrRay3D.show3">[docs]</a>    def show3(self, rayset=np.array([]), bdis=True, bstruc=True, id=0):
         &quot;&quot;&quot; 3D show using geomview
 
         Parameters
@@ -1832,7 +1901,7 @@ from pylayers.antprop.interactions import *
             os.system(chaine)
         else:
             return(filename)
-</div></div>
+</div>
 if __name__ == &quot;__main__&quot;:
     doctest.testmod()
 </pre></div>
