@@ -1433,8 +1433,8 @@ class Tchannel(bs.FUDAsignal):
 
     """
     def __init__(self,
-                fGHz = np.array(([],)),
-                alpha= np.array(([],[])),
+                fGHz = np.arange(0,2,1),
+                alpha= np.arange(0,2,1),
                 tau  = np.array(([],)),
                 dod  = np.array(([[],[]])).T,
                 doa  = np.array(([[],[]])).T):
