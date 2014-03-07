@@ -816,6 +816,7 @@ class Layout(object):
 
 
         self.pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
+        self.pg = np.hstack((self.pg,0.))
 
         ntail = map(lambda x : nx.neighbors(self.Gs,x)[0],useg)
         nhead = map(lambda x : nx.neighbors(self.Gs,x)[1],useg)

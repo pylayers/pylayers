@@ -206,7 +206,9 @@ class Body(object):
             self.sl[i,:] = np.array([t,h,r])
 
         self.ncyl = len(di['cylinder'].values())
-        
+
+        self.idcyl={}
+        [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
         # update devices dict 
         self.dev={}
         for dev in di['device'].keys():
@@ -748,7 +750,7 @@ class Body(object):
                 args[k] = kwargs[k]
 
         f = mlab.gcf()
-        visual.set_viewer(f)
+        #visual.set_viewer(f)
         #f.scene.background=(1,1,1)
 
         
@@ -777,6 +779,9 @@ class Body(object):
             l = np.sqrt(np.sum(ax**2))
             cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
                        axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l,color=body_color)
+
+            mlab.pipeline.surface(cyl.polydata)
+            f.children[-1].name=self.name +' ' +self.idcyl[k]            
 
             if kwargs['ccs']:
 
