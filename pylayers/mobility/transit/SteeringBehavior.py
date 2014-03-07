@@ -8,22 +8,83 @@ created by Craig Reynolds and expanded upon by many.
     http://opensteer.sourceforge.net/
     http://www.steeringbehaviors.de/
 
+
+Seek Class
+===========
+
+.. autosummary::
+    :toctree: generated
+
+    Seek.calculate
+
+Arrive Class
+==============
+
+.. autosummary::
+    :toctree: generated
+
+    Arrive.calculate
+
+Wander Class
+==============
+
+.. autosummary::
+    :toctree: generated
+
+    Wander.calculate
+
+Wander Class
+==============
+
+.. autosummary::
+    :toctree: generated
+
+    FollowWaypoints.calculate
+
+
+Separation Class
+=================
+
+.. autosummary::
+    :toctree: generated
+
+    Separation.calculate
+
+
+Queuing Class
+=================
+
+.. autosummary::
+    :toctree: generated
+
+    Separation.calculate
+
+
+Containment Class
+=================
+
+.. autosummary::
+    :toctree: generated
+
+    Separation.calculate
+
+
 """
 
 from math import *
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.vec3 import vec3
 from random import uniform,gauss,randint
-import pdb 
+import pdb
 
 
 class Seek:
-    """ class Seek 
+    """ class Seek
 
     Methods
     -------
 
-    calculate 
+    calculate
 
     """
     def calculate(self, boid):
@@ -31,11 +92,16 @@ class Seek:
         Parameters
         ----------
 
-        boid 
+        boid
 
-        Notes 
+        Notes
         -----
 
+        This behavior is the attraction by the destination POI
+        The desired velocity is oriented towrd the destination and scaled with
+        the desired velocity.
+        If the distance between current position and detination is less than
+        25cm the boid is arrived
 
 
         """
@@ -49,23 +115,44 @@ class Seek:
 class Arrive:
     """ Class Arrive 
 
-    Methods 
+    Methods
     -------
 
-    calculate 
+    calculate
+
+    Notes
+    ------
 
     """
+
     def calculate(self, boid):
+        """
+        Parameters
+        ----------
+
+        boid
+
+        Returns
+        -------
+
+        steering
+
+        """
         current_speed = boid.velocity.length()
         if current_speed < 0.0001:
             current_speed = 0.0001
+
         slowing_distance = (current_speed / boid.max_acceleration) * (current_speed / 2)
+
         target_offset = boid.destination - boid.position
         distance = target_offset.length()
+
         ramped_speed = boid.desired_speed * (distance / slowing_distance)
         clipped_speed = min(ramped_speed, boid.desired_speed)
         desired_velocity = (clipped_speed / distance) * target_offset
+
         steering = desired_velocity - boid.velocity
+
         if distance < boid.radius:
             boid.arrived = True
         return steering
@@ -73,7 +160,7 @@ class Arrive:
 class Wander:
     """ Class Wander
 
-    Methods 
+    Methods
     -------
 
     calculate
@@ -88,7 +175,7 @@ class Wander:
         boid.wander_value = wander_value
         desired_velocity = (boid.localy.scale(8) + boid.localx.scale(wander_value)).normalize() * boid.desired_speed
         return desired_velocity - boid.velocity
-        
+
 
 class FollowWaypoints:
     """ Class FollowWaypoints
@@ -316,7 +403,7 @@ class Containment:
             return True, distance_along_check, direction
         else:
             return False, 0.0, None
-   
+
 class InterpenetrationConstraint:
     """ Class InterpenetrationConstaint 
 
@@ -356,10 +443,10 @@ class InterpenetrationConstraint:
         return vec3()
 
     def distance_from_line(self, position, line):
-        """ distance from line 
+        """ distance from line
 
         Parameters 
-        ----------
+        ------------
 
         position 
         line 
