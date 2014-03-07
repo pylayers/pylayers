@@ -10,7 +10,7 @@ RAW_DATA Class
 .. autosummary::
     :toctree: generated/
 
-     RAW_DAT.__init__
+     RAW_DATA.__init__
 
 CAL_DATA Class
 ==============

@@ -2,7 +2,7 @@ PyLayers
 ========
 
 .. contents::
-   :depth: 3
+   :depth: 4
 
 Antenna and Propagation
 -----------------------

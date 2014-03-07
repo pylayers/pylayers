@@ -465,7 +465,7 @@ class Coverage(object):
         PrU = PndBm + gammaU
         PrL = PndBm + gammaL
 
-        fig,ax = self.L.showGs(fig=fig)
+        fig,ax = self.L.showGs()
 
         l = self.grid[0,0]
         r = self.grid[-1,0]
