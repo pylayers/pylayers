@@ -1,7 +1,4 @@
-pylayers.location.localization module
+pylayers.location.localization
 =====================================
 
 .. automodule:: pylayers.location.localization
-    :members:
-    :undoc-members:
-    :show-inheritance:

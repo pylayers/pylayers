@@ -1,7 +1,4 @@
-pylayers.antprop.spharm module
-==============================
+pylayers.antprop.spharm 
+=======================
 
 .. automodule:: pylayers.antprop.spharm
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,4 +1,22 @@
 # -*- coding:Utf-8 -*-
+"""
+
+Ploting Utility functions
+
+.. currentmodule:: pylayers.util.plotutil
+
+
+.. autosummary::
+    :toctree: generated/
+
+    cformat
+    mulcplot
+    displot
+    pol3D
+    cylinder
+
+"""
+
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -40,7 +58,7 @@ def cformat(x,y,**kwargs):
     else:
         uy = kwargs['uy']
 
-    # radians to degree coefficient   
+    # radians to degree coefficient
     rtd = 180./np.pi
 
     t = kwargs['typ']
@@ -106,27 +124,47 @@ def mulcplot(x,y,**kwargs):
             'l20' : dB (20 log10)
             'd'   : phase degrees
             'r'   : phase radians
-            'du'  : phase degrees unwrap 
-            'ru'  : phase radians unwrap 
-            'gdn' : group delay (ns) 
-            'gdm' : group distance (m) 
+            'du'  : phase degrees unwrap
+            'ru'  : phase radians unwrap
+            'gdn' : group delay (ns)
+            'gdm' : group distance (m)
             're'  : real part
-            'im'  : imaginary part 
+            'im'  : imaginary part
 
 
     fig and ax are numpy arrays of fig and ax
 
-    Examples
-    --------
-
-    >>> from pylayers.util.plotutil import *
-    >>> import numpy as np
 
     Notes
     -----
 
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
     takes the priority over the passed values nlin and ncol
+
+
+    Examples
+    --------
+
+    .. plot::
+        :include-source:
+
+        >>> import numpy as np
+        >>> import pylayers.util.plotutil as plu
+        >>> x = np.arange(0,10,.01)
+        >>> z1 = np.cos(2*x)*np.sin(10*x) + 1j * np.cos(3*x)*np.sin(11*x)
+        >>> z2 = np.cos(3*x)*np.sin(11*x) + 1j * np.cos(4*x)*np.sin(10*x)
+        >>> z3 = np.cos(4*x)*np.sin(12*x) + 1j * np.cos(5*x)*np.sin(12*x)
+        >>> z4 = np.cos(5*x)*np.sin(13*x) + 1j * np.cos(6*x)*np.sin(13*x)
+        >>> y = np.vstack((z1,z2,z3,z4))
+        >>> plu.mulcplot(x,y)
+        >>> plt.show()
+        >>> plu.mulcplot(x,y,typ='v',)
+        >>> plt.show()
+        >>> plu.mulcplot(x,y,typ='r',ncol=2,nlin=2,color='k',linewidth=2)
+        >>> plt.show()
+        >>> import pylayers.signal.bsignal as bs
+        >>> e = EnImpulse()
+        >>> e.plot()
 
 
     """
@@ -379,12 +417,13 @@ def displot(pt, ph, arrow=False, **kwargs ):
 
         >>> import scipy as sp
         >>> import matplotlib.pyplot as plt
-        >>> from pylayers.util.geomutil import *
+        >>> from pylayers.util.plotutil import *
         >>> N   = 10
         >>> pt  = sp.rand(2,N)
         >>> ph  = sp.rand(2,N)
         >>> f,a = displot(pt,ph)
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
+        >>> plt.show()
 
     """
     defaults = { 'arrow' : False ,
@@ -459,7 +498,8 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
     Examples
     --------
 
-    .. plot:: 
+    .. plot::
+        :include-source:
 
         >>> from pylayers.util.plotutil import *
         >>> import numpy as np
@@ -499,17 +539,27 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
 
 def cylinder(fig,pa,pb,R):
     """ plot a cylinder
-    pa : 3 x nc 
-    pb : 3 x nc 
-    R  : 1 x Nc
 
-    >>> from pylayers.util.plotutil import *
-    >>> import numpy as np
-    >>> pa = np.array([0,0,0])
-    >>> pb = np.array([0,0,10])
-    >>> fig = plt.figure()
-    >>> cylinder(fig,pa,pb,3)
-    >>> plt.show()
+    Parameters
+    ----------
+
+    pa : np.array 3 x nc
+    pb : np.array 3 x nc
+    R  : np.array 1 x Nc
+
+    Examples
+    --------
+
+    .. plot::
+        :include-source:
+
+        >>> from pylayers.util.plotutil import *
+        >>> import numpy as np
+        >>> pa = np.array([0,0,0])
+        >>> pb = np.array([0,0,10])
+        >>> fig = plt.figure()
+        >>> cylinder(fig,pa,pb,3)
+        >>> plt.show()
 
     """
     try:
@@ -518,7 +568,8 @@ def cylinder(fig,pa,pb,R):
         nc = 1
         pa = pa.reshape(3,1)
         pb = pb.reshape(3,1)
-        ax = fig.gca(projection='3d') 
+        ax = fig.gca(projection='3d')
+
     theta = np.linspace(0, 2 * np.pi, 40)
     # 3 x nc
     v = (pb-pa)
@@ -547,5 +598,4 @@ def cylinder(fig,pa,pb,R):
 
 
 if (__name__ == "__main__"):
-    plt.ion()
     doctest.testmod()

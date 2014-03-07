@@ -1,7 +1,4 @@
-pylayers.util.pyutil module
+pylayers.util.pyutil
 ===========================
 
 .. automodule:: pylayers.util.pyutil
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -180,12 +180,13 @@ class Rays(dict):
 
         filename = self.filename+'_'+str(idx) 
         filenameh5=pyu.getlong(filename+'.h5',pstruc['DIRR3D'])
-        f=h5py.File(filenameh5,'w')
+        
         
         
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
+            f=h5py.File(filenameh5,'w')
             # keys not saved as attribute of h5py file
             notattr = ['I','B','B0','delays','dis']
             for a in self.__dict__.keys():
@@ -221,10 +222,11 @@ class Rays(dict):
 
         filename=pyu.getlong(filenameh5,pstruc['DIRR3D'])
 
-        f=h5py.File(filename,'r')
+        
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
+            f=h5py.File(filename,'r')
             for k in f.keys():
                 self.update({eval(k):{}})
                 for kk in f[k].keys():
@@ -250,6 +252,110 @@ class Rays(dict):
 
         if self.evaluated:
             return self.eval(self.fGHz)
+
+    def _saveh5(self,filenameh5,grpname):
+        """ Save rays h5py format compliant with Links Class
+
+        Parameters
+        ----------
+
+        filenameh5 : string
+            filename of the h5py file (from Links Class)
+        grpname : string 
+            groupname of the h5py file (from Links Class)
+        
+        See Also
+        --------
+
+        pylayers.simul.links
+
+        """
+
+        filenameh5=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            
+            fh5=h5py.File(filenameh5,'a')
+            if not grpname in fh5['ray'].keys(): 
+                fh5['ray'].create_group(grpname)
+            else :
+                print 'ray/'+grpname +'already exists in '+filenameh5
+            f = fh5['ray/'+grpname]
+            # keys not saved as attribute of h5py file
+            notattr = ['I','B','B0','delays','dis']
+            for a in self.__dict__.keys():
+                if a not in notattr:
+                    f.attrs[a]=getattr(self,a)
+
+            for k in self.keys():
+                f.create_group(str(k))
+                for kk in self[k].keys():
+                    if kk == 'sig2d':
+                        # Need to find an efficient way to save the signatures
+                        # 2d which have created the rays
+                        pass
+                    elif kk == 'nbrays':
+                        f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
+                    else:    
+                        f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Rays: issue when writting h5py file')
+
+    def _loadh5(self,filenameh5,grpname):
+        """ Load rays  h5py format compliant with Links Class
+
+        Parameters
+        ----------
+
+        filenameh5 : string
+            filename of the h5py file (from Links Class)
+        grpname : string 
+            groupname of the h5py file (from Links Class)
+        
+
+        See Also
+        --------
+
+        pylayers.simul.links
+
+        """
+                
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            fh5=h5py.File(filename,'r')
+            f = fh5['ray/'+grpname]
+            for k in f.keys():
+                self.update({eval(k):{}})
+                for kk in f[k].keys():
+                    self[eval(k)].update({kk:f[k][str(kk)][:]})
+
+            for a,va in f.attrs.items():
+                setattr(self,a,va)
+            fh5.close()
+
+        except:
+
+            fh5.close()
+            raise NameError('Rays: issue when reading h5py file')
+            
+        # fill if save was filled
+
+        # temporary solution in order to avoir 
+        # creating save for Interactions classes
+
+        if self.filled:
+            L=Layout(Lfilename)
+            self.fillinter(L)
+
+        if self.evaluated:
+            return self.eval(self.fGHz) 
+
 
     def reciprocal(self):
         """ switch tx and rx
@@ -701,7 +807,7 @@ class Rays(dict):
                         iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_c,iray_c))
                     except:
                         pdb.set_trace()
-                  
+
                     # Update coordinate in the horizontal plane
                     #
                     #
@@ -711,7 +817,7 @@ class Rays(dict):
                     # parameterization of the point with respect to the two
                     # known adjascent interaction point j-1 and j+1 (Thales)
                     #
-                    
+
                     #iintm_f = iint_f - 1
                     #iintp_f = iint_f + 1
 
@@ -723,14 +829,14 @@ class Rays(dict):
                         a1esm_f = a1es[iintm_f, iray_f]
                         a1esc_f = a1es[iint_f, iray_f]
                         a1esp_f = a1es[iintp_f, iray_f]
-       
+
 
                         pteesm_f = ptees[0:2, iintm_f, iray_f]
                         pteesp_f = ptees[0:2, iintp_f, iray_f]
-                       
+
                         coeff_f = (a1esc_f-a1esm_f)/(a1esp_f-a1esm_f)
                         ptees[0:2, iint_f, iray_f] = pteesm_f + coeff_f*(pteesp_f-pteesm_f)
-       
+
                     if len(iint_c)>0:
                         a1esm_c = a1es[iintm_c, iray_c]
                         a1esc_c = a1es[iint_c, iray_c]
@@ -771,13 +877,13 @@ class Rays(dict):
                     ptees[2, :] = z
                 # recopy old 2D parameterization (no extension)
                 else:
-                    a1es = a1                      
+                    a1es = a1
                     ks = np.argsort(a1es, axis=0)
                     ptees = pte
                     # fixing bug
                     siges = copy.copy(sig)
                     #print siges
-              
+
                 #---------------------------------
                 # handling subsegments (if any)
                 #---------------------------------
@@ -793,15 +899,15 @@ class Rays(dict):
                     u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
 
                     # dimension extension of index u for :
-                    #    z coordinate extraction (append line 2 on dimension 0)   
-                    #    0 signature extraction  (append line 0 on  dimension 0)   
+                    #    z coordinate extraction (append line 2 on dimension 0)
+                    #    0 signature extraction  (append line 0 on  dimension 0)
 
                     # v : index 2 is for getting z coordinate
                     # w : index 0 is for getting segment number (first line of
                     # siges)
                     v   = [2*np.ones(len(u[0]),dtype=int)]+u
                     w   = [0*np.ones(len(u[0]),dtype=int)]+u
-                  
+
                     # zss : height of interactions on subsegments
                     zss = ptees[v]
                     #if k==1:
@@ -835,7 +941,7 @@ class Rays(dict):
                     # zss = array([ 2.62590637,  2.62589727,  1.34152518,
                     # 2.0221785 ,  0.23706671, 0.2378053])
                     #
-                    # tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]  
+                    # tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]
                     #
                     tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
                                                            (z[1]>x[1])),x[0]),zip(zinterval,zss))
@@ -863,7 +969,7 @@ class Rays(dict):
                     siges[w] = indexnew
                     #if k==3:
                     #    print siges
-                   
+
                     #if k==1:
                     #    print "indexss:",indexss
                     #    print "indexnew:",indexnew
@@ -913,7 +1019,7 @@ class Rays(dict):
             r3d[0]['pt']=np.zeros((3,2,1))
             r3d[0]['pt'][:,0,:]=tx[:,np.newaxis]
             r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
-       
+
         # r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint)
         # count total number of ray
         # evaluate length of ray segment
@@ -1744,15 +1850,15 @@ class Rays(dict):
                         Z = np.sum(Atmp[..., :, :, np.newaxis]
                                   *B00[..., np.newaxis, :, :], axis=-2)
                     else:
-                        Atmp = A[:, :, i, :, :]                   
+                        Atmp = A[:, :, i, :, :]
                         BB = Bl[:, :, i-1, :, :]
                         Ztmp = np.sum(Atmp[..., :, :, np.newaxis]
                                   *BB[..., np.newaxis, :, :], axis=-2)
-    
+
 
                         Z = np.sum(Ztmp[..., :, :, np.newaxis]
                                   *Z[..., np.newaxis, :, :], axis=-2)
-                       
+
                     if i == l-1:
                         BB = Bl[:, :, i, :, :]
                         Z = np.sum(BB[..., :, :, np.newaxis]

@@ -12,34 +12,145 @@ Geomview Class
 .. autosummary::
     :toctree: generated/
 
-    Geomview
-    Geomlist
-    Geomoff
-    GeomVect
+Geomview.__init__
+Geomview.show3
 
-
-2 points functions
-===================
+Geomlist Class
+==============
 
 .. autosummary::
     :toctree: generated/
 
-    SignedArea
-    Centroid
-    Lr2n
-    isBetween
+    Geomlist.__init__
+    Geomlist.append
 
-Functions2
-==========
+GeomVect Class
+==============
 
 .. autosummary::
     :toctree: generated/
 
-    pvec
-    pvecn
-    vec_sph
-    ellipse
-    ptonseg
+    GeomVect.__init__
+    GeomVect.segments
+    GeomVect.geomBase
+    GeomVect.points
+
+Geomoff Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Geomoff.__init__
+    Geomoff.loadpt
+    Geomoff.savept
+    Geomoff.polygon
+    Geomoff.polygons
+    Geomoff.cylinder
+    Geomoff.box
+    Geomoff.pattern
+
+Plot_Shapely Class
+==================
+
+.. autosummary::
+    :toctree: generated/
+
+    Plot_shapely.__init__
+    Plot_shapely.plot_coords
+    Plot_shapely.plot_ligne
+    Plot_shapely.plot_polygon
+    Plot_shapely.plot_multi
+
+LineString Class
+==================
+
+.. autosummary::
+    :toctree: generated/
+
+    LineString.__init__
+    LineString.plot
+
+PolyGon Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Polygon.__init__
+    Polygon.plot
+    Polygon.__init__
+    Polygon.__add__
+    Polygon.__repr__
+    Polygon.ndarray
+    Polygon.signedarea
+    Polygon.plot
+    Polygon.simplify
+    Polygon.buildGv
+    Polygon.showGv
+    Polygon.ptconvex
+
+
+Utility Functions
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+     angular
+     SignedArea
+     Centroid
+     Lr2n
+     isBetween
+     pvec
+     pvecn
+     onb
+     vec_sph
+     ellipse
+     normalize
+     ptonseg
+     dptseg
+     linet
+     ccw
+     intersect
+     isaligned
+     isleft
+     isleftorequal
+     affine
+     cylmap
+     mul3
+     MRot3
+     MEulerAngle
+     SphericalBasis
+     angledir
+     BTB_rx
+     BTB_tx
+
+     plot_coords
+     plot_bounds
+     plot_line
+     v_color
+
+     plotPolygon
+     shrinkPolygon
+     shrinkPolygon2
+     simplifyPolygon
+     wall_delta
+     plot_coords2
+     plot_bounds2
+     plot_line2
+     plot_coords3
+     plot_bounds3
+     plot_line3
+     valid_wedge
+     sector
+     dist
+     line_intersection
+     linepoly_intersection
+     mirror
+     distseg
+     dmin3d
+
 
 
 """
@@ -74,6 +185,983 @@ COLOR = {
     False: '#ff3333'
 }
 
+class Plot_shapely(object):
+    """draw Shapely with matplotlib - pylab
+     Plot_shapely.py
+     Author : Martin Laloux 2010
+
+    """
+
+    def __init__(self, obj, ax, coul=None, alph=1):
+        """
+
+         Parameters
+         ----------
+         ax :
+             pylab Axes
+         obj  : geometric object
+         coul : matplotlib color
+         alph : transparency
+
+         Examples
+         --------
+
+         >>> from shapely.wkt import loads
+         >>> import matplotlib.pylab as plt
+         >>> ax = plt.gca()
+         >>> ligne = loads('LINESTRING (3 1, 4 4, 5 5, 5 6)')
+         >>> a  = Plot_shapely(ligne,ax,'r', 0.5)
+         >>> a.plot
+         >>> Plot_shapely(ligne,ax,'#FFEC00').plot
+         >>> plt.show()
+        """
+        self.obj = obj
+        self.type = obj.geom_type
+        self.ax = ax
+        self.coul = coul
+        self.alph = alph
+
+    def plot_coords(self):
+        """ points
+        """
+        x, y = self.obj.xy
+        self.ax.plot(x, y, 'o', color=self.coul)
+
+    def plot_ligne(self):
+        """lines"""
+        x, y = self.obj.xy
+        self.ax.plot(x, y, color=self.coul, alpha=self.alph, linewidth=3)
+
+    def plot_polygon(self):
+        """polygons"""
+        patch = PolygonPatch(self.obj, facecolor=self.coul,
+                             edgecolor='#000000', alpha=self.alph)
+        self.ax.add_patch(patch)
+
+    def plot_multi(self):
+        """multipoints, multilignes,multipolygones + GeometryCollection"""
+        for elem in self.obj:
+            Plot_shapely(elem, self.ax, self.coul, self.alph).plot
+
+    @property
+    def plot(self):
+        """dessine en fonction du type geometrique"""
+        if self.type == 'Point':
+            self.plot_coords()
+        elif self.type == 'Polygon':
+            self.plot_polygon()
+        elif self.type == 'LineString':
+            self.plot_ligne()
+        elif "Multi" in self.type:
+            """ex. MultiPolygon"""
+            self.plot_multi()
+        elif self.type == 'GeometryCollection':
+            self.plot_multi()
+        elif self.type == 'LinearRing':
+            self.plot_line()
+        else:
+            raise ValueError("inconnu au bataillon: %s" % self.type)
+
+
+class LineString(shg.LineString):
+    """ Overloaded shapely LineString class
+    """
+    def __init__(self,p):
+
+        if type(p) == shg.polygon.Polygon:
+            self.Np = shape(p.exterior.xy)[1] - 1
+            shg.LineString.__init__(self, p)
+
+        if type(p) == shg.multipoint.MultiPoint:
+            self.Np = np.shape(p)[0]
+            shg.LineString.__init__(self, p)
+
+        if type(p) == list:
+            p = np.array(p)
+
+        if type(p) == np.ndarray:
+            self.Np = np.shape(p)[1]
+            tp = []
+            for k in range(self.Np):
+                tp.append(p[:, k])
+            tp.append(tp[0])
+            tu = tuple(tp)
+            shg.LineString.__init__(self, tu)
+
+    def plot(self,**kwargs):
+        """ plot LineString
+
+        Parameters
+        ----------
+
+        show : boolean
+        fig : figure object
+        ax  : axes object
+        linewidth : int 
+        color :  string
+            default #abcdef"
+        alpha :  float
+            transparency   (default 0.8)
+        figsize : tuple
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import *
+            >>> import matplotlib.pyplot as plt
+            >>> import numpy as np
+            >>> l1 = np.array([[0,1,1,0],[0,0,1,1]])
+            >>> L1 = LineString(l1)
+            >>> l2 = [[3,4,4,3],[1,1,2,2]]
+            >>> L2 = LineString(l2)
+            >>> fig,ax = L1.plot(color='red',alpha=0.3,linewidth=3)
+            >>> fig,ax = L2.plot(fig=fig,ax=ax,color='blue',alpha=0.7,linewidth=2)
+            >>> title = plt.title('test plotting LineString')
+
+        """
+
+        defaults = {'show': False,
+                'fig': [],
+                'ax': [],
+                'color':'#abcdef',
+                'linewidth':1,
+                'alpha':0.8 ,
+                'figsize':(10,10)
+                 }
+        #
+        # update default values
+        #
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+        #
+        # getting fig and ax
+        #
+        if kwargs['fig'] == []:
+            fig = plt.figure(figsize=kwargs['figsize'])
+            fig.set_frameon(True)
+        else:
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
+        x, y = self.xy
+
+        ax.plot(x, y,
+                color = kwargs['color'],
+                alpha=kwargs['alpha'],
+                linewidth = kwargs['linewidth'])
+
+        if kwargs['show']:
+            plt.show()
+
+        return fig,ax
+
+#-----------------------------------------------------------
+#   Functions used for calculation of visibility graph Gv
+#-----------------------------------------------------------
+
+class Polygon(shg.Polygon):
+    """ Overloaded shapely Polygon class
+
+    Attributes
+    ----------
+
+    Methods
+    -------
+    plot
+    ptconvex
+    buildGv
+    ndarray :
+        get a ndarray from a Polygon
+    signedarea :
+        get the signed area of the polygon
+
+    """
+    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[]):
+        """
+
+        Parameters
+        ----------
+
+        p : list
+            2xNp np.array
+            shg.MultiPoint
+            shg.Polygon
+        vnodes : list of alternating points and segments numbers
+            default = [] in this case a regular ordered sequence
+            is generated.
+
+        Notes
+        -----
+
+        Convention : a Polygon as an equal number of points and segments
+        There is an implicit closure between first and last point
+
+        """
+
+        if type(p) == shg.polygon.Polygon:
+            self.Np = np.shape(p.exterior.xy)[1] - 1
+            p = np.vstack((p.exterior.xy[0],p.exterior.xy[1]))
+            shg.Polygon.__init__(self, p)
+
+        if type(p) == shg.multipoint.MultiPoint:
+            self.Np = np.shape(p)[0]
+            shg.Polygon.__init__(self, p)
+
+        if type(p) == list:
+            p = np.array(p)
+
+        if type(p) == np.ndarray:
+            if np.shape(p)[1] == 2:
+                p = p.T
+            self.Np = np.shape(p)[1]
+            tp = []
+            for k in range(self.Np):
+                tp.append(p[:, k])
+            tp.append(tp[0])
+            tu = tuple(tp)
+            shg.Polygon.__init__(self, tu)
+
+        self.Np = np.shape(self.exterior.xy)[1] - 1
+
+        if vnodes != []:
+            self.vnodes = np.array(vnodes)
+            # check if always True
+            # very important fic for buildGv
+            # now vnodes starts always with <0
+            if self.vnodes[0]>0:
+                self.vnodes = np.roll(self.vnodes,-1)
+        else:
+            # create sequence
+            #
+            # -1 1 -2 2 -3 3 ... -(Np-1) (Np-1)
+            #
+            u = np.array([-1, 1])
+            v = np.arange(self.Np) + 1
+            self.vnodes = np.kron(v, u)
+
+    def __add__(self,p):
+        pnew = self.union(p)
+        p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
+        p2 = Polygon(p1)
+        return(p2)
+
+    def __repr__(self):
+        st = ''
+        p = self.ndarray()
+        sh = np.shape(p)
+        for k in range(sh[1]):
+            st = st + '('+str(p[0,k])+','+str(p[1,k])+')\n'
+        return(st)
+
+    def ndarray(self):
+        """ get a ndarray from a Polygon
+
+        Returns
+        -------
+            p : ndarray (2xNp)
+
+        Examples
+        --------
+        >>> from pylayers.util.geomutil import *
+        >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
+        >>> P1 = Polygon(p1)
+
+        """
+        lring = self.exterior
+        x, y = lring.xy
+        p = np.array([x[0:-1], y[0:-1]])
+        return(p)
+
+    def signedarea(self):
+        """ get the signed area of the polygon
+
+        """
+        p = self.ndarray()
+        return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
+
+    def plot(self,**kwargs):
+        """ plot function
+
+        Parameters
+        ----------
+        color :  string
+            default #abcdef"
+        alpha :  float
+            transparency   (default 0.8)
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import *
+            >>> import matplotlib.pyplot as plt
+            >>> import numpy as np
+            >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
+            >>> P1 = Polygon(p1)
+            >>> p2 = [[3,4,4,3],[1,1,2,2]]
+            >>> P2 = Polygon(p2)
+            >>> p3 = [np.array([10,10]),np.array([11,10]),np.array([11,11]),np.array([10,11])]
+            >>> P3 = Polygon(p3)
+            >>> fig,ax = P1.plot(color='red',alpha=0.3)
+            >>> fig,ax = P2.plot(fig=fig,ax=ax,color='blue',alpha=0.7)
+            >>> fig,ax = P3.plot(fig=fig,ax=ax,color='green',alpha=1)
+            >>> title = plt.title('test plotting polygons')
+
+        """
+
+        defaults = {'show': False,
+                'fig': [],
+                'ax': [],
+                'color':'#abcdef',
+                'edgecolor':'#000000',
+                'alpha':0.8 ,
+                'figsize':(10,10)
+                 }
+        #
+        # update default values
+        #
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+        #
+        # getting fig and ax
+        #
+        if kwargs['fig'] == []:
+            fig = plt.figure(figsize=kwargs['figsize'])
+            fig.set_frameon(True)
+        else:
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
+        x, y = self.exterior.xy
+
+        ax.fill(x, y,
+                color = kwargs['color'],
+                alpha=kwargs['alpha'],
+                ec = kwargs['edgecolor'])
+
+        if kwargs['show']:
+            plt.show()
+
+        return fig,ax
+
+    def simplify(self):
+        """ Simplify polygon - suppress adjacent colinear segments
+
+        Returns
+        -------
+            poly2 : simplified polygon
+
+        Examples
+        --------
+
+        Before
+
+
+        After
+
+
+        """
+        p = np.array(self.exterior.xy)
+        N = np.shape(p)[1]
+        q = p[:, 0].reshape(2, 1)
+        for k in range(N - 2):
+            v1 = p[:, k + 1] - p[:, k]
+            v2 = p[:, k + 2] - p[:, k + 1]
+            v1n = v1 / np.sqrt(np.dot(v1, v1))
+            v2n = v2 / np.sqrt(np.dot(v2, v2))
+            u = np.dot(v1n, v2n)
+            if u < 0.98:
+                q = np.hstack((q, p[:, k + 1].reshape(2, 1)))
+        vini = q[:, 1] - q[:, 0]
+        vin = vini / np.sqrt(np.dot(vini, vini))
+        v = np.dot(v2n, vin)
+        if v > 0.98:
+            q = q[:, 1:]
+        y = q.T.copy()
+        ls = shg.asLineString(y)
+        poly2 = shg.Polygon(ls)
+        return(poly2)
+
+    def buildGv(self, **kwargs):
+        """ Create  visibility graph for a polygon
+
+        Parameters
+        ----------
+
+        display   : boolean
+            default : False
+        fig       : matplotlib.figure.pyplot
+        ax        : axes
+        udeg1     : np.array indexes of points of degree 1
+            default = []
+        udeg2     : np.array indexes of points of degree 2
+            default = []
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import *
+            >>> import shapely.geometry as shg
+            >>> import matplotlib.pyplot as plt
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (2.5,1), (2.5, 2), \
+                                          (2.8,2), (2.8, 1.1), (3.2, 1.1), \
+                                          (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
+            >>> polyg   = Polygon(points)
+            >>> Gv      = polyg.buildGv(show=True)
+            >>> plt.axis('off')
+            (-0.5, 4.0, -0.5, 2.5)
+            >>> title = plt.title('Testing buildGv')
+
+
+        Notes
+        -----
+
+        Segment k and (k+1)%N share segment (k+1)%N
+        The degree of a point is dependent from other polygons around
+
+        Topological error can be raised if the point coordinates accuracy
+        is not limited.
+
+        Nodes of polygon are numbered in the global graph in vnodes member.
+
+        See Also
+        --------
+
+        pylayers.gis.layout
+
+        """
+
+        defaults = {'show': False,
+                    'fig': [],
+                    'ax': [],
+                    'udeg1': np.array([]),
+                    'udeg2': np.array([])
+                    }
+
+##       initialize function attributes
+
+        for key, value in defaults.items():
+            if key in kwargs:
+                setattr(self, key, kwargs[key])
+            else:
+                setattr(self, key, value)
+                kwargs[key] = value
+
+        #self.args=args
+        if kwargs['show']:
+            if kwargs['fig'] == []:
+                fig = plt.figure(figsize=(20,20))
+                fig.set_frameon(True)
+            else:
+                fig = kwargs['fig']
+
+            if kwargs['ax'] == []:
+                ax = fig.gca()
+            else:
+                ax = kwargs['ax']
+            plt.ion()
+
+        udeg1 = kwargs['udeg1']
+        udeg2 = kwargs['udeg2']
+
+        GRAY = '#999999'
+        Gv = nx.Graph()
+        Gv.pos = {}
+
+        lring = self.exterior
+        #
+        # Calculate interior normals
+        #
+        x, y = lring.xy
+        p = np.array([x[0:-1], y[0:-1]])
+        #
+        # determine convex points
+        #
+        tcc, n = self.ptconvex()
+        # Np = self.Np
+        Np = np.shape(self.exterior.xy)[1] -1
+        #
+        # retrieve
+        #  npt points label sequence
+        #  nseg segments label sequence
+        #
+        # vnodes do not necessarily start with a point
+        #
+        if self.vnodes[0] < 0:
+            ipt  = 2 * np.arange(Np)
+            iseg = 2 * np.arange(Np) + 1
+        else:
+            ipt = 2 * np.arange(Np) + 1
+            iseg = 2 * np.arange(Np)
+
+        npt = self.vnodes[ipt]
+        nseg = self.vnodes[iseg]
+        #print "npt : ",npt
+        #print "nseg : ",nseg
+
+        assert  np.all(npt < 0), "something wrong with points"
+        assert  np.all(nseg > 0), "something wrong with segments"
+        #
+        #
+        # Create middle point on lring
+        #
+        # Warning lring recopy the node at the end of the sequence
+        #
+        # A problem arises from the fact that a vnodes sequence
+        # do no necessarily starts with a point (negative node)
+        #
+        #
+        tpm = []
+        for ik, k in enumerate(lring.coords):
+            pt = np.array(k)
+            try:
+                pm = (pt + pm1) / 2.
+                if self.vnodes[0] < 0:
+                    Gv.pos[nseg[ik - 1]] = (pm[0], pm[1])
+                else:
+                    Gv.pos[nseg[ik % Np]] = (pm[0], pm[1])
+                tpm.append(pm)
+                pm1 = pt
+            except:
+                pm1 = pt
+        #
+        # Update position of points in Gv
+        #
+        for nk in range(Np):
+            #nnode = -(nk+1)
+            Gv.pos[npt[nk]] = (p[0, nk], p[1, nk])
+
+        xr, yr = lring.xy
+
+        #
+        # Degree 1 points : (should not exist anymore)
+        #
+        # Determine diffraction points
+        #
+        # udeg1 :
+        # deg2 : if null:
+        #           the point is kept
+        #        if convex:
+        #           the point is kept
+        #        else:
+        #           the point is not kept
+        #
+        uconvex = np.nonzero(tcc == 1)[0] # convex point position
+        uzero = np.nonzero(tcc == 0)[0]   # planar point (joining two parallel segment)
+        udiffdoor = np.intersect1d(uzero, udeg2)  # degree 2 paralell points are often doors and windows
+        udiff = np.hstack((uconvex, udiffdoor)).astype('int') # diffracting point
+        #print "vnodes",self.vnodes
+        #print "tcc : ",tcc
+        #print "uzero : ",uzero
+        #print "udiffdoor : ",udiffdoor
+        #print "udiff",udiff
+        #print "udeg2",udeg2
+        #print "npt",npt
+        #if udiff!=[]:
+        #    print "diff : ",npt[udiff]
+        #if udeg2!=[]:
+        #    print "deg2 : ",npt[udeg2]
+        #if uzero!=[]:
+        #    print "zero :",npt[uzero]
+        #
+        # if show == True display points and polygon
+        #
+        if kwargs['show']:
+            points1 = shg.MultiPoint(lring)
+            for k, pt in enumerate(points1):
+                if k in uconvex:
+                    ax.plot(pt.x, pt.y, 'o', color='red')
+                elif k in udiffdoor:
+                    ax.plot(pt.x, pt.y, 'o', color='blue')
+                else:
+                    ax.plot(pt.x, pt.y, 'o', color=GRAY)
+
+            patch = PolygonPatch(self, facecolor='#6699cc',
+                                 edgecolor='#000000', alpha=0.5, zorder=2)
+            ax.add_patch(patch)
+        #pdb.set_trace()
+        #
+        #  1) Calculate node-node visibility
+        #
+        # The following exploits definition of convexity.
+        #
+        # Between all combinations of diffracting points
+        # create a segment and check whether it is fully included in the
+        # polygon.
+        # If verified then there is a visibility between the 2 points.
+        #
+        for nk in combinations(udiff, 2):
+            p1 = p[:, nk[0]]
+            p2 = p[:, nk[1]]
+            seg = shg.LineString(((p1[0], p1[1]), (p2[0], p2[1])))
+            if self.contains(seg):
+                Gv.add_edge(npt[nk[0]], npt[nk[1]], weight=0)
+
+        #
+        #  2) Calculate edge-edge and node-edge visibility
+        #
+        for nk in range(Np):   # loop on range of number of points
+            ptk = p[:, nk]     # tail point
+            phk = p[:, (nk + 1) % Np] # head point (%Np to get 0 as last point)
+
+            # lnk : unitary vector on segment nk
+            lk = phk - ptk
+            nlk = np.sqrt(np.dot(lk, lk))
+            lnk = lk / nlk
+
+            # the epsilon is (1/1000) of the segment length
+            epsilonk = nlk / 1000.  # this can be dangerous (epsilon can be large)
+
+            # x--o----------------------o--x
+            #    +eps                  -eps
+            pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
+            pcornerh = phk - lnk * epsilonk  # + n[:,nk]*epsilon
+
+        #
+        # in any case no ray towark nk
+        # if nk is convex no ray toward (nk-1)%Np
+        #
+        # start from the two extremity of the segment
+            for i, pcorner in enumerate([pcornert, pcornerh]):
+                #
+                #  if tail point
+                #           remove nk segment
+                #  and if the point is convex
+                #          remove previous segment
+                #
+                #  si point head
+                #
+                listpoint = range(Np)
+                listpoint.remove(nk)   # remove current point
+                if i == 0:  # first iteration pcornert
+                    if nk in uconvex:  # == 1
+                        listpoint.remove((nk - 1) % Np)
+                if i == 1:  # second iteration pcornerh
+                    if (nk + 1) % Np in uconvex: # ==1
+                        listpoint.remove((nk + 1) % Np)
+
+                for ns in listpoint:
+                    pts = p[:, ns]
+                    phs = p[:, (ns + 1) % Np]
+                    # Add B.Uguen 2/01/2014 no possible visibility relation between aligned segments
+                    if (not (isaligned(pts,phs,ptk) & isaligned(pts,phs,phk))):
+                        ls = phs - pts
+                        nls = np.sqrt(np.dot(ls, ls))
+                        lns = ls / nls
+                        epsilons = nls / 1000.
+                        pte = pts + lns * epsilons  # + n[:,ns]*epsilon
+                        phe = phs - lns * epsilons  # + n[:,ns]*epsilon
+                        tbr = pyu.bitreverse(16, 5) / 16.
+                        for alpha in tbr:
+                            pa = pte + alpha * (phe - pte)
+                            seg = shg.LineString((pcorner, pa))
+                            #print "seg: ",seg.xy
+                            #if npt[nk] == -3:
+                            #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=0.2,color='k')
+                            #    plt.draw()
+                            # topological error can be raised here
+                            seg2 = self.intersection(seg)
+                            #if self.contains(seg):
+                            if seg2.almost_equals(seg, decimal=4):
+                                #print alpha,nk,ns
+                                #plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=2,color='r')
+                                #Gv.add_edge(-(uconvex[nk]+1),ns+1,weight=10)
+                                if i == 0:
+                                    if nk in udiff:
+                                        Gv.add_edge(npt[nk], nseg[ns], weight=1)
+                                        #plt.plot(np.array([Gv.pos[npt[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[nk]][1],Gv.pos[nseg[ns]][1]]),'r')
+                                if i == 1:
+                                    if (nk + 1) % Np in udiff:
+                                        Gv.add_edge(npt[(nk + 1) % Np], nseg[ns], weight=1)
+                                        #plt.plot(np.array([Gv.pos[npt[(nk+1)%Np]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[(nk+1)%Np]][1],Gv.pos[nseg[ns]][1]]),'g')
+                                    #plt.draw()
+                                #if i==1:
+                                #if (((nseg[nk]==10) & (nseg[ns]==7)) or
+                                #    ((nseg[nk]==7) & (nseg[ns]==10))):
+                                #    pdb.set_trace()
+                                if nseg[nk] != nseg[ns]:
+                                    Gv.add_edge(nseg[nk], nseg[ns], weight=1)
+                                    #else:
+                                    #    print nseg[nk],nseg[ns]
+                                    #    print pts,phs
+                                    #    print ptk,phk
+                                    #if (((nseg[nk]==10) & (nseg[ns]==7)) or
+                                    #    ((nseg[nk]==7) & (nseg[ns]==10))):
+                                    #    plt.plot(np.array([Gv.pos[nseg[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[nseg[nk]][1],Gv.pos[nseg[ns]][1]]),'b')
+                                    #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),'b')
+                                    #    print "seg: ",seg.xy
+                                    #    print "seg2: ",seg2.xy
+                                    #    print nseg[nk],nseg[ns]
+                                    #    print pcorner , ptk
+                                    #    print  alpha , pa ,pte
+                                    #    plt.draw()
+                                    #    raw_input()
+                                break
+                    #else:
+                        #print p
+                        #print ns
+                        #print nk
+                        #print 'nsegnk : ',nseg[nk]
+                        #print 'nsegns', nseg[ns]
+                        #print 'ptk : ',ptk
+                        #print 'phk : ',phk
+                        #print 'pts : ',pts
+                        #print 'phs : ',phs
+                        #print "aligne :",nseg[nk],nseg[ns]
+                        #pdb.set_trace()
+
+        if kwargs['show']:
+            nodes = np.array(Gv.nodes())
+            uneg = list(nodes[np.nonzero(nodes < 0)[0]])
+            upos = list(nodes[np.nonzero(nodes > 0)[0]])
+            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=upos,
+                                   node_color='blue', node_size=300, alpha=0.3)
+            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=uneg,
+                                   node_color='red', node_size=300, alpha=0.3)
+            nx.draw_networkx_labels(Gv, Gv.pos)
+
+            ndnd, nded, eded = gru.edgetype(Gv)
+
+            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
+                                   edge_color='blue', linewidth=2)
+            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
+                                   edge_color='red', linewidth=2)
+            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
+                                   edge_color='green', linewidth=2)
+
+            #label = {}
+            #for (u,v) in Gv.edges():
+            #    d = Gv.get_edge_data(u,v)
+            #    label[(u,v)]=d['weight']
+
+            #edge_label=nx.draw_networkx_edge_labels(Gv,Gv.pos,edge_labels=label)
+
+        return(Gv)
+
+    def showGv(self, **kwargs):
+        """ show graph Gv
+
+        Parameters
+        ----------
+        display
+        fig
+        ax
+        ndnd    : boolean
+            display node/node
+        nded    : boolean
+            display node/edge
+        eded    : boolean
+            display edge/edge
+        linewidth: float
+            default 2
+
+        """
+        defaults = {'display': False,
+                    'fig': [],
+                    'ax': [],
+                    'ndnd': True,
+                    'nded': False,
+                    'ndnd': False,
+                    'linewidth': 2
+                    }
+
+        for key, value in defaults.items():
+            if key in kwargs:
+                setattr(self, key, kwargs[key])
+            else:
+                setattr(self, key, value)
+                kwargs[key] = value
+
+        if kwargs['fig'] == []:
+            fig = plt.figure()
+            fig.set_frameon(True)
+        else:
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
+        lring = self.exterior
+        points = shg.MultiPoint(lring)
+        for k, pt in enumerate(points):
+            if tcc[k % Np] == 1:
+                ax.plot(pt.x, pt.y, 'o', color='red')
+            else:
+                ax.plot(pt.x, pt.y, 'o', color=GRAY)
+            k = k + 1
+
+        patch = PolygonPatch(self, facecolor='#6699cc',
+                             edgecolor='#6699cc', alpha=0.5, zorder=2)
+        ax.add_patch(patch)
+        nodes = np.array(Gv.nodes())
+
+        uneg = list(nodes[np.nonzero(nodes < 0)[0]])
+        upos = list(nodes[np.nonzero(nodes > 0)[0]])
+        if kwargs['nodes']:
+            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=upos,
+                                   node_color='blue', node_size=300, alpha=0.3)
+            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=uneg,
+                                   node_color='red', node_size=300, alpha=0.3)
+            nx.draw_networkx_labels(Gv, Gv.pos)
+
+            ndnd, nded, eded = gru.edgetype(Gv)
+
+        if kwargs['eded']:
+            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
+                                   edge_color='blue', linewidth=2)
+        if kwargs['ndnd']:
+            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
+                                   edge_color='red', linewidth=2)
+        if kwargs['nded']:
+            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
+                                   edge_color='green', linewidth=2)
+
+        return(fig, ax)
+
+    def ptconvex(self, display=False):
+        """ Return a list of booleans indicating points convexity
+
+        Parameters
+        ----------
+
+        display : boolean
+            default False
+
+
+        Returns
+        -------
+
+        tcc     : np.array (1x Nseg)
+            1 if convex , -1 if concav , 0 if plane
+        n       :  array(2xNseg)
+            segments normals
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import *
+            >>> import shapely.geometry as shg
+            >>> import matplotlib.pyplot as plt
+            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
+            >>> N = len(points)
+            >>> polyg   = Polygon(points)
+            >>> tcc,n   = polyg.ptconvex()
+            >>> #k = 0
+            >>> #for p in points:
+            >>> #  if tcc[k] == 1 :
+            >>> #      plt.plot(p.x, p.y, 'o', color='red',alpha=1)
+            >>> #  else:
+            >>> #      plt.plot(p.x, p.y, 'o', color='blue',alpha=0.3)
+            >>> #  k = k+1
+            >>> #polyg.plot()
+            >>> #plt.figure()
+            >>> #points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])
+            >>> #poly    = Polygon(points)
+            >>> #tcc,n   = polyg.ptconvex()
+            >>> #poly.plot()
+
+
+        Notes
+        ------
+
+            This function determines the convex and concav points of a polygon.
+            As there is no orientation convention for the polygon the sign of the cross
+            product can't be directly interpreted. So we exploit the following
+            property :
+
+            Let N be the number of points of the Polygon. N  = Nx + Nc where
+            Nx is the number of convex points and Nc the number of concav points
+
+            We have Nx >= Nc
+
+            If a point is common to two parallel segments, the cross product is = 0
+
+        See Also
+        --------
+
+        Lr2n
+
+        """
+
+        lring = self.exterior
+
+        #
+        # Calculate interior normals
+        #
+
+        x, y = lring.xy
+        Np = len(x) - 1
+        Nseg = Np
+        p = np.array([x[0:-1], y[0:-1]])
+        n = Lr2n(p)
+
+        tcc = np.zeros(Np)
+
+        #
+        # cross product between two adjascent normals
+        #
+        for k in range(Nseg):
+            nk = n[:, (k - 1) % Nseg]
+            nkp1 = n[:, k]
+            v = np.cross(nk, nkp1)
+            tcc[k] = v
+
+        #
+        # warning this test is fragile
+        #
+        # debug : print tcc
+        #
+        # The purpose here is to remove flat transition
+        #
+        upos = np.nonzero(tcc > 1e-2)[0]
+        uneg = np.nonzero(tcc < -1e-2)[0]
+
+        if len(upos) > len(uneg):
+            nconvex = uneg
+            nconcav = upos
+
+        if len(upos) < len(uneg):
+            nconvex = upos
+            nconcav = uneg
+
+        if len(upos) == len(uneg):
+            print "error polygon is a star "
+            print "tcc",tcc
+            print "upos",upos
+            print "uneg",uneg
+            self.plot()
+            pdb.set_trace()
+
+
+        tcc = np.zeros(Np)
+        tcc[nconvex] = 1
+        tcc[nconcav] = -1
+        #print "ptseg tcc ",tcc
+        upos = np.nonzero(tcc > 1e-4)[0]
+        return(tcc, n)
 
 class Geomview(object):
     """ Geomview file class
@@ -1821,83 +2909,6 @@ def BTB_tx(a_g, T):
 
     return R, al
 
-class Plot_shapely(object):
-    """draw Shapely with matplotlib - pylab
-     Plot_shapely.py
-     Author : Martin Laloux 2010
-
-    """
-
-    def __init__(self, obj, ax, coul=None, alph=1):
-        """
-
-         Parameters
-         ----------
-         ax :
-             pylab Axes
-         obj  : geometric object
-         coul : matplotlib color
-         alph : transparency
-
-         Examples
-         --------
-
-         >>> from shapely.wkt import loads
-         >>> import matplotlib.pylab as plt
-         >>> ax = plt.gca()
-         >>> ligne = loads('LINESTRING (3 1, 4 4, 5 5, 5 6)')
-         >>> a  = Plot_shapely(ligne,ax,'r', 0.5)
-         >>> a.plot
-         >>> Plot_shapely(ligne,ax,'#FFEC00').plot
-         >>> plt.show()
-        """
-        self.obj = obj
-        self.type = obj.geom_type
-        self.ax = ax
-        self.coul = coul
-        self.alph = alph
-
-    def plot_coords(self):
-        """ points
-        """
-        x, y = self.obj.xy
-        self.ax.plot(x, y, 'o', color=self.coul)
-
-    def plot_ligne(self):
-        """lines"""
-        x, y = self.obj.xy
-        self.ax.plot(x, y, color=self.coul, alpha=self.alph, linewidth=3)
-
-    def plot_polygon(self):
-        """polygons"""
-        patch = PolygonPatch(self.obj, facecolor=self.coul,
-                             edgecolor='#000000', alpha=self.alph)
-        self.ax.add_patch(patch)
-
-    def plot_multi(self):
-        """multipoints, multilignes,multipolygones + GeometryCollection"""
-        for elem in self.obj:
-            Plot_shapely(elem, self.ax, self.coul, self.alph).plot
-
-    @property
-    def plot(self):
-        """dessine en fonction du type geometrique"""
-        if self.type == 'Point':
-            self.plot_coords()
-        elif self.type == 'Polygon':
-            self.plot_polygon()
-        elif self.type == 'LineString':
-            self.plot_ligne()
-        elif "Multi" in self.type:
-            """ex. MultiPolygon"""
-            self.plot_multi()
-        elif self.type == 'GeometryCollection':
-            self.plot_multi()
-        elif self.type == 'LinearRing':
-            self.plot_line()
-        else:
-            raise ValueError("inconnu au bataillon: %s" % self.type)
-
 def plot_coords(ax, ob, color='#999999'):
     """ plotting coord of a `shapely` object
 
@@ -1989,901 +3000,6 @@ def v_color(ob):
     return COLOR[ob.is_simple]
 
 
-class LineString(shg.LineString):
-    """ Overloaded shapely LineString class
-    """
-    def __init__(self,p):
-
-        if type(p) == shg.polygon.Polygon:
-            self.Np = shape(p.exterior.xy)[1] - 1
-            shg.LineString.__init__(self, p)
-
-        if type(p) == shg.multipoint.MultiPoint:
-            self.Np = np.shape(p)[0]
-            shg.LineString.__init__(self, p)
-
-        if type(p) == list:
-            p = np.array(p)
-
-        if type(p) == np.ndarray:
-            self.Np = np.shape(p)[1]
-            tp = []
-            for k in range(self.Np):
-                tp.append(p[:, k])
-            tp.append(tp[0])
-            tu = tuple(tp)
-            shg.LineString.__init__(self, tu)
-
-    def plot(self,**kwargs):
-        """ plot LineString
-
-        Parameters
-        ----------
-
-        color :  string
-            default #abcdef"
-        alpha :  float
-            transparency   (default 0.8)
-        fig : figure object
-        ax  : axes object
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.util.geomutil import *
-            >>> import matplotlib.pyplot as plt
-            >>> import numpy as np
-            >>> l1 = np.array([[0,1,1,0],[0,0,1,1]])
-            >>> L1 = LineString(l1)
-            >>> l2 = [[3,4,4,3],[1,1,2,2]]
-            >>> L2 = LineString(l2)
-            >>> fig,ax = L1.plot(color='red',alpha=0.3,linewidth=3)
-            >>> fig,ax = L2.plot(fig=fig,ax=ax,color='blue',alpha=0.7,linewidth=2)
-            >>> title = plt.title('test plotting LineString')
-
-        """
-
-        defaults = {'show': False,
-                'fig': [],
-                'ax': [],
-                'color':'#abcdef',
-                'linewidth':1,
-                'alpha':0.8 ,
-                'figsize':(10,10)
-                 }
-        #
-        # update default values
-        #
-        for key, value in defaults.items():
-            if key not in kwargs:
-                kwargs[key] = value
-        #
-        # getting fig and ax
-        #
-        if kwargs['fig'] == []:
-            fig = plt.figure(figsize=kwargs['figsize'])
-            fig.set_frameon(True)
-        else:
-            fig = kwargs['fig']
-
-        if kwargs['ax'] == []:
-            ax = fig.gca()
-        else:
-            ax = kwargs['ax']
-
-        x, y = self.xy
-
-        ax.plot(x, y,
-                color = kwargs['color'],
-                alpha=kwargs['alpha'],
-                linewidth = kwargs['linewidth'])
-
-        if kwargs['show']:
-            plt.show()
-
-        return fig,ax
-
-#-----------------------------------------------------------
-#   Functions used for calculation of visibility graph Gv
-#-----------------------------------------------------------
-class Polygon(shg.Polygon):
-    """ Overloaded shapely Polygon class
-
-    Attributes
-    ----------
-
-    Methods
-    -------
-    plot
-    ptconvex
-    buildGv
-    ndarray :
-        get a ndarray from a Polygon
-    signedarea :
-        get the signed area of the polygon
-
-    """
-    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[]):
-        """
-
-        Parameters
-        ----------
-
-        p : list
-            2xNp np.array
-            shg.MultiPoint
-            shg.Polygon
-        vnodes : list of alternating points and segments numbers
-            default = [] in this case a regular ordered sequence
-            is generated.
-
-        Notes
-        -----
-
-        Convention : a Polygon as an equal number of points and segments
-        There is an implicit closure between first and last point
-
-        """
-
-        if type(p) == shg.polygon.Polygon:
-            self.Np = np.shape(p.exterior.xy)[1] - 1
-            p = np.vstack((p.exterior.xy[0],p.exterior.xy[1]))
-            shg.Polygon.__init__(self, p)
-
-        if type(p) == shg.multipoint.MultiPoint:
-            self.Np = np.shape(p)[0]
-            shg.Polygon.__init__(self, p)
-
-        if type(p) == list:
-            p = np.array(p)
-
-        if type(p) == np.ndarray:
-            if np.shape(p)[1] == 2:
-                p = p.T
-            self.Np = np.shape(p)[1]
-            tp = []
-            for k in range(self.Np):
-                tp.append(p[:, k])
-            tp.append(tp[0])
-            tu = tuple(tp)
-            shg.Polygon.__init__(self, tu)
-
-        self.Np = np.shape(self.exterior.xy)[1] - 1
-
-        if vnodes != []:
-            self.vnodes = np.array(vnodes)
-            # check if always True
-            # very important fic for buildGv
-            # now vnodes starts always with <0
-            if self.vnodes[0]>0:
-                self.vnodes = np.roll(self.vnodes,-1)
-        else:
-            # create sequence
-            #
-            # -1 1 -2 2 -3 3 ... -(Np-1) (Np-1)
-            #
-            u = np.array([-1, 1])
-            v = np.arange(self.Np) + 1
-            self.vnodes = np.kron(v, u)
-
-    def __add__(self,p):
-        pnew = self.union(p)
-        p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
-        p2 = Polygon(p1)
-        return(p2)
-
-    def __repr__(self):
-        st = ''
-        p = self.ndarray()
-        sh = np.shape(p)
-        for k in range(sh[1]):
-            st = st + '('+str(p[0,k])+','+str(p[1,k])+')\n'
-        return(st)
-
-    def ndarray(self):
-        """ get a ndarray from a Polygon
-
-        Returns
-        -------
-            p : ndarray (2xNp)
-
-        Examples
-        --------
-        >>> from pylayers.util.geomutil import *
-        >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
-        >>> P1 = Polygon(p1)
-
-        """
-        lring = self.exterior
-        x, y = lring.xy
-        p = np.array([x[0:-1], y[0:-1]])
-        return(p)
-
-    def signedarea(self):
-        """ get the signed area of the polygon
-
-        """
-        p = self.ndarray()
-        return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
-
-    def plot(self,**kwargs):
-        """ plot function
-
-        Parameters
-        ----------
-        color :  string
-            default #abcdef"
-        alpha :  float
-            transparency   (default 0.8)
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.util.geomutil import *
-            >>> import matplotlib.pyplot as plt
-            >>> import numpy as np
-            >>> p1 = np.array([[0,1,1,0],[0,0,1,1]])
-            >>> P1 = Polygon(p1)
-            >>> p2 = [[3,4,4,3],[1,1,2,2]]
-            >>> P2 = Polygon(p2)
-            >>> p3 = [np.array([10,10]),np.array([11,10]),np.array([11,11]),np.array([10,11])]
-            >>> P3 = Polygon(p3)
-            >>> fig,ax = P1.plot(color='red',alpha=0.3)
-            >>> fig,ax = P2.plot(fig=fig,ax=ax,color='blue',alpha=0.7)
-            >>> fig,ax = P3.plot(fig=fig,ax=ax,color='green',alpha=1)
-            >>> title = plt.title('test plotting polygons')
-
-        """
-
-        defaults = {'show': False,
-                'fig': [],
-                'ax': [],
-                'color':'#abcdef',
-                'edgecolor':'#000000',
-                'alpha':0.8 ,
-                'figsize':(10,10)
-                 }
-        #
-        # update default values
-        #
-        for key, value in defaults.items():
-            if key not in kwargs:
-                kwargs[key] = value
-        #
-        # getting fig and ax
-        #
-        if kwargs['fig'] == []:
-            fig = plt.figure(figsize=kwargs['figsize'])
-            fig.set_frameon(True)
-        else:
-            fig = kwargs['fig']
-
-        if kwargs['ax'] == []:
-            ax = fig.gca()
-        else:
-            ax = kwargs['ax']
-
-        x, y = self.exterior.xy
-
-        ax.fill(x, y,
-                color = kwargs['color'],
-                alpha=kwargs['alpha'],
-                ec = kwargs['edgecolor'])
-
-        if kwargs['show']:
-            plt.show()
-
-        return fig,ax
-
-    def simplify(self):
-        """ Simplify polygon - suppress adjacent colinear segments
-
-        Returns
-        -------
-            poly2 : simplified polygon
-
-        Examples
-        --------
-
-        Before
-
-
-        After
-
-
-        """
-        p = np.array(self.exterior.xy)
-        N = np.shape(p)[1]
-        q = p[:, 0].reshape(2, 1)
-        for k in range(N - 2):
-            v1 = p[:, k + 1] - p[:, k]
-            v2 = p[:, k + 2] - p[:, k + 1]
-            v1n = v1 / np.sqrt(np.dot(v1, v1))
-            v2n = v2 / np.sqrt(np.dot(v2, v2))
-            u = np.dot(v1n, v2n)
-            if u < 0.98:
-                q = np.hstack((q, p[:, k + 1].reshape(2, 1)))
-        vini = q[:, 1] - q[:, 0]
-        vin = vini / np.sqrt(np.dot(vini, vini))
-        v = np.dot(v2n, vin)
-        if v > 0.98:
-            q = q[:, 1:]
-        y = q.T.copy()
-        ls = shg.asLineString(y)
-        poly2 = shg.Polygon(ls)
-        return(poly2)
-
-    def buildGv(self, **kwargs):
-        """ Create  visibility graph for a polygon
-
-        Parameters
-        ----------
-
-        display   : boolean
-            default : False
-        fig       : matplotlib.figure.pyplot
-        ax        : axes
-        udeg1     : np.array indexes of points of degree 1
-            default = []
-        udeg2     : np.array indexes of points of degree 2
-            default = []
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.util.geomutil import *
-            >>> import shapely.geometry as shg
-            >>> import matplotlib.pyplot as plt
-            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (2.5,1), (2.5, 2), \
-                                          (2.8,2), (2.8, 1.1), (3.2, 1.1), \
-                                          (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
-            >>> polyg   = Polygon(points)
-            >>> Gv      = polyg.buildGv(show=True)
-            >>> plt.axis('off')
-            (-0.5, 4.0, -0.5, 2.5)
-            >>> title = plt.title('Testing buildGv')
-
-
-        Notes
-        -----
-
-        Segment k and (k+1)%N share segment (k+1)%N
-        The degree of a point is dependent from other polygons around
-
-        Topological error can be raised if the point coordinates accuracy
-        is not limited.
-
-        Nodes of polygon are numbered in the global graph in vnodes member.
-
-        See Also
-        --------
-
-        pylayers.gis.layout
-
-        """
-
-        defaults = {'show': False,
-                    'fig': [],
-                    'ax': [],
-                    'udeg1': np.array([]),
-                    'udeg2': np.array([])
-                    }
-
-##       initialize function attributes
-
-        for key, value in defaults.items():
-            if key in kwargs:
-                setattr(self, key, kwargs[key])
-            else:
-                setattr(self, key, value)
-                kwargs[key] = value
-
-        #self.args=args
-        if kwargs['show']:
-            if kwargs['fig'] == []:
-                fig = plt.figure(figsize=(20,20))
-                fig.set_frameon(True)
-            else:
-                fig = kwargs['fig']
-
-            if kwargs['ax'] == []:
-                ax = fig.gca()
-            else:
-                ax = kwargs['ax']
-            plt.ion()
-
-        udeg1 = kwargs['udeg1']
-        udeg2 = kwargs['udeg2']
-
-        GRAY = '#999999'
-        Gv = nx.Graph()
-        Gv.pos = {}
-
-        lring = self.exterior
-        #
-        # Calculate interior normals
-        #
-        x, y = lring.xy
-        p = np.array([x[0:-1], y[0:-1]])
-        #
-        # determine convex points
-        #
-        tcc, n = self.ptconvex()
-        # Np = self.Np
-        Np = np.shape(self.exterior.xy)[1] -1
-        #
-        # retrieve
-        #  npt points label sequence
-        #  nseg segments label sequence
-        #
-        # vnodes do not necessarily start with a point
-        #
-        if self.vnodes[0] < 0:
-            ipt  = 2 * np.arange(Np)
-            iseg = 2 * np.arange(Np) + 1
-        else:
-            ipt = 2 * np.arange(Np) + 1
-            iseg = 2 * np.arange(Np)
-
-        npt = self.vnodes[ipt]
-        nseg = self.vnodes[iseg]
-        #print "npt : ",npt
-        #print "nseg : ",nseg
-
-        assert  np.all(npt < 0), "something wrong with points"
-        assert  np.all(nseg > 0), "something wrong with segments"
-        #
-        #
-        # Create middle point on lring
-        #
-        # Warning lring recopy the node at the end of the sequence
-        #
-        # A problem arises from the fact that a vnodes sequence
-        # do no necessarily starts with a point (negative node)
-        #
-        #
-        tpm = []
-        for ik, k in enumerate(lring.coords):
-            pt = np.array(k)
-            try:
-                pm = (pt + pm1) / 2.
-                if self.vnodes[0] < 0:
-                    Gv.pos[nseg[ik - 1]] = (pm[0], pm[1])
-                else:
-                    Gv.pos[nseg[ik % Np]] = (pm[0], pm[1])
-                tpm.append(pm)
-                pm1 = pt
-            except:
-                pm1 = pt
-        #
-        # Update position of points in Gv
-        #
-        for nk in range(Np):
-            #nnode = -(nk+1)
-            Gv.pos[npt[nk]] = (p[0, nk], p[1, nk])
-
-        xr, yr = lring.xy
-
-        #
-        # Degree 1 points : (should not exist anymore)
-        #
-        # Determine diffraction points
-        #
-        # udeg1 :
-        # deg2 : if null:
-        #           the point is kept
-        #        if convex:
-        #           the point is kept
-        #        else:
-        #           the point is not kept
-        #
-        uconvex = np.nonzero(tcc == 1)[0] # convex point position
-        uzero = np.nonzero(tcc == 0)[0]   # planar point (joining two parallel segment)
-        udiffdoor = np.intersect1d(uzero, udeg2)  # degree 2 paralell points are often doors and windows
-        udiff = np.hstack((uconvex, udiffdoor)).astype('int') # diffracting point
-        #print "vnodes",self.vnodes
-        #print "tcc : ",tcc
-        #print "uzero : ",uzero
-        #print "udiffdoor : ",udiffdoor
-        #print "udiff",udiff
-        #print "udeg2",udeg2
-        #print "npt",npt
-        #if udiff!=[]:
-        #    print "diff : ",npt[udiff]
-        #if udeg2!=[]:
-        #    print "deg2 : ",npt[udeg2]
-        #if uzero!=[]:
-        #    print "zero :",npt[uzero]
-        #
-        # if show == True display points and polygon
-        #
-        if kwargs['show']:
-            points1 = shg.MultiPoint(lring)
-            for k, pt in enumerate(points1):
-                if k in uconvex:
-                    ax.plot(pt.x, pt.y, 'o', color='red')
-                elif k in udiffdoor:
-                    ax.plot(pt.x, pt.y, 'o', color='blue')
-                else:
-                    ax.plot(pt.x, pt.y, 'o', color=GRAY)
-
-            patch = PolygonPatch(self, facecolor='#6699cc',
-                                 edgecolor='#000000', alpha=0.5, zorder=2)
-            ax.add_patch(patch)
-        #pdb.set_trace()
-        #
-        #  1) Calculate node-node visibility
-        #
-        # The following exploits definition of convexity.
-        #
-        # Between all combinations of diffracting points
-        # create a segment and check whether it is fully included in the
-        # polygon.
-        # If verified then there is a visibility between the 2 points.
-        #
-        for nk in combinations(udiff, 2):
-            p1 = p[:, nk[0]]
-            p2 = p[:, nk[1]]
-            seg = shg.LineString(((p1[0], p1[1]), (p2[0], p2[1])))
-            if self.contains(seg):
-                Gv.add_edge(npt[nk[0]], npt[nk[1]], weight=0)
-
-        #
-        #  2) Calculate edge-edge and node-edge visibility
-        #
-        for nk in range(Np):   # loop on range of number of points
-            ptk = p[:, nk]     # tail point
-            phk = p[:, (nk + 1) % Np] # head point (%Np to get 0 as last point)
-
-            # lnk : unitary vector on segment nk
-            lk = phk - ptk
-            nlk = np.sqrt(np.dot(lk, lk))
-            lnk = lk / nlk
-
-            # the epsilon is (1/1000) of the segment length
-            epsilonk = nlk / 1000.  # this can be dangerous (epsilon can be large)
-
-            # x--o----------------------o--x
-            #    +eps                  -eps
-            pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
-            pcornerh = phk - lnk * epsilonk  # + n[:,nk]*epsilon
-
-        #
-        # in any case no ray towark nk
-        # if nk is convex no ray toward (nk-1)%Np
-        #
-        # start from the two extremity of the segment
-            for i, pcorner in enumerate([pcornert, pcornerh]):
-                #
-                #  if tail point
-                #           remove nk segment
-                #  and if the point is convex
-                #          remove previous segment
-                #
-                #  si point head
-                #
-                listpoint = range(Np)
-                listpoint.remove(nk)   # remove current point
-                if i == 0:  # first iteration pcornert
-                    if nk in uconvex:  # == 1
-                        listpoint.remove((nk - 1) % Np)
-                if i == 1:  # second iteration pcornerh
-                    if (nk + 1) % Np in uconvex: # ==1
-                        listpoint.remove((nk + 1) % Np)
-
-                for ns in listpoint:
-                    pts = p[:, ns]
-                    phs = p[:, (ns + 1) % Np]
-                    # Add B.Uguen 2/01/2014 no possible visibility relation between aligned segments
-                    if (not (isaligned(pts,phs,ptk) & isaligned(pts,phs,phk))):
-                        ls = phs - pts
-                        nls = np.sqrt(np.dot(ls, ls))
-                        lns = ls / nls
-                        epsilons = nls / 1000.
-                        pte = pts + lns * epsilons  # + n[:,ns]*epsilon
-                        phe = phs - lns * epsilons  # + n[:,ns]*epsilon
-                        tbr = pyu.bitreverse(16, 5) / 16.
-                        for alpha in tbr:
-                            pa = pte + alpha * (phe - pte)
-                            seg = shg.LineString((pcorner, pa))
-                            #print "seg: ",seg.xy
-                            #if npt[nk] == -3:
-                            #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=0.2,color='k')
-                            #    plt.draw()
-                            # topological error can be raised here
-                            seg2 = self.intersection(seg)
-                            #if self.contains(seg):
-                            if seg2.almost_equals(seg, decimal=4):
-                                #print alpha,nk,ns
-                                #plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=2,color='r')
-                                #Gv.add_edge(-(uconvex[nk]+1),ns+1,weight=10)
-                                if i == 0:
-                                    if nk in udiff:
-                                        Gv.add_edge(npt[nk], nseg[ns], weight=1)
-                                        #plt.plot(np.array([Gv.pos[npt[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[nk]][1],Gv.pos[nseg[ns]][1]]),'r')
-                                if i == 1:
-                                    if (nk + 1) % Np in udiff:
-                                        Gv.add_edge(npt[(nk + 1) % Np], nseg[ns], weight=1)
-                                        #plt.plot(np.array([Gv.pos[npt[(nk+1)%Np]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[(nk+1)%Np]][1],Gv.pos[nseg[ns]][1]]),'g')
-                                    #plt.draw()
-                                #if i==1:
-                                #if (((nseg[nk]==10) & (nseg[ns]==7)) or
-                                #    ((nseg[nk]==7) & (nseg[ns]==10))):
-                                #    pdb.set_trace()
-                                if nseg[nk] != nseg[ns]:
-                                    Gv.add_edge(nseg[nk], nseg[ns], weight=1)
-                                    #else:
-                                    #    print nseg[nk],nseg[ns]
-                                    #    print pts,phs
-                                    #    print ptk,phk
-                                    #if (((nseg[nk]==10) & (nseg[ns]==7)) or
-                                    #    ((nseg[nk]==7) & (nseg[ns]==10))):
-                                    #    plt.plot(np.array([Gv.pos[nseg[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[nseg[nk]][1],Gv.pos[nseg[ns]][1]]),'b')
-                                    #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),'b')
-                                    #    print "seg: ",seg.xy
-                                    #    print "seg2: ",seg2.xy
-                                    #    print nseg[nk],nseg[ns]
-                                    #    print pcorner , ptk
-                                    #    print  alpha , pa ,pte
-                                    #    plt.draw()
-                                    #    raw_input()
-                                break
-                    #else:
-                        #print p
-                        #print ns
-                        #print nk
-                        #print 'nsegnk : ',nseg[nk]
-                        #print 'nsegns', nseg[ns]
-                        #print 'ptk : ',ptk
-                        #print 'phk : ',phk
-                        #print 'pts : ',pts
-                        #print 'phs : ',phs
-                        #print "aligne :",nseg[nk],nseg[ns]
-                        #pdb.set_trace()
-
-        if kwargs['show']:
-            nodes = np.array(Gv.nodes())
-            uneg = list(nodes[np.nonzero(nodes < 0)[0]])
-            upos = list(nodes[np.nonzero(nodes > 0)[0]])
-            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=upos,
-                                   node_color='blue', node_size=300, alpha=0.3)
-            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=uneg,
-                                   node_color='red', node_size=300, alpha=0.3)
-            nx.draw_networkx_labels(Gv, Gv.pos)
-
-            ndnd, nded, eded = gru.edgetype(Gv)
-
-            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
-                                   edge_color='blue', linewidth=2)
-            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
-                                   edge_color='red', linewidth=2)
-            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
-                                   edge_color='green', linewidth=2)
-
-            #label = {}
-            #for (u,v) in Gv.edges():
-            #    d = Gv.get_edge_data(u,v)
-            #    label[(u,v)]=d['weight']
-
-            #edge_label=nx.draw_networkx_edge_labels(Gv,Gv.pos,edge_labels=label)
-
-        return(Gv)
-
-    def showGv(self, **kwargs):
-        """ show graph Gv
-
-        Parameters
-        ----------
-        display
-        fig
-        ax
-        ndnd    : boolean
-            display node/node
-        nded    : boolean
-            display node/edge
-        eded    : boolean
-            display edge/edge
-        linewidth: float
-            default 2
-
-        """
-        defaults = {'display': False,
-                    'fig': [],
-                    'ax': [],
-                    'ndnd': True,
-                    'nded': False,
-                    'ndnd': False,
-                    'linewidth': 2
-                    }
-
-        for key, value in defaults.items():
-            if key in kwargs:
-                setattr(self, key, kwargs[key])
-            else:
-                setattr(self, key, value)
-                kwargs[key] = value
-
-        if kwargs['fig'] == []:
-            fig = plt.figure()
-            fig.set_frameon(True)
-        else:
-            fig = kwargs['fig']
-
-        if kwargs['ax'] == []:
-            ax = fig.gca()
-        else:
-            ax = kwargs['ax']
-
-        lring = self.exterior
-        points = shg.MultiPoint(lring)
-        for k, pt in enumerate(points):
-            if tcc[k % Np] == 1:
-                ax.plot(pt.x, pt.y, 'o', color='red')
-            else:
-                ax.plot(pt.x, pt.y, 'o', color=GRAY)
-            k = k + 1
-
-        patch = PolygonPatch(self, facecolor='#6699cc',
-                             edgecolor='#6699cc', alpha=0.5, zorder=2)
-        ax.add_patch(patch)
-        nodes = np.array(Gv.nodes())
-
-        uneg = list(nodes[np.nonzero(nodes < 0)[0]])
-        upos = list(nodes[np.nonzero(nodes > 0)[0]])
-        if kwargs['nodes']:
-            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=upos,
-                                   node_color='blue', node_size=300, alpha=0.3)
-            nx.draw_networkx_nodes(Gv, Gv.pos, nodelist=uneg,
-                                   node_color='red', node_size=300, alpha=0.3)
-            nx.draw_networkx_labels(Gv, Gv.pos)
-
-            ndnd, nded, eded = gru.edgetype(Gv)
-
-        if kwargs['eded']:
-            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
-                                   edge_color='blue', linewidth=2)
-        if kwargs['ndnd']:
-            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
-                                   edge_color='red', linewidth=2)
-        if kwargs['nded']:
-            nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
-                                   edge_color='green', linewidth=2)
-
-        return(fig, ax)
-
-    def ptconvex(self, display=False):
-        """ Return a list of booleans indicating points convexity
-
-        Parameters
-        ----------
-
-        display : boolean
-            default False
-
-
-        Returns
-        -------
-
-        tcc     : np.array (1x Nseg)
-            1 if convex , -1 if concav , 0 if plane
-        n       :  array(2xNseg)
-            segments normals
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.util.geomutil import *
-            >>> import shapely.geometry as shg
-            >>> import matplotlib.pyplot as plt
-            >>> points  = shg.MultiPoint([(0, 0), (0, 1), (3.2, 1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
-            >>> N = len(points)
-            >>> polyg   = Polygon(points)
-            >>> tcc,n   = polyg.ptconvex()
-            >>> #k = 0
-            >>> #for p in points:
-            >>> #  if tcc[k] == 1 :
-            >>> #      plt.plot(p.x, p.y, 'o', color='red',alpha=1)
-            >>> #  else:
-            >>> #      plt.plot(p.x, p.y, 'o', color='blue',alpha=0.3)
-            >>> #  k = k+1
-            >>> #polyg.plot()
-            >>> #plt.figure()
-            >>> #points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])
-            >>> #poly    = Polygon(points)
-            >>> #tcc,n   = polyg.ptconvex()
-            >>> #poly.plot()
-
-
-        Notes
-        ------
-
-            This function determines the convex and concav points of a polygon.
-            As there is no orientation convention for the polygon the sign of the cross
-            product can't be directly interpreted. So we exploit the following
-            property :
-
-            Let N be the number of points of the Polygon. N  = Nx + Nc where
-            Nx is the number of convex points and Nc the number of concav points
-
-            We have Nx >= Nc
-
-            If a point is common to two parallel segments, the cross product is = 0
-
-        See Also
-        --------
-
-        Lr2n
-
-        """
-
-        lring = self.exterior
-
-        #
-        # Calculate interior normals
-        #
-
-        x, y = lring.xy
-        Np = len(x) - 1
-        Nseg = Np
-        p = np.array([x[0:-1], y[0:-1]])
-        n = Lr2n(p)
-
-        tcc = np.zeros(Np)
-
-        #
-        # cross product between two adjascent normals
-        #
-        for k in range(Nseg):
-            nk = n[:, (k - 1) % Nseg]
-            nkp1 = n[:, k]
-            v = np.cross(nk, nkp1)
-            tcc[k] = v
-
-        #
-        # warning this test is fragile
-        #
-        # debug : print tcc
-        #
-        # The purpose here is to remove flat transition
-        #
-        upos = np.nonzero(tcc > 1e-2)[0]
-        uneg = np.nonzero(tcc < -1e-2)[0]
-
-        if len(upos) > len(uneg):
-            nconvex = uneg
-            nconcav = upos
-
-        if len(upos) < len(uneg):
-            nconvex = upos
-            nconcav = uneg
-
-        if len(upos) == len(uneg):
-            print "error polygon is a star "
-            print "tcc",tcc
-            print "upos",upos
-            print "uneg",uneg
-            self.plot()
-            pdb.set_trace()
-
-
-        tcc = np.zeros(Np)
-        tcc[nconvex] = 1
-        tcc[nconcav] = -1
-        #print "ptseg tcc ",tcc
-        upos = np.nonzero(tcc > 1e-4)[0]
-        return(tcc, n)
 
 
 #def createPolygons(

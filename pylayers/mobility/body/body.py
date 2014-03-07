@@ -206,7 +206,9 @@ class Body(object):
             self.sl[i,:] = np.array([t,h,r])
 
         self.ncyl = len(di['cylinder'].values())
-        
+
+        self.idcyl={}
+        [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
         # update devices dict 
         self.dev={}
         for dev in di['device'].keys():
@@ -729,11 +731,13 @@ class Body(object):
         k : frame index
 
         """
-        defaults = {'iframe' : 0,
+        defaults = { 
+                    'iframe' : 0,
                     'widthfactor' : 1.,
                     'topos':False,
                     'pattern':False,
                     'ccs':False,
+                    'color':'white',
                     'k':0}
 
         for k in defaults:
@@ -745,9 +749,18 @@ class Body(object):
             if k not in defaults:
                 args[k] = kwargs[k]
 
-        visual.set_viewer(mlab.gcf())
+        f = mlab.gcf()
+        #visual.set_viewer(f)
+        #f.scene.background=(1,1,1)
 
+        
         fId = kwargs['iframe']
+
+
+        cold = pyu.coldict()
+        colhex = cold[kwargs['color']]
+        body_color = tuple(pyu.rgb(colhex)/255.)
+        
 
         for k in range(self.ncyl):
 
@@ -765,7 +778,10 @@ class Body(object):
             cc = (pta+phe)/2.
             l = np.sqrt(np.sum(ax**2))
             cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
-                       axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+                       axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l,color=body_color)
+
+            mlab.pipeline.surface(cyl.polydata)
+            f.children[-1].name=self.name +' ' +self.idcyl[k]            
 
             if kwargs['ccs']:
 
@@ -782,7 +798,7 @@ class Body(object):
                 Ant =  ant.Antenna(self.dev[key]['file'])
 
                 if not hasattr(Ant,'SqG'):
-                    Ant.Fsynth()
+                    Ant.Fsynth(theta=np.linspace(0,np.pi,25),phi= np.linspace(0,2*np.pi,45))
 
                 U = self.dcs[key]
                 V = Ant.SqG[kwargs['k'],:,:]

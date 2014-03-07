@@ -1,7 +1,4 @@
-pylayers.signal.waveform module
+pylayers.signal.waveform
 ===============================
 
 .. automodule:: pylayers.signal.waveform
-    :members:
-    :undoc-members:
-    :show-inheritance:

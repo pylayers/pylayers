@@ -1,4 +1,36 @@
 #-*- coding:Utf-8 -*-
+"""
+
+.. currentmodule:: pylayers.location.geometric.constraints.cla
+
+Constraint Layer Array (CLA) Class
+==================================
+
+.. autosummary::
+   :toctree: generated/
+
+   CLA.__init__
+   CLA.__repr__
+   CLA.info
+   CLA.update
+   CLA.compute
+   CLA.rescale
+   CLA.annulus_bound
+   CLA.append
+   CLA.remove
+   CLA.setvcw
+   CLA.merge2
+   CLA.valid_v
+   CLA.refine
+   CLA.show3
+   CLA.prob
+   CLA.gapdetect
+   CLA.gapdetect2
+   CLA.min_dist
+   CLA.estpos
+   CLA.estpos2
+
+"""
 #####################################################################
 #This file is part of RGPA.
 
@@ -160,6 +192,8 @@ class CLA(object):
             self.parmsh = parmsh
 
     def __repr__(self):
+        """
+        """
         np.set_printoptions(precision=3)
         s = '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format('node','peer','type', 'rat', 'p', 'value', 'std', 'runable' , 'usable' )
         for c in self.c:
@@ -178,6 +212,8 @@ class CLA(object):
         return s
 
     def info(self):
+        """ get information about constraint
+        """
         for c in self.c:
             c.info()
 
@@ -193,42 +229,37 @@ class CLA(object):
         self.usable=[c.usable for c in self.c]
 
     def compute(self,pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
-        """
-        Compute the cla to estimate the postion
-    
+        """ Compute the cla to estimate the postion
+
         Parameters
         ----------
 
-
-        pe : boolean 
+        pe : boolean
            set to True to compute the position estimation store into self.pe
-
         mergeRSS : boolean
             True : if there is RSS in cla, they are used to find the smallest merge
             False (default): even if there is RSS in cla, they are neglected during the merge process
-
         refineRSS :boolean
             True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous
                             during the refine process
-            False: if there is RSS in cla, they are ignore during the refine process 
-
-        NBOXMAX : integer 
+            False: if there is RSS in cla, they are ignore during the refine process
+        NBOXMAX : integer
             Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)
-
-        NVOLMIN : float 
+        NVOLMIN : float
             Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)
-
         HT : boolean
             True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
-                    in estpos2 method 
-            False : no HT methos is applied 
+                    in estpos2 method
+            False : no HT methos is applied
+
+        Notes
+        -----
 
             Description of the hypothesis testing (HT) method in:
-            Hybrid positioning based on hypothesis thesting
-            N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+
+        ..  [APLU2012]   N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen.
             A Hybrid Positioning Method Based on Hypothesis Testing
-            ,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
-            http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&arnumber=6205594
+            ,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012 http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&arnumber=6205594
 
 
         Returns
@@ -237,7 +268,7 @@ class CLA(object):
         return : boolean
             True if the position estimation has been performed.
 
-        update a self.pe which contain the estimated position   
+        update a self.pe which contain the estimated position
 
 
         """
@@ -280,7 +311,7 @@ class CLA(object):
 
         Returns
         -------
-        
+
         Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c
 
         """
@@ -296,7 +327,7 @@ class CLA(object):
 
         Update cmin and cmax of constraints for a given self.vcw
 
-        
+
 
 
         :Parameters:
@@ -316,7 +347,7 @@ class CLA(object):
 
         add a constraint into the CLA
 
-        
+
 
 
         Parameters
@@ -351,7 +382,7 @@ class CLA(object):
     def remove(self, k):
         """OBSOLETE/ TO BE DEVELOPPED
 
-        
+
 
         remove(k) : remove a constraint to cla
         """
@@ -451,8 +482,6 @@ class CLA(object):
                 del tlb
             except:
                 pass
-
-        
 
             for c in self.c:                # find intersection between all constraints for the current vcw
                 if (c.type != 'Exclude'):
@@ -588,7 +617,7 @@ class CLA(object):
         All boxes partially inside of the VA are divided into octants. Each octants are tested into the self.valid.
 
 
-        
+
         Parameters
         ----------
 

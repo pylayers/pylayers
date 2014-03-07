@@ -1,4 +1,4 @@
-pylayers.gis.layout module
+pylayers.gis.layout
 ==========================
 
 .. automodule:: pylayers.gis.layout

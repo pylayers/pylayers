@@ -13,10 +13,3 @@ Submodules
    pylayers.location.geometric.constraints.tdoa
    pylayers.location.geometric.constraints.toa
 
-Module contents
----------------
-
-.. automodule:: pylayers.location.geometric.constraints
-    :members:
-    :undoc-members:
-    :show-inheritance:

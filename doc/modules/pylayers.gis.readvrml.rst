@@ -1,7 +1,4 @@
-pylayers.gis.readvrml module
+pylayers.gis.readvrml
 ============================
 
 .. automodule:: pylayers.gis.readvrml
-    :members:
-    :undoc-members:
-    :show-inheritance:

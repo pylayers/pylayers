@@ -64,7 +64,7 @@ def rename(_filename,itx,irx,rep='./'):
 
     See Also
     --------
-
+    
     tratotud
 
     """
@@ -1218,9 +1218,8 @@ class Simul(object):
         try:
             self.filestr = self.config.get("files", "struc")
             # force .str extension
-            f,e = self.filestr.split['.']
+            f,e = self.filestr.split('.')
             self.filestr = f+'.str'
-            print self.filestr
         except:
             raise NameError('Error in section struc from '+ _filesimul)
 
@@ -1522,7 +1521,7 @@ class Simul(object):
         Parameters
         ----------
 
-        S 
+        S
         tx
         rx
         wav
@@ -1533,7 +1532,7 @@ class Simul(object):
         crxp =-1
         ctxp =-1
         tcir = {}
-        tx = self.tx.position 
+        tx = self.tx.position
         Ntx = len(tx[0])
         rx = self.rx.position
         Nrx = len(rx[0])
@@ -1559,7 +1558,7 @@ class Simul(object):
 
             r3d = r2d.to3D(self.L)
             r3d.locbas(self.L)
-            r3d.fillinter(self.L)   
+            r3d.fillinter(self.L)
             Ct  = r3d.eval(self.fGHz)
             sca = Ct.prop2tran(self.tx.A,self.rx.A)
             cir = sca.applywavB(self.wav.sfg)
@@ -1568,8 +1567,10 @@ class Simul(object):
 
     def loadcir(self, itx, irx):
         """
+
         Parameters
         ----------
+
         itx : Tx index
         irx : Rx index
 
@@ -1604,6 +1605,7 @@ class Simul(object):
 
         Parameters
         ----------
+
         itx : Tx index
         irx : Rx index
         mode : str
@@ -1686,6 +1688,7 @@ class Simul(object):
         """
             Parameters
             ----------
+
             itx
             irx
             values
@@ -1932,9 +1935,9 @@ class Simul(object):
 
         self.L._show3(newfig=False,opacity=0.7)
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-            title=False,colorbar=False,newfig=False,name = 'Antenna Tx')
+            title=False,colorbar=False,newfig=False)
         Arx._show3(T=Trx.reshape(3,3),po=prx,
-            title=False,colorbar=False,newfig=False,name = 'Antenna Rx')
+            title=False,colorbar=False,newfig=False)
         if rays != []:
             rays._show3(**kwargs)
 

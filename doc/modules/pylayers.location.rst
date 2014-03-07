@@ -6,7 +6,7 @@ Subpackages
 
 .. toctree::
 
-    pylayers.location.algebraic
+    pylayers.location.algebraic.algebraic
     pylayers.location.geometric
     pylayers.location.learning
 

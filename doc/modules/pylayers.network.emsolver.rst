@@ -1,7 +1,4 @@
-pylayers.network.emsolver module
+pylayers.network.emsolver
 ================================
 
 .. automodule:: pylayers.network.emsolver
-    :members:
-    :undoc-members:
-    :show-inheritance:

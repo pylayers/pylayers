@@ -1,7 +1,4 @@
-pylayers.antprop.channelc module
+pylayers.antprop.channelc
 ================================
 
 .. automodule:: pylayers.antprop.channelc
-    :members:
-    :undoc-members:
-    :show-inheritance:

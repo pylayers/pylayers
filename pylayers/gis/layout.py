@@ -816,6 +816,7 @@ class Layout(object):
 
 
         self.pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
+        self.pg = np.hstack((self.pg,0.))
 
         ntail = map(lambda x : nx.neighbors(self.Gs,x)[0],useg)
         nhead = map(lambda x : nx.neighbors(self.Gs,x)[1],useg)
@@ -5882,6 +5883,28 @@ class Layout(object):
                     walls.append(wall)
         return(walls)
 
+    def ptin(self,pt=np.array((0, 0, 0))):
+        """
+        check if a point is in the Layout
+
+        Parameters
+        ----------
+        pt : point (ndarray)
+
+        Returns
+        -------
+        boolean : True if inside
+        """
+
+        pt = pt[:2]
+
+        x= np.array((self.ax[:2]))
+        y= np.array((self.ax[2:]))
+
+        c0 = pt[0]<x[1] and  pt[0]>x[0]
+        c1 = pt[1]<y[1] and  pt[1]>y[0]
+
+        return (c0 & c1)
 
     def pt2cy(self, pt=np.array((0, 0))):
         """ point to cycle
@@ -6859,6 +6882,10 @@ class Layout(object):
         Parameters
         ----------
 
+        newfig : Boolean
+            create a new mayavi Figure
+        opacity : float ([0,1])
+            set slab opacity
         centered : Boolean
             if True the layout is centered around its center of gravity
 
@@ -6870,9 +6897,12 @@ class Layout(object):
         Examples
         --------
 
-        >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini')
-        >>> pg = L.mayafile()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.gis.layout import *
+            >>> L = Layout()
+            >>> L._show3()
 
         """
 
@@ -7056,10 +7086,11 @@ class Layout(object):
 
         if newfig:
             mlab.clf()
-            f = mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+            f = mlab.figure(bgcolor=(1,1,1))
         else :
             f = mlab.gcf()
-
+            f.scene.background=(1,1,1)
+            
         surf = mlab.pipeline.surface(mesh, opacity=opacity)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )

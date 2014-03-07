@@ -1,11 +1,43 @@
 # -*- coding:Utf-8 -*-
 #from numpy import *
+"""
+Multiwall module
+================
+
+.. autosummary::
+    :toctree: generated/
+
+
+    PL0
+    PL
+    Losst
+    Loss0_v2
+    Loss_mur_the
+    Loss0
+    Loss_diff
+    Loss_obstacle
+    Loss_2obstacle
+    LOSS_furniture
+    OneSlopeMdl
+    Dgrid_points
+    Dgrid_zone
+    calnu
+    Carretosegment
+    Intersection
+    Dis
+    Interline
+    showfurniture
+    visuPts
+    cdf
+
+"""
+
 import doctest
-import logging 
-import numpy as np 
+import logging
+import numpy as np
 from scipy import io
-import matplotlib.pylab as plt 
-import pylayers.simul.simulem 
+import matplotlib.pylab as plt
+import pylayers.simul.simulem
 import pylayers.measures.mesuwb
 import pdb
 
@@ -176,20 +208,20 @@ def PL(fGHz,pts,p,n=2.0):
     return(PL) 
 
 def Losst(L,fGHz,p1,p2):
-    """  Calculate Loss between links p1  p2 
+    """  Calculate Loss between links p1  p2
 
     Parameters
     ----------
 
     L   : Layout object
-    
+
     fGHz : np.array
            frequency GHz
 
-    p1 : source point 
+    p1 : source point
         (2 x Np) array or (2,) array
 
-    p2 : observation point 
+    p2 : observation point
         (2 x Np) array or (2,) array
 
     Examples
@@ -198,15 +230,15 @@ def Losst(L,fGHz,p1,p2):
     .. plot::
         :include-source:
 
-        >>> import matplotlib.pyplot as plt 
-        >>> from pylayers.simul.simulem import * 
+        >>> import matplotlib.pyplot as plt
+        >>> from pylayers.simul.simulem import *
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.multiwall import *
         >>> S = Simul()
-        >>> S.layout('Lstruc.ini')
-        >>> fGHz = 4 
+        >>> S.layout('where1.ini')
+        >>> fGHz = 4
         >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx,Rx[1,0:2])
+        >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2])
         >>> fig,ax = S.L.showGs()
         >>> tit = plt.title('test Losst')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
@@ -228,14 +260,14 @@ def Losst(L,fGHz,p1,p2):
         Nlink = sh2[1]
     if (len(sh1)<2) & (len(sh2)<2):
         Nlink = 1
-    
+
     data = L.angleonlink(p1,p2)
 
-    # as many slabs as segments 
+    # as many slabs as segments
     slabs = L.sla[data['s']]
-   
+
     cslab = np.unique(slabs)
-    
+
     LossWallo = np.zeros((len(fGHz),Nlink))
     LossWallp = np.zeros((len(fGHz),Nlink))
     EdWallo = np.zeros((len(fGHz),Nlink))
@@ -266,7 +298,7 @@ def Losst(L,fGHz,p1,p2):
         #
         Wallo = np.array(map(lambda x: np.sum(lko[:,indices[x]:indicep[x]],axis=1),irange)).T
         Wallp = np.array(map(lambda x: np.sum(lkp[:,indices[x]:indicep[x]],axis=1),irange)).T
-        
+
         Edo = np.array(map(lambda x: np.sum(do[indices[x]:indicep[x]]),irange)).T
         Edp = np.array(map(lambda x: np.sum(dp[indices[x]:indicep[x]]),irange)).T
 
@@ -318,7 +350,7 @@ def Losst(L,fGHz,p1,p2):
 
 #    return(Lwo,Lwp,Edo,Edp)
 def Loss0_v2(L,Pts,fGHz,p):
-    """ 
+    """
 
     Parameters
     ----------
@@ -333,10 +365,10 @@ def Loss0_v2(L,Pts,fGHz,p):
            frequency 
     p  : point
         source points
-    
+
     Returns
     -------
-    
+
     Lwo : Losses in wall polarization o
     Lwp : Losses in wall polarization p
     Edo :  polarization o
@@ -348,29 +380,29 @@ def Loss0_v2(L,Pts,fGHz,p):
     .. plot::
         :include-source:
 
-        >>> import matplotlib.pyplot as plt 
-        >>> from pylayers.simul.simulem import * 
-        >>> from pylayers.measures.mesuwb import *
-        >>> from pylayers.antprop.multiwall import *
-        >>> S = Simul()
-        >>> S.layout('Lstruc.ini','matDB.ini','slabDB.ini')
-        >>> fGHz = 4 
-        >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
-        >>> fig,ax = S.L.showGs()
-        >>> tit = plt.title('test Loss0_v2')
-        >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
-        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
-        >>> plt.show()
-       
+#        >>> import matplotlib.pyplot as plt
+#        >>> from pylayers.simul.simulem import *
+#        >>> from pylayers.measures.mesuwb import *
+#        >>> from pylayers.antprop.multiwall import *
+#        >>> S = Simul()
+#        >>> S.layout('Where1.ini')
+#        >>> fGHz = 4
+#        >>> Tx,Rx = ptw1()
+#        >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
+#        >>> fig,ax = S.L.showGs()
+#        >>> tit = plt.title('test Loss0_v2')
+#        >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
+#        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
+#        >>> plt.show()
+
     Notes
     -----
 
-    DEPRECATED : Use losst instead 
+    DEPRECATED : Use losst instead
 
     """
 
-    logging.warning('DEPRECATED function')     
+    logging.warning('DEPRECATED function')
 
     N   = np.shape(Pts)[0]
     Lwo = np.array([])
@@ -397,13 +429,13 @@ def Loss0_v2(L,Pts,fGHz,p):
                     name = L.Gs.node[k]['name']
                 #if k in S.indoor.ce.keys():
                 #if k in S.L.ce.keys():
-                # nom du sous-segment  
+                # nom du sous-segment
                 #    indss = S.L.ce[k][0]
                 #    name  = S.L.sl.di[indss]
                 #    print name
-                #"else:  
-                # nom du segment   
-                #    name = S.L.Gs.node[k]['name'] 
+                #"else:
+                # nom du segment
+                #    name = S.L.Gs.node[k]['name']
                 the = theta[i]
                 # idea paper : comparison multiwall th=0 th=variable
                 # comparison mesurement
@@ -427,43 +459,6 @@ def Loss0_v2(L,Pts,fGHz,p):
         Edp = np.hstack((Edp,edp))
 
     return(Lwo,Lwp,Edo,Edp)
-
-def Loss0_v2_separe(S,pi,f,p):
-    """ Loss0_v2_separe
-
-    Parameters
-    ----------
-
-    S 
-    pi ????
-    f 
-    p 
-    """
-    # for calibration the loss multiwall
-    lwo   = np.array([])
-    lwp   = np.array([])
-    Theta = np.array([])
-    seglist,theta = S.L.angleonlinkold(p,pi)
-    i = 0
-    for k in seglist:
-        if k in S.L.ce.keys():
-            indss = S.L.ce[k][0]
-            name = S.L.sl.di[indss]
-        else:
-            name =S.L. name[k]
-        the = theta[i]
-        i = i + 1
-
-        lko,lkp = S.sl[name].losst(f,the)
-        if name == 'PARTITION':
-            lwo = hstack((lwo,lko))
-            lwp = hstack((lwp,lkp))
-            Theta = hstack((Theta,the))
-        else:
-            lwo = lwo
-            lwp = lwp
-            Theta = Theta
-    return(seglist,lwo,lwp,Theta)
 
 def Loss_mur_the(S,pi,f,p):
     """
@@ -515,15 +510,15 @@ def Loss_diff(u):
 
     return(Ld)
 
-def Diffraction_parameter(h,d1,d2,fGHz):
+def calnu(h,d1,d2,fGHz):
     """ Calculate the diffraction Fresnel parameter
 
     Parameters
     ----------
 
-    h  : height (meter) 
+    h  : signed height w.r.t LOS (meter)
     d1 : distance 1 (meter)
-    d2 : distance 2 (meter) 
+    d2 : distance 2 (meter)
     fGHz  : frequency GHz
 
     Notes
@@ -615,7 +610,7 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
           
                     else:
                         return(Xa,Ya)
-          
+
 
 def Dis(x1,y1,x2,y2,x3,y3):
     """ Distance between a point and a line
@@ -660,7 +655,7 @@ def Interline(x1,y1,x2,y2,Obstacle):
         else:
             SS = hstack((SS,l))
     return(SS)
-          
+
 def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
     """
     Parameters
@@ -689,8 +684,8 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
                 d12 = np.sqrt((P1[0]-x2)*(P1[0]-x2)+(P1[1]-y2)*(P1[1]-y2)-h1*h1)
                 d21 = np.sqrt((P2[0]-x1)*(P2[0]-x1)+(P2[1]-y1)*(P2[1]-y1)-h2*h2)
                 d22 = np.sqrt((P2[0]-x2)*(P2[0]-x2)+(P2[1]-y2)*(P2[1]-y2)-h2*h2)
-                v1 =Diffraction_parameter(h1,d11,d12,f)
-                v2 =Diffraction_parameter(h2,d21,d22,f)
+                v1 = calnu(h1,d11,d12,f)
+                v2 = calnu(h2,d21,d22,f)
                 v = max(v1,v2)
                 Ld1 = Loss_diff(v)
               
@@ -719,7 +714,7 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
                     Ld2 = 0
                 else:
                     hmt = hm - hm2
-                    v0t = Diffraction_parameter(hmt,dmt,d0m,f)
+                    v0t = calnu(hmt,dmt,d0m,f)
                     Ld2 = Loss_diff(v)
 
                 Ld = Ld1 + Ld2
@@ -731,8 +726,8 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
             dis12 = np.sqrt((Pint1[0]-x2)*(Pint1[0]-x2)+(Pint1[1]-y2)*(Pint1[1]-y2)+hh*hh)
             dis21 = np.sqrt((Pint2[0]-x1)*(Pint2[0]-x1)+(Pint2[1]-y1)*(Pint2[1]-y1)+hh*hh)
             dis22 = np.sqrt((Pint2[0]-x2)*(Pint2[0]-x2)+(Pint2[1]-y2)*(Pint2[1]-y2)+hh*hh)
-            vh1 = Diffraction_parameter(hh,dis11,dis12,f)
-            vh2 = Diffraction_parameter(hh,dis21,dis22,f)
+            vh1 = calnu(hh,dis11,dis12,f)
+            vh2 = calnu(hh,dis21,dis22,f)
             vh = max(vh1,vh2)
             Ldh = Loss_diff(vh)
             LD = hstack((LD,Ldh))
@@ -752,7 +747,7 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
             h = Dis(Po[0],Po[1],x1,y1,x2,y2)
             d1 = np.sqrt((Po[0]-x1)*(Po[0]-x1)+(Po[1]-y1)*(Po[1]-y1)-h*h)                  
             d2 = np.sqrt((Po[0]-x2)*(Po[0]-x2)+(Po[1]-y2)*(Po[1]-y2)-h*h)
-            v = Diffraction_parameter(h,d1,d2,f)
+            v = calnu(h,d1,d2,f)
             Ld = Loss_diff(v)
             LD = hstack((LD,Ld))
 
@@ -783,9 +778,9 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
             dc1 = np.sqrt((pc[0]-x1)*(pc[0]-x1)+(pc[1]-y1)*(pc[1]-y1)-hc*hc)                  
             dc2 = np.sqrt((pc[0]-x2)*(pc[0]-x2)+(pc[1]-y2)*(pc[1]-y2)-hc*hc)
 
-            va = Diffraction_parameter(ha,da1,da2,f)
-            vb = Diffraction_parameter(hb,db1,db2,f)
-            vc = Diffraction_parameter(hc,dc1,dc2,f)
+            va = calnu(ha,da1,da2,f)
+            vb = calnu(hb,db1,db2,f)
+            vc = calnu(hc,dc1,dc2,f)
             vmax = max(va,vb,vc)
             Ld1 = Loss_diff(vmax)
 
@@ -834,7 +829,7 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
                         pp = [np.hstack((pm,pn))[2*nl[i]],np.hstack((pm,pn))[2*nl[i]+1]]
                         ldt = np.sqrt((pp[0]-x1)*(pp[0]-x1)+(pp[1]-y1)*(pp[1]-y1)-hreal*hreal)               
                         ld0 = d01 - ldt
-                        vl = Diffraction_parameter(hmt,ld0,ldt,f)
+                        vl = calnu(hmt,ld0,ldt,f)
                         Ldl = Loss_diff(vl)
                         VL = hstack((VL,Ldl))   
                 Ldl = max(VL)
@@ -855,7 +850,7 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
                         pp = [hstack((pm,pn))[2*nr[i]],hstack((pm,pn))[2*nr[i]+1]]              
                         rdt = np.sqrt((pp[0]-x2)*(pp[0]-x2)+(pp[1]-y2)*(pp[1]-y2)-hreal*hreal)
                         rd0 = d02 -rdt
-                        vr = Diffraction_parameter(hmt,rd0,rdt,f)
+                        vr = calnu(hmt,rd0,rdt,f)
                         Ldr = Loss_diff(vr)
                         VR = hstack((VR,Ldr))
                 Ldr = max(VR)
@@ -870,8 +865,8 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
             dis12 = np.sqrt((Pint1[0]-x2)*(Pint1[0]-x2)+(Pint1[1]-y2)*(Pint1[1]-y2)+hh*hh)
             dis21 = np.sqrt((Pint2[0]-x1)*(Pint2[0]-x1)+(Pint2[1]-y1)*(Pint2[1]-y1)+hh*hh)
             dis22 = np.sqrt((Pint2[0]-x2)*(Pint2[0]-x2)+(Pint2[1]-y2)*(Pint2[1]-y2)+hh*hh)
-            vh1 = Diffraction_parameter(hh,dis11,dis12,f)
-            vh2 = Diffraction_parameter(hh,dis21,dis22,f)
+            vh1 = calnu(hh,dis11,dis12,f)
+            vh2 = calnu(hh,dis21,dis22,f)
             vh = max(vh1,vh2)
             Ldh = Loss_diff(vh)
             LD = hstack((LD,Ldh))
@@ -882,7 +877,7 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
     return(LM)                              
 
 def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
-    """ Yu Lei function 
+    """ Yu Lei function
     """
     S1 = Interline(x1,y1,x2,y2,Obstacle1)
     S2 = Interline(x1,y1,x2,y2,Obstacle2)
@@ -908,7 +903,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
             po = p1
         if p2==p3:
             po = p2
-        Ga = [po]                  
+        Ga = [po]
 
         Pa = [SEG[K[0]][0],SEG[K[0]][1]]
         Pb = [SEG[K[0]][2],SEG[K[0]][3]]
@@ -917,7 +912,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
 
         if Pa==Pd:
             pp = Pa
-            Gb = [Pa,Pb,Pc]      
+            Gb = [Pa,Pb,Pc]
 
         if Pb==Pc:
             pp = Pb
@@ -926,7 +921,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
     SEG = Carretosegment(Obstacle2)
     K = [val for val in N if val not in S2]
 
-    if S2[0]+2==S2[1]:      
+    if S2[0]+2==S2[1]:
         p1 = [SEG[K[0]][0],SEG[K[0]][1]]
         p2 = [SEG[K[0]][2],SEG[K[0]][3]]
         p3 = [SEG[K[1]][0],SEG[K[1]][1]]
@@ -944,7 +939,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
                 po = p1
         if p2==p3:
                 po = p2
-        Ga2 = [po]      
+        Ga2 = [po]
 
         Pa = [SEG[K[0]][0],SEG[K[0]][1]]
         Pb = [SEG[K[0]][2],SEG[K[0]][3]]
@@ -970,7 +965,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
     h_bottom = Dis(Gbottom[:,0],Gbottom[:,1],x1,y1,x2,y2)
     d1_upper = np.sqrt((Gupper[:,0]-x1)*(Gupper[:,0]-x1)+(Gupper[:,1]-y1)*(Gupper[:,1]-y1)-h_upper[:]*h_upper[:])
     d2_upper = np.sqrt((Gupper[:,0]-x2)*(Gupper[:,0]-x2)+(Gupper[:,1]-y2)*(Gupper[:,1]-y2)-h_upper[:]*h_upper[:])
-    v_upper = Diffraction_parameter(h_upper[:],d1_upper[:],d2_upper[:],f)
+    v_upper = calnu(h_upper[:],d1_upper[:],d2_upper[:],f)
     v_max1=max(v_upper)
     nn = find(v_upper==v_max1)
     Ld = Loss_diff(v_max1)
@@ -986,7 +981,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
             height = (hreal - Hstd)[nl]
             dl1 = np.sqrt((Gupper[left][nl][:,0]-xt)*(Gupper[left][nl][:,0]-xt)+(Gupper[left][nl][:,1]-yt)*(Gupper[left][nl][:,1]-yt)-hreal[nl][:]*hreal[nl][:])
             dl2 = d1_upper[nn] - dl1
-            vl = Diffraction_parameter(height[:],dl1[:],dl2[:],f)
+            vl = calnu(height[:],dl1[:],dl2[:],f)
             Ll = Loss_diff(max(vl))
         else:
             Ll = 0
@@ -1002,7 +997,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
             height = (hreal - Hstd)[nr]
             dr2 = np.sqrt((Gupper[right][nr][:,0]-xr)*(Gupper[right][nr][:,0]-xr)+(Gupper[right][nr][:,1]-yr)*(Gupper[right][nr][:,1]-yr)-hreal[nr][:]*hreal[nr][:])  
             dr1 = d2_upper[nn] - dr2
-            vr = Diffraction_parameter(height[:],dr1[:],dr2[:],f)
+            vr = calnu(height[:],dr1[:],dr2[:],f)
             Lr = Loss_diff(max(vr))
         else:
             Lr = 0
@@ -1012,10 +1007,10 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
     Lupper = Ld + Ll + Lr
 #    Lupper = -10*log10(10**((-Ld/10))+10**((-Ll/10))+10**((-Lr/10)))
 
-              
+
     d1_bottom = np.sqrt((Gbottom[:,0]-x1)*(Gbottom[:,0]-x1)+(Gbottom[:,1]-y1)*(Gbottom[:,1]-y1)-h_bottom[:]*h_bottom[:])
     d2_bottom = np.sqrt((Gbottom[:,0]-x2)*(Gbottom[:,0]-x2)+(Gbottom[:,1]-y2)*(Gbottom[:,1]-y2)-h_bottom[:]*h_bottom[:])
-    v_bottom = Diffraction_parameter(h_bottom[:],d1_bottom[:],d2_bottom[:],f)
+    v_bottom = calnu(h_bottom[:],d1_bottom[:],d2_bottom[:],f)
     v_max2=max(v_bottom)
     nn2 = find(v_bottom==v_max2)
     Ld2 = Loss_diff(v_max2)
@@ -1031,7 +1026,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
             height = (hreal - Hstd)[nl]
             dl1 = np.sqrt((Gbottom[left2][nl][:,0]-xt)*(Gbottom[left2][nl][:,0]-xt)+(Gbottom[left2][nl][:,1]-yt)*(Gbottom[left2][nl][:,1]-yt)-hreal[nl][:]*hreal[nl][:])
             dl2 = d1_bottom[nn2] - dl1
-            vl = Diffraction_parameter(height[:],dl1[:],dl2[:],f)
+            vl = calnu(height[:],dl1[:],dl2[:],f)
             Ll = Loss_diff(max(vl))
         else:
             Ll = 0
@@ -1047,7 +1042,7 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
             height = (hreal -Hstd)[nr]
             dr2 = np.sqrt((Gbottom[right2][nr][:,0]-xr)*(Gbottom[right2][nr][:,0]-xr)+(Gbottom[right2][nr][:,1]-yr)*(Gbottom[right2][nr][:,1]-yr)-hreal[nr][:]*hreal[nr][:])  
             dr1 = d2_bottom[nn2] - dr2
-            vr = Diffraction_parameter(height[:],dr1[:],dr2[:],f)
+            vr = calnu(height[:],dr1[:],dr2[:],f)
             Lr = Loss_diff(max(vr))
         else:
             Lr = 0
@@ -1069,9 +1064,9 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
     dis12 = np.sqrt((Pint1[0]-x2)*(Pint1[0]-x2)+(Pint1[1]-y2)*(Pint1[1]-y2)+hh1*hh1)
     dis21 = np.sqrt((Pint2[0]-x1)*(Pint2[0]-x1)+(Pint2[1]-y1)*(Pint2[1]-y1)+hh1*hh1)
     dis22 = np.sqrt((Pint2[0]-x2)*(Pint2[0]-x2)+(Pint2[1]-y2)*(Pint2[1]-y2)+hh1*hh1)
-    vh1 = Diffraction_parameter(hh1,dis11,dis12,f)
-    vh2 = Diffraction_parameter(hh1,dis21,dis22,f)
-  
+    vh1 = calnu(hh1,dis11,dis12,f)
+    vh2 = calnu(hh1,dis21,dis22,f)
+
     hh2 = height2-1.2
     Pint3 = Intersection(x1,y1,x2,y2,SEG2[int(S2[0])][0],SEG2[int(S2[0])][1],SEG2[int(S2[0])][2],SEG2[int(S2[0])][3])  
     Pint4 = Intersection(x1,y1,x2,y2,SEG2[int(S2[1])][0],SEG2[int(S2[1])][1],SEG2[int(S2[1])][2],SEG2[int(S2[1])][3])
@@ -1079,20 +1074,20 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
     dis32 = np.sqrt((Pint3[0]-x2)*(Pint3[0]-x2)+(Pint3[1]-y2)*(Pint3[1]-y2)+hh2*hh2)
     dis41 = np.sqrt((Pint4[0]-x1)*(Pint4[0]-x1)+(Pint4[1]-y1)*(Pint4[1]-y1)+hh2*hh2)
     dis42 = np.sqrt((Pint4[0]-x2)*(Pint4[0]-x2)+(Pint4[1]-y2)*(Pint4[1]-y2)+hh2*hh2)
-    vh3 = Diffraction_parameter(hh2,dis31,dis32,f)
-    vh4 = Diffraction_parameter(hh2,dis41,dis42,f)
-  
+    vh3 = calnu(hh2,dis31,dis32,f)
+    vh4 = calnu(hh2,dis41,dis42,f)
+
 
     vh = max(vh1,vh2,vh3,vh4)
     Lheight = Loss_diff(vh)
-  
-          
+
+
     Ltotal = -10*log10(10**((-Lupper/10))+10**((-Lbottom/10))+10**((-Lheight/10)))
 #    Ltotal = -10*log10(10**((-Lupper/10))+10**((-Lbottom/10)))
-  
+
     return(Ltotal)
 
-def showfurniture(ax):  
+def showfurniture(ax):
     #R1_A.show(fig,ax)
     #R1_B1.show(fig,ax)
     #R1_B2.show(fig,ax)
@@ -1149,8 +1144,8 @@ def showfurniture(ax):
     R9_F.show(fig,ax)
     R9_G.show(fig,ax)
     axis('scaled')
-  
-  
+
+
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
     """
     visuPt  : Visualization of values a given points
@@ -1237,7 +1232,7 @@ def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size
     if colbar:
         cbar=colorbar(orientation='vertical')
         cbar.set_label(label)
-      
+
 def cdf(x,colsym="",lab="",lw=4):
     """ 
         Plot the cumulative density function

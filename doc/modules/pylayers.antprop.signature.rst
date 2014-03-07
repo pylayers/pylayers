@@ -1,4 +1,4 @@
-pylayers.antprop.signature module
+pylayers.antprop.signature
 =================================
 
 .. automodule:: pylayers.antprop.signature
