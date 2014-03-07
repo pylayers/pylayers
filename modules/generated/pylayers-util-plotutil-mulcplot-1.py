@@ -12,6 +12,3 @@ plu.mulcplot(x,y,typ='v',)
 plt.show()
 plu.mulcplot(x,y,typ='r',ncol=2,nlin=2,color='k',linewidth=2)
 plt.show()
-import pylayers.signal.bsignal as bs
-e = EnImpulse()
-e.plot()
