@@ -1,7 +1,41 @@
 # -*- coding:Utf-8 -*-
+"""
+
+
+Cycles Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+
+    Cycles.__init__
+    Cycles.__repr__
+    Cycles.info
+    Cycles.inclusion
+    Cycles.decompose
+
+Cycles Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Cycle.__init__
+    Cycle.__add__
+    Cycle.update
+    Cycle.__repr__
+    Cycle.info
+    Cycle.flip
+    Cycle.inclusion
+    Cycle.simplify
+    Cycle.intersect
+    Cycle.split
+    Cycle.corrcy
+    Cycle.show
+
+"""
 #
-# Class Cycles(list)
-# Class Cycle(Graph)
 #
 # Author : B.Uguen
 #  2nd implementation : April 2013

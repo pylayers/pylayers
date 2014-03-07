@@ -3,8 +3,8 @@
 Class Coverage
 ==============
 
-.. autosummarry::
-    :toctree:
+.. autosummary::
+    :toctree: generated/
 
     Coverage.__init__
     Coverage.__repr__

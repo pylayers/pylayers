@@ -143,17 +143,40 @@ Measurement Data
    pylayers.measures.mesuwb
 
 Agents and Bodies Mobility 
---------------------------------
+--------------------------
+
+.. toctree::
+   :maxdepth: 2
+
+Large Scale Mobility 
+~~~~~~~~~~~~~~~~~~~~
 
 .. toctree::
    :maxdepth: 2
 
    pylayers.mobility.agent
    pylayers.mobility.trajectory
+
+Motion Capture 
+~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 2
+
    pylayers.mobility.ban.body
    pylayers.mobility.ban.DeuxSeg
    pylayers.mobility.ban.c3d
    pylayers.mobility.ban.c3dtools
+
+Transit 
+~~~~~~~
+
+.. toctree::
+   :maxdepth: 2
+
+   pylayers.mobility.transit.Person
+   pylayers.mobility.transit.World
+   pylayers.mobility.transit.SteeringBehavior
 
 Networks
 -----------
