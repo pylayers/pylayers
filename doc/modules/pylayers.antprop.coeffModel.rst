@@ -1,7 +1,4 @@
-pylayers.antprop.coeffModel module
+pylayers.antprop.coeffModel
 ==================================
 
 .. automodule:: pylayers.antprop.coeffModel
-    :members:
-    :undoc-members:
-    :show-inheritance:

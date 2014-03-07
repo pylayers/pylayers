@@ -1,7 +1,4 @@
-pylayers.location.geometric.constraints.cla module
+pylayers.location.geometric.constraints.cla
 ==================================================
 
 .. automodule:: pylayers.location.geometric.constraints.cla
-    :members:
-    :undoc-members:
-    :show-inheritance:

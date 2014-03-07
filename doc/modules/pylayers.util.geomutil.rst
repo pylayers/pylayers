@@ -1,4 +1,4 @@
-pylayers.util.geomutil module
+pylayers.util.geomutil
 =============================
 
 .. automodule:: pylayers.util.geomutil

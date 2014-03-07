@@ -1,7 +1,4 @@
-pylayers.gis.readHGT module
+pylayers.gis.readHGT
 ===========================
 
 .. automodule:: pylayers.gis.readHGT
-    :members:
-    :undoc-members:
-    :show-inheritance:

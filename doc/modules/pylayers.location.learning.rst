@@ -8,10 +8,3 @@ Submodules
 
    pylayers.location.learning.loclearn
 
-Module contents
----------------
-
-.. automodule:: pylayers.location.learning
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,7 +1,4 @@
-pylayers.util.vect module
+pylayers.util.vect
 =========================
 
 .. automodule:: pylayers.util.vect
-    :members:
-    :undoc-members:
-    :show-inheritance:

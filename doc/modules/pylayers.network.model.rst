@@ -1,7 +1,4 @@
-pylayers.network.model module
-=============================
+pylayers.network.model 
+======================
 
 .. automodule:: pylayers.network.model
-    :members:
-    :undoc-members:
-    :show-inheritance:

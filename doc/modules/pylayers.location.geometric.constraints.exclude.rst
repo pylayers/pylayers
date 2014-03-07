@@ -1,7 +1,4 @@
-pylayers.location.geometric.constraints.exclude module
+pylayers.location.geometric.constraints.exclude
 ======================================================
 
 .. automodule:: pylayers.location.geometric.constraints.exclude
-    :members:
-    :undoc-members:
-    :show-inheritance:

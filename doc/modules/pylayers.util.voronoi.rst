@@ -1,7 +1,4 @@
-pylayers.util.voronoi module
+pylayers.util.voronoi
 ============================
 
 .. automodule:: pylayers.util.voronoi
-    :members:
-    :undoc-members:
-    :show-inheritance:

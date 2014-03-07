@@ -1,7 +1,4 @@
-pylayers.location.geometric.Scenario_base module
+pylayers.location.geometric.Scenario_base
 ================================================
 
 .. automodule:: pylayers.location.geometric.Scenario_base
-    :members:
-    :undoc-members:
-    :show-inheritance:

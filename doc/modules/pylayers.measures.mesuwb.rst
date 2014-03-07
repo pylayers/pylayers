@@ -1,7 +1,4 @@
-pylayers.measures.mesuwb module
+pylayers.measures.mesuwb
 ===============================
 
 .. automodule:: pylayers.measures.mesuwb
-    :members:
-    :undoc-members:
-    :show-inheritance:

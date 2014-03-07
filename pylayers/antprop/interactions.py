@@ -1,5 +1,83 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
+"""
+
+.. currentmodule:: pylayers.antprop.interactions
+
+Inters Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Inter.__init__
+    Inter.__repr__
+    Inter.create_dusl
+    Inter.sinsout
+    Inter.stack
+
+Interactions Class
+==================
+
+
+.. autosummary::
+    :toctree: generated/
+
+    Interactions.__init__
+    Interactions.add
+    Interactions.addi
+    Interactions.eval
+
+IntB Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntB.__init__
+    IntB.__repr__
+    IntB.eval
+
+IntL Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntL.__init__
+    IntL.__repr__
+    IntL.eval
+
+IntR Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntR.__init__
+    IntR.__repr__
+    IntR.eval
+
+IntT Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntT.__init__
+    IntT.__repr__
+    IntT.eval
+
+IntD Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    IntD.__init__
+    IntD.__repr__
+    IntD.eval
+"""
 import pdb
 import os
 import pdb
@@ -18,8 +96,8 @@ from pylayers.antprop.slab import *
 
 
 class Inter(object):
-    """ Interactions 
-    
+    """ Interactions
+
     Meta class of interactions ( Interactions, IntB/IntL/IntT/intR/intD)
 
     Attributes
@@ -27,10 +105,10 @@ class Inter(object):
 
         typ : int
             type of interaction
-            1 : R 
+            1 : R
             2 : T
-            3 : D 
-            0 : Tx or Rx 
+            3 : D
+            0 : Tx or Rx
            -1 : B
 
         data: np.array
@@ -54,11 +132,11 @@ class Inter(object):
         Parameters
         ----------
 
-        typ 
-        data  : ndarray 
-        idx 
-        _filemat 
-        _fileslab 
+        typ
+        data  : ndarray
+        idx
+        _filemat
+        _fileslab
 
         """
 
@@ -435,9 +513,7 @@ class IntB(Inter):
         >>> nf = B.nf
         >>> ninter = len(B.idx)
         >>> np.shape(eB)
-        (181, 2, 2, 2)
-        >>> B.delay
-        array([ 0.,  0.])
+        (1, 2, 2, 2)
 
         """
 
@@ -496,9 +572,7 @@ class IntL(Inter):
         >>> ninter = len(L.idx)
         >>> nf = L.nf
         >>> np.shape(eL)
-        (181, 2, 2, 2)
-        >>> L.delay
-        array([ 10.,  20.])
+        (1, 1, 2, 2)
         """
 
 
@@ -598,11 +672,9 @@ class IntR(Inter):
         >>> # examples
         >>> ninter = len(R.idx)
         >>> np.shape(eR)
-        (181, 2, 2, 2)
+        (1, 2, 2, 2)
         >>> eR[0,0,0]
-        array([-0.06412945+0.15756758j,  0.00000000+0.j        ])
-        >>> R.delay
-        array([ 13.33333333,   2.        ])
+        array([-0.0413822-0.12150975j,  0.0000000+0.j        ])
 
         Notes
         -----
@@ -720,12 +792,10 @@ class IntT(Inter):
         >>> # examples
         >>> ninter = len(T.idx)
         >>> np.shape(eT)
-        (181, 2, 2, 2)
+        (1, 2, 2, 2)
         >>> eT[0,0]
-        array([[ 0.43318949-0.87334289j, -0.00000000+0.j        ],
-               [-0.00000000+0.j        ,  0.43247609-0.87414221j]])
-        >>> T.delay()
-        array([ 13.33333333,   2.        ])
+        array([[-0.94187991+0.26299468j,  0.00000000+0.j        ],
+               [ 0.00000000+0.j        , -0.94234012+0.26232713j]])
         """
 
         self.sinsout()
@@ -742,7 +812,7 @@ class IntT(Inter):
         self.sm = np.zeros((len(self.idx)), dtype=complex)
 
         if np.shape(self.data)[0]!=len(self.idx):
-            self.data=self.data.T 
+            self.data=self.data.T
 
         if len(self.data) != 0:
             mapp = []

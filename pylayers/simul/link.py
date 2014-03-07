@@ -2,8 +2,27 @@
 # -*- coding: utf-8 -*-
 #
 """
+.. currentmodule:: pylayers.simul.links
 
-    This module run the electromagnetic simulation
+
+This module run the electromagnetic simulation at the link level
+It handles the storage of simulated object in `hdf5` format.
+
+Links Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Links.__init__
+    Links.updcfg
+    Links.save_init
+    Links.stack
+    Links.save
+    Links.get_idx
+    Links.array_exist
+    Links.eval
+    Links._show3
 
 
 """

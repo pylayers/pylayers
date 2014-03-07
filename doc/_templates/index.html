@@ -3,11 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="google-site-verification" content="rT0A6_-it7hp5yyvhFef_auUEXRhSBi5bRefEgQrG_M" />
         <title>PyLayers FrontPage</title>
     
     <link rel="stylesheet" href="./_static/sphinxdoc.css" type="text/css">
     <link rel="stylesheet" href="./_static/pygments.css" type="text/css">
     <link rel="stylesheet" href="./_static/force.css" type="text/css">
+    <link href="./_static/bootstrap_2_1.min.css" rel="stylesheet" type="text/css">
     
     <script type="text/javascript" async="" src="./_static/ga.js"></script><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -18,8 +20,11 @@
         HAS_SOURCE:  true
       };
     </script>
+    <script type="text/javascript" > $(function() { $('.carousel').carousel();}); </script> 
+    <script type='text/javascript' src="http://imsky.github.io/holder/holder.js"></script>
     <script type="text/javascript" src="./_static/jquery.js"></script>
     <script type="text/javascript" src="./_static/underscore.js"></script>
+    <script type="text/javascript" src="./_static/bootstrap.min.js"></script>
     <script type="text/javascript" src="./_static/doctools.js"></script>
     <script type="text/javascript" src="./_static/d3.min.js"></script>
     <script type="text/javascript" src="./_static/d3.geom.min.js"></script>
@@ -88,6 +93,9 @@ href="http://pylayers.github.com/documentation/development/_downloads/PyLayers.p
 
     <li><a class="reference external" href="http://pylayers.github.com/documentation/development/developer">
             Developer guide</a></li>
+        
+    <li><a class="reference external" href="https://github.com/pylayers/pylayers/wiki/PyLayers-RoadMap">
+            Road map</a></li>
 
     <li><a class="reference external" href="https://twitter.com/PyLayers">
         <img src="./_static/twitter.png" i="" width="40" ,="" alt="Twitter"></a></li>
@@ -111,9 +119,7 @@ href="http://pylayers.github.com/documentation/development/_downloads/PyLayers.p
 <tbody><tr>
   <td width="60%">
 <blockquote>
-<p>PyLayers is an indoor mobile radio propagation simulator. The purpose is
-to help the design and the evaluation of localization and positioning
-algorithms in heterogeneous networks and RTLS systems using Ultra Wide Band radio technology. 
+<p>An indoor mobile radio propagation simulator for studying localization algorithms in heterogeneous networks and RTLS systems using Ultra Wide Band radio technology. 
 </p>
 </blockquote>
   </td>
@@ -163,6 +169,138 @@ algorithms in heterogeneous networks and RTLS systems using Ultra Wide Band radi
 </li>
 </ul>
 
+
+<h2>Gallery
+<a class="headerlink" href="#some-examples" title="Permalink to this headline">¶</a></h2>
+<style>
+
+div.inner-item {
+    text-align: left;
+}
+
+div.banner-container{
+    width: 100%;
+}
+
+div#examples_carousel .carousel-control {
+    position: absolute;
+    top: 97%;
+    left: 213px;
+    width: 25px;
+    height: 25px;
+    font-size: 37px;
+    line-height: 19px;
+    color: rgba(35, 47, 62, 1);
+    background: #FFFFFF;
+}
+
+div#examples_carousel .carousel-control.right {
+    left: 385px;
+}
+
+div#index_carousel_tn {
+    width: 600px;
+}
+
+div#examples_carousel .carousel-indicators {
+    position: absolute;
+    top: 98%;
+    left: 313px;
+}
+
+div#examples_carousel .carousel-indicators .active {
+    background-color: rgba(35, 47, 32, 1);
+}
+
+div#examples_carousel .carousel-indicators li {
+    background-color: rgba(35, 47, 32, .45);
+}
+
+</style>
+
+<div class="container">
+  <div class="span9">
+    <div id="examples_carousel" class="carousel slide", data-interval="false">
+      <!-- Carousel items -->
+      <div class="carousel-inner">
+
+        <div class="active item">
+          <div class="inner-item">
+            <img src="_static/example1.png" width=700>
+            <div class="carousel-caption">
+                <p>Compact description of antennas using spherical harmonics
+                decomposition</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example2.png" width=900>
+            <div class="carousel-caption">
+                <p>Fast Indoor Coverage with MultiWall Model</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example3.png" width=900>
+            <div class="carousel-caption">
+                <p>Body Area Network simulation using C3D motion capture body
+                abstraction</p>
+            </div>    
+          </div>
+        </div>
+
+        
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example5.png" width=900>
+            <div class="carousel-caption">
+                <p>Calulation of Aggregated Channel Impulse Response over Time
+                Stamped Trajectories</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example6.png" width=900>
+            <div class="carousel-caption">
+                <p>Handling of IR-UWB signals</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example7.png" width=900>
+            <div class="carousel-caption">
+                <p>Validation with Measurement Data</p>
+            </div>    
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="inner-item">
+            <img src="_static/example8.png" width=900>
+            <div class="carousel-caption">
+                <p>Graphs, Signatures, Rays and  Multipath Channel</p>
+            </div>    
+          </div>
+        </div>
+
+      </div>
+      <!-- Carousel nav -->
+      <a class="carousel-control left" href="#examples_carousel" data-slide="prev">&lsaquo;</a>
+      <a class="carousel-control right" href="#examples_carousel" data-slide="next">&rsaquo;</a>
+    </div>
+  </div>
+</div>
+
+
+
 <!--<h2>Acknowledments</h2>
 -->
 <ul class="simple">
@@ -171,6 +309,7 @@ algorithms in heterogeneous networks and RTLS systems using Ultra Wide Band radi
 <a class="reference internal image-reference"
     href="http://www-leti.cea.fr/fr/Les-actualites/Le-projet-CORMORAN-explore-de-nouvelles-pistes2"><img
     alt="_images/logo_CORMORAN.png" src="./_static/logo_CORMORAN.png" style="width: 100.0px"></a>
+<a href="http://www.test-pagerank.com/" title="Test PageRank" target="_blank"><img src="http://www.test-pagerank.com/pagerankCurrent.php?url=http://www.pylayers.org&color=g" alt="Resultat test PageRank"/></a>
 </ul>
 
 <!---

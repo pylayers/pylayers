@@ -1,7 +1,4 @@
-pylayers.util.utilnet module
+pylayers.util.utilnet
 ============================
 
 .. automodule:: pylayers.util.utilnet
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,7 +1,4 @@
-pylayers.location.geometric.util.boxn module
+pylayers.location.geometric.util.boxn
 ============================================
 
 .. automodule:: pylayers.location.geometric.util.boxn
-    :members:
-    :undoc-members:
-    :show-inheritance:

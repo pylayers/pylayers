@@ -1,7 +1,4 @@
-pylayers.location.algebraic.algebraic module
+pylayers.location.algebraic.algebraic
 ============================================
 
 .. automodule:: pylayers.location.algebraic.algebraic
-    :members:
-    :undoc-members:
-    :show-inheritance:

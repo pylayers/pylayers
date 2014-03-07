@@ -188,11 +188,11 @@ class Localization(object):
             pass
         self.cla.update()
 
-        # ############"" FOR DEBUG
-        # prss=np.where(np.array(self.cla.type)=='RSS')[0]
-        # for x in range(len(self.cla.c)):
-        #     if x in prss:
-        #         self.cla.usable[x]=False
+        ############ FOR DEBUG ONLY : RSS localization neglected
+        prss=np.where(np.array(self.cla.type)=='RSS')[0]
+        for x in range(len(self.cla.c)):
+            if x in prss:
+                self.cla.usable[x]=False
 
 
     def savep(self,value,now=0.,name='pe'):
@@ -278,7 +278,7 @@ class PLocalization(Process):
         self.sim = sim
 
 
-
+        print ('!!!!!! Warning Localization : No RSS only localization !!!!!')
 
     def run(self):
 #        self.loc.get_const()
@@ -293,6 +293,7 @@ class PLocalization(Process):
                 self.tx.cmdrq.signal()
                 self.loc.update(ldp='TOA')
             # try to obtain an estimated position
+
             if 'geo' in self.method :
                 bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
 #                    if 'alg' in self.method and bep:

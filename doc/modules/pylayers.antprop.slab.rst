@@ -1,7 +1,4 @@
-pylayers.antprop.slab module
-============================
+pylayers.antprop.slab 
+=====================
 
 .. automodule:: pylayers.antprop.slab
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,7 +1,4 @@
-pylayers.network.communication module
-=====================================
+pylayers.network.communication 
+==============================
 
 .. automodule:: pylayers.network.communication
-    :members:
-    :undoc-members:
-    :show-inheritance:

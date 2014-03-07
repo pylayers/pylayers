@@ -1,7 +1,4 @@
-pylayers.gis.selectl module
+pylayers.gis.selectl
 ===========================
 
 .. automodule:: pylayers.gis.selectl
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,7 +1,4 @@
-pylayers.location.learning.loclearn module
+pylayers.location.learning.loclearn
 ==========================================
 
 .. automodule:: pylayers.location.learning.loclearn
-    :members:
-    :undoc-members:
-    :show-inheritance:
