@@ -82,20 +82,22 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
+
 <span class="sd">Cycles Class</span>
 <span class="sd">============</span>
+
 
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-
+<span class="sd">    Cycles</span>
 <span class="sd">    Cycles.__init__</span>
 <span class="sd">    Cycles.__repr__</span>
 <span class="sd">    Cycles.info</span>
 <span class="sd">    Cycles.inclusion</span>
 <span class="sd">    Cycles.decompose</span>
 
-<span class="sd">Cycles Class</span>
+<span class="sd">Cycle Class</span>
 <span class="sd">============</span>
 
 <span class="sd">.. autosummary::</span>
@@ -131,13 +133,14 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 
-<span class="k">class</span> <span class="nc">Cycles</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycles"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycles.html#pylayers.gis.cycles.Cycles">[docs]</a><span class="k">class</span> <span class="nc">Cycles</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Graph of Cycles</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
-<span class="sd">        inclusion</span>
-<span class="sd">        decompose</span>
+
+<span class="sd">    inclusion</span>
+<span class="sd">    decompose</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Cycles.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycles.__init__.html#pylayers.gis.cycles.Cycles.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -147,6 +150,8 @@
         <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Cycles.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycles.__repr__.html#pylayers.gis.cycles.Cycles.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; object representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Number of cycles :&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
@@ -361,7 +366,7 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lcyroot</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</div>
+</div></div>
 <span class="k">class</span> <span class="nc">Cycle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Graph cycle class</span>
 
@@ -369,8 +374,8 @@
 <span class="sd">    ----------</span>
 
 <span class="sd">    vertices : np.array</span>
-<span class="sd">    edges   : np.array</span>
-<span class="sd">    cycle   : np.array</span>
+<span class="sd">    edges    : np.array</span>
+<span class="sd">    cycle    : np.array</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Cycle.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.__init__.html#pylayers.gis.cycles.Cycle.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">):</span>
@@ -572,13 +577,18 @@
             <span class="k">return</span> <span class="bp">False</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
 </div>
 <div class="viewcode-block" id="Cycle.simplify"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.simplify.html#pylayers.gis.cycles.Cycle.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; simplify cycles</span>
+
+<span class="sd">        Simplification means that if there is a inclusion relation between 2</span>
+<span class="sd">        cycles they are splitted into two independent cycles.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        L : list of cycles</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="k">for</span> <span class="n">Cy</span> <span class="ow">in</span> <span class="n">L</span><span class="p">:</span>
             <span class="n">b</span><span class="p">,</span><span class="n">p</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">inclusion</span><span class="p">(</span><span class="n">Cy</span><span class="p">)</span>
@@ -675,17 +685,18 @@
 
 </div>
 <div class="viewcode-block" id="Cycle.split"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.split.html#pylayers.gis.cycles.Cycle.split">[docs]</a>    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cyin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; split(Cy)</span>
+        <span class="sd">&quot;&quot;&quot; split</span>
 
 <span class="sd">          Parameters</span>
 <span class="sd">          ----------</span>
+
 <span class="sd">          cyin :  input cycle</span>
 
 <span class="sd">          Returns</span>
 <span class="sd">          -------</span>
 <span class="sd">          cyout : list of output cycles</span>
 <span class="sd">          punctual : boolean</span>
-<span class="sd">                True if punctual connection</span>
+<span class="sd">              True if punctual connection</span>
 
 <span class="sd">          Notes</span>
 <span class="sd">          -----</span>

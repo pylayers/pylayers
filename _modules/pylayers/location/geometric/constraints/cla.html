@@ -184,7 +184,7 @@
 
 <span class="sd">    compute(pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):</span>
 <span class="sd">                                              compute the CLA to estimate the positon.</span>
-<span class="sd">    </span>
+
 <span class="sd">    rescale(self,f_vcw,cid=None)            : rescale Constraint Box</span>
 
 <span class="sd">    annulus_bound(self,cid=None)            : rescale Constraint</span>
@@ -308,7 +308,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">usable</span><span class="o">=</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">usable</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="CLA.compute"><a class="viewcode-back" href="../../../../../modules/generated/pylayers.location.geometric.constraints.cla.CLA.compute.html#pylayers.location.geometric.constraints.cla.CLA.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">mergeRSS</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">refineRSS</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">NBOXMAX</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">VOLMIN</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="n">HT</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">forceamb</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the cla to estimate the postion</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Compute the cla to estimate the postion</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -316,20 +317,20 @@
 <span class="sd">        pe : boolean</span>
 <span class="sd">           set to True to compute the position estimation store into self.pe</span>
 <span class="sd">        mergeRSS : boolean</span>
-<span class="sd">            True : if there is RSS in cla, they are used to find the smallest merge</span>
-<span class="sd">            False (default): even if there is RSS in cla, they are neglected during the merge process</span>
+<span class="sd">            True  if there is RSS in cla, they are used to find the smallest merge</span>
+<span class="sd">            False (default) even if there is RSS in cla, they are neglected during the merge process</span>
 <span class="sd">        refineRSS :boolean</span>
-<span class="sd">            True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous</span>
+<span class="sd">            True (default) if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous</span>
 <span class="sd">                            during the refine process</span>
-<span class="sd">            False: if there is RSS in cla, they are ignore during the refine process</span>
+<span class="sd">            False if there is RSS in cla, they are ignore during the refine process</span>
 <span class="sd">        NBOXMAX : integer</span>
 <span class="sd">            Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)</span>
 <span class="sd">        NVOLMIN : float</span>
 <span class="sd">            Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)</span>
 <span class="sd">        HT : boolean</span>
-<span class="sd">            True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</span>
+<span class="sd">            True  if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</span>
 <span class="sd">                    in estpos2 method</span>
-<span class="sd">            False : no HT methos is applied</span>
+<span class="sd">            False  no HT method is applied</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
