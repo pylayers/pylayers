@@ -186,7 +186,7 @@ class Coverage(object):
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover()
-            >>> C.showPr()
+            >>> C.showPower()
 
         """
         #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
@@ -216,7 +216,7 @@ class Coverage(object):
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover()
-            >>> C.showPr()
+            >>> C.showPower()
 
         """
         #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
