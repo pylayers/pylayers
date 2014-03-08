@@ -78,6 +78,66 @@
             
   <h1>Source code for pylayers.network.network</h1><div class="highlight"><pre>
 <span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">.. currentmodule:: pylayers.network.network</span>
+
+<span class="sd">Node Class</span>
+<span class="sd">==========</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">     Node.__init__</span>
+<span class="sd">     Node.randomMAC</span>
+
+
+<span class="sd">Network Class</span>
+<span class="sd">==============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Network.__init__</span>
+<span class="sd">    Network.__repr__</span>
+<span class="sd">    Network.perm</span>
+<span class="sd">    Network.combi</span>
+<span class="sd">    Network.Gen_tuple</span>
+<span class="sd">    Network.get_RAT</span>
+<span class="sd">    Network.connect</span>
+<span class="sd">    Network.get_SubNet</span>
+<span class="sd">    Network.init_PN</span>
+<span class="sd">    Network.create</span>
+<span class="sd">    Network.update_PN</span>
+<span class="sd">    Network.dist_edge</span>
+<span class="sd">    Network.update_LDPs</span>
+<span class="sd">    Network.compute_LDPs</span>
+<span class="sd">    Network.update_pos</span>
+<span class="sd">    Network.get_pos</span>
+<span class="sd">    Network.get_pos_est</span>
+<span class="sd">    Network.haspe</span>
+<span class="sd">    Network.overview</span>
+<span class="sd">    Network.pp</span>
+<span class="sd">    Network.show</span>
+<span class="sd">    Network.compute_Sg</span>
+<span class="sd">    Network.show_sig</span>
+<span class="sd">    Network.csv_save</span>
+<span class="sd">    Network.init_save</span>
+<span class="sd">    Network.mat_save</span>
+<span class="sd">    Network.txt_save</span>
+<span class="sd">    Network.loc_save</span>
+<span class="sd">    Network.dual_save</span>
+<span class="sd">    Network.pyray_save</span>
+<span class="sd">    Network.loc_save</span>
+<span class="sd">    Network.ini_save</span>
+
+<span class="sd">PNetwork Class</span>
+<span class="sd">==============</span>
+
+<span class="sd">     PNetwork.__init__</span>
+<span class="sd">     PNetwork.run</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="c">#####################################################################</span>
 <span class="c">#This file is part of Network.</span>
 
@@ -138,78 +198,86 @@
 
 
 
-        
 
-<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Class Node</span>
+
 <span class="sd">    inherit of networkx.Graph()</span>
-<span class="sd">    </span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">        Id    : float/hex/str/...</span>
-<span class="sd">                node Id</span>
-<span class="sd">        p    : np.array</span>
-<span class="sd">                True position</span>
-<span class="sd">        t    : time.time()</span>
-<span class="sd">                Tag time</span>
-<span class="sd">        RAT    : list</span>
-<span class="sd">                available RAT of the node</span>
-<span class="sd">        PN    : Network.Network</span>
-<span class="sd">                Personal vision of the Network </span>
-<span class="sd">        pos    : Dictionnary</span>
-<span class="sd">                parser from Node.Node to networkx.node.pos</span>
+
+<span class="sd">    Id    : float/hex/str/...</span>
+<span class="sd">            node Id</span>
+<span class="sd">    p    : np.array</span>
+<span class="sd">            True position</span>
+<span class="sd">    t    : time.time()</span>
+<span class="sd">            Tag time</span>
+<span class="sd">    RAT    : list</span>
+<span class="sd">            available RAT of the node</span>
+<span class="sd">    PN    : Network.Network</span>
+<span class="sd">            Personal vision of the Network</span>
+<span class="sd">    pos    : Dictionnary</span>
+<span class="sd">            parser from Node.Node to networkx.node.pos</span>
 
 <span class="sd">    Method</span>
 <span class="sd">    ------</span>
-<span class="sd">        RandomMac(): Generate a RAndom Mac adress    </span>
+
+<span class="sd">    RandomMac(): Generate a RAndom Mac adress</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ID</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">te</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="p">[],</span><span class="n">epwr</span><span class="o">=</span><span class="p">{},</span><span class="n">sens</span><span class="o">=</span><span class="p">{},</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;ag&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Node.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Node.__init__.html#pylayers.network.network.Node.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ID</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">te</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="p">[],</span><span class="n">epwr</span><span class="o">=</span><span class="p">{},</span><span class="n">sens</span><span class="o">=</span><span class="p">{},</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;ag&#39;</span><span class="p">):</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c"># Personnal Network init</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">=</span><span class="n">ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">PN</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="nb">dict</span><span class="p">(</span><span class="n">pe</span><span class="o">=</span><span class="n">pe</span><span class="p">,</span><span class="n">te</span><span class="o">=</span><span class="n">te</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="o">=</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="o">=</span><span class="n">sens</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">))</span>
         <span class="c"># Network init</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span><span class="nb">dict</span><span class="p">(</span><span class="n">PN</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">],</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="o">=</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="o">=</span><span class="n">sens</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pe</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;t&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pe</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;t&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;RAT&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epwr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span>
 
+</div>
+<div class="viewcode-block" id="Node.randomMAC"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Node.randomMAC.html#pylayers.network.network.Node.randomMAC">[docs]</a>    <span class="k">def</span> <span class="nf">randomMAC</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generate a random MAC address</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 
+<span class="sd">        macadress : string</span>
 
-
-<div class="viewcode-block" id="Node.randomMAC"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Node.randomMAC">[docs]</a>    <span class="k">def</span> <span class="nf">randomMAC</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mac</span> <span class="o">=</span> <span class="p">[</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">,</span> <span class="mh">0x3e</span><span class="p">,</span>
         <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x7f</span><span class="p">),</span>
         <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">),</span>
         <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">)</span> <span class="p">]</span>
-        <span class="k">return</span> <span class="s">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">&quot;</span><span class="si">%02x</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">,</span> <span class="n">mac</span><span class="p">))</span>	
+        <span class="k">return</span> <span class="s">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">&quot;</span><span class="si">%02x</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">,</span> <span class="n">mac</span><span class="p">))</span>
 
 
 
-</div></div>
-<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Network class</span>
 
-<span class="sd">    inherits of networkx.Graph()</span>
+<span class="sd">    inherits from networkx.Graph()</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 
 <span class="sd">    RAT : dictionnary</span>
-<span class="sd">        keys  = RAT </span>
+<span class="sd">        keys  = RAT</span>
 <span class="sd">        value = list of nodes id</span>
 <span class="sd">    RATe : dictionnary</span>
-<span class="sd">        keys  = RAT </span>
-<span class="sd">        value = list of edges id  </span>
+<span class="sd">        keys  = RAT</span>
+<span class="sd">        value = list of edges id </span>
 <span class="sd">    SubNet : dictionnary</span>
-<span class="sd">        keys  = RAT </span>
+<span class="sd">        keys  = RAT</span>
 <span class="sd">        value = Subgraph of the given RAT</span>
 <span class="sd">    pos : dictionnary</span>
 <span class="sd">        keys  = node id</span>
@@ -219,24 +287,34 @@
 <span class="sd">    -------</span>
 
 <span class="sd">    get_RAT(self)  : Get RAT from nodes of the network</span>
-<span class="sd">    connect(self)  : Connect each node from a rat together</span>
+<span class="sd">    connect(self)  : Connect each node from a rat</span>
 <span class="sd">    create(self)   : compute get_RAT(),get_pos() and connect()</span>
 <span class="sd">    update_LDP(self,n1,n2,RAT,LDP=None,value=[])    : update Location Dependent Parameter  </span>
 <span class="sd">    compute_LDP(self,RAT) : compute the LDP value thanks to a ElectroMag Solver </span>
-<span class="sd">    update_pos(self,n,p=np.array)            : update node (or node list) position</span>
-<span class="sd">    get_pos(self,RAT=None)                : get node positions</span>
+<span class="sd">    update_pos(self,n,p=np.array)  : update node (or node list) position</span>
+<span class="sd">    get_pos(self,RAT=None)         : get node positions</span>
 <span class="sd">    pp(self)                    : pretty print on std out all edtges informations</span>
-<span class="sd">    show(Rat=None,legend=True)            : Display network for all rat or specified in Rat. </span>
+<span class="sd">    show(Rat=None,legend=True)     : Display network for all rat or specified in Rat. </span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">owner</span><span class="o">=</span><span class="s">&#39;sim&#39;</span><span class="p">,</span><span class="n">EMS</span><span class="o">=</span><span class="n">EMSolver</span><span class="p">(),</span><span class="n">PN</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.__init__.html#pylayers.network.network.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">owner</span><span class="o">=</span><span class="s">&#39;sim&#39;</span><span class="p">,</span><span class="n">EMS</span><span class="o">=</span><span class="n">EMSolver</span><span class="p">(),</span><span class="n">PN</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        owner : string</span>
+<span class="sd">        EMS : EMSolver</span>
+<span class="sd">        PN : Boolean</span>
+<span class="sd">            personal network activation</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">=</span><span class="n">owner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="o">=</span><span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">,</span><span class="s">&#39;Pr&#39;</span><span class="p">]</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">,</span><span class="s">&#39;Pr&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">EMS</span><span class="o">=</span><span class="n">EMS</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="o">=</span><span class="p">{}</span>
@@ -247,8 +325,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lidx</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">isPN</span><span class="o">=</span><span class="n">PN</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Network.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.__repr__.html#pylayers.network.network.Network.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isPN</span> <span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Network information</span><span class="se">\n</span><span class="s">*******************</span><span class="se">\n</span><span class="s">&#39;</span>
@@ -305,11 +383,11 @@
 
 
 
-
-<div class="viewcode-block" id="Network.perm"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.perm">[docs]</a>    <span class="k">def</span> <span class="nf">perm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
+</div>
+<div class="viewcode-block" id="Network.perm"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.perm.html#pylayers.network.network.Network.perm">[docs]</a>    <span class="k">def</span> <span class="nf">perm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
         <span class="sd">&quot;&quot;&quot; combi = itertools.permutation(iterable,r) adapted</span>
 
-<span class="sd">        This is an adapted version of itertools.permutations in order to be complient with the networkx.add_edges_from method.</span>
+<span class="sd">        This is an adapted version of itertools.permutations in order to be compliant with the networkx.add_edges_from method.</span>
 <span class="sd">        itertools.permutations(range(4), 3) --&gt; 012 013 021 023 031 302 102 103 ...</span>
 
 <span class="sd">        self.perm([10,11],2,&#39;wifi&#39;) --&gt;     (10, 11, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []}) </span>
@@ -345,7 +423,7 @@
 <span class="sd">        &gt;&gt;&gt; perm.next()</span>
 <span class="sd">        (0, 1, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
 <span class="sd">        &gt;&gt;&gt; perm.next()</span>
-<span class="sd">        (0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})        for l in self.LDP:</span>
+<span class="sd">        (0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
 <span class="sd">        &gt;&gt;&gt; perm.next()</span>
 <span class="sd">        (1, 0, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
 <span class="sd">        &gt;&gt;&gt; perm.next()</span>
@@ -382,7 +460,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Network.combi"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.combi">[docs]</a>    <span class="k">def</span> <span class="nf">combi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
+<div class="viewcode-block" id="Network.combi"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.combi.html#pylayers.network.network.Network.combi">[docs]</a>    <span class="k">def</span> <span class="nf">combi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
         <span class="sd">&quot;&quot;&quot; combi = itertools.combination(iterable,r) adapted </span>
 
 <span class="sd">        This is an adapted version of itertools.combinations in order to be complient with the networkx.add_edges_from method.</span>
@@ -400,6 +478,7 @@
 <span class="sd">            list of node</span>
 <span class="sd">        r     : int</span>
 <span class="sd">            number of node gathered in the output tuple ( always set 2 ! )</span>
+<span class="sd">        d  : dict</span>
 
 
 <span class="sd">        Returns</span>
@@ -418,11 +497,11 @@
 <span class="sd">        &gt;&gt;&gt; N=Network()</span>
 <span class="sd">        &gt;&gt;&gt; l= [0,1,2,3,4]</span>
 <span class="sd">        &gt;&gt;&gt; key=&#39;toto&#39;</span>
-<span class="sd">        &gt;&gt;&gt; d=dict(key1=1,key2=2) </span>
+<span class="sd">        &gt;&gt;&gt; d=dict(key1=1,key2=2)</span>
 <span class="sd">        &gt;&gt;&gt; comb=N.combi(l,2,key,d)</span>
-<span class="sd">        &gt;&gt;&gt; comb.next()        </span>
+<span class="sd">        &gt;&gt;&gt; comb.next()</span>
 <span class="sd">        (0, 1, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
-<span class="sd">        &gt;&gt;&gt; comb.next()        </span>
+<span class="sd">        &gt;&gt;&gt; comb.next()</span>
 <span class="sd">        (0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -452,7 +531,7 @@
             <span class="k">yield</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">pool</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">pool</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="Network.Gen_tuple"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.Gen_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">Gen_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">gene</span><span class="p">,</span><span class="n">rat</span><span class="p">,</span><span class="n">var</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.Gen_tuple"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.Gen_tuple.html#pylayers.network.network.Network.Gen_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">Gen_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">gene</span><span class="p">,</span><span class="n">rat</span><span class="p">,</span><span class="n">var</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        generate a specific tuple  </span>
 
@@ -486,7 +565,7 @@
 <span class="sd">        &gt;&gt;&gt; T.next()</span>
 <span class="sd">        (1, 1, &#39;string rat&#39;, 11)</span>
 
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">gvar</span><span class="o">=</span><span class="nb">iter</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
@@ -495,9 +574,9 @@
             <span class="k">yield</span><span class="p">(</span><span class="nb">tuple</span><span class="p">((</span><span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">G</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">rat</span><span class="p">,</span><span class="n">Gvar</span><span class="p">)))</span>
 
 </div>
-<div class="viewcode-block" id="Network.get_RAT"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.get_RAT">[docs]</a>    <span class="k">def</span> <span class="nf">get_RAT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.get_RAT"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.get_RAT.html#pylayers.network.network.Network.get_RAT">[docs]</a>    <span class="k">def</span> <span class="nf">get_RAT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get rat from nodes of the network</span>
-<span class="sd">        </span>
+
 
 
 <span class="sd">        RAT argument specifies which RAt to append to the network. If None, all rat are appended.</span>
@@ -535,20 +614,20 @@
         <span class="c"># uniquify results</span>
         <span class="k">for</span> <span class="n">Rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span>    <span class="o">=</span> <span class="p">{}</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">Rat</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        
+
 
 </div>
-<div class="viewcode-block" id="Network.connect"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; </span>
+<div class="viewcode-block" id="Network.connect"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.connect.html#pylayers.network.network.Network.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Connect all nodes from the network sharing the same RAT and creating the associated Subnetwork</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="n">edge_dict</span><span class="o">=</span><span class="p">{}</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span><span class="p">:</span>
             <span class="n">edge_dict</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
         <span class="n">edge_dict</span><span class="p">[</span><span class="s">&#39;vis&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-        
+
 
 
         <span class="k">for</span> <span class="n">ratnb</span><span class="p">,</span><span class="n">Rat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
@@ -563,20 +642,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">relink</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">=</span><span class="p">[(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">[</span><span class="n">Rat</span><span class="p">]]</span>
 
 </div>
-<div class="viewcode-block" id="Network.get_SubNet"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.get_SubNet">[docs]</a>    <span class="k">def</span> <span class="nf">get_SubNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Rat</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.get_SubNet"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.get_SubNet.html#pylayers.network.network.Network.get_SubNet">[docs]</a>    <span class="k">def</span> <span class="nf">get_SubNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Rat</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get SubNetworks of a network</span>
 
 <span class="sd">        Warnings</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        ALWAYS use self.get_RAT() BEFORE !</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Rat : specify which SubNet to create</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
@@ -637,8 +716,8 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;invalid RAT name&#39;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Network.init_PN"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.init_PN">[docs]</a>    <span class="k">def</span> <span class="nf">init_PN</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; </span>
+<div class="viewcode-block" id="Network.init_PN"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.init_PN.html#pylayers.network.network.Network.init_PN">[docs]</a>    <span class="k">def</span> <span class="nf">init_PN</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializing personnal networks</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -653,29 +732,29 @@
                                 <span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nn</span><span class="p">][</span><span class="s">&#39;RAT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Sn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                         <span class="k">except</span><span class="p">:</span>
                             <span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span><span class="n">attr_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">RAT</span><span class="o">=</span><span class="p">[</span><span class="n">Sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">pe</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">te</span><span class="o">=</span><span class="mf">0.</span><span class="p">),</span><span class="nb">type</span><span class="o">=</span><span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nn</span><span class="p">][</span><span class="s">&#39;type&#39;</span><span class="p">])</span>
-<span class="c">#             </span>
+
 
                 <span class="n">Z</span><span class="o">=</span> <span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">keys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
                 <span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Network.create"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.create"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.create.html#pylayers.network.network.Network.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create the network</span>
 
-<span class="sd">        This method computes :     </span>
+<span class="sd">        This method computes :</span>
 <span class="sd">            * get_RAT()</span>
 <span class="sd">            * connect()</span>
 <span class="sd">            * connect_PN()</span>
 
-<span class="sd">        </span>
-<span class="sd">        </span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">get_RAT</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_PN</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Network.update_PN"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.update_PN">[docs]</a>    <span class="k">def</span> <span class="nf">update_PN</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.update_PN"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.update_PN.html#pylayers.network.network.Network.update_PN">[docs]</a>    <span class="k">def</span> <span class="nf">update_PN</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update personnal network</span>
 
 
@@ -702,13 +781,22 @@
 <span class="c">#            print &#39;decorator&#39;,a</span>
 <span class="c">#            return func(*args, **kwargs)</span>
 <span class="c">#        return wrapper</span></div>
-<div class="viewcode-block" id="Network.dist_edge"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.dist_edge">[docs]</a>    <span class="k">def</span> <span class="nf">dist_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">dp</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.dist_edge"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.dist_edge.html#pylayers.network.network.Network.dist_edge">[docs]</a>    <span class="k">def</span> <span class="nf">dist_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">dp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; compute distance to edge</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        e :</span>
+<span class="sd">        dp:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">-</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]))</span>
 
 </div>
-<div class="viewcode-block" id="Network.update_LDPs"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.update_LDPs">[docs]</a>    <span class="k">def</span> <span class="nf">update_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ln</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.update_LDPs"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.update_LDPs.html#pylayers.network.network.Network.update_LDPs">[docs]</a>    <span class="k">def</span> <span class="nf">update_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ln</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT</span>
-<span class="sd">            </span>
+
 <span class="sd">        This method update :     * The network edges </span>
 <span class="sd">                    * The personal network (PN) of both n1 and n2</span>
 
@@ -724,29 +812,26 @@
 <span class="sd">        lD     : list of dictionnary:</span>
 <span class="sd">            [ {LDP1_1:[value , std],LDP2_1:[value , std] } , {LDPL_N:[value , std],LDPL_N:[value , std] }    ] for N nodes and L LDPS</span>
 
-<span class="sd">        TODO </span>
-<span class="sd">        ----</span>
-<span class="sd">        Check if LDP value is complient with the LDP</span>
-<span class="sd">                 </span>
+<span class="sd">        .. toto::</span>
+
+<span class="sd">            Check if LDP value is compliant with the LDP</span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="n">ln</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">))</span>
 
 
 </div>
-<div class="viewcode-block" id="Network.compute_LDPs"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.compute_LDPs">[docs]</a>    <span class="k">def</span> <span class="nf">compute_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.compute_LDPs"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.compute_LDPs.html#pylayers.network.network.Network.compute_LDPs">[docs]</a>    <span class="k">def</span> <span class="nf">compute_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;compute edge LDP</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        n1      : float/string</span>
-<span class="sd">            node ID</span>
-<span class="sd">        n2      : float/string</span>
-<span class="sd">            node ID</span>
 <span class="sd">        RAT     : string</span>
-<span class="sd">            A specific RAT which exist in the network ( if not , raises an error)</span>
+<span class="sd">            A specific RAT which exists in the network ( if not , raises an error)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># value    : list : [LDP value , LDP standard deviation] </span>
         <span class="c"># method    : ElectroMagnetic Solver method ( &#39;direct&#39;, &#39;Multiwall&#39;, &#39;PyRay&#39;</span>
@@ -763,8 +848,8 @@
 
 
 </div>
-<div class="viewcode-block" id="Network.update_pos"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.update_pos">[docs]</a>    <span class="k">def</span> <span class="nf">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">p_pe</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; </span>
+<div class="viewcode-block" id="Network.update_pos"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.update_pos.html#pylayers.network.network.Network.update_pos">[docs]</a>    <span class="k">def</span> <span class="nf">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">p_pe</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update Position of a node</span>
 
 <span class="sd">        Parameters</span>
@@ -774,7 +859,7 @@
 <span class="sd">            node ID</span>
 <span class="sd">        p    : np.array  ( or a list of )</span>
 <span class="sd">            node position </span>
-<span class="sd">                </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="p">):</span>
@@ -796,20 +881,20 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;n and p must be either: a key and a np.ndarray, or 2 lists&#39;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Network.get_pos"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.get_pos">[docs]</a>    <span class="k">def</span> <span class="nf">get_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.get_pos"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.get_pos.html#pylayers.network.network.Network.get_pos">[docs]</a>    <span class="k">def</span> <span class="nf">get_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get node positions</span>
 
-<span class="sd">        Parameters </span>
+<span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        RAT : specify a RAT to display node position. If None, all RAT are displayed    </span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns </span>
 <span class="sd">        -------</span>
 
 <span class="sd">        dictionnary :     key     : node ID</span>
 <span class="sd">        value     : np.array node position</span>
-<span class="sd">        </span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">RAT</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
@@ -826,7 +911,7 @@
             <span class="k">except</span><span class="p">:</span> 
                 <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;invalid RAT name&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Network.get_pos_est"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.get_pos_est">[docs]</a>    <span class="k">def</span> <span class="nf">get_pos_est</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.get_pos_est"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.get_pos_est.html#pylayers.network.network.Network.get_pos_est">[docs]</a>    <span class="k">def</span> <span class="nf">get_pos_est</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get node estimated  positions ( only available in PN network)</span>
 
 <span class="sd">        Parameters</span>
@@ -852,14 +937,14 @@
 
 
 </div>
-<div class="viewcode-block" id="Network.haspe"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.haspe">[docs]</a>    <span class="k">def</span> <span class="nf">haspe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.haspe"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.haspe.html#pylayers.network.network.Network.haspe">[docs]</a>    <span class="k">def</span> <span class="nf">haspe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Test if a node has a pe key</span>
-<span class="sd">        </span>
+<span class="sd">            Test if a node has an estimated point  pe key</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        n : integer </span>
+<span class="sd">        n : int</span>
 <span class="sd">            node numbner</span>
 
 <span class="sd">        Returns</span>
@@ -874,8 +959,8 @@
             <span class="k">return</span> <span class="bp">False</span>
 
 </div>
-<div class="viewcode-block" id="Network.overview"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.overview">[docs]</a>    <span class="k">def</span> <span class="nf">overview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; overview </span>
+<div class="viewcode-block" id="Network.overview"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.overview.html#pylayers.network.network.Network.overview">[docs]</a>    <span class="k">def</span> <span class="nf">overview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; overview</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -896,10 +981,10 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">O</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="Network.pp"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.pp">[docs]</a>    <span class="k">def</span> <span class="nf">pp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.pp"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.pp.html#pylayers.network.network.Network.pp">[docs]</a>    <span class="k">def</span> <span class="nf">pp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; pretty print information</span>
 <span class="sd">            OBSOLETE</span>
-<span class="sd">        </span>
+
 <span class="sd">        Print information on edges connection and LDPs values and accuracy</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -917,7 +1002,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Network.show"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">ion</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">info</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(),</span><span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.show.html#pylayers.network.network.Network.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">ion</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">info</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(),</span><span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        Show the network</span>
 
@@ -932,15 +1017,15 @@
 <span class="sd">        ax      : plt.figure.ax to plot </span>
 <span class="sd">        name    : figure name</span>
 
-<span class="sd">            </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">C</span><span class="o">=</span><span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">C</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;show.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
         <span class="n">RATcolor</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;RATcolor&#39;</span><span class="p">))</span>
         <span class="n">RATes</span>    <span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;RATestyle&#39;</span><span class="p">))</span>
 
-        
-        
+
+
 
         <span class="k">if</span> <span class="n">RAT</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">rloop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -985,12 +1070,12 @@
             <span class="n">Cl</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rl</span><span class="p">],</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">Cl</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;edge&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span><span class="n">edgelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rl</span><span class="p">]</span><span class="o">.</span><span class="n">edges</span><span class="p">(),</span><span class="n">width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span><span class="n">edge_color</span><span class="o">=</span><span class="n">RATcolor</span><span class="p">[</span><span class="n">rl</span><span class="p">],</span><span class="n">style</span><span class="o">=</span><span class="n">RATes</span><span class="p">[</span><span class="n">rl</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)))</span>
-            
+
         <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;edge&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]),(</span><span class="n">rloop</span><span class="p">),</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">info</span> <span class="p">:</span>
             <span class="n">L</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;TOA&#39;</span><span class="p">)</span>
-            
+
 
         <span class="k">if</span> <span class="n">ion</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
@@ -1004,13 +1089,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;edge&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;edge&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Network.compute_Sg"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.compute_Sg">[docs]</a>    <span class="k">def</span> <span class="nf">compute_Sg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.compute_Sg"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.compute_Sg.html#pylayers.network.network.Network.compute_Sg">[docs]</a>    <span class="k">def</span> <span class="nf">compute_Sg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">==</span> <span class="p">{}:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pos</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EMS</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">tx</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">rx</span><span class="p">]))</span>
 
 </div>
-<div class="viewcode-block" id="Network.show_sig"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.show_sig">[docs]</a>    <span class="k">def</span> <span class="nf">show_sig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Sg</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">ion</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.show_sig"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.show_sig.html#pylayers.network.network.Network.show_sig">[docs]</a>    <span class="k">def</span> <span class="nf">show_sig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Sg</span><span class="p">,</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">ion</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
             <span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
@@ -1038,12 +1123,12 @@
 
 
 </div>
-<div class="viewcode-block" id="Network.csv_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.csv_save">[docs]</a>    <span class="k">def</span> <span class="nf">csv_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.csv_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.csv_save.html#pylayers.network.network.Network.csv_save">[docs]</a>    <span class="k">def</span> <span class="nf">csv_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save node positions into csv file</span>
 
 <span class="sd">        Parameters </span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        filename : string </span>
 <span class="sd">                   name of the csv file</span>
 <span class="sd">        S        : Simulation</span>
@@ -1062,8 +1147,13 @@
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Network.init_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.init_save">[docs]</a>    <span class="k">def</span> <span class="nf">init_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.init_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.init_save.html#pylayers.network.network.Network.init_save">[docs]</a>    <span class="k">def</span> <span class="nf">init_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameter</span>
+<span class="sd">        ---------</span>
+
+<span class="sd">        init_save</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">pos</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
@@ -1157,7 +1247,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Network.mat_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.mat_save">[docs]</a>    <span class="k">def</span> <span class="nf">mat_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.mat_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.mat_save.html#pylayers.network.network.Network.mat_save">[docs]</a>    <span class="k">def</span> <span class="nf">mat_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        DEPRECATED </span>
 
@@ -1170,7 +1260,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        filename : string </span>
 <span class="sd">                   name of the mat file</span>
 <span class="sd">        S        : Simulation</span>
@@ -1194,7 +1284,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="p">{}</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;pos&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
-                   
+
         <span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;mat.mat&#39;</span><span class="p">,</span><span class="s">&#39;save_data&#39;</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
 
 <span class="c">#    def sql_save(self,S):</span>
@@ -1211,7 +1301,7 @@
 <span class="c">#        &quot;&quot;&quot;</span>
 <span class="c">#        self.db.writenet(self,S.now())</span>
 </div>
-<div class="viewcode-block" id="Network.txt_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.txt_save">[docs]</a>    <span class="k">def</span> <span class="nf">txt_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.txt_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.txt_save.html#pylayers.network.network.Network.txt_save">[docs]</a>    <span class="k">def</span> <span class="nf">txt_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        DEPRECATED </span>
 
@@ -1226,7 +1316,7 @@
 
 <span class="sd">        Parameters </span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        S        : Simulation</span>
 <span class="sd">                   Scipy.Simulation object</span>
 
@@ -1249,7 +1339,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        S        : Simulation</span>
 <span class="sd">                   Scipy.Simulation object</span>
 
@@ -1276,7 +1366,7 @@
             <span class="k">pass</span>
 
 
-<div class="viewcode-block" id="Network.dual_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.dual_save">[docs]</a>    <span class="k">def</span> <span class="nf">dual_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.dual_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.dual_save.html#pylayers.network.network.Network.dual_save">[docs]</a>    <span class="k">def</span> <span class="nf">dual_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        DEPRECATED </span>
 
@@ -1292,7 +1382,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        S        : Simulation</span>
 <span class="sd">                   Scipy.Simulation object</span>
 
@@ -1356,15 +1446,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">+</span><span class="mi">1</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
-    
+
 </div>
-<div class="viewcode-block" id="Network.pyray_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.pyray_save">[docs]</a>    <span class="k">def</span> <span class="nf">pyray_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.pyray_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.pyray_save.html#pylayers.network.network.Network.pyray_save">[docs]</a>    <span class="k">def</span> <span class="nf">pyray_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            save node positions into ini file, compliant with pyray standard</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        filename : string </span>
 <span class="sd">                   name of the pyray file</span>
 <span class="sd">        S        : Simulation</span>
@@ -1394,13 +1484,13 @@
                 <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Network.loc_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.loc_save">[docs]</a>    <span class="k">def</span> <span class="nf">loc_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">node</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.loc_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.loc_save.html#pylayers.network.network.Network.loc_save">[docs]</a>    <span class="k">def</span> <span class="nf">loc_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">node</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            save node estimated positions into ini file,</span>
 
 <span class="sd">        Attributes:</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        S        : Simulation</span>
 <span class="sd">                   Scipy.Simulation object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1437,7 +1527,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Network.ini_save"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.Network.ini_save">[docs]</a>    <span class="k">def</span> <span class="nf">ini_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;simulnet_data.ini&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.ini_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.ini_save.html#pylayers.network.network.Network.ini_save">[docs]</a>    <span class="k">def</span> <span class="nf">ini_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;simulnet_data.ini&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ----------</span>
 <span class="sd">        DEPRECATED</span>
@@ -1455,7 +1545,7 @@
 
 <span class="sd">        Attributes:</span>
 <span class="sd">        ----------</span>
-<span class="sd">        </span>
+
 <span class="sd">        S        : Simulation</span>
 <span class="sd">                   Scipy.Simulation object</span>
 
@@ -1521,8 +1611,8 @@
 
 
 
-</div></div>
-<div class="viewcode-block" id="PNetwork"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.PNetwork">[docs]</a><span class="k">class</span> <span class="nc">PNetwork</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">PNetwork</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process version of the Network class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1557,7 +1647,7 @@
 
 
 
-<div class="viewcode-block" id="PNetwork.run"><a class="viewcode-back" href="../../../modules/pylayers.network.network.html#pylayers.network.network.PNetwork.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
 
         <span class="c">####################################################################################</span>
@@ -1639,7 +1729,7 @@
                 <span class="k">print</span> <span class="s">&#39;network updated @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span>
             <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_updt_time</span>
-</pre></div></div></div>
+</pre></div>
 
           </div>
         </div>
@@ -1666,7 +1756,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 07, 2014.
+      Last updated on mars 08, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
