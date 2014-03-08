@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.gis.readHGT" href="pylayers.gis.readHGT.html" />
+    <link rel="next" title="pylayers.gis.osmparser.Way.__init__" href="generated/pylayers.gis.osmparser.Way.__init__.html" />
     <link rel="prev" title="pylayers.gis.furniture" href="pylayers.gis.furniture.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.readHGT.html" title="pylayers.gis.readHGT"
+          <a href="generated/pylayers.gis.osmparser.Way.__init__.html" title="pylayers.gis.osmparser.Way.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.gis.furniture.html" title="pylayers.gis.furniture"
@@ -63,12 +63,25 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.gis.osmparser</a><ul>
+<li><a class="reference internal" href="#way-class">Way Class</a></li>
+<li><a class="reference internal" href="#coords-class">Coords Class</a></li>
+<li><a class="reference internal" href="#nodes-class">Nodes Class</a></li>
+<li><a class="reference internal" href="#relations-class">Relations Class</a></li>
+<li><a class="reference internal" href="#floorplan-class">FloorPlan Class</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.gis.furniture.html"
                         title="previous chapter">pylayers.gis.furniture</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.gis.readHGT.html"
-                        title="next chapter">pylayers.gis.readHGT</a></p>
+  <p class="topless"><a href="generated/pylayers.gis.osmparser.Way.__init__.html"
+                        title="next chapter">pylayers.gis.osmparser.Way.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.gis.osmparser.txt"
@@ -97,6 +110,166 @@
             
   <div class="section" id="module-pylayers.gis.osmparser">
 <span id="pylayers-gis-osmparser"></span><h1>pylayers.gis.osmparser<a class="headerlink" href="#module-pylayers.gis.osmparser" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="way-class">
+<h2>Way Class<a class="headerlink" href="#way-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Way.__init__.html#pylayers.gis.osmparser.Way.__init__" title="pylayers.gis.osmparser.Way.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Way.__init__</span></tt></a>(refs,&nbsp;tags,&nbsp;coords)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Way.__repr__.html#pylayers.gis.osmparser.Way.__repr__" title="pylayers.gis.osmparser.Way.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Way.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Way.show.html#pylayers.gis.osmparser.Way.show" title="pylayers.gis.osmparser.Way.show"><tt class="xref py py-obj docutils literal"><span class="pre">Way.show</span></tt></a>([fig,&nbsp;ax])</td>
+<td>show way</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="coords-class">
+<h2>Coords Class<a class="headerlink" href="#coords-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.__repr__.html#pylayers.gis.osmparser.Coords.__repr__" title="pylayers.gis.osmparser.Coords.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.clean.html#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.clean</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.coords.html#pylayers.gis.osmparser.Coords.coords" title="pylayers.gis.osmparser.Coords.coords"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.coords</span></tt></a>(coords)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.cartesian.html#pylayers.gis.osmparser.Coords.cartesian" title="pylayers.gis.osmparser.Coords.cartesian"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.cartesian</span></tt></a>()</td>
+<td>Convert Latitude/Longitude in cartesian   :Returns:      <strong>m</strong> : Basemap converter            ..</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Coords.nodes</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.clean.html#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.clean</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="nodes-class">
+<h2>Nodes Class<a class="headerlink" href="#nodes-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.ways</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Nodes.clean.html#pylayers.gis.osmparser.Nodes.clean" title="pylayers.gis.osmparser.Nodes.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.clean</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.building</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.eval</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.show</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.tomaska</span></tt></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.showold</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="relations-class">
+<h2>Relations Class<a class="headerlink" href="#relations-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Relations.relations.html#pylayers.gis.osmparser.Relations.relations" title="pylayers.gis.osmparser.Relations.relations"><tt class="xref py py-obj docutils literal"><span class="pre">Relations.relations</span></tt></a>(rels)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Relations.clean.html#pylayers.gis.osmparser.Relations.clean" title="pylayers.gis.osmparser.Relations.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Relations.clean</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="floorplan-class">
+<h2>FloorPlan Class<a class="headerlink" href="#floorplan-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.__init__.html#pylayers.gis.osmparser.FloorPlan.__init__" title="pylayers.gis.osmparser.FloorPlan.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">FloorPlan.__init__</span></tt></a>(rootid,&nbsp;coords,&nbsp;nodes,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.__repr__.html#pylayers.gis.osmparser.FloorPlan.__repr__" title="pylayers.gis.osmparser.FloorPlan.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">FloorPlan.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.build.html#pylayers.gis.osmparser.FloorPlan.build" title="pylayers.gis.osmparser.FloorPlan.build"><tt class="xref py py-obj docutils literal"><span class="pre">FloorPlan.build</span></tt></a>(typ,&nbsp;eid)</td>
+<td>Notes : recursive construction</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.FloorPlan.show.html#pylayers.gis.osmparser.FloorPlan.show" title="pylayers.gis.osmparser.FloorPlan.show"><tt class="xref py py-obj docutils literal"><span class="pre">FloorPlan.show</span></tt></a>([nid,&nbsp;fig,&nbsp;ax])</td>
+<td>show the floorplan</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.osmparse.html#pylayers.gis.osmparser.osmparse" title="pylayers.gis.osmparser.osmparse"><tt class="xref py py-obj docutils literal"><span class="pre">osmparse</span></tt></a>(filename[,&nbsp;typ,&nbsp;verbose,&nbsp;c,&nbsp;n,&nbsp;w,&nbsp;r])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.extract.html#pylayers.gis.osmparser.extract" title="pylayers.gis.osmparser.extract"><tt class="xref py py-obj docutils literal"><span class="pre">extract</span></tt></a>(alat,&nbsp;alon,&nbsp;fileosm,&nbsp;fileout)</td>
+<td>extraction of an osm sub region using osmconvert</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.getbdg.html#pylayers.gis.osmparser.getbdg" title="pylayers.gis.osmparser.getbdg"><tt class="xref py py-obj docutils literal"><span class="pre">getbdg</span></tt></a>(fileosm)</td>
+<td>get building from osm file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.buildingsparse.html#pylayers.gis.osmparser.buildingsparse" title="pylayers.gis.osmparser.buildingsparse"><tt class="xref py py-obj docutils literal"><span class="pre">buildingsparse</span></tt></a>(filename)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -115,7 +288,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.readHGT.html" title="pylayers.gis.readHGT"
+          <a href="generated/pylayers.gis.osmparser.Way.__init__.html" title="pylayers.gis.osmparser.Way.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.gis.furniture.html" title="pylayers.gis.furniture"
