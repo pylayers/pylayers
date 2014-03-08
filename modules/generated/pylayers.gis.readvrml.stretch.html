@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.gis.osmparser.buildingsparse &mdash; PyLayers</title>
+    <title>pylayers.gis.readvrml.stretch &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.gis.osmparser" href="../pylayers.gis.osmparser.html" />
-    <link rel="next" title="pylayers.gis.readvrml" href="../pylayers.gis.readvrml.html" />
-    <link rel="prev" title="pylayers.gis.osmparser.getbdg" href="pylayers.gis.osmparser.getbdg.html" /> 
+    <link rel="up" title="pylayers.gis.readvrml" href="../pylayers.gis.readvrml.html" />
+    <link rel="next" title="pylayers.gis.readvrml.segsplit" href="pylayers.gis.readvrml.segsplit.html" />
+    <link rel="prev" title="pylayers.gis.readvrml.savestr2" href="pylayers.gis.readvrml.savestr2.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -47,10 +47,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../pylayers.gis.readvrml.html" title="pylayers.gis.readvrml"
+          <a href="pylayers.gis.readvrml.segsplit.html" title="pylayers.gis.readvrml.segsplit"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.osmparser.getbdg.html" title="pylayers.gis.osmparser.getbdg"
+          <a href="pylayers.gis.readvrml.savestr2.html" title="pylayers.gis.readvrml.savestr2"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -58,21 +58,21 @@
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
           <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.gis.osmparser.html" accesskey="U">pylayers.gis.osmparser</a> &raquo;</li> 
+          <li><a href="../pylayers.gis.readvrml.html" accesskey="U">pylayers.gis.readvrml</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.gis.osmparser.getbdg.html"
-                        title="previous chapter">pylayers.gis.osmparser.getbdg</a></p>
+  <p class="topless"><a href="pylayers.gis.readvrml.savestr2.html"
+                        title="previous chapter">pylayers.gis.readvrml.savestr2</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../pylayers.gis.readvrml.html"
-                        title="next chapter">pylayers.gis.readvrml</a></p>
+  <p class="topless"><a href="pylayers.gis.readvrml.segsplit.html"
+                        title="next chapter">pylayers.gis.readvrml.segsplit</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/modules/generated/pylayers.gis.osmparser.buildingsparse.txt"
+    <li><a href="../../_sources/modules/generated/pylayers.gis.readvrml.stretch.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -96,12 +96,34 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-gis-osmparser-buildingsparse">
-<h1>pylayers.gis.osmparser.buildingsparse<a class="headerlink" href="#pylayers-gis-osmparser-buildingsparse" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-gis-readvrml-stretch">
+<h1>pylayers.gis.readvrml.stretch<a class="headerlink" href="#pylayers-gis-readvrml-stretch" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pylayers.gis.osmparser.buildingsparse">
-<tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">buildingsparse</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/osmparser.html#buildingsparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.buildingsparse" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="pylayers.gis.readvrml.stretch">
+<tt class="descclassname">pylayers.gis.readvrml.</tt><tt class="descname">stretch</tt><big>(</big><em>s</em>, <em>alphat=0.1</em>, <em>alphah=0.1</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/readvrml.html#stretch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.readvrml.stretch" title="Permalink to this definition">¶</a></dt>
+<dd><p>strech a LineString by a given perc on both terminations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> : LineString shapely</p>
+<p><strong>alphat</strong> : stretching coeff tail</p>
+<p><strong>alphah</strong> : stretching coeff head</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ss</strong> : streched segment</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss1</span> <span class="o">=</span> <span class="n">stretch</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mf">1.1</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">ss1</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">s2</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </div>
 
@@ -121,10 +143,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../pylayers.gis.readvrml.html" title="pylayers.gis.readvrml"
+          <a href="pylayers.gis.readvrml.segsplit.html" title="pylayers.gis.readvrml.segsplit"
              >next</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.osmparser.getbdg.html" title="pylayers.gis.osmparser.getbdg"
+          <a href="pylayers.gis.readvrml.savestr2.html" title="pylayers.gis.readvrml.savestr2"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -132,7 +154,7 @@
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
           <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.gis.osmparser.html" >pylayers.gis.osmparser</a> &raquo;</li> 
+          <li><a href="../pylayers.gis.readvrml.html" >pylayers.gis.readvrml</a> &raquo;</li> 
       </ul>
     </div>
 

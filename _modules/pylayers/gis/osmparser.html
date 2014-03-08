@@ -101,8 +101,6 @@
 <span class="sd">    Coords.clean</span>
 <span class="sd">    Coords.coords</span>
 <span class="sd">    Coords.cartesian</span>
-<span class="sd">    Coords.nodes</span>
-<span class="sd">    Coords.clean</span>
 
 <span class="sd">Nodes Class</span>
 <span class="sd">============</span>
@@ -110,13 +108,22 @@
 <span class="sd">.. autosummary::</span>
 <span class="sd">    :toctree: generated/</span>
 
-<span class="sd">    Nodes.ways</span>
-<span class="sd">    Nodes.clean</span>
-<span class="sd">    Nodes.building</span>
-<span class="sd">    Nodes.eval</span>
-<span class="sd">    Nodes.show</span>
-<span class="sd">    Nodes.tomaska</span>
-<span class="sd">    Nodes.showold</span>
+<span class="sd">    Coords.nodes</span>
+<span class="sd">    Coords.clean</span>
+
+<span class="sd">Ways Class</span>
+<span class="sd">============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Ways.ways</span>
+<span class="sd">    Ways.clean</span>
+<span class="sd">    Ways.building</span>
+<span class="sd">    Ways.eval</span>
+<span class="sd">    Ways.show</span>
+<span class="sd">    Ways.tomaska</span>
+<span class="sd">    Ways.showold</span>
 
 <span class="sd">Relations Class</span>
 <span class="sd">===============</span>
@@ -372,20 +379,20 @@
     <span class="n">way</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="nf">ways</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ways</span><span class="p">):</span>
+<div class="viewcode-block" id="Ways.ways"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.ways.html#pylayers.gis.osmparser.Ways.ways">[docs]</a>    <span class="k">def</span> <span class="nf">ways</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ways</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            general callback function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">osmid</span><span class="p">,</span> <span class="n">tags</span><span class="p">,</span> <span class="n">refs</span> <span class="ow">in</span> <span class="n">ways</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">refs</span><span class="p">,</span><span class="n">tags</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span>
-
-    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Ways.clean"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.clean.html#pylayers.gis.osmparser.Ways.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">way</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="nf">building</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ways</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Ways.building"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.building.html#pylayers.gis.osmparser.Ways.building">[docs]</a>    <span class="k">def</span> <span class="nf">building</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ways</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            building callback function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -393,8 +400,8 @@
             <span class="k">if</span> <span class="s">&#39;building&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">refs</span><span class="p">,</span><span class="n">tags</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cpt</span> <span class="o">+=</span> <span class="mi">1</span>
-
-    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coords</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Ways.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.eval.html#pylayers.gis.osmparser.Ways.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coords</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            convert into a Way object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -404,8 +411,8 @@
             <span class="n">away</span> <span class="o">=</span>  <span class="n">Way</span><span class="p">(</span><span class="n">refs</span><span class="p">,</span><span class="n">tags</span><span class="p">,</span><span class="n">coords</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">away</span><span class="o">.</span><span class="n">valid</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">way</span><span class="p">[</span><span class="n">osmid</span><span class="p">]</span> <span class="o">=</span> <span class="n">away</span>
-
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Ways.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.show.html#pylayers.gis.osmparser.Ways.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show all way</span>
 
 <span class="sd">        Parameters</span>
@@ -443,8 +450,8 @@
 
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">tomaska</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Ways.tomaska"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.tomaska.html#pylayers.gis.osmparser.Ways.tomaska">[docs]</a>    <span class="k">def</span> <span class="nf">tomaska</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert to masked array</span>
 
 <span class="sd">        Returns</span>
@@ -473,8 +480,8 @@
 
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">tpt</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">showold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
+</div>
+<div class="viewcode-block" id="Ways.showold"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Ways.showold.html#pylayers.gis.osmparser.Ways.showold">[docs]</a>    <span class="k">def</span> <span class="nf">showold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; show ways</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fig</span><span class="o">==</span><span class="p">[]:</span>
@@ -497,7 +504,7 @@
                     <span class="k">print</span> <span class="s">&quot;building: &quot;</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="s">&quot; is not a polygon&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-
+</div>
 <span class="k">class</span> <span class="nc">Relations</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">relation</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>

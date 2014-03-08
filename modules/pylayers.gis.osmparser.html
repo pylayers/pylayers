@@ -69,6 +69,7 @@
 <li><a class="reference internal" href="#way-class">Way Class</a></li>
 <li><a class="reference internal" href="#coords-class">Coords Class</a></li>
 <li><a class="reference internal" href="#nodes-class">Nodes Class</a></li>
+<li><a class="reference internal" href="#ways-class">Ways Class</a></li>
 <li><a class="reference internal" href="#relations-class">Relations Class</a></li>
 <li><a class="reference internal" href="#floorplan-class">FloorPlan Class</a></li>
 <li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
@@ -158,12 +159,6 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.cartesian.html#pylayers.gis.osmparser.Coords.cartesian" title="pylayers.gis.osmparser.Coords.cartesian"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.cartesian</span></tt></a>()</td>
 <td>Convert Latitude/Longitude in cartesian  This method converst latlon coordinates into cartesian x,y coordinates in Cassini projection relatively to specified latlon boundary + an offset of 0.01 degrees.(to be parameterized ? )  The basemap objet for back and forth coordinates.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Coords.nodes</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.clean.html#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.clean</span></tt></a>()</td>
-<td></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -175,26 +170,43 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.ways</span></tt></td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Coords.nodes</span></tt></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Nodes.clean.html#pylayers.gis.osmparser.Nodes.clean" title="pylayers.gis.osmparser.Nodes.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.clean</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Coords.clean.html#pylayers.gis.osmparser.Coords.clean" title="pylayers.gis.osmparser.Coords.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Coords.clean</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.building</span></tt></td>
+</tbody>
+</table>
+</div>
+<div class="section" id="ways-class">
+<h2>Ways Class<a class="headerlink" href="#ways-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.ways.html#pylayers.gis.osmparser.Ways.ways" title="pylayers.gis.osmparser.Ways.ways"><tt class="xref py py-obj docutils literal"><span class="pre">Ways.ways</span></tt></a>(ways)</td>
+<td>general callback function</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.clean.html#pylayers.gis.osmparser.Ways.clean" title="pylayers.gis.osmparser.Ways.clean"><tt class="xref py py-obj docutils literal"><span class="pre">Ways.clean</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.eval</span></tt></td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.building.html#pylayers.gis.osmparser.Ways.building" title="pylayers.gis.osmparser.Ways.building"><tt class="xref py py-obj docutils literal"><span class="pre">Ways.building</span></tt></a>(ways)</td>
+<td>building callback function</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.show</span></tt></td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.eval.html#pylayers.gis.osmparser.Ways.eval" title="pylayers.gis.osmparser.Ways.eval"><tt class="xref py py-obj docutils literal"><span class="pre">Ways.eval</span></tt></a>(coords)</td>
+<td>convert into a Way object</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.tomaska</span></tt></td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.show.html#pylayers.gis.osmparser.Ways.show" title="pylayers.gis.osmparser.Ways.show"><tt class="xref py py-obj docutils literal"><span class="pre">Ways.show</span></tt></a>([typ])</td>
+<td>show all way</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Nodes.showold</span></tt></td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.tomaska.html#pylayers.gis.osmparser.Ways.tomaska" title="pylayers.gis.osmparser.Ways.tomaska"><tt class="xref py py-obj docutils literal"><span class="pre">Ways.tomaska</span></tt></a>()</td>
+<td>convert to masked array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.osmparser.Ways.showold.html#pylayers.gis.osmparser.Ways.showold" title="pylayers.gis.osmparser.Ways.showold"><tt class="xref py py-obj docutils literal"><span class="pre">Ways.showold</span></tt></a>([fig,&nbsp;ax])</td>
+<td>show ways</td>
 </tr>
 </tbody>
 </table>
