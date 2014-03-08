@@ -228,8 +228,24 @@
 </div>
 <span class="k">class</span> <span class="nc">Coords</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Coords is a point in OSM</span>
 
-<span class="sd">    A Coords is a point</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    xy :</span>
+<span class="sd">    latlon :</span>
+<span class="sd">    cpt :</span>
+<span class="sd">    minlon :</span>
+<span class="sd">    maxlon :</span>
+<span class="sd">    minlat :</span>
+<span class="sd">    maxlat :</span>
+<span class="sd">    boundary : np.array</span>
+<span class="sd">        (minlat,minlon,maxlat,maxlon) </span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cpt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -272,16 +288,27 @@
 <div class="viewcode-block" id="Coords.cartesian"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.osmparser.Coords.cartesian.html#pylayers.gis.osmparser.Coords.cartesian">[docs]</a>    <span class="k">def</span> <span class="nf">cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Convert Latitude/Longitude in cartesian</span>
 
+<span class="sd">        This method converst latlon coordinates into cartesian x,y coordinates in</span>
+<span class="sd">        Cassini projection relatively to specified latlon boundary + an offset</span>
+<span class="sd">        of 0.01 degrees.(to be parameterized ? ) </span>
+<span class="sd">        The basemap objet for back and forth coordinates.</span>
+<span class="sd">        conversion is returned.</span>
+
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
 <span class="sd">        m : Basemap converter</span>
 
-
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
 <span class="sd">        The transformation is centered on the mean of latitude and longitude</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        If boundary are modified coordinates changes.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span>
