@@ -3111,15 +3111,15 @@ class Layout(object):
             #
             # sub-segment
             #
-           
+
             if 'ss_name' in self.Gs.node[i]:
-               
+
                 name = str(self.Gs.node[i]['ss_name'])
                 try:
                     core = str(sl[name]['index'])
-                except:   
+                except:
                     core = str(sl[eval(name)[0]]['index'])
-               
+
                 if self.Gs.node[i].has_key('ss_ce1'):
                     ce1 = str(self.Gs.node[i]['ss_ce1'][0][0])
                 else:
@@ -3135,7 +3135,7 @@ class Layout(object):
                 chaine = str(k + 1) + " " + core + " " + ce1 + \
                     " " + ce2 + " " + ss_zmin + " " + ss_zmax +  "\n"
                 fo.write(chaine)
-              
+
         fo.close()
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
@@ -3169,7 +3169,7 @@ class Layout(object):
 
 
         """
-       
+
         sh1 = np.shape(p1)
         sh2 = np.shape(p2)
 

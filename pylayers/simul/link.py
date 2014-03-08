@@ -8,21 +8,21 @@
 This module run the electromagnetic simulation at the link level
 It handles the storage of simulated object in `hdf5` format.
 
-Links Class
+Link Class
 ============
 
 .. autosummary::
     :toctree: generated/
 
-    Links.__init__
-    Links.updcfg
-    Links.save_init
-    Links.stack
-    Links.save
-    Links.get_idx
-    Links.array_exist
-    Links.eval
-    Links._show3
+    Link.__init__
+    Link.updcfg
+    Link.save_init
+    Link.stack
+    Link.save
+    Link.get_idx
+    Link.array_exist
+    Link.eval
+    Link._show3
 
 
 """
@@ -299,8 +299,6 @@ class Link(object):
 
         if len(self.b) == 0 :
             self.b = self.L.cy2pt(1)
-
-        pdb.set_trace()
 
         if not self.L.ptin(self.a):
             raise NameError ('point a not inside the Layout')
@@ -773,6 +771,17 @@ class Link(object):
         pylayers.gis.layout
         pylayers.antprop.antenna
         pylayers.antprop.rays
+
+        Examples
+        --------
+        
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.simul.link import *
+            >>> L=Link()
+            >>> L.eval()
+            >>> L._show3()
 
         """
 

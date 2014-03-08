@@ -1,8 +1,6 @@
 #-*- coding:Utf-8 -*-
 """
 
-.. currentmodule:: pylayers.gis.readvrml
-
 .. autosummary::
     :toctree: generated/
 

@@ -1,4 +1,4 @@
-pylayers.simul.simultraj
-===============================
+pylayers.simul.links
+====================
 
 .. automodule:: pylayers.simul.links

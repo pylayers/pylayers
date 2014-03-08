@@ -218,11 +218,11 @@ def Losst(L,fGHz,p1,p2):
     fGHz : np.array
            frequency GHz
 
-    p1 : source point
-        (2 x Np) array or (2,) array
+    p1 : source points
+        (2 x Np1) array or (2,) array
 
     p2 : observation point
-        (2 x Np) array or (2,) array
+        (2 x Np2) array or (2,) array
 
     Examples
     --------
@@ -239,10 +239,12 @@ def Losst(L,fGHz,p1,p2):
         >>> fGHz = 4
         >>> Tx,Rx = ptw1()
         >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2])
-        >>> fig,ax = S.L.showGs()
+        >>> fig=plt.figure(figsize=(20,10))
+        >>> fig,ax = S.L.showGs(fig=fig)
         >>> tit = plt.title('test Losst')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
-        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
+        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=20,c=Edo,linewidth=0)
+        >>> cb=colorbar()
         >>> plt.show()
 
     """

@@ -2,9 +2,20 @@
 # -*- coding: utf-8 -*-
 #
 """
+   Run simulation with full human trajectory
 
-    This module run simulation with full human trajectory
+.. currentmodule:: pylayers.simul.simultraj
 
+Simul class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+     Simul.__init__
+     Simul.load
+     Simul.links_generation
+     Simul.run
 
 """
 import doctest

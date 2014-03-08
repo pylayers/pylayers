@@ -215,7 +215,7 @@ Simulations
    pylayers.simul.simulem
    pylayers.simul.simulnet
    pylayers.simul.simultraj
-   pylayers.simul.links
+   pylayers.simul.link
 
 Utility classes and functions 
 -----------------------------

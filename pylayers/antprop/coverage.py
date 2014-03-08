@@ -9,7 +9,6 @@ Class Coverage
     Coverage.__init__
     Coverage.__repr__
     Coverage.creategrid
-    Coverage.coverold
     Coverage.cover
     Coverage.showEd
     Coverage.showPower
@@ -21,7 +20,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
-from pylayers.antprop.multiwall import *
+import pylayers.antprop.multiwall as mw
 from pylayers.network.model import *
 
 import matplotlib.cm  as cm
@@ -70,6 +69,14 @@ class Coverage(object):
 
 
     def __init__(self,_fileini='coverage.ini'):
+        """
+        Parameters
+        ----------
+
+        _fileini : string
+            name of the configuration file
+
+        """
 
 
         self.config = ConfigParser.ConfigParser()
@@ -122,8 +129,9 @@ class Coverage(object):
 
         self.creategrid(full=self.mode,boundary=self.boundary)
 
+
     def __repr__(self):
-        """
+        """ representation
         """
         st=''
         st = st+ 'Layout file : '+self.L.filename + '\n\n'
@@ -132,17 +140,17 @@ class Coverage(object):
         st= st+ 'fghz : ' + str(self.fGHz) + '\n'
         st= st+ 'Pt (dBm) : ' + str(self.ptdbm) + '\n\n'
         st = st + '-----Rx------'+'\n'
-        st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n' 
-        st= st+ 'bandwith (Mhz) : '+ str(self.bandwidthmhz) + '\n' 
-        st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n' 
-        st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n' 
+        st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n'
+        st= st+ 'bandwith (Mhz) : '+ str(self.bandwidthmhz) + '\n'
+        st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n'
+        st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
         st = st + '--- Grid ----'+'\n'
         st= st+ 'nx : ' + str(self.nx) + '\n'
         st= st+ 'ny : ' + str(self.ny) + '\n'
         st= st+ 'full grid : ' + str(self.mode) + '\n'
         st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
         st = st + '---- PL Model------'+'\n'
-        st= st+ 'plm : '+ str(self.plm) + '\n' 
+        st= st+ 'plm : '+ str(self.plm) + '\n'
         return(st)
 
     def creategrid(self,full=True,boundary=[]):
@@ -172,31 +180,6 @@ class Coverage(object):
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
 
-    def coverold(self):
-        """ start the coverage calculation
-
-        Deprecated : slow implementation
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showPower()
-
-        """
-        #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
-        self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.fGHz,self.tx)
-        self.freespace = PL(self.fGHz,self.grid,self.tx)
-        self.prdbmo = self.ptdbm - self.freespace - self.Lwo
-        self.prdbmp = self.ptdbm - self.freespace - self.Lwp
-        self.snro = self.prdbmo - self.pndbm
-        self.snrp = self.prdbmp - self.pndbm
-
     def cover(self):
         """ start the coverage calculation
 
@@ -219,9 +202,9 @@ class Coverage(object):
             >>> C.showPower()
 
         """
-        #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
-        self.Lwo,self.Lwp,self.Edo,self.Edp = Losst(self.L,self.fGHz,self.grid.T,self.tx)
-        self.freespace = PL(self.fGHz,self.grid,self.tx)
+
+        self.Lwo,self.Lwp,self.Edo,self.Edp = mw.Losst(self.L,self.fGHz,self.grid.T,self.tx)
+        self.freespace = mw.PL(self.fGHz,self.grid,self.tx)
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
         self.snro = self.prdbmo - self.pndbm
@@ -567,7 +550,6 @@ class Coverage(object):
 
 
 if (__name__ == "__main__"):
-    plt.ion()
     C=Coverage()
     C.cover()
     C.showPower()

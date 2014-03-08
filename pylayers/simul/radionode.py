@@ -1,5 +1,39 @@
 #/usr/bin/python
 # -*- coding: utf-8 -*-
+"""
+
+.. autosummary::
+    :toctree: generated/
+
+
+    RadioNode.__init__
+    RadioNode.__repr__
+    RadioNode.pos2pt
+    RadioNode.transform
+    RadioNode.info
+    RadioNode.clear
+    RadioNode.points
+    RadioNode.point
+    RadioNode.linevect
+    RadioNode.line
+    RadioNode.surface
+    RadioNode.volume
+    RadioNode.loadini
+    RadioNode.loadspa
+    RadioNode.save
+    RadioNode.gpoint
+    RadioNode.gline
+    RadioNode.gsurface
+    RadioNode.gvolume
+    RadioNode.show
+    RadioNode.show3
+    RadioNode.move
+    RadioNode.extract
+    RadioNode.loadvsh
+    RadioNode.gantenna
+
+"""
+
 import os
 import doctest
 import numpy as np
@@ -186,11 +220,11 @@ class RadioNode(object):
             print "filestr    : ", self.filestr
         except:
             pass
-    
+
     def clear(self):
         """ clear positions
 
-        The origin [0,0,0] is always defined as the first point 
+        The origin [0,0,0] is always defined as the first point
 
         """
         self.position = np.array([], dtype=float)
@@ -209,6 +243,7 @@ class RadioNode(object):
         """
         if type(pt) == list:
             pt = np.array(pt)
+
         self.position = pt
         self.N = np.shape(self.position)[1]
         self.save()

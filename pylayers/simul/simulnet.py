@@ -1,4 +1,24 @@
 #   -*- coding:Utf-8 -*-
+"""
+
+Simul class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+     Simul.__init__
+     Simul.__repr__
+     Simul.create_layout
+     Simul.create_agent
+     Simul.create_EMS
+     Simul.create_network
+     Simul.create_visual
+     Simul.create
+     Simul.create_show
+     Simul.runsimul
+
+"""
 #####################################################################
 #This file is part of LocaSimPy.
 
