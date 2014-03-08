@@ -1,3 +1,26 @@
+"""
+.. currentmodule:: pylayers.mobility.transit.Person
+
+Utility Functions
+=================
+
+.. autosummary;; 
+    :toctree: generated/
+
+    scale
+    copy
+
+Person Class
+=================
+
+.. autosummary;; 
+    :toctree: generated/
+
+    Person.__init__
+    Person.__repr__
+    Person.move
+    Person.delete
+"""
 from SimPy.SimulationRT import Process,Simulation,hold
 import ConfigParser
 import datetime
@@ -38,17 +61,32 @@ def truncate(self, max):
         return self.normalize() * max
     else:
         return vec3(self)
+
 vec3.truncate = truncate
 
 def scale(self, size):
     """
+    Parameters
+    ----------
+
+    size : float 
+        scaling factor
+
+    Returns
+    -------
+
+    scaled version of self
+
 
     """
     return self.normalize() * size
+
+
 vec3.scale = scale
 
 def copy(self):
     return vec3(self)
+
 vec3.copy = copy
 
 class Person(Process):
@@ -217,12 +255,12 @@ class Person(Process):
         s = s + 'forbiden room list: ' + str(self.forbidroomId) +'\n'
         return s
 
-        
+
 
 
 
     def move(self):
-        """ Move the Agent
+        """ Move the Person
 
         """
         if self.pdshow:
@@ -242,18 +280,22 @@ class Person(Process):
                         checked.append(zone)
                         zone(self)
 
-                acceleration = self.steering_mind(self) 
+                # updating acceleration
+                acceleration = self.steering_mind(self)
                 acceleration = acceleration.truncate(self.max_acceleration)
+                self.acceleration = acceleration
 
-                self.acceleration = acceleration 
+                # updating velocity
                 velocity = self.velocity + acceleration * self.interval
-                self.velocity = velocity.truncate(self.max_speed) 
+                self.velocity = velocity.truncate(self.max_speed)
+
 
                 if velocity.length() > 0.2:
                     # record direction only when we've really had some
                     self.localy = velocity.normalize()
                     self.localx = vec3(self.localy.y, -self.localy.x)
 
+                # updating position
                 self.position = self.position + self.velocity * self.interval
 #                self.update()
                 self.world.update_boid(self)
@@ -263,8 +305,10 @@ class Person(Process):
                 p=conv_vecarr(self.position).reshape(2,1)
                 v=conv_vecarr(self.velocity).reshape(2,1)
                 a=conv_vecarr(self.acceleration).reshape(2,1)
+
+                # fill panda dataframe 2D trajectory
                 self.df = self.df.append(pd.DataFrame({'t':pd.Timestamp(self.sim.now(),unit='s'),
-                'id':self.ID,    
+                'id':self.ID,
                 'x':p[0],
                 'y':p[1],
                 'vx':v[0],
@@ -272,14 +316,18 @@ class Person(Process):
                 'ax':a[0],
                 'ay':a[1]},
                 columns=['t','id','x','y','vx','vy','ax','ay']))
+
                 if self.pdshow:
                     plt.scatter(self.df['x'].tail(1),self.df['y'].tail(1),c=self.color,s=4,alpha=0.3)
                     plt.draw()
 
                 if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
+
                 if 'txt' in self.save:
                     pyu.writemeca(self.ID,self.sim.now(),p,v,a)
+
+                # new target when arrived in poi
                 if self.arrived:
                     self.arrived = False
                     if self.endpoint:
@@ -288,7 +336,7 @@ class Person(Process):
                         #self.sim.roomlist.pop(pr)
                         self.roomId = self.nextroomId
                     #
-                    # Si porte on continue
+                    # If door lets continue 
                     #
                     #
                     # ig destination --> next room
@@ -343,15 +391,15 @@ class Person(Process):
 #                        self.wait=abs(random.gauss(1,1))
                         if self.sim.verbose:
                             print 'meca: ag ' + self.ID + ' wait ' + str(self.wait)#*self.interval) 
-                        yield hold, self, self.wait 
+                        yield hold, self, self.wait
 
-                    else:    
+                    else:
                         del self.waypoints[0]
                     #print "wp : ", self.waypoints
                         if len(self.waypoints)==1:
                             self.endpoint=True
                         self.destination = self.waypoints[0]
-                    #print "dest : ", self.destination    
+                    #print "dest : ", self.destination
                 else:
                     yield hold, self, self.interval
             else:
