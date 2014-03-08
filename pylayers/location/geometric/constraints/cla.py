@@ -105,7 +105,7 @@ class CLA(object):
 
     compute(pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
                                               compute the CLA to estimate the positon.
-    
+
     rescale(self,f_vcw,cid=None)            : rescale Constraint Box
 
     annulus_bound(self,cid=None)            : rescale Constraint
@@ -229,7 +229,8 @@ class CLA(object):
         self.usable=[c.usable for c in self.c]
 
     def compute(self,pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
-        """ Compute the cla to estimate the postion
+        """
+            Compute the cla to estimate the postion
 
         Parameters
         ----------
@@ -237,20 +238,20 @@ class CLA(object):
         pe : boolean
            set to True to compute the position estimation store into self.pe
         mergeRSS : boolean
-            True : if there is RSS in cla, they are used to find the smallest merge
-            False (default): even if there is RSS in cla, they are neglected during the merge process
+            True  if there is RSS in cla, they are used to find the smallest merge
+            False (default) even if there is RSS in cla, they are neglected during the merge process
         refineRSS :boolean
-            True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous
+            True (default) if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous
                             during the refine process
-            False: if there is RSS in cla, they are ignore during the refine process
+            False if there is RSS in cla, they are ignore during the refine process
         NBOXMAX : integer
             Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)
         NVOLMIN : float
             Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)
         HT : boolean
-            True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
+            True  if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
                     in estpos2 method
-            False : no HT methos is applied
+            False  no HT method is applied
 
         Notes
         -----

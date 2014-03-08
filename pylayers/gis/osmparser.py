@@ -1,4 +1,82 @@
 #-*- coding:Utf-8 -*-
+"""
+
+Way Class
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+     Way.__init__
+     Way.__repr__
+     Way.show
+
+Coords Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Coords.__repr__
+    Coords.clean
+    Coords.coords
+    Coords.cartesian
+
+Nodes Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Coords.nodes
+    Coords.clean
+
+Ways Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Ways.ways
+    Ways.clean
+    Ways.building
+    Ways.eval
+    Ways.show
+    Ways.tomaska
+    Ways.showold
+
+Relations Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+     Relations.relations
+     Relations.clean
+
+FloorPlan Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+     FloorPlan.__init__
+     FloorPlan.__repr__
+     FloorPlan.build
+     FloorPlan.show
+
+Utility Functions
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+     osmparse
+     extract
+     getbdg
+     buildingsparse
+
+"""
 #
 # Module OSMParser
 #
@@ -77,8 +155,24 @@ class Way(object):
 
 class Coords(object):
     """
+    Coords is a point in OSM
 
-    A Coords is a point
+    Attributes
+    ----------
+
+    xy :
+    latlon :
+    cpt :
+    minlon :
+    maxlon :
+    minlat :
+    maxlat :
+    boundary : np.array
+        (minlat,minlon,maxlat,maxlon) 
+
+    Notes
+    -----
+
 
     """
     cpt = 0
@@ -121,16 +215,27 @@ class Coords(object):
     def cartesian(self):
         """ Convert Latitude/Longitude in cartesian
 
+        This method converst latlon coordinates into cartesian x,y coordinates in
+        Cassini projection relatively to specified latlon boundary + an offset
+        of 0.01 degrees.(to be parameterized ? ) 
+        The basemap objet for back and forth coordinates.
+        conversion is returned.
+
+
         Returns
         -------
 
         m : Basemap converter
 
-
         Notes
         -----
 
         The transformation is centered on the mean of latitude and longitude
+
+        Warning
+        -------
+
+        If boundary are modified coordinates changes.
 
         """
         bd = self.boundary

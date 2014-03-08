@@ -1,4 +1,38 @@
 #-*- coding:Utf-8 -*-
+"""
+
+.. currentmodule:: pylayers.gis.readvrml
+
+.. autosummary::
+    :toctree: generated/
+
+    savestr2
+    stretch
+    segsplit
+    extract
+    inbracket
+    incrochet
+    geomLine
+    geomFace
+    ParseDirectionalLight
+    ParseMaterial
+    show
+    parsevrml
+    vrml2sha
+    vrml2geom
+
+VLayout Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    load
+    show
+    wallanalysis
+    show3entity
+
+"""
 import os
 import doctest
 import glob
@@ -18,6 +52,7 @@ def savestr2(dpt,dwall, _filename='struc.str2'):
     """ save walls in str2 format
 
     The default filename is struc.str2
+
     Parameters
     ----------
 
@@ -408,10 +443,12 @@ def parsevrml(filename):
 
     Parameters
     ----------
+
     filename : vrml filename
 
     Returns
     -------
+
     dg : dictionnaries of group
 
     """
@@ -712,8 +749,10 @@ class VLayout(object):
 
     def show3entity(self, group, IDs):
         """ geomview vizualisation of entity
+
         Parameters
         ----------
+
         group :
         IDs :
 

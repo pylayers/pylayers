@@ -5889,11 +5889,14 @@ class Layout(object):
 
         Parameters
         ----------
+
         pt : point (ndarray)
 
         Returns
         -------
+
         boolean : True if inside
+
         """
 
         pt = pt[:2]
@@ -5901,8 +5904,11 @@ class Layout(object):
         x= np.array((self.ax[:2]))
         y= np.array((self.ax[2:]))
 
+        # being   in [xmin xmax]
         c0 = pt[0]<x[1] and  pt[0]>x[0]
+        # being   in [ymin ymax]
         c1 = pt[1]<y[1] and  pt[1]>y[0]
+
 
         return (c0 & c1)
 
@@ -5937,13 +5943,16 @@ class Layout(object):
 
         Parameters
         ----------
-        cy : 
-            cycle
+
+        cy : int
+            cycle number
 
         h : float
-            point height   
+            point height
+
         Returns
         -------
+
         point  : nd.array
 
         """

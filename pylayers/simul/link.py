@@ -61,10 +61,6 @@ import pdb
 class Link(object):
     """ Link Simulation Class
 
-    
-    
-
-
     Notes
     -----
 
@@ -73,11 +69,9 @@ class Link(object):
 
     Links_<save_idx>_<LayoutFilename>.h5
 
-    where 
-        <save_idx> is a integer number to be able to discriminate different links simulations 
+    where
+        <save_idx> is a integer number to be able to discriminate different links simulations
     and <LayoutFilename> is the Layout used for the link simulation.
-
-
 
 
 
@@ -112,15 +106,15 @@ class Link(object):
 
     Roots Dataset :
 
-    c_map : Cycles (Nc x 3) 
-    p_map : Positions (Np x 3) 
-    f_map : Frequency (Nf x 3) 
+    c_map : Cycles (Nc x 3)
+    p_map : Positions (Np x 3)
+    f_map : Frequency (Nf x 3)
     T_map : Rotation matrices (Nt x 3)
-    A_map : Antenna name (Na x 3) 
+    A_map : Antenna name (Na x 3)
 
     Groups and subgroups:
 
-     
+
         Signature identifier (si_ID#N):
             ca_cb_cutoff
 
@@ -133,8 +127,8 @@ class Link(object):
         H identifier (H_ID#N):
             ua_ub_uf_uTa_uTb_uAa_uAb
 
-        with 
-        ca : cycle number of a 
+        with
+        ca : cycle number of a
         cb : cycle number of b
         cutoff : signature.run cutoff
         ua : indice of a position in 'p_map' position dataset
@@ -145,7 +139,7 @@ class Link(object):
         uAa : indice of a position in 'A_map' Antenna name dataset
         uAb : indice of b position in 'A_map' Antenna name dataset
 
-    
+
     """
     def __init__(self, **kwargs):
         """
@@ -157,25 +151,25 @@ class Link(object):
         L : Layout
             Layout to be used
         a : np.ndarray (3,)
-            position of a device dev_a 
+            position of a device dev_a
         b : np.ndarray (3,)
-            position of a device dev_b  
+            position of a device dev_b
         Aa : Antenna
-            Antenna of device dev_a  
+            Antenna of device dev_a
         Ab : Antenna
-            Antenna of device dev_b 
+            Antenna of device dev_b
         Ta : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_a relative to global Layout scene
         Tb : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_b relative to global Layout scene
         fGHz : np.ndarray (Nptf,)
             frequency range of Nptf poitns used for evaluation of channel in GHz
-        wav : Waform 
+        wav : Waform
             Waveform to be applied on the channel
         save_idx : int
             number to differenciate the h5 file generated
 
-        Advanced (change only if you really know what you do !) 
+        Advanced (change only if you really know what you do !)
 
         save_opt : list (['sig','ray','Ct','H'])
             information to be saved in the Links h5 file. Should never be Modified !
@@ -201,6 +195,7 @@ class Link(object):
                 }
 
 
+
         for key, value in defaults.items():
             if key not in kwargs:
                 setattr(self,key,value)
@@ -208,7 +203,7 @@ class Link(object):
                 setattr(self,key,kwargs[key])
 
         force=self.force_create
-        delattr(self,'force_create') 
+        delattr(self,'force_create')
 
         self.Lname = self.L.filename
 
@@ -224,8 +219,8 @@ class Link(object):
                             _fileant = self.Ab._filename,
                             )
 
-        self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5'   
-  
+        self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5' 
+
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
         if not os.path.exists(filenameh5) or force:
@@ -242,24 +237,24 @@ class Link(object):
 
         self.updcfg()
 
-    
+
     def __repr__(self):
         """ __repr__
         """
-        
+
         s = 'filename: ' + self.filename +'\n'
 
-        s = s + 'Actual Link considered is:\n' 
-        s = s + '--------------------------\n' 
+        s = s + 'Actual Link considered is:\n'
+        s = s + '--------------------------\n'
         s = s + 'Layout: ' + self.Lname + '\n\n'
         s = s + 'Device a:  \n'
         s = s + '---------  \n'
-        s = s + 'position: ' + str (self.a) + '\n' 
+        s = s + 'position: ' + str (self.a) + '\n'
         s = s + 'Antenna: ' + str (self.Aa._filename) + '\n'
         s = s + 'Antenna rotation matrice : \n ' + str (self.Ta) + '\n\n'
         s = s + 'Device b:  \n'
         s = s + '---------  \n'
-        s = s + 'position: ' + str (self.b) + '\n' 
+        s = s + 'position: ' + str (self.b) + '\n'
         s = s + 'Antenna: ' + str (self.Ab._filename) + '\n'
         s = s + 'Antenna rotation matrice : \n ' + str (self.Tb) + '\n\n'
         s = s + 'Link evaluation information : \n '
@@ -284,7 +279,7 @@ class Link(object):
         if self.L.filename != self.Lname :
             self.Lname=self.L.filename
             # Layout has been changed:
-            self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5'   
+            self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5' 
             filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
             if not os.path.exists(filenameh5) :
                 print 'Links save file for ' + self.L.filename + ' does not exist.'
@@ -294,17 +289,18 @@ class Link(object):
         try:
             self.L.dumpr()
         except:
-            print('This is the first time the Layout is used. Graphs have to be build. Please Wait') 
+            print('This is the first time the Layout is used. Graphs have to be build. Please Wait')
             self.L.build()
             self.L.dumpw()
 
 
         if len(self.a) == 0 :
             self.a = self.L.cy2pt(0)
-            
+
         if len(self.b) == 0 :
             self.b = self.L.cy2pt(1)
-        
+
+        pdb.set_trace()
 
         if not self.L.ptin(self.a):
             raise NameError ('point a not inside the Layout')
@@ -315,7 +311,7 @@ class Link(object):
         self.cb = self.L.pt2cy(self.b)
 
 
-        
+
 
         self.fmin = self.fGHz[0]
         self.fmax = self.fGHz[-1]
@@ -323,14 +319,14 @@ class Link(object):
 
         # update radio node
 
-        self.tx.position = self.a  
+        self.tx.position = self.a
         self.rx.position = self.b
-        self.tx.orientation = self.Ta  
-        self.rx.orientation = self.Tb  
-        self.tx.A = self.Aa  
-        self.rx.A = self.Ab  
+        self.tx.orientation = self.Ta
+        self.rx.orientation = self.Tb
+        self.tx.A = self.Aa
+        self.rx.A = self.Ab
 
-        # get identifier groupname in h5py file 
+        # get identifier groupname in h5py file
         self.get_grpname()
         # check if grpnamee exist in the h5py file
         [self.exist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
@@ -346,12 +342,12 @@ class Link(object):
 
 
         filename_long : str
-            complete path and filename 
+            complete path and filename
         """
 
 
         f=h5py.File(filename_long,'w')
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
 
         try:
@@ -360,9 +356,9 @@ class Link(object):
             f.create_group('ray')
             f.create_group('Ct')
             f.create_group('H')
-            # mapping point a 
+            # mapping point a
             f.create_dataset('p_map',shape=(0,3), maxshape=(None,3),dtype='float64')
-            # mapping cycles  
+            # mapping cycles
             f.create_dataset('c_map',shape=(0,3), maxshape=(None,3),dtype='int')
             # mapping (fmin,fmax,fstep)
             f.create_dataset('f_map',shape=(0,3), maxshape=(None,3),dtype='float64')
@@ -378,7 +374,7 @@ class Link(object):
 
 
     def stack(self,key,array):
-        """ stack new array in h5py file 
+        """ stack new array in h5py file
             for a given key (dataframe/group)
 
         Parameters
@@ -394,7 +390,7 @@ class Link(object):
         idx : int
             indice of last element of the array of key
         """
-        try : 
+        try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f=h5py.File(lfilename,'a')
             if key != 'T_map':
@@ -417,7 +413,7 @@ class Link(object):
         Parameters
         ----------
 
-        obj : Object 
+        obj : Object
             (Signatures|Rays|Ctilde|Tchannel)
         grpname : string
             groupe name of the h5py file
@@ -434,12 +430,12 @@ class Link(object):
         Parameters
         ----------
 
-        obj : Object 
+        obj : Object
             (Signatures|Rays|Ctilde|Tchannel)
         grpname : string
             groupe name of the h5py file
 
-        
+      
         """
 
         obj._loadh5(self.filename,grpname)
@@ -453,21 +449,21 @@ class Link(object):
         Notes
         -----
 
-        Update the key grpname of self.dexist[key] dictionnary 
+        Update the key grpname of self.dexist[key] dictionnary
         """
         ############
         # Signatures
-        ############# 
+        #############
         array = np.array(([self.ca,self.cb,self.cutoff]))
         ua_opt, ua = self.get_idx('c_map',array)
         grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff)
-        self.dexist['sig']['grpname']=grpname        
-        
-                
+        self.dexist['sig']['grpname']=grpname      
+      
+              
 
         ############
         # Rays
-        ############# 
+        #############
 
         # check existence of self.a in h5py file
 
@@ -476,27 +472,27 @@ class Link(object):
         ub_opt, ub = self.get_idx('p_map',self.b)
         # Write in h5py if no prior a-b link
         grpname = str(ua) + '_' +str(ub)
-        self.dexist['ray']['grpname']=grpname                
-    
+        self.dexist['ray']['grpname']=grpname              
+  
 
-        
+      
         ############
         # Ctilde
-        ############# 
+        #############
 
         # check existence of frequency in h5py file
         farray = np.array(([self.fmin,self.fmax,self.fstep]))
         uf_opt, uf = self.get_idx('f_map',farray)
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
-        self.dexist['Ct']['grpname']=grpname               
+        self.dexist['Ct']['grpname']=grpname             
 
         ############
         # H
-        ############# 
+        #############
 
-    
-    
+  
+  
         # check existence of Rot a (Ta) in h5py file
         uTa_opt, uTa = self.get_idx('T_map',self.Ta)
         # check existence of Rot b (Tb) in h5py file
@@ -509,19 +505,19 @@ class Link(object):
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf) + \
                   '_'  + str(uTa) + '_' + str(uTb) + \
-                  '_'  + str(uAa) + '_' + str(uAb) 
+                  '_'  + str(uAa) + '_' + str(uAb)
 
-        self.dexist['H']['grpname']=grpname    
+        self.dexist['H']['grpname']=grpname  
 
 
     def exist(self,key,grpname):
-        """Check if the data of a key with a given groupname 
+        """Check if the data of a key with a given groupname
             already exists in the h5py file
 
         Parameters
         ----------
-        
-        key: string 
+      
+        key: string
             key of the h5py group
         grpname : string
             groupe name of the h5py file
@@ -529,10 +525,10 @@ class Link(object):
         Notes
         -----
 
-        update the key grpname of self.dexist[key] dictionnary 
+        update the key grpname of self.dexist[key] dictionnary
 
         """
-        try : 
+        try :
             lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
             f=h5py.File(lfilename,'r')
             if grpname in f[key].keys():
@@ -550,12 +546,12 @@ class Link(object):
             of the h5py file.
             If array doesn't exist, the h5pyfile[key] array is stacked
 
-     
-        
+   
+      
         Parameters
         ----------
-        
-        key: string 
+      
+        key: string
             key of the h5py group
         array : np.ndarray
             array type to check existency
@@ -565,27 +561,27 @@ class Link(object):
         Returns
         -------
 
-        (u_opt, u): tuple 
+        (u_opt, u): tuple
 
         u : np.ndarray
             the index in the array of the file[key] group
         u_opt : string ('r'|'s')
             return 'r' if array has been read into h5py file
             return 's' if array has been stacked into the array of group key
-        
-            
+      
+          
 
         See Also:
         --------
 
         Links.array_exist
         """
-        
+      
         umap = self.array_exist(key,array,tol=tol)
         lu = len(umap)
         # if exists take the existing one
         # otherwise value is created
-        if lu != 0: 
+        if lu != 0:
             u = umap
             u_opt='r'
         else :
@@ -595,14 +591,14 @@ class Link(object):
 
 
     def array_exist(self,key,array,tol=1e-3) :
-        """ check if an array of a given key (h5py group) 
+        """ check if an array of a given key (h5py group)
             has already been stored into the h5py file
-        
-    
+      
+  
         Parameters
         ----------
-    
-        key: string 
+  
+        key: string
             key of the h5py group
         array : np.ndarray
             array type to check existency
@@ -624,25 +620,25 @@ class Link(object):
         """
 
         lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
-        try : 
+        try :
             f=h5py.File(lfilename,'a')
             fa = f[key][...]
             f.close()
         except:
             f.close()
-            raise NameError('Link check_exist: issue during reading')    
+            raise NameError('Link check_exist: issue during reading')  
 
         if key == 'c_map':
             eq = array == fa
             # sum eq = 3 means cy0,cy1 and cutoff are the same in fa and array
-            ua = np.where(np.sum(eq,axis=1)==3)[0]     
+            ua = np.where(np.sum(eq,axis=1)==3)[0]   
 
         elif key == 'p_map':
 
             da = np.sqrt(np.sum((array-fa)**2,axis=1))
             # indice points candidate in db for a
 
-            ua = np.where(da<tol)[0]     
+            ua = np.where(da<tol)[0]   
 
         elif key == 'f_map':
             # fmin_h5 < fmin_rqst
@@ -654,9 +650,9 @@ class Link(object):
             # fstep_h5 < fstep_rqst
             ufst = np.where(fa[:,2]<=array[2])[0]
             lufst = len(ufst)
-            # if fmin, fmax or fstep 
+            # if fmin, fmax or fstep
             if (lufmi==0) and (lufma==0) and (lufst==0):
-                ua = np.array([]) 
+                ua = np.array([])
             else :
                 # find comon lines of fmin and fmax
                 ufmima = np.where(np.in1d(ufmi,ufma))[0]
@@ -676,14 +672,14 @@ class Link(object):
 
         return ua
 
-    
+  
     def eval(self,**kwargs):
         """ Evaluate the link
 
         Parameters
         ----------
 
-       
+     
         si.algo : str ('old'|'new')
             siganture.run algo type
         ra.ceil_height_meter : int
@@ -696,7 +692,7 @@ class Link(object):
 
         pylayers.antprop.signature
         pylayers.antprop.rays
-        
+      
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
@@ -710,18 +706,18 @@ class Link(object):
 
         self.updcfg()
 
-        
-        
+      
+      
         #signatures
         Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
         if self.dexist['sig']['exist']:
             self.load(Si,self.dexist['sig']['grpname'])
         else :
-            
+          
             Si.run5(cutoff=self.cutoff,algo=kwargs['si.algo'])
             # save sig
             self.save(Si,self.dexist['sig']['grpname'])
-        
+      
         R = Rays(self.a,self.b)
         if self.dexist['ray']['exist']:
             self.load(R,self.dexist['ray']['grpname'])
@@ -730,8 +726,8 @@ class Link(object):
             R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
             R.locbas(self.L)
             # save ray
-            self.save(R,self.dexist['ray']['grpname'])    
-        
+            self.save(R,self.dexist['ray']['grpname'])  
+      
         C=Ctilde()
         if self.dexist['Ct']['exist']:
             self.load(C,self.dexist['Ct']['grpname'])
@@ -740,8 +736,8 @@ class Link(object):
             #Ctilde
             C=R.eval(self.fGHz)
             # save Ct
-            self.save(C,self.dexist['Ct']['grpname'])    
-        
+            self.save(C,self.dexist['Ct']['grpname'])  
+      
         H=Tchannel()
         if self.dexist['H']['exist']:
             self.load(H,self.dexist['H']['grpname'])
@@ -752,10 +748,10 @@ class Link(object):
             H=C.prop2tran(a=self.Aa,b=self.Ab)
             self.save(H,self.dexist['H']['grpname'])
 
-        self.Si = Si        
+        self.Si = Si      
         self.R = R
         self.C = C
-        self.H = H        
+        self.H = H      
 
 
     def _show3(self,rays=True,newfig = False,**kwargs):
@@ -810,7 +806,7 @@ class Link(object):
 
         self.L._show3(newfig=False,opacity=0.7,centered=centered)
 
-        
+      
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
             title=False,colorbar=False,newfig=False)
         Arx._show3(T=Trx.reshape(3,3),po=prx,
@@ -1366,7 +1362,7 @@ class Link(object):
 #         Parameters
 #         ----------
 
-#         S 
+#         S
 #         tx
 #         rx
 #         wav
@@ -1377,7 +1373,7 @@ class Link(object):
 #         crxp =-1
 #         ctxp =-1
 #         tcir = {}
-#         tx = self.tx.position 
+#         tx = self.tx.position
 #         Ntx = len(tx[0])
 #         rx = self.rx.position
 #         Nrx = len(rx[0])
@@ -1403,7 +1399,7 @@ class Link(object):
 
 #             r3d = r2d.to3D(self.L)
 #             r3d.locbas(self.L)
-#             r3d.fillinter(self.L)   
+#             r3d.fillinter(self.L) 
 #             Ct  = r3d.eval(self.fGHz)
 #             sca = Ct.prop2tran(self.tx.A,self.rx.A)
 #             cir = sca.applywavB(self.wav.sfg)
@@ -1974,12 +1970,12 @@ class Link(object):
     #     This function should not be used for more than one rx.
     #     .. todo extend properly this function in order to handle properly
     #         multi-nodes in irx. The problem is to keep the association
-    #         between the index number of the rx in the ini file and the 
-    #         rx in dtra. 
+    #         between the index number of the rx in the ini file and the
+    #         rx in dtra.
 
     #     """
     #     #
-    #     # Verify 
+    #     # Verify
     #     #
     #     if (self.progress >= 1):
     #         chaine = "tracing -lch " + self.dlch[itx] + \
@@ -1998,14 +1994,14 @@ class Link(object):
     #         aux = recup.splitlines()
     #         len_aux = recup.count("\n")
     #         #
-    #         # set list of .tra files empty 
+    #         # set list of .tra files empty
     #         #filetra = []
     #         #for i in range(len_aux):
     #         #    if aux[i].find("filetraout") != -1:
     #         #        aux[i] = aux[i].replace('filetraout : ', '')
     #         #        filetra.append(pyu.getshort(aux[i]))
     #         #
-    #         # Warning : this is a bad fix  
+    #         # Warning : this is a bad fix
     #         #
     #         #for filename in filetra:
     #         for i in range(len_aux):
@@ -2116,7 +2112,7 @@ class Link(object):
     #     nrx : integer
     #              tracing index
     #     verbose : Boolean
-            
+          
 
     #     """
     #     chaine = "evalfield -tud " + self.dtud[itx][irx] + \
@@ -2189,7 +2185,7 @@ class Link(object):
 
     #     """
 
-    #     prefix = self.filesimul.replace('.ini', '') 
+    #     prefix = self.filesimul.replace('.ini', '')
     #     #
     #     #
     #     #
@@ -2200,7 +2196,7 @@ class Link(object):
 
     #         ctx = S.L.pt2cy(tx)
     #         crx = S.L.pt2cy(rx)
-            
+          
     #         _filecir = prefix +'-cir-'+str(k)+'-'+str(link)+'-'+str((ctx,crx))
     #         D = {}
     #         D['Tx'] = tx
@@ -2225,7 +2221,7 @@ class Link(object):
 
     #         r2d = Si.rays(tx,rx)
     #         r2d.show(S.L)
-    
+  
     #         r3d = r2d.to3D()
     #         r3d.locbas(S.L)
     #         r3d.fillinter(S.L)
@@ -2244,7 +2240,7 @@ class Link(object):
 
     #         filename = pyu.getlong(_filename, cirdir)
     #         spio.savemat(filename, D)
-            
+          
     # def run(self, itx, srx=[], cirforce=True,verbose=False):
     #     """ run the simulation for 1 tx and a set of rx
 
@@ -2492,7 +2488,7 @@ class Link(object):
     #                 CSCO.append(SCO)
     #                 #SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)
     #                 #
-    #                 #  Apply the apha factor on waveform 
+    #                 #  Apply the apha factor on waveform
     #                 #
     #                 SCA = VCl.prop2tran(a=self.tx.A,b=self.rx.A)
     #                 CSCA.append(SCA)
