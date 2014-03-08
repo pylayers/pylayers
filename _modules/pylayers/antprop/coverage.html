@@ -88,7 +88,6 @@
 <span class="sd">    Coverage.__init__</span>
 <span class="sd">    Coverage.__repr__</span>
 <span class="sd">    Coverage.creategrid</span>
-<span class="sd">    Coverage.coverold</span>
 <span class="sd">    Coverage.cover</span>
 <span class="sd">    Coverage.showEd</span>
 <span class="sd">    Coverage.showPower</span>
@@ -100,7 +99,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">str2bool</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">as</span> <span class="nn">mw</span>
 <span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span>  <span class="kn">as</span> <span class="nn">cm</span>
@@ -149,6 +148,14 @@
 
 
 <div class="viewcode-block" id="Coverage.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__init__.html#pylayers.antprop.coverage.Coverage.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;coverage.ini&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        _fileini : string</span>
+<span class="sd">            name of the configuration file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -200,9 +207,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">creategrid</span><span class="p">(</span><span class="n">full</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span>
+
 </div>
 <div class="viewcode-block" id="Coverage.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__repr__.html#pylayers.antprop.coverage.Coverage.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; representation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">st</span><span class="o">=</span><span class="s">&#39;&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Layout file : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
@@ -211,17 +219,17 @@
         <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;fghz : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;Pt (dBm) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;-----Rx------&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;rxsens (dBm) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> 
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;bandwith (Mhz) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandwidthmhz</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> 
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;temperature (K) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> 
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;noisefactor (dB) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span> 
+        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;rxsens (dBm) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;bandwith (Mhz) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bandwidthmhz</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;temperature (K) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;noisefactor (dB) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;--- Grid ----&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;nx : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;ny : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;full grid : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;boundary (xmin,ymin,xmax,ymax) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;---- PL Model------&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;plm : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plm</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> 
+        <span class="n">st</span><span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;plm : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plm</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Coverage.creategrid"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.creategrid.html#pylayers.antprop.coverage.Coverage.creategrid">[docs]</a>    <span class="k">def</span> <span class="nf">creategrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">full</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">boundary</span><span class="o">=</span><span class="p">[]):</span>
@@ -251,31 +259,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))))</span>
 
 </div>
-<div class="viewcode-block" id="Coverage.coverold"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.coverold.html#pylayers.antprop.coverage.Coverage.coverold">[docs]</a>    <span class="k">def</span> <span class="nf">coverold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; start the coverage calculation</span>
-
-<span class="sd">        Deprecated : slow implementation</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt;&gt;&gt; from pylayers.antprop.coverage import *</span>
-<span class="sd">            &gt;&gt;&gt; C = Coverage()</span>
-<span class="sd">            &gt;&gt;&gt; C.cover()</span>
-<span class="sd">            &gt;&gt;&gt; C.showPower()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edp</span> <span class="o">=</span> <span class="n">Loss0_v2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="n">PL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">snro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">snrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
-</div>
 <div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.cover.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    <span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; start the coverage calculation</span>
 
@@ -298,9 +281,9 @@
 <span class="sd">            &gt;&gt;&gt; C.showPower()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c">#self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edp</span> <span class="o">=</span> <span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="n">PL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edp</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">snro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
@@ -646,7 +629,6 @@
 
 </div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">C</span><span class="o">=</span><span class="n">Coverage</span><span class="p">()</span>
     <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
     <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">()</span>
