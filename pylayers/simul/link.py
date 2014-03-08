@@ -803,9 +803,14 @@ class Link(object):
             prx = self.rx.position
 
         # evaluate antenna if required
-        if len(Atx.SqG.shape) == 2:
+        if not Atx.evaluated:
             Atx.Fsynth()
-        if len(Arx.SqG.shape) == 2:
+        elif len(Atx.SqG.shape) == 2 :
+            Atx.Fsynth()
+
+        if not Arx.evaluated:
+            Arx.Fsynth()
+        elif len(Arx.SqG.shape) == 2 : 
             Arx.Fsynth()
 
         self.L._show3(newfig=False,opacity=0.7,centered=centered)
