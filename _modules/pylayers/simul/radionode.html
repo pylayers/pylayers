@@ -79,6 +79,42 @@
   <h1>Source code for pylayers.simul.radionode</h1><div class="highlight"><pre>
 <span class="c">#/usr/bin/python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.simul.radionode</span>
+
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+
+<span class="sd">    RadioNode.__init__</span>
+<span class="sd">    RadioNode.__repr__</span>
+<span class="sd">    RadioNode.pos2pt</span>
+<span class="sd">    RadioNode.transform</span>
+<span class="sd">    RadioNode.info</span>
+<span class="sd">    RadioNode.clear</span>
+<span class="sd">    RadioNode.points</span>
+<span class="sd">    RadioNode.point</span>
+<span class="sd">    RadioNode.linevect</span>
+<span class="sd">    RadioNode.line</span>
+<span class="sd">    RadioNode.surface</span>
+<span class="sd">    RadioNode.volume</span>
+<span class="sd">    RadioNode.loadini</span>
+<span class="sd">    RadioNode.loadspa</span>
+<span class="sd">    RadioNode.save</span>
+<span class="sd">    RadioNode.gpoint</span>
+<span class="sd">    RadioNode.gline</span>
+<span class="sd">    RadioNode.gsurface</span>
+<span class="sd">    RadioNode.gvolume</span>
+<span class="sd">    RadioNode.show</span>
+<span class="sd">    RadioNode.show3</span>
+<span class="sd">    RadioNode.move</span>
+<span class="sd">    RadioNode.extract</span>
+<span class="sd">    RadioNode.loadvsh</span>
+<span class="sd">    RadioNode.gantenna</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -93,7 +129,7 @@
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 
 
-<div class="viewcode-block" id="RadioNode"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode">[docs]</a><span class="k">class</span> <span class="nc">RadioNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">RadioNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; container for a Radio Node</span>
 
 <span class="sd">     This class manages the spatial and temporal behavior of a radio node</span>
@@ -133,7 +169,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;undefined&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="RadioNode.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.__init__.html#pylayers.simul.radionode.RadioNode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;undefined&#39;</span><span class="p">,</span>
                  <span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;radionode.ini&#39;</span><span class="p">,</span>
                  <span class="n">_filetraj</span><span class="o">=</span><span class="s">&#39;pos.csv&#39;</span><span class="p">,</span>
                  <span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">,</span>
@@ -209,8 +245,8 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;antenna file does not exist&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="RadioNode.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.__repr__.html#pylayers.simul.radionode.RadioNode.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; representation of radio node</span>
 <span class="sd">        Only position if shown </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -221,8 +257,8 @@
                       <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> \
                       <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mf">1000.</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-
-<div class="viewcode-block" id="RadioNode.pos2pt"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.pos2pt">[docs]</a>    <span class="k">def</span> <span class="nf">pos2pt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="RadioNode.pos2pt"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.pos2pt.html#pylayers.simul.radionode.RadioNode.pos2pt">[docs]</a>    <span class="k">def</span> <span class="nf">pos2pt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert position to points dict</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -231,7 +267,7 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npt</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="RadioNode.transform"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">trans</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.transform"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.transform.html#pylayers.simul.radionode.RadioNode.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">trans</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; tranform position rotation + translation</span>
 
 <span class="sd">        Parameters</span>
@@ -248,7 +284,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Rot</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:]</span><span class="o">+</span><span class="n">trans</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="RadioNode.info"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.info.html#pylayers.simul.radionode.RadioNode.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display RadioNodes informations</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -266,7 +302,7 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
     </div>
-<div class="viewcode-block" id="RadioNode.clear"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.clear"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.clear.html#pylayers.simul.radionode.RadioNode.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; clear positions</span>
 
 <span class="sd">        The origin [0,0,0] is always defined as the first point </span>
@@ -292,7 +328,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-<div class="viewcode-block" id="RadioNode.point"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.point">[docs]</a>    <span class="k">def</span> <span class="nf">point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="p">[],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.point"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.point.html#pylayers.simul.radionode.RadioNode.point">[docs]</a>    <span class="k">def</span> <span class="nf">point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">orientation</span><span class="o">=</span><span class="p">[],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a position to RadioNode</span>
 
 <span class="sd">        The new RadioNode is saved in .spa</span>
@@ -350,7 +386,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pos2pt</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.linevect"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.linevect">[docs]</a>    <span class="k">def</span> <span class="nf">linevect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">npt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span> <span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.linevect"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.linevect.html#pylayers.simul.radionode.RadioNode.linevect">[docs]</a>    <span class="k">def</span> <span class="nf">linevect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">npt</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">1.0</span> <span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a line along a direction </span>
 
 <span class="sd">        Parameters</span>
@@ -399,7 +435,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
     </div>
-<div class="viewcode-block" id="RadioNode.line"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.line">[docs]</a>    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npt</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pth</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.line"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.line.html#pylayers.simul.radionode.RadioNode.line">[docs]</a>    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npt</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pth</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build a line trajectory for a RadioNode</span>
 
 <span class="sd">        Parameters</span>
@@ -447,7 +483,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.surface"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.surface">[docs]</a>    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.surface"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.surface.html#pylayers.simul.radionode.RadioNode.surface">[docs]</a>    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a surface to RadioNode</span>
 
 <span class="sd">        add a surface with basis (p0p1,p0p2)</span>
@@ -503,7 +539,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.volume"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.volume">[docs]</a>    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N3</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p3</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.volume"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.volume.html#pylayers.simul.radionode.RadioNode.volume">[docs]</a>    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N3</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span><span class="n">p1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p3</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add a volume to RadioNode</span>
 
 <span class="sd">        build a volume with edges : p0p1, p0p2, p0p3</span>
@@ -569,7 +605,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.loadini"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.loadini">[docs]</a>    <span class="k">def</span> <span class="nf">loadini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="s">&#39;ini&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.loadini"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadini.html#pylayers.simul.radionode.RadioNode.loadini">[docs]</a>    <span class="k">def</span> <span class="nf">loadini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="s">&#39;ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load an .ini file</span>
 
 <span class="sd">        Parameters</span>
@@ -599,7 +635,7 @@
                 
         <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">=</span><span class="n">Trajectory</span><span class="p">(</span><span class="n">pt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>        
         </div>
-<div class="viewcode-block" id="RadioNode.loadspa"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.loadspa">[docs]</a>    <span class="k">def</span> <span class="nf">loadspa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLCH&#39;</span><span class="p">]):</span>
+<div class="viewcode-block" id="RadioNode.loadspa"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadspa.html#pylayers.simul.radionode.RadioNode.loadspa">[docs]</a>    <span class="k">def</span> <span class="nf">loadspa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filespa</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLCH&#39;</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot; load a spa file</span>
 
 <span class="sd">        Parameters</span>
@@ -640,7 +676,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ident</span>
         <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.save"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.save.html#pylayers.simul.radionode.RadioNode.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save RadioNode in  .ini, .spa, .vect file</span>
 
 <span class="sd">        This function save the RadioNode in different files format</span>
@@ -728,7 +764,7 @@
 
             <span class="n">fi_spa</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gpoint"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.gpoint">[docs]</a>    <span class="k">def</span> <span class="nf">gpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gpoint"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gpoint.html#pylayers.simul.radionode.RadioNode.gpoint">[docs]</a>    <span class="k">def</span> <span class="nf">gpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui point </span>
 
 <span class="sd">        Parameters</span>
@@ -747,7 +783,7 @@
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gline"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.gline">[docs]</a>    <span class="k">def</span> <span class="nf">gline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gline"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gline.html#pylayers.simul.radionode.RadioNode.gline">[docs]</a>    <span class="k">def</span> <span class="nf">gline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui line</span>
 
 <span class="sd">        A line is built between the first point and the gui point</span>
@@ -768,7 +804,7 @@
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gsurface"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.gsurface">[docs]</a>    <span class="k">def</span> <span class="nf">gsurface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gsurface"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gsurface.html#pylayers.simul.radionode.RadioNode.gsurface">[docs]</a>    <span class="k">def</span> <span class="nf">gsurface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui surface</span>
 
 <span class="sd">        Parameters</span>
@@ -789,7 +825,7 @@
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gvolume"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.gvolume">[docs]</a>    <span class="k">def</span> <span class="nf">gvolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gvolume"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gvolume.html#pylayers.simul.radionode.RadioNode.gvolume">[docs]</a>    <span class="k">def</span> <span class="nf">gvolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui volume </span>
 
 <span class="sd">        Parameters</span>
@@ -893,7 +929,7 @@
 <span class="c">#                        fi_spa.write(chaine)</span>
 <span class="c">#                fi_spa.close()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.show"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span> <span class="o">=</span><span class="p">[],</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.show.html#pylayers.simul.radionode.RadioNode.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">fig</span><span class="o">=</span><span class="p">[],</span> <span class="n">ax</span> <span class="o">=</span><span class="p">[],</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display RadioNode position in the 2D strucure</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">num</span> <span class="o">==</span><span class="p">[]:</span>
@@ -906,7 +942,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
-<div class="viewcode-block" id="RadioNode.show3"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestr</span><span class="o">=</span><span class="s">&#39;DLR.off&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.show3.html#pylayers.simul.radionode.RadioNode.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filestr</span><span class="o">=</span><span class="s">&#39;DLR.off&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display RadioNode position in geomview</span>
 
 <span class="sd">        Parameters</span>
@@ -931,7 +967,7 @@
         <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="RadioNode.move"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.move"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.move.html#pylayers.simul.radionode.RadioNode.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; move RadioNode with a specified offset over each cartesian axis</span>
 
 <span class="sd">        Parameters</span>
@@ -946,7 +982,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">dz</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="RadioNode.extract"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.extract.html#pylayers.simul.radionode.RadioNode.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; extract the i-th radionode component </span>
 
 <span class="sd">        Parameters</span>
@@ -996,7 +1032,7 @@
 
         <span class="k">return</span> <span class="n">u</span>
 </div>
-<div class="viewcode-block" id="RadioNode.loadvsh"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.loadvsh">[docs]</a>    <span class="k">def</span> <span class="nf">loadvsh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.loadvsh"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.loadvsh.html#pylayers.simul.radionode.RadioNode.loadvsh">[docs]</a>    <span class="k">def</span> <span class="nf">loadvsh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load an antenna </span>
 
 
@@ -1005,7 +1041,7 @@
         <span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileant</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">A</span>
 </div>
-<div class="viewcode-block" id="RadioNode.gantenna"><a class="viewcode-back" href="../../../modules/pylayers.simul.radionode.html#pylayers.simul.radionode.RadioNode.gantenna">[docs]</a>    <span class="k">def</span> <span class="nf">gantenna</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="RadioNode.gantenna"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.radionode.RadioNode.gantenna.html#pylayers.simul.radionode.RadioNode.gantenna">[docs]</a>    <span class="k">def</span> <span class="nf">gantenna</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get antenna file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">tkFileDialog</span>
@@ -1019,7 +1055,7 @@
         <span class="n">_fileant</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fileant</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fileant</span> <span class="o">=</span> <span class="n">_fileant</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loadvsh</span><span class="p">()</span>
-</div></div>
+</div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
     <span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">)</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
