@@ -31,6 +31,7 @@ import matplotlib as m
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import ConfigParser
 import pdb
+import doctest
 from itertools import product
 
 class Coverage(object):
@@ -238,8 +239,8 @@ class Coverage(object):
 
 
 
-    def cover(self):
-        """ run the coverage calculation
+    def coverold(self):
+        """ run the coverage calculation (Deprecated)
 
         Parameters
         ----------
@@ -254,10 +255,10 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showPower()
+            >> from pylayers.antprop.coverage import *
+            >> C = Coverage()
+            >> C.cover()
+            >> C.showPower()
 
         Notes
         -----
@@ -295,7 +296,7 @@ class Coverage(object):
         self.snro = self.prdbmo - self.pndbm
         self.snrp = self.prdbmp - self.pndbm
 
-    def sinr(self):
+    def cover(self,polar='o'):
         """ run the sinr coverage calculation
 
         Parameters
@@ -313,8 +314,8 @@ class Coverage(object):
 
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
-            >>> C.sinr()
-            >>> C.showsinr()
+            >>> C.cover()
+            >>> f,a=C.show(typ='sinr')
 
         Notes
         -----
@@ -350,28 +351,30 @@ class Coverage(object):
         nf = self.nf
 
         Lwo,Lwp,Edo,Edp = mw.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
-
-        self.Lwo = Lwo.reshape(nf,ng,na)
-        self.Lwp = Lwp.reshape(nf,ng,na)
+        if polar=='o':
+            self.polar='o'
+            self.Lw = Lwo.reshape(nf,ng,na)
+            self.Ed = Edo.reshape(nf,ng,na)
+        if polar=='p':
+            self.polar='p'
+            self.Lw = Lwp.reshape(nf,ng,na)
+            self.Ed = Edp.reshape(nf,ng,na)
 
         freespace = mw.PL(self.fGHz,self.pa,self.pg,dB=False)
         self.freespace = freespace.reshape(nf,ng,na)
 
         # Warning we are assuming here all transmitter have the same
         # transmitting power (to be modified)
-        # f x g x a 
-        ComW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace
+        # f x g x a
 
-        CpmW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace
+        self.CmW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lw*self.freespace
 
         U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
 
-        IomW = np.einsum('ijkl,ijl->ijk',U,ComW)
-        IpmW = np.einsum('ijkl,ijl->ijk',U,CpmW)
+        ImW = np.einsum('ijkl,ijl->ijk',U,self.CmW)
 
         NmW = 10**(self.pndbm/10.)
-        self.SINRo = ComW/(IomW+NmW)
-        self.SINRp = CpmW/(IpmW+NmW)
+        self.SINR = self.CmW/(ImW+NmW)
 
 
 
@@ -390,10 +393,10 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showEd(polar='o')
+            >> from pylayers.antprop.coverage import *
+            >> C = Coverage()
+            >> C.cover()
+            >> C.showEd(polar='o')
 
         """
 
@@ -482,10 +485,10 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showPower()
+            > from pylayers.antprop.coverage import *
+            > C = Coverage()
+            > C.cover()
+            > C.showPower()
 
         """
 
@@ -595,10 +598,10 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showTransitionRegion()
+            > from pylayers.antprop.coverage import *
+            > C = Coverage()
+            > C.cover()
+            > C.showTransitionRegion()
 
         """
 
@@ -645,11 +648,73 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-    def show(self):
-        fig,ax = self.L.showGs()
-        for k in self.dap:
-            p = self.dap[k].p
-            ax.plot(p[0],p[1],'or')
+    def show(self,typ='sinr',grid=False,f=0,a=-1,dB=True):
+        """ show coverage
+
+        Parameters
+        ----------
+
+        Examples
+        --------
+
+        .. plot::
+            :include-graphics:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.cover(polar='o')
+            >>> f,a = C.show(typ='pr')
+
+        """
+        fig = plt.figure()
+        fig,ax=self.L.showGs(fig=fig)
+
+        if grid:
+            for k in self.dap:
+                p = self.dap[k].p
+                ax.plot(p[0],p[1],'or')
+
+        # setting the grid
+
+        l = self.grid[0,0]
+        r = self.grid[-1,0]
+        b = self.grid[0,1]
+        t = self.grid[-1,-1]
+
+        if typ =='sinr':
+            title = 'SINR : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+            legcb = 'dB'
+            V = self.SINR
+
+        if typ =='pr':
+            title = 'Pr : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+            legcb = 'dBm'
+            V = self.CmW
+
+        if a == -1:
+            V = np.max(V[f,:,:],axis=1)
+            vmax = V.max()
+        else:
+            V = V[f,:,a]
+
+        U = V.reshape((self.nx,self.ny)).T
+        if dB:
+            U = 10*np.log10(U)
+        vmin = U.min()
+        vmax = U.max()
+        img = ax.imshow(U,
+                        extent=(l,r,b,t),
+                        origin='lower',
+                        vmin = vmin,
+                        vmax = vmax)
+
+        ax.scatter(self.pa[0,:],self.pa[1,:],s=10,c='k',linewidth=0)
+        ax.set_title(title)
+
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        clb = fig.colorbar(img,cax)
+        clb.set_label(legcb)
 
         return(fig,ax)
 
@@ -670,9 +735,8 @@ class Coverage(object):
 
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showLoss(polar='o')
-            >>> C.showLoss(polar='p')
+            >>> C.cover(polar='o')
+            >>> f,a = C.show(typ='pr')
         """
 
         fig = plt.figure()
@@ -721,13 +785,5 @@ class Coverage(object):
 
 
 if (__name__ == "__main__"):
-    C=Coverage()
-    C.cover()
-    C.showPower()
-    C.showLoss(polar='o')
-    C.showLoss(polar='p')
-    C.showTransistionRegion(polar='o')
-    C.showEd(polar='o')
-#    C.L.dumpr()
-#    sigar,sig=C.L.signature(C.grid[2],C.tx)
+    doctest.testmod()
 
