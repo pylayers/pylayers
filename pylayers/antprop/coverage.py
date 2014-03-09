@@ -286,6 +286,7 @@ class Coverage(object):
         """
         from itertools import product
 
+
         Nf = np.shape(self.fGHz)
         Ng = np.shape(self.grid)
         Nt = np.shape(self.tx)
