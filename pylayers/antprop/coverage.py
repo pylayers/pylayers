@@ -21,6 +21,7 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
 import pylayers.antprop.multiwall as mw
+import pylayers.signal.standard as std
 
 import matplotlib.cm  as cm
 
@@ -66,7 +67,7 @@ class Coverage(object):
     """
 
 
-    def __init__(self,_fileini='coverage.ini'):
+    def __init__(self,_fileini='coverage-new.ini'):
         """
 
         Parameters
@@ -78,31 +79,44 @@ class Coverage(object):
         Notes
         -----
 
-        Coverage is described in an ini file. Default file is coverage.ini
-        and is placed in the ini directory of the current project.
+        Coverage is described in an ini file.
+        Default file is coverage.ini and is placed in the ini directory of the current project.
 
         """
 
 
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
+
         self.layoutopt = dict(self.config.items('layout'))
         self.gridopt = dict(self.config.items('grid'))
-        self.txopt = dict(self.config.items('tx'))
+        self.apopt = dict(self.config.items('ap'))
         self.rxopt = dict(self.config.items('rx'))
         self.showopt = dict(self.config.items('show'))
 
+        # get the Layout
         self.L = Layout(self.layoutopt['filename'])
 
+        # get the grid
         self.nx = eval(self.gridopt['nx'])
         self.ny = eval(self.gridopt['ny'])
+        self.ng = self.nx*self.ny
         self.mode = eval(self.gridopt['full'])
         self.boundary = eval(self.gridopt['boundary'])
-        # transitter section
-        self.fGHz = eval(self.txopt['fghz'])
-        self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
-        self.ptdbm = eval(self.txopt['ptdbm'])
-        self.framelengthbytes = eval(self.txopt['framelengthbytes'])
+
+        self.dap = {}
+        for k in self.apopt:
+            kwargs  = eval(self.apopt[k])
+            ap = std.AP(**kwargs)
+            self.dap[eval(k)]=ap
+
+        self.nt = len(self.dap)
+
+        # AP section
+        #self.fGHz = eval(self.txopt['fghz'])
+        #self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
+        #self.ptdbm = eval(self.txopt['ptdbm'])
+        #self.framelengthbytes = eval(self.txopt['framelengthbytes'])
 
         # receiver section
         self.rxsens = eval(self.rxopt['sensitivity'])
@@ -112,9 +126,11 @@ class Coverage(object):
         self.noisefactordb = eval(self.rxopt['noisefactordb'])
 
         # Evaluate Noise Power (in dBm)
+
         Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bandwidthmhz*1e3
         self.pndbm = 10*np.log10(Pn)+60
 
+        # show section
         self.show = str2bool(self.showopt['show'])
 
         try:
@@ -135,10 +151,9 @@ class Coverage(object):
         """
         st=''
         st = st+ 'Layout file : '+self.L.filename + '\n\n'
-        st = st + '-----Tx------'+'\n'
-        st= st+ 'tx (coord) : ' + str(self.tx) + '\n'
-        st= st+ 'fghz : ' + str(self.fGHz) + '\n'
-        st= st+ 'Pt (dBm) : ' + str(self.ptdbm) + '\n\n'
+        st = st + '-----list of Access Points ------'+'\n'
+        for k in self.dap:
+            st = st + self.dap[k].__repr__()
         st = st + '-----Rx------'+'\n'
         st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n'
         st= st+ 'bandwith (Mhz) : '+ str(self.bandwidthmhz) + '\n'
@@ -507,7 +522,7 @@ class Coverage(object):
                           vmin=self.pndbm,origin='lower')
 
         if nfl:
-            ### values under the noise floor 
+            ### values under the noise floor
             ### we first clip the value below the noise floor
             cl = np.nonzero(prdbm<=self.pndbm)
             cPr = prdbm
@@ -597,6 +612,14 @@ class Coverage(object):
         fig.colorbar(cov,cax)
         if self.show:
             plt.show()
+
+    def show2(self):
+        fig,ax = self.L.showGs()
+        for k in self.dap:
+            p = self.dap[k].p
+            ax.plot(p[0],p[1],'or')
+
+        return(fig,ax)
 
     def showLoss(self,polar='o',**kwargs):
         """ show losses map
