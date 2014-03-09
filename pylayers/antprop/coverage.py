@@ -111,7 +111,7 @@ class Coverage(object):
         self.temperaturek = eval(self.rxopt['temperaturek'])
         self.noisefactordb = eval(self.rxopt['noisefactordb'])
 
-
+        # Evaluate Noise Power (in dBm)
         Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bandwidthmhz*1e3
         self.pndbm = 10*np.log10(Pn)+60
 
@@ -181,7 +181,7 @@ class Coverage(object):
 
 
     def cover(self):
-        """ start the coverage calculation
+        """ run the coverage calculation
 
         Parameters
         ----------
@@ -201,10 +201,37 @@ class Coverage(object):
             >>> C.cover()
             >>> C.showPower()
 
+        Notes
+        -----
+
+        self.fGHz is an array it means that coverage is calculated at once
+        for a whole set of frequencies. In practice the center frequency of a
+        given standard channel.
+
+        This function is calling `Losst` which calculates Losses along a
+        straight path. In a future implementation we will
+        abstract the EM solver in order to make use of other calculation
+        approaches as full or partial Ray Tracing.
+
+        The following members variables are evaluated :
+
+        + freespace Loss @ fGHz   PL()  PathLoss (shoud be rename FS as free space) $
+        + prdbmo : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{odB}`
+        + prdbmp : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{pdB}`
+        + snro : SNR polar o (H)
+        + snrp : SNR polar p (H)
+
+        See Also
+        --------
+
+        pylayers.antprop.multiwall.Losst
+        pylayers.antprop.multiwall.PL
+
         """
 
         self.Lwo,self.Lwp,self.Edo,self.Edp = mw.Losst(self.L,self.fGHz,self.grid.T,self.tx)
         self.freespace = mw.PL(self.fGHz,self.grid,self.tx)
+
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
         self.snro = self.prdbmo - self.pndbm

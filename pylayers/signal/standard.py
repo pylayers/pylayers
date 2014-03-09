@@ -1,7 +1,7 @@
 import numpy as np
 
 class Channel(object):
-    """ a radio channel abstaction
+    """ a radio channel abstraction
     """
     def __init__(self,fcGHz,BMHz,GMHz,attmask,speff,crate):
         """
@@ -15,8 +15,8 @@ class Channel(object):
         GMHz : float
             guard frequency (inter channel gap)
         attmask : float
-           required attenuation on band edges 
-        speff : float 
+           required attenuation on band edges
+        speff : float
             spectral efficiency (bit/s/Hz)
         crate : float
             coding rate
@@ -49,6 +49,11 @@ class Channel(object):
         ov : int
             1 if overlaping channel
             0 otherwise
+
+        Notes
+        -----
+
+        To be used later for optimization purpose
 
         """
         if ( ( (self.f[1]>C.f[0]) & (self.f[1] < C.f[1]))
@@ -100,14 +105,11 @@ class Wstandard(object):
             self.chan[k+1] = Channel(fcGHz,BMHz,GMHz,attmask,speff,crate)
 
 
-Wifi11b = Wstandard('IEEE802.11.b',14,'ofdm')
+Wifi11b = Wstandard('IEEE802.11.b',14,'dsss')
 Wifi11b.bandplan(2.412)
-
+#  IoT (Zigbee alternative)
+#  MIMO 4x4
 Wifi11ah = Wstandard('IEEE802.11.ah',13,'ofdm')
 Wifi11ah.bandplan(0.903,SMHz=2,BMHz=1,GMHz=1,attmask=20)
 Bluetooth = Wstandard('Bluetooth',79,'gmsk')
 Bluetooth.bandplan(2.4025,SMHz=1,BMHz=1,GMHz=0,attmask=0)
-#Wifi.bandplan(np.array([2.412, 2.417,   2.422,  2.427,  2.432, 2.437,
-#                            2.442, 2.447, 2.452, 2.457,  2.462, 2.467, 2.472,
-#                            2.484]))
-

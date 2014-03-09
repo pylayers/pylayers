@@ -365,7 +365,7 @@ class Interface(object):
 
         return(Lo, Lp)
 
-    def losst(self, fGHz, display=False):
+    def losst(self, fGHz, display=False,dB=True):
         """ Evaluate Loss
 
         Parameters
@@ -391,13 +391,15 @@ class Interface(object):
         #Lo = -20 * np.log10(modTo[:, 0])
         #Lp = -20 * np.log10(modTp[:, 0])
 
-        Lo = -20 * np.log10(modTo)
-        Lp = -20 * np.log10(modTp)
+        if dB:
+            Lo = -20 * np.log10(modTo)
+            Lp = -20 * np.log10(modTp)
+        else:
+            Lo = modTo
+            Lp = modTp
 
         if display:
             plt.plot(fGHz, Lo, 'b')
-            #plot(f,Lp,'r')
-            #legend(('L0 _|_','L0 //'),loc='upper right')
             plt.legend(('L0 (dB)'), loc='upper right')
             plt.xlabel('frequency (GHz)')
             plt.show()

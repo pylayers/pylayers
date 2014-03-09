@@ -247,6 +247,12 @@ def Losst(L,fGHz,p1,p2):
         >>> cb=colorbar()
         >>> plt.show()
 
+    See Also
+    --------
+
+    pylayers.antprop.coverage
+    pylayers.slab.Interface.losst
+
     """
     if (type(fGHz)==float) | (type(fGHz)==int):
         fGHz=np.array([fGHz],dtype=float)
@@ -288,15 +294,15 @@ def Losst(L,fGHz,p1,p2):
         # calculate Excess delay for slab slname
         #
         do , dp  = L.sl[slname].excess_grdelay(theta=data['a'][u])
-        # data['i'][u] links number 
+        # data['i'][u] links number
         indexu = data['i'][u]
-        # reduce to involved links 
+        # reduce to involved links
         involved_links, indices = np.unique(indexu,return_index=True)
         indicep = np.hstack((indices[1:],np.array([len(indexu)])))
         # range on involved links
         irange = np.arange(len(involved_links))
         #
-        # sum contribution of slab of a same link 
+        # sum contribution of slab of a same link
         #
         Wallo = np.array(map(lambda x: np.sum(lko[:,indices[x]:indicep[x]],axis=1),irange)).T
         Wallp = np.array(map(lambda x: np.sum(lkp[:,indices[x]:indicep[x]],axis=1),irange)).T
