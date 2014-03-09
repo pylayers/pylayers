@@ -31,6 +31,7 @@ import matplotlib as m
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import ConfigParser
 import pdb
+from itertools import product
 
 class Coverage(object):
     """ Handle Layout Coverage
@@ -97,20 +98,63 @@ class Coverage(object):
         # get the Layout
         self.L = Layout(self.layoutopt['filename'])
 
-        # get the grid
+        # get the receiving grid
+
         self.nx = eval(self.gridopt['nx'])
         self.ny = eval(self.gridopt['ny'])
         self.ng = self.nx*self.ny
         self.mode = eval(self.gridopt['full'])
         self.boundary = eval(self.gridopt['boundary'])
 
+        # create grid
+        # we could here construct a grid locally around the access point
+        # to be done later for code acceleration
+        #
+        self.creategrid(full=self.mode,boundary=self.boundary)
+
         self.dap = {}
         for k in self.apopt:
             kwargs  = eval(self.apopt[k])
             ap = std.AP(**kwargs)
-            self.dap[eval(k)]=ap
+            self.dap[eval(k)] = ap
+            try:
+                self.aap = np.vstack((self.aap,ap['p'][0:2]))
+                self.ptdbm = np.vstack((self.ptdbm,ap['PtdBm']))
+            except:
+                self.aap = ap['p'][0:2]
+                self.ptdbm = ap['PtdBm']
+        # 1 x na
+        self.ptdbm = self.ptdbm.T
+        # number of access points
 
-        self.nt = len(self.dap)
+        self.na = len(self.dap)
+
+
+        # creating all links
+        p = product(range(self.ng),range(self.na))
+        #
+        # a : access point
+        # g : grid
+        #
+        for k in p:
+            pg = self.grid[k[0],:]
+            pa = self.aap[k[1]]
+            try:
+                self.pa = np.vstack((self.pa,pa))
+            except:
+                self.pa = pa
+            try:
+                self.pg = np.vstack((self.pg,pg))
+            except:
+                self.pg = pg
+
+        self.pa = self.pa.T
+        self.pg = self.pg.T
+
+        # frequency is chosen as all the center frequencies of the standard
+        # warning assuming the same standard
+        self.fGHz = self.dap[0].s.fcGHz
+        self.nf = len(self.fGHz)
 
         # AP section
         #self.fGHz = eval(self.txopt['fghz'])
@@ -131,7 +175,7 @@ class Coverage(object):
         self.pndbm = 10*np.log10(Pn)+60
 
         # show section
-        self.show = str2bool(self.showopt['show'])
+        self.bshow = str2bool(self.showopt['show'])
 
         try:
             self.L.Gt.nodes()
@@ -143,7 +187,6 @@ class Coverage(object):
             self.L.build()
             self.L.dumpw()
 
-        self.creategrid(full=self.mode,boundary=self.boundary)
 
 
     def __repr__(self):
@@ -153,7 +196,7 @@ class Coverage(object):
         st = st+ 'Layout file : '+self.L.filename + '\n\n'
         st = st + '-----list of Access Points ------'+'\n'
         for k in self.dap:
-            st = st + self.dap[k].__repr__()
+            st = st + self.dap[k].__repr__()+'\n'
         st = st + '-----Rx------'+'\n'
         st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n'
         st= st+ 'bandwith (Mhz) : '+ str(self.bandwidthmhz) + '\n'
@@ -162,6 +205,7 @@ class Coverage(object):
         st = st + '--- Grid ----'+'\n'
         st= st+ 'nx : ' + str(self.nx) + '\n'
         st= st+ 'ny : ' + str(self.ny) + '\n'
+        st= st+ 'nlink : ' + str(self.ng*self.na) + '\n'
         st= st+ 'full grid : ' + str(self.mode) + '\n'
         st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
         return(st)
@@ -299,47 +343,35 @@ class Coverage(object):
         pylayers.antprop.multiwall.PL
 
         """
-        from itertools import product
 
+        # retrieving dimensions along the 3 axis
+        na = self.na
+        ng = self.ng
+        nf = self.nf
 
-        Nf = np.shape(self.fGHz)
-        Ng = np.shape(self.grid)
-        Nt = np.shape(self.tx)
+        Lwo,Lwp,Edo,Edp = mw.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
 
-        # creating all links (could be done outside, temporary)
-        p = product(range(Ng),range(Nt))
-        for k in p:
-            p1 = Tx[k[0],0:2]
-            p2 = Rx[k[1]+1,0:2]
-            try:
-                tp1 = np.vstack((tp1,p1))
-            except:
-                tp1 = p1
-                try:
-                    tp2 = np.vstack((tp2,p2))
-                except:
-                    tp2 = p2
+        self.Lwo = Lwo.reshape(nf,ng,na)
+        self.Lwp = Lwp.reshape(nf,ng,na)
 
-        Lwo,Lwp,Edo,Edp = mw.Losst(self.L,self.fGHz,tp1.T,tp2.T,dB=False)
-
-        self.Lwo = Lwo.reshape(Nf,Ng,Nt)
-        self.Lwp = Lwp.reshape(Nf,Ng,Nt)
-
-        freespace = mw.PL(self.fGHz,tp1.T,tp2.T,dB=False)
-        freespace = np.reshape(Nf,Ng,Nt)
+        freespace = mw.PL(self.fGHz,self.pa,self.pg,dB=False)
+        self.freespace = freespace.reshape(nf,ng,na)
 
         # Warning we are assuming here all transmitter have the same
         # transmitting power (to be modified)
+        # f x g x a 
+        ComW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwo*self.freespace
 
-        ComW = 10**(self.ptdbm/10.)*Lwo*freespace
+        CpmW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lwp*self.freespace
 
-        CpmW = 10**(self.ptdbm/10.)*Lwp*freespace
+        U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
 
-        U = (np.ones((Nt,Nt))-np.eye(Nt))[np.newaxis,np.newaxis,:,:]
+        IomW = np.einsum('ijkl,ijl->ijk',U,ComW)
+        IpmW = np.einsum('ijkl,ijl->ijk',U,CpmW)
 
-        I = np.einsum('ijkl,ijl->ijk',U,C)
-        self.SINRo = ComW/(I+N)
-        self.SINRp = CpmW/(I+N)
+        NmW = 10**(self.pndbm/10.)
+        self.SINRo = ComW/(IomW+NmW)
+        self.SINRp = CpmW/(IpmW+NmW)
 
 
 
@@ -613,7 +645,7 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-    def show2(self):
+    def show(self):
         fig,ax = self.L.showGs()
         for k in self.dap:
             p = self.dap[k].p

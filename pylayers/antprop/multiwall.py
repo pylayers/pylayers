@@ -200,10 +200,13 @@ def PL(fGHz,pts,p,n=2.0,dB=True):
          path loss w.r.t distance and frequency
 
     """
+    shp = np.shape(p)
+    assert(shp[0]==2)
 
-    D = np.sqrt(np.sum((pts-p)**2,axis=1))
+    D = np.sqrt(np.sum((pts-p)**2,axis=0))
 
-    PL = PL0(fGHz) + 10*n*np.log10(D)
+    # f x grid x ap
+    PL = PL0(fGHz)[:,np.newaxis] + 10*n*np.log10(D)[np.newaxis,:]
 
     if not dB:
         PL=10**(-PL/10)

@@ -3,7 +3,7 @@ import ConfigParser
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 
-class Channel(object):
+class Channel(dict):
     """ a radio channel abstraction
     """
     def __init__(self,fcGHz,BMHz,GMHz,attmask,speff,crate):
@@ -25,18 +25,18 @@ class Channel(object):
             coding rate
 
         """
-        self.fcGHz = fcGHz
-        self.BMHz  = BMHz
-        self.GMHz  = GMHz
-        self.attmask  = attmask
-        self.speff = speff
-        self.crate = crate
-        self.f     = np.array([fcGHz-(BMHz+GMHz)/2000.,fcGHz+(BMHz+GMHz)/2000.])
+        self['fcGHz'] = fcGHz
+        self['BMHz']  = BMHz
+        self['GMHz']  = GMHz
+        self['attmask']  = attmask
+        self['speff'] = speff
+        self['crate'] = crate
+        self.fGHz    = np.array([fcGHz-(BMHz+GMHz)/2000.,fcGHz+(BMHz+GMHz)/2000.])
 
     def __repr__(self):
         """
         """
-        st = str(self.fcGHz)+': ['+str(self.f[0])+','+str(self.f[1])+']\n'
+        st = str(self['fcGHz'])+': ['+str(self.fGHz[0])+','+str(self.fGHz[1])+']\n'
         return(st)
 
     def overlap(self,C):
@@ -103,11 +103,11 @@ class Wstandard(object):
         """
         """
         self.chan={}
-        lfcGHz = fstart+np.arange(self.Nchannel)*SMHz/1000.
-        for k,fcGHz in enumerate(lfcGHz):
-            self.chan[k+1] = Channel(fcGHz,BMHz,GMHz,attmask,speff,crate)
+        self.fcGHz = fstart+np.arange(self.Nchannel)*SMHz/1000.
+        for k,fc in enumerate(self.fcGHz):
+            self.chan[k+1] = Channel(fc,BMHz,GMHz,attmask,speff,crate)
 
-class AP(object):
+class AP(dict):
     """ Access Point
 
     Attributes
@@ -149,15 +149,15 @@ class AP(object):
             if k not in kwargs:
                 kwargs[k]=defaults[k]
 
-        self.name = kwargs['name']
-        self.p = kwargs['p']
-        self.wstd = kwargs['wstd']
-        self.PtdBm = kwargs['PtdBm']
-        self.channels = kwargs['channels']
-        self.sensdBm = kwargs['sensdBm']
-        self.nant = kwargs['nant']
+        self['name'] = kwargs['name']
+        self['p'] = kwargs['p']
+        self['wstd'] = kwargs['wstd']
+        self['PtdBm'] = kwargs['PtdBm']
+        self['channels'] = kwargs['channels']
+        self['sensdBm'] = kwargs['sensdBm']
+        self['nant'] = kwargs['nant']
 
-        self.upfstd(self.wstd)
+        self.upfstd(self['wstd'])
 
     def upfstd(self,wstd='ieee80211b'):
         """ update from standard
@@ -180,8 +180,9 @@ class AP(object):
         wstandard = ConfigParser.ConfigParser()
         fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
         wstandard.readfp(fp)
-        self.dwstd = dict(wstandard.items(wstd))
+        fp.close()
 
+        self.dwstd = dict(wstandard.items(wstd))
         fstart =  eval(self.dwstd['fcghzstart'])
         nchan = eval(self.dwstd['nchan'])
         modulation = self.dwstd['modulation']
@@ -189,9 +190,8 @@ class AP(object):
         GMHz = eval(self.dwstd['gmhz'])
         SMHz = eval(self.dwstd['smhz'])
         attmask = eval(self.dwstd['attmask'])
-        self.s  = Wstandard(self.wstd,nchan,modulation)
+        self.s = Wstandard(wstd,nchan,modulation)
         self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
-        fp.close()
 
 
     def load(self,_fileini='defAP.ini'):
@@ -205,33 +205,35 @@ class AP(object):
 
         """
 
-        self._fileini  = _fileini
+        self._fileini = _fileini
         self.config = ConfigParser.ConfigParser()
         fp = open(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
         self.config.readfp(fp)
-        self.ap = dict(self.config.items('ap'))
-        self.name = self.ap['name']
-        self.p = eval(self.ap['pos'])
-        self.wstd = self.ap['wstd']
-        self.PtdBm = eval(self.ap['ptdbm'])
-        self.channels = eval(self.ap['chan'])
-        self.sensdBm = eval(self.ap['snsdbm'])
-        self.nant = eval(self.ap['nant'])
+
+        ap = dict(self.config.items('ap'))
+        self['name'] = ap['name']
+        self['p'] = eval(ap['pos'])
+        self['wstd'] = ap['wstd']
+        self['PtdBm'] = eval(ap['ptdbm'])
+        self['channels'] = eval(ap['chan'])
+        self['sensdBm'] = eval(ap['snsdbm'])
+        self['nant'] = eval(ap['nant'])
+
         fp.close()
-        self.upfstd(self.wstd)
+        self.upfstd(self['wstd'])
 
 
 
     def __repr__(self):
-        st = 'Name : '+str(self.name)+'\n'
-        st = st + 'position : '+str(self.p)+'\n'
-        st = st+ 'Wireless standard : '+str(self.wstd)+'\n'
-        st = st+ 'Trasmit Power (dBm) : '+str(self.PtdBm)+'\n'
-        st = st+ 'Selected Channels  : '+str(self.channels)+'   '
-        for k in self.channels:
+        st = 'name : '+str(self['name'])+'\n'
+        st = st + 'p : '+str(self['p'])+'\n'
+        st = st+ 'wstd : '+str(self['wstd'])+'\n'
+        st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
+        st = st+ 'channels  : '+str(self['channels'])+'   '
+        for k in self['channels']:
            st = st + self.s.chan[k].__repr__()
-        st = st+ 'Sensitivity (dBm) : '+str(self.sensdBm)+'\n'
-        st = st+ 'Number of antennas : '+str(self.nant)+'\n'
+        st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'
+        st = st+ 'nant : '+str(self['nant'])+'\n'
         return(st)
 
 
