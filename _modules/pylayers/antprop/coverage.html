@@ -88,11 +88,9 @@
 <span class="sd">    Coverage.__init__</span>
 <span class="sd">    Coverage.__repr__</span>
 <span class="sd">    Coverage.creategrid</span>
+<span class="sd">    Coverage.coverold</span>
 <span class="sd">    Coverage.cover</span>
-<span class="sd">    Coverage.showEd</span>
-<span class="sd">    Coverage.showPower</span>
-<span class="sd">    Coverage.showTransistionRegion</span>
-<span class="sd">    Coverage.showLoss</span>
+<span class="sd">    Coverage.show</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
@@ -727,7 +725,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">,</span><span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">a</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.show.html#pylayers.antprop.coverage.Coverage.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">,</span><span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">a</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show coverage</span>
 
 <span class="sd">        Parameters</span>
@@ -796,7 +794,7 @@
         <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">legcb</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Coverage.showLoss"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.showLoss.html#pylayers.antprop.coverage.Coverage.showLoss">[docs]</a>    <span class="k">def</span> <span class="nf">showLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show losses map</span>
 
@@ -892,7 +890,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 09, 2014.
+      Last updated on mars 10, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
