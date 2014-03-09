@@ -179,8 +179,8 @@ def OneSlopeMdl(D,n,fGHz):
 
     return(PL)
 
-def PL(fGHz,pts,p,n=2.0):
-    """ calculate Path Loss
+def PL(fGHz,pts,p,n=2.0,dB=True):
+    """ calculate Free Space Path Loss
 
     Parameters
     ----------
@@ -189,7 +189,7 @@ def PL(fGHz,pts,p,n=2.0):
              frequency (GHz)
     pts    : np.array (2xNp)
              points
-    p      : np.array (2x1)
+    p      : np.array (2x1) or (2xNp)
     n      : float
             path loss exponent (default = 2)
 
@@ -205,9 +205,12 @@ def PL(fGHz,pts,p,n=2.0):
 
     PL = PL0(fGHz) + 10*n*np.log10(D)
 
-    return(PL) 
+    if not dB:
+        PL=10**(-PL/10)
 
-def Losst(L,fGHz,p1,p2):
+    return(PL)
+
+def Losst(L,fGHz,p1,p2,dB=True):
     """  Calculate Loss between links p1  p2
 
     Parameters
@@ -238,13 +241,14 @@ def Losst(L,fGHz,p1,p2):
         >>> S.layout('where1.ini')
         >>> fGHz = 4
         >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2])
+        >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2],dB=True)
         >>> fig=plt.figure(figsize=(20,10))
         >>> fig,ax = S.L.showGs(fig=fig)
         >>> tit = plt.title('test Losst')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
-        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=20,c=Edo,linewidth=0)
-        >>> cb=colorbar()
+        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=20,c=Lwo,linewidth=0)
+        >>> cb = plt.colorbar(sc1)
+        >>> cb.set_label('dB')
         >>> plt.show()
 
     See Also
@@ -315,6 +319,10 @@ def Losst(L,fGHz,p1,p2):
 
         EdWallo[:,involved_links] = EdWallo[:,involved_links] + Edo
         EdWallp[:,involved_links] = EdWallp[:,involved_links] + Edp
+
+    if not dB:
+        LossWallo = 10**(-LossWallo/10)
+        LossWallp = 10**(-LossWallp/10)
 
     return(LossWallo,LossWallp,EdWallo,EdWallp)
 #    i = 0

@@ -2316,7 +2316,7 @@ def calsig(cval, fGHz, typ='epsr'):
 
 
 if (__name__ == "__main__"):
-    plt.ion()
+    #plt.ion()
     doctest.testmod()
     sl = SlabDB('matDB.ini','slabDB.ini')
     s1 = sl['PILLAR']

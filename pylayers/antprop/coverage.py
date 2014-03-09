@@ -70,11 +70,18 @@ class Coverage(object):
 
     def __init__(self,_fileini='coverage.ini'):
         """
+
         Parameters
         ----------
 
         _fileini : string
             name of the configuration file
+
+        Notes
+        -----
+
+        Coverage is described in an ini file. Default file is coverage.ini
+        and is placed in the ini directory of the current project.
 
         """
 
@@ -180,6 +187,7 @@ class Coverage(object):
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
 
+
     def cover(self):
         """ run the coverage calculation
 
@@ -237,6 +245,95 @@ class Coverage(object):
         self.snro = self.prdbmo - self.pndbm
         self.snrp = self.prdbmp - self.pndbm
 
+    def sinr(self):
+        """ run the sinr coverage calculation
+
+        Parameters
+        ----------
+
+        lay_bound : bool
+            If True, the coverage is performed only inside the Layout
+            and clip the values of the grid chosen in coverage.ini
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.sinr()
+            >>> C.showsinr()
+
+        Notes
+        -----
+
+        self.fGHz is an array it means that coverage is calculated at once
+        for a whole set of frequencies. In practice the center frequency of a
+        given standard channel.
+
+        This function is calling `Losst` which calculates Losses along a
+        straight path. In a future implementation we will
+        abstract the EM solver in order to make use of other calculation
+        approaches as full or partial Ray Tracing.
+
+        The following members variables are evaluated :
+
+        + freespace Loss @ fGHz   PL()  PathLoss (shoud be rename FS as free space) $
+        + prdbmo : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{odB}`
+        + prdbmp : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{pdB}`
+        + snro : SNR polar o (H)
+        + snrp : SNR polar p (H)
+
+        See Also
+        --------
+
+        pylayers.antprop.multiwall.Losst
+        pylayers.antprop.multiwall.PL
+
+        """
+        from itertools import product
+
+        Nf = np.shape(self.fGHz)
+        Ng = np.shape(self.grid)
+        Nt = np.shape(self.tx)
+
+        # creating all links (could be done outside, temporary)
+        p = product(range(Ng),range(Nt))
+        for k in p:
+            p1 = Tx[k[0],0:2]
+            p2 = Rx[k[1]+1,0:2]
+            try:
+                tp1 = np.vstack((tp1,p1))
+            except:
+                tp1 = p1
+                try:
+                    tp2 = np.vstack((tp2,p2))
+                except:
+                    tp2 = p2
+
+        Lwo,Lwp,Edo,Edp = mw.Losst(self.L,self.fGHz,tp1.T,tp2.T,dB=False)
+
+        self.Lwo = Lwo.reshape(Nf,Ng,Nt)
+        self.Lwp = Lwp.reshape(Nf,Ng,Nt)
+
+        freespace = mw.PL(self.fGHz,tp1.T,tp2.T,dB=False)
+        freespace = np.reshape(Nf,Ng,Nt)
+
+        # Warning we are assuming here all transmitter have the same
+        # transmitting power (to be modified)
+
+        ComW = 10**(self.ptdbm/10.)*Lwo*freespace
+
+        CpmW = 10**(self.ptdbm/10.)*Lwp*freespace
+
+        U = (np.ones((Nt,Nt))-np.eye(Nt))[np.newaxis,np.newaxis,:,:]
+
+        I = np.einsum('ijkl,ijl->ijk',U,C)
+        self.SINRo = ComW/(I+N)
+        self.SINRp = CpmW/(I+N)
+
 
 
     def showEd(self,polar='o',**kwargs):
@@ -246,7 +343,7 @@ class Coverage(object):
         ----------
 
         polar : string
-            'o' | 'p'
+        'o' | 'p'
 
         Examples
         --------

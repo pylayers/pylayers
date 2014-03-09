@@ -1,4 +1,7 @@
 import numpy as np
+import ConfigParser
+import pylayers.util.pyutil as pyu
+from pylayers.util.project import *
 
 class Channel(object):
     """ a radio channel abstraction
@@ -29,6 +32,7 @@ class Channel(object):
         self.speff = speff
         self.crate = crate
         self.f     = np.array([fcGHz-(BMHz+GMHz)/2000.,fcGHz+(BMHz+GMHz)/2000.])
+
     def __repr__(self):
         """
         """
@@ -78,8 +82,6 @@ class Channel(object):
         """
         C = self.BMHz*np.log(1+10**(SNRdB/10.))/np.log(2)
         return(C)
-
-
 class Wstandard(object):
     """ Wireless standard class
     """
@@ -104,12 +106,81 @@ class Wstandard(object):
         for k,fcGHz in enumerate(lfcGHz):
             self.chan[k+1] = Channel(fcGHz,BMHz,GMHz,attmask,speff,crate)
 
+class AP(object):
+    """ Access Point
 
-Wifi11b = Wstandard('IEEE802.11.b',14,'dsss')
-Wifi11b.bandplan(2.412)
+    Attributes
+    ----------
+
+    pos : np.array(,3)
+        AP position in 3D
+    wstd : Wireless standard
+    PtdBm : Transmit Power
+    channels : list of used channels
+    snsdBm : float
+        receiver sensitivity
+    nant : int
+        number of antennas
+
+    """
+
+    def __init__(self,_fileini='defAP.ini'):
+        """
+        Examples
+        --------
+
+        >>> import pylayers.signal.standard as std
+        >>> AP1 = AP()
+
+        """
+
+        self.config = ConfigParser.ConfigParser()
+        fp = open(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
+        self.config.readfp(fp)
+        self.ap = dict(self.config.items('ap'))
+        self.typ = self.ap['typ']
+        self.p = eval(self.ap['pos'])
+        self.wstd = self.ap['wstd']
+        self.PtdBm = eval(self.ap['ptdbm'])
+        self.channels = eval(self.ap['chan'])
+        self.sensdBm = eval(self.ap['snsdbm'])
+        self.nant = eval(self.ap['nant'])
+        fp.close()
+        wstandard = ConfigParser.ConfigParser()
+        fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
+        wstandard.readfp(fp)
+        self.dwstd = dict(wstandard.items(self.wstd))
+        fstart =  eval(self.dwstd['fcghzstart'])
+        nchan = eval(self.dwstd['nchan'])
+        modulation = self.dwstd['modulation']
+        BMHz = eval(self.dwstd['bmhz'])
+        GMHz = eval(self.dwstd['gmhz'])
+        SMHz = eval(self.dwstd['smhz'])
+        attmask = eval(self.dwstd['attmask'])
+        self.s  = Wstandard(self.wstd,nchan,modulation)
+        self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
+        fp.close()
+
+
+
+    def __repr__(self):
+        st = 'Name : '+str(self.typ)+'\n'
+        st = st + 'position : '+str(self.p)+'\n'
+        st = st+ 'Wireless standard : '+str(self.wstd)+'\n'
+        st = st+ 'Trasmit Power (dBm) : '+str(self.PtdBm)+'\n'
+        st = st+ 'Selected Channels  : '+str(self.channels)+'   '
+        for k in self.channels:
+           st = st + self.s.chan[k].__repr__()
+        st = st+ 'Sensitivity (dBm) : '+str(self.sensdBm)+'\n'
+        st = st+ 'Number of antennas : '+str(self.nant)+'\n'
+        return(st)
+
+
+#Wifi11b = Wstandard('IEEE802.11.b',14,'dsss')
+#Wifi11b.bandplan(2.412)
 #  IoT (Zigbee alternative)
 #  MIMO 4x4
-Wifi11ah = Wstandard('IEEE802.11.ah',13,'ofdm')
-Wifi11ah.bandplan(0.903,SMHz=2,BMHz=1,GMHz=1,attmask=20)
-Bluetooth = Wstandard('Bluetooth',79,'gmsk')
-Bluetooth.bandplan(2.4025,SMHz=1,BMHz=1,GMHz=0,attmask=0)
+#Wifi11ah = Wstandard('IEEE802.11.ah',13,'ofdm')
+#"Wifi11ah.bandplan(0.903,SMHz=2,BMHz=1,GMHz=1,attmask=20)
+#Bluetooth = Wstandard('Bluetooth',79,'gmsk')
+#Bluetooth.bandplan(2.4025,SMHz=1,BMHz=1,GMHz=0,attmask=0)
