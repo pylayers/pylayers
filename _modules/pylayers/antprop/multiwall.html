@@ -258,8 +258,8 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="PL"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.multiwall.PL.html#pylayers.antprop.multiwall.PL">[docs]</a><span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">pts</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; calculate Path Loss</span>
+<div class="viewcode-block" id="PL"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.multiwall.PL.html#pylayers.antprop.multiwall.PL">[docs]</a><span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">pts</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; calculate Free Space Path Loss</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -268,7 +268,7 @@
 <span class="sd">             frequency (GHz)</span>
 <span class="sd">    pts    : np.array (2xNp)</span>
 <span class="sd">             points</span>
-<span class="sd">    p      : np.array (2x1)</span>
+<span class="sd">    p      : np.array (2x1) or (2xNp)</span>
 <span class="sd">    n      : float</span>
 <span class="sd">            path loss exponent (default = 2)</span>
 
@@ -279,14 +279,20 @@
 <span class="sd">         path loss w.r.t distance and frequency</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">shp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span>
 
-    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pts</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pts</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
-    <span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+    <span class="c"># f x grid x ap</span>
+    <span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">D</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
-    <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dB</span><span class="p">:</span>
+        <span class="n">PL</span><span class="o">=</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">PL</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.multiwall.Losst.html#pylayers.antprop.multiwall.Losst">[docs]</a><span class="k">def</span> <span class="nf">Losst</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">):</span>
+<div class="viewcode-block" id="Losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.multiwall.Losst.html#pylayers.antprop.multiwall.Losst">[docs]</a><span class="k">def</span> <span class="nf">Losst</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  Calculate Loss between links p1  p2</span>
 
 <span class="sd">    Parameters</span>
@@ -297,11 +303,11 @@
 <span class="sd">    fGHz : np.array</span>
 <span class="sd">           frequency GHz</span>
 
-<span class="sd">    p1 : source point</span>
-<span class="sd">        (2 x Np) array or (2,) array</span>
+<span class="sd">    p1 : source points</span>
+<span class="sd">        (2 x Np1) array or (2,) array</span>
 
 <span class="sd">    p2 : observation point</span>
-<span class="sd">        (2 x Np) array or (2,) array</span>
+<span class="sd">        (2 x Np2) array or (2,) array</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -317,14 +323,21 @@
 <span class="sd">        &gt;&gt;&gt; S.layout(&#39;where1.ini&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; fGHz = 4</span>
 <span class="sd">        &gt;&gt;&gt; Tx,Rx = ptw1()</span>
-<span class="sd">        &gt;&gt;&gt; Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2])</span>
+<span class="sd">        &gt;&gt;&gt; Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx.T,Rx[1,0:2],dB=True)</span>
 <span class="sd">        &gt;&gt;&gt; fig=plt.figure(figsize=(20,10))</span>
 <span class="sd">        &gt;&gt;&gt; fig,ax = S.L.showGs(fig=fig)</span>
 <span class="sd">        &gt;&gt;&gt; tit = plt.title(&#39;test Losst&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker=&#39;x&#39;,c=&#39;k&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=20,c=Edo,linewidth=0)</span>
-<span class="sd">        &gt;&gt;&gt; cb=colorbar()</span>
+<span class="sd">        &gt;&gt;&gt; sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=20,c=Lwo,linewidth=0)</span>
+<span class="sd">        &gt;&gt;&gt; cb = plt.colorbar(sc1)</span>
+<span class="sd">        &gt;&gt;&gt; cb.set_label(&#39;dB&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; plt.show()</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    pylayers.antprop.coverage</span>
+<span class="sd">    pylayers.slab.Interface.losst</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span><span class="p">):</span>
@@ -367,15 +380,15 @@
         <span class="c"># calculate Excess delay for slab slname</span>
         <span class="c">#</span>
         <span class="n">do</span> <span class="p">,</span> <span class="n">dp</span>  <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="n">slname</span><span class="p">]</span><span class="o">.</span><span class="n">excess_grdelay</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">])</span>
-        <span class="c"># data[&#39;i&#39;][u] links number </span>
+        <span class="c"># data[&#39;i&#39;][u] links number</span>
         <span class="n">indexu</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">][</span><span class="n">u</span><span class="p">]</span>
-        <span class="c"># reduce to involved links </span>
+        <span class="c"># reduce to involved links</span>
         <span class="n">involved_links</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">indexu</span><span class="p">,</span><span class="n">return_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">indicep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">indexu</span><span class="p">)])))</span>
         <span class="c"># range on involved links</span>
         <span class="n">irange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">involved_links</span><span class="p">))</span>
         <span class="c">#</span>
-        <span class="c"># sum contribution of slab of a same link </span>
+        <span class="c"># sum contribution of slab of a same link</span>
         <span class="c">#</span>
         <span class="n">Wallo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lko</span><span class="p">[:,</span><span class="n">indices</span><span class="p">[</span><span class="n">x</span><span class="p">]:</span><span class="n">indicep</span><span class="p">[</span><span class="n">x</span><span class="p">]],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">irange</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
         <span class="n">Wallp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lkp</span><span class="p">[:,</span><span class="n">indices</span><span class="p">[</span><span class="n">x</span><span class="p">]:</span><span class="n">indicep</span><span class="p">[</span><span class="n">x</span><span class="p">]],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">irange</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
@@ -388,6 +401,10 @@
 
         <span class="n">EdWallo</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">=</span> <span class="n">EdWallo</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">+</span> <span class="n">Edo</span>
         <span class="n">EdWallp</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">=</span> <span class="n">EdWallp</span><span class="p">[:,</span><span class="n">involved_links</span><span class="p">]</span> <span class="o">+</span> <span class="n">Edp</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dB</span><span class="p">:</span>
+        <span class="n">LossWallo</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">LossWallo</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">LossWallp</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">LossWallp</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">LossWallo</span><span class="p">,</span><span class="n">LossWallp</span><span class="p">,</span><span class="n">EdWallo</span><span class="p">,</span><span class="n">EdWallp</span><span class="p">)</span>
 <span class="c">#    i = 0</span>
@@ -1361,7 +1378,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 08, 2014.
+      Last updated on mars 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

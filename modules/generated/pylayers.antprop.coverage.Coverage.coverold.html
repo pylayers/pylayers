@@ -81,6 +81,56 @@
             
   <div class="section" id="pylayers-antprop-coverage-coverage-coverold">
 <h1>pylayers.antprop.coverage.Coverage.coverold<a class="headerlink" href="#pylayers-antprop-coverage-coverage-coverold" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.coverage.Coverage.coverold">
+<tt class="descclassname">Coverage.</tt><tt class="descname">coverold</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/coverage.html#Coverage.coverold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.coverold" title="Permalink to this definition">¶</a></dt>
+<dd><p>run the coverage calculation (Deprecated)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lay_bound</strong> : bool</p>
+<blockquote class="last">
+<div><p>If True, the coverage is performed only inside the Layout
+and clip the values of the grid chosen in coverage.ini</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.antprop.multiwall.Losst.html#pylayers.antprop.multiwall.Losst" title="pylayers.antprop.multiwall.Losst"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.multiwall.Losst</span></tt></a>, <a class="reference internal" href="pylayers.antprop.multiwall.PL.html#pylayers.antprop.multiwall.PL" title="pylayers.antprop.multiwall.PL"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.multiwall.PL</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>self.fGHz is an array it means that coverage is calculated at once
+for a whole set of frequencies. In practice the center frequency of a
+given standard channel.</p>
+<p>This function is calling <cite>Losst</cite> which calculates Losses along a
+straight path. In a future implementation we will
+abstract the EM solver in order to make use of other calculation
+approaches as full or partial Ray Tracing.</p>
+<p>The following members variables are evaluated :</p>
+<ul class="simple">
+<li>freespace Loss &#64; fGHz   PL()  PathLoss (shoud be rename FS as free space) $</li>
+<li>prdbmo : Received power in dBm .. math:<cite>P_{rdBm} =P_{tdBm} - L_{odB}</cite></li>
+<li>prdbmp : Received power in dBm .. math:<cite>P_{rdBm} =P_{tdBm} - L_{pdB}</cite></li>
+<li>snro : SNR polar o (H)</li>
+<li>snrp : SNR polar p (H)</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="o">&gt;&gt;</span> <span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span> <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span> <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-coverold-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-coverold-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-coverold-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-coverage-Coverage-coverold-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-coverage-Coverage-coverold-1.png" src="../../_images/pylayers-antprop-coverage-Coverage-coverold-1.png" />
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -108,7 +158,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 08, 2014.
+      Last updated on mars 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

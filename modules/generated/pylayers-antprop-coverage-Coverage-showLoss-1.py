@@ -1,5 +1,4 @@
 from pylayers.antprop.coverage import *
 C = Coverage()
-C.cover()
-C.showLoss(polar='o')
-C.showLoss(polar='p')
+C.cover(polar='o')
+f,a = C.show(typ='pr')

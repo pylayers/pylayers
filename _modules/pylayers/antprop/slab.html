@@ -444,7 +444,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Interface.losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.losst.html#pylayers.antprop.slab.Interface.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.losst.html#pylayers.antprop.slab.Interface.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluate Loss</span>
 
 <span class="sd">        Parameters</span>
@@ -470,13 +470,15 @@
         <span class="c">#Lo = -20 * np.log10(modTo[:, 0])</span>
         <span class="c">#Lp = -20 * np.log10(modTp[:, 0])</span>
 
-        <span class="n">Lo</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTo</span><span class="p">)</span>
-        <span class="n">Lp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTp</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
+            <span class="n">Lo</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTo</span><span class="p">)</span>
+            <span class="n">Lp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Lo</span> <span class="o">=</span> <span class="n">modTo</span>
+            <span class="n">Lp</span> <span class="o">=</span> <span class="n">modTp</span>
 
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Lo</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="c">#plot(f,Lp,&#39;r&#39;)</span>
-            <span class="c">#legend((&#39;L0 _|_&#39;,&#39;L0 //&#39;),loc=&#39;upper right&#39;)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;L0 (dB)&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -2393,7 +2395,7 @@
 
 </div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="c">#plt.ion()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
     <span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
     <span class="n">s1</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;PILLAR&#39;</span><span class="p">]</span>
@@ -2425,7 +2427,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 08, 2014.
+      Last updated on mars 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

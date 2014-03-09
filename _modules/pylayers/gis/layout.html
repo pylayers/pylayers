@@ -3191,15 +3191,15 @@
             <span class="c">#</span>
             <span class="c"># sub-segment</span>
             <span class="c">#</span>
-           
+
             <span class="k">if</span> <span class="s">&#39;ss_name&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-               
+
                 <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">core</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">])</span>
-                <span class="k">except</span><span class="p">:</span>   
+                <span class="k">except</span><span class="p">:</span>
                     <span class="n">core</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sl</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;index&#39;</span><span class="p">])</span>
-               
+
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;ss_ce1&#39;</span><span class="p">):</span>
                     <span class="n">ce1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;ss_ce1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -3215,7 +3215,7 @@
                 <span class="n">chaine</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">core</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">ce1</span> <span class="o">+</span> \
                     <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">ce2</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">ss_zmin</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">ss_zmax</span> <span class="o">+</span>  <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
                 <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
-              
+
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Layout.angleonlink"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.angleonlink.html#pylayers.gis.layout.Layout.angleonlink">[docs]</a>    <span class="k">def</span> <span class="nf">angleonlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">p2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">])):</span>
@@ -3249,7 +3249,7 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-       
+
         <span class="n">sh1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
         <span class="n">sh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
 
@@ -7597,7 +7597,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 08, 2014.
+      Last updated on mars 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

@@ -116,11 +116,11 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.multiwall.PL0.html#pylayers.antprop.multiwall.PL0" title="pylayers.antprop.multiwall.PL0"><tt class="xref py py-obj docutils literal"><span class="pre">PL0</span></tt></a>(fGHz[,&nbsp;GtdB,&nbsp;GrdB])</td>
 <td>Path Loss at frequency fGHZ &#64; 1m    :Parameters:      <strong>fGHz: float</strong> :           frequency GHz      <strong>GtdB: float</strong> :           transmitting antenna gain dB (default 0 dB)      <strong>GrdB: float</strong> :           receiving antenna gain dB (default 0 dB)  :Returns:      <strong>PL0</strong> : float          path &#64; 1m  ..</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.multiwall.PL.html#pylayers.antprop.multiwall.PL" title="pylayers.antprop.multiwall.PL"><tt class="xref py py-obj docutils literal"><span class="pre">PL</span></tt></a>(fGHz,&nbsp;pts,&nbsp;p[,&nbsp;n])</td>
-<td>calculate Path Loss</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.multiwall.PL.html#pylayers.antprop.multiwall.PL" title="pylayers.antprop.multiwall.PL"><tt class="xref py py-obj docutils literal"><span class="pre">PL</span></tt></a>(fGHz,&nbsp;pts,&nbsp;p[,&nbsp;n,&nbsp;dB])</td>
+<td>calculate Free Space Path Loss</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.multiwall.Losst.html#pylayers.antprop.multiwall.Losst" title="pylayers.antprop.multiwall.Losst"><tt class="xref py py-obj docutils literal"><span class="pre">Losst</span></tt></a>(L,&nbsp;fGHz,&nbsp;p1,&nbsp;p2)</td>
-<td>Calculate Loss between links p1  p2   :Parameters:      <strong>L</strong> : Layout object                <strong>fGHz</strong> : np.array          frequency GHz               <strong>p1</strong> : source point          (2 x Np) array or (2,) array               <strong>p2</strong> : observation point          (2 x Np) array or (2,) array  ..</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.multiwall.Losst.html#pylayers.antprop.multiwall.Losst" title="pylayers.antprop.multiwall.Losst"><tt class="xref py py-obj docutils literal"><span class="pre">Losst</span></tt></a>(L,&nbsp;fGHz,&nbsp;p1,&nbsp;p2[,&nbsp;dB])</td>
+<td>Calculate Loss between links p1  p2   :Parameters:      <strong>L</strong> : Layout object                <strong>fGHz</strong> : np.array          frequency GHz               <strong>p1</strong> : source points          (2 x Np1) array or (2,) array               <strong>p2</strong> : observation point          (2 x Np2) array or (2,) array  ..</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.multiwall.Loss0_v2.html#pylayers.antprop.multiwall.Loss0_v2" title="pylayers.antprop.multiwall.Loss0_v2"><tt class="xref py py-obj docutils literal"><span class="pre">Loss0_v2</span></tt></a>(L,&nbsp;Pts,&nbsp;fGHz,&nbsp;p)</td>
 <td><table class="docutils field-list" frame="void" rules="none">
@@ -245,7 +245,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 08, 2014.
+      Last updated on mars 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
