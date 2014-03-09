@@ -201,6 +201,7 @@ Signals
    pylayers.signal.DF
    pylayers.signal.Fading
    pylayers.signal.waveform
+   pylayers.signal.standard
 
 
 Simulations 

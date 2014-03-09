@@ -21,7 +21,6 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
 import pylayers.antprop.multiwall as mw
-from pylayers.network.model import *
 
 import matplotlib.cm  as cm
 
@@ -58,7 +57,6 @@ class Coverage(object):
             default coverage.ini
 
         L :  a Layout
-        model : a pylayers.network.model object.
         nx    : number of point on x
         ny    : number of point on y
         tx    : transmitter position
@@ -88,7 +86,6 @@ class Coverage(object):
 
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
-        self.plm = dict(self.config.items('pl_model'))
         self.layoutopt = dict(self.config.items('layout'))
         self.gridopt = dict(self.config.items('grid'))
         self.txopt = dict(self.config.items('tx'))
@@ -96,10 +93,6 @@ class Coverage(object):
         self.showopt = dict(self.config.items('show'))
 
         self.L = Layout(self.layoutopt['filename'])
-        self.model = PLSmodel(f = eval(self.plm['fghz']),
-                          rssnp = eval(self.plm['rssnp']),
-                             d0 = eval(self.plm['d0']),
-                         sigrss = eval(self.plm['sigrss']))
 
         self.nx = eval(self.gridopt['nx'])
         self.ny = eval(self.gridopt['ny'])
@@ -156,8 +149,6 @@ class Coverage(object):
         st= st+ 'ny : ' + str(self.ny) + '\n'
         st= st+ 'full grid : ' + str(self.mode) + '\n'
         st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
-        st = st + '---- PL Model------'+'\n'
-        st= st+ 'plm : '+ str(self.plm) + '\n'
         return(st)
 
     def creategrid(self,full=True,boundary=[]):
