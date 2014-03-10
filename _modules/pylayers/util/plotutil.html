@@ -197,7 +197,9 @@
 
 <span class="sd">    y : ndarray  (M,N)</span>
 
-<span class="sd">    types : &#39;m&#39;   : modulus</span>
+<span class="sd">    types : string</span>
+
+<span class="sd">            &#39;m&#39;   : modulus</span>
 <span class="sd">            &#39;v&#39;   : value</span>
 <span class="sd">            &#39;l10&#39; : dB (10 log10)</span>
 <span class="sd">            &#39;l20&#39; : dB (20 log10)</span>
@@ -211,11 +213,12 @@
 <span class="sd">            &#39;im&#39;  : imaginary part</span>
 
 
-<span class="sd">    fig and ax are numpy arrays of fig and ax</span>
 
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
+
+<span class="sd">    Here fig and ax are numpy arrays of matplotlib fig and ax</span>
 
 <span class="sd">    If len(y.shape) &gt; 2 the two first axes are used as nlin and ncol this</span>
 <span class="sd">    takes the priority over the passed values nlin and ncol</span>
