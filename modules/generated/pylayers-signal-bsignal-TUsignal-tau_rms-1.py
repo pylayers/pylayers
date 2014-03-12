@@ -14,3 +14,4 @@ tau_moy = ch4.tau_moy()
 print "tau_moy: %2.2f ns" % tau_moy
 tau_rms = ch4.tau_rms()
 print "tau_rms: %2.2f" % tau_rms
+plt.show()
