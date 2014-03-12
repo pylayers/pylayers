@@ -131,22 +131,33 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span><span class="p">,</span><span class="n">a1</span><span class="o">=</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;WHERE1 M1 UWB Channel impulse response&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="p">,</span><span class="n">a2</span><span class="o">=</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;WHERE1 M1 UWB Channel impulse response&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">160</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f3</span><span class="p">,</span><span class="n">a3</span><span class="o">=</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;WHERE1 M1 UWB Channel impulse response&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax2</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tau_moy</span> <span class="o">=</span> <span class="n">ch4</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;tau_moy: </span><span class="si">%2.2f</span><span class="s"> ns&quot;</span> <span class="o">%</span> <span class="n">tau_moy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tau_rms</span> <span class="o">=</span> <span class="n">ch4</span><span class="o">.</span><span class="n">tau_rms</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;tau_rms: </span><span class="si">%2.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">tau_rms</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1.py">Source code</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TUsignal-tau_rms-1_00.png" src="../../_images/pylayers-signal-bsignal-TUsignal-tau_rms-1_00.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_00.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TUsignal-tau_rms-1_01.png" src="../../_images/pylayers-signal-bsignal-TUsignal-tau_rms-1_01.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_01.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TUsignal-tau_rms-1_02.png" src="../../_images/pylayers-signal-bsignal-TUsignal-tau_rms-1_02.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_02.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_02.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1_02.pdf">pdf</a>)</p>
+</div>
+<p>tau_moy = ch4.tau_moy()
+print &#8220;tau_moy: %2.2f ns&#8221; % tau_moy
+tau_rms = ch4.tau_rms()
+print &#8220;tau_rms: %2.2f&#8221; % tau_rms</p>
 <p>tau_moy: 38.09 ns
 tau_rms: 13.79 ns</p>
 </dd></dl>
