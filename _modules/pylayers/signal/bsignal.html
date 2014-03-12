@@ -2847,20 +2847,19 @@
 <span class="sd">            &gt;&gt;&gt; f1,a1=ch4.plot(color=&#39;k&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; plt.title(&quot;WHERE1 M1 UWB Channel impulse response&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; f2,a2=ch4.plot(color=&#39;k&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.title(&quot;WHERE1 M1 UWB Channel impulse response&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.title(&quot;WHERE1 M1 UWB Channel impulse response (Zoom 1)&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; ax1=plt.axis([10,160,-90,-50])</span>
 <span class="sd">            &gt;&gt;&gt; f3,a3=ch4.plot(color=&#39;k&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.title(&quot;WHERE1 M1 UWB Channel impulse response&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.title(&quot;WHERE1 M1 UWB Channel impulse response (Zoom 2)&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; ax2=plt.axis([20,120,-80,-50])</span>
+<span class="sd">            &gt;&gt;&gt; tau_moy = ch4.tau_moy()</span>
+<span class="sd">            &gt;&gt;&gt; print &quot;tau_moy: %2.2f ns&quot; % tau_moy</span>
+<span class="sd">            tau_moy: 38.09 ns</span>
+<span class="sd">            &gt;&gt;&gt; tau_rms = ch4.tau_rms()</span>
+<span class="sd">            &gt;&gt;&gt; print &quot;tau_rms: %2.2f&quot; % tau_rms</span>
+<span class="sd">            tau_rms: 13.79 ns</span>
 
-<span class="sd">        tau_moy = ch4.tau_moy()</span>
-<span class="sd">        print &quot;tau_moy: %2.2f ns&quot; % tau_moy</span>
-<span class="sd">        tau_rms = ch4.tau_rms()</span>
-<span class="sd">        print &quot;tau_rms: %2.2f&quot; % tau_rms</span>
 
-
-<span class="sd">        tau_moy: 38.09 ns</span>
-<span class="sd">        tau_rms: 13.79 ns</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
