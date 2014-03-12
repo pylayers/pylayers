@@ -113,8 +113,8 @@
 
 <span class="gp">In [7]: </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gr">Out[7]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0x5ae1b50&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x5ae1550&gt;]], dtype=object))</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x50d88d0&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x50d8f50&gt;]], dtype=object))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/simple_impulse.png"><img alt="../_images/simple_impulse.png" src="../_images/simple_impulse.png" style="width: 5in;" /></a>
@@ -140,19 +140,6 @@
 <span class="gp">In [15]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 
 <span class="gp">In [16]: </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-16-4ea56c3c3160&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 S.load(&#39;default.ini&#39;)</span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simulem.pyc in load(self, _filesimul)</span>
-<span class="go">   1223             print self.filestr</span>
-<span class="go">   1224         except:</span>
-<span class="go">-&gt; 1225             raise NameError(&#39;Error in section struc from &#39;+ _filesimul)</span>
-<span class="go">   1226 </span>
-<span class="go">   1227         try:</span>
-
-<span class="go">NameError: Error in section struc from default.ini</span>
 
 <span class="gp">In [17]: </span><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
 
@@ -170,53 +157,30 @@
 
 <span class="gp">In [20]: </span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gr">Out[20]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0xbae2f90&gt;,</span>
-<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0xbaf1310&gt;]], dtype=object))</span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x9d9c090&gt;,</span>
+<span class="go"> array([[&lt;matplotlib.axes.AxesSubplot object at 0x9d9c890&gt;]], dtype=object))</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/default_wav.png"><img alt="../_images/default_wav.png" src="../_images/default_wav.png" style="width: 5in;" /></a>
 <p><em>Construction of the VectChannel</em></p>
 <p><em class="xref std std-ref">pylayers.antprop.channel.VectChannel</em></p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">KeyError                                  Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-21-0be40c2b38b4&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 vc = S.VC(1,1)</span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayers/pylayers/simul/simulem.pyc in VC(self, itx, irx)</span>
-<span class="go">   2588         &quot;&quot;&quot;</span>
-<span class="go">   2589 </span>
-<span class="go">-&gt; 2590         VCl = channelc.VectChannel(self, itx, irx, False)</span>
-<span class="go">   2591         return(VCl)</span>
-<span class="go">   2592 </span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/channelc.pyc in __init__(self, S, itx, irx, transpose)</span>
-<span class="go">     69         #   a verifier -ravel-</span>
-<span class="go">     70         self.fail = False</span>
-<span class="go">---&gt; 71         _filefield = S.dfield[itx][irx]</span>
-<span class="go">     72         filefield = pyu.getlong(_filefield,pstruc[&#39;DIRTUD&#39;])</span>
-<span class="go">     73         _filetauk = S.dtauk[itx][irx]</span>
-
-<span class="go">KeyError: 1</span>
 
 <span class="gp">In [22]: </span><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-22-d0872865149e&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 vc.doadod()</span>
-
-<span class="go">NameError: name &#39;vc&#39; is not defined</span>
+<span class="gr">Out[22]: </span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x9ec7610&gt;,</span>
+<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0xa5549d0&gt;)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/doadod.png"><img alt="../_images/doadod.png" src="../_images/doadod.png" style="width: 8in;" /></a>
 <p><em>Construction of the ScalChannel</em></p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [23]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">tran2prop</span><span class="p">()</span>
 <span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
 <span class="go">&lt;ipython-input-23-37573399afd8&gt; in &lt;module&gt;()</span>
 <span class="go">----&gt; 1 H = vc.tran2prop()</span>
 
-<span class="go">NameError: name &#39;vc&#39; is not defined</span>
+<span class="go">AttributeError: &#39;VectChannel&#39; object has no attribute &#39;tran2prop&#39;</span>
 </pre></div>
 </div>
 <p>Tchannel object is the container for the ray transfer function</p>
@@ -226,7 +190,7 @@
 <span class="go">No vsh coefficient calculated yet</span>
 
 <span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0xc3d1550</span><span class="o">&gt;</span>
+<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0xaf69b50</span><span class="o">&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="go">---------------------------------------------------------------------------</span>
@@ -266,7 +230,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 09, 2014.
+      Last updated on mars 12, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

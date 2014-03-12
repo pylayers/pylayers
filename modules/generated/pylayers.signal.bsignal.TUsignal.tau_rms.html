@@ -121,14 +121,15 @@
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.TUsignal.ecdf.html#pylayers.signal.bsignal.TUsignal.ecdf" title="pylayers.signal.bsignal.TUsignal.ecdf"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal.ecdf</span></tt></a>, <a class="reference internal" href="pylayers.signal.bsignal.TUsignal.tau_moy.html#pylayers.signal.bsignal.TUsignal.tau_moy" title="pylayers.signal.bsignal.TUsignal.tau_moy"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal.tau_moy</span></tt></a></p>
+<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.TUsignal.ecdf.html#pylayers.signal.bsignal.TUsignal.ecdf" title="pylayers.signal.bsignal.TUsignal.ecdf"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.ecdf</span></tt></a>, <a class="reference internal" href="pylayers.signal.bsignal.TUsignal.tau_moy.html#pylayers.signal.bsignal.TUsignal.tau_moy" title="pylayers.signal.bsignal.TUsignal.tau_moy"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_moy</span></tt></a></p>
 </div>
 <p class="rubric">Notes</p>
 <div class="math">
 <p><img src="../../_images/math/9771b5afe73ab0a22691177bb0fa896e34b78a02.png" alt="\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}"/></p>
 </div><p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">M1</span> <span class="o">=</span> <span class="n">UWBmeasure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M1</span> <span class="o">=</span> <span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>

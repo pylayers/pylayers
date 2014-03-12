@@ -1,5 +1,6 @@
 from pylayers.measures.mesuwb import *
-M1 = UWBmeasure(1)
+import matplotlib.pyplot as plt
+M1 = UWBMeasure(1)
 ch4 = M.tdd.ch4
 ch4.plot(color='k')
 ch4.plot(color='k')
