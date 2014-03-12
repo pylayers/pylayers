@@ -413,7 +413,7 @@
 <span class="sd">        x : ndarray</span>
 <span class="sd">        y : ndarray</span>
 <span class="sd">            values  (Nx,Ny)</span>
-<span class="sd">           </span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
@@ -430,7 +430,7 @@
                     <span class="k">print</span> <span class="s">&quot;Error in Bsignal : Dimension incompatibility &quot;</span>
                     <span class="k">print</span> <span class="s">&quot;x : &quot;</span><span class="p">,</span> <span class="n">lx</span>
                     <span class="k">print</span> <span class="s">&quot;y : &quot;</span><span class="p">,</span> <span class="n">ly</span>
-           
+
 
 </div>
 <div class="viewcode-block" id="Bsignal.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.__repr__.html#pylayers.signal.bsignal.Bsignal.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -605,10 +605,10 @@
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;uy&#39;</span><span class="p">]</span>
-       
+
         <span class="c"># radians to degree coefficient  </span>
         <span class="n">rtd</span> <span class="o">=</span> <span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-       
+
         <span class="n">t</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
 
         <span class="n">xn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
@@ -645,7 +645,7 @@
         <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;gdn&#39;</span><span class="p">:</span>
             <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Group delay (ns)&#39;</span>
             <span class="n">df</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">xn</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>              
+            <span class="n">xn</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">yn</span>  <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,:])))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t</span><span class="o">==</span><span class="s">&#39;gdm&#39;</span><span class="p">:</span>
             <span class="n">ylabels</span><span class="o">=</span><span class="s">&#39;Group distance (m)&#39;</span>
@@ -714,7 +714,7 @@
                 <span class="n">vmax</span> <span class="o">=</span> <span class="n">yn</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">vmax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;vmax&#39;</span><span class="p">]</span>
-           
+
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;function&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;imshow&#39;</span><span class="p">:</span>
                 <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">yn</span><span class="p">,</span>
                            <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span>
@@ -1743,8 +1743,9 @@
 <span class="sd">        See Also</span>
 <span class="sd">        ---------</span>
 
-<span class="sd">        psd</span>
-<span class="sd">        zlr</span>
+<span class="sd">        pylayers.signal.bsignal.TUsignal.psd</span>
+<span class="sd">        pylayers.signal.bsignal.Usignal.zlr</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
@@ -2679,6 +2680,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        ecdf , vary</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2690,13 +2692,13 @@
         <span class="n">te</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
         <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span> <span class="o">**</span> <span class="mi">2</span>
         <span class="c">#</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span> <span class="o">*</span> <span class="n">te</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span> <span class="o">*</span> <span class="n">te</span>
         <span class="c"># retrieve the noise only portion at the beginning of TUsignal</span>
         <span class="c">#</span>
         <span class="n">Nnoise</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">Tnoise</span> <span class="o">/</span> <span class="n">te</span><span class="p">))</span>
         <span class="n">tn</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Nnoise</span><span class="p">]</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Nnoise</span><span class="p">]</span>
-        <span class="n">stdy</span> <span class="o">=</span> <span class="n">std</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Nnoise</span><span class="p">])</span>
+        <span class="n">stdy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">Nnoise</span><span class="p">])</span>
         <span class="n">vary</span> <span class="o">=</span> <span class="n">stdy</span> <span class="o">*</span> <span class="n">stdy</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="n">vary</span>
         <span class="c">#</span>
@@ -2714,10 +2716,10 @@
         <span class="c"># inforce positivity</span>
         <span class="c">#</span>
         <span class="k">if</span> <span class="n">in_positivity</span><span class="p">:</span>
-            <span class="n">pdf</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">pdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">pdf</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">pdf</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">ecdf</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+            <span class="n">ecdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ecdf</span> <span class="o">=</span> <span class="n">f</span>
         <span class="c">#</span>
@@ -2769,7 +2771,7 @@
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
 
         <span class="n">cdf</span><span class="p">,</span> <span class="n">vary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecdf</span><span class="p">()</span>
-        <span class="n">pdf</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -2778,8 +2780,8 @@
         <span class="n">pdf</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">v</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 
         <span class="n">te</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">pdf</span><span class="p">)</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">pdf</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
         <span class="n">taum</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">taum</span><span class="p">)</span>
@@ -2832,6 +2834,27 @@
 
 <span class="sd">            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}</span>
 
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.measures.mesuwb import *</span>
+<span class="sd">            &gt;&gt;&gt; M1 = UWBmeasure(1)</span>
+<span class="sd">            &gt;&gt;&gt; ch4 = M.tdd.ch4</span>
+<span class="sd">            &gt;&gt;&gt; ch4.plot(color=&#39;k&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; ch4.plot(color=&#39;k&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.axis([10,160,-90,-50])</span>
+<span class="sd">            &gt;&gt;&gt; ch4.plot((color=&#39;k&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; plt.axis([20,120,-80,-50])</span>
+<span class="sd">            &gt;&gt;&gt; tau_moy = ch4.tau_moy()</span>
+<span class="sd">            &gt;&gt;&gt; print &quot;tau_moy: %2.2f&quot; % tau_moy</span>
+<span class="sd">            38.09</span>
+<span class="sd">            &gt;&gt;&gt; tau_rms = ch4.tau_rms()</span>
+<span class="sd">            &gt;&gt;&gt; print &quot;tau_rms: %2.2f&quot; % tau_rms</span>
+<span class="sd">            13.79</span>
+
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 
@@ -2843,7 +2866,7 @@
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
         <span class="n">cdf</span><span class="p">,</span> <span class="n">vary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ecdf</span><span class="p">()</span>
-        <span class="n">pdp</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">pdp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="n">taum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">(</span><span class="n">tau0</span><span class="p">)</span>
 
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
