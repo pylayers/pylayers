@@ -452,6 +452,7 @@
         <span class="n">ImW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ijkl,ijl-&gt;ijk&#39;</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">)</span>
 
         <span class="n">NmW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">SINR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="o">/</span><span class="p">(</span><span class="n">ImW</span><span class="o">+</span><span class="n">NmW</span><span class="p">)</span>
 
 
@@ -893,7 +894,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 11, 2014.
+      Last updated on mars 12, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
