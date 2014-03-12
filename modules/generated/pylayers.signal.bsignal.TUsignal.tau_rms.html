@@ -107,7 +107,10 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
-<p><strong>threshold ( delay region is defined between :math:`lpha` and :math:`1 -lpha` )</strong> :</p>
+<p><strong>threshold</strong> : float</p>
+<blockquote>
+<div><p>( delay interval is defined between <img class="math" src="../../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> and <img class="math" src="../../_images/math/b4deda361d8f8be10ce79a3b62f719b81c720e19.png" alt="1 -\alpha"/> )</p>
+</div></blockquote>
 <p><strong>tau0</strong> : float</p>
 <blockquote class="last">
 <div><p>argument for specifying the delay start</p>
@@ -118,12 +121,11 @@
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.ecdf</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.tau_moy</span></tt></p>
+<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.TUsignal.ecdf.html#pylayers.signal.bsignal.TUsignal.ecdf" title="pylayers.signal.bsignal.TUsignal.ecdf"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal.ecdf</span></tt></a>, <a class="reference internal" href="pylayers.signal.bsignal.TUsignal.tau_moy.html#pylayers.signal.bsignal.TUsignal.tau_moy" title="pylayers.signal.bsignal.TUsignal.tau_moy"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal.tau_moy</span></tt></a></p>
 </div>
 <p class="rubric">Notes</p>
 <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)}  (\tau-\taum)^2 PDP(\tau) d\tau} \
-            {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}</tt>)</p>
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\taum)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}} </tt>)</p>
 latex exited with error
 [stdout]
 This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
@@ -161,17 +163,17 @@ No file math.aux.
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
 ! Undefined control sequence.
 &lt;argument&gt; ... )}^{\tau (1-\alpha )} (\tau -\taum 
-                                                  )^2 PDP(\tau ) d\tau 
-l.15 \end{gather}
+                                                  )^{2} PDP(\tau ) d\tau 
+l.14 \end{gather}
                  
 ! Undefined control sequence.
 &lt;argument&gt; ... )}^{\tau (1-\alpha )} (\tau -\taum 
-                                                  )^2 PDP(\tau ) d\tau 
-l.15 \end{gather}
+                                                  )^{2} PDP(\tau ) d\tau 
+l.14 \end{gather}
                  
 [1] (./math.aux) )
 (see the transcript file for additional information)
-Output written on math.dvi (1 page, 788 bytes).
+Output written on math.dvi (1 page, 784 bytes).
 Transcript written on math.log.
 </div>
 </dd></dl>
