@@ -107,25 +107,74 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<p><strong>threshold</strong> : float</p>
+<blockquote>
+<div><p>( delay interval is defined between <img class="math" src="../../_images/math/301b769d08b32ffdfd8a5eff20129c24cf492650.png" alt="\tau(\alpha)"/> and <img class="math" src="../../_images/math/d5ab105336fdefc284143a7fe82ce0dfb03e1bc1.png" alt="\tau(1 -\alpha)"/> )</p>
+</div></blockquote>
+<p><strong>tau0</strong> : float</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>threshold <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">( delay interval is defined between :math:` au(alpha)` and <img class="math" src="../../_images/math/d5ab105336fdefc284143a7fe82ce0dfb03e1bc1.png" alt="\tau(1 -\alpha)"/> )</p>
-</dd>
-<dt>tau0 <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">argument for specifying the delay start</p>
-</dd>
-</dl>
+<div><p>argument for specifying the delay start</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>rac{int_{ au(lpha)}^{    au(1-lpha)}</dt>
-<dd>(   au-     aum)^{2} PDP(   au) d   au}
-{int_{     au(lpha)}^{    au(1-lpha)} PDP(       au) d   au}}&#8221;</dd>
-</dl>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.TUsignal.ecdf.html#pylayers.signal.bsignal.TUsignal.ecdf" title="pylayers.signal.bsignal.TUsignal.ecdf"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal.ecdf</span></tt></a>, <a class="reference internal" href="pylayers.signal.bsignal.TUsignal.tau_moy.html#pylayers.signal.bsignal.TUsignal.tau_moy" title="pylayers.signal.bsignal.TUsignal.tau_moy"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUsignal.tau_moy</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\taum)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2009/09/24&gt;
+Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
+ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
+9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
+skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
+orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
+, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
+rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
+(/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
+(/home/uguen/texmf/tex/latex/ucs/ucs.sty
+(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?&#8217; option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texmf-texlive/tex/latex/tools/bm.sty) (./math.aux)
+(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
+! Undefined control sequence.
+&lt;argument&gt; ... )}^{\tau (1-\alpha )} (\tau -\taum 
+                                                  )^{2} PDP(\tau ) d\tau 
+l.14 \end{gather}
+                 
+! Undefined control sequence.
+&lt;argument&gt; ... )}^{\tau (1-\alpha )} (\tau -\taum 
+                                                  )^{2} PDP(\tau ) d\tau 
+l.14 \end{gather}
+                 
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 784 bytes).
+Transcript written on math.log.
+</div>
 </dd></dl>
 
 </div>

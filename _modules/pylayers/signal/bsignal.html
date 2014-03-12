@@ -2814,14 +2814,14 @@
 
 </div>
 <div class="viewcode-block" id="TUsignal.tau_rms"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.tau_rms.html#pylayers.signal.bsignal.TUsignal.tau_rms">[docs]</a>    <span class="k">def</span> <span class="nf">tau_rms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">tau0</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculate root mean square delay spread starting from delay tau_0</span>
+        <span class="sd">r&quot;&quot;&quot; calculate root mean square delay spread starting from delay tau_0</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        alpha : float</span>
 <span class="sd">        threshold : float</span>
-<span class="sd">            ( delay interval is defined between :math:`\tau(\\alpha)` and :math:`\\tau(1 -\\alpha)` )</span>
+<span class="sd">            ( delay interval is defined between :math:`\tau(\alpha)` and :math:`\tau(1 -\alpha)` )</span>
 <span class="sd">        tau0 : float</span>
 <span class="sd">            argument for specifying the delay start</span>
 
@@ -2830,9 +2830,7 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">            r&quot;\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)}</span>
-<span class="sd">            (\tau-\taum)^{2} PDP(\tau) d\tau}</span>
-<span class="sd">            {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}&quot; </span>
+<span class="sd">            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\taum)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
