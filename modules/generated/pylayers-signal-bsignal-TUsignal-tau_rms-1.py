@@ -13,7 +13,5 @@ ax2=plt.axis([20,120,-80,-50])
 plt.show()
 tau_moy = ch4.tau_moy()
 print "tau_moy: %2.2f ns" % tau_moy
-# tau_moy: 38.09 ns
 tau_rms = ch4.tau_rms()
 print "tau_rms: %2.2f" % tau_rms
-# tau_rms: 13.79 ns
