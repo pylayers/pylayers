@@ -2821,7 +2821,7 @@
 
 <span class="sd">        alpha : float</span>
 <span class="sd">        threshold : float</span>
-<span class="sd">            ( delay interval is defined between :math:`\\alpha` and :math:`1 -\\alpha` )</span>
+<span class="sd">            ( delay interval is defined between :math:`\tau(\\alpha)` and :math:`\\tau(1 -\\alpha)` )</span>
 <span class="sd">        tau0 : float</span>
 <span class="sd">            argument for specifying the delay start</span>
 
@@ -2830,7 +2830,9 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">            \\sqrt{\\frac{\\int_{\\tau(\\alpha)}^{\\tau(1-\\alpha)} (\\tau-\\taum)^{2} PDP(\\tau) d\\tau} {\\int_{\\tau(\\alpha)}^{\\tau(1-\\alpha)} PDP(\\tau) d\\tau}} </span>
+<span class="sd">            r&quot;\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)}</span>
+<span class="sd">            (\tau-\taum)^{2} PDP(\tau) d\tau}</span>
+<span class="sd">            {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}&quot; </span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
