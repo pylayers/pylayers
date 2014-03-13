@@ -334,7 +334,7 @@ class Bsignal(object):
         x : ndarray
         y : ndarray
             values  (Nx,Ny)
-           
+
 
         """
         self.x = x
@@ -351,7 +351,7 @@ class Bsignal(object):
                     print "Error in Bsignal : Dimension incompatibility "
                     print "x : ", lx
                     print "y : ", ly
-           
+
 
 
     def __repr__(self):
@@ -369,6 +369,17 @@ class Bsignal(object):
         -------
 
         O : Usignal
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
+        >>> import numpy as np
+        >>> x = np.arange(0,1,0.01)
+        >>> y = np.sin(2*np.pi*x)
+        >>> s =Bsignal(x,y)
+        >>> su = s.extact(np.arange(4,20))
+
 
         """
         O = copy(self)
@@ -452,7 +463,7 @@ class Bsignal(object):
         """
         self.y = function(self.x)
 
-    def stem(self, color='b-'):
+    def stem(self, **kwargs):
         """ stem display
 
         Parameters
@@ -464,22 +475,37 @@ class Bsignal(object):
         Examples
         --------
 
-        >>> from pylayers.signal import *
-        >>> import matplotlib.pyplot as plt
-        >>> si = Bsignal()
-        >>> si.x= np.arange(100)
-        >>> si.y= np.arange(100)
-        >>> si.stem()
-        >>> plt.show()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import matplotlib.pyplot as plt
+            >>> si = Bsignal()
+            >>> si.x= np.arange(100)
+            >>> si.y= np.arange(100)
+            >>> f,a = si.stem()
 
         """
+
         ndim = self.y.ndim
+
+        if 'fig' not in kwargs:
+            fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+
+        if 'ax' not in kwargs:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
         if ndim > 1:
             nl = len(self.y)
             for k in range(nl):
-                plt.stem(self.x, self.y[k], color)
+                ax.stem(self.x, self.y[k], **kwargs)
         else:
-            plt.stem(self.x, self.y, color)
+            ax.stem(self.x, self.y,**kwargs)
+        return(fig,ax)
 
     def step(self, color='b'):
         """ plot steps display

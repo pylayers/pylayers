@@ -725,6 +725,12 @@ class Mat(dict):
         sigma :
         roughness :
 
+        Examples
+        --------
+
+        >>> from pylayers.antprop.slab import *
+        >>> M = Mat(name='Phantom',index=17,epr=2+0.15j,mur=1,sigma=4,roughness=0)
+
         """
         self['name'] = name
         self['index'] = index
@@ -739,8 +745,8 @@ class Mat(dict):
         Parameters
         ----------
 
-        epsc : Calculate complex permittivity
-        fGHz : frequency (GHz)
+        fGHz : np.array
+            frequency (GHz)
 
 
         Notes
@@ -758,8 +764,7 @@ class Mat(dict):
         """
 
         self['fGHz'] = fGHz
-        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / \
-            self['fGHz']
+        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) /  self['fGHz']
 
         return(epsc)
 
