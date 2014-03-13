@@ -2680,11 +2680,11 @@
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
 <span class="sd">            &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">            &gt;&gt;&gt; alphak = 10.np.random.rand(7)</span>
-<span class="sd">            &gt;&gt;&gt; tauk = 100.np.random.rand(7)</span>
+<span class="sd">            &gt;&gt;&gt; alphak = 10*np.random.rand(7)</span>
+<span class="sd">            &gt;&gt;&gt; tauk = 100*np.random.rand(7)</span>
 <span class="sd">            &gt;&gt;&gt; tau = np.arange(0,150,0.1)</span>
 <span class="sd">            &gt;&gt;&gt; y = np.zeros(len(tau))</span>
-<span class="sd">            &gt;&gt;&gt; CIR = TUsignal(alphak,tauk)</span>
+<span class="sd">            &gt;&gt;&gt; CIR = TUsignal(tau,y)</span>
 <span class="sd">            &gt;&gt;&gt; CIR.aggcir(alphak,tauk)</span>
 <span class="sd">            &gt;&gt;&gt; CIR.plot(typ=&#39;v&#39;)</span>
 
