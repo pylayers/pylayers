@@ -739,8 +739,8 @@ class Mat(dict):
         Parameters
         ----------
 
-        epsc : Calculate complex permittivity
-        fGHz : frequency (GHz)
+        fGHz : np.array()
+            frequency (GHz)
 
 
         Notes
@@ -758,8 +758,7 @@ class Mat(dict):
         """
 
         self['fGHz'] = fGHz
-        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / \
-            self['fGHz']
+        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / self['fGHz']
 
         return(epsc)
 

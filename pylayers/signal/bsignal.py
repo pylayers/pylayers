@@ -334,7 +334,7 @@ class Bsignal(object):
         x : ndarray
         y : ndarray
             values  (Nx,Ny)
-           
+
 
         """
         self.x = x
@@ -351,7 +351,7 @@ class Bsignal(object):
                     print "Error in Bsignal : Dimension incompatibility "
                     print "x : ", lx
                     print "y : ", ly
-           
+
 
 
     def __repr__(self):
@@ -526,10 +526,10 @@ class Bsignal(object):
             u = np.arange(np.shape(self.y)[0])
         else:
             u = kwargs['uy']
-       
+
         # radians to degree coefficient  
         rtd = 180./np.pi
-       
+
         t = kwargs['typ']
 
         xn = self.x
@@ -566,7 +566,7 @@ class Bsignal(object):
         if t=='gdn':
             ylabels='Group delay (ns)'
             df  = self.x[1]-self.x[0]
-            xn  = self.x[0:-1]              
+            xn  = self.x[0:-1]
             yn  = -np.diff(np.unwrap(np.angle(self.y[l,c,:])))/(2*np.pi*df)
         if t=='gdm':
             ylabels='Group distance (m)'
@@ -635,7 +635,7 @@ class Bsignal(object):
                 vmax = yn.max()
             else:
                 vmax = kwargs['vmax']
-           
+
             if kwargs['function']=='imshow':
                 im = ax.imshow(yn,
                            origin = 'lower',
@@ -1664,8 +1664,9 @@ class TUsignal(TBsignal, Usignal):
         See Also
         ---------
 
-        psd
-        zlr
+        pylayers.signal.bsignal.TUsignal.psd
+        pylayers.signal.bsignal.Usignal.zlr
+
         """
         if fig == []:
             fig = plt.gcf()
@@ -2600,6 +2601,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
+
         ecdf , vary
 
         """
@@ -2611,13 +2613,13 @@ class TUsignal(TBsignal, Usignal):
         te = self.dx()
         y2 = y ** 2
         #
-        f1 = cumsum(y2) * te
+        f1 = np.cumsum(y2) * te
         # retrieve the noise only portion at the beginning of TUsignal
         #
         Nnoise = int(np.ceil(Tnoise / te))
         tn = t[0:Nnoise]
         fn = f1[0:Nnoise]
-        stdy = std(y[0:Nnoise])
+        stdy = np.std(y[0:Nnoise])
         vary = stdy * stdy
         y = t * vary
         #
@@ -2635,10 +2637,10 @@ class TUsignal(TBsignal, Usignal):
         # inforce positivity
         #
         if in_positivity:
-            pdf = diff(f)
+            pdf = np.diff(f)
             u = np.nonzero(pdf < 0)[0]
             pdf[u] = 0
-            ecdf = cumsum(pdf)
+            ecdf = np.cumsum(pdf)
         else:
             ecdf = f
         #
@@ -2690,7 +2692,7 @@ class TUsignal(TBsignal, Usignal):
         y = self.y
 
         cdf, vary = self.ecdf()
-        pdf = diff(cdf.y)
+        pdf = np.diff(cdf.y)
 
         u = np.nonzero(cdf.y > alpha)[0]
         v = np.nonzero(cdf.y < 1 - alpha)[0]
@@ -2699,8 +2701,8 @@ class TUsignal(TBsignal, Usignal):
         pdf = pdf[u[0]:v[-1]]
 
         te = self.dx()
-        a = sum(t * pdf)
-        b = sum(pdf)
+        a = np.sum(t * pdf)
+        b = np.sum(pdf)
         taum = a / b
 
         return(taum)
@@ -2735,28 +2737,73 @@ class TUsignal(TBsignal, Usignal):
 
 
     def tau_rms(self, alpha=0.1, tau0=0):
-        """ calculate root mean square delay spread starting from delay tau_0
+        r""" calculate root mean square delay spread starting from delay tau_0
 
         Parameters
         ----------
-        alpha :
-        tau0 :
+
+        alpha : float
+        threshold : float
+            ( delay interval is defined between :math:`\tau(\alpha)` and :math:`\tau(1 -\alpha)` )
+        tau0 : float
+            argument for specifying the delay start
+
+        Notes
+        -----
+
+        .. math::
+
+            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.measures.mesuwb import *
+            >>> import matplotlib.pyplot as plt
+            >>> M = UWBMeasure(1)
+            >>> ch4 = M.tdd.ch4
+            >>> f1,a1=ch4.plot(color='k')
+            >>> plt.title("WHERE1 M1 UWB Channel impulse response")
+            >>> f2,a2=ch4.plot(color='k')
+            >>> plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
+            >>> ax1=plt.axis([10,160,-90,-50])
+            >>> f3,a3=ch4.plot(color='k')
+            >>> plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
+            >>> ax2=plt.axis([20,120,-80,-50])
+            >>> tau_moy = ch4.tau_moy()
+            >>> print "tau_moy: %2.2f ns" % tau_moy
+            tau_moy: 38.09 ns
+            >>> tau_rms = ch4.tau_rms()
+            >>> print "tau_rms: %2.2f" % tau_rms
+            tau_rms: 13.79 ns
+
+
+
+        See Also
+        --------
+
+        TUsignal.ecdf
+        TUsignal.tau_moy
 
         """
+
         t = self.x
         y = self.y
         cdf, vary = self.ecdf()
-        pdf = diff(cdf.y)
+        pdp = np.diff(cdf.y)
         taum = self.tau_moy(tau0)
 
         u = np.nonzero(cdf.y > alpha)[0]
         v = np.nonzero(cdf.y < 1 - alpha)[0]
 
         t = t[u[0]:v[-1]]
-        pdf = pdf[u[0]:v[-1]]
+        pdp = pdp[u[0]:v[-1]]
         te = self.dx()
-        b = sum(pdf)
-        m = sum(pdf * (t - taum) * (t - taum))
+        b = sum(pdp)
+        m = sum(pdp * (t - taum) * (t - taum))
         taurms = np.sqrt(m / b)
 
         return(taurms)

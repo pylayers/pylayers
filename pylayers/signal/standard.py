@@ -1,7 +1,70 @@
+"""
+
+Channel Class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+     Channel.__init__
+     Channel.__repr__
+     Channel.overlap
+     Channel.capacity
+
+
+Wstandard Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+     Wstandard.__init__
+     Wstandard.__repr__
+     Wstandard.bandplan
+
+AP Class
+========
+
+.. autosummary::
+    :toctree: generated/
+
+     AP.__init__
+     AP.__repr__
+     AP.upfstd
+     AP.load
+
+"""
 import numpy as np
 import ConfigParser
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
+
+class Band(dict):
+    """ A Band is a structured portion of the spectrum
+
+    A band is subdivided into channels
+    """
+    def __init__(self,**kwargs):
+        """
+        """
+        default = {
+            'zone'  : 'Europe',
+        'name'  : 'ISM24',
+        'fmin'  : 2.4,
+        'fmax'  : 2.45,
+        'fstep' : 5}
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        self['zone']  = kwargs['zone']
+        self['name']  = kwargs['name']
+        self['fmin']  = eval(kwargs['fmin'])
+        self['fmax']  = eval(kwargs['PmaxdBm'])
+        self['fstep'] = fstep
+
+    def channelize(self):
 
 class Channel(dict):
     """ a radio channel abstraction
@@ -34,7 +97,7 @@ class Channel(dict):
         self.fGHz    = np.array([fcGHz-(BMHz+GMHz)/2000.,fcGHz+(BMHz+GMHz)/2000.])
 
     def __repr__(self):
-        """
+        """ representation
         """
         st = str(self['fcGHz'])+': ['+str(self.fGHz[0])+','+str(self.fGHz[1])+']\n'
         return(st)
@@ -67,7 +130,7 @@ class Channel(dict):
             return(0)
 
     def capacity(self,SNRdB):
-        """ calculate capacity
+        """ calculates channel capacity
 
          Parameters
          ----------
@@ -87,6 +150,15 @@ class Wstandard(object):
     """ Wireless standard class
     """
     def __init__(self,name,Nchannel,modulation):
+        """
+        Parameters
+        ----------
+
+        name : string
+        Nchannel : int
+        modulation : string
+
+        """
         self.name = name
         self.Nchannel = Nchannel
         self.modulation = modulation
@@ -159,6 +231,23 @@ class AP(dict):
 
         self.upfstd(self['wstd'])
 
+    def __repr__(self):
+        """ specific representation
+
+        It respects keys of the dictionnary
+        """
+        st = 'name : '+str(self['name'])+'\n'
+        st = st + 'p : '+str(self['p'])+'\n'
+        st = st+ 'wstd : '+str(self['wstd'])+'\n'
+        st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
+        st = st+ 'channels  : '+str(self['channels'])+'   '
+        for k in self['channels']:
+           st = st + self.s.chan[k].__repr__()
+        st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'
+        st = st+ 'nant : '+str(self['nant'])+'\n'
+        return(st)
+
+
     def upfstd(self,wstd='ieee80211b'):
         """ update from standard
 
@@ -223,18 +312,6 @@ class AP(dict):
         self.upfstd(self['wstd'])
 
 
-
-    def __repr__(self):
-        st = 'name : '+str(self['name'])+'\n'
-        st = st + 'p : '+str(self['p'])+'\n'
-        st = st+ 'wstd : '+str(self['wstd'])+'\n'
-        st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
-        st = st+ 'channels  : '+str(self['channels'])+'   '
-        for k in self['channels']:
-           st = st + self.s.chan[k].__repr__()
-        st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'
-        st = st+ 'nant : '+str(self['nant'])+'\n'
-        return(st)
 
 
 #Wifi11b = Wstandard('IEEE802.11.b',14,'dsss')

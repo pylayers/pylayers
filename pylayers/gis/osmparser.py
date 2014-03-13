@@ -217,7 +217,7 @@ class Coords(object):
 
         This method converst latlon coordinates into cartesian x,y coordinates in
         Cassini projection relatively to specified latlon boundary + an offset
-        of 0.01 degrees.(to be parameterized ? ) 
+        of 0.01 degrees.(to be parameterized ? )
         The basemap objet for back and forth coordinates.
         conversion is returned.
 
@@ -371,8 +371,16 @@ class Ways(object):
         plt.axis('scaled')
         return(fig,ax)
 
-    def tomaska(self):
+    def tomaska(self,m,lonlat=True):
         """ convert to masked array
+
+        Parameters
+        ----------
+
+        m : Basemap object
+            for converting to and from map projection coordinates
+        lonlat : boolean
+            returns in WGS84 format if True
 
         Returns
         -------
@@ -381,11 +389,12 @@ class Ways(object):
 
         """
 
-        tpt=np.empty((2,))
-        mask=np.ones((2,))
+        tpt  = np.empty((2,))
+        mask = np.ones((2,))
         N = len(self.way.keys())
         for k,b in enumerate(self.way):
             # retrieve PolyGon or LineString
+            # progress bar
             if k%1000==0:
                 print k,N
             shp = self.way[b].shp
@@ -397,9 +406,14 @@ class Ways(object):
                     mask = np.vstack((mask,np.array([[0,0]])))
                 tpt = np.vstack((tpt,np.array([[0,0]])))
                 mask = np.vstack((mask,np.array([[1,1]])))
+        
+        if lonlat:
+            (lon,lat) = m(tpt[:,0],tpt[:,1],inverse=True)
+            tpt = np.vstack([lon,lat]).T
 
-        vertices = np.ma.masked_array(tpt, mask)
-        return(vertices)
+        #vertices = np.ma.masked_array(tpt, mask)
+        #return(vertices)
+        return(tpt,mask)
 
     def showold(self,fig=[],ax=[]):
         """ show ways

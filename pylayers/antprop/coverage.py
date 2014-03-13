@@ -9,11 +9,9 @@ Class Coverage
     Coverage.__init__
     Coverage.__repr__
     Coverage.creategrid
+    Coverage.coverold
     Coverage.cover
-    Coverage.showEd
-    Coverage.showPower
-    Coverage.showTransistionRegion
-    Coverage.showLoss
+    Coverage.show
 
 """
 from pylayers.util.project import *
@@ -316,6 +314,7 @@ class Coverage(object):
             >>> C = Coverage()
             >>> C.cover()
             >>> f,a=C.show(typ='sinr')
+            >>> plt.show()
 
         Notes
         -----
@@ -374,6 +373,7 @@ class Coverage(object):
         ImW = np.einsum('ijkl,ijl->ijk',U,self.CmW)
 
         NmW = 10**(self.pndbm/10.)
+
         self.SINR = self.CmW/(ImW+NmW)
 
 
@@ -658,12 +658,13 @@ class Coverage(object):
         --------
 
         .. plot::
-            :include-graphics:
+            :include-source:
 
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover(polar='o')
             >>> f,a = C.show(typ='pr')
+            >>> plt.show()
 
         """
         fig = plt.figure()
@@ -737,6 +738,7 @@ class Coverage(object):
             >>> C = Coverage()
             >>> C.cover(polar='o')
             >>> f,a = C.show(typ='pr')
+            >>> plt.show()
         """
 
         fig = plt.figure()

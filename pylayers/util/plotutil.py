@@ -118,7 +118,8 @@ def mulcplot(x,y,**kwargs):
 
     y : ndarray  (M,N)
 
-    types : 'm'   : modulus
+    typ : string
+            'm'   : modulus
             'v'   : value
             'l10' : dB (10 log10)
             'l20' : dB (20 log10)
@@ -131,12 +132,16 @@ def mulcplot(x,y,**kwargs):
             're'  : real part
             'im'  : imaginary part
 
-
-    fig and ax are numpy arrays of fig and ax
+    ncol : int
+        number of columns
+    nlin : int
+        number of lines
 
 
     Notes
     -----
+
+    Here fig and ax are numpy arrays of matplotlib fig and ax
 
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
     takes the priority over the passed values nlin and ncol
