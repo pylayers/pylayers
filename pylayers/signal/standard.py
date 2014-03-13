@@ -65,6 +65,9 @@ class Band(dict):
         self['fstep'] = fstep
 
     def channelize(self):
+        """
+        """
+        pass
 
 class Channel(dict):
     """ a radio channel abstraction

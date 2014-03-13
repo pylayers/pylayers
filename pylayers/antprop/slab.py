@@ -135,6 +135,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 from pylayers.util.easygui import *
+from scipy.interpolate import interp1d
 import pdb
 
 class Interface(object):
@@ -745,11 +746,7 @@ class Mat(dict):
         Parameters
         ----------
 
-<<<<<<< HEAD
         fGHz : np.array()
-=======
-        fGHz : np.array
->>>>>>> 15c96311e054528634a3eff3d5a2b1bd70488aa3
             frequency (GHz)
 
 
@@ -768,11 +765,7 @@ class Mat(dict):
         """
 
         self['fGHz'] = fGHz
-<<<<<<< HEAD
-        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / self['fGHz']
-=======
         epsc = self['epr'] - 1j * 18 * abs(self['sigma']) /  self['fGHz']
->>>>>>> 15c96311e054528634a3eff3d5a2b1bd70488aa3
 
         return(epsc)
 
@@ -978,6 +971,7 @@ class MatDB(dict):
 
         """
 
+        # get the next available index
         maxid = self.maxindex()
         M = Mat()
         M['name'] = name
@@ -1094,8 +1088,14 @@ class MatDB(dict):
 
         Parameters
         ----------
+
         _filemat : string
         a short file name
+
+        Notes 
+        -----
+
+            Deprecated this the format for PyRay
 
         """
         filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])

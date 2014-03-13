@@ -93,6 +93,19 @@ Fourier Functions
     TUsignal.Yadd_zeros2r
     TUsignal.esd
 
+CIR Functions
+-------------
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.aggcir
+    TUsignal.ecdf
+    TUsignal.taumax
+    TUsignal.tau_moy
+    TUsignal.delays
+    TUsignal.tau_rms
+
 Visualization Functions
 -----------------------
 
@@ -142,10 +155,6 @@ TOA Estimation Functions
     TUsignal.toa_cum_tm
     TUsignal.toa_cum_tmtm
     TUsignal.toa_cum_tmt
-    TUsignal.taumax
-    TUsignal.tau_moy
-    TUsignal.delays
-    TUsignal.tau_rms
 
 Input Output Functions
 -----------------------
@@ -155,7 +164,6 @@ Input Output Functions
 
     TUsignal.readcir
     TUsignal.readuwb
-    TUsignal.ecdf
 
 TUDsignal Class
 ===============
@@ -1292,13 +1300,13 @@ class Usignal(Bsignal):
         .. plot::
             :include-source:
 
-            #>>> from pylayers.signal import *
-            #>>> from matplotlib.pylab import *
-            #>>> ip = EnImpulse()
-            #>>> fig,ax = ip.plot(typ=['v'])
-            #>>> ip.zlr(-10,10)
-            #>>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
-            #>>> show()
+            >>> from pylayers.signal import *
+            >>> from matplotlib.pylab import *
+            >>> ip = EnImpulse()
+            >>> fig,ax = ip.plot(typ=['v'])
+            >>> ip.zlr(-10,10)
+            >>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
+            >>> show()
 
         """
         dx = self.dx()
@@ -2571,6 +2579,48 @@ class TUsignal(TBsignal, Usignal):
         v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
         toa = t[v[0]]
         return toa
+
+
+
+    def aggcir(self,alphak,tauk):
+        """ aggregation of CIR from (alphak,tauk)
+
+        Parameters
+        ----------
+
+        alphak : float
+            CIR path amplitude
+        tauk : float
+            CIR delay values
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import numpy as np
+            >>> alphak = 10*np.random.rand(7)
+            >>> tauk = 100*np.random.rand(7)
+            >>> tau = np.arange(0,150,0.1)
+            >>> y = np.zeros(len(tau))
+            >>> CIR = TUsignal(tau,y)
+            >>> CIR.aggcir(alphak,tauk)
+            >>> CIR.plot(typ='v')
+
+        """
+        shy = np.shape(self.y)
+        x = self.x
+        eps = (x[1]-x[0])/2
+        u = map(lambda t: np.where( (x>t-eps) & (x<=t+eps))[0][0],tauk)
+        ynew  = np.zeros(len(x))
+        ynew[u] = alphak
+        if len(shy)>1:
+           self.y = np.vstack((self.y,ynew))
+        else:
+           self.y = ynew[np.newaxis,:]
+
 
     def readcir(self,filename,outdir=[]):
         """ read channel impulse response
