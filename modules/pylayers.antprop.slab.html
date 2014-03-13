@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.antprop.channel" href="pylayers.antprop.channel.html" />
+    <link rel="next" title="pylayers.antprop.slab.Interface.__init__" href="generated/pylayers.antprop.slab.Interface.__init__.html" />
     <link rel="prev" title="pylayers.antprop.spharm.plotVW" href="generated/pylayers.antprop.spharm.plotVW.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.channel.html" title="pylayers.antprop.channel"
+          <a href="generated/pylayers.antprop.slab.Interface.__init__.html" title="pylayers.antprop.slab.Interface.__init__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/pylayers.antprop.spharm.plotVW.html" title="pylayers.antprop.spharm.plotVW"
@@ -63,12 +63,26 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pylayers.antprop.slab</a><ul>
+<li><a class="reference internal" href="#interface-class">Interface Class</a></li>
+<li><a class="reference internal" href="#matinterface-class">MatInterface Class</a></li>
+<li><a class="reference internal" href="#mat-class">Mat Class</a></li>
+<li><a class="reference internal" href="#matdb-class">MatDB Class</a></li>
+<li><a class="reference internal" href="#slab-class">Slab Class</a></li>
+<li><a class="reference internal" href="#slabdb-class">SlabDB Class</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="generated/pylayers.antprop.spharm.plotVW.html"
                         title="previous chapter">pylayers.antprop.spharm.plotVW</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.channel.html"
-                        title="next chapter">pylayers.antprop.channel</a></p>
+  <p class="topless"><a href="generated/pylayers.antprop.slab.Interface.__init__.html"
+                        title="next chapter">pylayers.antprop.slab.Interface.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.antprop.slab.txt"
@@ -95,8 +109,313 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-antprop-slab">
-<h1>pylayers.antprop.slab<a class="headerlink" href="#pylayers-antprop-slab" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pylayers.antprop.slab">
+<span id="pylayers-antprop-slab"></span><h1>pylayers.antprop.slab<a class="headerlink" href="#module-pylayers.antprop.slab" title="Permalink to this headline">¶</a></h1>
+<p>This module exploits heavily numpy broadcasting mechanism :</p>
+<p>Axis Convention</p>
+<ul class="simple">
+<li>nf : axis = 0 frequency axis</li>
+<li>nt : axis = 1 angular axis</li>
+<li>p : axis = 2 parallel axis</li>
+<li>o : axis = 2 orhogonal axis</li>
+</ul>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<div class="section" id="interface-class">
+<h2>Interface Class<a class="headerlink" href="#interface-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.__init__.html#pylayers.antprop.slab.Interface.__init__" title="pylayers.antprop.slab.Interface.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Interface.__init__</span></tt></a>([fGHz,&nbsp;theta,&nbsp;name])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.RT.html#pylayers.antprop.slab.Interface.RT" title="pylayers.antprop.slab.Interface.RT"><tt class="xref py py-obj docutils literal"><span class="pre">Interface.RT</span></tt></a>([metalic,&nbsp;RT])</td>
+<td>evaluate Reflection and Transmission matrix</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.pcolor.html#pylayers.antprop.slab.Interface.pcolor" title="pylayers.antprop.slab.Interface.pcolor"><tt class="xref py py-obj docutils literal"><span class="pre">Interface.pcolor</span></tt></a>([dB])</td>
+<td>display of R &amp; T coefficients wrt frequency an angle</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.tocolor.html#pylayers.antprop.slab.Interface.tocolor" title="pylayers.antprop.slab.Interface.tocolor"><tt class="xref py py-obj docutils literal"><span class="pre">Interface.tocolor</span></tt></a>(fGHz)</td>
+<td>convert transmission into color</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.loss0.html#pylayers.antprop.slab.Interface.loss0" title="pylayers.antprop.slab.Interface.loss0"><tt class="xref py py-obj docutils literal"><span class="pre">Interface.loss0</span></tt></a>(fGHz[,&nbsp;display])</td>
+<td>Evaluate Loss at normal incidence theta=0</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.losst.html#pylayers.antprop.slab.Interface.losst" title="pylayers.antprop.slab.Interface.losst"><tt class="xref py py-obj docutils literal"><span class="pre">Interface.losst</span></tt></a>(fGHz[,&nbsp;display,&nbsp;dB])</td>
+<td>Evaluate Loss</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.plotwrt.html#pylayers.antprop.slab.Interface.plotwrt" title="pylayers.antprop.slab.Interface.plotwrt"><tt class="xref py py-obj docutils literal"><span class="pre">Interface.plotwrt</span></tt></a>([var,&nbsp;kv])</td>
+<td>plot R &amp; T coefficients with respect to angle or frequency</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="matinterface-class">
+<h2>MatInterface Class<a class="headerlink" href="#matinterface-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatInterface.__init__.html#pylayers.antprop.slab.MatInterface.__init__" title="pylayers.antprop.slab.MatInterface.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">MatInterface.__init__</span></tt></a>(lmat,&nbsp;l,&nbsp;fGHz,&nbsp;theta)</td>
+<td>Fresnel reflection coefficients</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="mat-class">
+<h2>Mat Class<a class="headerlink" href="#mat-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.__init__.html#pylayers.antprop.slab.Mat.__init__" title="pylayers.antprop.slab.Mat.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Mat.__init__</span></tt></a>([name,&nbsp;index,&nbsp;epr,&nbsp;mur,&nbsp;sigma,&nbsp;...])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.eval.html#pylayers.antprop.slab.Mat.eval" title="pylayers.antprop.slab.Mat.eval"><tt class="xref py py-obj docutils literal"><span class="pre">Mat.eval</span></tt></a>(fGHz)</td>
+<td>evaluate Mat at given frequencies</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.info.html#pylayers.antprop.slab.Mat.info" title="pylayers.antprop.slab.Mat.info"><tt class="xref py py-obj docutils literal"><span class="pre">Mat.info</span></tt></a>()</td>
+<td>display material properties</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.R.html#pylayers.antprop.slab.Mat.R" title="pylayers.antprop.slab.Mat.R"><tt class="xref py py-obj docutils literal"><span class="pre">Mat.R</span></tt></a>(fGHz,&nbsp;theta)</td>
+<td>Calculate Reflection coefficient on the air|mat interface</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="matdb-class">
+<h2>MatDB Class<a class="headerlink" href="#matdb-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.__init__.html#pylayers.antprop.slab.MatDB.__init__" title="pylayers.antprop.slab.MatDB.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.__init__</span></tt></a>([_fileini])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.info.html#pylayers.antprop.slab.MatDB.info" title="pylayers.antprop.slab.MatDB.info"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.info</span></tt></a>()</td>
+<td>get MatDB info</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.dass.html#pylayers.antprop.slab.MatDB.dass" title="pylayers.antprop.slab.MatDB.dass"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.dass</span></tt></a>()</td>
+<td>create a dictionnary to associate index | name</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.maxindex.html#pylayers.antprop.slab.MatDB.maxindex" title="pylayers.antprop.slab.MatDB.maxindex"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.maxindex</span></tt></a>()</td>
+<td>find the max value of the index in DB</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.delete.html#pylayers.antprop.slab.MatDB.delete" title="pylayers.antprop.slab.MatDB.delete"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.delete</span></tt></a>(name)</td>
+<td>Delete a material in the DB</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.edit.html#pylayers.antprop.slab.MatDB.edit" title="pylayers.antprop.slab.MatDB.edit"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.edit</span></tt></a>(name)</td>
+<td>Edit a material in the DB   :Parameters:      <strong>name</strong> : vstring            ..</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.add.html#pylayers.antprop.slab.MatDB.add" title="pylayers.antprop.slab.MatDB.add"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.add</span></tt></a>([name,&nbsp;cval,&nbsp;sigma,&nbsp;alpha_cmm1,&nbsp;...])</td>
+<td>Add a material in the DB   :Parameters:      <strong>name</strong> : string                <strong>material name</strong> :                 <strong>cval</strong> : float or complex                <strong>epsilon or index</strong> :                 <strong>sigma</strong> : float or complex                <strong>permeability</strong> :                 <strong>mur</strong> : float                <strong>typ</strong> : string                <strong>{&#8216;epsr&#8217;|&#8217;ind&#8217;|,&#8217;reim&#8217;,|&#8217;THz&#8217;}</strong> :             ..</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.addgui.html#pylayers.antprop.slab.MatDB.addgui" title="pylayers.antprop.slab.MatDB.addgui"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.addgui</span></tt></a>([name])</td>
+<td>Add a material in the DB</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.choose.html#pylayers.antprop.slab.MatDB.choose" title="pylayers.antprop.slab.MatDB.choose"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.choose</span></tt></a>()</td>
+<td>Choose a mat from matdir</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.load.html#pylayers.antprop.slab.MatDB.load" title="pylayers.antprop.slab.MatDB.load"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.load</span></tt></a>(_fileini)</td>
+<td>Load a Material from a .ini file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.loadmat.html#pylayers.antprop.slab.MatDB.loadmat" title="pylayers.antprop.slab.MatDB.loadmat"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.loadmat</span></tt></a>(_filemat)</td>
+<td>Load a Material from a .mat file   :Parameters:      <strong>_filemat</strong> : string                <strong>a short file name</strong> :             ..</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.save.html#pylayers.antprop.slab.MatDB.save" title="pylayers.antprop.slab.MatDB.save"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.save</span></tt></a>([_fileini])</td>
+<td>save MatDB in an ini file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.savemat.html#pylayers.antprop.slab.MatDB.savemat" title="pylayers.antprop.slab.MatDB.savemat"><tt class="xref py py-obj docutils literal"><span class="pre">MatDB.savemat</span></tt></a>(_filemat)</td>
+<td>save a .mat file (PulsRay format)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="slab-class">
+<h2>Slab Class<a class="headerlink" href="#slab-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.__init__.html#pylayers.antprop.slab.Slab.__init__" title="pylayers.antprop.slab.Slab.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.__init__</span></tt></a>(mat[,&nbsp;name])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.__repr__.html#pylayers.antprop.slab.Slab.__repr__" title="pylayers.antprop.slab.Slab.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.info.html#pylayers.antprop.slab.Slab.info" title="pylayers.antprop.slab.Slab.info"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.info</span></tt></a>()</td>
+<td>Display Slab Info   ..</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.conv.html#pylayers.antprop.slab.Slab.conv" title="pylayers.antprop.slab.Slab.conv"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.conv</span></tt></a>()</td>
+<td>build lmat and thick</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Slab.ev</span></tt>((fGHz=array([&nbsp;1.])[,&nbsp;theta])</td>
+<td>Evaluation of the slab</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.filter.html#pylayers.antprop.slab.Slab.filter" title="pylayers.antprop.slab.Slab.filter"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.filter</span></tt></a>(win[,&nbsp;theta])</td>
+<td>filtering waveform</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Slab.excess_grdelay</span></tt>((fGHz=array([&nbsp;2.4,&nbsp;&nbsp;2.5,&nbsp;...)</td>
+<td>calculate transmission excess delay in ns</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.tocolor.html#pylayers.antprop.slab.Slab.tocolor" title="pylayers.antprop.slab.Slab.tocolor"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.tocolor</span></tt></a>([fGHz])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.loss0.html#pylayers.antprop.slab.Slab.loss0" title="pylayers.antprop.slab.Slab.loss0"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.loss0</span></tt></a>([fGHz])</td>
+<td>calculate loss for theta=0 at frequency (fGHz)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.losst.html#pylayers.antprop.slab.Slab.losst" title="pylayers.antprop.slab.Slab.losst"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.losst</span></tt></a>(fGHz,&nbsp;theta)</td>
+<td>Calculate loss w.r.t angle and frequency</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.editgui.html#pylayers.antprop.slab.Slab.editgui" title="pylayers.antprop.slab.Slab.editgui"><tt class="xref py py-obj docutils literal"><span class="pre">Slab.editgui</span></tt></a>()</td>
+<td>edit a Slab in the DB</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Slab.show</span></tt>((fGHz=2.4[,&nbsp;theta])</td>
+<td>show slab Reflection and Transmission coefficient</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="slabdb-class">
+<h2>SlabDB Class<a class="headerlink" href="#slabdb-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__" title="pylayers.antprop.slab.SlabDB.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.__init__</span></tt></a>([filemat,&nbsp;fileslab])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.showall.html#pylayers.antprop.slab.SlabDB.showall" title="pylayers.antprop.slab.SlabDB.showall"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.showall</span></tt></a>()</td>
+<td>show all</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.info.html#pylayers.antprop.slab.SlabDB.info" title="pylayers.antprop.slab.SlabDB.info"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.info</span></tt></a>()</td>
+<td>information</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.dass.html#pylayers.antprop.slab.SlabDB.dass" title="pylayers.antprop.slab.SlabDB.dass"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.dass</span></tt></a>()</td>
+<td>update conversion dictionnary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.maxindex.html#pylayers.antprop.slab.SlabDB.maxindex" title="pylayers.antprop.slab.SlabDB.maxindex"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.maxindex</span></tt></a>()</td>
+<td>find the max value of the index in DB</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.delete.html#pylayers.antprop.slab.SlabDB.delete" title="pylayers.antprop.slab.SlabDB.delete"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.delete</span></tt></a>(name)</td>
+<td>delete an element from the database</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.edit.html#pylayers.antprop.slab.SlabDB.edit" title="pylayers.antprop.slab.SlabDB.edit"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.edit</span></tt></a>(name)</td>
+<td>edit a Slab in the DB</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.show.html#pylayers.antprop.slab.SlabDB.show" title="pylayers.antprop.slab.SlabDB.show"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.show</span></tt></a>([name,&nbsp;fGHz])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.add.html#pylayers.antprop.slab.SlabDB.add" title="pylayers.antprop.slab.SlabDB.add"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.add</span></tt></a>(name,&nbsp;lmatname,&nbsp;lthick[,&nbsp;color])</td>
+<td>add a slab in dB</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.addgui.html#pylayers.antprop.slab.SlabDB.addgui" title="pylayers.antprop.slab.SlabDB.addgui"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.addgui</span></tt></a>(name)</td>
+<td>add a slab in the DB</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.load.html#pylayers.antprop.slab.SlabDB.load" title="pylayers.antprop.slab.SlabDB.load"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.load</span></tt></a>([_fileini])</td>
+<td>Load a Material from a .ini file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.loadsl.html#pylayers.antprop.slab.SlabDB.loadsl" title="pylayers.antprop.slab.SlabDB.loadsl"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.loadsl</span></tt></a>(_filename)</td>
+<td>load a .slab file (PulsRay format)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.save.html#pylayers.antprop.slab.SlabDB.save" title="pylayers.antprop.slab.SlabDB.save"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.save</span></tt></a>([_fileini])</td>
+<td>save SlabDB in an ini file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.savesl.html#pylayers.antprop.slab.SlabDB.savesl" title="pylayers.antprop.slab.SlabDB.savesl"><tt class="xref py py-obj docutils literal"><span class="pre">SlabDB.savesl</span></tt></a>(_filename)</td>
+<td>Save a Slab database in a .slab file (PulsRay format)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.slab.calsig.html#pylayers.antprop.slab.calsig" title="pylayers.antprop.slab.calsig"><tt class="xref py py-obj docutils literal"><span class="pre">calsig</span></tt></a>(cval,&nbsp;fGHz[,&nbsp;typ])</td>
+<td>evaluate sigma from epsr or index at a given frequency</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -115,7 +434,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.channel.html" title="pylayers.antprop.channel"
+          <a href="generated/pylayers.antprop.slab.Interface.__init__.html" title="pylayers.antprop.slab.Interface.__init__"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/pylayers.antprop.spharm.plotVW.html" title="pylayers.antprop.spharm.plotVW"
@@ -131,7 +450,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 13, 2014.
+      Last updated on mars 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

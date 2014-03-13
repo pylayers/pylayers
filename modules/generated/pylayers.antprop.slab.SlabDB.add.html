@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.slab" href="../pylayers.antprop.slab.html" />
+    <link rel="next" title="pylayers.antprop.slab.SlabDB.addgui" href="pylayers.antprop.slab.SlabDB.addgui.html" />
+    <link rel="prev" title="pylayers.antprop.slab.SlabDB.show" href="pylayers.antprop.slab.SlabDB.show.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.SlabDB.addgui.html" title="pylayers.antprop.slab.SlabDB.addgui"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.SlabDB.show.html" title="pylayers.antprop.slab.SlabDB.show"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.slab.html" accesskey="U">pylayers.antprop.slab</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.slab.SlabDB.show.html"
+                        title="previous chapter">pylayers.antprop.slab.SlabDB.show</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.slab.SlabDB.addgui.html"
+                        title="next chapter">pylayers.antprop.slab.SlabDB.addgui</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.slab.SlabDB.add.txt"
@@ -81,6 +98,101 @@
             
   <div class="section" id="pylayers-antprop-slab-slabdb-add">
 <h1>pylayers.antprop.slab.SlabDB.add<a class="headerlink" href="#pylayers-antprop-slab-slabdb-add" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.slab.SlabDB.add">
+<tt class="descclassname">SlabDB.</tt><tt class="descname">add</tt><big>(</big><em>name</em>, <em>lmatname</em>, <em>lthick</em>, <em>color='black'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#SlabDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a slab in dB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<p><strong>lmatname</strong> : list of mat name</p>
+<p><strong>lthick</strong> : list ot float</p>
+<blockquote class="last">
+<div><p>lthick  is in meters</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">thickness is in cm in .slab</p>
+</div>
+<p class="rubric">Examples</p>
+<p>Example from the paper:
+&#8220;Reflection ant Transmission Properties of Building Materials in D-Band
+for Modeling Future mm-Wave Communication Systems &#8221;
+Martin Jacob and Thomas Kurner and Robert Geise and Radoslaw Piesiewicz
+EUCAP 2010</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+
+<span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.55</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">],[</span><span class="mf">0.049</span><span class="p">])</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">,[</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;GlassJc&#39;</span><span class="p">],[</span>
+    <span class="mf">0.0029</span><span class="p">,</span><span class="mf">0.0102</span><span class="p">,</span><span class="mf">0.0029</span><span class="p">])</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
+<span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1.py">Source code</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_00.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_00.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_00.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_01.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_01.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_01.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_02.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_02.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_02.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_02.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_02.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-1_03.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-1_03.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_03.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_03.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-1_03.pdf">pdf</a>)</p>
+</div>
+<p>Exemple from paper <a class="reference external" href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&amp;arnumber=4554974&amp;url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974">&#8220;[Kiani2007] Glass Characterization for Designing
+Frequency Selective Surfaces to Improve Transmission through Energy saving
+glass windows  Kiani 2007&#8221;</a>
+The surface impedance is <img class="math" src="../../_images/math/1cc1f717f12cb2d8b9d8f1ab350c9092e3d32f4e.png" alt="R = 4 \Omega"/>, the thicknesss is <img class="math" src="../../_images/math/e7fd625f68aa1f65c98c6a274218ada86615fe07.png" alt="d = 100 nm"/></p>
+<p><a class="reference external" href="http://www.pilkington.com/spectrum2/default.aspx?country_code=FR">Pilkington Spectrum OnLine applet</a></p>
+<p><a class="reference external" href="http://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=530536&amp;fileOId=624944">Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz</a></p>
+<div class="math">
+<p><img src="../../_images/math/a12f398e710ecba953916c4436acda5a39e0275e.png" alt="\sigma =  \frac{1}{Rd} = 2.5 10^{6} S/m"/></p>
+</div><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;CoatingPilkington&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">2.5e6</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassPilkington&#39;</span><span class="p">,</span><span class="n">cval</span> <span class="o">=</span> <span class="mf">6.9</span><span class="p">,</span><span class="n">sigma</span> <span class="o">=</span> <span class="mf">5e-4</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;Optitherm382&#39;</span><span class="p">,[</span><span class="s">&#39;CoatingPilkington&#39;</span><span class="p">,</span>
+    <span class="s">&#39;GlassPilkington&#39;</span><span class="p">],[</span><span class="mf">100e-9</span><span class="p">,</span><span class="mf">0.00382</span><span class="p">])</span>
+<span class="n">fGHz</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">2.2</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;Optitherm382&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;Optitherm382&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-antprop-slab-SlabDB-add-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-antprop-slab-SlabDB-add-2.png" src="../../_images/pylayers-antprop-slab-SlabDB-add-2.png" />
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -98,17 +210,25 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.SlabDB.addgui.html" title="pylayers.antprop.slab.SlabDB.addgui"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.slab.SlabDB.show.html" title="pylayers.antprop.slab.SlabDB.show"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.slab.html" >pylayers.antprop.slab</a> &raquo;</li> 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 13, 2014.
+      Last updated on mars 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

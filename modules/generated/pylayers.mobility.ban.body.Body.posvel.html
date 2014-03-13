@@ -81,6 +81,31 @@
             
   <div class="section" id="pylayers-mobility-ban-body-body-posvel">
 <h1>pylayers.mobility.ban.body.Body.posvel<a class="headerlink" href="#pylayers-mobility-ban-body-body-posvel" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body.posvel">
+<tt class="descclassname">Body.</tt><tt class="descname">posvel</tt><big>(</big><em>traj</em>, <em>t</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/ban/body.html#Body.posvel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body.posvel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>traj <span class="classifier-delimiter">:</span> <span class="classifier">Tajectory DataFrame</span></dt>
+<dd>nx3</dd>
+<dt>t <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>trajectory time for evaluation of topos</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>kf</strong> : frame integer index</p>
+<p><strong>kt</strong> : trajectory integer index</p>
+<p><strong>vsn</strong> : normalized speed vector along motion capture trajectory (source)</p>
+<p><strong>wsn</strong> : planar vector orthogonal to vsn</p>
+<p><strong>vtn</strong> : normalized speed vector along motion trajectory (target)</p>
+<p class="last"><strong>wtn</strong> : planar vector orthogonal to wtn</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -108,7 +133,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 13, 2014.
+      Last updated on mars 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

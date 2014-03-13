@@ -172,6 +172,19 @@
 <span class="sd">    TUsignal.Yadd_zeros2r</span>
 <span class="sd">    TUsignal.esd</span>
 
+<span class="sd">CIR Functions</span>
+<span class="sd">-------------</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    TUsignal.aggcir</span>
+<span class="sd">    TUsignal.ecdf</span>
+<span class="sd">    TUsignal.taumax</span>
+<span class="sd">    TUsignal.tau_moy</span>
+<span class="sd">    TUsignal.delays</span>
+<span class="sd">    TUsignal.tau_rms</span>
+
 <span class="sd">Visualization Functions</span>
 <span class="sd">-----------------------</span>
 
@@ -221,10 +234,6 @@
 <span class="sd">    TUsignal.toa_cum_tm</span>
 <span class="sd">    TUsignal.toa_cum_tmtm</span>
 <span class="sd">    TUsignal.toa_cum_tmt</span>
-<span class="sd">    TUsignal.taumax</span>
-<span class="sd">    TUsignal.tau_moy</span>
-<span class="sd">    TUsignal.delays</span>
-<span class="sd">    TUsignal.tau_rms</span>
 
 <span class="sd">Input Output Functions</span>
 <span class="sd">-----------------------</span>
@@ -234,7 +243,6 @@
 
 <span class="sd">    TUsignal.readcir</span>
 <span class="sd">    TUsignal.readuwb</span>
-<span class="sd">    TUsignal.ecdf</span>
 
 <span class="sd">TUDsignal Class</span>
 <span class="sd">===============</span>
@@ -2650,6 +2658,48 @@
         <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">cdf</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">cdf</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">toa</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">toa</span>
+
+
+</div>
+<div class="viewcode-block" id="TUsignal.aggcir"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.aggcir.html#pylayers.signal.bsignal.TUsignal.aggcir">[docs]</a>    <span class="k">def</span> <span class="nf">aggcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">alphak</span><span class="p">,</span><span class="n">tauk</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; aggregation of CIR from (alphak,tauk)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        alphak : float</span>
+<span class="sd">            CIR path amplitude</span>
+<span class="sd">        tauk : float</span>
+<span class="sd">            CIR delay values</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">            &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">            &gt;&gt;&gt; alphak = 10.np.random.rand(7)</span>
+<span class="sd">            &gt;&gt;&gt; tauk = 100.np.random.rand(7)</span>
+<span class="sd">            &gt;&gt;&gt; tau = np.arange(0,150,0.1)</span>
+<span class="sd">            &gt;&gt;&gt; y = np.zeros(len(tau))</span>
+<span class="sd">            &gt;&gt;&gt; CIR = TUsignal(alphak,tauk)</span>
+<span class="sd">            &gt;&gt;&gt; CIR.aggcir(alphak,tauk)</span>
+<span class="sd">            &gt;&gt;&gt; CIR.plot(typ=&#39;v&#39;)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">shy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="p">(</span><span class="n">x</span><span class="o">&gt;</span><span class="n">t</span><span class="o">-</span><span class="n">eps</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">&lt;=</span><span class="n">t</span><span class="o">+</span><span class="n">eps</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">tauk</span><span class="p">)</span>
+        <span class="n">ynew</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">ynew</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">alphak</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shy</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">ynew</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">ynew</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+
 </div>
 <div class="viewcode-block" id="TUsignal.readcir"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.readcir.html#pylayers.signal.bsignal.TUsignal.readcir">[docs]</a>    <span class="k">def</span> <span class="nf">readcir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">outdir</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; read channel impulse response</span>
@@ -4797,7 +4847,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 13, 2014.
+      Last updated on mars 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

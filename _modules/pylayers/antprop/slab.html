@@ -214,6 +214,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">as</span> <span class="nn">plu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.easygui</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 <span class="k">class</span> <span class="nc">Interface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -804,6 +805,12 @@
 <span class="sd">        sigma :</span>
 <span class="sd">        roughness :</span>
 
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
+<span class="sd">        &gt;&gt;&gt; M = Mat(name=&#39;Phantom&#39;,index=17,epr=2+0.15j,mur=1,sigma=4,roughness=0)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
@@ -818,8 +825,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        epsc : Calculate complex permittivity</span>
-<span class="sd">        fGHz : frequency (GHz)</span>
+<span class="sd">        fGHz : np.array()</span>
+<span class="sd">            frequency (GHz)</span>
 
 
 <span class="sd">        Notes</span>
@@ -837,8 +844,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fGHz</span>
-        <span class="n">epsc</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">/</span> \
-            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">]</span>
+        <span class="n">epsc</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;epr&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="mi">18</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">])</span> <span class="o">/</span>  <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">]</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">epsc</span><span class="p">)</span>
 </div>
@@ -1044,6 +1050,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c"># get the next available index</span>
         <span class="n">maxid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxindex</span><span class="p">()</span>
         <span class="n">M</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">()</span>
         <span class="n">M</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
@@ -1160,8 +1167,14 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        _filemat : string</span>
 <span class="sd">        a short file name</span>
+
+<span class="sd">        Notes </span>
+<span class="sd">        -----</span>
+
+<span class="sd">            Deprecated this the format for PyRay</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filemat</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filemat</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRMAT&#39;</span><span class="p">])</span>
@@ -2427,7 +2440,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 13, 2014.
+      Last updated on mars 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

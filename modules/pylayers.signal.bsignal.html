@@ -71,6 +71,7 @@
 <li><a class="reference internal" href="#tbsignal-class">TBsignal Class</a></li>
 <li><a class="reference internal" href="#tusignal-class">TUsignal Class</a><ul>
 <li><a class="reference internal" href="#fourier-functions">Fourier Functions</a></li>
+<li><a class="reference internal" href="#cir-functions">CIR Functions</a></li>
 <li><a class="reference internal" href="#visualization-functions">Visualization Functions</a></li>
 <li><a class="reference internal" href="#energy-functions">Energy Functions</a></li>
 <li><a class="reference internal" href="#toa-estimation-functions">TOA Estimation Functions</a></li>
@@ -350,6 +351,35 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="cir-functions">
+<h3>CIR Functions<a class="headerlink" href="#cir-functions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.aggcir.html#pylayers.signal.bsignal.TUsignal.aggcir" title="pylayers.signal.bsignal.TUsignal.aggcir"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.aggcir</span></tt></a>(alphak,&nbsp;tauk)</td>
+<td>aggregation of CIR from (alphak,tauk)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ecdf.html#pylayers.signal.bsignal.TUsignal.ecdf" title="pylayers.signal.bsignal.TUsignal.ecdf"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.ecdf</span></tt></a>([Tnoise,&nbsp;rem_noise,&nbsp;...])</td>
+<td>calculate energy cumulative density function</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.taumax.html#pylayers.signal.bsignal.TUsignal.taumax" title="pylayers.signal.bsignal.TUsignal.taumax"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.taumax</span></tt></a>()</td>
+<td>calculate taumax</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.tau_moy.html#pylayers.signal.bsignal.TUsignal.tau_moy" title="pylayers.signal.bsignal.TUsignal.tau_moy"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_moy</span></tt></a>([alpha,&nbsp;tau0])</td>
+<td>calculate mean excess delay starting from delay tau_0</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.delays.html#pylayers.signal.bsignal.TUsignal.delays" title="pylayers.signal.bsignal.TUsignal.delays"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.delays</span></tt></a>()</td>
+<td>calculate delay parameters and othogonality factor from cir</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.tau_rms.html#pylayers.signal.bsignal.TUsignal.tau_rms" title="pylayers.signal.bsignal.TUsignal.tau_rms"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_rms</span></tt></a>([alpha,&nbsp;tau0])</td>
+<td>calculate root mean square delay spread starting from delay tau_0</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="visualization-functions">
 <h3>Visualization Functions<a class="headerlink" href="#visualization-functions" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
@@ -467,18 +497,6 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.toa_cum_tmt.html#pylayers.signal.bsignal.TUsignal.toa_cum_tmt" title="pylayers.signal.bsignal.TUsignal.toa_cum_tmt"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.toa_cum_tmt</span></tt></a>()</td>
 <td>calculate time of arrival</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.taumax.html#pylayers.signal.bsignal.TUsignal.taumax" title="pylayers.signal.bsignal.TUsignal.taumax"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.taumax</span></tt></a>()</td>
-<td>calculate taumax</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.tau_moy.html#pylayers.signal.bsignal.TUsignal.tau_moy" title="pylayers.signal.bsignal.TUsignal.tau_moy"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_moy</span></tt></a>([alpha,&nbsp;tau0])</td>
-<td>calculate mean excess delay starting from delay tau_0</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.delays.html#pylayers.signal.bsignal.TUsignal.delays" title="pylayers.signal.bsignal.TUsignal.delays"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.delays</span></tt></a>()</td>
-<td>calculate delay parameters and othogonality factor from cir</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.tau_rms.html#pylayers.signal.bsignal.TUsignal.tau_rms" title="pylayers.signal.bsignal.TUsignal.tau_rms"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_rms</span></tt></a>([alpha,&nbsp;tau0])</td>
-<td>calculate root mean square delay spread starting from delay tau_0</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -495,9 +513,6 @@
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.readuwb.html#pylayers.signal.bsignal.TUsignal.readuwb" title="pylayers.signal.bsignal.TUsignal.readuwb"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.readuwb</span></tt></a>(_filename)</td>
 <td>read  Waveform from Matlab file</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.ecdf.html#pylayers.signal.bsignal.TUsignal.ecdf" title="pylayers.signal.bsignal.TUsignal.ecdf"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.ecdf</span></tt></a>([Tnoise,&nbsp;rem_noise,&nbsp;...])</td>
-<td>calculate energy cumulative density function</td>
 </tr>
 </tbody>
 </table>
@@ -859,7 +874,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 13, 2014.
+      Last updated on mars 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
