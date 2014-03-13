@@ -449,6 +449,17 @@
 
 <span class="sd">        O : Usignal</span>
 
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; x = np.arange(0,1,0.01)</span>
+<span class="sd">        &gt;&gt;&gt; y = np.sin(2*np.pi*x)</span>
+<span class="sd">        &gt;&gt;&gt; s =Bsignal(x,y)</span>
+<span class="sd">        &gt;&gt;&gt; su = s.extact(np.arange(4,20))</span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">O</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">O</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
@@ -531,7 +542,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Bsignal.stem"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.stem.html#pylayers.signal.bsignal.Bsignal.stem">[docs]</a>    <span class="k">def</span> <span class="nf">stem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b-&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Bsignal.stem"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.stem.html#pylayers.signal.bsignal.Bsignal.stem">[docs]</a>    <span class="k">def</span> <span class="nf">stem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; stem display</span>
 
 <span class="sd">        Parameters</span>
@@ -543,22 +554,37 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal import *</span>
-<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; si = Bsignal()</span>
-<span class="sd">        &gt;&gt;&gt; si.x= np.arange(100)</span>
-<span class="sd">        &gt;&gt;&gt; si.y= np.arange(100)</span>
-<span class="sd">        &gt;&gt;&gt; si.stem()</span>
-<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">            &gt;&gt;&gt; si = Bsignal()</span>
+<span class="sd">            &gt;&gt;&gt; si.x= np.arange(100)</span>
+<span class="sd">            &gt;&gt;&gt; si.y= np.arange(100)</span>
+<span class="sd">            &gt;&gt;&gt; f,a = si.stem()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">ndim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span>
+
+        <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s">&#39;ax&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">nl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">color</span><span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.step"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.step.html#pylayers.signal.bsignal.Bsignal.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot steps display</span>
@@ -1345,13 +1371,13 @@
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
-<span class="sd">            #&gt;&gt;&gt; from pylayers.signal import *</span>
-<span class="sd">            #&gt;&gt;&gt; from matplotlib.pylab import *</span>
-<span class="sd">            #&gt;&gt;&gt; ip = EnImpulse()</span>
-<span class="sd">            #&gt;&gt;&gt; fig,ax = ip.plot(typ=[&#39;v&#39;])</span>
-<span class="sd">            #&gt;&gt;&gt; ip.zlr(-10,10)</span>
-<span class="sd">            #&gt;&gt;&gt; fig,ax = ip.plot(typ=[&#39;v&#39;],fig=fig,ax=ax)</span>
-<span class="sd">            #&gt;&gt;&gt; show()</span>
+<span class="sd">            &gt;&gt;&gt; from pylayers.signal import *</span>
+<span class="sd">            &gt;&gt;&gt; from matplotlib.pylab import *</span>
+<span class="sd">            &gt;&gt;&gt; ip = EnImpulse()</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = ip.plot(typ=[&#39;v&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; ip.zlr(-10,10)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = ip.plot(typ=[&#39;v&#39;],fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
@@ -4771,7 +4797,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
+      Last updated on Mar 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

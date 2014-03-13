@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.slab" href="../pylayers.antprop.slab.html" />
-    <link rel="next" title="pylayers.antprop.slab.Slab.losst" href="pylayers.antprop.slab.Slab.losst.html" />
-    <link rel="prev" title="pylayers.antprop.slab.Slab.tocolor" href="pylayers.antprop.slab.Slab.tocolor.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.losst.html" title="pylayers.antprop.slab.Slab.losst"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.tocolor.html" title="pylayers.antprop.slab.Slab.tocolor"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.antprop.slab.html" accesskey="U">pylayers.antprop.slab</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.antprop.slab.Slab.tocolor.html"
-                        title="previous chapter">pylayers.antprop.slab.Slab.tocolor</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.slab.Slab.losst.html"
-                        title="next chapter">pylayers.antprop.slab.Slab.losst</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.slab.Slab.loss0.txt"
@@ -98,37 +81,6 @@
             
   <div class="section" id="pylayers-antprop-slab-slab-loss0">
 <h1>pylayers.antprop.slab.Slab.loss0<a class="headerlink" href="#pylayers-antprop-slab-slab-loss0" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.antprop.slab.Slab.loss0">
-<tt class="descclassname">Slab.</tt><tt class="descname">loss0</tt><big>(</big><em>fGHz=2.4</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#Slab.loss0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.loss0" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate loss for theta=0 at frequency (fGHz)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency (GHz) np.array()</p>
-<p><strong>default 2.4</strong> :</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Lo</strong> : np.array</p>
-<p><strong>Loss at 0 deg polarization ortho</strong> :</p>
-<p><strong>Lp</strong> : np.array</p>
-<p class="last"><strong>Loss at 0 deg polarization para</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Lo</span><span class="p">,</span><span class="n">Lp</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">loss0</span><span class="p">(</span><span class="mf">2.4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">((</span><span class="n">Lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">5.54</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">Lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">5.56</span><span class="p">)),</span><span class="s">&#39;def Partition has changed&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">Lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">Lp</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="s">&#39;something wrong with polarization&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -146,25 +98,17 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.losst.html" title="pylayers.antprop.slab.Slab.losst"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.tocolor.html" title="pylayers.antprop.slab.Slab.tocolor"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.antprop.slab.html" >pylayers.antprop.slab</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
+      Last updated on Mar 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

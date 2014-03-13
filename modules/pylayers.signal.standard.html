@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="next" title="pylayers.signal.standard.Channel.__init__" href="generated/pylayers.signal.standard.Channel.__init__.html" />
+    <link rel="next" title="pylayers.simul.exploit" href="pylayers.simul.exploit.html" />
     <link rel="prev" title="pylayers.signal.waveform" href="pylayers.signal.waveform.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.signal.standard.Channel.__init__.html" title="pylayers.signal.standard.Channel.__init__"
+          <a href="pylayers.simul.exploit.html" title="pylayers.simul.exploit"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.signal.waveform.html" title="pylayers.signal.waveform"
@@ -63,22 +63,12 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">pylayers.signal.standard</a><ul>
-<li><a class="reference internal" href="#channel-class">Channel Class</a></li>
-<li><a class="reference internal" href="#wstandard-class">Wstandard Class</a></li>
-<li><a class="reference internal" href="#ap-class">AP Class</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="pylayers.signal.waveform.html"
                         title="previous chapter">pylayers.signal.waveform</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/pylayers.signal.standard.Channel.__init__.html"
-                        title="next chapter">pylayers.signal.standard.Channel.__init__</a></p>
+  <p class="topless"><a href="pylayers.simul.exploit.html"
+                        title="next chapter">pylayers.simul.exploit</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.signal.standard.txt"
@@ -105,91 +95,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-pylayers.signal.standard">
-<span id="pylayers-signal-standard"></span><h1>pylayers.signal.standard<a class="headerlink" href="#module-pylayers.signal.standard" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="channel-class">
-<h2>Channel Class<a class="headerlink" href="#channel-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.standard.Channel.__init__.html#pylayers.signal.standard.Channel.__init__" title="pylayers.signal.standard.Channel.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Channel.__init__</span></tt></a>(fcGHz,&nbsp;BMHz,&nbsp;GMHz,&nbsp;attmask,&nbsp;...)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.standard.Channel.__repr__.html#pylayers.signal.standard.Channel.__repr__" title="pylayers.signal.standard.Channel.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Channel.__repr__</span></tt></a>()</td>
-<td>representation</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.standard.Channel.overlap.html#pylayers.signal.standard.Channel.overlap" title="pylayers.signal.standard.Channel.overlap"><tt class="xref py py-obj docutils literal"><span class="pre">Channel.overlap</span></tt></a>(C)</td>
-<td>tests wether 2 channels overlap</td>
-</tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Channel.capacity</span></tt>(SNRdB)</td>
-<td>calculates channel capacity</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="wstandard-class">
-<h2>Wstandard Class<a class="headerlink" href="#wstandard-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Wstandard.__init__</span></tt>(name,&nbsp;Nchannel,&nbsp;modulation)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.standard.Wstandard.__repr__.html#pylayers.signal.standard.Wstandard.__repr__" title="pylayers.signal.standard.Wstandard.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Wstandard.__repr__</span></tt></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.standard.Wstandard.bandplan.html#pylayers.signal.standard.Wstandard.bandplan" title="pylayers.signal.standard.Wstandard.bandplan"><tt class="xref py py-obj docutils literal"><span class="pre">Wstandard.bandplan</span></tt></a>(fstart[,&nbsp;SMHz,&nbsp;BMHz,&nbsp;...])</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="ap-class">
-<h2>AP Class<a class="headerlink" href="#ap-class" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.standard.AP.__init__.html#pylayers.signal.standard.AP.__init__" title="pylayers.signal.standard.AP.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">AP.__init__</span></tt></a>(**kwargs)</td>
-<td><p class="rubric">Examples</p>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.standard.AP.__repr__.html#pylayers.signal.standard.AP.__repr__" title="pylayers.signal.standard.AP.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">AP.__repr__</span></tt></a>()</td>
-<td>specific representation</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.standard.AP.upfstd.html#pylayers.signal.standard.AP.upfstd" title="pylayers.signal.standard.AP.upfstd"><tt class="xref py py-obj docutils literal"><span class="pre">AP.upfstd</span></tt></a>([wstd])</td>
-<td>update from standard</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.standard.AP.load.html#pylayers.signal.standard.AP.load" title="pylayers.signal.standard.AP.load"><tt class="xref py py-obj docutils literal"><span class="pre">AP.load</span></tt></a>([_fileini])</td>
-<td>loading an access point from file</td>
-</tr>
-</tbody>
-</table>
-</div>
+  <div class="section" id="pylayers-signal-standard">
+<h1>pylayers.signal.standard<a class="headerlink" href="#pylayers-signal-standard" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -208,7 +115,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.signal.standard.Channel.__init__.html" title="pylayers.signal.standard.Channel.__init__"
+          <a href="pylayers.simul.exploit.html" title="pylayers.simul.exploit"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.signal.waveform.html" title="pylayers.signal.waveform"
@@ -224,7 +131,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
+      Last updated on Mar 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

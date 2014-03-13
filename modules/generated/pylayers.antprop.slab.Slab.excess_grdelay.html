@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.antprop.slab" href="../pylayers.antprop.slab.html" />
-    <link rel="next" title="pylayers.antprop.slab.Slab.tocolor" href="pylayers.antprop.slab.Slab.tocolor.html" />
-    <link rel="prev" title="pylayers.antprop.slab.Slab.filter" href="pylayers.antprop.slab.Slab.filter.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.tocolor.html" title="pylayers.antprop.slab.Slab.tocolor"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.filter.html" title="pylayers.antprop.slab.Slab.filter"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.antprop.slab.html" accesskey="U">pylayers.antprop.slab</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.antprop.slab.Slab.filter.html"
-                        title="previous chapter">pylayers.antprop.slab.Slab.filter</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.slab.Slab.tocolor.html"
-                        title="next chapter">pylayers.antprop.slab.Slab.tocolor</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.slab.Slab.excess_grdelay.txt"
@@ -98,40 +81,6 @@
             
   <div class="section" id="pylayers-antprop-slab-slab-excess-grdelay">
 <h1>pylayers.antprop.slab.Slab.excess_grdelay<a class="headerlink" href="#pylayers-antprop-slab-slab-excess-grdelay" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt>
-<tt class="descname">Slab.excess_grdelay(fGHz=array([ 2.4,  2.5,  2.6,  2.7,  2.8,  2.9,  3. ,  3.1,  3.2,  3.3,  3.4,</tt></dt>
-<dt>
-<tt class="descname">3.5,  3.6,  3.7,  3.8,  3.9]), theta=array([0]))</tt></dt>
-<dd><p>calculate transmission excess delay in ns</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : array</p>
-<p><strong>default arange(2.4,4,0.1)</strong> :</p>
-<p><strong>theta</strong> : default 0</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>delayo</strong> : excess delay polarization o</p>
-<p class="last"><strong>delayp</strong> : excess delay polarization p</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<p>#&gt;&gt;&gt; from pylayers.antprop.slab import *
-#&gt;&gt;&gt; from matplotlib.pylab import *
-#&gt;&gt;&gt; import numpy as np
-#&gt;&gt;&gt; sl = SlabDB(&#8216;matDB.ini&#8217;,&#8217;slabDB.ini&#8217;)
-#&gt;&gt;&gt; s1 = sl[&#8216;PARTITION&#8217;]
-#&gt;&gt;&gt; fGHz = np.arange(3.1,10.6,0.1)
-#&gt;&gt;&gt; delayo,delayp = s1.excess_grdelay(fGHz,0)
-#&gt;&gt;&gt; lineo = plt.plot(fGHz[0:-1],delayo)
-#&gt;&gt;&gt; linep = plt.plot(fGHz[0:-1],delayp)
-#&gt;&gt;&gt; plt.show()</p>
-</dd></dl>
-
 </div>
 
 
@@ -149,25 +98,17 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.tocolor.html" title="pylayers.antprop.slab.Slab.tocolor"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.antprop.slab.Slab.filter.html" title="pylayers.antprop.slab.Slab.filter"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.antprop.slab.html" >pylayers.antprop.slab</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
+      Last updated on Mar 13, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
