@@ -725,6 +725,12 @@ class Mat(dict):
         sigma :
         roughness :
 
+        Examples
+        --------
+
+        >>> from pylayers.antprop.slab import *
+        >>> M = Mat(name='Phantom',index=17,epr=2+0.15j,mur=1,sigma=4,roughness=0)
+
         """
         self['name'] = name
         self['index'] = index
@@ -739,7 +745,11 @@ class Mat(dict):
         Parameters
         ----------
 
+<<<<<<< HEAD
         fGHz : np.array()
+=======
+        fGHz : np.array
+>>>>>>> 15c96311e054528634a3eff3d5a2b1bd70488aa3
             frequency (GHz)
 
 
@@ -758,7 +768,11 @@ class Mat(dict):
         """
 
         self['fGHz'] = fGHz
+<<<<<<< HEAD
         epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / self['fGHz']
+=======
+        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) /  self['fGHz']
+>>>>>>> 15c96311e054528634a3eff3d5a2b1bd70488aa3
 
         return(epsc)
 
