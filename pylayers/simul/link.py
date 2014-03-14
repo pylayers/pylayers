@@ -195,17 +195,25 @@ class Link(object):
                 }
 
 
+        specset = ['a','b','Aa','Ab','Ta','Tb','L']
 
         for key, value in defaults.items():
             if key not in kwargs:
-                setattr(self,key,value)
+                if key in specset :
+                    setattr(self,'_'+key,value)
+                else :
+                    setattr(self,key,value)
             else :
-                setattr(self,key,kwargs[key])
+                if key in specset :
+                    setattr(self,'_'+key,kwargs[key])
+                else :
+                    setattr(self,key,kwargs[key])
+
 
         force=self.force_create
         delattr(self,'force_create')
 
-        self.Lname = self.L.filename
+        self._Lname = self._L.filename
 
         self.tx = RadioNode(name = '',
                             typ = 'tx',
@@ -219,7 +227,7 @@ class Link(object):
                             _fileant = self.Ab._filename,
                             )
 
-        self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5' 
+        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5' 
 
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
@@ -236,6 +244,94 @@ class Link(object):
                     }
 
         self.updcfg()
+
+    @property
+    def Lname(self):
+        return self._Lname 
+
+    @property
+    def L(self):
+        return self._L 
+
+    @property
+    def a(self):
+        return self._a 
+
+    @property
+    def b(self):
+        return self._b 
+
+    @property
+    def Aa(self):
+        return self._Aa 
+
+    @property
+    def Ab(self):
+        return self._Ab 
+
+    @property
+    def Ta(self):
+        return self._Ta 
+
+    @property
+    def Tb(self):
+        return self._Tb 
+
+    @Lname.setter        
+    def Lname(self,Lname):
+        self._L = Layout(Lname)
+        try:
+            self._L.dumpr()
+        except:
+            self._L.build()
+            self._L.dumpw()
+
+        self._Lname = Lname
+
+    @a.setter
+    def a(self,position):
+        if not self.L.ptin(position):
+            raise NameError ('point a not inside the Layout') 
+        self._a = position
+        self.ca = self.L.pt2cy(position)
+        self.tx.position = position
+
+    @b.setter
+    def b(self,position):
+        if not self.L.ptin(position):
+            raise NameError ('point a not inside the Layout') 
+        self._b = position
+        self.cb = self.L.pt2cy(position)
+        self.rx.position = position
+
+    @Aa.setter
+    def Aa(self,Ant):
+        self.tx = RadioNode(name = '',
+                            typ = 'tx',
+                            _fileini = 'radiotx.ini',
+                            _fileant = Ant._filename
+                            )
+        self._Aa = Ant
+
+    @Ab.setter
+    def Ab(self,Ant):
+        self.rx = RadioNode(name = '',
+                            typ = 'rx',
+                            _fileini = 'radiorx.ini',
+                            _fileant = Ant._filename,
+                            )
+        self._Ab = Ant
+
+    @Ta.setter
+    def Ta(self,orientation):
+        self._Ta = orientation
+        self.tx.orientation = orientation
+
+    @Tb.setter
+    def Tb(self,orientation):
+        self._Tb = orientation
+        self.rx.orientation = orientation
+
 
 
     def __repr__(self):
