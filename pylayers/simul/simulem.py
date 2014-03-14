@@ -4,11 +4,11 @@
 """
 
     This module run the electromagnetic simulation with an old 
-    version of the Ray Tracing tool 
+    version of the Ray Tracing tool
 
     Deprecated
 
-Utility Functions 
+Utility Functions
 =================
 
 .. autosummary::

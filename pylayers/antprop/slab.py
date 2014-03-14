@@ -135,6 +135,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 from pylayers.util.easygui import *
+from scipy.interpolate import interp1d
 import pdb
 
 class Interface(object):
@@ -725,6 +726,12 @@ class Mat(dict):
         sigma :
         roughness :
 
+        Examples
+        --------
+
+        >>> from pylayers.antprop.slab import *
+        >>> M = Mat(name='Phantom',index=17,epr=2+0.15j,mur=1,sigma=4,roughness=0)
+
         """
         self['name'] = name
         self['index'] = index
@@ -739,8 +746,8 @@ class Mat(dict):
         Parameters
         ----------
 
-        epsc : Calculate complex permittivity
-        fGHz : frequency (GHz)
+        fGHz : np.array()
+            frequency (GHz)
 
 
         Notes
@@ -758,8 +765,7 @@ class Mat(dict):
         """
 
         self['fGHz'] = fGHz
-        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / \
-            self['fGHz']
+        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) /  self['fGHz']
 
         return(epsc)
 
@@ -965,6 +971,7 @@ class MatDB(dict):
 
         """
 
+        # get the next available index
         maxid = self.maxindex()
         M = Mat()
         M['name'] = name
@@ -1081,8 +1088,14 @@ class MatDB(dict):
 
         Parameters
         ----------
+
         _filemat : string
         a short file name
+
+        Notes 
+        -----
+
+            Deprecated this the format for PyRay
 
         """
         filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])
