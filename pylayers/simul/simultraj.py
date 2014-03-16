@@ -126,7 +126,10 @@ class Simul(object):
                di[section][option] = config.get(section,option)
 
         self.L = Layout(di['layout']['layout'])
-        self.traj= tr.importsn(di['trajectory']['traj'])
+        traj  = tr.importsn(di['trajectory']['traj'])
+        for i in range(len(traj)):
+            traj[i] = traj[i].resample(2)
+        self.traj= traj
         self.ap = di['acces_point']['ap']
 
         persons_files  = di['person'].values()
@@ -329,7 +332,12 @@ class Simul(object):
         Kmax = 100
         resultEnv  = np.zeros(shape=(n_time,n_links,Kmax,2))
         resultOb  = np.zeros(shape=(n_time,n_links,Kmax,2))
-
+        taumin  = 0
+        taumax  = 300
+        taustep = 0.1
+        x = np.arange(taumin,taumax,taustep)
+        y = np.zeros(len(x))
+        cira=bs.TUsignal(x,y)
 
         for kt in range(0,n_time):          
 
@@ -373,6 +381,7 @@ class Simul(object):
                 ntraj = H.y.shape[0]
                 alphak =  np.zeros(shape=(Kmax))
                 tauk   =  np.zeros(shape=(Kmax))
+                
                 if ntraj < Kmax:
                     #pdb.set_trace()
                     alphak[0:ntraj] =  np.real(np.sqrt(np.sum(H.y*np.conj(H.y),axis =1))/len(self.fGHz))
@@ -385,8 +394,10 @@ class Simul(object):
                 resultEnv[kt,kl,:,:]= tab
                 if show:
                     print 'link  = ', link , '  pr env  = ',10*np.log10(sum((abs(alphak)**2)))
-               
-        return resultEnv
+                cira.aggcir(alphak,tauk)
+                self.chan = resultEnv
+                self.cira  = cira
+        #return resultEnv, cira
         
     def runOb(self,llink = [], t =[], show = False ):
         """
@@ -411,12 +422,14 @@ class Simul(object):
         resultEnv  = np.zeros(shape=(n_time,n_links,Kmax,2))
         resultOb  = np.zeros(shape=(n_time,n_links,Kmax,2))
 
-
+        #~ prev_lstate = list(np.zeros(shape = (n_links)))
+        #~ prev_alphakOb = []
+        #~ prev_taukOb = []
+        
         for kt in range(0,n_time):          
          
             for kp, person in enumerate(self.dpersons.values()):
-                person.settopos(self.traj[kp],t=time[kt],cs=True)
-                
+                person.settopos(self.traj[kp],t=time[kt],cs=True)               
             
            
             for kl in range(0,n_links):
@@ -450,9 +463,9 @@ class Simul(object):
                     
                 if emp == 'trunku':
                     condition = 'los'
-                
-               
                 alphakOb, taukOb = getchannel(emplacement = emp ,condition = condition, intersection = interA)
+                 
+                     
                 alphak =  np.zeros(shape=(Kmax))
                 tauk   =  np.zeros(shape=(Kmax))
                 ntraj = len(taukOb)
