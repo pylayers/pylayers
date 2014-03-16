@@ -1,3 +1,34 @@
+"""
+
+
+Trajectory Class
+================
+
+.. autosumarry::
+    :toctree: generated/
+
+    Trajectory.__init__
+    Trajectory.__repr__
+    Trajectory.update
+    Trajectory.generate
+    Trajectory.resample
+    Trajectory.rescale
+    Trajectory.replay
+    Trajectory.distance
+    Trajectory.space
+    Trajectory.time
+    Trajectory.plot
+
+Utility Functions
+=================
+
+.. autosumarry::
+    :toctree: generated/
+
+    importsn
+    importh5
+
+"""
 import numpy as np
 import scipy as sp
 import pdb
@@ -11,8 +42,6 @@ import copy
 import time
 import doctest
 from matplotlib.widgets import Slider,CheckButtons
-
-
 
 class Trajectory(pd.DataFrame):
     """  Define a trajectory
@@ -131,9 +160,9 @@ class Trajectory(pd.DataFrame):
         npt = len(t)
         td = pd.to_datetime(t,unit=unit)
         # velocity vector
-        v = (pt[1:,:]-pt[0:-1,:])/(td[1]-td[0])
+        v = (pt[1:,:]-pt[0:-1,:])/(t[1]-t[0])
         # acceleration vector
-        a = (v[1:,:]-v[0:-1,:])/(td[1]-td[0])
+        a = (v[1:,:]-v[0:-1,:])/(t[1]-t[0])
         #
         d = np.sqrt(np.sum(v[:,0:2]*v[:,0:2],axis=1))
         s = np.cumsum(d)*(t[1]-t[0])
