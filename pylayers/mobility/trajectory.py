@@ -128,20 +128,12 @@ class Trajectory(pd.DataFrame):
 
         """
 
-        
         npt = len(t)
         td = pd.to_datetime(t,unit=unit)
-        
         # velocity vector
-<<<<<<< HEAD
         v = (pt[1:,:]-pt[0:-1,:])/(td[1]-td[0])
         # acceleration vector
         a = (v[1:,:]-v[0:-1,:])/(td[1]-td[0])
-=======
-        v = (pt[1:,:]-pt[0:-1,:])/(t[1]-t[0])
-        # acceleration vector
-        a = (v[1:,:]-v[0:-1,:])/(t[1]-t[0])
->>>>>>> b107bb1973eb597b9e232b990957eb6594b56dd4
         #
         d = np.sqrt(np.sum(v[:,0:2]*v[:,0:2],axis=1))
         s = np.cumsum(d)*(t[1]-t[0])
@@ -163,7 +155,14 @@ class Trajectory(pd.DataFrame):
         return self
 
     def resample(self,sf = 2):
-        
+        """ resample trajectory
+
+        Parameters
+        ----------
+
+        sf : int
+            sampling factor
+        """
         t = self.time()
         x = self.space()[:,0]
         y = self.space()[:,1]
@@ -173,14 +172,14 @@ class Trajectory(pd.DataFrame):
         tstop = t[-1]
         tstep = (t[1]-t[0])/sf
         tnew =  np.arange(tstart, tstop,tstep)
-        xnew =fx(tnew) 
-        ynew =fy(tnew) 
+        xnew =fx(tnew)
+        ynew =fy(tnew)
         T = Trajectory()
         T.generate(t=tnew,pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,unit='s', sf = sf)
         return T
-        
-        
-        
+
+
+
     def rescale(self,speedkmph=3):
         """ same length but specified speed
 
