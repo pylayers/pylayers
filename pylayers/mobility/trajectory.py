@@ -132,9 +132,9 @@ class Trajectory(pd.DataFrame):
         npt = len(t)
         td = pd.to_datetime(t,unit=unit)
         # velocity vector
-        v = pt[1:,:]-pt[0:-1,:]
+        v = (pt[1:,:]-pt[0:-1,:])/(td[1]-td[0])
         # acceleration vector
-        a = v[1:,:]-v[0:-1,:]
+        a = (v[1:,:]-v[0:-1,:])/(td[1]-td[0])
         #
         d = np.sqrt(np.sum(v*v,axis=1))
         s = np.cumsum(d)

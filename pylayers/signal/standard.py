@@ -1,5 +1,14 @@
 """
 
+Band Class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    Band.__init__
+    Band.channelize
+
 Channel Class
 =============
 
@@ -35,6 +44,7 @@ AP Class
 
 """
 import numpy as np
+import json
 import ConfigParser
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
@@ -43,16 +53,18 @@ class Band(dict):
     """ A Band is a structured portion of the spectrum
 
     A band is subdivided into channels
+
     """
     def __init__(self,**kwargs):
         """
         """
-        default = {
-            'zone'  : 'Europe',
+        defaults = {
+        'zone'  : 'Europe',
         'name'  : 'ISM24',
-        'fmin'  : 2.4,
-        'fmax'  : 2.45,
-        'fstep' : 5}
+        'fstart'  : 2.412,
+        'fstop'  : 2.472,
+        'fstep' : 5,
+        'bmhz' : 20 }
 
         for k in defaults:
             if k not in kwargs:
@@ -60,19 +72,55 @@ class Band(dict):
 
         self['zone']  = kwargs['zone']
         self['name']  = kwargs['name']
-        self['fmin']  = eval(kwargs['fmin'])
-        self['fmax']  = eval(kwargs['PmaxdBm'])
-        self['fstep'] = fstep
+        self['fstart']  = kwargs['fstart']
+        self['fstop']  = kwargs['fstop']
+        self['fstep'] = kwargs['fstep']
+        self['bmhz'] = kwargs['bmhz']
+        self.channelize()
 
     def channelize(self):
         """
         """
-        pass
+        self.chan={}
+        self.fcGHz = np.arange(self['fstart'],self['fstop'],self['fstep']/1000.)
+        for k,fc in enumerate(self.fcGHz):
+            if (fc>=4) & (fc<5):
+                channum = int(np.round((fc-4)*200))
+            if (fc>=5) & (fc<6):
+                channum = int(np.round((fc-5)*200))
+            if fc<4:
+                channum = k+1
+            self.chan[channum] = Channel(fc,self['bmhz'])
+
+    def select(self,lchan):
+        """ select a dictionnary of channel from a list of channels
+        """
+        dchan = {}
+        for k,chan in enumerate(lchan):
+           dchan[k] = self[chan]
+        return(dchan)
+
+    def load(self,bandname,_fileini='spectrum.ini'):
+        """ load spectrum
+        """
+        self._fileini = _fileini
+        self.config = ConfigParser.ConfigParser()
+        fp = open(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
+        self.config.readfp(fp)
+        band = dict(self.config.items(bandname))
+
+        self['name'] = bandname
+        self['zone'] = band['zone']
+        self['fstart'] = eval(band['fstart'])
+        self['fstop'] = eval(band['fstop'])
+        self['fstep'] = eval(band['fstep'])
+        self['bmhz'] = eval(band['bmhz'])
+        self.channelize()
 
 class Channel(dict):
     """ a radio channel abstraction
     """
-    def __init__(self,fcGHz,BMHz,GMHz,attmask,speff,crate):
+    def __init__(self,fcGHz,BMHz,GMHz=0,attmask=20,speff=2,crate=3/4):
         """
         Parameters
         ----------
@@ -97,13 +145,28 @@ class Channel(dict):
         self['attmask']  = attmask
         self['speff'] = speff
         self['crate'] = crate
-        self.fGHz    = np.array([fcGHz-(BMHz+GMHz)/2000.,fcGHz+(BMHz+GMHz)/2000.])
+        self.fGHz = np.array([fcGHz-(BMHz+GMHz)/2000.,fcGHz+(BMHz+GMHz)/2000.])
 
     def __repr__(self):
         """ representation
         """
         st = str(self['fcGHz'])+': ['+str(self.fGHz[0])+','+str(self.fGHz[1])+']\n'
         return(st)
+
+    def __add__(self,chan):
+        """ add two adjascent channels
+        """
+        if (self.fGHz[1]==chan.fGHz[0]):
+            self['fcGHz'] = self.fGHz[1]
+            self['BMHz'] = self['BMHZ']+chan['BMHz']
+            self.fGHz[1]=chan.fGHz[1]
+        elif (self.fGHz[0]==chan.fGHz[1]):
+            self['fcGHz'] = self.fGHz[0]
+            self['BMHz'] = self['BMHZ']+chan['BMHz']
+            self.fGHz[0]=chan.fGHz[0]
+        else:
+            pass
+        return(self)
 
     def overlap(self,C):
         """ tests wether 2 channels overlap
@@ -174,13 +237,50 @@ class Wstandard(object):
         return(st)
 
 
+    def load(self,stdname,_fileini='wstd.json'):
+        """ load a standard from file
+
+
+        Parameters
+        ----------
+
+        stdname : string
+            standard name
+        _fileini : string
+            file containing the description of available standards
+        """
+
+        wstandard = ConfigParser.ConfigParser()
+        fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
+        wstandard.readfp(fp)
+        fp.close()
+
+        self.dwstd = dict(wstandard.items(wstd))
+        fstart =  eval(self.dwstd['fcghzstart'])
+        nchan = eval(self.dwstd['nchan'])
+        modulation = self.dwstd['modulation']
+        BMHz = eval(self.dwstd['bmhz'])
+        GMHz = eval(self.dwstd['gmhz'])
+        SMHz = eval(self.dwstd['smhz'])
+        attmask = eval(self.dwstd['attmask'])
+        self.s = Wstandard(wstd,nchan,modulation)
+        self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
+
+
+
     def bandplan(self,fstart,SMHz=5,BMHz=20,GMHz=2,attmask=20,speff=2,crate=0.5):
         """
         """
         self.chan={}
         self.fcGHz = fstart+np.arange(self.Nchannel)*SMHz/1000.
         for k,fc in enumerate(self.fcGHz):
-            self.chan[k+1] = Channel(fc,BMHz,GMHz,attmask,speff,crate)
+            if (fc>=4) & (fc<5):
+                channum = int((fc-4)*200)
+            if (fc>=5) & (fc<6):
+                channum = int((fc-5)*200)
+            if fc<4:
+                channum = k+1
+            self.chan[channum] = Channel(fc,BMHz,GMHz,attmask,speff,crate)
 
 class AP(dict):
     """ Access Point
@@ -268,8 +368,7 @@ class AP(dict):
         This function updates `self.s` which contains standard specific parameters
 
         """
-
-        wstandard = ConfigParser.ConfigParser()
+wstandard = ConfigParser.ConfigParser()
         fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
         wstandard.readfp(fp)
         fp.close()
@@ -286,6 +385,7 @@ class AP(dict):
         self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
 
 
+        
     def load(self,_fileini='defAP.ini'):
         """ loading an access point from file
 

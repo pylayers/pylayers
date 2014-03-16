@@ -54,7 +54,7 @@ from pylayers.util.project import *
 from pylayers.measures import mesuwb as muwb
 import pdb
 import pylayers.mobility.trajectory as tr
-from pylayers.mobility.body.body1 import *
+from pylayers.mobility.ban.body import *
 from pylayers.antprop.delaydispersion import *
 
 class Simul(object):
