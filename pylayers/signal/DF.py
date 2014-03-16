@@ -4,7 +4,7 @@ from numpy import *
 from scipy import io
 from scipy.signal import *
 from pylab import *
-from EnergyDetector import *
+#from EnergyDetector import *
 
 class DF(object):
     """ Digital Filter Class
@@ -12,7 +12,7 @@ class DF(object):
     Methods
     -------
 
-    filter : flilter a signal 
+    filter : flilter a signal
 
     """
     def __init__(self,b=array([1]),a=array([1,-0.5])):
@@ -103,7 +103,7 @@ class DF(object):
         ip[0] = 1
         rip   = self.filter(ip)
         stem(arange(N),rip)
-        show()
+        show() 
 
 
 if __name__ == "__main__":
@@ -118,3 +118,8 @@ if __name__ == "__main__":
     flt.ellip_bp(wp,ws,gpass,gstop)
     flt.zplane()
     flt.freqz()
+    x = np.random.randn(1000)
+    y = flt.filter(x)
+    fo = DF()
+    y2 = fo.filter(x)
+

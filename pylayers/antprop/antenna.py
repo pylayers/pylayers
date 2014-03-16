@@ -1469,6 +1469,7 @@ class Antenna(object):
                             cmap=cm.hot_r,shade=True)
         else:
             ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
+        plt.show()
 
     def pol3d(self, k=0, R=50, St=1, Sp=1, silent=False):
         """ Display polarisation diagram  in 3D
