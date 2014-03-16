@@ -98,7 +98,7 @@ class Trajectory(pd.DataFrame):
             return False
 
 
-    def generate(self,t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s'):
+    def generate(self,t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
         """
         Generate a trajectroy from a numpy array
 
@@ -128,16 +128,17 @@ class Trajectory(pd.DataFrame):
 
         """
 
-
+        
         npt = len(t)
         td = pd.to_datetime(t,unit=unit)
+        
         # velocity vector
-        v = pt[1:,:]-pt[0:-1,:]
+        v = (pt[1:,:]-pt[0:-1,:])/(t[1]-t[0])
         # acceleration vector
-        a = v[1:,:]-v[0:-1,:]
+        a = (v[1:,:]-v[0:-1,:])/(t[1]-t[0])
         #
-        d = np.sqrt(np.sum(v*v,axis=1))
-        s = np.cumsum(d)
+        d = np.sqrt(np.sum(v[:,0:2]*v[:,0:2],axis=1))
+        s = np.cumsum(d)*(t[1]-t[0])
         s[-1] = 0
         s = np.roll(s,1)
 
@@ -155,7 +156,25 @@ class Trajectory(pd.DataFrame):
         self.update()
         return self
 
-
+    def resample(self,sf = 2):
+        
+        t = self.time()
+        x = self.space()[:,0]
+        y = self.space()[:,1]
+        fx = sp.interpolate.interp1d(t, x)
+        fy = sp.interpolate.interp1d(t, y)
+        tstart = t[0]
+        tstop = t[-1]
+        tstep = (t[1]-t[0])/sf
+        tnew =  np.arange(tstart, tstop,tstep)
+        xnew =fx(tnew) 
+        ynew =fy(tnew) 
+        T = Trajectory()
+        T.generate(t=tnew,pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,unit='s', sf = sf)
+        return T
+        
+        
+        
     def rescale(self,speedkmph=3):
         """ same length but specified speed
 
