@@ -1,5 +1,24 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
+"""
+
+DF Class
+========
+
+This class implements a LTI digital filter
+
+.. autosummary::
+    :toctree: generated/
+
+    DF.__init__
+    DF.filter
+    DF.order
+    DF.freqz
+    DF.ellip_bp
+    DF.remez
+    DF.zplane
+    DF.ir
+"""
 from numpy import *
 from scipy import io
 from scipy.signal import *
