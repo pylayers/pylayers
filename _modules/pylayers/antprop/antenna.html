@@ -1335,7 +1335,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
     <span class="nd">@mlab.show</span>
-<div class="viewcode-block" id="Antenna._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna._show3.html#pylayers.antprop.antenna.Antenna._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 mayavi</span>
 
 <span class="sd">        fGHz : float</span>
@@ -1434,7 +1434,7 @@
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]:</span>
             <span class="n">mlab</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39; @ &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; GHz&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
-</div>
+
 <div class="viewcode-block" id="Antenna.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.show3.html#pylayers.antprop.antenna.Antenna.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="p">[],</span><span class="n">T</span><span class="o">=</span><span class="p">[],</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 geomview</span>
 
@@ -1548,6 +1548,7 @@
                             <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">,</span><span class="n">shade</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot3D</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Z</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Antenna.pol3d"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.pol3d.html#pylayers.antprop.antenna.Antenna.pol3d">[docs]</a>    <span class="k">def</span> <span class="nf">pol3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">St</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Sp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display polarisation diagram  in 3D</span>
@@ -3336,7 +3337,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 13, 2014.
+      Last updated on mars 16, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

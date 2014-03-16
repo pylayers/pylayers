@@ -79,34 +79,53 @@
   <h1>Source code for pylayers.signal.DF</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: latin1 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">DF Class</span>
+<span class="sd">========</span>
+
+<span class="sd">This class implements a LTI digital filter</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    DF.__init__</span>
+<span class="sd">    DF.filter</span>
+<span class="sd">    DF.order</span>
+<span class="sd">    DF.freqz</span>
+<span class="sd">    DF.ellip_bp</span>
+<span class="sd">    DF.remez</span>
+<span class="sd">    DF.zplane</span>
+<span class="sd">    DF.ir</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">EnergyDetector</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c">#from EnergyDetector import *</span>
 
-<div class="viewcode-block" id="DF"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF">[docs]</a><span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">DF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Digital Filter Class</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    filter : flilter a signal </span>
+<span class="sd">    filter : flilter a signal</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]),</span><span class="n">a</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">])):</span>
+<div class="viewcode-block" id="DF.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.__init__.html#pylayers.signal.DF.DF.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]),</span><span class="n">a</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mf">0.5</span><span class="p">])):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
-
-<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="DF.filter"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.filter.html#pylayers.signal.DF.DF.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
         <span class="n">y</span>  <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DF.order"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.order">[docs]</a>    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.order"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.order.html#pylayers.signal.DF.DF.order">[docs]</a>    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span>
 </div>
-<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.freqz"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.freqz.html#pylayers.signal.DF.DF.freqz">[docs]</a>    <span class="k">def</span> <span class="nf">freqz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        freqz : display filter transfer function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -126,7 +145,7 @@
         <span class="n">grid</span><span class="p">()</span>
         <span class="c">#show()</span>
 </div>
-<div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.ellip_bp">[docs]</a>    <span class="k">def</span> <span class="nf">ellip_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">gstop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.ellip_bp"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.ellip_bp.html#pylayers.signal.DF.DF.ellip_bp">[docs]</a>    <span class="k">def</span> <span class="nf">ellip_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">gstop</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Elliptic Bandpath filter</span>
 
 <span class="sd">        wp :</span>
@@ -144,7 +163,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="o">=</span> <span class="n">b</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span>  <span class="o">=</span> <span class="n">a</span>
 </div>
-<div class="viewcode-block" id="DF.remez"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.remez">[docs]</a>    <span class="k">def</span> <span class="nf">remez</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numtaps</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span><span class="n">bands</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.21</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span><span class="n">desired</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.0001</span><span class="p">)):</span>
+<div class="viewcode-block" id="DF.remez"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.remez.html#pylayers.signal.DF.DF.remez">[docs]</a>    <span class="k">def</span> <span class="nf">remez</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numtaps</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span><span class="n">bands</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.21</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span><span class="n">desired</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.0001</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        FIR design Remez algorithm</span>
 
@@ -160,7 +179,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">remez</span><span class="p">(</span><span class="n">numtaps</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="n">desired</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Hz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;bandpass&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">grid_density</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="DF.zplane"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.zplane">[docs]</a>    <span class="k">def</span> <span class="nf">zplane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.zplane"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.zplane.html#pylayers.signal.DF.DF.zplane">[docs]</a>    <span class="k">def</span> <span class="nf">zplane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Display filter in the complex plane</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -177,14 +196,14 @@
         <span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
         <span class="n">show</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="DF.ir"><a class="viewcode-back" href="../../../modules/pylayers.signal.DF.html#pylayers.signal.DF.DF.ir">[docs]</a>    <span class="k">def</span> <span class="nf">ir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+<div class="viewcode-block" id="DF.ir"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.DF.DF.ir.html#pylayers.signal.DF.DF.ir">[docs]</a>    <span class="k">def</span> <span class="nf">ir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
         <span class="n">ip</span>    <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="n">ip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">rip</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
         <span class="n">stem</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="n">rip</span><span class="p">)</span>
-        <span class="n">show</span><span class="p">()</span>
+        <span class="n">show</span><span class="p">()</span> 
 
-</div></div>
+</div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">fe</span>  <span class="o">=</span> <span class="mi">10</span>
     <span class="n">fN</span>  <span class="o">=</span> <span class="n">fe</span><span class="o">/</span><span class="mf">2.0</span>
@@ -197,6 +216,10 @@
     <span class="n">flt</span><span class="o">.</span><span class="n">ellip_bp</span><span class="p">(</span><span class="n">wp</span><span class="p">,</span><span class="n">ws</span><span class="p">,</span><span class="n">gpass</span><span class="p">,</span><span class="n">gstop</span><span class="p">)</span>
     <span class="n">flt</span><span class="o">.</span><span class="n">zplane</span><span class="p">()</span>
     <span class="n">flt</span><span class="o">.</span><span class="n">freqz</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">flt</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">fo</span> <span class="o">=</span> <span class="n">DF</span><span class="p">()</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -224,7 +247,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
+      Last updated on mars 16, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
