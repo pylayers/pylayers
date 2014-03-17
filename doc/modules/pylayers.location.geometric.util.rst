@@ -12,10 +12,3 @@ Submodules
    pylayers.location.geometric.util.model
    pylayers.location.geometric.util.scene
 
-Module contents
----------------
-
-.. automodule:: pylayers.location.geometric.util
-    :members:
-    :undoc-members:
-    :show-inheritance:

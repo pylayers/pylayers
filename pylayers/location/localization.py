@@ -23,11 +23,35 @@ from   pylayers.network.model import PLSmodel
 import networkx as nx
 
 class Localization(object):
-    """
+    """ Handle localization engine of agents
+
+    Attributes
+    ----------
+
+    args
+    config
+    cla
+    algloc
+    idx
 
     """
 
     def __init__(self,**args):
+        """
+
+        Parameters
+        ----------
+
+        'PN'  : Network
+            Personal Network
+        'net' : Network
+            Global Network
+        'method' : list of string
+        'ID' : string
+        'save' : list
+
+
+        """
 
         defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'ID':'0','save':[]}
 
@@ -41,10 +65,12 @@ class Localization(object):
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
         self.cla = CLA()
-        self.algloc=algloc()
+        self.algloc = algloc()
         self.idx = 0
 
     def __repr__(self):
+        """ object representation
+        """
         s = 'Localization information\n*************************\n'
         s = s + '\nNode ID: ' + str(self.ID)
         s = s + '\nLocalization methods: ' + str(self.method)
@@ -75,7 +101,20 @@ class Localization(object):
 
     def fill_cla(self):
         """
-            Fill the constraint layer array
+        fill the constraint layer array
+
+        Notes
+        -----
+
+        loop on edges
+            loop on rat
+                append cla with available LDP among (RSS,TOA)
+
+        Warning
+        -------
+
+        TDOA not implemented yet
+
         """
         ## loop on edges
         for e in self.net.node[self.ID]['PN'].edge[self.ID].keys():
@@ -87,9 +126,9 @@ class Localization(object):
                         RSS(id = rat+'-Pr-'+self.ID+'-'+e,
                             value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][0],
                             std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][1],
-                            model = PLSmodel(f = eval(param['f']), 
+                            model = PLSmodel(f = eval(param['f']),
                                              rssnp = eval(param['rssnp']),
-                                             d0 = eval(param['d0']), 
+                                             d0 = eval(param['d0']),
                                              method = param['method']),
                             p = self.net.node[self.ID]['PN'].node[e]['pe'],
                             origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
@@ -188,11 +227,11 @@ class Localization(object):
             pass
         self.cla.update()
 
-        # ############"" FOR DEBUG
-        # prss=np.where(np.array(self.cla.type)=='RSS')[0]
-        # for x in range(len(self.cla.c)):
-        #     if x in prss:
-        #         self.cla.usable[x]=False
+        ############ FOR DEBUG ONLY : RSS localization neglected
+        prss=np.where(np.array(self.cla.type)=='RSS')[0]
+        for x in range(len(self.cla.c)):
+            if x in prss:
+                self.cla.usable[x]=False
 
 
     def savep(self,value,now=0.,name='pe'):
@@ -278,7 +317,7 @@ class PLocalization(Process):
         self.sim = sim
 
 
-
+        print ('!!!!!! Warning Localization : No RSS only localization !!!!!')
 
     def run(self):
 #        self.loc.get_const()
@@ -293,6 +332,7 @@ class PLocalization(Process):
                 self.tx.cmdrq.signal()
                 self.loc.update(ldp='TOA')
             # try to obtain an estimated position
+
             if 'geo' in self.method :
                 bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
 #                    if 'alg' in self.method and bep:

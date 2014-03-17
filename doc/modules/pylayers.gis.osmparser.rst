@@ -1,7 +1,4 @@
-pylayers.gis.osmparser module
+pylayers.gis.osmparser
 =============================
 
 .. automodule:: pylayers.gis.osmparser
-    :members:
-    :undoc-members:
-    :show-inheritance:

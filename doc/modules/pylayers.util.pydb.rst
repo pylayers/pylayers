@@ -1,7 +1,4 @@
-pylayers.util.pydb module
+pylayers.util.pydb
 =========================
 
 .. automodule:: pylayers.util.pydb
-    :members:
-    :undoc-members:
-    :show-inheritance:

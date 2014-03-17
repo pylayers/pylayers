@@ -1,7 +1,4 @@
-pylayers.util.plotutil module
+pylayers.util.plotutil
 =============================
 
 .. automodule:: pylayers.util.plotutil
-    :members:
-    :undoc-members:
-    :show-inheritance:

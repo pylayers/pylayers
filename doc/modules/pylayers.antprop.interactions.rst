@@ -1,7 +1,4 @@
-pylayers.antprop.interactions module
+pylayers.antprop.interactions
 ====================================
 
 .. automodule:: pylayers.antprop.interactions
-    :members:
-    :undoc-members:
-    :show-inheritance:

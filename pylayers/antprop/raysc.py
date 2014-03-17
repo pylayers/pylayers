@@ -1,5 +1,73 @@
 #!/usr/bin/python
 # -*- coding: latin1 -*-
+"""
+
+This modules contains classes for old code PulsRay
+
+Ray3D class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    Ray3D.info
+    Ray3D.locbas
+    Ray3D.delay
+    Ray3D.show
+    Ray3D.show3
+
+RayTud class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    RayTud.__init__
+    RayTud.info
+    RayTud.delay
+    RayTud.signature
+    RayTud.eval
+
+
+GrRayTud class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    GrRayTud.__init__
+    GrRayTud.__repr__
+    GrRayTud.dir
+    GrRayTud.delay
+    GrRayTud.choose
+    GrRayTud.save
+    GrRayTud.load
+    GrRayTud.ray
+    GrRayTud.typ
+    GrRayTud.eval
+    GrRayTud.info
+    GrRayTud.imshowinter
+    GrRayTud.get_thetas
+    GrRayTud.get_mat
+
+GrRay3D class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    GrRay3D.__init__
+    GrRay3D.dir
+    GrRay3D.info
+    GrRay3D.choose
+    GrRay3D.load
+    GrRay3D.delay
+    GrRay3D.save
+    GrRay3D.reciprocal
+    GrRay3D.show
+    GrRay3D.show3
+
+"""
 import pdb
 import os
 import pdb
@@ -1699,12 +1767,13 @@ class GrRay3D(object):
         return(G)
 
     def show(self,fig=[], ax=[], rayset=np.array([]), col='b', node=False):
-        """ show a cluster of rays 
+        """ show a cluster of rays
 
         Parameters
         ----------
-        fig    : figure instance 
-        ax     : axes instance  
+
+        fig    : figure instance
+        ax     : axes instance
         rayset :
             set of rays np.array([])
         col  : string

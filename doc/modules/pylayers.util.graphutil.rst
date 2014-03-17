@@ -1,7 +1,4 @@
-pylayers.util.graphutil module
+pylayers.util.graphutil
 ==============================
 
 .. automodule:: pylayers.util.graphutil
-    :members:
-    :undoc-members:
-    :show-inheritance:

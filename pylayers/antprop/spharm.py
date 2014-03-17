@@ -176,30 +176,31 @@ def indexvsh(L):
 
     Parameters
     ----------
-         L : int
-             degree max
+
+    L : int
+      degree max
 
 
     Returns
     -------
 
-        t : ndarray ( (L+1)(L+2)/2 ,  2 )
-            tab for indexing the upper triangle
+    t : ndarray ( (L+1)(L+2)/2 ,  2 )
+       tab for indexing the upper triangle
 
     Examples
     --------
 
-        >>> from pylayers.antprop.antenna import *
-        >>> indexvsh(3)
-        array([[1, 0],
-               [1, 1],
-               [2, 0],
-               [2, 1],
-               [2, 2],
-               [3, 0],
-               [3, 1],
-               [3, 2],
-               [3, 3]])
+    >>> from pylayers.antprop.antenna import *
+    >>> indexvsh(3)
+    array([[1, 0],
+           [1, 1],
+           [2, 0],
+           [2, 1],
+           [2, 2],
+           [3, 0],
+           [3, 1],
+           [3, 2],
+           [3, 3]])
 
     """
     Kmax = (L + 1) * (L + 2) / 2
@@ -262,11 +263,29 @@ def index_vsh(L, M):
 class VectorCoeff(object):
 
     def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
-                 ind=np.array([]), k=np.array([])):
+                 ind=np.array([]) ):
+        """
+        Parameters
+        ----------
 
+        typ :
+        fmin :
+            min frequency GHz
+        fmax :
+        data : np.array
+        ind : np.array
+
+        Notes 
+        -----
+
+        .. warning::
+            seems deprecated
+
+        """
         self.s1 = np.array([])
         self.s4 = np.array([])
         self.s3 = np.array([])
+
         self.fmin = fmin
         self.fmax = fmax
 
@@ -276,8 +295,11 @@ class VectorCoeff(object):
     def inits1(self, data, ind):
         """
 
+        Parameters
+        ----------
+
         data :
-        ind
+        ind :
 
         """
         sh = np.shape(data)
@@ -633,6 +655,17 @@ class SCoeff(object):
 
     def plot(self,typ='s3',title='',xl=False,yl=False,log=False,stem=True,color='b'):
         """
+        Parameters
+        ----------
+
+        typ : string
+            's3'
+        title 
+        xl 
+        yl 
+        log
+        stem: boolean
+        color
         """
         if typ=='s3':
             indices = self.ind3
@@ -1254,13 +1287,15 @@ class VSHCoeff(object):
 
     """
     def __init__(self, Br, Bi, Cr, Ci):
-        """
+        """ Init  VSHCoeff
+
         Parameters
         ----------
-            Br
-            Bi
-            Cr
-            Ci
+
+        Br
+        Bi
+        Cr
+        Ci
         """
 
         self.Br = Br
@@ -1286,7 +1321,17 @@ class VSHCoeff(object):
         return(st) 
 
     def plot(self,typ='s3',titre='titre',log=False,stem=True,subp=True):
-        """
+        """ plot coeff
+
+        Parameters
+        ----------
+
+        typ
+        titre
+        log
+        stem
+        subp
+
         """
         fa = np.linspace(self.Br.fmin,self.Br.fmax,self.Br.Nf)
         st = titre+'  shape : '+typ
@@ -1327,6 +1372,7 @@ class VSHCoeff(object):
 
         Parameters
         ----------
+
         typ : str
             {'s1','s2','s3'}
         k  : int
@@ -1383,7 +1429,6 @@ class VSHCoeff(object):
         N2 : max level
             default (-1 means all values)
 
-        s1 :
         """
         self.Bi.s1tos2(N2)
         self.Br.s1tos2(N2)
@@ -2049,14 +2094,15 @@ def plotVW(l, m, theta, phi, sf=False):
     .. plot::
         :include-source:
 
-        #>>> from pylayers.antprop.antenna import *
-        #>>> import  matplotlib.pyplot as plt
-        #>>> import numpy as np
-        #>>> n=5
-        #>>> m=3
-        #>>> theta = np.linspace(0,np.pi,30)
-        #>>> phi   = np.linspace(0,2*np.pi,60)
-        #>>> plotVW(n,m,theta,phi)
+        >>> from pylayers.antprop.spharm import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> n=5
+        >>> m=3
+        >>> theta = np.linspace(0,np.pi,30)
+        >>> phi   = np.linspace(0,2*np.pi,60)
+        >>> plotVW(n,m,theta,phi)
+        >>> plt.show()
 
     """
     # calculate v and w

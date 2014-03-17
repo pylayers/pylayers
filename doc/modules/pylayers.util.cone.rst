@@ -1,4 +1,4 @@
-pylayers.util.cone module
+pylayers.util.cone
 =========================
 
 .. automodule:: pylayers.util.cone

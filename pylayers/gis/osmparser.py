@@ -1,4 +1,82 @@
 #-*- coding:Utf-8 -*-
+"""
+
+Way Class
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+     Way.__init__
+     Way.__repr__
+     Way.show
+
+Coords Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Coords.__repr__
+    Coords.clean
+    Coords.coords
+    Coords.cartesian
+
+Nodes Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Coords.nodes
+    Coords.clean
+
+Ways Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Ways.ways
+    Ways.clean
+    Ways.building
+    Ways.eval
+    Ways.show
+    Ways.tomaska
+    Ways.showold
+
+Relations Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+     Relations.relations
+     Relations.clean
+
+FloorPlan Class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+     FloorPlan.__init__
+     FloorPlan.__repr__
+     FloorPlan.build
+     FloorPlan.show
+
+Utility Functions
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+     osmparse
+     extract
+     getbdg
+     buildingsparse
+
+"""
 #
 # Module OSMParser
 #
@@ -77,8 +155,24 @@ class Way(object):
 
 class Coords(object):
     """
+    Coords is a point in OSM
 
-    A Coords is a point
+    Attributes
+    ----------
+
+    xy :
+    latlon :
+    cpt :
+    minlon :
+    maxlon :
+    minlat :
+    maxlat :
+    boundary : np.array
+        (minlat,minlon,maxlat,maxlon) 
+
+    Notes
+    -----
+
 
     """
     cpt = 0
@@ -121,16 +215,27 @@ class Coords(object):
     def cartesian(self):
         """ Convert Latitude/Longitude in cartesian
 
+        This method converst latlon coordinates into cartesian x,y coordinates in
+        Cassini projection relatively to specified latlon boundary + an offset
+        of 0.01 degrees.(to be parameterized ? )
+        The basemap objet for back and forth coordinates.
+        conversion is returned.
+
+
         Returns
         -------
 
         m : Basemap converter
 
-
         Notes
         -----
 
         The transformation is centered on the mean of latitude and longitude
+
+        Warning
+        -------
+
+        If boundary are modified coordinates changes.
 
         """
         bd = self.boundary
@@ -266,8 +371,16 @@ class Ways(object):
         plt.axis('scaled')
         return(fig,ax)
 
-    def tomaska(self):
+    def tomaska(self,m,lonlat=True):
         """ convert to masked array
+
+        Parameters
+        ----------
+
+        m : Basemap object
+            for converting to and from map projection coordinates
+        lonlat : boolean
+            returns in WGS84 format if True
 
         Returns
         -------
@@ -276,11 +389,12 @@ class Ways(object):
 
         """
 
-        tpt=np.empty((2,))
-        mask=np.ones((2,))
+        tpt  = np.empty((2,))
+        mask = np.ones((2,))
         N = len(self.way.keys())
         for k,b in enumerate(self.way):
             # retrieve PolyGon or LineString
+            # progress bar
             if k%1000==0:
                 print k,N
             shp = self.way[b].shp
@@ -292,9 +406,14 @@ class Ways(object):
                     mask = np.vstack((mask,np.array([[0,0]])))
                 tpt = np.vstack((tpt,np.array([[0,0]])))
                 mask = np.vstack((mask,np.array([[1,1]])))
+        
+        if lonlat:
+            (lon,lat) = m(tpt[:,0],tpt[:,1],inverse=True)
+            tpt = np.vstack([lon,lat]).T
 
-        vertices = np.ma.masked_array(tpt, mask)
-        return(vertices)
+        #vertices = np.ma.masked_array(tpt, mask)
+        #return(vertices)
+        return(tpt,mask)
 
     def showold(self,fig=[],ax=[]):
         """ show ways

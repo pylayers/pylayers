@@ -1,7 +1,4 @@
-pylayers.location.locarule module
+pylayers.location.locarule
 =================================
 
 .. automodule:: pylayers.location.locarule
-    :members:
-    :undoc-members:
-    :show-inheritance:

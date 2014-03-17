@@ -1,3 +1,12 @@
+"""
+.. currentmodule:: pylayers.antprop.antvsh
+
+
+.. autosummary::
+    :toctree: /generated
+
+    vsh
+"""
 import pdb
 import doctest
 import pylayers.antprop.antenna as ant

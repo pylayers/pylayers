@@ -1,7 +1,4 @@
-pylayers.mobility.transit.vec3 module
+pylayers.mobility.transit.vec3
 =====================================
 
 .. automodule:: pylayers.mobility.transit.vec3
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -520,7 +520,6 @@ class Signatures(dict):
             f.close()
             raise NameError('Signature: issue when writting h5py file')
 
-
     def loadh5(self,filename=[]):
         """ Load signatures
             h5py format
@@ -532,10 +531,10 @@ class Signatures(dict):
 
         filename=pyu.getlong(_filename+'.h5',pstruc['DIRSIG'])
 
-        f=h5py.File(filename,'r')
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
+            f=h5py.File(filename,'r')
             for k in f.keys():
                 self.update({eval(k):f[k][:]})
             f.close()
@@ -546,6 +545,81 @@ class Signatures(dict):
 
         _fileL=pyu.getshort(filename).split('_')[0]+'.ini'
         self.L=layout.Layout(_fileL)
+        try:
+            self.L.dumpr()
+        except:
+            self.L.build()
+            self.L.dumpw()
+
+
+    def _saveh5(self,filenameh5,grpname):
+        """ Save H5py compliant with Links
+        """
+
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+        # if grpname == '':
+        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff) 
+        try:
+            # file management
+            fh5=h5py.File(filename,'a')
+            if not grpname in fh5['sig'].keys(): 
+                fh5['sig'].create_group(grpname)
+            else :
+                raise NameError('sig/'+grpname +'already exists in '+filenameh5)    
+            f=fh5['sig/'+grpname]
+
+            # write data
+            f.attrs['L']=self.L.filename
+            f.attrs['source']=self.source
+            f.attrs['target']=self.target
+            f.attrs['cutoff']=self.cutoff
+            for k in self.keys():
+                f.create_dataset(str(k),shape=np.shape(self[k]),data=self[k])
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Signature: issue when writting h5py file')
+
+
+    def _loadh5(self,filenameh5,grpname):
+        """ Load signatures h5py format compliant with Links Class
+
+        Parameters
+        ----------
+
+        filenameh5 : string
+            filename of the h5py file (from Links Class)
+        grpname : string 
+            groupname of the h5py file (from Links Class)
+        
+
+        See Also
+        --------
+
+        pylayers.simul.links
+
+        """
+        
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+        # if grpname =='':
+        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff) 
+    
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:    
+            fh5=h5py.File(filename,'r')
+            f=fh5['sig/'+grpname]
+            for k in f.keys():
+                self.update({eval(k):f[k][:]})
+            Lname=f.attrs['L']
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Signature: issue when reading h5py file')
+
+        self.L=layout.Layout(Lname)
         try:
             self.L.dumpr()
         except:
@@ -1577,7 +1651,7 @@ class Signatures(dict):
         lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
 
         # target
-   
+
         litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
         litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
 
@@ -1592,7 +1666,7 @@ class Signatures(dict):
 
         Gi = self.L.Gi
         Gi.pos = self.L.Gi.pos
-#       
+        #
         # TODO : This has to be changed for handling diffraction
         # 
         # remove diffractions from Gi
@@ -1600,7 +1674,7 @@ class Signatures(dict):
 
         #initilaize dout dictionnary
         dout={}
-        
+
 
         # progresss stuff...
         lmax = len(lis)*len(lit)
@@ -1612,7 +1686,7 @@ class Signatures(dict):
             #for target interaction in list of target interaction
 
             for ut,t in enumerate(lit):
-                
+
                 if progress :
 
                     ratio = np.round((((us)*len(lit)+ut)/(1.*lmax))*10 )
@@ -1634,7 +1708,7 @@ class Signatures(dict):
                     except:
                         dout[1]=[]
                         dout[1].append(self.L.di[s])
- 
+
         for k in dout.keys():
             adout=np.array((dout[k]))
             shad = np.shape(adout)
@@ -1643,7 +1717,7 @@ class Signatures(dict):
                 adout=adout.reshape(shad[0],1,shad[1])
                 shad=np.shape(adout)
             # rehape (rays * 2 , interaction)
-            # the 2 dimension comes from the signature definition : 
+            # the 2 dimension comes from the signature definition :
             # 1st row = segment index
             # 2nd row = tyep of interaction
             self[k] = adout.swapaxes(1,2).reshape(shad[0]*shad[2],shad[1])
@@ -1677,7 +1751,7 @@ class Signatures(dict):
         #if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
         #    raise AttributeError('Tx or Rx is not in Gr')
 
-        # list of interaction in roomTx 
+        # list of interaction in roomTx
         # list of interaction in roomRx
         #ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         #ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']

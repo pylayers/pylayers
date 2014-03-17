@@ -1,7 +1,4 @@
-pylayers.mobility.transit.World module
-======================================
+pylayers.mobility.transit.World 
+================================
 
 .. automodule:: pylayers.mobility.transit.World
-    :members:
-    :undoc-members:
-    :show-inheritance:

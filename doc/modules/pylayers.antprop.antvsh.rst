@@ -1,7 +1,4 @@
-pylayers.antprop.antvsh module
-==============================
+pylayers.antprop.antvsh 
+=======================
 
 .. automodule:: pylayers.antprop.antvsh
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -3,26 +3,23 @@
 Class Coverage
 ==============
 
-.. autosummarry::
-    :toctree:
+.. autosummary::
+    :toctree: generated/
 
     Coverage.__init__
     Coverage.__repr__
     Coverage.creategrid
     Coverage.coverold
     Coverage.cover
-    Coverage.showEd
-    Coverage.showPower
-    Coverage.showTransistionRegion
-    Coverage.showLoss
+    Coverage.show
 
 """
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
-from pylayers.antprop.multiwall import *
-from pylayers.network.model import *
+import pylayers.antprop.multiwall as mw
+import pylayers.signal.standard as std
 
 import matplotlib.cm  as cm
 
@@ -32,6 +29,8 @@ import matplotlib as m
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import ConfigParser
 import pdb
+import doctest
+from itertools import product
 
 class Coverage(object):
     """ Handle Layout Coverage
@@ -59,7 +58,6 @@ class Coverage(object):
             default coverage.ini
 
         L :  a Layout
-        model : a pylayers.network.model object.
         nx    : number of point on x
         ny    : number of point on y
         tx    : transmitter position
@@ -69,33 +67,99 @@ class Coverage(object):
     """
 
 
-    def __init__(self,_fileini='coverage.ini'):
+    def __init__(self,_fileini='coverage-new.ini'):
+        """
+
+        Parameters
+        ----------
+
+        _fileini : string
+            name of the configuration file
+
+        Notes
+        -----
+
+        Coverage is described in an ini file.
+        Default file is coverage.ini and is placed in the ini directory of the current project.
+
+        """
 
 
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
-        self.plm = dict(self.config.items('pl_model'))
+
         self.layoutopt = dict(self.config.items('layout'))
         self.gridopt = dict(self.config.items('grid'))
-        self.txopt = dict(self.config.items('tx'))
+        self.apopt = dict(self.config.items('ap'))
         self.rxopt = dict(self.config.items('rx'))
         self.showopt = dict(self.config.items('show'))
 
+        # get the Layout
         self.L = Layout(self.layoutopt['filename'])
-        self.model = PLSmodel(f = eval(self.plm['fghz']),
-                          rssnp = eval(self.plm['rssnp']),
-                             d0 = eval(self.plm['d0']),
-                         sigrss = eval(self.plm['sigrss']))
+
+        # get the receiving grid
 
         self.nx = eval(self.gridopt['nx'])
         self.ny = eval(self.gridopt['ny'])
+        self.ng = self.nx*self.ny
         self.mode = eval(self.gridopt['full'])
         self.boundary = eval(self.gridopt['boundary'])
-        # transitter section
-        self.fGHz = eval(self.txopt['fghz'])
-        self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
-        self.ptdbm = eval(self.txopt['ptdbm'])
-        self.framelengthbytes = eval(self.txopt['framelengthbytes'])
+
+        # create grid
+        # we could here construct a grid locally around the access point
+        # to be done later for code acceleration
+        #
+        self.creategrid(full=self.mode,boundary=self.boundary)
+
+        self.dap = {}
+        for k in self.apopt:
+            kwargs  = eval(self.apopt[k])
+            ap = std.AP(**kwargs)
+            self.dap[eval(k)] = ap
+            try:
+                self.aap = np.vstack((self.aap,ap['p'][0:2]))
+                self.ptdbm = np.vstack((self.ptdbm,ap['PtdBm']))
+            except:
+                self.aap = ap['p'][0:2]
+                self.ptdbm = ap['PtdBm']
+        # 1 x na
+        self.ptdbm = self.ptdbm.T
+        # number of access points
+
+        self.na = len(self.dap)
+
+
+        # creating all links
+        p = product(range(self.ng),range(self.na))
+        #
+        # a : access point
+        # g : grid
+        #
+        for k in p:
+            pg = self.grid[k[0],:]
+            pa = self.aap[k[1]]
+            try:
+                self.pa = np.vstack((self.pa,pa))
+            except:
+                self.pa = pa
+            try:
+                self.pg = np.vstack((self.pg,pg))
+            except:
+                self.pg = pg
+
+        self.pa = self.pa.T
+        self.pg = self.pg.T
+
+        # frequency is chosen as all the center frequencies of the standard
+        # warning assuming the same standard
+        self.fGHz = self.dap[0].s.fcGHz
+        self.nf = len(self.fGHz)
+
+        # AP section
+        #self.fGHz = eval(self.txopt['fghz'])
+        #self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
+        #self.ptdbm = eval(self.txopt['ptdbm'])
+        #self.framelengthbytes = eval(self.txopt['framelengthbytes'])
 
         # receiver section
         self.rxsens = eval(self.rxopt['sensitivity'])
@@ -104,11 +168,13 @@ class Coverage(object):
         self.temperaturek = eval(self.rxopt['temperaturek'])
         self.noisefactordb = eval(self.rxopt['noisefactordb'])
 
+        # Evaluate Noise Power (in dBm)
 
         Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bandwidthmhz*1e3
         self.pndbm = 10*np.log10(Pn)+60
 
-        self.show = str2bool(self.showopt['show'])
+        # show section
+        self.bshow = str2bool(self.showopt['show'])
 
         try:
             self.L.Gt.nodes()
@@ -120,29 +186,27 @@ class Coverage(object):
             self.L.build()
             self.L.dumpw()
 
-        self.creategrid(full=self.mode,boundary=self.boundary)
+
 
     def __repr__(self):
-        """
+        """ representation
         """
         st=''
         st = st+ 'Layout file : '+self.L.filename + '\n\n'
-        st = st + '-----Tx------'+'\n'
-        st= st+ 'tx (coord) : ' + str(self.tx) + '\n'
-        st= st+ 'fghz : ' + str(self.fGHz) + '\n'
-        st= st+ 'Pt (dBm) : ' + str(self.ptdbm) + '\n\n'
+        st = st + '-----list of Access Points ------'+'\n'
+        for k in self.dap:
+            st = st + self.dap[k].__repr__()+'\n'
         st = st + '-----Rx------'+'\n'
-        st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n' 
-        st= st+ 'bandwith (Mhz) : '+ str(self.bandwidthmhz) + '\n' 
-        st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n' 
-        st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n' 
+        st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n'
+        st= st+ 'bandwith (Mhz) : '+ str(self.bandwidthmhz) + '\n'
+        st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n'
+        st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
         st = st + '--- Grid ----'+'\n'
         st= st+ 'nx : ' + str(self.nx) + '\n'
         st= st+ 'ny : ' + str(self.ny) + '\n'
+        st= st+ 'nlink : ' + str(self.ng*self.na) + '\n'
         st= st+ 'full grid : ' + str(self.mode) + '\n'
         st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n\n'
-        st = st + '---- PL Model------'+'\n'
-        st= st+ 'plm : '+ str(self.plm) + '\n' 
         return(st)
 
     def creategrid(self,full=True,boundary=[]):
@@ -172,10 +236,16 @@ class Coverage(object):
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
 
-    def coverold(self):
-        """ start the coverage calculation
 
-        Deprecated : slow implementation
+    def coverold(self):
+        """ run the coverage calculation (Deprecated)
+
+        Parameters
+        ----------
+
+        lay_bound : bool
+            If True, the coverage is performed only inside the Layout
+            and clip the values of the grid chosen in coverage.ini
 
         Examples
         --------
@@ -183,22 +253,49 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showPr()
+            >> from pylayers.antprop.coverage import *
+            >> C = Coverage()
+            >> C.cover()
+            >> C.showPower()
+
+        Notes
+        -----
+
+        self.fGHz is an array it means that coverage is calculated at once
+        for a whole set of frequencies. In practice the center frequency of a
+        given standard channel.
+
+        This function is calling `Losst` which calculates Losses along a
+        straight path. In a future implementation we will
+        abstract the EM solver in order to make use of other calculation
+        approaches as full or partial Ray Tracing.
+
+        The following members variables are evaluated :
+
+        + freespace Loss @ fGHz   PL()  PathLoss (shoud be rename FS as free space) $
+        + prdbmo : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{odB}`
+        + prdbmp : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{pdB}`
+        + snro : SNR polar o (H)
+        + snrp : SNR polar p (H)
+
+        See Also
+        --------
+
+        pylayers.antprop.multiwall.Losst
+        pylayers.antprop.multiwall.PL
 
         """
-        #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
-        self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.fGHz,self.tx)
-        self.freespace = PL(self.fGHz,self.grid,self.tx)
+
+        self.Lwo,self.Lwp,self.Edo,self.Edp = mw.Losst(self.L,self.fGHz,self.grid.T,self.tx)
+        self.freespace = mw.PL(self.fGHz,self.grid,self.tx)
+
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
         self.snro = self.prdbmo - self.pndbm
         self.snrp = self.prdbmp - self.pndbm
 
-    def cover(self):
-        """ start the coverage calculation
+    def cover(self,polar='o'):
+        """ run the sinr coverage calculation
 
         Parameters
         ----------
@@ -216,16 +313,68 @@ class Coverage(object):
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover()
-            >>> C.showPr()
+            >>> f,a=C.show(typ='sinr')
+            >>> plt.show()
+
+        Notes
+        -----
+
+        self.fGHz is an array it means that coverage is calculated at once
+        for a whole set of frequencies. In practice the center frequency of a
+        given standard channel.
+
+        This function is calling `Losst` which calculates Losses along a
+        straight path. In a future implementation we will
+        abstract the EM solver in order to make use of other calculation
+        approaches as full or partial Ray Tracing.
+
+        The following members variables are evaluated :
+
+        + freespace Loss @ fGHz   PL()  PathLoss (shoud be rename FS as free space) $
+        + prdbmo : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{odB}`
+        + prdbmp : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{pdB}`
+        + snro : SNR polar o (H)
+        + snrp : SNR polar p (H)
+
+        See Also
+        --------
+
+        pylayers.antprop.multiwall.Losst
+        pylayers.antprop.multiwall.PL
 
         """
-        #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
-        self.Lwo,self.Lwp,self.Edo,self.Edp = Losst(self.L,self.fGHz,self.grid.T,self.tx)
-        self.freespace = PL(self.fGHz,self.grid,self.tx)
-        self.prdbmo = self.ptdbm - self.freespace - self.Lwo
-        self.prdbmp = self.ptdbm - self.freespace - self.Lwp
-        self.snro = self.prdbmo - self.pndbm
-        self.snrp = self.prdbmp - self.pndbm
+
+        # retrieving dimensions along the 3 axis
+        na = self.na
+        ng = self.ng
+        nf = self.nf
+
+        Lwo,Lwp,Edo,Edp = mw.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+        if polar=='o':
+            self.polar='o'
+            self.Lw = Lwo.reshape(nf,ng,na)
+            self.Ed = Edo.reshape(nf,ng,na)
+        if polar=='p':
+            self.polar='p'
+            self.Lw = Lwp.reshape(nf,ng,na)
+            self.Ed = Edp.reshape(nf,ng,na)
+
+        freespace = mw.PL(self.fGHz,self.pa,self.pg,dB=False)
+        self.freespace = freespace.reshape(nf,ng,na)
+
+        # Warning we are assuming here all transmitter have the same
+        # transmitting power (to be modified)
+        # f x g x a
+
+        self.CmW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lw*self.freespace
+
+        U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
+
+        ImW = np.einsum('ijkl,ijl->ijk',U,self.CmW)
+
+        NmW = 10**(self.pndbm/10.)
+
+        self.SINR = self.CmW/(ImW+NmW)
 
 
 
@@ -236,7 +385,7 @@ class Coverage(object):
         ----------
 
         polar : string
-            'o' | 'p'
+        'o' | 'p'
 
         Examples
         --------
@@ -244,10 +393,10 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showEd(polar='o')
+            >> from pylayers.antprop.coverage import *
+            >> C = Coverage()
+            >> C.cover()
+            >> C.showEd(polar='o')
 
         """
 
@@ -336,10 +485,10 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showPower()
+            > from pylayers.antprop.coverage import *
+            > C = Coverage()
+            > C.cover()
+            > C.showPower()
 
         """
 
@@ -408,7 +557,7 @@ class Coverage(object):
                           vmin=self.pndbm,origin='lower')
 
         if nfl:
-            ### values under the noise floor 
+            ### values under the noise floor
             ### we first clip the value below the noise floor
             cl = np.nonzero(prdbm<=self.pndbm)
             cPr = prdbm
@@ -449,10 +598,10 @@ class Coverage(object):
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import *
-            >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showTransitionRegion()
+            > from pylayers.antprop.coverage import *
+            > C = Coverage()
+            > C.cover()
+            > C.showTransitionRegion()
 
         """
 
@@ -465,7 +614,7 @@ class Coverage(object):
         PrU = PndBm + gammaU
         PrL = PndBm + gammaL
 
-        fig,ax = self.L.showGs(fig=fig)
+        fig,ax = self.L.showGs()
 
         l = self.grid[0,0]
         r = self.grid[-1,0]
@@ -499,6 +648,77 @@ class Coverage(object):
         if self.show:
             plt.show()
 
+    def show(self,typ='sinr',grid=False,f=0,a=-1,dB=True):
+        """ show coverage
+
+        Parameters
+        ----------
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.cover(polar='o')
+            >>> f,a = C.show(typ='pr')
+            >>> plt.show()
+
+        """
+        fig = plt.figure()
+        fig,ax=self.L.showGs(fig=fig)
+
+        if grid:
+            for k in self.dap:
+                p = self.dap[k].p
+                ax.plot(p[0],p[1],'or')
+
+        # setting the grid
+
+        l = self.grid[0,0]
+        r = self.grid[-1,0]
+        b = self.grid[0,1]
+        t = self.grid[-1,-1]
+
+        if typ =='sinr':
+            title = 'SINR : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+            legcb = 'dB'
+            V = self.SINR
+
+        if typ =='pr':
+            title = 'Pr : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+            legcb = 'dBm'
+            V = self.CmW
+
+        if a == -1:
+            V = np.max(V[f,:,:],axis=1)
+            vmax = V.max()
+        else:
+            V = V[f,:,a]
+
+        U = V.reshape((self.nx,self.ny)).T
+        if dB:
+            U = 10*np.log10(U)
+        vmin = U.min()
+        vmax = U.max()
+        img = ax.imshow(U,
+                        extent=(l,r,b,t),
+                        origin='lower',
+                        vmin = vmin,
+                        vmax = vmax)
+
+        ax.scatter(self.pa[0,:],self.pa[1,:],s=10,c='k',linewidth=0)
+        ax.set_title(title)
+
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        clb = fig.colorbar(img,cax)
+        clb.set_label(legcb)
+
+        return(fig,ax)
+
     def showLoss(self,polar='o',**kwargs):
         """ show losses map
 
@@ -516,9 +736,9 @@ class Coverage(object):
 
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
-            >>> C.cover()
-            >>> C.showLoss(polar='o')
-            >>> C.showLoss(polar='p')
+            >>> C.cover(polar='o')
+            >>> f,a = C.show(typ='pr')
+            >>> plt.show()
         """
 
         fig = plt.figure()
@@ -567,14 +787,5 @@ class Coverage(object):
 
 
 if (__name__ == "__main__"):
-    plt.ion()
-    C=Coverage()
-    C.cover()
-    C.showPower()
-    C.showLoss(polar='o')
-    C.showLoss(polar='p')
-    C.showTransistionRegion(polar='o')
-    C.showEd(polar='o')
-#    C.L.dumpr()
-#    sigar,sig=C.L.signature(C.grid[2],C.tx)
+    doctest.testmod()
 

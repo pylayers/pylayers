@@ -93,6 +93,19 @@ Fourier Functions
     TUsignal.Yadd_zeros2r
     TUsignal.esd
 
+CIR Functions
+-------------
+
+.. autosummary::
+    :toctree: generated/
+
+    TUsignal.aggcir
+    TUsignal.ecdf
+    TUsignal.taumax
+    TUsignal.tau_moy
+    TUsignal.delays
+    TUsignal.tau_rms
+
 Visualization Functions
 -----------------------
 
@@ -142,10 +155,6 @@ TOA Estimation Functions
     TUsignal.toa_cum_tm
     TUsignal.toa_cum_tmtm
     TUsignal.toa_cum_tmt
-    TUsignal.taumax
-    TUsignal.tau_moy
-    TUsignal.delays
-    TUsignal.tau_rms
 
 Input Output Functions
 -----------------------
@@ -155,7 +164,6 @@ Input Output Functions
 
     TUsignal.readcir
     TUsignal.readuwb
-    TUsignal.ecdf
 
 TUDsignal Class
 ===============
@@ -334,7 +342,7 @@ class Bsignal(object):
         x : ndarray
         y : ndarray
             values  (Nx,Ny)
-           
+
 
         """
         self.x = x
@@ -351,7 +359,7 @@ class Bsignal(object):
                     print "Error in Bsignal : Dimension incompatibility "
                     print "x : ", lx
                     print "y : ", ly
-           
+
 
 
     def __repr__(self):
@@ -369,6 +377,17 @@ class Bsignal(object):
         -------
 
         O : Usignal
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
+        >>> import numpy as np
+        >>> x = np.arange(0,1,0.01)
+        >>> y = np.sin(2*np.pi*x)
+        >>> s =Bsignal(x,y)
+        >>> su = s.extact(np.arange(4,20))
+
 
         """
         O = copy(self)
@@ -452,7 +471,7 @@ class Bsignal(object):
         """
         self.y = function(self.x)
 
-    def stem(self, color='b-'):
+    def stem(self, **kwargs):
         """ stem display
 
         Parameters
@@ -464,22 +483,37 @@ class Bsignal(object):
         Examples
         --------
 
-        >>> from pylayers.signal import *
-        >>> import matplotlib.pyplot as plt
-        >>> si = Bsignal()
-        >>> si.x= np.arange(100)
-        >>> si.y= np.arange(100)
-        >>> si.stem()
-        >>> plt.show()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import matplotlib.pyplot as plt
+            >>> si = Bsignal()
+            >>> si.x= np.arange(100)
+            >>> si.y= np.arange(100)
+            >>> f,a = si.stem()
 
         """
+
         ndim = self.y.ndim
+
+        if 'fig' not in kwargs:
+            fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+
+        if 'ax' not in kwargs:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
         if ndim > 1:
             nl = len(self.y)
             for k in range(nl):
-                plt.stem(self.x, self.y[k], color)
+                ax.stem(self.x, self.y[k], **kwargs)
         else:
-            plt.stem(self.x, self.y, color)
+            ax.stem(self.x, self.y,**kwargs)
+        return(fig,ax)
 
     def step(self, color='b'):
         """ plot steps display
@@ -526,10 +560,10 @@ class Bsignal(object):
             u = np.arange(np.shape(self.y)[0])
         else:
             u = kwargs['uy']
-       
+
         # radians to degree coefficient  
         rtd = 180./np.pi
-       
+
         t = kwargs['typ']
 
         xn = self.x
@@ -566,7 +600,7 @@ class Bsignal(object):
         if t=='gdn':
             ylabels='Group delay (ns)'
             df  = self.x[1]-self.x[0]
-            xn  = self.x[0:-1]              
+            xn  = self.x[0:-1]
             yn  = -np.diff(np.unwrap(np.angle(self.y[l,c,:])))/(2*np.pi*df)
         if t=='gdm':
             ylabels='Group distance (m)'
@@ -635,7 +669,7 @@ class Bsignal(object):
                 vmax = yn.max()
             else:
                 vmax = kwargs['vmax']
-           
+
             if kwargs['function']=='imshow':
                 im = ax.imshow(yn,
                            origin = 'lower',
@@ -653,7 +687,7 @@ class Bsignal(object):
             cb.set_label(ylabels)
             plt.axis('auto')
             fig.tight_layout()
-           
+
             return fig,ax
 
     def plot(self, **kwargs):
@@ -686,7 +720,7 @@ class Bsignal(object):
             default False
 
         """
-      
+
         defaults = {'iy'  :  -1,
                   'vline' : np.array([]),
                   'hline' : np.array([]),
@@ -717,7 +751,7 @@ class Bsignal(object):
         conversion = 1.0
         if ((kwargs['unit1'] == 'V') & (kwargs['unit2'] == 'mV')):
             conversion = 1000
-   
+
         # restriction of x support
         u = np.nonzero((self.x > kwargs['xmin']) & (self.x < kwargs['xmax']))[0]
 
@@ -746,18 +780,14 @@ class Bsignal(object):
         #
 
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
-        for i in range(len(vline)):
-            if ax != []:
-                ax.axvline(vline[i], color=tcolor[i])
-            else:
-                axvline(vline[i], color=tcolor[i])
-
-        for i in range(len(hline)):
-            if ax != []:
-                ax.axhline(hline[i] * conversion, color='red')
-            else:
-                axhline(hline[i] * conversion, color='red')
-       
+        nl,nc = np.shape(ax)
+        for l in range(nl):
+            for c in range(nc):
+                for i in range(len(vline)):
+                    ax[l,c].axvline(vline[i], color=tcolor[i])
+                for i in range(len(hline)):
+                    ax.axhline(hline[i] * conversion, color='red')
+        
         return(fig,ax)
 
     def flatteny(self,yrange=[],reversible=False):
@@ -852,7 +882,8 @@ class Usignal(Bsignal):
     """
 
     def __init__(self, x=np.array([]), y=np.array([])):
-        Bsignal.__init__(self, x, y)
+        super(Usignal,self).__init__(x,y)
+        #Bsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1269,13 +1300,13 @@ class Usignal(Bsignal):
         .. plot::
             :include-source:
 
-            #>>> from pylayers.signal import *
-            #>>> from matplotlib.pylab import *
-            #>>> ip = EnImpulse()
-            #>>> fig,ax = ip.plot(typ=['v'])
-            #>>> ip.zlr(-10,10)
-            #>>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
-            #>>> show()
+            >>> from pylayers.signal import *
+            >>> from matplotlib.pylab import *
+            >>> ip = EnImpulse()
+            >>> fig,ax = ip.plot(typ=['v'])
+            >>> ip.zlr(-10,10)
+            >>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
+            >>> show()
 
         """
         dx = self.dx()
@@ -1308,7 +1339,8 @@ class TBsignal(Bsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        Bsignal.__init__(self, x, y)
+        super(TBsignal,self).__init__(x,y)
+        #Bsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Bsignal.__repr__(self)
@@ -1338,8 +1370,6 @@ class TBsignal(Bsignal):
         >>> show()
 
         """
-       
-       
         defaults = {'iy'  :  -1,
                   'vline' : np.array([]),
                   'hline' : np.array([]),
@@ -1351,7 +1381,7 @@ class TBsignal(Bsignal):
                   'logx'  : False,
                   'logy'  : False
                  }
-       
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
@@ -1385,6 +1415,7 @@ class TBsignal(Bsignal):
 #                plt.ylabel('Voltage (mV)')
 
         fig,ax = Bsignal.plot(self,**kwargs)
+        #fig,ax = self.plot(**kwargs)
 
         return(fig,ax)
 
@@ -1475,7 +1506,8 @@ class TUsignal(TBsignal, Usignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        Usignal.__init__(self, x, y)
+        super(TUsignal,self).__init__(x,y)
+        #Usignal.__init__(self, x, y)
 
     def __repr__(self):
         s = Usignal.__repr__(self)
@@ -1691,8 +1723,9 @@ class TUsignal(TBsignal, Usignal):
         See Also
         ---------
 
-        psd
-        zlr
+        pylayers.signal.bsignal.TUsignal.psd
+        pylayers.signal.bsignal.Usignal.zlr
+
         """
         if fig == []:
             fig = plt.gcf()
@@ -2572,6 +2605,48 @@ class TUsignal(TBsignal, Usignal):
         toa = t[v[0]]
         return toa
 
+
+
+    def aggcir(self,alphak,tauk):
+        """ aggregation of CIR from (alphak,tauk)
+
+        Parameters
+        ----------
+
+        alphak : float
+            CIR path amplitude
+        tauk : float
+            CIR delay values
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import numpy as np
+            >>> alphak = 10*np.random.rand(7)
+            >>> tauk = 100*np.random.rand(7)
+            >>> tau = np.arange(0,150,0.1)
+            >>> y = np.zeros(len(tau))
+            >>> CIR = TUsignal(tau,y)
+            >>> CIR.aggcir(alphak,tauk)
+            >>> CIR.plot(typ='v')
+
+        """
+        shy = np.shape(self.y)
+        x = self.x
+        eps = (x[1]-x[0])/2
+        u = map(lambda t: np.where( (x>t-eps) & (x<=t+eps))[0][0],tauk)
+        ynew  = np.zeros(len(x))
+        ynew[u] = alphak
+        if len(shy)>1:
+           self.y = np.vstack((self.y,ynew))
+        else:
+           self.y = ynew[np.newaxis,:]
+
+
     def readcir(self,filename,outdir=[]):
         """ read channel impulse response
 
@@ -2627,6 +2702,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
+
         ecdf , vary
 
         """
@@ -2638,13 +2714,13 @@ class TUsignal(TBsignal, Usignal):
         te = self.dx()
         y2 = y ** 2
         #
-        f1 = cumsum(y2) * te
+        f1 = np.cumsum(y2) * te
         # retrieve the noise only portion at the beginning of TUsignal
         #
         Nnoise = int(np.ceil(Tnoise / te))
         tn = t[0:Nnoise]
         fn = f1[0:Nnoise]
-        stdy = std(y[0:Nnoise])
+        stdy = np.std(y[0:Nnoise])
         vary = stdy * stdy
         y = t * vary
         #
@@ -2662,10 +2738,10 @@ class TUsignal(TBsignal, Usignal):
         # inforce positivity
         #
         if in_positivity:
-            pdf = diff(f)
+            pdf = np.diff(f)
             u = np.nonzero(pdf < 0)[0]
             pdf[u] = 0
-            ecdf = cumsum(pdf)
+            ecdf = np.cumsum(pdf)
         else:
             ecdf = f
         #
@@ -2717,7 +2793,7 @@ class TUsignal(TBsignal, Usignal):
         y = self.y
 
         cdf, vary = self.ecdf()
-        pdf = diff(cdf.y)
+        pdf = np.diff(cdf.y)
 
         u = np.nonzero(cdf.y > alpha)[0]
         v = np.nonzero(cdf.y < 1 - alpha)[0]
@@ -2726,8 +2802,8 @@ class TUsignal(TBsignal, Usignal):
         pdf = pdf[u[0]:v[-1]]
 
         te = self.dx()
-        a = sum(t * pdf)
-        b = sum(pdf)
+        a = np.sum(t * pdf)
+        b = np.sum(pdf)
         taum = a / b
 
         return(taum)
@@ -2762,28 +2838,73 @@ class TUsignal(TBsignal, Usignal):
 
 
     def tau_rms(self, alpha=0.1, tau0=0):
-        """ calculate root mean square delay spread starting from delay tau_0
+        r""" calculate root mean square delay spread starting from delay tau_0
 
         Parameters
         ----------
-        alpha :
-        tau0 :
+
+        alpha : float
+        threshold : float
+            ( delay interval is defined between :math:`\tau(\alpha)` and :math:`\tau(1 -\alpha)` )
+        tau0 : float
+            argument for specifying the delay start
+
+        Notes
+        -----
+
+        .. math::
+
+            \sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.measures.mesuwb import *
+            >>> import matplotlib.pyplot as plt
+            >>> M = UWBMeasure(1)
+            >>> ch4 = M.tdd.ch4
+            >>> f1,a1=ch4.plot(color='k')
+            >>> plt.title("WHERE1 M1 UWB Channel impulse response")
+            >>> f2,a2=ch4.plot(color='k')
+            >>> plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
+            >>> ax1=plt.axis([10,160,-90,-50])
+            >>> f3,a3=ch4.plot(color='k')
+            >>> plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
+            >>> ax2=plt.axis([20,120,-80,-50])
+            >>> tau_moy = ch4.tau_moy()
+            >>> print "tau_moy: %2.2f ns" % tau_moy
+            tau_moy: 38.09 ns
+            >>> tau_rms = ch4.tau_rms()
+            >>> print "tau_rms: %2.2f" % tau_rms
+            tau_rms: 13.79 ns
+
+
+
+        See Also
+        --------
+
+        TUsignal.ecdf
+        TUsignal.tau_moy
 
         """
+
         t = self.x
         y = self.y
         cdf, vary = self.ecdf()
-        pdf = diff(cdf.y)
+        pdp = np.diff(cdf.y)
         taum = self.tau_moy(tau0)
 
         u = np.nonzero(cdf.y > alpha)[0]
         v = np.nonzero(cdf.y < 1 - alpha)[0]
 
         t = t[u[0]:v[-1]]
-        pdf = pdf[u[0]:v[-1]]
+        pdp = pdp[u[0]:v[-1]]
         te = self.dx()
-        b = sum(pdf)
-        m = sum(pdf * (t - taum) * (t - taum))
+        b = sum(pdp)
+        m = sum(pdp * (t - taum) * (t - taum))
         taurms = np.sqrt(m / b)
 
         return(taurms)
@@ -2804,7 +2925,8 @@ class TUDsignal(TUsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([]), tau=np.array([])):
-        TUsignal.__init__(self, x, y)
+        super(TUDsigal,self).__init__(x,y)
+        #TUsignal.__init__(self, x, y)
         self.tau = tau
 
     def __repr__(self):
@@ -2850,8 +2972,9 @@ class FBsignal(Bsignal):
     plotdB   : plot modulus in dB
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        Bsignal.__init__(self, x, y)
-   
+        super(FBsignal,self).__init__(x,y)
+        #Bsignal.__init__(self, x, y)
+
     def __repr__(self):
         s = Bsignal.__repr__(self)
         return(s)
@@ -3061,7 +3184,8 @@ class FUsignal(FBsignal, Usignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
-        FBsignal.__init__(self, x, y)
+        super(FUsignal,self).__init__(x,y)
+        #FBsignal.__init__(self, x, y)
 
     def __repr__(self):
         s = FBsignal.__repr__(self)
@@ -4583,7 +4707,7 @@ def test():
 #
 
 if __name__ == "__main__":
-    plt.ion()
+    #plt.ion()
     doctest.testmod()
     #ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)

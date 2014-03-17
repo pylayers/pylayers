@@ -2,9 +2,20 @@
 # -*- coding: utf-8 -*-
 #
 """
+   Run simulation with full human trajectory
 
-    This module run simulation with full human trajectory
+.. currentmodule:: pylayers.simul.simultraj
 
+Simul class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+     Simul.__init__
+     Simul.load
+     Simul.links_generation
+     Simul.run
 
 """
 import doctest
@@ -27,9 +38,11 @@ import pylayers.util.geomutil as geu
 import pylayers.util.plotutil as plu
 import pylayers.signal.waveform as wvf
 import pylayers.signal.bsignal as bs
+
 from pylayers.simul.radionode import RadioNode
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
+
 # Handle Layout
 from pylayers.gis.layout import Layout
 # Handle Rays
@@ -43,7 +56,7 @@ from pylayers.util.project import *
 from pylayers.measures import mesuwb as muwb
 import pdb
 import pylayers.mobility.trajectory as tr
-from pylayers.mobility.body.body import *
+from pylayers.mobility.ban.body import *
 from pylayers.antprop.statModel import *
 
 class Simul(object):
@@ -125,8 +138,11 @@ class Simul(object):
             for option in options:
                di[section][option] = config.get(section,option)
 
+        # get the layout
         self.L = Layout(di['layout']['layout'])
+        # get the trajectory
         traj  = tr.importsn(di['trajectory']['traj'])
+        # resample trajectory
         for i in range(len(traj)):
             traj[i] = traj[i].resample(10)
         self.traj= traj
@@ -202,7 +218,7 @@ class Simul(object):
             time =  self.traj[0].time()
         else:
             time =  self.traj[0].time()[t]
-        
+
 
         n_time =len(time)
         n_links = len(llink)
@@ -211,18 +227,18 @@ class Simul(object):
         resultOb  = np.zeros(shape=(n_time,n_links,Kmax,2))
 
 
-        for kt in range(0,n_time):          
+        for kt in range(0,n_time):
 
             #~ if time[kt]%int(time[kt]) == 0:
                 #~ print 't = ', time[kt]
             print 't = ', time[kt]
             for kp, person in enumerate(self.dpersons.values()):
                 person.settopos(self.traj[kp],t=time[kt],cs=True)
-                
-            
+
+
             plt.figure()
             self.dpersons['Alex'].show(color='b',plane='xz',topos=True)
-            plt.show()    
+            plt.show()
 
 
             for kl in range(0,n_links):
@@ -235,11 +251,11 @@ class Simul(object):
                 TB = self.dpersons[B[0]].acs[B[1]]
                 cylA = self.dpersons[A[0]].dev[A[1]]['cyl']
                 cylB = self.dpersons[B[0]].dev[B[1]]['cyl']
-                
+
                 #interA = self.dpersons[A[0]].intersectBody3(pA,pB, topos = True)
                 ##interB = self.dpersons[B[0]].intersectBody2(pA,pB, topos = True)
-                    
-                   
+
+
                 #condition ='nlos'
                 #if interA==1:
                     #condition = 'los'
@@ -256,8 +272,8 @@ class Simul(object):
                         ##~ condition = 'los'
                 #if emp == 'front_chest':
                     #condition = 'los'
-                
-               
+
+
                 #alphakOb, taukOb = getchannel(emplacement = emp ,condition = condition, intersection = interA)
                 #alphak =  np.zeros(shape=(Kmax))
                 #tauk   =  np.zeros(shape=(Kmax))
@@ -272,11 +288,12 @@ class Simul(object):
 
                 #tab = np.vstack((alphak,tauk)).T
                 #resultOb[kt,kl,:,:]= tab
-                
+
                 cycA =  self.L.pt2cy(pt = pA)
                 cycB =  self.L.pt2cy(pt = pB)
                 sig = signature.Signatures(self.L,cycA,cycB)
-                sig.run4(cutoff =1,algo='old')
+                #sig.run4(cutoff =1,algo='old')
+                sig.run5(cutoff = 3)
                 tx_2D = pA[0:2]
                 rx_2D = pB[0:2]
                 r2d = sig.rays(tx_2D,rx_2D)
@@ -305,10 +322,10 @@ class Simul(object):
                 tab = np.vstack((alphak,tauk)).T
                 resultEnv[kt,kl,:,:]= tab
                 print 'link = ', link , '  pr  = ',10*np.log10(sum((abs(alphak)**2)))
-               
+
         return resultEnv#, resultOb
-        
-        
+
+
 
     def runEnv(self,llink = [], t =[], show = False ):
         """
@@ -325,7 +342,7 @@ class Simul(object):
             time =  self.traj[0].time()
         else:
             time =  self.traj[0].time()[t]
-        
+
 
         n_time =len(time)
         n_links = len(llink)
@@ -339,14 +356,14 @@ class Simul(object):
         y = np.zeros(len(x))
         cira=bs.TUsignal(x,y)
 
-        for kt in range(0,n_time):          
+        for kt in range(0,n_time):
 
             if time[kt]%int(time[kt]) == 0:
                 print 't = ', time[kt]
-          
+
             for kp, person in enumerate(self.dpersons.values()):
-                person.settopos(self.traj[kp],t=time[kt],cs=True)             
-            
+                person.settopos(self.traj[kp],t=time[kt],cs=True)
+
 
             for kl in range(0,n_links):
                 link = llink[kl]
@@ -357,9 +374,9 @@ class Simul(object):
                 pB = self.dpersons[B[0]].dcs[B[1]][:,0]
                 TB = self.dpersons[B[0]].acs[B[1]]
                 cylA = self.dpersons[A[0]].dev[A[1]]['cyl']
-                cylB = self.dpersons[B[0]].dev[B[1]]['cyl']             
-               
-                
+                cylB = self.dpersons[B[0]].dev[B[1]]['cyl']
+
+
                 cycA =  self.L.pt2cy(pt = pA)
                 cycB =  self.L.pt2cy(pt = pB)
                 sig = signature.Signatures(self.L,cycA,cycB)
@@ -381,7 +398,7 @@ class Simul(object):
                 ntraj = H.y.shape[0]
                 alphak =  np.zeros(shape=(Kmax))
                 tauk   =  np.zeros(shape=(Kmax))
-                
+
                 if ntraj < Kmax:
                     #pdb.set_trace()
                     alphak[0:ntraj] =  np.real(np.sqrt(np.sum(H.y*np.conj(H.y),axis =1))/len(self.fGHz))
@@ -398,7 +415,7 @@ class Simul(object):
                 self.chan = resultEnv
                 self.cira  = cira
         #return resultEnv, cira
-        
+
     def runOb(self,llink = [], t =[], show = False ):
         """
         Parameters
@@ -414,7 +431,7 @@ class Simul(object):
             time =  self.traj[0].time()
         else:
             time =  self.traj[0].time()[t]
-        
+
 
         n_time =len(time)
         n_links = len(llink)
@@ -425,13 +442,13 @@ class Simul(object):
         #~ prev_lstate = list(np.zeros(shape = (n_links)))
         #~ prev_alphakOb = []
         #~ prev_taukOb = []
-        
-        for kt in range(0,n_time):          
-         
+
+        for kt in range(0,n_time):
+
             for kp, person in enumerate(self.dpersons.values()):
-                person.settopos(self.traj[kp],t=time[kt],cs=True)               
-            
-           
+                person.settopos(self.traj[kp],t=time[kt],cs=True)
+
+
             for kl in range(0,n_links):
                 link = llink[kl]
                 A = link[0]
@@ -442,11 +459,11 @@ class Simul(object):
                 TB = self.dpersons[B[0]].acs[B[1]]
                 cylA = self.dpersons[A[0]].dev[A[1]]['cyl']
                 cylB = self.dpersons[B[0]].dev[B[1]]['cyl']
-                
+
                 interA = self.dpersons[A[0]].intersectBody3(pA,pB, topos = True)
                 #interB = self.dpersons[B[0]].intersectBody2(pA,pB, topos = True)
-                    
-                   
+
+
                 condition ='nlos'
                 if interA==1:
                     condition = 'los'
@@ -454,18 +471,18 @@ class Simul(object):
                 devIdB = B[1]
                 empA =self.dpersons[A[0]].dev[devIdA]['cyl']
                 empB =self.dpersons[B[0]].dev[devIdB]['cyl']
-                
+
                 emp  = empA
                 if empA == 'trunkb':
                     emp = empB
                 if emp == 'forearml':
                     emp = 'forearmr'
-                    
+
                 if emp == 'trunku':
                     condition = 'los'
                 alphakOb, taukOb = getchannel(emplacement = emp ,condition = condition, intersection = interA)
-                 
-                     
+
+
                 alphak =  np.zeros(shape=(Kmax))
                 tauk   =  np.zeros(shape=(Kmax))
                 ntraj = len(taukOb)
@@ -481,8 +498,5 @@ class Simul(object):
                 resultOb[kt,kl,:,:]= tab
                 if show:
                     print 'link  = ', link , '  pr ob  = ',10*np.log10(sum((abs(alphak)**2)))
-               
-              
-              
-               
+
         return resultOb

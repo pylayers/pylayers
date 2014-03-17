@@ -1,7 +1,4 @@
-pylayers.util.mayautil module
+pylayers.util.mayautil
 =============================
 
 .. automodule:: pylayers.util.mayautil
-    :members:
-    :undoc-members:
-    :show-inheritance:

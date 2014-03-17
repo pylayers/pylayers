@@ -1,5 +1,108 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
+"""
+.. currentmodule:: pylayers.measures.mesuwb
+
+
+RAW_DATA Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+     RAW_DATA.__init__
+
+CAL_DATA Class
+==============
+
+.. autosummary::
+    :toctree: generated/
+
+    CAL_DATA.__init__
+    CAL_DATA.plot
+    CAL_DATA.getwave
+
+Fdd Class
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+     Fdd.__init__
+     Fdd.plot
+
+Tdd Class
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+     Tdd.__init__
+     Tdd.PL
+     Tdd.show
+     Tdd.show_span
+     Tdd.box
+     Tdd.plot
+
+TFP Class
+=========
+
+.. autosummary::
+    :toctree: generated/
+
+     TFP.__init__
+     TFP.append
+
+FP Class
+========
+
+.. autosummary::
+    :toctree: generated/
+
+     FP.__init__
+
+UWBMeasure
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+    UWBMeasure.__init__
+    UWBMeasure.info
+    UWBMeasure.show
+    UWBMeasure.Epercent
+    UWBMeasure.toa_max2
+    UWBMeasure.tau_Emax
+    UWBMeasure.tau_moy
+    UWBMeasure.tau_rms
+    UWBMeasure.toa_new
+    UWBMeasure.toa_win
+    UWBMeasure.toa_max
+    UWBMeasure.toa_th
+    UWBMeasure.toa_cum
+    UWBMeasure.taumax
+    UWBMeasure.Emax
+    UWBMeasure.Etot
+    UWBMeasure.Efirst
+    UWBMeasure.Etau0
+    UWBMeasure.ecdf
+    UWBMeasure.tdelay
+    UWBMeasure.fp
+    UWBMeasure.outlatex
+
+
+Utility Functions
+=================
+
+.. autosummary::
+    :toctree:
+
+    mesname
+    ptw1
+    visibility
+    trait
+
+"""
 import pdb
 import doctest
 import os.path
@@ -610,7 +713,7 @@ def trait(filename, itx=np.array([]), dico={}, h=1):
     for i in itx:
         iTx = dico[i]
         try:
-            M = UWBMesure(iTx, h)
+            M = UWBMeasure(iTx, h)
             #f,pl = M.tdd.PL(2,6,0.02)
             #F['PL'] = appendlink(F['PL'],pl)
             etot = M.Etot()
@@ -803,7 +906,7 @@ class Fdd(object):
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
             >>> import matplotlib.pylab as plt
-            >>> M  = UWBMesure(1)
+            >>> M  = UWBMeasure(1)
             >>> F  = M.fdd
             >>> fig = plt.figure()
             >>> F.plot('moddB')
@@ -924,7 +1027,7 @@ class Tdd(object):
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
             >>> import matplotlib.pylab as plt
-            >>> M  = UWBMesure(1)
+            >>> M  = UWBMeasure(1)
             >>> T  = M.tdd
             >>> freq,pl = T.PL(3,7,10)
 
@@ -966,19 +1069,14 @@ class Tdd(object):
 
         return(freq, pl)
 
-    def show(self,
-             delay=np.array([[0], [0], [0], [0]]),
-             display=True,
-             titre=['Rx1', 'Rx2', 'Rx3', 'Rx4'],
-             col=['k', 'b', 'g', 'c'],
-             xmin=0,
-             xmax=200,
-             C=0,
-             NC=1):
+    def show(self, delay=np.array([[0], [0], [0], [0]]), display=True,
+             titre=['Rx1', 'Rx2', 'Rx3', 'Rx4'], col=['k', 'b', 'g', 'c'],
+             xmin=0, xmax=200, C=0, NC=1,typ='v'):
         """ show the 4 Impulse Radio Impulse responses
 
         Parameters
         ----------
+
         delay
             delay values to be displayed vertically [tau0 - toa_th toa_cum toa_max , taum-taurms taum+taurms]
         display
@@ -993,7 +1091,7 @@ class Tdd(object):
             >>> from pylayers.measures.mesuwb import *
             >>> import matplotlib.pylab as plt
             >>> ntx = 2
-            >>> M  = UWBMesure(ntx)
+            >>> M  = UWBMeasure(ntx)
             >>> T  = M.tdd
             >>> fig = plt.figure()
             >>> t = plt.title('test Tdd.show  Tx='+str(ntx))
@@ -1028,8 +1126,8 @@ class Tdd(object):
         else:
             sp1 = ax[1]
 
-        self.ch1.plot(col=col[0], vline=np.array([delay[0]]),
-                      showlabel=[False, True], unit1='V', unit2='mV', ax=sp1)
+        self.ch1.plot(color=col[0], vline=np.array([delay[0]]),ax=sp1,typ=typ)
+        #              showlabel=[False, True], unit1='V', unit2='mV', ax=sp1)
         #self.ch1.plot(col=col[0],unit1='V',unit2='mV',ax=sp1,logx=False,logy=False)
         #plt.show()
         #axis([0,200,-2,2])
@@ -1040,8 +1138,8 @@ class Tdd(object):
             sp2 = ax[1]
         else:
             sp2 = ax[2]
-        self.ch2.plot(col=col[1], vline=np.array([delay[1]]),
-                      showlabel=[False, True], unit1='V', unit2='mV', ax=sp2)
+        self.ch2.plot(color=col[1], vline=np.array([delay[1]]),ax=sp2,typ=typ)
+        #              showlabel=[False, True], unit1='V', unit2='mV', ax=sp2)
         #self.ch2.plot(col=col[1],unit1='V',unit2='mV',ax=sp2,logx=False,logy=False)
         #plt.show()
         #plt.axis([0,200,-2,2])
@@ -1052,8 +1150,8 @@ class Tdd(object):
             sp3 = ax[2]
         else:
             sp3 = ax[3]
-        self.ch3.plot(col=col[2], vline=np.array([delay[2]]),
-                      showlabel=[False, True], unit1='V', unit2='mV', ax=sp3)
+        self.ch3.plot(color=col[2], vline=np.array([delay[2]]),ax=sp3,typ=typ)
+        #              showlabel=[False, True], unit1='V', unit2='mV', ax=sp3)
         #self.ch3.plot(col=col[2],unit1='V',unit2='mV',ax=sp3,logx=False,logy=False)
         #plt.show()
         #plt.title(titre[2])
@@ -1063,8 +1161,8 @@ class Tdd(object):
             sp4 = ax[3]
         else:
             sp4 = ax[4]
-        self.ch4.plot(col=col[3], vline=np.array([delay[3]]),
-                      showlabel=[True, True], unit1='V', unit2='mV', ax=sp4)
+        self.ch4.plot(color=col[3], vline=np.array([delay[3]]), ax=sp4,typ=typ)
+        #              showlabel=[True, True], unit1='V', unit2='mV', ax=sp4)
         #self.ch4.plot(col=col[3],unit1='V',unit2='mV',ax=sp4,logx=False,logy=False)
         #plt.show()
         #plt.axis([0,200,-2,2])
@@ -1083,7 +1181,7 @@ class Tdd(object):
 
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
-            >>> M  = UWBMesure(2)
+            >>> M  = UWBMeasure(2)
             >>> T  = M.tdd
             >>> s1 = T.show_span()
             >>> plt.show()
@@ -1125,7 +1223,7 @@ class Tdd(object):
         --------
 
         >>> from pylayers.measures.mesuwb import *
-        >>> M  = UWBMesure(1)
+        >>> M  = UWBMeasure(1)
         >>> T  = M.tdd
         >>> bo = T.box()
 
@@ -1302,7 +1400,7 @@ class FP(object):
     thnlos : threshold for nlos case toa_th
     thcum  : threshold for toa_cum
 
-    This method build the Fingerprint from UWBMesure M - Rx number k
+    This method build the Fingerprint from UWBMeasure M - Rx number k
 
     Attributes
     ----------
@@ -1476,8 +1574,8 @@ class FP(object):
 #\bigskip
 
 
-class UWBMesure(object):
-    """ UWBMesure class
+class UWBMeasure(object):
+    """ UWBMeasure class
 
     Attributes
     ----------
@@ -1516,10 +1614,10 @@ class UWBMesure(object):
 
         Parameters
         ----------
-        
-           nTx
+
+        nTx : int
             Tx index
-           h
+        h : int
             height indicator (default 1 - 1.2m)  0 - 1.5 m
 
          Examples
@@ -1529,7 +1627,7 @@ class UWBMesure(object):
             :include-source:
 
             >>> from pylayers.measures.mesuwb import *
-            >>> M1 = UWBMesure(1)
+            >>> M1 = UWBMeasure(1)
             >>> M1.show()
 
         """
@@ -1706,18 +1804,13 @@ class UWBMesure(object):
             #PL4 = hstack((PL1,pl4))
 
         #return PL1,PL2,PL3,PL4
-    def show(self,
-             delay=np.array([[0], [0], [0], [0]]),
-             display=True,
-             col=['k', 'b', 'g', 'c'],
-             xmin=0,
-             xmax=100,
-             C=0,
-             NC=1):
+    def show(self, delay=np.array([[0], [0], [0], [0]]), display=True,
+             col=['k', 'b', 'g', 'c'], xmin=0, xmax=100, C=0, NC=1,typ='v'):
         """ show measurement in time domain
+
         Parameters
         ----------
-        delay
+        delay : np.array(1,4)
         display
             optional
         col
@@ -1733,19 +1826,6 @@ class UWBMesure(object):
 
         """
         titre = []
-        #titre.append('Rx1   ' "LQI1 = %5.2f" % real(self.LQI['Method1_CH1']) + " (dB)")
-        #titre.append('Rx1   ' + "Etot = %5.2f" % self.F1.chan_param['Etot'] + " (dBnJ)")
-        #           + "   LQI2 = %5.2f" % real(self.LQI['Method2_CH1']) + " (dB)" )
-        #titre.append('Rx2   ' + "Etot = %5.2f" % self.F2.chan_param['Etot'] + " (dBnJ)")
-        #titre.append('Rx4   ' + "LQI1 = %5.2f" % real(self.LQI['Method1_CH4']) + " (dB)")
-            #           + "   LQI2 = %5.2f" % real(self.LQI['Method2_CH2']) + " (dB)" )
-        #titre.append('Rx4   ' + "LQI1 = %5.2f" % real(self.LQI['Method1_CH4']) + " (dB)")
-        #titre.append('Rx3   ' + "Etot = %5.2f" % self.F3.chan_param['Etot'] + " (dBnJ)")
-            #           + "   LQI2 = %5.2f" % real(self.LQI['Method2_CH3']) + " (dB)" )
-        #titre.append('Rx4   ' + "LQI1 = %5.2f" % real(self.LQI['Method1_CH4']) + " (dB)")
-        #titre.append('Rx4   ' + "Etot = %5.2f" % self.F4.chan_param['Etot'] + " (dBnJ)")
-        #           + "   LQI2 = %5.2f" % real(self.LQI['Method2_CH4']) + " (dB)" )
-        #self.tdd.show(delay,display,titre)
         self.tdd.show(delay,
                       display=display,
                       titre=['Rx1 ' + 'Tx' + str(self.ntx),
@@ -1754,7 +1834,8 @@ class UWBMesure(object):
                       xmin=xmin,
                       xmax=xmax,
                       C=C,
-                      NC=NC)
+                      NC=NC,
+                     typ='v')
 
     def Epercent(self):
         """

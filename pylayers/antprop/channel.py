@@ -1,5 +1,9 @@
 # -*- coding:Utf-8 -*-
 """
+.. currentmodule:: pylayers.antprop.channel
+
+.. autosummary::
+    :toctree: generated/
 
 Ctilde class
 ============
@@ -175,10 +179,10 @@ class Ctilde(object):
         if self.islocal:
             self.locbas(b2g=True)
 
-        f=h5py.File(filename,'w')
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
+            f=h5py.File(filename,'w')
             f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
             f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
             f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
@@ -201,7 +205,7 @@ class Ctilde(object):
             f.close()
             raise NameError('Channel.Ctilde: issue when writting h5py file')
 
-
+    
 
 
     def loadh5(self,Lfilename,idx,output=True):
@@ -229,8 +233,8 @@ class Ctilde(object):
         _filename= _Lfilename +'_' + str(idx).zfill(5) + '.hdf5'
         filename=pyu.getlong(_filename,pstruc['DIRCT'])
 
-        f=h5py.File(filename,'r')
         try:
+            f=h5py.File(filename,'r')
             self.fGHz = f['fGHz'][:]
             self.tang = f['tang'][:]
             self.rang = f['rang'][:]
@@ -263,6 +267,105 @@ class Ctilde(object):
         if output :
             return (Lfilename ,tx,rx)
 
+
+    def _saveh5(self,filenameh5,grpname):
+        """ save Ctilde object in hdf5 format compliant with Link Class
+
+        Parameters
+        ----------
+
+        filenameh5  : str
+            file name of h5py file Link format
+        grpname  : int
+            groupname in filenameh5
+
+
+        """
+
+        if self.islocal:
+            self.locbas(b2g=True)
+
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            
+            fh5=h5py.File(filename,'a')
+            if not grpname in fh5['Ct'].keys(): 
+                fh5['Ct'].create_group(grpname)
+            else :
+                print 'Warning : Ct/'+grpname +'already exists in '+filenameh5
+            f=fh5['Ct/'+grpname]
+
+            # save channel in global basis
+            f.create_dataset('Tt',shape=np.shape(self.Tt),data=self.Tt)
+            f.create_dataset('Tr',shape=np.shape(self.Tr),data=self.Tr)
+            f.create_dataset('tang',shape=np.shape(self.tang),data=self.tang)
+            f.create_dataset('rang',shape=np.shape(self.rang),data=self.rang)
+            f.create_dataset('tauk',shape=np.shape(self.tauk),data=self.tauk)
+
+            f.create_dataset('fGHz',shape=np.shape(self.fGHz),data=self.fGHz)
+
+
+            f.create_dataset('Ctt_y',shape=np.shape(self.Ctt.y),data=self.Ctt.y)
+            f.create_dataset('Cpp_y',shape=np.shape(self.Cpp.y),data=self.Cpp.y)
+            f.create_dataset('Cpt_y',shape=np.shape(self.Cpt.y),data=self.Cpt.y)
+            f.create_dataset('Ctp_y',shape=np.shape(self.Ctp.y),data=self.Ctp.y)
+
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Channel.Ctilde: issue when writting h5py file')
+
+
+    def _loadh5(self,filenameh5,grpname):
+        """ load Ctilde object in hdf5 format
+
+        Parameters
+        ----------
+
+        filenameh5  : str
+            file name of h5py file Link format
+        grpname  : int
+            groupname in filenameh5
+        
+
+        """
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+
+        try:
+            fh5=h5py.File(filename,'r')
+            f = fh5['Ct/'+grpname]
+
+            self.fGHz = f['fGHz'][:]
+            self.tang = f['tang'][:]
+            self.rang = f['rang'][:]
+            self.tauk = f['tauk'][:]
+
+            self.Tt = f['Tt'][:]
+            self.Tr = f['Tr'][:]
+
+            Ctt = f['Ctt_y'][:]
+            Cpp = f['Cpp_y'][:]
+            Ctp = f['Ctp_y'][:]
+            Cpt = f['Cpt_y'][:]
+
+            self.Ctt = bs.FUsignal(self.fGHz, Ctt)
+            self.Ctp = bs.FUsignal(self.fGHz, Ctp)
+            self.Cpt = bs.FUsignal(self.fGHz, Cpt)
+            self.Cpp = bs.FUsignal(self.fGHz, Cpp)
+
+
+            self.nfreq = len(self.fGHz)
+            self.nray = np.shape(self.Cpp.y)[0]
+
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Channel.Ctilde: issue when reading h5py file')
+
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
 
@@ -284,7 +387,7 @@ class Ctilde(object):
         >>> S = Simul()
         >>> S.load('default.ini')
         >>> C = Ctilde()
-        >>> C.load(pyu.getlong(S.dtud[1][1],'output'))
+        >>> out = C.load(pyu.getlong(S.dtud[1][1],'output'))
 
         """
         filetauk = filefield.replace('.field', '.tauk')
@@ -297,9 +400,7 @@ class Ctilde(object):
 
         # decode filename (*.field file obtained from evalfield simulation)
         nray = stru.unpack('i', fo.read(4))[0]
-        print "nray : ", nray
         nfreq = stru.unpack('i', fo.read(4))[0]
-        print "nfreq : ", nfreq
         if nfreq == 0:
             print " Error : incorrect number of frequency points in .field"
             self.fail = True
@@ -346,14 +447,14 @@ class Ctilde(object):
         # decode filetauk
         if not self.fail:
             nray_tauk = stru.unpack('i', fo.read(4))[0]
-            print "nb rays in .tauk file: ", nray_tauk
+            #print "nb rays in .tauk file: ", nray_tauk
             buf = fo.read()
             fo.close()
             nray = len(buf) / 8
-            print "nb rays 2: ", nray
+            #print "nb rays 2: ", nray
             self.tauk = np.ndarray(shape=nray, buffer=buf)
-            if nray_tauk != nray:
-                print nray_tauk - nray
+            #if nray_tauk != nray:
+            #    print nray_tauk - nray
         self.tauk = self.tauk
 
         # decode the angular files (.tang and .rang)
@@ -1332,8 +1433,8 @@ class Tchannel(bs.FUDAsignal):
 
     """
     def __init__(self,
-                fGHz = np.array(([],)),
-                alpha= np.array(([],[])),
+                fGHz = np.arange(0,2,1),
+                alpha= np.arange(0,2,1),
                 tau  = np.array(([],)),
                 dod  = np.array(([[],[]])).T,
                 doa  = np.array(([[],[]])).T):
@@ -1457,6 +1558,74 @@ class Tchannel(bs.FUDAsignal):
         except:
             f.close()
             raise NameError('Channel Tchannel: issue when reading h5py file')
+
+    def _saveh5(self,filenameh5,grpname):
+        """ save Tchannel object in hdf5 format compliant with Link Class
+
+        
+        Parameters
+        ----------
+
+        filenameh5  : str
+            file name of h5py file Link format
+        grpname  : int
+            groupname in filenameh5
+
+        """
+
+
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+                
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            fh5=h5py.File(filename,'a')
+            if not grpname in fh5['H'].keys(): 
+                fh5['H'].create_group(grpname)
+            else :
+                print 'Warning : H/'+grpname +'already exists in '+filenameh5
+            f=fh5['H/'+grpname]
+            
+            for k,va in self.__dict__.items():
+                f.create_dataset(k,shape = np.shape(va),data=va)
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Channel Tchannel: issue when writting h5py file')
+
+    def _loadh5(self,filenameh5,grpname):
+        """ Load Ctilde object in hdf5 format compliant with Link Class
+
+        Parameters
+        ----------
+
+        filenameh5  : str
+            file name of h5py file Link format
+        grpname  : int
+            groupname in filenameh5
+
+        """    
+        filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
+
+        try:
+            fh5=h5py.File(filename,'r')
+            f = fh5['H/'+grpname]
+
+            # keys not saved as attribute of h5py file
+            for k,va in f.items():
+                if k != 'tau1':
+                    setattr(self,str(k),va[:])
+                else :
+                    setattr(self,str(k),va)
+
+            
+            fh5.close()
+            self.__init__(self.x, self.y, self.tau0, self.dod, self.doa)
+
+        except:
+            fh5.close()
+            raise NameError('Channel Tchannel: issue when reading h5py file')
+
 
     def info(self):
         """ display information

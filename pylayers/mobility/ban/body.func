@@ -1,0 +1,38 @@
+Body Class
+===========
+
+.. autosummary::
+    :toctree: /generated 
+
+    Body.__init__
+    Body.__repr__
+    Body.load
+    Body.center
+    Body.posvel
+    Body.settopos
+    Body.setccs
+    Body.setdcs
+    Body.setacs
+    Body.loadC3D
+    Body.plot3d
+    Body._show3
+    Body.show
+    Body.show3
+    Body.geomfile
+    Body.movie
+    Body.intersectBody
+    Body.body_link
+    Body.cylinder_basis_k
+    Body.cyl_antenna
+    Body.translate
+
+Miscelianous Functions
+======================
+
+.. autosummary::
+    :toctree: /generated 
+
+    ChangeBasis
+    rotation
+    dist
+    Global_Trajectory

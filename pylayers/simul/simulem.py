@@ -3,8 +3,126 @@
 #
 """
 
-    This module run the electromagnetic simulation
+    This module run the electromagnetic simulation with an old 
+    version of the Ray Tracing tool
 
+    Deprecated
+
+Utility Functions
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+     rename
+     spafile
+
+Palch class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+    Palch.__init__
+    Palch.info
+    Palch.info2
+    Palch.load
+    Palch.save
+    Palch.gui
+
+Patra class
+===========
+
+.. autosummary::
+    :toctree: generated/
+
+     Patra.__init__
+     Patra.info
+     Patra.load
+     Patra.save
+     Patra.gui
+
+Pafreq class
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+     Pafreq.__init__
+     Pafreq.info
+     Pafreq.load
+     Pafreq.save
+     Pafreq.gui
+
+
+
+Patud class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+     Patud.__init__
+     Patud.info
+     Patud.gui
+
+     
+Launch class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+     Launch.info
+     Launch.choose
+     Launch.load
+     Launch.show
+
+Simul class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Simul.__init__
+    Simul.gui
+    Simul.updcfg
+    Simul.clean
+    Simul.clean_project
+    Simul.save
+    Simul.save_project
+    Simul.load_project
+    Simul.choose
+    Simul.load
+    Simul.layout
+    Simul.show
+    Simul.PL
+    Simul.evalcir
+    Simul.loadcir
+    Simul.pltcir
+    Simul.scatter
+    Simul.info
+    Simul.info2
+    Simul.filtray
+    Simul.showray
+    Simul.show3l
+    Simul._show3
+    Simul.show3
+    Simul.freq
+    Simul.getlaunch
+    Simul.gettra
+    Simul.gettud
+    Simul.launching
+    Simul.tracing
+    Simul.tratotud
+    Simul.field
+    Simul.run2
+    Simul.run
+    Simul.gt
+    Simul.delay
+    Simul.gr
+    Simul.VC
+    Simul.cir
 
 """
 import doctest
@@ -64,7 +182,7 @@ def rename(_filename,itx,irx,rep='./'):
 
     See Also
     --------
-
+    
     tratotud
 
     """
@@ -1218,9 +1336,8 @@ class Simul(object):
         try:
             self.filestr = self.config.get("files", "struc")
             # force .str extension
-            f,e = self.filestr.split['.']
+            f,e = self.filestr.split('.')
             self.filestr = f+'.str'
-            print self.filestr
         except:
             raise NameError('Error in section struc from '+ _filesimul)
 
@@ -1522,7 +1639,7 @@ class Simul(object):
         Parameters
         ----------
 
-        S 
+        S
         tx
         rx
         wav
@@ -1533,7 +1650,7 @@ class Simul(object):
         crxp =-1
         ctxp =-1
         tcir = {}
-        tx = self.tx.position 
+        tx = self.tx.position
         Ntx = len(tx[0])
         rx = self.rx.position
         Nrx = len(rx[0])
@@ -1559,7 +1676,7 @@ class Simul(object):
 
             r3d = r2d.to3D(self.L)
             r3d.locbas(self.L)
-            r3d.fillinter(self.L)   
+            r3d.fillinter(self.L)
             Ct  = r3d.eval(self.fGHz)
             sca = Ct.prop2tran(self.tx.A,self.rx.A)
             cir = sca.applywavB(self.wav.sfg)
@@ -1568,8 +1685,10 @@ class Simul(object):
 
     def loadcir(self, itx, irx):
         """
+
         Parameters
         ----------
+
         itx : Tx index
         irx : Rx index
 
@@ -1604,6 +1723,7 @@ class Simul(object):
 
         Parameters
         ----------
+
         itx : Tx index
         irx : Rx index
         mode : str
@@ -1686,6 +1806,7 @@ class Simul(object):
         """
             Parameters
             ----------
+
             itx
             irx
             values
@@ -1932,9 +2053,9 @@ class Simul(object):
 
         self.L._show3(newfig=False,opacity=0.7)
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-            title=False,colorbar=False,newfig=False,name = 'Antenna Tx')
+            title=False,colorbar=False,newfig=False)
         Arx._show3(T=Trx.reshape(3,3),po=prx,
-            title=False,colorbar=False,newfig=False,name = 'Antenna Rx')
+            title=False,colorbar=False,newfig=False)
         if rays != []:
             rays._show3(**kwargs)
 

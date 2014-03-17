@@ -1,4 +1,44 @@
 # -*- coding: utf-8 -*-
+"""
+
+Marker Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+     Marker.__init__
+     Marker.__repr__
+
+ParameterGroup
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+     ParameterGroup.__init__
+     ParameterGroup.__repr__
+
+Parameter class
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+     Parameter.__init__
+     Parameter.__repr__
+
+Utility Functions
+=================
+
+.. autosummary::
+    :toctree: generated/
+
+    getNumber
+    getFloat
+    read_c3d
+
+"""
 import string
 import struct
 import numpy as np
@@ -73,8 +113,10 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
 
     Parameters
     ----------
+
     _filename : string
     verbose : boolean
+
     """
     FullFileName = pyu.getlong(_filename, 'body/c3d')
     Markers = []
@@ -232,7 +274,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
                 lenom = content[0:4]
                 content = content[4:]
                 EventName.append(lenom)
-    
+
     if verbose:
         print "***************************"
         print "**** Reading Parameters ..."

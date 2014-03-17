@@ -1,7 +1,4 @@
-pylayers.mobility.trajectory module
+pylayers.mobility.trajectory
 ===================================
 
 .. automodule:: pylayers.mobility.trajectory
-    :members:
-    :undoc-members:
-    :show-inheritance:

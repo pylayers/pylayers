@@ -1,7 +1,43 @@
 # -*- coding:Utf-8 -*-
+"""
+
+
+
+Cycles Class
+============
+
+
+.. autosummary::
+    :toctree: generated/
+
+    Cycles
+    Cycles.__init__
+    Cycles.__repr__
+    Cycles.info
+    Cycles.inclusion
+    Cycles.decompose
+
+Cycle Class
+============
+
+.. autosummary::
+    :toctree: generated/
+
+    Cycle.__init__
+    Cycle.__add__
+    Cycle.update
+    Cycle.__repr__
+    Cycle.info
+    Cycle.flip
+    Cycle.inclusion
+    Cycle.simplify
+    Cycle.intersect
+    Cycle.split
+    Cycle.corrcy
+    Cycle.show
+
+"""
 #
-# Class Cycles(list)
-# Class Cycle(Graph)
 #
 # Author : B.Uguen
 #  2nd implementation : April 2013
@@ -22,8 +58,9 @@ class Cycles(nx.DiGraph):
 
     Methods
     -------
-        inclusion
-        decompose
+
+    inclusion
+    decompose
 
     """
     def __init__(self):
@@ -33,6 +70,8 @@ class Cycles(nx.DiGraph):
         nx.DiGraph.__init__(self)
 
     def __repr__(self):
+        """ object representation
+        """
         s = ''
         s = s + 'Number of cycles :' +str(len(self.node)) + '\n'
         for k in self:
@@ -255,8 +294,8 @@ class Cycle(object):
     ----------
 
     vertices : np.array
-    edges   : np.array
-    cycle   : np.array
+    edges    : np.array
+    cycle    : np.array
 
     """
     def __init__(self,G):
@@ -458,13 +497,18 @@ class Cycle(object):
             return False,np.array([])
 
     def simplify(self,L):
-        """
+        """ simplify cycles
+
+        Simplification means that if there is a inclusion relation between 2
+        cycles they are splitted into two independent cycles.
+
         Parameters
         ----------
 
         L : list of cycles
 
         """
+
         T = self
         for Cy in L:
             b,p = T.inclusion(Cy)
@@ -561,17 +605,18 @@ class Cycle(object):
 
 
     def split(self,cyin):
-        """ split(Cy)
+        """ split
 
           Parameters
           ----------
+
           cyin :  input cycle
 
           Returns
           -------
           cyout : list of output cycles
           punctual : boolean
-                True if punctual connection
+              True if punctual connection
 
           Notes
           -----

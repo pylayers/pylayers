@@ -3,11 +3,6 @@ import scipy as sp
 import matplotlib.pylab as plt
 import scipy.linalg as la
 
-
-
-
-
-
 def dist(A,B,C,D,alpha,beta):
     """
 

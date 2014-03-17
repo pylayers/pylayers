@@ -1,7 +1,4 @@
-pylayers.util.save module
+pylayers.util.save
 =========================
 
 .. automodule:: pylayers.util.save
-    :members:
-    :undoc-members:
-    :show-inheritance:

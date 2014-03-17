@@ -1,7 +1,4 @@
-pylayers.antprop.multiwall module
+pylayers.antprop.multiwall
 =================================
 
 .. automodule:: pylayers.antprop.multiwall
-    :members:
-    :undoc-members:
-    :show-inheritance:

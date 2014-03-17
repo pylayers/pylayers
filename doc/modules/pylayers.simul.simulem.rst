@@ -1,7 +1,4 @@
-pylayers.simul.simulem module
+pylayers.simul.simulem
 =============================
 
 .. automodule:: pylayers.simul.simulem
-    :members:
-    :undoc-members:
-    :show-inheritance:
