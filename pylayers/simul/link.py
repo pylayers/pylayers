@@ -15,7 +15,7 @@ Link Class
     :toctree: generated/
 
     Link.__init__
-    Link.updcfg
+    Link.checkh5
     Link.save_init
     Link.stack
     Link.save
@@ -61,8 +61,6 @@ import pdb
 class Link(object):
     """ Link Simulation Class
 
-    Notes
-    -----
 
     All simulation are stored into a unique file in your <PyProject>/output directory
     using the following convention:
@@ -106,7 +104,7 @@ class Link(object):
 
     Roots Dataset :
 
-    c_map : Cycles (Nc x 3)
+    cutoff_map : Cycles (Nc x 3)
     p_map : Positions (Np x 3)
     f_map : Frequency (Nf x 3)
     T_map : Rotation matrices (Nt x 3)
@@ -176,6 +174,100 @@ class Link(object):
 
         force_create : Boolean (False)
             forcecreating the h5py file (if already exist, will be erased)
+
+
+        Notes
+        -----
+
+        All simulation are stored into a unique file in your <PyProject>/output directory
+        using the following convention:
+
+        Links_<save_idx>_<LayoutFilename>.h5
+
+        where
+            <save_idx> is a integer number to be able to discriminate different links simulations
+        and <LayoutFilename> is the Layout used for the link simulation.
+
+
+
+        Dataset organisation:
+
+        Links_<idx>_<Layout_name>.h5
+            |
+            |/sig/si_ID#0/
+            |    /si_ID#1/
+            |    ...
+            |
+            |/ray/ray_ID#0/
+            |    /ray_ID#1/
+            |    ...
+            |
+            |/Ct/Ct_ID#0/
+            |   /Ct_ID#1/
+            |    ...
+            |
+            |/H/H_ID#0/
+            |  /H_ID#1/
+            |    ...
+            |
+            |
+            |p_map
+            |c_map
+            |f_map
+            |A_map
+            |T_map
+
+
+
+        Roots Dataset :
+
+        c_map : Cycles (Nc x 3)
+        p_map : Positions (Np x 3)
+        f_map : Frequency (Nf x 3)
+        T_map : Rotation matrices (Nt x 3)
+        A_map : Antenna name (Na x 3)
+
+        Groups and subgroups:
+
+
+            Signature identifier (si_ID#N):
+                ca_cb_cutoff
+
+            Ray identifier (ray_ID#N):
+                ua_ub
+
+            Ctilde identifier (Ct_ID#N):
+                ua_ub_uf
+
+            H identifier (H_ID#N):
+                ua_ub_uf_uTa_uTb_uAa_uAb
+
+            with
+            ca : cycle number of a
+            cb : cycle number of b
+            cutoff : signature.run cutoff
+            ua : indice of a position in 'p_map' position dataset
+            ub : indice of a position in 'p_map' position dataset
+            uf : indice of freq position in 'f_map' frequency dataset
+            uTa : indice of a position in 'T_map' Rotation dataset
+            uTb : indice of b position in 'T_map' Rotation dataset
+            uAa : indice of a position in 'A_map' Antenna name dataset
+            uAb : indice of b position in 'A_map' Antenna name dataset
+
+
+        
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.simul.link import *
+            >>> L=Link()
+            >>> L.eval()
+            >>> L._show3()
+
+
         """
 
         defaults={ 'L':Layout(),
@@ -195,7 +287,7 @@ class Link(object):
                 }
 
 
-        specset = ['a','b','Aa','Ab','Ta','Tb','L']
+        specset = ['a','b','Aa','Ab','Ta','Tb','L','fGHz']
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -215,6 +307,10 @@ class Link(object):
 
         self._Lname = self._L.filename
 
+
+        ###########
+        # init ant
+        ###########
         self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
@@ -227,8 +323,11 @@ class Link(object):
                             _fileant = self.Ab._filename,
                             )
 
+        
+        ##############
+        #### init save
+        ###############
         self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5' 
-
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
         if not os.path.exists(filenameh5) or force:
@@ -243,7 +342,34 @@ class Link(object):
                      'H':{'exist':False,'grpname':''}
                     }
 
-        self.updcfg()
+
+
+        try:
+            self.L.dumpr()
+        except:
+            print('This is the first time the Layout is used. Graphs have to be build. Please Wait')
+            self.L.build()
+            self.L.dumpw()
+
+
+        ###########
+        # init pos & cycles
+        ###########
+
+        self.ca = 0
+        self.cb = 1
+        self.a = self.L.cy2pt(self.ca)
+        self.b = self.L.cy2pt(self.cb)
+
+
+        ###########
+        # init freq
+        ###########
+        self.fmin = self.fGHz[0]
+        self.fmax = self.fGHz[-1]
+        self.fstep = self.fGHz[1]-self.fGHz[0]
+
+        # self.checkh5()
 
     @property
     def Lname(self):
@@ -277,17 +403,17 @@ class Link(object):
     def Tb(self):
         return self._Tb 
 
+    @property
+    def fGHz(self):
+        return self._fGHz
+
     @Lname.setter        
     def Lname(self,Lname):
+        # cahnge layout and build/load 
         self._L = Layout(Lname)
-        try:
-            self._L.dumpr()
-        except:
-            self._L.build()
-            self._L.dumpw()
-
         self._Lname = Lname
-
+        self.reset_config()
+        
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
@@ -299,7 +425,7 @@ class Link(object):
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
-            raise NameError ('point a not inside the Layout') 
+            raise NameError ('point b not inside the Layout') 
         self._b = position
         self.cb = self.L.pt2cy(position)
         self.rx.position = position
@@ -334,6 +460,14 @@ class Link(object):
 
 
 
+    @fGHz.setter
+    def fGHz(self,freq):
+        self._freq = freq
+        self.fmin = freq[0]
+        self.fmax = freq[-1]
+        self.fstep = freq[1]-freq[0]
+
+
     def __repr__(self):
         """ __repr__
         """
@@ -366,67 +500,95 @@ class Link(object):
 
 
 
-
-    def updcfg(self):
-        """ update configuration
-
+    def reset_config(self):
+        """ reset configuration when new layout loaded
         """
-
-        if self.L.filename != self.Lname :
-            self.Lname=self.L.filename
-            # Layout has been changed:
-            self.filename = 'Links_' + str(self.save_idx) + '_' + self.Lname + '.h5' 
-            filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
-            if not os.path.exists(filenameh5) :
-                print 'Links save file for ' + self.L.filename + ' does not exist.'
-                print 'It is beeing created. You\'ll see that message only once per Layout'
-                self.save_init(filenameh5)
-
         try:
             self.L.dumpr()
         except:
-            print('This is the first time the Layout is used. Graphs have to be build. Please Wait')
             self.L.build()
             self.L.dumpw()
 
 
-        if len(self.a) == 0 :
-            self.a = self.L.cy2pt(0)
-
-        if len(self.b) == 0 :
-            self.b = self.L.cy2pt(1)
-
-        if not self.L.ptin(self.a):
-            raise NameError ('point a not inside the Layout')
-        if not self.L.ptin(self.b):
-            raise NameError ('point b not inside the Layout')
-
-        self.ca = self.L.pt2cy(self.a)
-        self.cb = self.L.pt2cy(self.b)
-
+        self.ca = 0
+        self.cb = 1
+        self.a = self.L.cy2pt(self.ca)
+        self.b = self.L.cy2pt(self.cb)
+        
+        # change h5py file if layout changed
+        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5' 
+        filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
+        if not os.path.exists(filenameh5) :
+            print 'Links save file for ' + self.L.filename + ' does not exist.'
+            print 'It is beeing created. You\'ll see that message only once per Layout'
+            self.save_init(filenameh5)
 
 
+        try:
+            delattr(self,'Si')
+        except:
+            pass
+        try:
+            delattr(self,'R')
+        except:
+            pass
+        try:
+            delattr(self,'C')
+        except:
+            pass
+        try:
+            delattr(self,'H')
+        except:
+            pass
 
-        self.fmin = self.fGHz[0]
-        self.fmax = self.fGHz[-1]
-        self.fstep = self.fGHz[1]-self.fGHz[0]
 
-        # update radio node
+    def checkh5(self):
+        """ check existence of previous simulation run with the same parameters.
 
-        self.tx.position = self.a
-        self.rx.position = self.b
-        self.tx.orientation = self.Ta
-        self.rx.orientation = self.Tb
-        self.tx.A = self.Aa
-        self.rx.A = self.Ab
+
+        Returns
+        -------
+
+        update self.dexist dictionnary
+
+        """
+
+        
+        # if len(self.a) == 0 :
+        #     self.a = self.L.cy2pt(0)
+
+        # if len(self.b) == 0 :
+        #     self.b = self.L.cy2pt(1)
+
+        # if not self.L.ptin(self.a):
+        #     raise NameError ('point a not inside the Layout')
+        # if not self.L.ptin(self.b):
+        #     raise NameError ('point b not inside the Layout')
+
+        # self.ca = self.L.pt2cy(self.a)
+        # self.cb = self.L.pt2cy(self.b)
+
+
+
+
+        # self.fmin = self.fGHz[0]
+        # self.fmax = self.fGHz[-1]
+        # self.fstep = self.fGHz[1]-self.fGHz[0]
+
+        # # update radio node
+
+        # self.tx.position = self.a
+        # self.rx.position = self.b
+        # self.tx.orientation = self.Ta
+        # self.rx.orientation = self.Tb
+        # self.tx.A = self.Aa
+        # self.rx.A = self.Ab
 
         # get identifier groupname in h5py file
         self.get_grpname()
         # check if grpnamee exist in the h5py file
         [self.exist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
 
-        # save layout name in case of layout would be modified
-        self.Lname = self.L.filename
 
     def save_init(self,filename_long):
         """ initilaize save Link
@@ -780,6 +942,8 @@ class Link(object):
             rays.to3D ceil height in mteres
         ra.number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
+        
+
 
         See Also
         --------
@@ -793,48 +957,65 @@ class Link(object):
                    'si.algo':'old',
                    'ra.ceil_height_meter':3,
                    'ra.number_mirror_cf':1,
+                   'force':False,
+                   'force_save':False,
                    }
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key]=value
 
-        self.updcfg()
+        self.checkh5()
 
       
       
         #signatures
         Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
-        if self.dexist['sig']['exist']:
+        if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
+            if kwargs['force_save']:
+                self.save(Si,self.dexist['sig']['grpname'])
+
         else :
-          
             Si.run5(cutoff=self.cutoff,algo=kwargs['si.algo'])
             # save sig
             self.save(Si,self.dexist['sig']['grpname'])
-      
+        self.Si = Si      
+
+
         R = Rays(self.a,self.b)
-        if self.dexist['ray']['exist']:
+        if self.dexist['ray']['exist'] and not kwargs['force']:
             self.load(R,self.dexist['ray']['grpname'])
+            if kwargs['force_save']:
+                self.save(Si,self.dexist['ray']['grpname'])
         else :
             r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
             R.locbas(self.L)
             # save ray
             self.save(R,self.dexist['ray']['grpname'])  
-      
+        self.R = R
+        if self.R.nray == 0:
+            raise NameError('No ray have been founded. Try to re-run the simulation with a higher S.cutoff ')
+
         C=Ctilde()
-        if self.dexist['Ct']['exist']:
+        if self.dexist['Ct']['exist'] and not kwargs['force']:
             self.load(C,self.dexist['Ct']['grpname'])
+            if kwargs['force_save']:
+                self.save(Si,self.dexist['Ct']['grpname'])
         else :
             R.fillinter(self.L)
             #Ctilde
             C=R.eval(self.fGHz)
             # save Ct
             self.save(C,self.dexist['Ct']['grpname'])  
-      
+        self.C = C
+
+
         H=Tchannel()
-        if self.dexist['H']['exist']:
+        if self.dexist['H']['exist'] and not kwargs['force']:
             self.load(H,self.dexist['H']['grpname'])
+            if kwargs['force_save']:
+                self.save(Si,self.dexist['H']['grpname'])
         else :
             # Ctilde antenna
             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
@@ -842,9 +1023,6 @@ class Link(object):
             H=C.prop2tran(a=self.Aa,b=self.Ab)
             self.save(H,self.dexist['H']['grpname'])
 
-        self.Si = Si      
-        self.R = R
-        self.C = C
         self.H = H      
 
 
@@ -2379,7 +2557,7 @@ class Link(object):
 
     #     """
 
-    #     self.updcfg()
+    #     self.checkh5()
     #     #t0 = time.clock()
     #     if type(srx) == int:
     #         srx = [srx]

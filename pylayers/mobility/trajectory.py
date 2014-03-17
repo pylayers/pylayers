@@ -41,7 +41,143 @@ import pandas as pd
 import copy
 import time
 import doctest
-from matplotlib.widgets import Slider,CheckButtons
+from matplotlib.widgets import Slider, Button, RadioButtons, CheckButtons
+
+
+
+
+
+class Trajectories(list):
+    """  Define a list of trajectory
+
+
+    """
+    def __init__(self):
+        """ initialization 
+        """
+        super(list,self).__init__()  
+        
+
+    def __repr__(self):
+
+        s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
+        for a in self:
+            string ='Trajectory of agent ' + a['id'][0] 
+            s = s + string + '\n'
+            s = s + '-'*len(string) + '\n'
+            s = s +  a.__repr__()
+            s = s + '\n'
+        return s
+
+    def loadh5(self,_filename='simulnet_TA-Office.h5'):
+
+        """ import simulnet h5 file
+        
+        Parameters
+        ----------
+
+        filename : string 
+            default simulnet + Layout_filename . h5
+
+        Returns
+        -------
+
+        lt : list of trajectory
+
+        """
+
+        self.Lfilename = _filename.split('_')[1].split('.')[0] +'.ini'
+        filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+        fil = pd.HDFStore(filename)
+
+        
+
+        for k in fil.keys():
+            df = fil[k]
+            df = df.set_index('t')
+            v=np.array((df.vx.values,df.vy.values))
+            d = np.sqrt(np.sum(v*v,axis=0))
+            s = np.cumsum(d)
+            df['s'] = s
+            self.append(Trajectory(df))
+        fil.close()
+
+  
+    
+    def ishow(self):
+        """
+            interactive show of trajectories
+        
+        
+        Examples
+        --------
+
+
+        .. plot::
+            :include-source:
+    
+            >>> from pylayers.mobility.trajectory import *
+            >>> T=Trajectories()
+            >>> T.loadh5()
+            >>> T.ishow()
+
+        """
+
+       
+        fig, ax = plt.subplots()
+        fig.subplots_adjust(bottom=0.2, left=0.2)
+
+        t = np.arange(0, len(self[0].index), self[0].ts)
+        L=Layout(self.Lfilename)
+        fig,ax = L.showG('s',fig=fig,ax=ax)
+
+
+        valinit=1
+        lines=[]
+        labels=[]
+        colors = "bgrcmykw"
+
+        for iT,T in enumerate(self):
+            lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
+            labels.append('node' + T.id[0])
+        
+        time=self[0].time()       
+
+        # init boolean value for visible in checkbutton    
+        blabels=[False]*len(labels)
+       
+                
+        ########    
+        # slider
+        ######## 
+        slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
+        slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax, valinit=valinit, color='#AAAAAA')
+        def update(val):
+            print val
+            pval=np.where(val>time)[0]
+            ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),loc='left')
+            for iT,T in enumerate(self):
+                lines[iT].set_xdata(T['x'][pval])
+                lines[iT].set_ydata(T['y'][pval])
+            fig.canvas.draw()
+        slider.on_changed(update)
+       
+
+        ########
+        # choose
+        ########
+        rax = plt.axes([0.02, 0.4, 0.13, 0.2], aspect='equal')
+        # check (ax.object, name of the object , bool value for the obsject)
+        check = CheckButtons(rax, labels, tuple(blabels))
+        def func(label):
+            i = labels.index(label)
+            lines[i].set_visible(not lines[i].get_visible())
+            fig.canvas.draw()
+        check.on_clicked(func)
+        fig.canvas.draw()
+        plt.show(fig)
+        
+
 
 class Trajectory(pd.DataFrame):
     """  Define a trajectory
@@ -93,6 +229,8 @@ class Trajectory(pd.DataFrame):
         except:
             st = 'void Trajectory'
         return(st)
+
+
 
     def update(self):
         """ update class member data
@@ -149,10 +287,13 @@ class Trajectory(pd.DataFrame):
         Examples
         --------
 
-        >>> from pylayers.mobility.trajectory import *
-        >>> traj = Trajectory()
-        >>> traj.generate()
-        >>> traj.plot()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.mobility.trajectory import *
+            >>> traj = Trajectory()
+            >>> traj.generate()
+            >>> traj.plot()
 
 
         """
@@ -454,37 +595,37 @@ def importsn(_filename='pos.csv'):
 
     return(lt)
 
-def importh5(self,_filename='simulnet_TA-Office.h5'):
-        """ import simulnet h5 file
+# def importh5(_filename='simulnet_TA-Office.h5'):
+#         """ import simulnet h5 file
 
-        Parameters
-        ----------
+#         Parameters
+#         ----------
 
-        filename : string
-            default simulnet + Layout_filename . h5
+#         filename : string
+#             default simulnet + Layout_filename . h5
 
-        Returns
-        -------
+#         Returns
+#         -------
 
-        lt : list of trajectory
+#         lt : list of trajectory
 
-        """
+#         """
 
-        filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
-        fil = pd.HDFStore(filename)
+#         filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+#         fil = pd.HDFStore(filename)
 
-        lt=[]
+#         lt=[]
 
-        for k in fil.keys():
-            df = fil[k]
-            df = df.set_index('t')
-            v=np.array((df.vx.values,df.vy.values))
-            d = np.sqrt(np.sum(v*v,axis=0))
-            s = np.cumsum(d)
-            df['s'] = s
-            lt.append(Trajectory(df))
-        fil.close()
-        return lt
+#         for k in fil.keys():
+#             df = fil[k]
+#             df = df.set_index('t')
+#             v=np.array((df.vx.values,df.vy.values))
+#             d = np.sqrt(np.sum(v*v,axis=0))
+#             s = np.cumsum(d)
+#             df['s'] = s
+#             lt.append(Trajectory(df))
+#         fil.close()
+#         return lt
 
 if __name__ == '__main__':
     plt.ion()
