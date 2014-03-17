@@ -1,4 +1,19 @@
 # -*- coding:Utf-8 -*-
+"""
+
+Constraint Class
+================
+
+.. autosummary::
+    :toctree: generated/
+
+    Constraint.__init__
+    Constraint.__repr__
+    Constraint.updc
+    Constraint.info
+    Constraint.show3
+
+"""
 #####################################################################
 #This file is part of RGPA.
 
@@ -45,7 +60,7 @@ class Constraint(object):
 
     p       : nd.array
         Constraint center
-    
+
     self.Id : str
         Constraint.C_Id
 
@@ -148,7 +163,7 @@ class Constraint(object):
     def __repr__(self):
         np.set_printoptions(precision=3)
         s = '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format('node','peer','type', 'rat', 'p', 'value', 'std', 'runable' , 'usable' )
-        
+
         node = self.origin['id']
         peer = self.origin['link']
         rat  = self.origin['rat']
@@ -157,7 +172,7 @@ class Constraint(object):
         else:
             s = s + '\n' + '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format(node,peer,self.type,rat, self.p[0], self.value, self.std, self.runable, self.usable)
             s = s + '\n' + '                            '+str(self.p[1])
-    
+
         return s
         # np.set_printoptions(precision=3)
         # s = '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
@@ -166,8 +181,8 @@ class Constraint(object):
         # else:
         #     s = s + '\n' + '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format(self.type, self.p[0], self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
         #     s = s + '\n' + '       '+str(self.p[1])
-         
-        # return s
+
+        return s
 
     def updc(self,name='p',value=np.array(())):
         """ update values of a constraint
@@ -256,8 +271,9 @@ class Constraint(object):
     #     np.set_printoptions(precision=3)
     #     print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
     def info(self):
+        """
 
-
+        """
         print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
         np.set_printoptions(precision=3)
         print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)

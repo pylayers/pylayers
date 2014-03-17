@@ -1651,7 +1651,7 @@ class Signatures(dict):
         lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
 
         # target
-   
+
         litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
         litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
 
@@ -1666,7 +1666,7 @@ class Signatures(dict):
 
         Gi = self.L.Gi
         Gi.pos = self.L.Gi.pos
-#       
+        #
         # TODO : This has to be changed for handling diffraction
         # 
         # remove diffractions from Gi
@@ -1674,7 +1674,7 @@ class Signatures(dict):
 
         #initilaize dout dictionnary
         dout={}
-        
+
 
         # progresss stuff...
         lmax = len(lis)*len(lit)
@@ -1686,7 +1686,7 @@ class Signatures(dict):
             #for target interaction in list of target interaction
 
             for ut,t in enumerate(lit):
-                
+
                 if progress :
 
                     ratio = np.round((((us)*len(lit)+ut)/(1.*lmax))*10 )
@@ -1708,7 +1708,7 @@ class Signatures(dict):
                     except:
                         dout[1]=[]
                         dout[1].append(self.L.di[s])
- 
+
         for k in dout.keys():
             adout=np.array((dout[k]))
             shad = np.shape(adout)
@@ -1717,7 +1717,7 @@ class Signatures(dict):
                 adout=adout.reshape(shad[0],1,shad[1])
                 shad=np.shape(adout)
             # rehape (rays * 2 , interaction)
-            # the 2 dimension comes from the signature definition : 
+            # the 2 dimension comes from the signature definition :
             # 1st row = segment index
             # 2nd row = tyep of interaction
             self[k] = adout.swapaxes(1,2).reshape(shad[0]*shad[2],shad[1])
@@ -1751,7 +1751,7 @@ class Signatures(dict):
         #if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
         #    raise AttributeError('Tx or Rx is not in Gr')
 
-        # list of interaction in roomTx 
+        # list of interaction in roomTx
         # list of interaction in roomRx
         #ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         #ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']

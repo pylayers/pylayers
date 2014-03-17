@@ -1,8 +1,6 @@
 #-*- coding:Utf-8 -*-
 """
 
-.. currentmodule:: pylayers.location.geometric.constraints.cla
-
 Constraint Layer Array (CLA) Class
 ==================================
 

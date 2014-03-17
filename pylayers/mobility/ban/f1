@@ -1,0 +1,124 @@
+60c60
+<     """ Class to manage a Body model
+---
+>     """ Class to manage the Body model
+86a87,88
+>     Notes
+>     -----
+87a90,95
+>     nodes_Id = {0:'STRN',1:'CLAV',2:'RFHD',3:'RSHO',
+>     4:'LSHO', 5:'RELB',6:'LELB', 7:'RWRB',8:'LWRB', 9:'RFWT',
+>     10:'LFWT', 11:'RKNE', 12:'LKNE',13:'RANK', 14:'LANK' ,
+>     15:'LFIN' ,16:'LELB', 17:'RUPA',18:'LUPA', 19:'RFRM',
+>     20:'LFRM', 21:'LSHN', 22:'RSHN',23:'LTHI', 24:'RTHI',
+>     25:'LHEE', 26:'RHEE', 27:'LTOE',28:'RTOE', 29:'RMT5'}
+91,99d98
+<         """
+<         Parameters
+<         ----------
+< 
+<         _filebody : string 
+<         _filemocap : string     
+< 
+<         """
+< 
+151d149
+< 
+160c158
+<         CylinderId = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
+---
+>         Cylinder number = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
+199,200d196
+<         
+<         # update devices dict 
+336d331
+<             >>> import pylayers.mobility.body.body as body
+343,347c338,341
+<             >>> traj.generate()
+<             >>> John = body.Body()
+<             >>> John.settopos(traj,2.3)
+<             >>> fig,ax = John.show(plane='xz',color='b')
+<             >>> plt.title('xz')
+---
+>             >>> bc = Body()
+>             >>> bc.settopos(traj,2.3)
+>             >>> nx.draw(bc.g,bc.g.pos)
+>             >>> axe = plt.axis('scaled')
+431c425
+<                 default 0
+---
+>                 default 0 
+440,459c434,448
+< 
+<         .. plot::
+<             :include-source:
+< 
+<             >>> import numpy as np
+<             >>> import pylayers.mobility.trajectory as tr
+<             >>> import pylayers.mobility.body.body as body
+<             >>> import matplotlib.pyplot as plt
+<             >>> time = np.arange(0,10,0.1)
+<             >>> v = 4000/3600.
+<             >>> x = v*time
+<             >>> y = np.zeros(len(time))
+<             >>> traj = tr.Trajectory()
+<             >>> traj.generate()
+<             >>> bc = body.Body()
+<             >>> bc.settopos(traj,2.3,2)
+<             >>> bc.setccs(topos=True)
+<             >>> bc.setdcs()
+<             >>> bc.show(plane='yz',color='b',widthfactor=80)
+<             >>> plt.show()
+---
+>         >>> import numpy as np
+>         >>> import pylayers.mobility.trajectory as tr
+>         >>> import matplotlib.pyplot as plt
+>         >>> time = np.arange(0,10,0.1)
+>         >>> v = 4000/3600.
+>         >>> x = v*time
+>         >>> y = np.zeros(len(time))
+>         >>> traj = tr.Trajectory()
+>         >>> bc = Body()
+>         >>> bc.settopos(traj,2.3,2)
+>         >>> bc.setccs(topos=True)
+>         >>> bc.setdcs()
+>         >>> nx.draw(bc.g,bc.g.pos)
+>         >>> axe = plt.axis('scaled')
+>         >>> plt.show()
+746,747c735,736
+<                        axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+< 
+---
+>                         axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+>            
+754,755c743,744
+< 
+< 
+---
+>     
+>                     
+761a751
+>                 ipdb.set_trace()
+771c761
+< 
+---
+>                 
+783,787d772
+<         widthfactor : int
+<         topos : boolean
+<             default False
+< 
+< 
+813c798
+<             ax2 = 1
+---
+>             ax2 = 2
+1255c1240
+< 
+---
+>             
+1440c1425,1426
+<     bd._show3(k=46,ccs=True,topos=True,pattern=True)
+---
+>     bd.show3(k=46,wire=True,ccs=True,dcs=False,topos=True,pattern=True)
+>     bd.show()

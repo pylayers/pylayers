@@ -22,7 +22,7 @@ Trajectory Class
 Utility Functions
 =================
 
-.. autosumarry::
+.. autosummary::
     :toctree: generated/
 
     importsn

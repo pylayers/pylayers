@@ -215,19 +215,19 @@ class Channel(dict):
 class Wstandard(object):
     """ Wireless standard class
     """
-    def __init__(self,name,Nchannel,modulation):
+    def __init__(self,name,_filejson='wstd.json'):
         """
         Parameters
         ----------
 
         name : string
-        Nchannel : int
-        modulation : string
 
         """
         self.name = name
-        self.Nchannel = Nchannel
-        self.modulation = modulation
+        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        stds = json.load(fp)
+        fp.close()
+        self.std = stds[name]
 
     def __repr__(self):
         st = self.name+'\n'
@@ -250,21 +250,20 @@ class Wstandard(object):
             file containing the description of available standards
         """
 
-        wstandard = ConfigParser.ConfigParser()
-        fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
-        wstandard.readfp(fp)
+        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        stds = json.load(fp)
         fp.close()
-
-        self.dwstd = dict(wstandard.items(wstd))
-        fstart =  eval(self.dwstd['fcghzstart'])
-        nchan = eval(self.dwstd['nchan'])
-        modulation = self.dwstd['modulation']
-        BMHz = eval(self.dwstd['bmhz'])
-        GMHz = eval(self.dwstd['gmhz'])
-        SMHz = eval(self.dwstd['smhz'])
-        attmask = eval(self.dwstd['attmask'])
-        self.s = Wstandard(wstd,nchan,modulation)
-        self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
+        self.std = stds['stdname']
+        #self.dwstd = dict(wstandard.items(wstd))
+        #fstart =  eval(self.dwstd['fcghzstart'])
+        #nchan = eval(self.dwstd['nchan'])
+        #modulation = self.dwstd['modulation']
+        #"BMHz = eval(self.dwstd['bmhz'])
+        #GMHz = eval(self.dwstd['gmhz'])
+        #SMHz = eval(self.dwstd['smhz'])
+        #attmask = eval(self.dwstd['attmask'])
+        #self.s = Wstandard(wstd,nchan,modulation)
+        #self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
 
 
 
@@ -368,7 +367,7 @@ class AP(dict):
         This function updates `self.s` which contains standard specific parameters
 
         """
-wstandard = ConfigParser.ConfigParser()
+        wstandard = ConfigParser.ConfigParser()
         fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
         wstandard.readfp(fp)
         fp.close()
