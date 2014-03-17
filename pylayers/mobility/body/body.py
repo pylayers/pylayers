@@ -733,8 +733,9 @@ class Body(object):
                     'widthfactor' : 1.,
                     'topos':False,
                     'pattern':False,
+                    'lccs':[],
                     'ccs':False,
-                    'k':0}
+                    'k':46}
 
         for k in defaults:
             if k not in kwargs:
@@ -767,13 +768,18 @@ class Body(object):
             cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
                        axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
 
-            if kwargs['ccs']:
-
-                pt = pta+cylrad*kwargs['widthfactor']*self.ccs[k,:,0]
-                pte = np.repeat(pt[:,np.newaxis],3,axis=1)
-                mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)
-
-
+            if kwargs['ccs']: 
+                if k in kwargs['lccs']:
+                    pt = pta+cylrad*kwargs['widthfactor']*self.ccs[k,:,0]
+                    pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
+                    mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)
+        
+        if kwargs['dcs']:
+            for key in self.dcs.keys():               
+                U = self.dcs[key]               
+                pt = U[:,0]
+                pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
+                mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
 
 
         if kwargs['pattern']:
@@ -954,7 +960,7 @@ class Body(object):
                     'velocity':False,
                     'filestruc':'DLR.off',
                     'fileant':'defant.vsh3',
-                    'k':0 }
+                    'k':50 }
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -1069,6 +1075,7 @@ class Body(object):
                 _filepatt = kwargs['tag']+'patt-'+key
                 geo = geu.Geomoff(_filepatt)
                 V = Ant.SqG[kwargs['k'],:,:]
+                
                 #T = U[:,1:]
                 #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))

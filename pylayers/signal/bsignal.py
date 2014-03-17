@@ -1530,7 +1530,32 @@ class TUsignal(TBsignal, Usignal):
         print 'xmax :', self.x.max()
         print 'ymin :', self.y.min()
         print 'ymax :', self.y.max()
+        
+    def aggcir(self,alphak,tauk):
+        
+        """ aggregation of CIR from (alphak,tauk)
 
+        Parameters
+        ----------
+
+        alphak : float
+            CIR path amplitude
+        tauk : float
+            CIR delay values
+            
+        """
+        shy = np.shape(self.y)
+        x = self.x
+        eps = (x[1]-x[0])/2
+        u = map(lambda t: np.where( (x>t-eps) & (x<=t+eps))[0][0],tauk)
+        ynew  = np.zeros(len(x))
+        ynew[u] = alphak
+        if len(shy)>1:
+           self.y = np.vstack((self.y,ynew))
+        else:
+           self.y = ynew[np.newaxis,:]
+            
+        
     def fft(self, shift=False):
         """  forward fast Fourier transform
 

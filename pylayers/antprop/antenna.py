@@ -1176,10 +1176,9 @@ class Antenna(object):
         t2 = np.arange(GmindB + 5, kwargs['GmaxdB'] + 5, 5)
 
 
-
-
         col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
         cpt = 0
+       
 
         fstep = self.fa[1]-self.fa[0]
         #dtheta = self.theta[1,0]-self.theta[0,0]
@@ -1188,8 +1187,16 @@ class Antenna(object):
         dphi = self.phi[1]-self.phi[0]
 
         for f in kwargs['fGHz']:
+            if 'col' in kwargs:
+                colr  = kwargs['col']
+            else:           
+                corl = col[cpt]
+                
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
-            chaine = 'f = %3.2f GHz' %(self.fa[ik])
+            if 'lab' in kwargs:
+                chaine  = kwargs['lab']
+            else:
+                chaine = 'f = %3.2f GHz' %(self.fa[ik])
             # all theta
             if 'phd' in kwargs:
                 itheta = np.arange(self.Nt)
@@ -1248,7 +1255,7 @@ class Antenna(object):
                 a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
                 rline2, rtext2 = plt.thetagrids(a1, a2)
 
-            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+            ax.plot(angle, r, color=colr, lw=2, label=chaine)
             rline1, rtext1 = plt.rgrids(t1, t2)
             cpt = cpt + 1
         if kwargs['legend']:

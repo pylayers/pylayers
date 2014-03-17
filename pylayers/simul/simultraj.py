@@ -128,7 +128,7 @@ class Simul(object):
         self.L = Layout(di['layout']['layout'])
         traj  = tr.importsn(di['trajectory']['traj'])
         for i in range(len(traj)):
-            traj[i] = traj[i].resample(2)
+            traj[i] = traj[i].resample(10)
         self.traj= traj
         self.ap = di['acces_point']['ap']
 
