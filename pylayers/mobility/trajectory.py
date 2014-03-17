@@ -84,6 +84,16 @@ class Trajectories(list):
 
         lt : list of trajectory
 
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+        
+            >>> from pylayers.mobility.trajectory import *
+            >>> T=Trajectories()
+            >>> T.loadh5()
+            
         """
 
         self.Lfilename = _filename.split('_')[1].split('.')[0] +'.ini'
@@ -137,14 +147,14 @@ class Trajectories(list):
         fig,ax = L.showG('s',fig=fig,ax=ax)
 
 
-        valinit=1
+        valinit=0
         lines=[]
         labels=[]
         colors = "bgrcmykw"
 
         for iT,T in enumerate(self):
             lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
-            labels.append('node' + T.id[0])
+            labels.append('node' + T.ID)
         
         time=self[0].time()       
 
@@ -272,7 +282,7 @@ class Trajectory(pd.DataFrame):
             return False
 
 
-    def generate(self,id = 1, t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
+    def generate(self,ID = 1, name = '',t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
         """
         Generate a trajectroy from a numpy array
 
@@ -329,6 +339,8 @@ class Trajectory(pd.DataFrame):
             'az':a[:,2],
             's':s[:-1]}
         super(Trajectory,self).__init__(df,columns=['x','y','z','vx','vy','vz','ax','ay','az','s'],index=td[:-2])
+        self.ID = ID
+        self.name = name
         self.update()
         return self
 
@@ -353,9 +365,7 @@ class Trajectory(pd.DataFrame):
         xnew =fx(tnew)
         ynew =fy(tnew)
         T = Trajectory()
-        import ipdb
-        ipdb.set_trace()
-        T.generate(id=self.id[0],t=tnew,pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,unit='s', sf = sf)
+        T.generate(ID=self.ID,name=self.name,t=tnew,pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,unit='s', sf = sf)
         return T
 
 
@@ -380,7 +390,7 @@ class Trajectory(pd.DataFrame):
         newtime = self.time()/factor
         pt = self.space(ndim=3)
         t = copy.copy(self)
-        t.generate(t=newtime,pt=pt)
+        t.generate(ID=self.ID,name=self.name,t=newtime,pt=pt)
         return(t)
 
 
