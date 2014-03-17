@@ -56,13 +56,13 @@ class Trajectories(list):
         """ initialization 
         """
         super(list,self).__init__()  
-        
+
 
     def __repr__(self):
 
         s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
         for a in self:
-            string ='Trajectory of agent ' + a['id'][0] 
+            string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID 
             s = s + string + '\n'
             s = s + '-'*len(string) + '\n'
             s = s +  a.__repr__()
@@ -88,18 +88,23 @@ class Trajectories(list):
 
         self.Lfilename = _filename.split('_')[1].split('.')[0] +'.ini'
         filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
-        fil = pd.HDFStore(filename)
+        if os.path.exists(filename):
+            fil = pd.HDFStore(filename)
+        else: 
+            raise NameError(filename + ' not founded')
 
         
 
         for k in fil.keys():
             df = fil[k]
             df = df.set_index('t')
+            ID = fil.get_storer(k).attrs.ID
+            name = fil.get_storer(k).attrs.name
             v=np.array((df.vx.values,df.vy.values))
             d = np.sqrt(np.sum(v*v,axis=0))
             s = np.cumsum(d)
             df['s'] = s
-            self.append(Trajectory(df))
+            self.append(Trajectory(df=df,ID=ID,name=name))
         fil.close()
 
   
@@ -210,10 +215,12 @@ class Trajectory(pd.DataFrame):
 
 
     """
-    def __init__(self, df = {}):
+    def __init__(self, df = {}, ID = 0, name =''):
         """ initialization
         """
         super(Trajectory,self).__init__(df)
+        self.ID = ID
+        self.name = name
         self.has_values=self.update()
 
 
@@ -265,7 +272,7 @@ class Trajectory(pd.DataFrame):
             return False
 
 
-    def generate(self,t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
+    def generate(self,id = 1, t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
         """
         Generate a trajectroy from a numpy array
 
@@ -310,7 +317,8 @@ class Trajectory(pd.DataFrame):
         s[-1] = 0
         s = np.roll(s,1)
 
-        df = {'x':pt[:-2,0],
+        df = {
+            'x':pt[:-2,0],
             'y':pt[:-2,1],
             'z':pt[:-2,2],
             'vx':v[:-1,0],
@@ -345,7 +353,9 @@ class Trajectory(pd.DataFrame):
         xnew =fx(tnew)
         ynew =fy(tnew)
         T = Trajectory()
-        T.generate(t=tnew,pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,unit='s', sf = sf)
+        import ipdb
+        ipdb.set_trace()
+        T.generate(id=self.id[0],t=tnew,pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,unit='s', sf = sf)
         return T
 
 
