@@ -401,7 +401,7 @@ def importsn(_filename='pos.csv'):
 
     return(lt)
 
-def importh5(self,_filename='simulnet_TA-Office.h5'):
+def importh5(_filename='simulnet_TA-Office.h5'):
         """ import simulnet h5 file
 
         Parameters
