@@ -1225,14 +1225,13 @@ class Body(object):
         """
 
         intersect = np.zeros((self.ncyl,1))
-        mu = np.zeros((self.ncyl,1))
-        lmd = 0.075
+        
         for k in range (self.ncyl):
             if k not in cyl:
 
                 if topos  == True:
-                    kta  = self.sl[k,0]
-                    khe  = self.sl[k,1]
+                    kta  = int(self.sl[k,0])
+                    khe  = int(self.sl[k,1])
                     C = self.topos[:,kta]
                     D = self.topos[:,khe]
                 else:
@@ -1253,17 +1252,147 @@ class Body(object):
                 dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
 
                 if dmin  < self.sl[k,2]:
-                    intersect[k]=1
-
-                    
-                if 0 < alpha < 1 and 0 < beta < 1 :
-                    #print 'dmin = ', dmin  
-                    #print 'r = ', self.sl[k,2]  
-                    dAB = np.sqrt(sum((A-B)**2))
-                    if alpha <> 0:
-                        mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
+                    intersect[k]=1                   
                  
         return intersect
+        
+    def intersectBody2(self,A,B, topos = True, frameId = 0):
+        """
+
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+        Returns
+        -------
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
+
+        intersect = 0
+
+        for k in [10]:        
+
+            if topos  == True:
+                kta  = int(self.sl[k,0])
+                khe  = int(self.sl[k,1])
+                C = self.topos[:,kta]
+                D = self.topos[:,khe]
+            else:
+                kta  = self.sl[k,0]
+                khe  = self.sl[k,1]
+                C = self.d[:,kta,frameId]
+                D = self.d[:,khe,frameId]
+
+            alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+            if alpha < 0:
+                alpha = 0
+            if alpha > 1 :
+                alpha  = 1
+            if beta < 0:
+                beta = 0
+            if beta > 1:
+                beta = 1
+            dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+
+            if dmin  < self.sl[k,2]:
+                intersect=1         
+             
+        return intersect
+        
+    def intersectBody3(self,A,B, topos = True, frameId = 0):
+        """
+
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+        Returns
+        -------
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
+
+        loss_dB = 0 # in dB
+        loss_lin  =1/10**(loss_dB/10.0)
+
+        for k in [10]:        
+
+            if topos  == True:
+                kta  = int(self.sl[k,0])
+                khe  = int(self.sl[k,1])
+                C = self.topos[:,kta]
+                D = self.topos[:,khe]
+            else:
+                kta  = self.sl[k,0]
+                khe  = self.sl[k,1]
+                C = self.d[:,kta,frameId]
+                D = self.d[:,khe,frameId]
+
+            alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+            if alpha < 0:
+                alpha = 0
+            if alpha > 1 :
+                alpha  = 1
+            if beta < 0:
+                beta = 0
+            if beta > 1:
+                beta = 1
+            dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+
+            #~ if dmin  < self.sl[k,2]:
+                #~ intersect=1
+            lmd = 0.06 
+               
+            #~ if 0 < alpha < 1 and 0 < beta < 1 :
+            loss1_dB = 0
+            loss2_dB = 0 
+
+
+
+            if dmin < self.sl[k,2]:
+                
+                """
+                in this case intersection is True
+                """
+                #pdb.set_trace()                                                            
+                dAB = np.sqrt(sum((A-B)**2))
+                #nu1 =(self.sl[k,2]-dmin)*np.sqrt((2/lmd)*dAB*abs(alpha)*abs(1-alpha)))
+                nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
+                nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
+              
+                if -0.7 < nu1 : 
+                
+                    loss1_dB = 6.9 + 20*np.log10(np.sqrt((nu1-0.1)**2+1)+nu1-0.1)
+                else :
+                    loss1_dB = 0.0 
+                
+                if -0.7 < nu2 : 
+                    loss2_dB = 6.9 + 20*np.log10(np.sqrt((nu2-0.1)**2+1)+nu2-0.1)
+                else :
+                    loss2_dB = 0.0 
+                    
+                loss_dB  =10*np.log10(10**(loss1_dB/10.0)+10**(loss2_dB/10.0))
+                
+                loss_lin  =1.0/10**(loss_dB/10.0)
+              
+        return loss_lin#, loss_dB, loss1_dB, loss2_dB 
         
 
     def body_link(self, topos = True,frameId = 0):

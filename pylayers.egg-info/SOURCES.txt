@@ -14,6 +14,7 @@ pylayers/antprop/channel.py
 pylayers/antprop/channelc.py
 pylayers/antprop/coeffModel.py
 pylayers/antprop/coverage.py
+pylayers/antprop/delaydispersion.py
 pylayers/antprop/interactions.py
 pylayers/antprop/loadTMP.py
 pylayers/antprop/multiwall.py
@@ -64,6 +65,7 @@ pylayers/mobility/trajectory.py
 pylayers/mobility/body/DeuxSeg.py
 pylayers/mobility/body/__init__.py
 pylayers/mobility/body/body.py
+pylayers/mobility/body/body1.py
 pylayers/mobility/body/c3d.py
 pylayers/mobility/body/c3dtools.py
 pylayers/mobility/body/dist.py
@@ -84,6 +86,10 @@ pylayers/network/wsn.py
 pylayers/signal/DF.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
+pylayers/signal/chi2.py
+pylayers/signal/detect_quad.py
+pylayers/signal/invfreq.py
+pylayers/signal/invfreqz.py
 pylayers/signal/waveform.py
 pylayers/simul/Monitor.py
 pylayers/simul/__init__.py
@@ -101,6 +107,7 @@ pylayers/util/cone.py
 pylayers/util/easygui.py
 pylayers/util/geomutil.py
 pylayers/util/graphutil.py
+pylayers/util/mayautil.py
 pylayers/util/plot_simulation_loc.py
 pylayers/util/plotutil.py
 pylayers/util/project.py
@@ -113,3 +120,4 @@ pylayers/util/utilnet.py
 pylayers/util/vect.py
 pylayers/util/versions.py
 pylayers/util/voronoi.py
+
