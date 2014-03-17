@@ -759,6 +759,7 @@ class Body(object):
                     'topos':False,
                     'pattern':False,
                     'ccs':False,
+                    'dcs':False,
                     'color':'white',
                     'k':0}
 
@@ -808,7 +809,12 @@ class Body(object):
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
                 mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)  
 
-
+        if kwargs['dcs']:
+                    for key in self.dcs.keys():               
+                        U = self.dcs[key]               
+                        pt = U[:,0]
+                        pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
+                        mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
 
 
         if kwargs['pattern']:
