@@ -760,7 +760,6 @@ class Body(object):
         cold = pyu.coldict()
         colhex = cold[kwargs['color']]
         body_color = tuple(pyu.rgb(colhex)/255.)
-        
 
         for k in range(self.ncyl):
 
@@ -777,10 +776,10 @@ class Body(object):
             ax = phe-pta
             cc = (pta+phe)/2.
             l = np.sqrt(np.sum(ax**2))
-            cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
-                       axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l,color=body_color)
-
-            mlab.pipeline.surface(cyl.polydata)
+            cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+            import ipdb
+            ipdb.set_trace()
+            mlab.pipeline.surface(cyl.polydata,color=body_color)
             f.children[-1].name=self.name +' ' +self.idcyl[k]            
 
             if kwargs['ccs']:
