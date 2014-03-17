@@ -207,6 +207,10 @@ class Body(object):
 
         self.ncyl = len(di['cylinder'].values())
 
+
+
+        self.idcyl={}
+        [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
         # update devices dict
         self.dev={}
         for dev in di['device'].keys():
@@ -755,6 +759,7 @@ class Body(object):
                     'topos':False,
                     'pattern':False,
                     'ccs':False,
+                    'color':'white',
                     'k':0}
 
         for k in defaults:
@@ -766,15 +771,17 @@ class Body(object):
             if k not in defaults:
                 args[k] = kwargs[k]
 
-        visual.set_viewer(mlab.gcf())
+        f = mlab.gcf()
+        #visual.set_viewer(f)
+        #f.scene.background=(1,1,1)
 
+        
         fId = kwargs['iframe']
 
 
         cold = pyu.coldict()
         colhex = cold[kwargs['color']]
         body_color = tuple(pyu.rgb(colhex)/255.)
-
 
         for k in range(self.ncyl):
 
@@ -792,16 +799,14 @@ class Body(object):
             cc = (pta+phe)/2.
             l = np.sqrt(np.sum(ax**2))
             cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
-
             mlab.pipeline.surface(cyl.polydata,color=body_color)
             f.children[-1].name=self.name +' ' +self.idcyl[k]            
-
 
             if kwargs['ccs']:
 
                 pt = pta+cylrad*kwargs['widthfactor']*self.ccs[k,:,0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
-                mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)
+                mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)  
 
 
 
