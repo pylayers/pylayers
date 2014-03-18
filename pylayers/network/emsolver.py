@@ -229,7 +229,8 @@ class EMSolver(object):
                         MW = mw.Losst(self.L,model.f,pa[i+1:lpa].T,pa[i])
                         # MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
                         # loss free space
-                        frees=np.hstack((frees,mw.PL(model.f,pa[i+1:lpa],pa[i],model.rssnp) ))
+
+                        frees=np.hstack((frees,mw.PL(np.array([model.f]),pa[i+1:lpa].T,pa[i].reshape(2,1),model.rssnp)[0] ))
                         # Pr.extend(lepwr - MW[0] - frees)
                        
                         # WARNING : only one polarization is taken into
