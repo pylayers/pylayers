@@ -1,5 +1,14 @@
 """
 
+Trajectories Class
+==================
+.. autosummary::
+    :toctree: generated/
+
+    Trajectories.__init__
+    Trajectories.__repr__
+    Trajectories.loadh5
+    Trajectories.ishow
 
 Trajectory Class
 ================
@@ -53,9 +62,9 @@ class Trajectories(list):
 
     """
     def __init__(self):
-        """ initialization 
+        """ initialization
         """
-        super(list,self).__init__()  
+        super(list,self).__init__() 
 
 
     def __repr__(self):
@@ -65,9 +74,9 @@ class Trajectories(list):
             for a in self:
                 typ = a.typ
                 if typ == 'ag':
-                    string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID 
+                    string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID
                 else :
-                    string ='Access point ' + a.name + ' with ID ' + a.ID 
+                    string ='Access point ' + a.name + ' with ID ' + a.ID
                 s = s + string + '\n'
                 s = s + '-'*len(string) + '\n'
                 s = s +  a.__repr__()
@@ -77,13 +86,12 @@ class Trajectories(list):
         return s
 
     def loadh5(self,_filename='simulnet_TA-Office.h5'):
-
         """ import simulnet h5 file
-        
+
         Parameters
         ----------
 
-        filename : string 
+        filename : string
             default simulnet + Layout_filename . h5
 
         Returns
@@ -96,20 +104,20 @@ class Trajectories(list):
 
         .. plot::
             :include-source:
-        
+
             >>> from pylayers.mobility.trajectory import *
             >>> T=Trajectories()
             >>> T.loadh5()
-            
+
         """
 
         filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
         if os.path.exists(filename):
             fil = pd.HDFStore(filename)
-        else: 
+        else:
             raise NameError(filename + ' not founded')
 
-        
+
 
         for k in fil.keys():
             df = fil[k]
@@ -127,20 +135,19 @@ class Trajectories(list):
         self.Lfilename = layout
 
 
-  
-    
+
+
     def ishow(self):
         """
             interactive show of trajectories
-        
-        
+
+
         Examples
         --------
 
-
         .. plot::
             :include-source:
-    
+
             >>> from pylayers.mobility.trajectory import *
             >>> T=Trajectories()
             >>> T.loadh5()
@@ -148,7 +155,6 @@ class Trajectories(list):
 
         """
 
-       
         fig, ax = plt.subplots()
         fig.subplots_adjust(bottom=0.2, left=0.3)
 
@@ -166,19 +172,19 @@ class Trajectories(list):
             if T.typ == 'ag':
                 lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
                 labels.append(T.name + ':' + T.ID)
-            else : 
+            else :
                 lines.extend(ax.plot(T['x'][0],T['y'][0],'^',ms = 12,color=colors[iT],visible=False))
                 labels.append(T.name + ':' + T.ID)
 
-        time=self[0].time()       
+        time=self[0].time()
 
-        # init boolean value for visible in checkbutton    
+        # init boolean value for visible in checkbutton
         blabels=[False]*len(labels)
-       
-                
-        ########    
+
+
+        ########
         # slider
-        ######## 
+        ########
         slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
         slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax, valinit=valinit, color='#AAAAAA')
         def update(val):
@@ -191,7 +197,7 @@ class Trajectories(list):
                         lines[iT].set_ydata(T['y'][pval])
                 fig.canvas.draw()
         slider.on_changed(update)
-       
+
 
         ########
         # choose
@@ -207,14 +213,13 @@ class Trajectories(list):
         check.on_clicked(func)
         fig.canvas.draw()
         plt.show(fig)
-        
+
 
 
 class Trajectory(pd.DataFrame):
     """  Define a trajectory
 
-    This class derives from pandas.DataFrame. It handles a full 3D trajectory
-    description.
+    This class derives from pandas.DataFrame. It handles a full 3D trajectory.
 
     A trajectory is time-stamped and contains 3D coordinates of position, velocity and acceleration.
 
@@ -372,7 +377,15 @@ class Trajectory(pd.DataFrame):
 
         sf : int
             sampling factor
+
+        Returns
+        -------
+
+        T : Trajectory
+            resampled trajectory
+
         """
+
         t = self.time()
         x = self.space()[:,0]
         y = self.space()[:,1]
@@ -381,11 +394,16 @@ class Trajectory(pd.DataFrame):
         tstart = t[0]
         tstop = t[-1]
         tstep = (t[1]-t[0])/sf
-        tnew =  np.arange(tstart, tstop,tstep)
+        tnew =  np.arange(tstart,tstop,tstep)
         xnew =fx(tnew)
         ynew =fy(tnew)
         T = Trajectory()
-        T.generate(ID=self.ID,name=self.name,t=tnew,pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,unit='s', sf = sf)
+        T.generate(ID=self.ID,
+                   name=self.name,
+                   t=tnew,
+                   pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
+                   unit='s',
+                   sf = sf)
         return T
 
 
@@ -405,6 +423,7 @@ class Trajectory(pd.DataFrame):
         t : rescaled trajectory
 
         """
+
         speedms = speedkmph/3.6
         factor  = speedms/self.meansp
         newtime = self.time()/factor
