@@ -234,7 +234,7 @@ class Link(object):
                 ca_cb_cutoff
 
             Ray identifier (ray_ID#N):
-                ua_ub
+                cutoff_ua_ub
 
             Ctilde identifier (Ct_ID#N):
                 ua_ub_uf
@@ -458,8 +458,6 @@ class Link(object):
         self._Tb = orientation
         self.rx.orientation = orientation
 
-
-
     @fGHz.setter
     def fGHz(self,freq):
         self._freq = freq
@@ -587,7 +585,8 @@ class Link(object):
         # get identifier groupname in h5py file
         self.get_grpname()
         # check if grpnamee exist in the h5py file
-        [self.exist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+        [self.fill_dexist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+
 
 
     def save_init(self,filename_long):
@@ -663,7 +662,33 @@ class Link(object):
             f.close()
             raise NameError('Link stack: issue during stacking')
 
-    def save(self,obj,grpname):
+    def _delete(self,key,grpname):
+        """ Delete a key and associated data into h5py file
+
+        Parameters
+        ----------
+
+        key : string    
+            key of the h5py file
+        grpname : string
+            groupe name of the h5py file
+        """
+        lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        f=h5py.File(lfilename,'a')
+        # try/except to avoid loosing the h5 file if
+        # read/write error
+
+        try:
+            del f[key][grpname]
+            print 'delete ',key , ' in ', grpname
+            f.close()
+        except:
+            f.close()
+            raise NameError('Link._delete: issue when deleteting in h5py file')
+
+
+
+    def save(self,obj,key,grpname,force=False):
         """ Save a given object in the correct grp
 
         Parameters
@@ -671,11 +696,23 @@ class Link(object):
 
         obj : Object
             (Signatures|Rays|Ctilde|Tchannel)
+        key : string    
+            key of the h5py file
         grpname : string
             groupe name of the h5py file
         """
 
-        obj._saveh5(self.filename,grpname)
+
+        if not force :
+            obj._saveh5(self.filename,grpname)
+        # if save is forced, previous existing data are removed and 
+        # replaced by new ones.
+        else :
+            if self.dexist[key]['exist']:
+                self._delete(key,grpname)
+
+            obj._saveh5(self.filename,grpname)  
+
         if self.verbose :
             print str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved'
 
@@ -700,12 +737,13 @@ class Link(object):
 
 
     def get_grpname(self):
-        """ Determine if the group name of the dataregarding the given configuration
+        """ Determine if the group name of the data regarding the given configuration
 
         Notes
         -----
 
-        Update the key grpname of self.dexist[key] dictionnary
+        Update the key grpname of self.dexist[key] dictionnary, 
+        where key  = 'sig'|'ray'|'Ct'|'H'
         """
         ############
         # Signatures
@@ -727,7 +765,7 @@ class Link(object):
         # check existence of self.b in h5py file
         ub_opt, ub = self.get_idx('p_map',self.b)
         # Write in h5py if no prior a-b link
-        grpname = str(ua) + '_' +str(ub)
+        grpname = str(self.cutoff) + '_' + str(ua) + '_' +str(ub)
         self.dexist['ray']['grpname']=grpname              
   
 
@@ -766,7 +804,7 @@ class Link(object):
         self.dexist['H']['grpname']=grpname  
 
 
-    def exist(self,key,grpname):
+    def fill_dexist(self,key,grpname):
         """Check if the data of a key with a given groupname
             already exists in the h5py file
 
@@ -932,16 +970,26 @@ class Link(object):
     def eval(self,**kwargs):
         """ Evaluate the link
 
+
+
+
         Parameters
         ----------
 
+        force_save : boolean
+            Force the computation (even if obj already exists)
+            AND save (replace previous computations)
      
+
+        Advanced features :
+        
         si.algo : str ('old'|'new')
             siganture.run algo type
         ra.ceil_height_meter : int
             rays.to3D ceil height in mteres
         ra.number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
+
         
 
 
@@ -958,7 +1006,6 @@ class Link(object):
                    'ra.ceil_height_meter':3,
                    'ra.number_mirror_cf':1,
                    'force':False,
-                   'force_save':False,
                    }
         for key, value in defaults.items():
             if key not in kwargs:
@@ -967,61 +1014,78 @@ class Link(object):
         self.checkh5()
 
       
-      
-        #signatures
+        ############
+        # Signatures
+        ############
         Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+
         if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['sig']['grpname'])
 
         else :
             Si.run5(cutoff=self.cutoff,algo=kwargs['si.algo'])
             # save sig
-            self.save(Si,self.dexist['sig']['grpname'])
+            self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
+
         self.Si = Si      
 
 
+
+        ############
+        # Rays
+        ############
         R = Rays(self.a,self.b)
+
         if self.dexist['ray']['exist'] and not kwargs['force']:
             self.load(R,self.dexist['ray']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['ray']['grpname'])
+
         else :
+            # perform computation...
             r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
             R.locbas(self.L)
-            # save ray
-            self.save(R,self.dexist['ray']['grpname'])  
+            # ...and save
+            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])  
+
         self.R = R
+
         if self.R.nray == 0:
             raise NameError('No ray have been founded. Try to re-run the simulation with a higher S.cutoff ')
 
+
+
+        ############
+        # Ctilde
+        ############
         C=Ctilde()
+
         if self.dexist['Ct']['exist'] and not kwargs['force']:
             self.load(C,self.dexist['Ct']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['Ct']['grpname'])
+
         else :
             R.fillinter(self.L)
-            #Ctilde
+            # Ctilde...
             C=R.eval(self.fGHz)
-            # save Ct
-            self.save(C,self.dexist['Ct']['grpname'])  
+            # ...save Ct
+            self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])  
+
         self.C = C
 
-
+        ############
+        # H
+        ############
         H=Tchannel()
+
         if self.dexist['H']['exist'] and not kwargs['force']:
             self.load(H,self.dexist['H']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['H']['grpname'])
+
+
         else :
             # Ctilde antenna
             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
             H=C.prop2tran(a=self.Aa,b=self.Ab)
-            self.save(H,self.dexist['H']['grpname'])
+            self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H      
 
