@@ -358,6 +358,29 @@ class Simul(SimulationRT): # Sympy 2
             self.activate(self.sht,self.sht.run(),1.0)
 
 
+    def savepandas(self):
+        """ Save mechanic in pandas hdf5 format
+        """
+        filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
+        layfile = self.L.filename.split('.')[0]
+        store = pd.HDFStore(filename+'_'+layfile+'.h5','w')
+        for a in self.lAg :
+
+            if a.type != 'ap':
+                store.put( a.ID,a.meca.df.convert_objects() ) 
+
+            else : # if agent acces point, its position is saved
+                store.put( a.ID,a.posdf )
+
+            store.get_storer(a.ID).attrs.typ = a.type
+            store.get_storer(a.ID).attrs.name = a.name
+            store.get_storer(a.ID).attrs.ID = a.ID
+            store.get_storer(a.ID).attrs.layout = self.L.filename
+        #saving metadata
+        store.close()
+
+
+
     def runsimul(self):
         """ Run simulation
         """
@@ -375,17 +398,7 @@ class Simul(SimulationRT): # Sympy 2
 
 
         if str2bool(self.save_opt['savepd']):
-            filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
-            layfile = self.L.filename.split('.')[0]
-            store = pd.HDFStore(filename+'_'+layfile+'.h5','w')
-            for a in self.lAg :
-                if a.type != 'ap':
-                    store.put( a.ID,a.meca.df.convert_objects() ) 
-                    store.get_storer(a.ID).attrs.name = a.name
-                    store.get_storer(a.ID).attrs.ID = a.ID
-
-            #saving metadata
-            store.close()
+            self.savepandas()
 
 if __name__ == '__main__':
 
