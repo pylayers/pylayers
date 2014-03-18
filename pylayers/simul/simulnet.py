@@ -149,6 +149,7 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\n\nAgents => self.lAg[i]' + '\n------' 
         s = s + '\nNumber of agents :' + str(len(self.lAg))
         s = s + '\nAgents IDs: ' + str([self.lAg[i].ID for i in range(len(self.lAg))])
+        s = s + '\nAgents names: ' + str([self.lAg[i].name for i in range(len(self.lAg))])
         s = s + '\nDestination of agents choosed: ' + self.meca_opt['choose_destination']
 
         s = s + '\n\nNetwork' + '\n-------' 
