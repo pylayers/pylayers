@@ -203,7 +203,7 @@ class Person(Process):
         for tup in self.wp[1:]:
                 self.waypoints.append(vec3(tup)  ) 
         try:
-            self.position = vec3(L.Gr.pos[self.roomId][0],L.Gr.pos[self.roomId][1])
+            self.position = vec3(L.Gr.pos[self.roomId][0],L.Gr.pos[self.roomId][1],1.0)
         except:     
             self.position = vec3()
 #           self.old_pos = vec3()
@@ -303,9 +303,9 @@ class Person(Process):
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
 
-                p=conv_vecarr(self.position).reshape(2,1)
-                v=conv_vecarr(self.velocity).reshape(2,1)
-                a=conv_vecarr(self.acceleration).reshape(2,1)
+                p=conv_vecarr(self.position).reshape(3,1)
+                v=conv_vecarr(self.velocity).reshape(3,1)
+                a=conv_vecarr(self.acceleration).reshape(3,1)
 
                 # fill panda dataframe 2D trajectory
                 self.df = self.df.append(pd.DataFrame({'t':pd.Timestamp(self.sim.now(),unit='s'),

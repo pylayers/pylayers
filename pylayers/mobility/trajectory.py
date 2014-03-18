@@ -60,13 +60,20 @@ class Trajectories(list):
 
     def __repr__(self):
 
-        s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
-        for a in self:
-            string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID 
-            s = s + string + '\n'
-            s = s + '-'*len(string) + '\n'
-            s = s +  a.__repr__()
-            s = s + '\n'
+        try:
+            s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
+            for a in self:
+                typ = a.typ
+                if typ == 'ag':
+                    string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID 
+                else :
+                    string ='Access point ' + a.name + ' with ID ' + a.ID 
+                s = s + string + '\n'
+                s = s + '-'*len(string) + '\n'
+                s = s +  a.__repr__()
+                s = s + '\n'
+        except:
+            s = 'Issue in Trajectories. Are you sure any Trajectory is loaded ?'
         return s
 
     def loadh5(self,_filename='simulnet_TA-Office.h5'):
@@ -96,7 +103,6 @@ class Trajectories(list):
             
         """
 
-        self.Lfilename = _filename.split('_')[1].split('.')[0] +'.ini'
         filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
         if os.path.exists(filename):
             fil = pd.HDFStore(filename)
@@ -110,12 +116,16 @@ class Trajectories(list):
             df = df.set_index('t')
             ID = fil.get_storer(k).attrs.ID
             name = fil.get_storer(k).attrs.name
+            typ = fil.get_storer(k).attrs.typ
+            layout = fil.get_storer(k).attrs.layout
             v=np.array((df.vx.values,df.vy.values))
             d = np.sqrt(np.sum(v*v,axis=0))
             s = np.cumsum(d)
             df['s'] = s
-            self.append(Trajectory(df=df,ID=ID,name=name))
+            self.append(Trajectory(df=df,ID=ID,name=name,typ=typ))
         fil.close()
+        self.Lfilename = layout
+
 
   
     
@@ -140,7 +150,7 @@ class Trajectories(list):
 
        
         fig, ax = plt.subplots()
-        fig.subplots_adjust(bottom=0.2, left=0.2)
+        fig.subplots_adjust(bottom=0.2, left=0.3)
 
         t = np.arange(0, len(self[0].index), self[0].ts)
         L=Layout(self.Lfilename)
@@ -153,9 +163,13 @@ class Trajectories(list):
         colors = "bgrcmykw"
 
         for iT,T in enumerate(self):
-            lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
-            labels.append('node' + T.ID)
-        
+            if T.typ == 'ag':
+                lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
+                labels.append(T.name + ':' + T.ID)
+            else : 
+                lines.extend(ax.plot(T['x'][0],T['y'][0],'^',ms = 12,color=colors[iT],visible=False))
+                labels.append(T.name + ':' + T.ID)
+
         time=self[0].time()       
 
         # init boolean value for visible in checkbutton    
@@ -168,26 +182,28 @@ class Trajectories(list):
         slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
         slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax, valinit=valinit, color='#AAAAAA')
         def update(val):
-            print val
-            pval=np.where(val>time)[0]
-            ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),loc='left')
-            for iT,T in enumerate(self):
-                lines[iT].set_xdata(T['x'][pval])
-                lines[iT].set_ydata(T['y'][pval])
-            fig.canvas.draw()
+            if val >= 1 :
+                pval=np.where(val>time)[0]
+                ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),loc='left')
+                for iT,T in enumerate(self):
+                    if T.typ == 'ag':
+                        lines[iT].set_xdata(T['x'][pval])
+                        lines[iT].set_ydata(T['y'][pval])
+                fig.canvas.draw()
         slider.on_changed(update)
        
 
         ########
         # choose
         ########
-        rax = plt.axes([0.02, 0.4, 0.13, 0.2], aspect='equal')
+        rax = plt.axes([0.02, 0.5, 0.3, 0.2], aspect='equal')
         # check (ax.object, name of the object , bool value for the obsject)
         check = CheckButtons(rax, labels, tuple(blabels))
         def func(label):
             i = labels.index(label)
             lines[i].set_visible(not lines[i].get_visible())
             fig.canvas.draw()
+
         check.on_clicked(func)
         fig.canvas.draw()
         plt.show(fig)
@@ -225,12 +241,13 @@ class Trajectory(pd.DataFrame):
 
 
     """
-    def __init__(self, df = {}, ID = 0, name =''):
+    def __init__(self, df = {}, ID = 0, name ='',typ=''):
         """ initialization
         """
         super(Trajectory,self).__init__(df)
         self.ID = ID
         self.name = name
+        self.typ = typ
         self.has_values=self.update()
 
 
@@ -272,7 +289,10 @@ class Trajectory(pd.DataFrame):
             N = len(self.index)
             self.tmin = self.index.min().value*1e-9
             self.tmax = self.index.max().value*1e-9
-            self.ts = (self.index[1].value*1e-9)-(self.index[0].value*1e-9)
+            try:
+                self.ts = (self.index[1].value*1e-9)-(self.index[0].value*1e-9)
+            except:
+                self.ts = np.nan
 
             self.ttime = self.tmax-self.tmin
             self.dtot = self['s'].values[-1]

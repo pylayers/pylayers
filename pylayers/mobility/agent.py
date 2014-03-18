@@ -10,6 +10,7 @@ import numpy as np
 import networkx as nx
 import time
 import ConfigParser
+import pandas as pd
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import Node, Network
 from pylayers.network.communication import Gcom, TX, RX
@@ -246,6 +247,13 @@ class Agent(object):
                 self.rx = RX(net=self.net, ID=self.ID,
                               gcom=self.gcom, sim=self.sim)
                 self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
+
+            p=self.args['pos']
+            self.posdf = pd.DataFrame({'t':pd.Timestamp(0),'x':p[0],'y':p[1],'z':p[2],
+                                       'vx':np.array([0.0]),'vy':np.array([0.0]),
+                                       'ax':np.array([0.0]),'ay':np.array([0.0]),
+                },columns=['t','x','y','z','vx','vy','ax','ay'],index=np.array([0]))
+
         else:
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')
 

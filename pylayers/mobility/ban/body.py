@@ -148,6 +148,8 @@ class Body(object):
         if 'vmocap' in dir(self):
             st = st + 'Mocap Speed : ' + str(self.vmocap)+'\n'
 
+        st = st + '\n'
+        
         return(st)
 
 
