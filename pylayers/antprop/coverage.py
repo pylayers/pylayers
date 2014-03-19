@@ -152,7 +152,7 @@ class Coverage(object):
 
         # frequency is chosen as all the center frequencies of the standard
         # warning assuming the same standard
-        self.fGHz = self.dap[0].s.fcGHz
+        self.fGHz = self.dap[0].s.fcghz
         self.nf = len(self.fGHz)
 
         # AP section

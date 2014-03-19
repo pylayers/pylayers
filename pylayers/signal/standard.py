@@ -346,22 +346,21 @@ class AP(dict):
 
         self['name'] = kwargs['name']
         self['p'] = kwargs['p']
-        self['wstd'] = kwargs['wstd']
         self['PtdBm'] = kwargs['PtdBm']
         self['channels'] = kwargs['channels']
         self['sensdBm'] = kwargs['sensdBm']
         self['nant'] = kwargs['nant']
 
-        self.upfstd(self['wstd'])
+        standard = Wstandard(kwargs['wstd'])
+        self.s = standard
 
     def __repr__(self):
         """ specific representation
 
-        It respects keys of the dictionnary
+            It respects keys of the dictionnary
         """
         st = 'name : '+str(self['name'])+'\n'
         st = st + 'p : '+str(self['p'])+'\n'
-        st = st+ 'wstd : '+str(self['wstd'])+'\n'
         st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
         st = st+ 'channels  : '+str(self['channels'])+'   '
         for k in self['channels']:
@@ -371,42 +370,7 @@ class AP(dict):
         return(st)
 
 
-    def upfstd(self,wstd='ieee80211b'):
-        """ update from standard
-
-        Parameters
-        ----------
-
-        wstd : string
-            wireless standard name
-
-        Notes
-        -----
-
-        All defined wireless standard are gathered in one  single file `wstd.ini`
-
-        This function updates `self.s` which contains standard specific parameters
-
-        """
-        wstandard = ConfigParser.ConfigParser()
-        fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
-        wstandard.readfp(fp)
-        fp.close()
-
-        self.dwstd = dict(wstandard.items(wstd))
-        fstart =  eval(self.dwstd['fcghzstart'])
-        nchan = eval(self.dwstd['nchan'])
-        modulation = self.dwstd['modulation']
-        BMHz = eval(self.dwstd['bmhz'])
-        GMHz = eval(self.dwstd['gmhz'])
-        SMHz = eval(self.dwstd['smhz'])
-        attmask = eval(self.dwstd['attmask'])
-        self.s = Wstandard(wstd,nchan,modulation)
-        self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
-
-
-        
-    def load(self,_fileini='defAP.ini'):
+    def load(self,name,_fileini='defAP.json'):
         """ loading an access point from file
 
         Parameters
@@ -418,30 +382,19 @@ class AP(dict):
         """
 
         self._fileini = _fileini
-        self.config = ConfigParser.ConfigParser()
-        fp = open(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
-        self.config.readfp(fp)
+        fileini = pyu.getlong(_fileini,pstruc['DIRSIMUL'])
+        fp = open(fileini,"r")
+        ap = json.load(fp)
 
-        ap = dict(self.config.items('ap'))
-        self['name'] = ap['name']
-        self['p'] = eval(ap['pos'])
-        self['wstd'] = ap['wstd']
-        self['PtdBm'] = eval(ap['ptdbm'])
-        self['channels'] = eval(ap['chan'])
-        self['sensdBm'] = eval(ap['snsdbm'])
-        self['nant'] = eval(ap['nant'])
+        self['name'] = name
+        dap = ap[name]
+        self['p'] = eval(dap['pos'])
+        wstd = dap['wstd']
+        self['PtdBm'] = dap['ptdbm']
+        self['channels'] = eval(dap['chan'])
+        self['sensdBm'] = dap['snsdbm']
+        self['nant'] = dap['nant']
 
+        standard = Wstandard(wstd)
+        self.s = standard
         fp.close()
-        self.upfstd(self['wstd'])
-
-
-
-
-#Wifi11b = Wstandard('IEEE802.11.b',14,'dsss')
-#Wifi11b.bandplan(2.412)
-#  IoT (Zigbee alternative
-#  MIMO 4x4
-#Wifi11ah = Wstandard('IEEE802.11.ah',13,'ofdm')
-#"Wifi11ah.bandplan(0.903,SMHz=2,BMHz=1,GMHz=1,attmask=20)
-#Bluetooth = Wstandard('Bluetooth',79,'gmsk')
-#Bluetooth.bandplan(2.4025,SMHz=1,BMHz=1,GMHz=0,attmask=0)
