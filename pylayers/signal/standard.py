@@ -141,7 +141,7 @@ class Channel(dict):
     def __repr__(self):
         """ representation
         """
-        st = str(self['fcGHz'])+': ['+str(self.fghz[0])+','+str(self.fghz[1])+']\n'
+        st = str(self['fcGHz'])+' : ['+str(self.fghz[0])+','+str(self.fghz[1])+']\n'
         return(st)
 
     def __add__(self,chan):
@@ -225,9 +225,9 @@ class Wstandard(dict):
 
     def __repr__(self):
         st = self.name+'\n'
-        st = st+'-------------------\n'
-        for k in range(self.Nchannel):
-            st = st + str(k+1) +' '+  self.chan[k+1].__repr__()
+        st = st+'-------------------------\n'
+        for k in np.sort(self.chan.keys()):
+            st = st + str(k) +' :  '+  self.chan[k].__repr__()
         return(st)
 
 
@@ -288,9 +288,9 @@ class Wstandard(dict):
         fcghz = np.linspace(fstart,fstop,Nchannel,endpoint=True)
         for k,fc in enumerate(fcghz):
             if (fc>=4) & (fc<5):
-                channum = int((fc-4)*200)
+                channum = int(np.round((fc-4)*200))
             if (fc>=5) & (fc<6):
-                channum = int((fc-5)*200)
+                channum = int(np.round((fc-5)*200))
             if fc<4:
                 channum = k+1
             self.chan[channum] = Channel(fc,bmhz,gmhz)

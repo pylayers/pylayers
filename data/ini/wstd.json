@@ -7,11 +7,71 @@
                   "zone": "Europe",
                   "bmhz": 1,
                   "gmhz": 0}},
+"ieee80211a": 
+    {"ofdm": { "nsd":48,
+               "nsp":4,
+               "dfmhz":0.3125,
+               "tplcp":16,
+               "tgi":0.8,
+               "tgi2":1.6,
+               "tshort":8,
+               "tlong":8
+              },
+    "modulation": [1,2,4,6],
+    "crate": "[0.5,0.666,0.75]",
+    "channels": {"uniil":
+                            {"fstart": 5.18, 
+                            "fstop": 5.24,
+                            "zone": "Europe", 
+                            "bmhz": 20,
+                            "smhz":20,
+                            "gmhz":0,
+                            "pmaxmw":40},
+                 "uniim":           
+                            {"fstart": 5.26, 
+                            "fstop": 5.32,
+                            "zone": "Europe", 
+                            "bmhz": 20,
+                            "smhz":20,
+                            "gmhz":0,
+                            "pmaxmw":200},
+                 "uniih":           
+                            {"fstart": 5.745, 
+                            "fstop": 5.805,
+                            "zone": "Europe", 
+                            "bmhz": 20,
+                            "smhz":20,
+                            "gmhz":0,
+                            "pmaxmw":800}
+
+                }
+     },
 "ieee80211b": 
     {"modulation": "dsss", 
     "crate": "[0.5,0.666,0.75]",
+    "channels": {"ism24" :
+                            {"fstart": 2.412, 
+                             "fstop": 2.472,
+                             "fstep": "5", 
+                             "zone": "Europe", 
+                             "bmhz": 20,
+                             "smhz":5,
+                             "gmhz":2}}
+    },                         
+"ieee80211g": 
+    {"ofdm": { "nsd":48,
+               "nsp":4,
+               "dfmhz":0.3125,
+               "tplcp":16,
+               "tgi":0.8,
+               "tgi2":1.6,
+               "tshort":8,
+               "tlong":8
+              },
+    "modulation": [1,2,4,6],
+    "crate": "[0.5,0.666,0.75]",
     "channels": {"fstart": 2.412, 
-                 "fstop": 2.482,
+                 "fstop": 2.472,
                  "fstep": "5", 
                  "zone": "Europe", 
                  "bmhz": 20,
