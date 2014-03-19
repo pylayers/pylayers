@@ -234,7 +234,7 @@ class Link(object):
                 ca_cb_cutoff
 
             Ray identifier (ray_ID#N):
-                ua_ub
+                cutoff_ua_ub
 
             Ctilde identifier (Ct_ID#N):
                 ua_ub_uf
@@ -255,7 +255,7 @@ class Link(object):
             uAb : indice of b position in 'A_map' Antenna name dataset
 
 
-        
+
         Examples
         --------
 
@@ -323,7 +323,7 @@ class Link(object):
                             _fileant = self.Ab._filename,
                             )
 
-        
+
         ##############
         #### init save
         ###############
@@ -373,51 +373,51 @@ class Link(object):
 
     @property
     def Lname(self):
-        return self._Lname 
+        return self._Lname
 
     @property
     def L(self):
-        return self._L 
+        return self._L
 
     @property
     def a(self):
-        return self._a 
+        return self._a
 
     @property
     def b(self):
-        return self._b 
+        return self._b
 
     @property
     def Aa(self):
-        return self._Aa 
+        return self._Aa
 
     @property
     def Ab(self):
-        return self._Ab 
+        return self._Ab
 
     @property
     def Ta(self):
-        return self._Ta 
+        return self._Ta
 
     @property
     def Tb(self):
-        return self._Tb 
+        return self._Tb
 
     @property
     def fGHz(self):
         return self._fGHz
 
-    @Lname.setter        
+    @Lname.setter
     def Lname(self,Lname):
-        # cahnge layout and build/load 
+        # change layout and build/load
         self._L = Layout(Lname)
         self._Lname = Lname
         self.reset_config()
-        
+
     @a.setter
     def a(self,position):
         if not self.L.ptin(position):
-            raise NameError ('point a not inside the Layout') 
+            raise NameError ('point a is not inside the Layout')
         self._a = position
         self.ca = self.L.pt2cy(position)
         self.tx.position = position
@@ -425,7 +425,7 @@ class Link(object):
     @b.setter
     def b(self,position):
         if not self.L.ptin(position):
-            raise NameError ('point b not inside the Layout') 
+            raise NameError ('point b is not inside the Layout')
         self._b = position
         self.cb = self.L.pt2cy(position)
         self.rx.position = position
@@ -457,8 +457,6 @@ class Link(object):
     def Tb(self,orientation):
         self._Tb = orientation
         self.rx.orientation = orientation
-
-
 
     @fGHz.setter
     def fGHz(self,freq):
@@ -514,9 +512,9 @@ class Link(object):
         self.cb = 1
         self.a = self.L.cy2pt(self.ca)
         self.b = self.L.cy2pt(self.cb)
-        
+
         # change h5py file if layout changed
-        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5' 
+        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         if not os.path.exists(filenameh5) :
             print 'Links save file for ' + self.L.filename + ' does not exist.'
@@ -553,7 +551,7 @@ class Link(object):
 
         """
 
-        
+
         # if len(self.a) == 0 :
         #     self.a = self.L.cy2pt(0)
 
@@ -587,7 +585,8 @@ class Link(object):
         # get identifier groupname in h5py file
         self.get_grpname()
         # check if grpnamee exist in the h5py file
-        [self.exist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+        [self.fill_dexist(k,self.dexist[k]['grpname'])   for k in self.save_opt]
+
 
 
     def save_init(self,filename_long):
@@ -663,19 +662,58 @@ class Link(object):
             f.close()
             raise NameError('Link stack: issue during stacking')
 
-    def save(self,obj,grpname):
-        """ Save a given object in the correct grp
+    def _delete(self,key,grpname):
+        """ Delete a key and associated data into h5py file
+
+        Parameters
+        ----------
+
+        key : string
+            key of the h5py file
+        grpname : string
+            groupe name of the h5py file
+
+        """
+        lfilename=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        f=h5py.File(lfilename,'a')
+        # try/except to avoid loosing the h5 file if
+        # read/write error
+
+        try:
+            del f[key][grpname]
+            print 'delete ',key , ' in ', grpname
+            f.close()
+        except:
+            f.close()
+            raise NameError('Link._delete: issue when deleteting in h5py file')
+
+
+
+    def save(self,obj,key,grpname,force=False):
+        """ Save a given object in the correct group
 
         Parameters
         ----------
 
         obj : Object
             (Signatures|Rays|Ctilde|Tchannel)
+        key : string
+            key of the h5py file
         grpname : string
             groupe name of the h5py file
         """
 
-        obj._saveh5(self.filename,grpname)
+
+        if not force :
+            obj._saveh5(self.filename,grpname)
+        # if save is forced, previous existing data are removed and
+        # replaced by new ones.
+        else :
+            if self.dexist[key]['exist']:
+                self._delete(key,grpname)
+
+            obj._saveh5(self.filename,grpname)
+
         if self.verbose :
             print str(obj.__class__).split('.')[-1] + ' from '+ grpname + ' saved'
 
@@ -691,7 +729,7 @@ class Link(object):
         grpname : string
             groupe name of the h5py file
 
-      
+
         """
 
         obj._loadh5(self.filename,grpname)
@@ -700,22 +738,24 @@ class Link(object):
 
 
     def get_grpname(self):
-        """ Determine if the group name of the dataregarding the given configuration
+        """ Determine if the group name of the data regarding the given configuration
 
         Notes
         -----
 
-        Update the key grpname of self.dexist[key] dictionnary
+        Update the key grpname of self.dexist[key] dictionnary,
+        where key  = 'sig'|'ray'|'Ct'|'H'
         """
         ############
         # Signatures
-        #############
+        ############
+
         array = np.array(([self.ca,self.cb,self.cutoff]))
         ua_opt, ua = self.get_idx('c_map',array)
         grpname = str(self.ca) + '_' +str(self.cb) + '_' + str(self.cutoff)
-        self.dexist['sig']['grpname']=grpname      
-      
-              
+        self.dexist['sig']['grpname']=grpname
+
+
 
         ############
         # Rays
@@ -727,11 +767,11 @@ class Link(object):
         # check existence of self.b in h5py file
         ub_opt, ub = self.get_idx('p_map',self.b)
         # Write in h5py if no prior a-b link
-        grpname = str(ua) + '_' +str(ub)
-        self.dexist['ray']['grpname']=grpname              
-  
+        grpname = str(self.cutoff) + '_' + str(ua) + '_' +str(ub)
+        self.dexist['ray']['grpname']=grpname
 
-      
+
+
         ############
         # Ctilde
         #############
@@ -741,14 +781,13 @@ class Link(object):
         uf_opt, uf = self.get_idx('f_map',farray)
 
         grpname = str(ua) + '_' + str(ub) + '_' + str(uf)
-        self.dexist['Ct']['grpname']=grpname             
+        self.dexist['Ct']['grpname'] = grpname
 
         ############
         # H
         #############
 
-  
-  
+
         # check existence of Rot a (Ta) in h5py file
         uTa_opt, uTa = self.get_idx('T_map',self.Ta)
         # check existence of Rot b (Tb) in h5py file
@@ -763,16 +802,16 @@ class Link(object):
                   '_'  + str(uTa) + '_' + str(uTb) + \
                   '_'  + str(uAa) + '_' + str(uAb)
 
-        self.dexist['H']['grpname']=grpname  
+        self.dexist['H']['grpname']=grpname
 
 
-    def exist(self,key,grpname):
+    def fill_dexist(self,key,grpname):
         """Check if the data of a key with a given groupname
             already exists in the h5py file
 
         Parameters
         ----------
-      
+
         key: string
             key of the h5py group
         grpname : string
@@ -799,14 +838,14 @@ class Link(object):
 
     def get_idx(self,key,array,tol=1e-3):
         """ try to get the index of the requested array in the group key
-            of the h5py file.
-            If array doesn't exist, the h5pyfile[key] array is stacked
+            of the hdf5 file.
+            If array doesn't exist, the hdf5file[key] array is stacked
 
-   
-      
+
+
         Parameters
         ----------
-      
+
         key: string
             key of the h5py group
         array : np.ndarray
@@ -824,15 +863,15 @@ class Link(object):
         u_opt : string ('r'|'s')
             return 'r' if array has been read into h5py file
             return 's' if array has been stacked into the array of group key
-      
-          
+
+
 
         See Also:
         --------
 
         Links.array_exist
         """
-      
+
         umap = self.array_exist(key,array,tol=tol)
         lu = len(umap)
         # if exists take the existing one
@@ -849,11 +888,11 @@ class Link(object):
     def array_exist(self,key,array,tol=1e-3) :
         """ check if an array of a given key (h5py group)
             has already been stored into the h5py file
-      
-  
+
+
         Parameters
         ----------
-  
+
         key: string
             key of the h5py group
         array : np.ndarray
@@ -882,19 +921,19 @@ class Link(object):
             f.close()
         except:
             f.close()
-            raise NameError('Link check_exist: issue during reading')  
+            raise NameError('Link check_exist: issue during reading')
 
         if key == 'c_map':
             eq = array == fa
             # sum eq = 3 means cy0,cy1 and cutoff are the same in fa and array
-            ua = np.where(np.sum(eq,axis=1)==3)[0]   
+            ua = np.where(np.sum(eq,axis=1)==3)[0]
 
         elif key == 'p_map':
 
             da = np.sqrt(np.sum((array-fa)**2,axis=1))
             # indice points candidate in db for a
 
-            ua = np.where(da<tol)[0]   
+            ua = np.where(da<tol)[0]
 
         elif key == 'f_map':
             # fmin_h5 < fmin_rqst
@@ -928,21 +967,28 @@ class Link(object):
 
         return ua
 
-  
+
     def eval(self,**kwargs):
         """ Evaluate the link
 
         Parameters
         ----------
 
-     
+        force_save : boolean
+            Force the computation (even if obj already exists)
+            AND save (replace previous computations)
+
+
+        Advanced features :
+
         si.algo : str ('old'|'new')
             siganture.run algo type
         ra.ceil_height_meter : int
             rays.to3D ceil height in mteres
         ra.number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
-        
+
+
 
 
         See Also
@@ -950,7 +996,7 @@ class Link(object):
 
         pylayers.antprop.signature
         pylayers.antprop.rays
-      
+
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
@@ -958,7 +1004,6 @@ class Link(object):
                    'ra.ceil_height_meter':3,
                    'ra.number_mirror_cf':1,
                    'force':False,
-                   'force_save':False,
                    }
         for key, value in defaults.items():
             if key not in kwargs:
@@ -967,61 +1012,78 @@ class Link(object):
         self.checkh5()
 
       
-      
-        #signatures
+        ############
+        # Signatures
+        ############
         Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+
         if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['sig']['grpname'])
 
         else :
             Si.run5(cutoff=self.cutoff,algo=kwargs['si.algo'])
             # save sig
-            self.save(Si,self.dexist['sig']['grpname'])
+            self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
+
         self.Si = Si      
 
 
+
+        ############
+        # Rays
+        ############
         R = Rays(self.a,self.b)
+
         if self.dexist['ray']['exist'] and not kwargs['force']:
             self.load(R,self.dexist['ray']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['ray']['grpname'])
+
         else :
+            # perform computation...
             r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
             R.locbas(self.L)
-            # save ray
-            self.save(R,self.dexist['ray']['grpname'])  
+            # ...and save
+            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])  
+
         self.R = R
+
         if self.R.nray == 0:
             raise NameError('No ray have been founded. Try to re-run the simulation with a higher S.cutoff ')
 
+
+
+        ############
+        # Ctilde
+        ############
         C=Ctilde()
+
         if self.dexist['Ct']['exist'] and not kwargs['force']:
             self.load(C,self.dexist['Ct']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['Ct']['grpname'])
+
         else :
             R.fillinter(self.L)
-            #Ctilde
+            # Ctilde...
             C=R.eval(self.fGHz)
-            # save Ct
-            self.save(C,self.dexist['Ct']['grpname'])  
+            # ...save Ct
+            self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])  
+
         self.C = C
 
-
+        ############
+        # H
+        ############
         H=Tchannel()
+
         if self.dexist['H']['exist'] and not kwargs['force']:
             self.load(H,self.dexist['H']['grpname'])
-            if kwargs['force_save']:
-                self.save(Si,self.dexist['H']['grpname'])
+
+
         else :
             # Ctilde antenna
             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
             H=C.prop2tran(a=self.Aa,b=self.Ab)
-            self.save(H,self.dexist['H']['grpname'])
+            self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H      
 
@@ -1094,7 +1156,7 @@ class Link(object):
 
         self.L._show3(newfig=False,opacity=0.7,centered=centered)
 
-      
+
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
             title=False,colorbar=False,newfig=False)
         Arx._show3(T=Trx.reshape(3,3),po=prx,

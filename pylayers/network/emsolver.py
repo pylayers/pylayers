@@ -204,6 +204,10 @@ class EMSolver(object):
             if len(e) > 0:
 
                 lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
+                # MW is 2D only now. 
+                # This explain the following licenses
+                lp = lp[:,:,:2]
+                dim = lp.shape[2]
                 # euclidian distance
                 d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
                 slp = np.shape(lp)[1]
@@ -226,10 +230,11 @@ class EMSolver(object):
                         #   Lo Lp Edo Edp
                         #
                         #
-                        MW = mw.Losst(self.L,model.f,pa[i+1:lpa].T,pa[i])
+                        MW = mw.Losst(self.L,model.f,pa[i+1:lpa,:dim].T,pa[i,:dim])
                         # MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
                         # loss free space
-                        frees=np.hstack((frees,mw.PL(model.f,pa[i+1:lpa],pa[i],model.rssnp) ))
+
+                        frees=np.hstack((frees,mw.PL(np.array([model.f]),pa[i+1:lpa,:dim].T,pa[i,:dim].reshape(2,1),model.rssnp)[0] ))
                         # Pr.extend(lepwr - MW[0] - frees)
                        
                         # WARNING : only one polarization is taken into
