@@ -712,6 +712,9 @@ class Coverage(object):
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
+        if typ =='bs':
+            V = self.Lw+self.freespace
+
         if typ =='sinr':
             title = 'SINR : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
             if dB:
@@ -735,10 +738,10 @@ class Coverage(object):
             else:
                 legcb = 'Linear scale'
 
-            V = self.L
+            V = self.Lw*self.freespace
 
         if a == -1:
-            if typ in ['sinr','pr']:
+            if typ in ['sinr','pr','loss']:
                 V = np.max(V[f,:,:],axis=1)
             else:
                 V = np.min(V[f,:,:],axis=1)
