@@ -99,131 +99,9 @@
   <div class="section" id="pylayers-mobility-trajectory-trajectory-generate">
 <h1>pylayers.mobility.trajectory.Trajectory.generate<a class="headerlink" href="#pylayers-mobility-trajectory-trajectory-generate" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt>
-<tt class="descname">Trajectory.generate(ID=1, name='', t=array([  0.        ,   0.20408163,   0.40816327,   0.6122449 ,</tt></dt>
-<dt>
-<tt class="descname">0.81632653,   1.02040816,   1.2244898 ,   1.42857143,</tt></dt>
-<dt>
-<tt class="descname">1.63265306,   1.83673469,   2.04081633,   2.24489796,</tt></dt>
-<dt>
-<tt class="descname">2.44897959,   2.65306122,   2.85714286,   3.06122449,</tt></dt>
-<dt>
-<tt class="descname">3.26530612,   3.46938776,   3.67346939,   3.87755102,</tt></dt>
-<dt>
-<tt class="descname">4.08163265,   4.28571429,   4.48979592,   4.69387755,</tt></dt>
-<dt>
-<tt class="descname">4.89795918,   5.10204082,   5.30612245,   5.51020408,</tt></dt>
-<dt>
-<tt class="descname">5.71428571,   5.91836735,   6.12244898,   6.32653061,</tt></dt>
-<dt>
-<tt class="descname">6.53061224,   6.73469388,   6.93877551,   7.14285714,</tt></dt>
-<dt>
-<tt class="descname">7.34693878,   7.55102041,   7.75510204,   7.95918367,</tt></dt>
-<dt>
-<tt class="descname">8.16326531,   8.36734694,   8.57142857,   8.7755102 ,</tt></dt>
-<dt>
-<tt class="descname">8.97959184,   9.18367347,   9.3877551 ,   9.59183673,</tt></dt>
-<dt>
-<tt class="descname">9.79591837,  10.        ]), pt=array([[  0.        ,   0.        ,  -0.96020959],</tt></dt>
-<dt>
-<tt class="descname">[  0.06118625,   0.20408163,  -1.19414249],</tt></dt>
-<dt>
-<tt class="descname">[  0.12214321,   0.40816327,  -1.01994625],</tt></dt>
-<dt>
-<tt class="descname">[  0.18264248,   0.6122449 ,   0.71453921],</tt></dt>
-<dt>
-<tt class="descname">[  0.24245733,   0.81632653,   0.12489794],</tt></dt>
-<dt>
-<tt class="descname">[  0.30136363,   1.02040816,  -1.15960839],</tt></dt>
-<dt>
-<tt class="descname">[  0.35914064,   1.2244898 ,  -0.55645216],</tt></dt>
-<dt>
-<tt class="descname">[  0.41557185,   1.42857143,  -0.57690018],</tt></dt>
-<dt>
-<tt class="descname">[  0.47044581,   1.63265306,  -1.55209634],</tt></dt>
-<dt>
-<tt class="descname">[  0.52355688,   1.83673469,   0.69067124],</tt></dt>
-<dt>
-<tt class="descname">[  0.57470604,   2.04081633,   0.54285397],</tt></dt>
-<dt>
-<tt class="descname">[  0.62370163,   2.24489796,   1.79665411],</tt></dt>
-<dt>
-<tt class="descname">[  0.67036003,   2.44897959,  -0.62437287],</tt></dt>
-<dt>
-<tt class="descname">[  0.71450642,   2.65306122,  -0.36678247],</tt></dt>
-<dt>
-<tt class="descname">[  0.75597537,   2.85714286,  -1.12401561],</tt></dt>
-<dt>
-<tt class="descname">[  0.79461147,   3.06122449,  -0.34154118],</tt></dt>
-<dt>
-<tt class="descname">[  0.83026995,   3.26530612,   0.95979867],</tt></dt>
-<dt>
-<tt class="descname">[  0.86281718,   3.46938776,  -1.50027334],</tt></dt>
-<dt>
-<tt class="descname">[  0.89213121,   3.67346939,  -1.61296287],</tt></dt>
-<dt>
-<tt class="descname">[  0.91810218,   3.87755102,   0.0935549 ],</tt></dt>
-<dt>
-<tt class="descname">[  0.94063279,   4.08163265,   0.69077372],</tt></dt>
-<dt>
-<tt class="descname">[  0.95963858,   4.28571429,  -0.03460795],</tt></dt>
-<dt>
-<tt class="descname">[  0.97504836,   4.48979592,   0.86509499],</tt></dt>
-<dt>
-<tt class="descname">[  0.98680437,   4.69387755,   0.21343465],</tt></dt>
-<dt>
-<tt class="descname">[  0.99486256,   4.89795918,  -2.16251852],</tt></dt>
-<dt>
-<tt class="descname">[  0.99919273,   5.10204082,   1.27288724],</tt></dt>
-<dt>
-<tt class="descname">[  0.99977866,   5.30612245,   0.30138712],</tt></dt>
-<dt>
-<tt class="descname">[  0.99661815,   5.51020408,   0.65827435],</tt></dt>
-<dt>
-<tt class="descname">[  0.98972305,   5.71428571,  -0.14109847],</tt></dt>
-<dt>
-<tt class="descname">[  0.97911919,   5.91836735,   0.83949974],</tt></dt>
-<dt>
-<tt class="descname">[  0.96484631,   6.12244898,   0.13939748],</tt></dt>
-<dt>
-<tt class="descname">[  0.94695789,   6.32653061,   1.06597536],</tt></dt>
-<dt>
-<tt class="descname">[  0.92552097,   6.53061224,  -0.58203533],</tt></dt>
-<dt>
-<tt class="descname">[  0.90061587,   6.73469388,   0.9087538 ],</tt></dt>
-<dt>
-<tt class="descname">[  0.87233593,   6.93877551,   1.49925135],</tt></dt>
-<dt>
-<tt class="descname">[  0.84078711,   7.14285714,   1.71268376],</tt></dt>
-<dt>
-<tt class="descname">[  0.80608763,   7.34693878,   0.27281286],</tt></dt>
-<dt>
-<tt class="descname">[  0.76836753,   7.55102041,   1.28215872],</tt></dt>
-<dt>
-<tt class="descname">[  0.72776815,   7.75510204,  -1.90521664],</tt></dt>
-<dt>
-<tt class="descname">[  0.68444163,   7.95918367,   1.2582284 ],</tt></dt>
-<dt>
-<tt class="descname">[  0.63855032,   8.16326531,  -0.27480604],</tt></dt>
-<dt>
-<tt class="descname">[  0.59026619,   8.36734694,   1.17321528],</tt></dt>
-<dt>
-<tt class="descname">[  0.53977018,   8.57142857,   0.21389227],</tt></dt>
-<dt>
-<tt class="descname">[  0.48725151,   8.7755102 ,   3.04370544],</tt></dt>
-<dt>
-<tt class="descname">[  0.43290697,   8.97959184,  -0.1786059 ],</tt></dt>
-<dt>
-<tt class="descname">[  0.37694022,   9.18367347,  -0.96480257],</tt></dt>
-<dt>
-<tt class="descname">[  0.31956097,   9.3877551 ,  -1.87918326],</tt></dt>
-<dt>
-<tt class="descname">[  0.26098424,   9.59183673,  -1.10054484],</tt></dt>
-<dt>
-<tt class="descname">[  0.20142953,   9.79591837,  -0.61137044],</tt></dt>
-<dt>
-<tt class="descname">[  0.14112001,  10.        ,   1.65894459]]), unit='s', sf=1)</tt></dt>
-<dd><p>Generate a trajectroy from a numpy array</p>
+<dt id="pylayers.mobility.trajectory.Trajectory.generate">
+<tt class="descclassname">Trajectory.</tt><tt class="descname">generate</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/trajectory.html#Trajectory.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a trajectory from a numpy array</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -242,6 +120,8 @@ y : y values</p>
 <blockquote>
 <div><p>(1 x npt)</p>
 </div></blockquote>
+<p><strong>Id</strong> : Agent Id</p>
+<p><strong>name</strong> : Agent Name</p>
 <p><strong>unit</strong> : str</p>
 <blockquote class="last">
 <div><p>time unity (&#8216;s&#8217;|&#8217;ns&#8217;,...)</p>
