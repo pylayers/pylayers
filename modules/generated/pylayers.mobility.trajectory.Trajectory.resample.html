@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pylayers.mobility.trajectory.Trajectories.ishow &mdash; PyLayers</title>
+    <title>pylayers.mobility.trajectory.Trajectory.resample &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="pylayers.mobility.trajectory" href="../pylayers.mobility.trajectory.html" />
-    <link rel="next" title="pylayers.mobility.trajectory.Trajectory.__init__" href="pylayers.mobility.trajectory.Trajectory.__init__.html" />
-    <link rel="prev" title="pylayers.mobility.trajectory.Trajectories.loadh5" href="pylayers.mobility.trajectory.Trajectories.loadh5.html" /> 
+    <link rel="next" title="pylayers.mobility.trajectory.Trajectory.rescale" href="pylayers.mobility.trajectory.Trajectory.rescale.html" />
+    <link rel="prev" title="pylayers.mobility.trajectory.Trajectory.generate" href="pylayers.mobility.trajectory.Trajectory.generate.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -47,10 +47,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.mobility.trajectory.Trajectory.__init__.html" title="pylayers.mobility.trajectory.Trajectory.__init__"
+          <a href="pylayers.mobility.trajectory.Trajectory.rescale.html" title="pylayers.mobility.trajectory.Trajectory.rescale"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pylayers.mobility.trajectory.Trajectories.loadh5.html" title="pylayers.mobility.trajectory.Trajectories.loadh5"
+          <a href="pylayers.mobility.trajectory.Trajectory.generate.html" title="pylayers.mobility.trajectory.Trajectory.generate"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -65,14 +65,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.mobility.trajectory.Trajectories.loadh5.html"
-                        title="previous chapter">pylayers.mobility.trajectory.Trajectories.loadh5</a></p>
+  <p class="topless"><a href="pylayers.mobility.trajectory.Trajectory.generate.html"
+                        title="previous chapter">pylayers.mobility.trajectory.Trajectory.generate</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.mobility.trajectory.Trajectory.__init__.html"
-                        title="next chapter">pylayers.mobility.trajectory.Trajectory.__init__</a></p>
+  <p class="topless"><a href="pylayers.mobility.trajectory.Trajectory.rescale.html"
+                        title="next chapter">pylayers.mobility.trajectory.Trajectory.rescale</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/modules/generated/pylayers.mobility.trajectory.Trajectories.ishow.txt"
+    <li><a href="../../_sources/modules/generated/pylayers.mobility.trajectory.Trajectory.resample.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -96,21 +96,30 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-mobility-trajectory-trajectories-ishow">
-<h1>pylayers.mobility.trajectory.Trajectories.ishow<a class="headerlink" href="#pylayers-mobility-trajectory-trajectories-ishow" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pylayers-mobility-trajectory-trajectory-resample">
+<h1>pylayers.mobility.trajectory.Trajectory.resample<a class="headerlink" href="#pylayers-mobility-trajectory-trajectory-resample" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pylayers.mobility.trajectory.Trajectories.ishow">
-<tt class="descclassname">Trajectories.</tt><tt class="descname">ishow</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/trajectory.html#Trajectories.ishow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectories.ishow" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>interactive show of trajectories</div></blockquote>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">loadh5</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">ishow</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-mobility-trajectory-Trajectories-ishow-1.py">Source code</a>)</p>
+<dt id="pylayers.mobility.trajectory.Trajectory.resample">
+<tt class="descclassname">Trajectory.</tt><tt class="descname">resample</tt><big>(</big><em>sf=2</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/trajectory.html#Trajectory.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.resample" title="Permalink to this definition">¶</a></dt>
+<dd><p>resample trajectory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sf</strong> : int</p>
+<blockquote>
+<div><p>sampling factor</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>T</strong> : Trajectory</p>
+<blockquote class="last">
+<div><p>resampled trajectory</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -131,10 +140,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.mobility.trajectory.Trajectory.__init__.html" title="pylayers.mobility.trajectory.Trajectory.__init__"
+          <a href="pylayers.mobility.trajectory.Trajectory.rescale.html" title="pylayers.mobility.trajectory.Trajectory.rescale"
              >next</a> |</li>
         <li class="right" >
-          <a href="pylayers.mobility.trajectory.Trajectories.loadh5.html" title="pylayers.mobility.trajectory.Trajectories.loadh5"
+          <a href="pylayers.mobility.trajectory.Trajectory.generate.html" title="pylayers.mobility.trajectory.Trajectory.generate"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>

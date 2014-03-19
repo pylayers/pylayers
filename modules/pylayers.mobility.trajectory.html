@@ -132,6 +132,47 @@
 </div>
 <div class="section" id="trajectory-class">
 <h2>Trajectory Class<a class="headerlink" href="#trajectory-class" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.__init__.html#pylayers.mobility.trajectory.Trajectory.__init__" title="pylayers.mobility.trajectory.Trajectory.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.__init__</span></tt></a>([df,&nbsp;ID,&nbsp;name,&nbsp;typ])</td>
+<td>initialization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.__repr__.html#pylayers.mobility.trajectory.Trajectory.__repr__" title="pylayers.mobility.trajectory.Trajectory.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.update.html#pylayers.mobility.trajectory.Trajectory.update" title="pylayers.mobility.trajectory.Trajectory.update"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.update</span></tt></a>()</td>
+<td>update class member data</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.generate</span></tt>((ID=1[,&nbsp;name,&nbsp;t])</td>
+<td>Generate a trajectroy from a numpy array   :Parameters:      <strong>pt</strong> : np.ndarray:          (npt x x x y)         with             npt : number of samples             x : x values             y : y values      <strong>t = np.ndarray</strong> :           (1 x npt)               <strong>unit</strong> : str          time unity (&#8216;s&#8217;|&#8217;ns&#8217;,...)  ..</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.resample.html#pylayers.mobility.trajectory.Trajectory.resample" title="pylayers.mobility.trajectory.Trajectory.resample"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.resample</span></tt></a>([sf])</td>
+<td>resample trajectory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.rescale.html#pylayers.mobility.trajectory.Trajectory.rescale" title="pylayers.mobility.trajectory.Trajectory.rescale"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.rescale</span></tt></a>([speedkmph])</td>
+<td>same length but specified speed</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.replay.html#pylayers.mobility.trajectory.Trajectory.replay" title="pylayers.mobility.trajectory.Trajectory.replay"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.replay</span></tt></a>([fig,&nbsp;ax,&nbsp;Nlabels,&nbsp;typ,&nbsp;...])</td>
+<td>replay a trajectory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.distance.html#pylayers.mobility.trajectory.Trajectory.distance" title="pylayers.mobility.trajectory.Trajectory.distance"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.distance</span></tt></a>(tk)</td>
+<td>recover distance at time tk</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.space.html#pylayers.mobility.trajectory.Trajectory.space" title="pylayers.mobility.trajectory.Trajectory.space"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.space</span></tt></a>([ndim])</td>
+<td>extract space information</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.time.html#pylayers.mobility.trajectory.Trajectory.time" title="pylayers.mobility.trajectory.Trajectory.time"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.time</span></tt></a>([unit])</td>
+<td>extract time</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.mobility.trajectory.Trajectory.plot.html#pylayers.mobility.trajectory.Trajectory.plot" title="pylayers.mobility.trajectory.Trajectory.plot"><tt class="xref py py-obj docutils literal"><span class="pre">Trajectory.plot</span></tt></a>([fig,&nbsp;ax,&nbsp;Nlabels,&nbsp;typ,&nbsp;L])</td>
+<td>plot trajectory</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="utility-functions">
 <h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
