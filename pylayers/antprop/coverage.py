@@ -63,11 +63,12 @@ class Coverage(object):
         tx    : transmitter position
         txpe  : transmitter power emmission level
         show  : boolean for automatic display power map
+        na : number of access point
 
     """
 
 
-    def __init__(self,_fileini='coverage-new.ini'):
+    def __init__(self,_fileini='coverage.ini'):
         """
 
         Parameters
@@ -124,8 +125,8 @@ class Coverage(object):
                 self.ptdbm = ap['PtdBm']
         # 1 x na
         self.ptdbm = self.ptdbm.T
-        # number of access points
 
+        # number of access points
         self.na = len(self.dap)
 
 
@@ -648,11 +649,20 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-    def show(self,typ='sinr',grid=False,f=0,a=-1,dB=True):
+    def show(self,**kwargs):
         """ show coverage
 
         Parameters
         ----------
+
+        typ : string
+            'pr' | 'sinr'
+        grid : boolean
+        f : int
+            frequency index
+        a : int
+            access point index (-1 all access point)
+
 
         Examples
         --------
@@ -667,13 +677,33 @@ class Coverage(object):
             >>> plt.show()
 
         """
-        fig = plt.figure()
-        fig,ax=self.L.showGs(fig=fig)
+        defaults = { 'typ': 'pr',
+                     'grid': False,
+                     'f' :0,
+                     'a' :-1,
+                     'dB':True,
+                    'cmap' :cm.jet
+                   }
 
-        if grid:
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
+        if 'fig' in kwargs:
+            fig,ax=self.L.showGs(fig=kwargs['fig'])
+        else:
+            fig,ax=self.L.showGs()
+
+        # plot the grid
+        if kwargs['grid']:
             for k in self.dap:
                 p = self.dap[k].p
                 ax.plot(p[0],p[1],'or')
+
+        f = kwargs['f']
+        a = kwargs['a']
+        typ = kwargs['typ']
+        dB = kwargs['dB']
 
         # setting the grid
 
@@ -684,32 +714,63 @@ class Coverage(object):
 
         if typ =='sinr':
             title = 'SINR : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
-            legcb = 'dB'
+            if dB:
+                legcb = 'dB'
+            else:
+                legcb = 'Linear scale'
             V = self.SINR
 
         if typ =='pr':
             title = 'Pr : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
-            legcb = 'dBm'
+            if dB:
+                legcb = 'dBm'
+            else:
+                lgdcb = 'mW'
             V = self.CmW
 
+        if typ =='loss':
+            title = 'Loss : '+' f = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+            if dB:
+                legcb = 'dB'
+            else:
+                legcb = 'Linear scale'
+
+            V = self.L
+
         if a == -1:
-            V = np.max(V[f,:,:],axis=1)
-            vmax = V.max()
+            if typ in ['sinr','pr']:
+                V = np.max(V[f,:,:],axis=1)
+            else:
+                V = np.min(V[f,:,:],axis=1)
         else:
             V = V[f,:,a]
 
+        # reshaping the data on the grid
         U = V.reshape((self.nx,self.ny)).T
         if dB:
             U = 10*np.log10(U)
-        vmin = U.min()
-        vmax = U.max()
+
+        if 'vmin' in kwargs:
+            vmin = kwargs['vmin']
+        else:
+            vmin = U.min()
+
+        if 'vmax' in kwargs:
+            vmax = kwargs['vmax']
+        else:
+            vmax = U.max()
+
         img = ax.imshow(U,
                         extent=(l,r,b,t),
                         origin='lower',
                         vmin = vmin,
-                        vmax = vmax)
+                        vmax = vmax,
+                        cmap = kwargs['cmap'])
 
         ax.scatter(self.pa[0,:],self.pa[1,:],s=10,c='k',linewidth=0)
+
+        for k in range(self.na):
+            ax.annotate(str(k),xy=(self.pa[0,k],self.pa[1,k]))
         ax.set_title(title)
 
         divider = make_axes_locatable(ax)
@@ -753,7 +814,9 @@ class Coverage(object):
 
         Lo = self.freespace+self.Lwo
         Lp = self.freespace+self.Lwp
+
         # orthogonal polarization
+
         if polar=='o':
             cov = ax.imshow(Lo.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
