@@ -3179,18 +3179,18 @@ class Layout(object):
         if (len(sh1)<2) & (len(sh2)>1):
             p1 = np.outer(p1,np.ones(sh2[1]))
 
-        if (len(sh2)<2) & (len(sh1)>1):   
+        if (len(sh2)<2) & (len(sh1)>1):
             p2 = np.outer(p2,np.ones(sh1[1]))
 
-        if (len(sh2)<2) & (len(sh1)<2):   
+        if (len(sh2)<2) & (len(sh1)<2):
             p1 = np.outer(p1,np.ones(1))
             p2 = np.outer(p2,np.ones(1))
-       
+
         # 2 x N
         u = p1 - p2
         # 1 x N
         nu = np.sqrt(np.sum(u*u,axis=0))
-        # 2 x N 
+        # 2 x N
         un = u / nu[np.newaxis,:]
 
         seglist = self.seginframe2(p1, p2)
@@ -3212,7 +3212,7 @@ class Layout(object):
 
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
-       
+
         #
         # This part should possibly be improved
         #
