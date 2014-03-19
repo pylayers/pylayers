@@ -100,8 +100,29 @@
 <h1>pylayers.antprop.coverage.Coverage.show<a class="headerlink" href="#pylayers-antprop-coverage-coverage-show" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.coverage.Coverage.show">
-<tt class="descclassname">Coverage.</tt><tt class="descname">show</tt><big>(</big><em>typ='sinr'</em>, <em>grid=False</em>, <em>f=0</em>, <em>a=-1</em>, <em>dB=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/coverage.html#Coverage.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Coverage.</tt><tt class="descname">show</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/coverage.html#Coverage.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show coverage</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote>
+<div><p>&#8216;pr&#8217; | &#8216;sinr&#8217;</p>
+</div></blockquote>
+<p><strong>grid</strong> : boolean</p>
+<p><strong>f</strong> : int</p>
+<blockquote>
+<div><p>frequency index</p>
+</div></blockquote>
+<p><strong>a</strong> : int</p>
+<blockquote class="last">
+<div><p>access point index (-1 all access point)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
@@ -151,7 +172,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 16, 2014.
+      Last updated on mars 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
