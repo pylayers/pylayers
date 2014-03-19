@@ -388,7 +388,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">scipy.io</span> <span class="kn">as</span> <span class="nn">ios</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">cspline1d</span><span class="p">,</span> <span class="n">cspline1d_eval</span><span class="p">,</span> <span class="n">iirfilter</span><span class="p">,</span> <span class="n">iirdesign</span><span class="p">,</span> <span class="n">lfilter</span><span class="p">,</span> <span class="n">firwin</span> <span class="p">,</span> <span class="n">correlate</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">mixture</span>
+<span class="c">#from sklearn import mixture</span>
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">st</span>
 
 
@@ -397,15 +397,13 @@
 
 <span class="sd">    This class gathers a 1D signal and its axis indexation.</span>
 
-<span class="sd">    This class offers a transparent back and forth mechanism between time and frequency domain.</span>
-
 <span class="sd">    The x base is not necessarily uniform</span>
 
 <span class="sd">    x can have 1 or two axis</span>
 
 <span class="sd">    The first axis of x and y have the same length</span>
 
-<span class="sd">    By construction len(y):=len(x), len(x) takes priority in case of observed conflict</span>
+<span class="sd">    By construction shape(y)[1] :=len(x), len(x) takes priority in case of observed conflict</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -418,7 +416,6 @@
 <span class="sd">        x : ndarray (,Nx)</span>
 <span class="sd">            time or frequency axis</span>
 
-<span class="sd">        x : ndarray</span>
 <span class="sd">        y : ndarray</span>
 <span class="sd">            values  (Nx,Ny)</span>
 
@@ -470,6 +467,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">O</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">O</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
         <span class="n">O</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">O</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">O</span><span class="p">)</span>
 </div>
@@ -4847,7 +4845,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 16, 2014.
+      Last updated on mars 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

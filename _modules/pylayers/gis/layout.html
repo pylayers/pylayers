@@ -3217,6 +3217,131 @@
 
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
+    <span class="k">def</span> <span class="nf">angleonlink3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span> <span class="n">p2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">])):</span>
+        <span class="sd">&quot;&quot;&quot; angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        p1 : np.array (2 x Np) or (2,)</span>
+<span class="sd">        p2 : np.array (2 x Np) or (2,)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        seglist : list</span>
+<span class="sd">                  list of segment number on the link</span>
+<span class="sd">        angle   : angle (in radians) between segment and LOS axis</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p1 = np.array([0,0,1])</span>
+<span class="sd">        &gt;&gt;&gt; p2 = np.array([10,3,2])</span>
+<span class="sd">        &gt;&gt;&gt; alpha = L.angleonlink3(p1,p2)</span>
+
+<span class="sd">        #array([(0, 141, 1.2793395519256592), (0, 62, 0.29145678877830505),</span>
+<span class="sd">               (0, 65, 0.29145678877830505)],</span>
+<span class="sd">              dtype=[(&#39;i&#39;, &#39;&lt;i8&#39;), (&#39;s&#39;, &#39;&lt;i8&#39;), (&#39;a&#39;, &#39;&lt;f4&#39;)])</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sh1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+        <span class="n">sh2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">sh1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">sh2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">3</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh2</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh1</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="c"># 3 x N</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">-</span> <span class="n">p2</span>
+        <span class="c"># 1 x N</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="c"># 3 x N</span>
+        <span class="n">un</span> <span class="o">=</span> <span class="n">u</span> <span class="o">/</span> <span class="n">nu</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+
+        <span class="n">seglist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seginframe2</span><span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">upos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">seglist</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">uneg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">seglist</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">nNLOS</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">uneg</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+        <span class="c"># retrieve the number of segments per link</span>
+        <span class="k">if</span> <span class="n">nNLOS</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">llink</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">uneg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">uneg</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">seglist</span><span class="p">)])))</span><span class="o">-</span><span class="n">uneg</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">llink</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">seglist</span><span class="p">)])</span>
+        <span class="c"># [(link id,number of seg),...]</span>
+        <span class="c">#nl = zip(np.arange(nlink),llink)</span>
+
+        <span class="n">npta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">seglist</span><span class="p">[</span><span class="n">upos</span><span class="p">]]</span>
+        <span class="n">nphe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tahe</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">seglist</span><span class="p">[</span><span class="n">upos</span><span class="p">]]</span>
+
+        <span class="n">Pta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span> <span class="n">npta</span><span class="p">]</span>
+        <span class="n">Phe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span> <span class="n">nphe</span><span class="p">]</span>
+
+        <span class="c">#</span>
+        <span class="c"># This part should possibly be improved</span>
+        <span class="c">#</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">nl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">llink</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">P1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p1</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nl</span><span class="p">))))</span>
+                <span class="n">P2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">P2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nl</span><span class="p">))))</span>
+                <span class="n">ilink</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">ilink</span><span class="p">,</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span><span class="n">i</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p1</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nl</span><span class="p">))</span>
+                <span class="n">P2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p2</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nl</span><span class="p">))</span>
+                <span class="n">ilink</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+
+        <span class="c"># check for intersection P1P2 PtaPhe</span>
+        <span class="n">bo</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">P1</span><span class="p">,</span> <span class="n">P2</span><span class="p">,</span> <span class="n">Pta</span><span class="p">,</span> <span class="n">Phe</span><span class="p">)</span>
+
+        <span class="n">upos_intersect</span> <span class="o">=</span> <span class="n">upos</span><span class="p">[</span><span class="n">bo</span><span class="p">]</span>
+
+        <span class="n">seglist2</span> <span class="o">=</span> <span class="n">seglist</span><span class="p">[</span><span class="n">upos_intersect</span><span class="p">]</span>
+        <span class="n">idxlnk</span> <span class="o">=</span> <span class="n">ilink</span><span class="p">[</span><span class="n">upos_intersect</span><span class="p">]</span>
+
+        <span class="c">#</span>
+        <span class="c"># Calculate angle of incidence refered from segment normal</span>
+        <span class="c">#</span>
+
+        <span class="n">norm</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normal</span><span class="p">[:,</span><span class="n">seglist2</span><span class="p">]</span>
+        <span class="c"># vector along the link</span>
+        <span class="n">uu</span> <span class="o">=</span> <span class="n">un</span><span class="p">[:,</span><span class="n">idxlnk</span><span class="p">]</span>
+        <span class="n">unn</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">uu</span> <span class="o">*</span> <span class="n">norm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">unn</span><span class="p">)</span>
+
+        <span class="c"># seglist = seglist+1</span>
+        <span class="n">seglist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsg</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="n">seglist2</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seglist</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="s">&#39;i8&#39;</span><span class="p">),(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="s">&#39;i8&#39;</span><span class="p">),(</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+
+        <span class="c">#</span>
+        <span class="c"># update subsegment in seglist</span>
+        <span class="c">#</span>
+        <span class="c"># self.sla</span>
+        <span class="c"># self.lsss</span>
+        <span class="c"># self.stridess</span>
+        <span class="c">#</span>
+        <span class="n">sseglist</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stridess</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lsss</span> <span class="k">else</span> <span class="n">x</span><span class="p">,</span><span class="n">seglist</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">idxlnk</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sseglist</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">angle</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
 <div class="viewcode-block" id="Layout.angleonlink"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.angleonlink.html#pylayers.gis.layout.Layout.angleonlink">[docs]</a>    <span class="k">def</span> <span class="nf">angleonlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">p2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</span>
 
@@ -3258,18 +3383,18 @@
         <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh2</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>   
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh1</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span>   
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh2</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sh1</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
             <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-       
+
         <span class="c"># 2 x N</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">-</span> <span class="n">p2</span>
         <span class="c"># 1 x N</span>
         <span class="n">nu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-        <span class="c"># 2 x N </span>
+        <span class="c"># 2 x N</span>
         <span class="n">un</span> <span class="o">=</span> <span class="n">u</span> <span class="o">/</span> <span class="n">nu</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
         <span class="n">seglist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seginframe2</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">)</span>
@@ -3291,7 +3416,7 @@
 
         <span class="n">Pta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span> <span class="n">npta</span><span class="p">]</span>
         <span class="n">Phe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span> <span class="n">nphe</span><span class="p">]</span>
-       
+
         <span class="c">#</span>
         <span class="c"># This part should possibly be improved</span>
         <span class="c">#</span>
@@ -6964,7 +7089,7 @@
         <span class="k">return</span> <span class="n">pg</span>
 </div>
     <span class="nd">@mlab.show</span>
-<div class="viewcode-block" id="Layout._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._show3.html#pylayers.gis.layout.Layout._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a .off geomview file</span>
 
 <span class="sd">        Parameters</span>
@@ -7184,7 +7309,7 @@
                                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Layout &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
 
-</div>
+
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show3.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
@@ -7595,7 +7720,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 16, 2014.
+      Last updated on mars 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

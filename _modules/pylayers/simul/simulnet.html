@@ -153,6 +153,8 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.save</span> <span class="kn">import</span> <span class="o">*</span>
 
+
+
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -226,6 +228,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Agents =&gt; self.lAg[i]&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">------&#39;</span> 
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Number of agents :&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Agents IDs: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">ID</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))])</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Agents names: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">))])</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Destination of agents choosed: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span><span class="p">[</span><span class="s">&#39;choose_destination&#39;</span><span class="p">]</span>
 
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">Network&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">-------&#39;</span> 
@@ -434,6 +437,29 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span><span class="mf">1.0</span><span class="p">)</span>
 
 </div>
+    <span class="k">def</span> <span class="nf">savepandas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save mechanic in pandas hdf5 format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&quot;filename&quot;</span><span class="p">]),</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">])</span>
+        <span class="n">layfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="n">layfile</span><span class="o">+</span><span class="s">&#39;.h5&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lAg</span> <span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">:</span>
+                <span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">convert_objects</span><span class="p">()</span> <span class="p">)</span> 
+
+            <span class="k">else</span> <span class="p">:</span> <span class="c"># if agent acces point, its position is saved</span>
+                <span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">posdf</span> <span class="p">)</span>
+
+            <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">type</span>
+            <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span>
+            <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
+        <span class="c">#saving metadata</span>
+        <span class="n">store</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+
 <div class="viewcode-block" id="Simul.runsimul"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.runsimul.html#pylayers.simul.simulnet.Simul.runsimul">[docs]</a>    <span class="k">def</span> <span class="nf">runsimul</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Run simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -451,11 +477,7 @@
 
 
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savepd&#39;</span><span class="p">]):</span>
-            <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&quot;filename&quot;</span><span class="p">]),</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">])</span>
-            <span class="n">layfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">store</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="n">layfile</span><span class="o">+</span><span class="s">&#39;.h5&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
-            <span class="p">[</span><span class="n">store</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">a</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">convert_objects</span><span class="p">())</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lAg</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">]</span>    
-            <span class="n">store</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">savepandas</span><span class="p">()</span>
 </div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 
@@ -488,7 +510,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 16, 2014.
+      Last updated on mars 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
