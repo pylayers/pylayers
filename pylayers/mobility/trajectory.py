@@ -13,7 +13,7 @@ Trajectories Class
 Trajectory Class
 ================
 
-.. autosumarry::
+.. autosummary::
     :toctree: generated/
 
     Trajectory.__init__
@@ -259,12 +259,17 @@ class Trajectory(pd.DataFrame):
 
     def __repr__(self):
         try:
+            # total distance
             dtot = self['s'].values[-1]
+            # total time
             T = self.tmax-self.tmin
             st = ''
-            st = st+'t (s) : '+ str(self.tmin)+':'+str(self.tmax)+'\n'
-            st = st+'d (m) : '+ str(dtot)+'\n'
-            st = st+'Vmoy (m/s) : '+ str(dtot/T)+'\n'
+            st = st + 'Agent : '+ self.name + ': \n'
+            st = st + "ID : " + str(self.ID)+'\n'
+            st = st + '---'+'\n'
+            st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'
+            st = st+'dtot (m) : '+ str("%3.2f" %dtot)+'\n'
+            st = st+'Vmoy (m/s) : '+ str("%3.2f" % (dtot/T))+'\n'
         except:
             st = 'void Trajectory'
         return(st)
@@ -307,9 +312,10 @@ class Trajectory(pd.DataFrame):
             return False
 
 
-    def generate(self,ID = 1, name = '',t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
+    #def generate(self,ID = 1, name = '',t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
+    def generate(self,**kwargs):
         """
-        Generate a trajectroy from a numpy array
+        Generate a trajectory from a numpy array
 
         Parameters
         ----------
@@ -322,6 +328,10 @@ class Trajectory(pd.DataFrame):
                 y : y values
         t = np.ndarray
             (1 x npt)
+
+        Id : Agent Id
+
+        name : Agent Name
 
         unit : str
             time unity ('s'|'ns',...)
@@ -338,10 +348,24 @@ class Trajectory(pd.DataFrame):
             >>> traj.plot()
 
 
+
         """
+        defaults  = { 'ID': 1,
+                     'name' : 'MyNameIsNoBody',
+                     't' : np.linspace(0,10,50),
+                     'pt' : np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,
+                     'unit' : 's',
+                     'sf' : 1
+                    }
+
+        for k in defaults:
+            kwargs[k] = defaults[k]
+
+        t = kwargs['t']
+        pt = kwargs['pt']
 
         npt = len(t)
-        td = pd.to_datetime(t,unit=unit)
+        td = pd.to_datetime(t,unit=kwargs['unit'])
         # velocity vector
         v = (pt[1:,:]-pt[0:-1,:])/(t[1]-t[0])
         # acceleration vector
@@ -364,8 +388,10 @@ class Trajectory(pd.DataFrame):
             'az':a[:,2],
             's':s[:-1]}
         super(Trajectory,self).__init__(df,columns=['x','y','z','vx','vy','vz','ax','ay','az','s'],index=td[:-2])
-        self.ID = ID
-        self.name = name
+
+        self.ID = kwargs['ID']
+        self.name = kwargs['name']
+
         self.update()
         return self
 
@@ -439,13 +465,16 @@ class Trajectory(pd.DataFrame):
         Parameters
         ----------
 
-        tk :
+        tk : float
+            time value in seconds
 
         Example
         -------
 
         >>> from pylayers.mobility.trajectory import *
-        >>> bc = body.Body()
+        >>> T = Trajectory()
+        >>> T.generate()
+        >>> T.distance(2)
 
         """
         t = self.time()
