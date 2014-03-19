@@ -1,0 +1,31 @@
+{"ieee80211ah": 
+    {"smhz": 2, 
+    "bmhz": 1, 
+    "modulation": "ofdm", 
+    "crate": "[1/2.2/3.,3/4]",
+    "bandname": "80211ah", 
+    "gmhz": 0}, 
+"ieee80211b": 
+    {"smhz": 5, 
+    "bmhz": 20,
+    "modulation": "dsss", 
+    "crate": "[1/2, 2/3, 3/4}", 
+    "gmhz": 2},
+"bluetooth": {
+    "smhz": 1, 
+    "bmhz": 1,
+    "crate": "[1/2, 2/3, 3/4}", 
+    "bandname": "ISM24-1", 
+    "powerdbm": {
+                "Class1": { "PmaxdBm":20,
+                            "PmindBm":0,
+                            "PstepdBm":1},
+                "Class2": { "PmaxdBm":4,
+                            "PmindBm":-6,
+                            "PstepdBm":1},
+                "Class3": { "PmaxdBm":0,
+                            "PmindBm":0,
+                             "PstepdBm":0}
+                 }
+     }
+}     
