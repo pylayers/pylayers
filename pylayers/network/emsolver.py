@@ -204,7 +204,7 @@ class EMSolver(object):
             if len(e) > 0:
 
                 lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
-                # MW is 2D only now. 
+                # MW is 2D only now.
                 # This explain the following licenses
                 lp = lp[:,:,:2]
                 dim = lp.shape[2]
@@ -226,7 +226,7 @@ class EMSolver(object):
                     for i in range(lpa-1):
                         # excess time of flight + losses computation
                         #
-                        # Losst returns 4 parameters  
+                        # Losst returns 4 parameters
                         #   Lo Lp Edo Edp
                         #
                         #
@@ -236,7 +236,6 @@ class EMSolver(object):
 
                         frees=np.hstack((frees,mw.PL(np.array([model.f]),pa[i+1:lpa,:dim].T,pa[i,:dim].reshape(2,1),model.rssnp)[0] ))
                         # Pr.extend(lepwr - MW[0] - frees)
-                       
                         # WARNING : only one polarization is taken into
                         # account here
                         # save losses computation

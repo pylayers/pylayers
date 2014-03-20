@@ -39,7 +39,6 @@ AP Class
 
      AP.__init__
      AP.__repr__
-     AP.upfstd
      AP.load
 
 """
@@ -334,7 +333,7 @@ class AP(dict):
         defaults = { 'p' : np.array([0,0,1.2]),
             'name': 'default',
             'wstd': 'ieee80211b',
-            'channels':[11],
+            'chan':[11],
             'PtdBm':0,
             'sensdBm': -94,
             'nant':1,
@@ -347,7 +346,7 @@ class AP(dict):
         self['name'] = kwargs['name']
         self['p'] = kwargs['p']
         self['PtdBm'] = kwargs['PtdBm']
-        self['channels'] = kwargs['channels']
+        self['chan'] = kwargs['chan']
         self['sensdBm'] = kwargs['sensdBm']
         self['nant'] = kwargs['nant']
 
@@ -362,8 +361,8 @@ class AP(dict):
         st = 'name : '+str(self['name'])+'\n'
         st = st + 'p : '+str(self['p'])+'\n'
         st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
-        st = st+ 'channels  : '+str(self['channels'])+'   '
-        for k in self['channels']:
+        st = st+ 'chanels  : '+str(self['chan'])+'   '
+        for k in self['chan']:
            st = st + self.s.chan[k].__repr__()
         st = st+ 'sensdBm : '+str(self['sensdBm'])+'\n'
         st = st+ 'nant : '+str(self['nant'])+'\n'
