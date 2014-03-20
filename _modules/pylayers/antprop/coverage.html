@@ -89,6 +89,8 @@
 <span class="sd">    Coverage.__repr__</span>
 <span class="sd">    Coverage.creategrid</span>
 <span class="sd">    Coverage.cover</span>
+<span class="sd">    Coverage.sinr</span>
+<span class="sd">    Coverage.best</span>
 <span class="sd">    Coverage.show</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -781,13 +783,14 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        typ : string</span>
-<span class="sd">            &#39;pr&#39; | &#39;sinr&#39;</span>
+<span class="sd">            &#39;pr&#39; | &#39;sinr&#39; | &#39;capacity&#39; | &#39;loss&#39; | &#39;best&#39;</span>
 <span class="sd">        grid : boolean</span>
+<span class="sd">        best : boolean</span>
+<span class="sd">            draw best server contour if True</span>
 <span class="sd">        f : int</span>
 <span class="sd">            frequency index</span>
 <span class="sd">        a : int</span>
 <span class="sd">            access point index (-1 all access point)</span>
-
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -813,8 +816,8 @@
                      <span class="s">&#39;f&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                      <span class="s">&#39;a&#39;</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
                      <span class="s">&#39;db&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                    <span class="s">&#39;cmap&#39;</span> <span class="p">:</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">,</span>
-                    <span class="s">&#39;best&#39;</span><span class="p">:</span><span class="bp">True</span>
+                     <span class="s">&#39;cmap&#39;</span> <span class="p">:</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">,</span>
+                     <span class="s">&#39;best&#39;</span><span class="p">:</span><span class="bp">True</span>
                    <span class="p">}</span>
 
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="o">+</span> <span class="s">&#39; : &#39;</span>
