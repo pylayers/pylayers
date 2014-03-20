@@ -128,7 +128,6 @@ class Coverage(object):
         # number of access points
         self.na = len(self.dap)
 
-
         # creating all links
         p = product(range(self.ng),range(self.na))
         #
@@ -168,13 +167,16 @@ class Coverage(object):
         self.temperaturek = eval(self.rxopt['temperaturek'])
         self.noisefactordb = eval(self.rxopt['noisefactordb'])
 
+        # list of access points
         lap  = self.dap.keys()
+        # list of channels
         lchan = map(lambda x: self.dap[x]['chan'],lap)
+
         apchan = zip(self.dap.keys(),lchan)
-        bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]]['BMHz']*len(x[1]),apchan))
+        self.bmhz = np.array(map(lambda x: self.dap[x[0]].s.chan[x[1][0]]['BMHz']*len(x[1]),apchan))
         # Evaluate Noise Power (in dBm)
 
-        Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*bmhz*1e3
+        Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bmhz*1e3
         self.pndbm = 10*np.log10(Pn)+60
 
         # show section
@@ -297,7 +299,7 @@ class Coverage(object):
 #        self.snro = self.prdbmo - self.pndbm
 #        self.snrp = self.prdbmp - self.pndbm
 
-    def cover(self,polar='o',sinr=True,best=True):
+    def cover(self,polar='o',sinr=True,snr=True,best=True):
         """ run the sinr coverage calculation
 
         Parameters
@@ -372,10 +374,20 @@ class Coverage(object):
         # CmW : Received Power coverage in mW
         self.CmW = 10**(self.ptdbm[np.newaxis,...]/10.)*self.Lw*self.freespace
 
+        if snr:
+            self.snr()
         if sinr:
             self.sinr()
         if best:
             self.best()
+
+    def snr(self):
+        """ calculate snr
+        """
+
+        NmW = 10**(self.pndbm/10.)[np.newaxis,np.newaxis,:]
+
+        self.snr = self.CmW/NmW
 
     def sinr(self):
         """ calculate sinr
@@ -383,14 +395,13 @@ class Coverage(object):
 
         na = self.na
 
-
         U = (np.ones((na,na))-np.eye(na))[np.newaxis,np.newaxis,:,:]
 
         ImW = np.einsum('ijkl,ijl->ijk',U,self.CmW)
 
         NmW = 10**(self.pndbm/10.)[np.newaxis,np.newaxis,:]
 
-        self.SINR = self.CmW/(ImW+NmW)
+        self.sinr = self.CmW/(ImW+NmW)
 
     def best(self):
         """ determine best server map
@@ -774,7 +785,23 @@ class Coverage(object):
                     legcb = 'dB'
                 else:
                     legcb = 'Linear scale'
-                V = self.SINR
+                V = self.sinr
+
+            if typ=='snr':
+                title = title + 'SNR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                if dB:
+                    legcb = 'dB'
+                else:
+                    legcb = 'Linear scale'
+                V = self.snr
+
+            if typ=='capacity':
+                title = title + 'Capacity : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+                if dB:
+                    legcb = ''
+                else:
+                    legcb = 'Mbit/s'
+                V = self.bmhz[np.newaxis,np.newaxis,:]*np.log(1+self.sinr)/np.log(2)
 
             if typ=='pr':
                 title = title + 'Pr : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
