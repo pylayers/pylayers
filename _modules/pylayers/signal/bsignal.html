@@ -4516,8 +4516,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Noise.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.__init__.html#pylayers.signal.bsignal.Noise.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tobs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fe</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">DSPdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span> <span class="n">NF</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        Tobs      : Time duration</span>
 <span class="sd">        fe        : sampling frequency</span>
 <span class="sd">        DSPdBmpHz : Power Spectral Density Noise (dBm/Hz)</span>
@@ -4525,6 +4527,7 @@
 <span class="sd">        NF        : 0</span>
 <span class="sd">        R         : 50</span>
 <span class="sd">        seed      : []</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">TUsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">DSPdBmpHz</span> <span class="o">+</span> <span class="n">NF</span>

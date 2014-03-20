@@ -207,7 +207,6 @@
         <span class="c"># number of access points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">na</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">)</span>
 
-
         <span class="c"># creating all links</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">na</span><span class="p">))</span>
         <span class="c">#</span>
@@ -242,14 +241,21 @@
 
         <span class="c"># receiver section</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;sensitivity&#39;</span><span class="p">])</span>
+
         <span class="n">kBoltzmann</span> <span class="o">=</span> <span class="mf">1.3806503e-23</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bandwidthmhz</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;bandwidthmhz&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;temperaturek&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rxopt</span><span class="p">[</span><span class="s">&#39;noisefactordb&#39;</span><span class="p">])</span>
 
+        <span class="c"># list of access points</span>
+        <span class="n">lap</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="c"># list of channels</span>
+        <span class="n">lchan</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s">&#39;chan&#39;</span><span class="p">],</span><span class="n">lap</span><span class="p">)</span>
+
+        <span class="n">apchan</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">lchan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">chan</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;BMHz&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">apchan</span><span class="p">))</span>
         <span class="c"># Evaluate Noise Power (in dBm)</span>
 
-        <span class="n">Pn</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">kBoltzmann</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bandwidthmhz</span><span class="o">*</span><span class="mf">1e3</span>
+        <span class="n">Pn</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noisefactordb</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">kBoltzmann</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">temperaturek</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="o">*</span><span class="mf">1e3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Pn</span><span class="p">)</span><span class="o">+</span><span class="mi">60</span>
 
         <span class="c"># show section</span>
@@ -264,7 +270,6 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
-
 
 </div>
 <div class="viewcode-block" id="Coverage.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.__repr__.html#pylayers.antprop.coverage.Coverage.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -373,7 +378,7 @@
 <span class="c">#        self.snro = self.prdbmo - self.pndbm</span>
 <span class="c">#        self.snrp = self.prdbmp - self.pndbm</span>
 </div>
-<div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.cover.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    <span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.cover.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    <span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">sinr</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">snr</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">best</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run the sinr coverage calculation</span>
 
 <span class="sd">        Parameters</span>
@@ -448,14 +453,47 @@
         <span class="c"># CmW : Received Power coverage in mW</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="o">...</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Lw</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">freespace</span>
 
+        <span class="k">if</span> <span class="n">snr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">snr</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">sinr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sinr</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">best</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">snr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate snr</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">NmW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">/</span><span class="mf">10.</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">snr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="o">/</span><span class="n">NmW</span>
+
+    <span class="k">def</span> <span class="nf">sinr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate sinr</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">na</span>
+
         <span class="n">U</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">na</span><span class="p">,</span><span class="n">na</span><span class="p">))</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">na</span><span class="p">))[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:]</span>
 
         <span class="n">ImW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ijkl,ijl-&gt;ijk&#39;</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="p">)</span>
 
-        <span class="n">NmW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+        <span class="n">NmW</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="o">/</span><span class="mf">10.</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">SINR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="o">/</span><span class="p">(</span><span class="n">ImW</span><span class="o">+</span><span class="n">NmW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sinr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span><span class="o">/</span><span class="p">(</span><span class="n">ImW</span><span class="o">+</span><span class="n">NmW</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">best</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; determine best server map</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        C.bestsv</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">na</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">na</span>
+        <span class="n">ng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ng</span>
+        <span class="n">nf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nf</span>
         <span class="c"># find best server regions</span>
         <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CmW</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bestsv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nf</span><span class="o">*</span><span class="n">ng</span><span class="o">*</span><span class="n">na</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="n">ng</span><span class="p">,</span><span class="n">na</span><span class="p">)</span>
@@ -735,7 +773,7 @@
 <span class="c">#        fig.colorbar(cov,cax)</span>
 <span class="c">#        if self.show:</span>
 <span class="c">#            plt.show()</span>
-<span class="c">#</span></div>
+<span class="c">#</span>
 <div class="viewcode-block" id="Coverage.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.show.html#pylayers.antprop.coverage.Coverage.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show coverage</span>
 
@@ -826,7 +864,23 @@
                     <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;dB&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Linear scale&#39;</span>
-                <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SINR</span>
+                <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sinr</span>
+
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;snr&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;SNR : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">polar</span>
+                <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;dB&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Linear scale&#39;</span>
+                <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">snr</span>
+
+            <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;capacity&#39;</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;Capacity : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">polar</span>
+                <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Mbit/s&#39;</span>
+                <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">sinr</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;pr&#39;</span><span class="p">:</span>
                 <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;Pr : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">polar</span>
