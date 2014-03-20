@@ -75,21 +75,19 @@ engineers and scientists out there, interested by the PyLayers endeavour
 curious to have a try, which will provide feed back and will contribute to
 the necessary continuous improvement of the PyLayers platform.
 
-So, if you see any wrong assertion or have seen any thing that could be
-improved, please do not hesitate to provide a feed back on the `issues
+So, if you see any wrong assertion or have any suggestion 
+please do not hesitate to provide a feed back on the `issues
 page of the
 project <https://github.com/pylayers/pylayers/issues?milestone=1&state=open>`__
 
-If you find any bug, please keep preciously track of it in a notebook
+If you find a bug, please keep track of it in a notebook
 and ``gist`` it and send the link on the issues page.
 
-PyLayers's developers are not experts in computer science,
-but they are keen to learn more simple and efficient (== pythonic)
-manners to do things. So any feedback from advanced Python users is more
-than welcome for any suggestions of improvement about the source code.
+Any feedback from users is more than welcome for any suggestions of
+improvement about the source code.
 
-If you have any interest to be involved and participate to the
-``PyLayers`` journey, the best way is to open a ``github`` account and
+If you have any interest to be involved and to participate to the
+``PyLayers`` project, the best way is to open a ``github`` account and
 to fork the project on your own machine. Use PyLayers for your own
 needs, and if you wish provide feedback to the project with a **pull
 request**.

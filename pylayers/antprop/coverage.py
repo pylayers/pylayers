@@ -10,6 +10,8 @@ Class Coverage
     Coverage.__repr__
     Coverage.creategrid
     Coverage.cover
+    Coverage.sinr
+    Coverage.best
     Coverage.show
 
 """
@@ -702,13 +704,14 @@ class Coverage(object):
         ----------
 
         typ : string
-            'pr' | 'sinr'
+            'pr' | 'sinr' | 'capacity' | 'loss' | 'best'
         grid : boolean
+        best : boolean
+            draw best server contour if True
         f : int
             frequency index
         a : int
             access point index (-1 all access point)
-
 
         Examples
         --------
@@ -734,8 +737,8 @@ class Coverage(object):
                      'f' : 0,
                      'a' :-1,
                      'db':True,
-                    'cmap' :cm.jet,
-                    'best':True
+                     'cmap' :cm.jet,
+                     'best':True
                    }
 
         title = self.dap[0].s.name+ ' : '
@@ -769,7 +772,7 @@ class Coverage(object):
         t = self.grid[-1,-1]
 
         if typ=='best':
-            title = title+ 'Best server'+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
+            title = title + 'Best server'+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
             for ka in range(self.na):
                 bestsv =  self.bestsv[f,:,ka]
                 m = np.ma.masked_where(bestsv == 0,bestsv)
@@ -778,6 +781,7 @@ class Coverage(object):
                             origin='lower',
                             vmin=1,
                             vmax=self.na+1)
+            ax.set_title(title)
         else:
             if typ=='sinr':
                 title = title + 'SINR : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
