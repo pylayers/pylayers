@@ -88,7 +88,6 @@
 <span class="sd">    Coverage.__init__</span>
 <span class="sd">    Coverage.__repr__</span>
 <span class="sd">    Coverage.creategrid</span>
-<span class="sd">    Coverage.coverold</span>
 <span class="sd">    Coverage.cover</span>
 <span class="sd">    Coverage.show</span>
 
@@ -316,63 +315,63 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)))))</span>
 
 
-</div>
-<div class="viewcode-block" id="Coverage.coverold"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.coverold.html#pylayers.antprop.coverage.Coverage.coverold">[docs]</a>    <span class="k">def</span> <span class="nf">coverold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; run the coverage calculation (Deprecated)</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        lay_bound : bool</span>
-<span class="sd">            If True, the coverage is performed only inside the Layout</span>
-<span class="sd">            and clip the values of the grid chosen in coverage.ini</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt;&gt; from pylayers.antprop.coverage import *</span>
-<span class="sd">            &gt;&gt; C = Coverage()</span>
-<span class="sd">            &gt;&gt; C.cover()</span>
-<span class="sd">            &gt;&gt; C.showPower()</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        self.fGHz is an array it means that coverage is calculated at once</span>
-<span class="sd">        for a whole set of frequencies. In practice the center frequency of a</span>
-<span class="sd">        given standard channel.</span>
-
-<span class="sd">        This function is calling `Losst` which calculates Losses along a</span>
-<span class="sd">        straight path. In a future implementation we will</span>
-<span class="sd">        abstract the EM solver in order to make use of other calculation</span>
-<span class="sd">        approaches as full or partial Ray Tracing.</span>
-
-<span class="sd">        The following members variables are evaluated :</span>
-
-<span class="sd">        + freespace Loss @ fGHz   PL()  PathLoss (shoud be rename FS as free space) $</span>
-<span class="sd">        + prdbmo : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{odB}`</span>
-<span class="sd">        + prdbmp : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{pdB}`</span>
-<span class="sd">        + snro : SNR polar o (H)</span>
-<span class="sd">        + snrp : SNR polar p (H)</span>
-
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        pylayers.antprop.multiwall.Losst</span>
-<span class="sd">        pylayers.antprop.multiwall.PL</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edo</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edp</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">snro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">snrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
+<span class="c">#    def coverold(self):</span>
+<span class="c">#        &quot;&quot;&quot; run the coverage calculation (Deprecated)</span>
+<span class="c">#</span>
+<span class="c">#        Parameters</span>
+<span class="c">#        ----------</span>
+<span class="c">#</span>
+<span class="c">#        lay_bound : bool</span>
+<span class="c">#            If True, the coverage is performed only inside the Layout</span>
+<span class="c">#            and clip the values of the grid chosen in coverage.ini</span>
+<span class="c">#</span>
+<span class="c">#        Examples</span>
+<span class="c">#        --------</span>
+<span class="c">#</span>
+<span class="c">#        .. plot::</span>
+<span class="c">#            :include-source:</span>
+<span class="c">#</span>
+<span class="c">#            &gt;&gt; from pylayers.antprop.coverage import *</span>
+<span class="c">#            &gt;&gt; C = Coverage()</span>
+<span class="c">#            &gt;&gt; C.cover()</span>
+<span class="c">#            &gt;&gt; C.showPower()</span>
+<span class="c">#</span>
+<span class="c">#        Notes</span>
+<span class="c">#        -----</span>
+<span class="c">#</span>
+<span class="c">#        self.fGHz is an array it means that coverage is calculated at once</span>
+<span class="c">#        for a whole set of frequencies. In practice the center frequency of a</span>
+<span class="c">#        given standard channel.</span>
+<span class="c">#</span>
+<span class="c">#        This function is calling `Losst` which calculates Losses along a</span>
+<span class="c">#        straight path. In a future implementation we will</span>
+<span class="c">#        abstract the EM solver in order to make use of other calculation</span>
+<span class="c">#        approaches as full or partial Ray Tracing.</span>
+<span class="c">#</span>
+<span class="c">#        The following members variables are evaluated :</span>
+<span class="c">#</span>
+<span class="c">#        + freespace Loss @ fGHz   PL()  PathLoss (shoud be rename FS as free space) $</span>
+<span class="c">#        + prdbmo : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{odB}`</span>
+<span class="c">#        + prdbmp : Received power in dBm .. math:`P_{rdBm} =P_{tdBm} - L_{pdB}`</span>
+<span class="c">#        + snro : SNR polar o (H)</span>
+<span class="c">#        + snrp : SNR polar p (H)</span>
+<span class="c">#</span>
+<span class="c">#        See Also</span>
+<span class="c">#        --------</span>
+<span class="c">#</span>
+<span class="c">#        pylayers.antprop.multiwall.Losst</span>
+<span class="c">#        pylayers.antprop.multiwall.PL</span>
+<span class="c">#</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        self.Lwo,self.Lwp,self.Edo,self.Edp = mw.Losst(self.L,self.fGHz,self.grid.T,self.tx)</span>
+<span class="c">#        self.freespace = mw.PL(self.fGHz,self.grid,self.tx)</span>
+<span class="c">#</span>
+<span class="c">#        self.prdbmo = self.ptdbm - self.freespace - self.Lwo</span>
+<span class="c">#        self.prdbmp = self.ptdbm - self.freespace - self.Lwp</span>
+<span class="c">#        self.snro = self.prdbmo - self.pndbm</span>
+<span class="c">#        self.snrp = self.prdbmp - self.pndbm</span>
 </div>
 <div class="viewcode-block" id="Coverage.cover"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.cover.html#pylayers.antprop.coverage.Coverage.cover">[docs]</a>    <span class="k">def</span> <span class="nf">cover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; run the sinr coverage calculation</span>
@@ -466,277 +465,277 @@
                 <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="n">kf</span><span class="p">,:,</span><span class="n">ka</span><span class="p">]</span><span class="o">==</span><span class="n">MaxV</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">bestsv</span><span class="p">[</span><span class="n">kf</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">ka</span><span class="p">]</span><span class="o">=</span><span class="n">ka</span><span class="o">+</span><span class="mi">1</span>
 
-</div>
-<div class="viewcode-block" id="Coverage.showEd"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.showEd.html#pylayers.antprop.coverage.Coverage.showEd">[docs]</a>    <span class="k">def</span> <span class="nf">showEd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; shows a map of direct path excess delay</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        polar : string</span>
-<span class="sd">        &#39;o&#39; | &#39;p&#39;</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt;&gt; from pylayers.antprop.coverage import *</span>
-<span class="sd">            &gt;&gt; C = Coverage()</span>
-<span class="sd">            &gt;&gt; C.cover()</span>
-<span class="sd">            &gt;&gt; C.showEd(polar=&#39;o&#39;)</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;alphacy&#39;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphacy&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.0</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;colorcy&#39;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorcy&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;w&#39;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;nodes&#39;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">cdict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;red&#39;</span>  <span class="p">:</span>  <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)),</span>
-        <span class="s">&#39;green&#39;</span><span class="p">:</span>  <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)),</span>
-        <span class="s">&#39;blue&#39;</span> <span class="p">:</span>  <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
-        <span class="p">}</span>
-        <span class="c">#generate the colormap with 1024 interpolated values</span>
-        <span class="n">my_cmap</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="p">(</span><span class="s">&#39;my_colormap&#39;</span><span class="p">,</span> <span class="n">cdict</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
-            <span class="n">prdbm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span>
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-            <span class="n">prdbm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span>
-
-
-
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
-            <span class="n">mcEdof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edo</span><span class="p">)</span>
-
-            <span class="n">cov</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcEdof</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="s">&#39;jet&#39;</span><span class="p">,</span>
-                             <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
-
-
-
-            <span class="c"># cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,</span>
-            <span class="c">#           extent=(l,r,b,t),</span>
-            <span class="c">#           origin=&#39;lower&#39;)</span>
-            <span class="n">titre</span> <span class="o">=</span> <span class="s">&quot;Map of LOS excess delay, polar orthogonal&quot;</span>
-
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-            <span class="n">mcEdpf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Edp</span><span class="p">)</span>
-
-            <span class="n">cov</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcEdpf</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="s">&#39;jet&#39;</span><span class="p">,</span>
-                             <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
-
-            <span class="c"># cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,</span>
-            <span class="c">#           extent=(l,r,b,t),</span>
-            <span class="c">#           origin=&#39;lower&#39;)</span>
-            <span class="n">titre</span> <span class="o">=</span> <span class="s">&quot;Map of LOS excess delay, polar parallel&quot;</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titre</span><span class="p">)</span>
-
-        <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-        <span class="n">clb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span><span class="n">cax</span><span class="p">)</span>
-        <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;excess delay (ns)&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
-</div>
-<div class="viewcode-block" id="Coverage.showPower"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.showPower.html#pylayers.antprop.coverage.Coverage.showPower">[docs]</a>    <span class="k">def</span> <span class="nf">showPower</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rxsens</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">nfl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; show the map of received power</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        rxsens : bool</span>
-<span class="sd">              clip the map with rx sensitivity set in self.rxsens</span>
-<span class="sd">        nfl : bool</span>
-<span class="sd">              clip the map with noise floor set in self.pndbm</span>
-<span class="sd">        polar : string</span>
-<span class="sd">            &#39;o&#39;|&#39;p&#39;</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt; from pylayers.antprop.coverage import *</span>
-<span class="sd">            &gt; C = Coverage()</span>
-<span class="sd">            &gt; C.cover()</span>
-<span class="sd">            &gt; C.showPower()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;alphacy&#39;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphacy&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.0</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;colorcy&#39;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorcy&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;w&#39;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;nodes&#39;</span><span class="p">):</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
-            <span class="n">prdbm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span>
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-            <span class="n">prdbm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span>
-
-<span class="c">#        tCM = plt.cm.get_cmap(&#39;jet&#39;)</span>
-<span class="c">#        tCM._init()</span>
-<span class="c">#        alphas = np.abs(np.linspace(.0,1.0, tCM.N))</span>
-<span class="c">#        tCM._lut[:-3,-1] = alphas</span>
-
-        <span class="n">title</span><span class="o">=</span><span class="s">&#39;Map of received power - Pt = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ptdbm</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; dBm&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s">&#39; fGHz =&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; polar = &#39;</span><span class="o">+</span><span class="n">polar</span>
-
-        <span class="n">cdict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;red&#39;</span>  <span class="p">:</span>  <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)),</span>
-        <span class="s">&#39;green&#39;</span><span class="p">:</span>  <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)),</span>
-        <span class="s">&#39;blue&#39;</span> <span class="p">:</span>  <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;cmap&#39;</span><span class="p">):</span>
-        <span class="c"># generate the colormap with 1024 interpolated values</span>
-            <span class="n">cmap</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="p">(</span><span class="s">&#39;my_colormap&#39;</span><span class="p">,</span> <span class="n">cdict</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cmap</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;cmap&#39;</span><span class="p">]</span>
-        <span class="c">#my_cmap = cm.copper</span>
-
-
-        <span class="k">if</span> <span class="n">rxsens</span> <span class="p">:</span>
-
-            <span class="c">## values between the rx sensitivity and noise floor</span>
-            <span class="n">mcPrf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">((</span><span class="n">prdbm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">)</span>
-                                     <span class="o">&amp;</span> <span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="p">),</span><span class="n">prdbm</span><span class="p">)</span>
-            <span class="c"># mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens) ,prdbm)</span>
-
-            <span class="n">cov1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcPrf</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">copper</span><span class="p">,</span>
-                             <span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
-
-            <span class="c">### values above the sensitivity</span>
-            <span class="n">mcPrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="n">prdbm</span><span class="p">)</span>
-            <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcPrs</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                            <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
-                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">,</span>
-                            <span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
-            <span class="n">title</span><span class="o">=</span><span class="n">title</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s"> black : Pr (dBm) &lt; </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rxsens</span> <span class="o">+</span> <span class="s">&#39; dBm&#39;</span>
-
-        <span class="k">else</span> <span class="p">:</span>
-            <span class="n">cov</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">prdbm</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                          <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
-                          <span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">,</span>
-                          <span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">nfl</span><span class="p">:</span>
-            <span class="c">### values under the noise floor</span>
-            <span class="c">### we first clip the value below the noise floor</span>
-            <span class="n">cl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">prdbm</span><span class="o">&lt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="p">)</span>
-            <span class="n">cPr</span> <span class="o">=</span> <span class="n">prdbm</span>
-            <span class="n">cPr</span><span class="p">[</span><span class="n">cl</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
-            <span class="n">mcPruf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">cPr</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="p">,</span><span class="n">cPr</span><span class="p">)</span>
-            <span class="n">cov2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mcPruf</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="s">&#39;binary&#39;</span><span class="p">,</span>
-                             <span class="n">vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
-            <span class="n">title</span><span class="o">=</span><span class="n">title</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s"> white : Pr (dBm) &lt; </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span> <span class="o">+</span> <span class="s">&#39; dBm&#39;</span>
-
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-        <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-        <span class="n">clb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span><span class="n">cax</span><span class="p">)</span>
-        <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Power (dBm)&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
-
-</div>
-<div class="viewcode-block" id="Coverage.showTransistionRegion"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.showTransistionRegion.html#pylayers.antprop.coverage.Coverage.showTransistionRegion">[docs]</a>    <span class="k">def</span> <span class="nf">showTransistionRegion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        See  : &quot;Analyzing the Transitional Region in Low Power Wireless Links&quot;</span>
-<span class="sd">                Marco Zuniga and Bhaskar Krishnamachari</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt; from pylayers.antprop.coverage import *</span>
-<span class="sd">            &gt; C = Coverage()</span>
-<span class="sd">            &gt; C.cover()</span>
-<span class="sd">            &gt; C.showTransitionRegion()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">frameLength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">framelengthbytes</span>
-
-        <span class="n">PndBm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pndbm</span>
-        <span class="n">gammaU</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="o">-</span><span class="mf">1.28</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">0.9</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">frameLength</span><span class="p">)))))</span>
-        <span class="n">gammaL</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="o">-</span><span class="mf">1.28</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">0.1</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="n">frameLength</span><span class="p">)))))</span>
-
-        <span class="n">PrU</span> <span class="o">=</span> <span class="n">PndBm</span> <span class="o">+</span> <span class="n">gammaU</span>
-        <span class="n">PrL</span> <span class="o">=</span> <span class="n">PndBm</span> <span class="o">+</span> <span class="n">gammaL</span>
-
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-
-        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
-            <span class="n">prdbm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prdbmo</span>
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-            <span class="n">prdbm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prdbmp</span>
-
-        <span class="n">zones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">prdbm</span><span class="p">))</span>
-        <span class="c">#pdb.set_trace()</span>
-
-        <span class="n">uconnected</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">prdbm</span><span class="o">&gt;</span><span class="n">PrU</span><span class="p">)</span>
-        <span class="n">utransition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="n">PrU</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">prdbm</span> <span class="o">&gt;</span> <span class="n">PrL</span><span class="p">))</span>
-        <span class="n">udisconnected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">prdbm</span> <span class="o">&lt;</span> <span class="n">PrL</span><span class="p">)</span>
-
-        <span class="n">zones</span><span class="p">[</span><span class="n">uconnected</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">zones</span><span class="p">[</span><span class="n">utransition</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">prdbm</span><span class="p">[</span><span class="n">utransition</span><span class="p">]</span><span class="o">-</span><span class="n">PrL</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">PrU</span><span class="o">-</span><span class="n">PrL</span><span class="p">)</span>
-        <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">zones</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                             <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span><span class="n">cmap</span> <span class="o">=</span> <span class="s">&#39;BuGn&#39;</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
-
-        <span class="n">title</span><span class="o">=</span><span class="s">&#39;PDR region&#39;</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-        <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span><span class="n">cax</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</div>
+<span class="c">#    def showEd(self,polar=&#39;o&#39;,**kwargs):</span>
+<span class="c">#        &quot;&quot;&quot; shows a map of direct path excess delay</span>
+<span class="c">#</span>
+<span class="c">#        Parameters</span>
+<span class="c">#        ----------</span>
+<span class="c">#</span>
+<span class="c">#        polar : string</span>
+<span class="c">#        &#39;o&#39; | &#39;p&#39;</span>
+<span class="c">#</span>
+<span class="c">#        Examples</span>
+<span class="c">#        --------</span>
+<span class="c">#</span>
+<span class="c">#        .. plot::</span>
+<span class="c">#            :include-source:</span>
+<span class="c">#</span>
+<span class="c">#            &gt;&gt; from pylayers.antprop.coverage import *</span>
+<span class="c">#            &gt;&gt; C = Coverage()</span>
+<span class="c">#            &gt;&gt; C.cover()</span>
+<span class="c">#            &gt;&gt; C.showEd(polar=&#39;o&#39;)</span>
+<span class="c">#</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        if not kwargs.has_key(&#39;alphacy&#39;):</span>
+<span class="c">#            kwargs[&#39;alphacy&#39;]=0.0</span>
+<span class="c">#        if not kwargs.has_key(&#39;colorcy&#39;):</span>
+<span class="c">#            kwargs[&#39;colorcy&#39;]=&#39;w&#39;</span>
+<span class="c">#        if not kwargs.has_key(&#39;nodes&#39;):</span>
+<span class="c">#            kwargs[&#39;nodes&#39;]=False</span>
+<span class="c">#</span>
+<span class="c">#        fig,ax = self.L.showG(&#39;s&#39;,**kwargs)</span>
+<span class="c">#        l = self.grid[0,0]</span>
+<span class="c">#        r = self.grid[-1,0]</span>
+<span class="c">#        b = self.grid[0,1]</span>
+<span class="c">#        t = self.grid[-1,-1]</span>
+<span class="c">#</span>
+<span class="c">#        cdict = {</span>
+<span class="c">#        &#39;red&#39;  :  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c">#        &#39;green&#39;:  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c">#        &#39;blue&#39; :  ((0., 0.5, 0.5), (1., 1., 1.))</span>
+<span class="c">#        }</span>
+<span class="c">#        #generate the colormap with 1024 interpolated values</span>
+<span class="c">#        my_cmap = m.colors.LinearSegmentedColormap(&#39;my_colormap&#39;, cdict, 1024)</span>
+<span class="c">#</span>
+<span class="c">#        if polar==&#39;o&#39;:</span>
+<span class="c">#            prdbm=self.prdbmo</span>
+<span class="c">#        if polar==&#39;p&#39;:</span>
+<span class="c">#            prdbm=self.prdbmp</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#        if polar==&#39;o&#39;:</span>
+<span class="c">#            mcEdof = np.ma.masked_where(prdbm &lt; self.rxsens,self.Edo)</span>
+<span class="c">#</span>
+<span class="c">#            cov=ax.imshow(mcEdof.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                             extent=(l,r,b,t),cmap = &#39;jet&#39;,</span>
+<span class="c">#                             origin=&#39;lower&#39;)</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#            # cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#            #           extent=(l,r,b,t),</span>
+<span class="c">#            #           origin=&#39;lower&#39;)</span>
+<span class="c">#            titre = &quot;Map of LOS excess delay, polar orthogonal&quot;</span>
+<span class="c">#</span>
+<span class="c">#        if polar==&#39;p&#39;:</span>
+<span class="c">#            mcEdpf = np.ma.masked_where(prdbm &lt; self.rxsens,self.Edp)</span>
+<span class="c">#</span>
+<span class="c">#            cov=ax.imshow(mcEdpf.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                             extent=(l,r,b,t),cmap = &#39;jet&#39;,</span>
+<span class="c">#                             origin=&#39;lower&#39;)</span>
+<span class="c">#</span>
+<span class="c">#            # cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#            #           extent=(l,r,b,t),</span>
+<span class="c">#            #           origin=&#39;lower&#39;)</span>
+<span class="c">#            titre = &quot;Map of LOS excess delay, polar parallel&quot;</span>
+<span class="c">#</span>
+<span class="c">#        ax.scatter(self.tx[0],self.tx[1],linewidth=0)</span>
+<span class="c">#        ax.set_title(titre)</span>
+<span class="c">#</span>
+<span class="c">#        divider = make_axes_locatable(ax)</span>
+<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c">#        clb = fig.colorbar(cov,cax)</span>
+<span class="c">#        clb.set_label(&#39;excess delay (ns)&#39;)</span>
+<span class="c">#</span>
+<span class="c">#        if self.show:</span>
+<span class="c">#            plt.show()</span>
+<span class="c">#        return fig,ax</span>
+<span class="c">#</span>
+<span class="c">#    def showPower(self,rxsens=True,nfl=True,polar=&#39;o&#39;,**kwargs):</span>
+<span class="c">#        &quot;&quot;&quot; show the map of received power</span>
+<span class="c">#</span>
+<span class="c">#        Parameters</span>
+<span class="c">#        ----------</span>
+<span class="c">#</span>
+<span class="c">#        rxsens : bool</span>
+<span class="c">#              clip the map with rx sensitivity set in self.rxsens</span>
+<span class="c">#        nfl : bool</span>
+<span class="c">#              clip the map with noise floor set in self.pndbm</span>
+<span class="c">#        polar : string</span>
+<span class="c">#            &#39;o&#39;|&#39;p&#39;</span>
+<span class="c">#</span>
+<span class="c">#        Examples</span>
+<span class="c">#        --------</span>
+<span class="c">#</span>
+<span class="c">#        .. plot::</span>
+<span class="c">#            :include-source:</span>
+<span class="c">#</span>
+<span class="c">#            &gt; from pylayers.antprop.coverage import *</span>
+<span class="c">#            &gt; C = Coverage()</span>
+<span class="c">#            &gt; C.cover()</span>
+<span class="c">#            &gt; C.showPower()</span>
+<span class="c">#</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        if not kwargs.has_key(&#39;alphacy&#39;):</span>
+<span class="c">#            kwargs[&#39;alphacy&#39;]=0.0</span>
+<span class="c">#        if not kwargs.has_key(&#39;colorcy&#39;):</span>
+<span class="c">#            kwargs[&#39;colorcy&#39;]=&#39;w&#39;</span>
+<span class="c">#        if not kwargs.has_key(&#39;nodes&#39;):</span>
+<span class="c">#            kwargs[&#39;nodes&#39;]=False</span>
+<span class="c">#        fig,ax = self.L.showG(&#39;s&#39;,**kwargs)</span>
+<span class="c">#</span>
+<span class="c">#        l = self.grid[0,0]</span>
+<span class="c">#        r = self.grid[-1,0]</span>
+<span class="c">#        b = self.grid[0,1]</span>
+<span class="c">#        t = self.grid[-1,-1]</span>
+<span class="c">#</span>
+<span class="c">#        if polar==&#39;o&#39;:</span>
+<span class="c">#            prdbm=self.prdbmo</span>
+<span class="c">#        if polar==&#39;p&#39;:</span>
+<span class="c">#            prdbm=self.prdbmp</span>
+<span class="c">#</span>
+<span class="c">##        tCM = plt.cm.get_cmap(&#39;jet&#39;)</span>
+<span class="c">##        tCM._init()</span>
+<span class="c">##        alphas = np.abs(np.linspace(.0,1.0, tCM.N))</span>
+<span class="c">##        tCM._lut[:-3,-1] = alphas</span>
+<span class="c">#</span>
+<span class="c">#        title=&#39;Map of received power - Pt = &#39; + str(self.ptdbm) + &#39; dBm&#39;+str(&#39; fGHz =&#39;) + str(self.fGHz) + &#39; polar = &#39;+polar</span>
+<span class="c">#</span>
+<span class="c">#        cdict = {</span>
+<span class="c">#        &#39;red&#39;  :  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c">#        &#39;green&#39;:  ((0., 0.5, 0.5), (1., 1., 1.)),</span>
+<span class="c">#        &#39;blue&#39; :  ((0., 0.5, 0.5), (1., 1., 1.))</span>
+<span class="c">#        }</span>
+<span class="c">#</span>
+<span class="c">#        if not kwargs.has_key(&#39;cmap&#39;):</span>
+<span class="c">#        # generate the colormap with 1024 interpolated values</span>
+<span class="c">#            cmap = m.colors.LinearSegmentedColormap(&#39;my_colormap&#39;, cdict, 1024)</span>
+<span class="c">#        else:</span>
+<span class="c">#            cmap = kwargs[&#39;cmap&#39;]</span>
+<span class="c">#        #my_cmap = cm.copper</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#        if rxsens :</span>
+<span class="c">#</span>
+<span class="c">#            ## values between the rx sensitivity and noise floor</span>
+<span class="c">#            mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens)</span>
+<span class="c">#                                     &amp; (prdbm &lt; self.pndbm),prdbm)</span>
+<span class="c">#            # mcPrf = np.ma.masked_where((prdbm &gt; self.rxsens) ,prdbm)</span>
+<span class="c">#</span>
+<span class="c">#            cov1 = ax.imshow(mcPrf.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                             extent=(l,r,b,t),cmap = cm.copper,</span>
+<span class="c">#                             vmin=self.rxsens,origin=&#39;lower&#39;)</span>
+<span class="c">#</span>
+<span class="c">#            ### values above the sensitivity</span>
+<span class="c">#            mcPrs = np.ma.masked_where(prdbm &lt; self.rxsens,prdbm)</span>
+<span class="c">#            cov = ax.imshow(mcPrs.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                            extent=(l,r,b,t),</span>
+<span class="c">#                            cmap = cmap,</span>
+<span class="c">#                            vmin=self.rxsens,origin=&#39;lower&#39;)</span>
+<span class="c">#            title=title + &#39;\n black : Pr (dBm) &lt; %.2f&#39; % self.rxsens + &#39; dBm&#39;</span>
+<span class="c">#</span>
+<span class="c">#        else :</span>
+<span class="c">#            cov=ax.imshow(prdbm.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                          extent=(l,r,b,t),</span>
+<span class="c">#                          cmap = cmap,</span>
+<span class="c">#                          vmin=self.pndbm,origin=&#39;lower&#39;)</span>
+<span class="c">#</span>
+<span class="c">#        if nfl:</span>
+<span class="c">#            ### values under the noise floor</span>
+<span class="c">#            ### we first clip the value below the noise floor</span>
+<span class="c">#            cl = np.nonzero(prdbm&lt;=self.pndbm)</span>
+<span class="c">#            cPr = prdbm</span>
+<span class="c">#            cPr[cl] = self.pndbm</span>
+<span class="c">#            mcPruf = np.ma.masked_where(cPr &gt; self.pndbm,cPr)</span>
+<span class="c">#            cov2 = ax.imshow(mcPruf.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                             extent=(l,r,b,t),cmap = &#39;binary&#39;,</span>
+<span class="c">#                             vmax=self.pndbm,origin=&#39;lower&#39;)</span>
+<span class="c">#            title=title + &#39;\n white : Pr (dBm) &lt; %.2f&#39; % self.pndbm + &#39; dBm&#39;</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#        ax.scatter(self.tx[0],self.tx[1],s=10,c=&#39;k&#39;,linewidth=0)</span>
+<span class="c">#</span>
+<span class="c">#        ax.set_title(title)</span>
+<span class="c">#        divider = make_axes_locatable(ax)</span>
+<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c">#        clb = fig.colorbar(cov,cax)</span>
+<span class="c">#        clb.set_label(&#39;Power (dBm)&#39;)</span>
+<span class="c">#</span>
+<span class="c">#        if self.show:</span>
+<span class="c">#            plt.show()</span>
+<span class="c">#</span>
+<span class="c">#        return fig,ax</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#    def showTransistionRegion(self,polar=&#39;o&#39;):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        Notes</span>
+<span class="c">#        -----</span>
+<span class="c">#</span>
+<span class="c">#        See  : &quot;Analyzing the Transitional Region in Low Power Wireless Links&quot;</span>
+<span class="c">#                Marco Zuniga and Bhaskar Krishnamachari</span>
+<span class="c">#</span>
+<span class="c">#        Examples</span>
+<span class="c">#        --------</span>
+<span class="c">#</span>
+<span class="c">#        .. plot::</span>
+<span class="c">#            :include-source:</span>
+<span class="c">#</span>
+<span class="c">#            &gt; from pylayers.antprop.coverage import *</span>
+<span class="c">#            &gt; C = Coverage()</span>
+<span class="c">#            &gt; C.cover()</span>
+<span class="c">#            &gt; C.showTransitionRegion()</span>
+<span class="c">#</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        frameLength = self.framelengthbytes</span>
+<span class="c">#</span>
+<span class="c">#        PndBm = self.pndbm</span>
+<span class="c">#        gammaU = 10*np.log10(-1.28*np.log(2*(1-0.9**(1./(8*frameLength)))))</span>
+<span class="c">#        gammaL = 10*np.log10(-1.28*np.log(2*(1-0.1**(1./(8*frameLength)))))</span>
+<span class="c">#</span>
+<span class="c">#        PrU = PndBm + gammaU</span>
+<span class="c">#        PrL = PndBm + gammaL</span>
+<span class="c">#</span>
+<span class="c">#        fig,ax = self.L.showGs()</span>
+<span class="c">#</span>
+<span class="c">#        l = self.grid[0,0]</span>
+<span class="c">#        r = self.grid[-1,0]</span>
+<span class="c">#        b = self.grid[0,1]</span>
+<span class="c">#        t = self.grid[-1,-1]</span>
+<span class="c">#</span>
+<span class="c">#        if polar==&#39;o&#39;:</span>
+<span class="c">#            prdbm=self.prdbmo</span>
+<span class="c">#        if polar==&#39;p&#39;:</span>
+<span class="c">#            prdbm=self.prdbmp</span>
+<span class="c">#</span>
+<span class="c">#        zones = np.zeros(np.shape(prdbm))</span>
+<span class="c">#        #pdb.set_trace()</span>
+<span class="c">#</span>
+<span class="c">#        uconnected  = np.nonzero(prdbm&gt;PrU)</span>
+<span class="c">#        utransition = np.nonzero((prdbm &lt; PrU)&amp;(prdbm &gt; PrL))</span>
+<span class="c">#        udisconnected = np.nonzero(prdbm &lt; PrL)</span>
+<span class="c">#</span>
+<span class="c">#        zones[uconnected] = 1</span>
+<span class="c">#        zones[utransition] = (prdbm[utransition]-PrL)/(PrU-PrL)</span>
+<span class="c">#        cov = ax.imshow(zones.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                             extent=(l,r,b,t),cmap = &#39;BuGn&#39;,origin=&#39;lower&#39;)</span>
+<span class="c">#</span>
+<span class="c">#        title=&#39;PDR region&#39;</span>
+<span class="c">#        ax.scatter(self.tx[0],self.tx[1],linewidth=0)</span>
+<span class="c">#</span>
+<span class="c">#        ax.set_title(title)</span>
+<span class="c">#        divider = make_axes_locatable(ax)</span>
+<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c">#        fig.colorbar(cov,cax)</span>
+<span class="c">#        if self.show:</span>
+<span class="c">#            plt.show()</span>
+<span class="c">#</span></div>
 <div class="viewcode-block" id="Coverage.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.show.html#pylayers.antprop.coverage.Coverage.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show coverage</span>
 
@@ -888,73 +887,73 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="bp">self</span><span class="o">.</span><span class="n">pa</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Coverage.showLoss"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.coverage.Coverage.showLoss.html#pylayers.antprop.coverage.Coverage.showLoss">[docs]</a>    <span class="k">def</span> <span class="nf">showLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; show losses map</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        polar : string</span>
-<span class="sd">            &#39;o&#39;|&#39;p&#39;|&#39;both&#39;</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt;&gt;&gt; from pylayers.antprop.coverage import *</span>
-<span class="sd">            &gt;&gt;&gt; C = Coverage()</span>
-<span class="sd">            &gt;&gt;&gt; C.cover(polar=&#39;o&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; f,a = C.show(typ=&#39;pr&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.show()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
-
-        <span class="c"># setting the grid</span>
-
-        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">Lo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwo</span>
-        <span class="n">Lp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freespace</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">Lwp</span>
-
-        <span class="c"># orthogonal polarization</span>
-
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;o&#39;</span><span class="p">:</span>
-            <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">Lo</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                            <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
-                            <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>
-                            <span class="n">vmin</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
-                            <span class="n">vmax</span> <span class="o">=</span> <span class="mi">130</span><span class="p">)</span>
-            <span class="n">str1</span> <span class="o">=</span> <span class="s">&#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="p">(</span><span class="n">str1</span><span class="p">)</span>
-
-        <span class="c"># parallel polarization</span>
-        <span class="k">if</span> <span class="n">polar</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
-            <span class="n">cov</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">Lp</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                            <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">),</span>
-                            <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span>
-                            <span class="n">vmin</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
-                            <span class="n">vmax</span> <span class="o">=</span> <span class="mi">130</span><span class="p">)</span>
-            <span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
-            <span class="n">title</span> <span class="o">=</span> <span class="p">(</span><span class="n">str2</span><span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-
-        <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-        <span class="n">clb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span><span class="n">cax</span><span class="p">)</span>
-        <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Loss (dB)&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c">#    def showLoss(self,polar=&#39;o&#39;,**kwargs):</span>
+<span class="c">#        &quot;&quot;&quot; show losses map</span>
+<span class="c">#</span>
+<span class="c">#        Parameters</span>
+<span class="c">#        ----------</span>
+<span class="c">#</span>
+<span class="c">#        polar : string</span>
+<span class="c">#            &#39;o&#39;|&#39;p&#39;|&#39;both&#39;</span>
+<span class="c">#</span>
+<span class="c">#        Examples</span>
+<span class="c">#        --------</span>
+<span class="c">#</span>
+<span class="c">#        .. plot::</span>
+<span class="c">#            :include-source:</span>
+<span class="c">#</span>
+<span class="c">#            &gt;&gt;&gt; from pylayers.antprop.coverage import *</span>
+<span class="c">#            &gt;&gt;&gt; C = Coverage()</span>
+<span class="c">#            &gt;&gt;&gt; C.cover(polar=&#39;o&#39;)</span>
+<span class="c">#            &gt;&gt;&gt; f,a = C.show(typ=&#39;pr&#39;)</span>
+<span class="c">#            &gt;&gt;&gt; plt.show()</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        fig = plt.figure()</span>
+<span class="c">#        fig,ax=self.L.showGs(fig=fig)</span>
+<span class="c">#</span>
+<span class="c">#        # setting the grid</span>
+<span class="c">#</span>
+<span class="c">#        l = self.grid[0,0]</span>
+<span class="c">#        r = self.grid[-1,0]</span>
+<span class="c">#        b = self.grid[0,1]</span>
+<span class="c">#        t = self.grid[-1,-1]</span>
+<span class="c">#</span>
+<span class="c">#        Lo = self.freespace+self.Lwo</span>
+<span class="c">#        Lp = self.freespace+self.Lwp</span>
+<span class="c">#</span>
+<span class="c">#        # orthogonal polarization</span>
+<span class="c">#</span>
+<span class="c">#        if polar==&#39;o&#39;:</span>
+<span class="c">#            cov = ax.imshow(Lo.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                            extent=(l,r,b,t),</span>
+<span class="c">#                            origin=&#39;lower&#39;,</span>
+<span class="c">#                            vmin = 40,</span>
+<span class="c">#                            vmax = 130)</span>
+<span class="c">#            str1 = &#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;+str(self.fGHz)</span>
+<span class="c">#            title = (str1)</span>
+<span class="c">#</span>
+<span class="c">#        # parallel polarization</span>
+<span class="c">#        if polar==&#39;p&#39;:</span>
+<span class="c">#            cov = ax.imshow(Lp.reshape((self.nx,self.ny)).T,</span>
+<span class="c">#                            extent=(l,r,b,t),</span>
+<span class="c">#                            origin=&#39;lower&#39;,</span>
+<span class="c">#                            vmin = 40,</span>
+<span class="c">#                            vmax = 130)</span>
+<span class="c">#            str2 = &#39;Map of losses, orthogonal (V) polarization, fGHz=&#39;+str(self.fGHz)</span>
+<span class="c">#            title = (str2)</span>
+<span class="c">#</span>
+<span class="c">#        ax.scatter(self.tx[0],self.tx[1],s=10,c=&#39;k&#39;,linewidth=0)</span>
+<span class="c">#        ax.set_title(title)</span>
+<span class="c">#</span>
+<span class="c">#        divider = make_axes_locatable(ax)</span>
+<span class="c">#        cax = divider.append_axes(&quot;right&quot;, size=&quot;5%&quot;, pad=0.05)</span>
+<span class="c">#        clb = fig.colorbar(cov,cax)</span>
+<span class="c">#        clb.set_label(&#39;Loss (dB)&#39;)</span>
+<span class="c">#</span>
+<span class="c">#        if self.show:</span>
+<span class="c">#            plt.show()</span>
 
 
 </div>
