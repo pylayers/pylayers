@@ -1,10 +1,19 @@
 """
 
+Trajectories Class
+==================
+.. autosummary::
+    :toctree: generated/
+
+    Trajectories.__init__
+    Trajectories.__repr__
+    Trajectories.loadh5
+    Trajectories.ishow
 
 Trajectory Class
 ================
 
-.. autosumarry::
+.. autosummary::
     :toctree: generated/
 
     Trajectory.__init__
@@ -60,9 +69,10 @@ class Trajectories(list):
             for a in self:
                 typ = a.typ
                 if typ == 'ag':
-                    string = 'Trajectory of agent ' + a.name + ' with ID ' + a.ID
-                else:
-                    string = 'Access point ' + a.name + ' with ID ' + a.ID
+
+                    string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID
+                else :
+                    string ='Access point ' + a.name + ' with ID ' + a.ID
                 s = s + string + '\n'
                 s = s + '-'*len(string) + '\n'
                 s = s + a.__repr__()
@@ -72,6 +82,7 @@ class Trajectories(list):
         return s
 
     def loadh5(self, _filename='simulnet_TA-Office.h5'):
+
 
         """ import simulnet h5 file
 
@@ -153,7 +164,7 @@ class Trajectories(list):
                 lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit], 'o',
                              color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)
-            else:
+        else:
                 lines.extend(ax.plot(T['x'][0], T['y'][0], '^', ms=12,
                              color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)
@@ -163,9 +174,10 @@ class Trajectories(list):
         # init boolean value for visible in checkbutton
         blabels = [False]*len(labels)
 
+
         ########
         # slider
-        ######## 
+        ########
         slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
         slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax,
                         valinit=valinit, color='#AAAAAA')
@@ -181,6 +193,7 @@ class Trajectories(list):
                         lines[iT].set_ydata(T['y'][pval])
                 fig.canvas.draw()
         slider.on_changed(update)
+
 
         ########
         # choose
@@ -202,8 +215,7 @@ class Trajectories(list):
 class Trajectory(pd.DataFrame):
     """  Define a trajectory
 
-    This class derives from pandas.DataFrame. It handles a full 3D trajectory
-    description.
+    This class derives from pandas.DataFrame. It handles a full 3D trajectory.
 
     A trajectory is time-stamped and contains 3D coordinates of p
     position, velocity and acceleration.
@@ -242,12 +254,17 @@ class Trajectory(pd.DataFrame):
 
     def __repr__(self):
         try:
+            # total distance
             dtot = self['s'].values[-1]
+            # total time
             T = self.tmax-self.tmin
             st = ''
-            st = st+'t (s) : ' + str(self.tmin)+':'+str(self.tmax)+'\n'
-            st = st+'d (m) : ' + str(dtot)+'\n'
-            st = st+'Vmoy (m/s) : ' + str(dtot/T)+'\n'
+            st = st + 'Agent : '+ self.name + ': \n'
+            st = st + "ID : " + str(self.ID)+'\n'
+            st = st + '---'+'\n'
+            st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'
+            st = st+'dtot (m) : '+ str("%3.2f" %dtot)+'\n'
+            st = st+'Vmoy (m/s) : '+ str("%3.2f" % (dtot/T))+'\n'
         except:
             st = 'void Trajectory'
         return(st)
@@ -287,9 +304,11 @@ class Trajectory(pd.DataFrame):
             return False
 
 
-    def generate(self, ID=1, name='', **kwargs):
+
+    #def generate(self,ID = 1, name = '',t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
+    def generate(self,**kwargs):
         """
-        Generate a trajectroy from a numpy array
+        Generate a trajectory from a numpy array
 
         Parameters
         ----------
@@ -302,6 +321,10 @@ class Trajectory(pd.DataFrame):
                 y : y values
         t = np.ndarray
             (1 x npt)
+
+        Id : Agent Id
+
+        name : Agent Name
 
         unit : str
             time unity ('s'|'ns',...)
@@ -318,26 +341,24 @@ class Trajectory(pd.DataFrame):
             >>> traj.plot()
 
 
+
         """
-        defaults = {'t':np.linspace(0, 10, 50),
-                    'pt':np.vstack((np.sin(np.linspace(0, 3, 50)),
-                                    np.linspace(0, 10, 50),
-                                    np.random.randn(50),)).T,
-                    'unit':'s',
-                    'sf':1
-                   }
+        defaults  = { 'ID': 1,
+                     'name' : 'MyNameIsNoBody',
+                     't' : np.linspace(0,10,50),
+                     'pt' : np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,
+                     'unit' : 's',
+                     'sf' : 1
+                    }
 
-        for key, value in defaults.items():
-            if key not in kwargs:
-                kwargs[key] = value
+        for k in defaults:
+            kwargs[k] = defaults[k]
 
-        t = kwargs.pop('t')
-        pt = kwargs.pop('pt')
-        unit = kwargs.pop('unit')
-        sf = kwargs.pop('sf')
+        t = kwargs['t']
+        pt = kwargs['pt']
 
         npt = len(t)
-        td = pd.to_datetime(t,unit=unit)
+        td = pd.to_datetime(t,unit=kwargs['unit'])
         # velocity vector
         v = (pt[1:, :]-pt[0:-1, :])/(t[1]-t[0])
         # acceleration vector
@@ -375,7 +396,15 @@ class Trajectory(pd.DataFrame):
 
         sf : int
             sampling factor
+
+        Returns
+        -------
+
+        T : Trajectory
+            resampled trajectory
+
         """
+
         t = self.time()
         x = self.space()[:, 0]
         y = self.space()[:, 1]
@@ -388,9 +417,13 @@ class Trajectory(pd.DataFrame):
         xnew = fx(tnew)
         ynew = fy(tnew)
         T = Trajectory()
-        T.generate(ID=self.ID, name=self.name, t=tnew,
-                   pt=np.vstack((xnew, ynew, np.random.randn(len(tnew)))).T,
-                   unit='s', sf=sf)
+        T.generate(ID=self.ID,
+                   name=self.name,
+                   t=tnew,
+                   pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
+                   unit='s',
+                   sf=sf)
+
         return T
 
 
@@ -410,6 +443,7 @@ class Trajectory(pd.DataFrame):
         t : rescaled trajectory
 
         """
+
         speedms = speedkmph/3.6
         factor = speedms/self.meansp
         newtime = self.time()/factor
@@ -424,13 +458,16 @@ class Trajectory(pd.DataFrame):
         Parameters
         ----------
 
-        tk :
+        tk : float
+            time value in seconds
 
         Example
         -------
 
         >>> from pylayers.mobility.trajectory import *
-        >>> bc = body.Body()
+        >>> T = Trajectory()
+        >>> T.generate()
+        >>> T.distance(2)
 
         """
         t = self.time()

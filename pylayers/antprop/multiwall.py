@@ -568,8 +568,10 @@ def Carretosegment(Mob):
 
 def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
     """ check intersecton  of 2 segments 
+
     Parameters
     ----------
+
     segment 1 : 
         ({x1,y1),(x2,y2)}
     segment 2 : 

@@ -82,8 +82,8 @@ class Band(dict):
         """
         """
         self.chan={}
-        self.fcGHz = np.arange(self['fstart'],self['fstop'],self['fstep']/1000.)
-        for k,fc in enumerate(self.fcGHz):
+        self.fcghz = np.arange(self['fstart'],self['fstop'],self['fstep']/1000.)
+        for k,fc in enumerate(self.fcghz):
             if (fc>=4) & (fc<5):
                 channum = int(np.round((fc-4)*200))
             if (fc>=5) & (fc<6):
@@ -120,50 +120,41 @@ class Band(dict):
 class Channel(dict):
     """ a radio channel abstraction
     """
-    def __init__(self,fcGHz,BMHz,GMHz=0,attmask=20,speff=2,crate=3/4):
+    def __init__(self,fcghz,bmhz,gmhz=0):
         """
         Parameters
         ----------
 
-        fcGHz : float
+        fcghz : float
             center frequency
-        BMHz : float
+        bmhz : float
             effective bandwith
-        GMHz : float
+        gmhz : float
             guard frequency (inter channel gap)
-        attmask : float
-           required attenuation on band edges
-        speff : float
-            spectral efficiency (bit/s/Hz)
-        crate : float
-            coding rate
 
         """
-        self['fcGHz'] = fcGHz
-        self['BMHz']  = BMHz
-        self['GMHz']  = GMHz
-        self['attmask']  = attmask
-        self['speff'] = speff
-        self['crate'] = crate
-        self.fGHz = np.array([fcGHz-(BMHz+GMHz)/2000.,fcGHz+(BMHz+GMHz)/2000.])
+        self['fcGHz'] = fcghz
+        self['BMHz']  = bmhz
+        self['GMHz']  = gmhz
+        self.fghz = np.array([fcghz-(bmhz+gmhz)/2000.,fcghz+(bmhz+gmhz)/2000.])
 
     def __repr__(self):
         """ representation
         """
-        st = str(self['fcGHz'])+': ['+str(self.fGHz[0])+','+str(self.fGHz[1])+']\n'
+        st = str(self['fcGHz'])+' : ['+str(self.fghz[0])+','+str(self.fghz[1])+']\n'
         return(st)
 
     def __add__(self,chan):
         """ add two adjascent channels
         """
-        if (self.fGHz[1]==chan.fGHz[0]):
-            self['fcGHz'] = self.fGHz[1]
+        if (self.fghz[1]==chan.fghz[0]):
+            self['fcGHz'] = self.fghz[1]
             self['BMHz'] = self['BMHZ']+chan['BMHz']
-            self.fGHz[1]=chan.fGHz[1]
-        elif (self.fGHz[0]==chan.fGHz[1]):
-            self['fcGHz'] = self.fGHz[0]
+            self.fghz[1]=chan.fghz[1]
+        elif (self.fghz[0]==chan.fghz[1]):
+            self['fcGHz'] = self.fghz[0]
             self['BMHz'] = self['BMHZ']+chan['BMHz']
-            self.fGHz[0]=chan.fGHz[0]
+            self.fghz[0]=chan.fghz[0]
         else:
             pass
         return(self)
@@ -209,37 +200,39 @@ class Channel(dict):
          C : Channel capacity in Mbit/s (M=1e6)
 
         """
-        C = self.BMHz*np.log(1+10**(SNRdB/10.))/np.log(2)
+        C = self.bmhz*np.log(1+10**(SNRdB/10.))/np.log(2)
         return(C)
 
-class Wstandard(object):
+class Wstandard(dict):
     """ Wireless standard class
     """
-    def __init__(self,name,_filejson='wstd.json'):
+    def __init__(self,stdname,_filejson='wstd.json'):
         """
         Parameters
         ----------
 
         name : string
 
+        Examples
+        ---------
+
+        >>> from pylayers.signal.standard import *
+        >>> Wifiag =Wstandard('ieee80211ah')
+
         """
-        self.name = name
-        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
-        stds = json.load(fp)
-        fp.close()
-        self.std = stds[name]
+        self.name = stdname
+        self.load(stdname)
 
     def __repr__(self):
         st = self.name+'\n'
-        st = st+'-------------------\n'
-        for k in range(self.Nchannel):
-            st = st + str(k+1) +' '+  self.chan[k+1].__repr__()
+        st = st+'-------------------------\n'
+        for k in np.sort(self.chan.keys()):
+            st = st + str(k) +' :  '+  self.chan[k].__repr__()
         return(st)
 
 
     def load(self,stdname,_fileini='wstd.json'):
         """ load a standard from file
-
 
         Parameters
         ----------
@@ -248,38 +241,66 @@ class Wstandard(object):
             standard name
         _fileini : string
             file containing the description of available standards
+
+
+
         """
 
         fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
         stds = json.load(fp)
         fp.close()
-        self.std = stds['stdname']
-        #self.dwstd = dict(wstandard.items(wstd))
-        #fstart =  eval(self.dwstd['fcghzstart'])
-        #nchan = eval(self.dwstd['nchan'])
-        #modulation = self.dwstd['modulation']
-        #"BMHz = eval(self.dwstd['bmhz'])
-        #GMHz = eval(self.dwstd['gmhz'])
-        #SMHz = eval(self.dwstd['smhz'])
-        #attmask = eval(self.dwstd['attmask'])
-        #self.s = Wstandard(wstd,nchan,modulation)
-        #self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
+        std = stds[stdname]
+        for k in std:
+            if k<> "channels":
+                try:
+                    self[k] = eval(std[k])
+                except:
+                    self[k] = std[k]
+            else:
+                chan = std[k]
+                for k in chan:
+                    bandname = k
+                    fstart=chan[k]['fstart']
+                    fstop =chan[k]['fstop']
+                    smhz =chan[k]['smhz']
+                    bmhz = chan[k]['bmhz']
+                    gmhz = chan[k]['gmhz']
+                    self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz)
 
 
 
-    def bandplan(self,fstart,SMHz=5,BMHz=20,GMHz=2,attmask=20,speff=2,crate=0.5):
+    def bandplan(self,fstart,fstop,smhz=5,bmhz=20,gmhz=2):
+        """ construct the different channels of the standard
+
+        Parameters
+        ----------
+
+        fstart : start frequency GHz
+        fstop : stop frequency GHz
+        smhz : step between adjacscent channels
+        bmhz : useful channel bandwidth
+        gmhz : gap between channels
+
         """
-        """
-        self.chan={}
-        self.fcGHz = fstart+np.arange(self.Nchannel)*SMHz/1000.
-        for k,fc in enumerate(self.fcGHz):
+        if not(hasattr(self,'chan')):
+            self.chan={}
+        Nchannel = np.round((fstop-fstart)/(smhz/1000.)).astype(int)+1
+        fcghz = np.linspace(fstart,fstop,Nchannel,endpoint=True)
+        for k,fc in enumerate(fcghz):
             if (fc>=4) & (fc<5):
-                channum = int((fc-4)*200)
+                channum = int(np.round((fc-4)*200))
             if (fc>=5) & (fc<6):
-                channum = int((fc-5)*200)
+                channum = int(np.round((fc-5)*200))
             if fc<4:
                 channum = k+1
-            self.chan[channum] = Channel(fc,BMHz,GMHz,attmask,speff,crate)
+            self.chan[channum] = Channel(fc,bmhz,gmhz)
+        try:
+            self.fcghz=np.hstack((self.fcghz,fcghz))
+        except:
+            self.fcghz=fcghz
+
+        self.fcghz=np.sort(self.fcghz)
+
 
 class AP(dict):
     """ Access Point
@@ -325,22 +346,21 @@ class AP(dict):
 
         self['name'] = kwargs['name']
         self['p'] = kwargs['p']
-        self['wstd'] = kwargs['wstd']
         self['PtdBm'] = kwargs['PtdBm']
         self['channels'] = kwargs['channels']
         self['sensdBm'] = kwargs['sensdBm']
         self['nant'] = kwargs['nant']
 
-        self.upfstd(self['wstd'])
+        standard = Wstandard(kwargs['wstd'])
+        self.s = standard
 
     def __repr__(self):
         """ specific representation
 
-        It respects keys of the dictionnary
+            It respects keys of the dictionnary
         """
         st = 'name : '+str(self['name'])+'\n'
         st = st + 'p : '+str(self['p'])+'\n'
-        st = st+ 'wstd : '+str(self['wstd'])+'\n'
         st = st+ 'PtdBm : '+str(self['PtdBm'])+'\n'
         st = st+ 'channels  : '+str(self['channels'])+'   '
         for k in self['channels']:
@@ -350,42 +370,7 @@ class AP(dict):
         return(st)
 
 
-    def upfstd(self,wstd='ieee80211b'):
-        """ update from standard
-
-        Parameters
-        ----------
-
-        wstd : string
-            wireless standard name
-
-        Notes
-        -----
-
-        All defined wireless standard are gathered in one  single file `wstd.ini`
-
-        This function updates `self.s` which contains standard specific parameters
-
-        """
-        wstandard = ConfigParser.ConfigParser()
-        fp = open(pyu.getlong('wstd.ini',pstruc['DIRSIMUL']))
-        wstandard.readfp(fp)
-        fp.close()
-
-        self.dwstd = dict(wstandard.items(wstd))
-        fstart =  eval(self.dwstd['fcghzstart'])
-        nchan = eval(self.dwstd['nchan'])
-        modulation = self.dwstd['modulation']
-        BMHz = eval(self.dwstd['bmhz'])
-        GMHz = eval(self.dwstd['gmhz'])
-        SMHz = eval(self.dwstd['smhz'])
-        attmask = eval(self.dwstd['attmask'])
-        self.s = Wstandard(wstd,nchan,modulation)
-        self.s.bandplan(fstart,SMHz=SMHz,BMHz=BMHz,GMHz=GMHz,attmask=attmask)
-
-
-        
-    def load(self,_fileini='defAP.ini'):
+    def load(self,name,_fileini='defAP.json'):
         """ loading an access point from file
 
         Parameters
@@ -397,30 +382,19 @@ class AP(dict):
         """
 
         self._fileini = _fileini
-        self.config = ConfigParser.ConfigParser()
-        fp = open(pyu.getlong(_fileini,pstruc['DIRSIMUL']))
-        self.config.readfp(fp)
+        fileini = pyu.getlong(_fileini,pstruc['DIRSIMUL'])
+        fp = open(fileini,"r")
+        ap = json.load(fp)
 
-        ap = dict(self.config.items('ap'))
-        self['name'] = ap['name']
-        self['p'] = eval(ap['pos'])
-        self['wstd'] = ap['wstd']
-        self['PtdBm'] = eval(ap['ptdbm'])
-        self['channels'] = eval(ap['chan'])
-        self['sensdBm'] = eval(ap['snsdbm'])
-        self['nant'] = eval(ap['nant'])
+        self['name'] = name
+        dap = ap[name]
+        self['p'] = eval(dap['pos'])
+        wstd = dap['wstd']
+        self['PtdBm'] = dap['ptdbm']
+        self['channels'] = eval(dap['chan'])
+        self['sensdBm'] = dap['snsdbm']
+        self['nant'] = dap['nant']
 
+        standard = Wstandard(wstd)
+        self.s = standard
         fp.close()
-        self.upfstd(self['wstd'])
-
-
-
-
-#Wifi11b = Wstandard('IEEE802.11.b',14,'dsss')
-#Wifi11b.bandplan(2.412)
-#  IoT (Zigbee alternative
-#  MIMO 4x4
-#Wifi11ah = Wstandard('IEEE802.11.ah',13,'ofdm')
-#"Wifi11ah.bandplan(0.903,SMHz=2,BMHz=1,GMHz=1,attmask=20)
-#Bluetooth = Wstandard('Bluetooth',79,'gmsk')
-#Bluetooth.bandplan(2.4025,SMHz=1,BMHz=1,GMHz=0,attmask=0)

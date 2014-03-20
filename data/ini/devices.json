@@ -1,0 +1,6 @@
+{"Telephone": 
+    { "standards": "[ieee80211a, ieee80211b, ieee80211n, bluetooth]"},
+    
+ "Watch" : { "standards":"[bluetooth]"
+            }
+}

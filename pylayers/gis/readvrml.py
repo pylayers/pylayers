@@ -1,6 +1,9 @@
 #-*- coding:Utf-8 -*-
 """
 
+Utility Functions
+=================
+
 .. autosummary::
     :toctree: generated/
 
@@ -25,10 +28,10 @@ VLayout Class
 .. autosummary::
     :toctree: generated/
 
-    load
-    show
-    wallanalysis
-    show3entity
+    Vlayout.load
+    Vlayout.show
+    Vlayout.wallanalysis
+    Vlayout.show3entity
 
 """
 import os
@@ -565,6 +568,7 @@ class VLayout(object):
         """
         Parameters
         ----------
+
         filename : str
 
         """

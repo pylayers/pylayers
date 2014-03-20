@@ -309,7 +309,7 @@ from pylayers.util.pyutil import *
 from pylayers.util.plotutil import *
 import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
-from sklearn import mixture
+#from sklearn import mixture
 import scipy.stats as st
 
 
@@ -318,15 +318,13 @@ class Bsignal(object):
 
     This class gathers a 1D signal and its axis indexation.
 
-    This class offers a transparent back and forth mechanism between time and frequency domain.
-
     The x base is not necessarily uniform
 
     x can have 1 or two axis
 
     The first axis of x and y have the same length
 
-    By construction len(y):=len(x), len(x) takes priority in case of observed conflict
+    By construction shape(y)[1] :=len(x), len(x) takes priority in case of observed conflict
 
     """
 
@@ -339,7 +337,6 @@ class Bsignal(object):
         x : ndarray (,Nx)
             time or frequency axis
 
-        x : ndarray
         y : ndarray
             values  (Nx,Ny)
 
@@ -391,6 +388,7 @@ class Bsignal(object):
 
         """
         O = copy(self)
+        O.x = O.x[u]
         O.y = O.y[u,:]
         return(O)
 
