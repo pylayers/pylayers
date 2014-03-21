@@ -4437,8 +4437,10 @@ class Noise(TUsignal):
     """
     def __init__(self, Tobs=100, fe=50, DSPdBmpHz=-174, NF=0, R=50, seed=[]):
         """
+
         Parameters
         ----------
+
         Tobs      : Time duration
         fe        : sampling frequency
         DSPdBmpHz : Power Spectral Density Noise (dBm/Hz)
@@ -4446,6 +4448,7 @@ class Noise(TUsignal):
         NF        : 0
         R         : 50
         seed      : []
+
         """
         TUsignal.__init__(self)
         P = DSPdBmpHz + NF

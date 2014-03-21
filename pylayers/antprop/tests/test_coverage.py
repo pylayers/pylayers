@@ -8,10 +8,11 @@ from pylayers.antprop.coverage import *
 from pylayers.network.model import *
 
 
-L = Layout('TA-Office.ini')
-L.dumpr()
-A=np.array((4,1)) # defining transmitter position 
-B=np.array((30,12)) # defining receiver position
-fGHz = 2.4
-r = np.array((B,B))
+C1 = Coverage('coverage.ini')
+C1.cover()
+C1.show(typ='loss',vmin=-80,vmax=-20)
+C2 = Coverage('coverage2.ini')
+C2.cover()
+C2.show(typ='loss',vmin=-90,vmax=-20)
+
 
