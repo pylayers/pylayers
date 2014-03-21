@@ -29,6 +29,7 @@ Wstandard Class
 
      Wstandard.__init__
      Wstandard.__repr__
+     Wstandard.ls
      Wstandard.bandplan
 
 AP Class
@@ -205,7 +206,7 @@ class Channel(dict):
 class Wstandard(dict):
     """ Wireless standard class
     """
-    def __init__(self,stdname,_filejson='wstd.json'):
+    def __init__(self,stdname='',_filejson='wstd.json'):
         """
         Parameters
         ----------
@@ -220,13 +221,19 @@ class Wstandard(dict):
 
         """
         self.name = stdname
-        self.load(stdname)
+        if stdname != '':
+            self.load(stdname)
 
     def __repr__(self):
-        st = self.name+'\n'
-        st = st+'-------------------------\n'
-        for k in np.sort(self.chan.keys()):
-            st = st + str(k) +' :  '+  self.chan[k].__repr__()
+        try:
+            st = self.name+'\n'
+            st = st+'-------------------------\n'
+            for k in np.sort(self.chan.keys()):
+                st = st + str(k) +' :  '+  self.chan[k].__repr__()
+        except:
+            print 'No standard loaded. \
+                   check available standards with ls() method'
+
         return(st)
 
 
@@ -267,6 +274,24 @@ class Wstandard(dict):
                     self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz)
 
 
+    def ls(self):
+        """ list all available standards
+        
+        Examples
+        --------
+        
+        .. plot::
+            :include-source:
+        
+            >>> from pylayers.signal.standard import *
+            >>> W =Wstandard('ieee80211ah')
+            >>> W.ls()
+        """
+        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        stds = json.load(fp)
+        fp.close()
+        for k in stds:
+            print k + ' , ',
 
     def bandplan(self,fstart,fstop,smhz=5,bmhz=20,gmhz=2):
         """ construct the different channels of the standard
