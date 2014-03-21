@@ -21,27 +21,67 @@ Network Class
 
     Network.__init__
     Network.__repr__
+
+
+Network creation
+----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Network.add_devices
+    Network.create
+    Network.get_wstd
+    Network.get_SubNet
+    Network.connect
+    Network.init_PN
+
+
+Network attributes queries
+--------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Network.get_pos
+    Network.get_pos_est
+    Network.overview
+    Network.haspe
+    Network.pp
+
+
+Network update
+--------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Network.update_PN
+    Network.compute_LDPs
+    Network.update_LDPs
+    Network.update_pos
+
+
+Network Utilities
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
     Network.perm
     Network.combi
     Network.Gen_tuple
-    Network.get_wstd
-    Network.connect
-    Network.get_SubNet
-    Network.init_PN
-    Network.create
-    Network.update_PN
     Network.dist_edge
-    Network.update_LDPs
-    Network.compute_LDPs
-    Network.update_pos
-    Network.get_pos
-    Network.get_pos_est
-    Network.haspe
-    Network.overview
-    Network.pp
     Network.show
-    Network.compute_Sg
-    Network.show_sig
+
+
+
+Network save
+------------
+
+.. autosummary::
+    :toctree: generated/
+
     Network.csv_save
     Network.init_save
     Network.mat_save
@@ -52,8 +92,11 @@ Network Class
     Network.loc_save
     Network.ini_save
 
+
 PNetwork Class
 ==============
+
+    SimPy Process compliant version of the Network class
 
      PNetwork.__init__
      PNetwork.run
@@ -305,7 +348,7 @@ class Network(nx.MultiDiGraph):
 
 
     def add_devices(self, dev, p=np.array([0.,0.,0.])):
-        """ add devices to the current
+        """ add devices to the current network
 
         dev : list
             list of Devices 
@@ -329,14 +372,15 @@ class Network(nx.MultiDiGraph):
             self.node[d.ID]['PN']= Network(owner=d.ID, PN=True)
             self.node[d.ID]['PN'].add_nodes_from([(d.ID,d.__dict__)])
 
-        for d in dev:
-            for s in d.wstd.keys():
-                try:
-                    self.wstd[s]
-                    if d.ID not in self.wstd[s]:
-                        self.wstd[s].append(d.ID)
-                except :
-                    self.wstd[s]=[d.ID]
+        self.get_wstd()
+        # for d in dev:
+        #     for s in d.wstd.keys():
+        #         try:
+        #             self.wstd[s]
+        #             if d.ID not in self.wstd[s]:
+        #                 self.wstd[s].append(d.ID)
+        #         except :
+        #             self.wstd[s]=[d.ID]
 
 
     def perm(self,iterable,r,key,d=dict()):
@@ -1043,37 +1087,37 @@ class Network(nx.MultiDiGraph):
             self.coll_plot['edge'][0]=self.coll_plot['edge'][1]
             self.coll_plot['label'][0]=self.coll_plot['label'][1]
 
-    def compute_Sg(self,tx,rx):
-        if self.pos == {}:
-            self.pos=self.get_pos()
-        return (self.EMS.L.signature(self.pos[tx],self.pos[rx]))
+    # def compute_Sg(self,tx,rx):
+    #     if self.pos == {}:
+    #         self.pos=self.get_pos()
+    #     return (self.EMS.L.signature(self.pos[tx],self.pos[rx]))
 
 
-    def show_sig(self,Sg,tx,rx,ion=False,fig=None,ax=None):
-        if fig==None:
-            fig = plt.figure()
-            ax=fig.add_subplot(111)
-        elif ax== None:
-            ax=fig.add_subplot(111)
+    # def show_sig(self,Sg,tx,rx,ion=False,fig=None,ax=None):
+    #     if fig==None:
+    #         fig = plt.figure()
+    #         ax=fig.add_subplot(111)
+    #     elif ax== None:
+    #         ax=fig.add_subplot(111)
 
-        try:
-            self.coll_plot['Sg'][1]=[]
-        except:
-            self.coll_plot['Sg']=[[]]
-            self.coll_plot['Sg'].append([])
-
-
-        fig,ax,self.coll_plot['Sg'][1]=self.EMS.L.showSig(Sg,Tx=self.pos[tx],Rx=self.pos[rx],sr=True,fig=fig,ax=ax)
+    #     try:
+    #         self.coll_plot['Sg'][1]=[]
+    #     except:
+    #         self.coll_plot['Sg']=[[]]
+    #         self.coll_plot['Sg'].append([])
 
 
-        if ion:
-            try:
-                [jj.remove() for jj in self.coll_plot['Sg'][0]]
-            except:
-                pass
+    #     fig,ax,self.coll_plot['Sg'][1]=self.EMS.L.showSig(Sg,Tx=self.pos[tx],Rx=self.pos[rx],sr=True,fig=fig,ax=ax)
 
-            plt.draw()
-            self.coll_plot['Sg'][0]=self.coll_plot['Sg'][1]
+
+    #     if ion:
+    #         try:
+    #             [jj.remove() for jj in self.coll_plot['Sg'][0]]
+    #         except:
+    #             pass
+
+    #         plt.draw()
+    #         self.coll_plot['Sg'][0]=self.coll_plot['Sg'][1]
 
 
 
