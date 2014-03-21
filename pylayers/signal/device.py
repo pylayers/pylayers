@@ -62,15 +62,28 @@ class Device(object):
 
         s = s + 'Wireless Standards' + '\n'
         s = s + '==================' + '\n'
-        s = s + '{0:7} | {1:15} |{2:20} '.format('on/off', 'standard', 'antenna(s)') + '\n'
-        s = s + '{0:7} | {1:15} |{2:20} '.format('','','') + '\n'
         for k in self.std:
             if self.std[k]['on']:
                 power = 'on'
             else :
                 power ='off'
             ant = str([a for a in self.std[k]['ant']])
-            s = s +'{0:7} | {1:15} |{2:20} '.format(power, str(k), ant ) + '\n'
+            s = s + str(k) + '\n'
+            s = s + '-'*len(k) + '\n'
+            s = s + '{0:5} | {1:7} |{2:10} | {3:10} | {4:10} '.format('power', 'channel', 'modulation', 'code rate', 'antenna(s)') + '\n'
+            s = s +'{0:5} | {1:7} |{2:10} | {3:10} | {4:10} '.format(power, self.std[k]['chan'], self.std[k]['mod'], self.std[k]['cr'], ant) + '\n\n'
+
+
+
+        # s = s + '{0:7} | {1:20} |{2:20} '.format('on/off', 'standard', 'antenna(s)') + '\n'
+        
+        # for k in self.std:
+        #     if self.std[k]['on']:
+        #         power = 'on'
+        #     else :
+        #         power ='off'
+        #     ant = str([a for a in self.std[k]['ant']])
+        #     s = s +'{0:7} | {1:20} |{2:20} '.format(power, str(k), ant ) + '\n'
         s = s + '\n\nAntennas' + '\n'
         s = s + '========' + '\n'
         for k in self.ant:
@@ -114,11 +127,16 @@ class Device(object):
         self.std = {}
         for k in std.keys():
             self.std[k] = {}
+            W = Wstandard(k)
             self.std[k]['on']=True
             self.std[k]['ant'] = std[k]['antenna']
-            self.std[k]['epwr'] = [0]*len(self.std[k]['ant'])
+            self.std[k]['chan'] = W.chan.keys()[0]
+            self.std[k]['epwr'] = W.power(self.std[k]['chan'])
             self.std[k]['sens'] = [0]*len(self.std[k]['ant'])
-            self.std[k]['channel'] = 0
+            import ipdb
+            ipdb.set_trace()
+            self.std[k]['cr'] = W['crate'][0]
+            self.std[k]['mod'] = W['modulation'][0]
             self.std[k]['cca'] = ''
 
 
