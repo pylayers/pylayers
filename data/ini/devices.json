@@ -1,0 +1,43 @@
+{"Telephone1": 
+    {"dimensions":
+        {"height":123.8,
+         "width":58.6,
+         "depth":7.6
+        },
+     "standards":
+         {"ieee80211a":
+              {"antenna":["defant.vsh3"]},
+          "ieee80211b":
+              {"antenna":["defant.vsh3"]},
+          "bluetooth-class2":
+              {"antenna":["defant.vsh3"]}
+         },
+     "antennas":
+         {"defant.vsh3":
+            {"p": "[0.5, 0.5, 0.5]",
+             "T":"[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]"
+            },
+          "S2R2.sh3":
+            {"p": "[0.5, 0.5, 0.5]",
+             "T":"[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]"
+            }
+         }
+    },
+"Watch1": 
+    {"dimensions":
+        {"height":36.8,
+         "width":56.6,
+         "depth":11.1
+        },
+     "standards":
+         {"bluetooth-class2":
+              {"antenna":["S2R2.sh3"]}
+         },
+     "antennas":
+         {"S2R2.sh3":
+            {"p": "[0.5, 0.5, 0.5]",
+             "T":"[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]"
+            }
+         }
+    }
+}

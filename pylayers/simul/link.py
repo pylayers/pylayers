@@ -2,27 +2,67 @@
 # -*- coding: utf-8 -*-
 #
 """
-.. currentmodule:: pylayers.simul.links
+.. currentmodule:: pylayers.simul.link
 
 
 This module run the electromagnetic simulation at the link level
 It handles the storage of simulated object in `hdf5` format.
 
 Link Class
-============
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+
+Link simulation
+---------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Link.eval
+    Link._show3
+
+
+Link init
+---------
 
 .. autosummary::
     :toctree: generated/
 
     Link.__init__
+    Link.__repr__
+    Link.reset_config
+    Link.fill_dexist
+
+
+search in h5py file
+-------------------
+
+.. autosummary::
+    :toctree: generated/
+
     Link.checkh5
-    Link.save_init
-    Link.stack
-    Link.save
-    Link.get_idx
     Link.array_exist
-    Link.eval
-    Link._show3
+    Link.get_grpname
+    Link.get_idx
+
+
+Modify h5py file
+----------------
+
+.. autosummary::
+    :toctree: generated/
+
+
+    Link.save_init
+    Link.save
+    Link.load
+    Link.stack
+    Link._delete
+
+
 
 
 """
@@ -44,7 +84,7 @@ from pylayers.antprop.signature import Signatures
 # Handle Rays
 from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
-from pylayers.antprop.channel import Ctilde,Tchannel
+from pylayers.antprop.channel import Ctilde, Tchannel
 #from   Channel import *
 import h5py
 try:
@@ -56,89 +96,8 @@ except:
 import pdb
 
 
-
-
 class Link(object):
-    """ Link Simulation Class
 
-
-    All simulation are stored into a unique file in your <PyProject>/output directory
-    using the following convention:
-
-    Links_<save_idx>_<LayoutFilename>.h5
-
-    where
-        <save_idx> is a integer number to be able to discriminate different links simulations
-    and <LayoutFilename> is the Layout used for the link simulation.
-
-
-
-    Dataset organisation:
-
-    Links_<idx>_<Layout_name>.h5
-        |
-        |/sig/si_ID#0/
-        |    /si_ID#1/
-        |    ...
-        |
-        |/ray/ray_ID#0/
-        |    /ray_ID#1/
-        |    ...
-        |
-        |/Ct/Ct_ID#0/
-        |   /Ct_ID#1/
-        |    ...
-        |
-        |/H/H_ID#0/
-        |  /H_ID#1/
-        |    ...
-        |
-        |
-        |p_map
-        |c_map
-        |f_map
-        |A_map
-        |T_map
-
-
-
-    Roots Dataset :
-
-    cutoff_map : Cycles (Nc x 3)
-    p_map : Positions (Np x 3)
-    f_map : Frequency (Nf x 3)
-    T_map : Rotation matrices (Nt x 3)
-    A_map : Antenna name (Na x 3)
-
-    Groups and subgroups:
-
-
-        Signature identifier (si_ID#N):
-            ca_cb_cutoff
-
-        Ray identifier (ray_ID#N):
-            ua_ub
-
-        Ctilde identifier (Ct_ID#N):
-            ua_ub_uf
-
-        H identifier (H_ID#N):
-            ua_ub_uf_uTa_uTb_uAa_uAb
-
-        with
-        ca : cycle number of a
-        cb : cycle number of b
-        cutoff : signature.run cutoff
-        ua : indice of a position in 'p_map' position dataset
-        ub : indice of a position in 'p_map' position dataset
-        uf : indice of freq position in 'f_map' frequency dataset
-        uTa : indice of a position in 'T_map' Rotation dataset
-        uTb : indice of b position in 'T_map' Rotation dataset
-        uAa : indice of a position in 'A_map' Antenna name dataset
-        uAb : indice of b position in 'A_map' Antenna name dataset
-
-
-    """
     def __init__(self, **kwargs):
         """
         Parameters

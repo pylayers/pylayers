@@ -29,6 +29,7 @@ Wstandard Class
 
      Wstandard.__init__
      Wstandard.__repr__
+     Wstandard.ls
      Wstandard.bandplan
 
 AP Class
@@ -205,7 +206,7 @@ class Channel(dict):
 class Wstandard(dict):
     """ Wireless standard class
     """
-    def __init__(self,stdname,_filejson='wstd.json'):
+    def __init__(self,stdname='',_filejson='wstd.json'):
         """
         Parameters
         ----------
@@ -220,13 +221,19 @@ class Wstandard(dict):
 
         """
         self.name = stdname
-        self.load(stdname)
+        if stdname != '':
+            self.load(stdname)
 
     def __repr__(self):
-        st = self.name+'\n'
-        st = st+'-------------------------\n'
-        for k in np.sort(self.chan.keys()):
-            st = st + str(k) +' :  '+  self.chan[k].__repr__()
+        try:
+            st = self.name+'\n'
+            st = st+'-------------------------\n'
+            for k in np.sort(self.chan.keys()):
+                st = st + str(k) +' :  '+  self.chan[k].__repr__()
+        except:
+            print 'No standard loaded. \
+                   check available standards with ls() method'
+
         return(st)
 
 
@@ -266,7 +273,96 @@ class Wstandard(dict):
                     gmhz = chan[k]['gmhz']
                     self.bandplan(fstart=fstart,fstop=fstop,smhz=smhz,bmhz=bmhz,gmhz=gmhz)
 
+    def ls(self):
+        """ list all available standards
+        
+        Examples
+        --------
+        
+        .. plot::
+            :include-source:
+        
+            >>> from pylayers.signal.standard import *
+            >>> W =Wstandard('ieee80211ah')
+            >>> W.ls()
+        """
+        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        stds = json.load(fp)
+        fp.close()
+        for k in stds:
+            print k + ' , ',
 
+    def power(self, band, info ='max', unit='mw'):
+        """ Return inunition for a given channel
+        
+        Parameters
+        ----------
+        
+        band : int /float/string 
+            'bandnb' : band number 
+            'fghz' : frequency 
+            'bandname' : band name
+
+        info : string ('max'|'min'|'step')
+            requested information about power 
+
+        unit : string ('mw'|db)
+            miliwatt or db
+
+        Returns
+        -------
+        Pmaxmw
+            power iformations for given bandnb/fghz/
+        """
+
+        fp = open(pyu.getlong('wstd.json',pstruc['DIRSIMUL']))
+        stds = json.load(fp)
+        fp.close()
+        std = stds[self.name]
+
+        if info == 'max':
+            ii = 'pmaxmw'
+        if info == 'min':
+            ii = 'pminmw'
+        if info == 'step':
+            ii = 'pstepmw'
+
+        # band is a band number
+        if isinstance(band,int):
+            try:
+                fc = self.chan[band]['fcGHz']
+            except:
+                raise bandeError('incorrect channel number')
+        # band is a frequency
+        elif isinstance(band,float):
+            fc = band
+        # band is a band name
+        elif isinstance(band,str):
+            try:
+                f0 = std['channels'][band]['fstart']
+                f1 = std['channels'][band]['fstop']
+                bmhz = std['channels'][band]['bmhz']
+                gmhz = std['channels'][band]['gmhz']
+                f0g = f0 - (bmhz+gmhz)/2000.
+                f1g = f0 + (bmhz+gmhz)/2000.
+                fc = (f1g+f0g)/2.
+            except:
+                raise TypeError('Incorrect band name')
+
+        for k in std['channels'].keys():
+            f0 = std['channels'][k]['fstart']
+            f1 = std['channels'][k]['fstop']
+            bmhz = std['channels'][k]['bmhz']
+            gmhz = std['channels'][k]['gmhz']
+            f0g = f0 - (bmhz+gmhz)/2000.
+            f1g = f1 + (bmhz+gmhz)/2000.
+            bb = fc >= f0g and fc <= f1g
+            if bb:
+                power = stds[self.name]['channels'][k][ii]
+                if unit.lower() == 'db':
+                    power = 10*np.log10(power)
+                return power
+        raise NameError('Requested information not in standard')
 
     def bandplan(self,fstart,fstop,smhz=5,bmhz=20,gmhz=2):
         """ construct the different channels of the standard

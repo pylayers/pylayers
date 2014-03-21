@@ -43,17 +43,13 @@ import scipy as sp
 import pdb
 import matplotlib.pyplot as plt
 import pylayers.util.pyutil as pyu
-from matplotlib.path import Path
 from pylayers.util.project import *
 from pylayers.gis.layout import Layout
 import pandas as pd
 import copy
 import time
 import doctest
-from matplotlib.widgets import Slider, Button, RadioButtons, CheckButtons
-
-
-
+from matplotlib.widgets import Slider, CheckButtons
 
 
 class Trajectories(list):
@@ -64,8 +60,7 @@ class Trajectories(list):
     def __init__(self):
         """ initialization
         """
-        super(list,self).__init__() 
-
+        super(list, self).__init__()
 
     def __repr__(self):
 
@@ -74,18 +69,21 @@ class Trajectories(list):
             for a in self:
                 typ = a.typ
                 if typ == 'ag':
+
                     string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID
                 else :
                     string ='Access point ' + a.name + ' with ID ' + a.ID
                 s = s + string + '\n'
                 s = s + '-'*len(string) + '\n'
-                s = s +  a.__repr__()
+                s = s + a.__repr__()
                 s = s + '\n'
         except:
             s = 'Issue in Trajectories. Are you sure any Trajectory is loaded ?'
         return s
 
-    def loadh5(self,_filename='simulnet_TA-Office.h5'):
+    def loadh5(self, _filename='simulnet_TA-Office.h5'):
+
+
         """ import simulnet h5 file
 
         Parameters
@@ -111,13 +109,11 @@ class Trajectories(list):
 
         """
 
-        filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+        filename = pyu.getlong(_filename, pstruc['DIRNETSAVE'])
         if os.path.exists(filename):
             fil = pd.HDFStore(filename)
         else:
             raise NameError(filename + ' not founded')
-
-
 
         for k in fil.keys():
             df = fil[k]
@@ -134,13 +130,9 @@ class Trajectories(list):
         fil.close()
         self.Lfilename = layout
 
-
-
-
     def ishow(self):
         """
             interactive show of trajectories
-
 
         Examples
         --------
@@ -159,39 +151,43 @@ class Trajectories(list):
         fig.subplots_adjust(bottom=0.2, left=0.3)
 
         t = np.arange(0, len(self[0].index), self[0].ts)
-        L=Layout(self.Lfilename)
-        fig,ax = L.showG('s',fig=fig,ax=ax)
+        L = Layout(self.Lfilename)
+        fig, ax = L.showG('s', fig=fig, ax=ax)
 
-
-        valinit=0
-        lines=[]
-        labels=[]
+        valinit = 0
+        lines = []
+        labels = []
         colors = "bgrcmykw"
 
-        for iT,T in enumerate(self):
+        for iT, T in enumerate(self):
             if T.typ == 'ag':
-                lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit],'o',color=colors[iT],visible=False))
+                lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit], 'o',
+                             color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)
-            else :
-                lines.extend(ax.plot(T['x'][0],T['y'][0],'^',ms = 12,color=colors[iT],visible=False))
+        else:
+                lines.extend(ax.plot(T['x'][0], T['y'][0], '^', ms=12,
+                             color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)
 
-        time=self[0].time()
+        t = self[0].time()
 
         # init boolean value for visible in checkbutton
-        blabels=[False]*len(labels)
+        blabels = [False]*len(labels)
 
 
         ########
         # slider
         ########
         slider_ax = plt.axes([0.1, 0.1, 0.8, 0.02])
-        slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax, valinit=valinit, color='#AAAAAA')
+        slider = Slider(slider_ax, "time", self[0].tmin, self[0].tmax,
+                        valinit=valinit, color='#AAAAAA')
+
         def update(val):
-            if val >= 1 :
-                pval=np.where(val>time)[0]
-                ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),loc='left')
-                for iT,T in enumerate(self):
+            if val >= 1:
+                pval=np.where(val>t)[0]
+                ax.set_title(str(self[0].index[pval[-1]].time())[:11].ljust(12),
+                             loc='left')
+                for iT, T in enumerate(self):
                     if T.typ == 'ag':
                         lines[iT].set_xdata(T['x'][pval])
                         lines[iT].set_ydata(T['y'][pval])
@@ -205,6 +201,7 @@ class Trajectories(list):
         rax = plt.axes([0.02, 0.5, 0.3, 0.2], aspect='equal')
         # check (ax.object, name of the object , bool value for the obsject)
         check = CheckButtons(rax, labels, tuple(blabels))
+
         def func(label):
             i = labels.index(label)
             lines[i].set_visible(not lines[i].get_visible())
@@ -215,13 +212,13 @@ class Trajectories(list):
         plt.show(fig)
 
 
-
 class Trajectory(pd.DataFrame):
     """  Define a trajectory
 
     This class derives from pandas.DataFrame. It handles a full 3D trajectory.
 
-    A trajectory is time-stamped and contains 3D coordinates of position, velocity and acceleration.
+    A trajectory is time-stamped and contains 3D coordinates of p
+    position, velocity and acceleration.
 
     Attributes
     ----------
@@ -246,16 +243,14 @@ class Trajectory(pd.DataFrame):
 
 
     """
-    def __init__(self, df = {}, ID = 0, name ='',typ=''):
+    def __init__(self, df={}, ID=0, name='', typ=''):
         """ initialization
         """
-        super(Trajectory,self).__init__(df)
+        super(Trajectory, self).__init__(df)
         self.ID = ID
         self.name = name
         self.typ = typ
-        self.has_values=self.update()
-
-
+        self.has_values = self.update()
 
     def __repr__(self):
         try:
@@ -273,8 +268,6 @@ class Trajectory(pd.DataFrame):
         except:
             st = 'void Trajectory'
         return(st)
-
-
 
     def update(self):
         """ update class member data
@@ -296,7 +289,6 @@ class Trajectory(pd.DataFrame):
         """
 
         if len(self.values) != 0:
-            N = len(self.index)
             self.tmin = self.index.min().value*1e-9
             self.tmax = self.index.max().value*1e-9
             try:
@@ -310,6 +302,7 @@ class Trajectory(pd.DataFrame):
             return True
         else :
             return False
+
 
 
     #def generate(self,ID = 1, name = '',t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
@@ -367,35 +360,35 @@ class Trajectory(pd.DataFrame):
         npt = len(t)
         td = pd.to_datetime(t,unit=kwargs['unit'])
         # velocity vector
-        v = (pt[1:,:]-pt[0:-1,:])/(t[1]-t[0])
+        v = (pt[1:, :]-pt[0:-1, :])/(t[1]-t[0])
         # acceleration vector
-        a = (v[1:,:]-v[0:-1,:])/(t[1]-t[0])
+        a = (v[1:, :]-v[0:-1, :])/(t[1]-t[0])
         #
-        d = np.sqrt(np.sum(v[:,0:2]*v[:,0:2],axis=1))
+        d = np.sqrt(np.sum(v[:,0:2]*v[:, 0:2], axis=1))
         s = np.cumsum(d)*(t[1]-t[0])
         s[-1] = 0
         s = np.roll(s,1)
 
         df = {
-            'x':pt[:-2,0],
-            'y':pt[:-2,1],
-            'z':pt[:-2,2],
-            'vx':v[:-1,0],
-            'vy':v[:-1,1],
-            'vz':v[:-1,2],
-            'ax':a[:,0],
-            'ay':a[:,1],
-            'az':a[:,2],
-            's':s[:-1]}
-        super(Trajectory,self).__init__(df,columns=['x','y','z','vx','vy','vz','ax','ay','az','s'],index=td[:-2])
-
-        self.ID = kwargs['ID']
-        self.name = kwargs['name']
-
+            'x': pt[:-2, 0],
+            'y': pt[:-2, 1],
+            'z': pt[:-2, 2],
+            'vx': v[:-1, 0],
+            'vy': v[:-1, 1],
+            'vz': v[:-1, 2],
+            'ax': a[:, 0],
+            'ay': a[:, 1],
+            'az': a[:, 2],
+            's': s[:-1]}
+        super(Trajectory, self).__init__(df, columns=['x', 'y', 'z', 'vx', 'vy',
+                                         'vz', 'ax', 'ay', 'az', 's'],
+                                        index=td[:-2])
+        self.ID = ID
+        self.name = name
         self.update()
         return self
 
-    def resample(self,sf = 2):
+    def resample(self, sf=2):
         """ resample trajectory
 
         Parameters
@@ -413,23 +406,24 @@ class Trajectory(pd.DataFrame):
         """
 
         t = self.time()
-        x = self.space()[:,0]
-        y = self.space()[:,1]
+        x = self.space()[:, 0]
+        y = self.space()[:, 1]
         fx = sp.interpolate.interp1d(t, x)
         fy = sp.interpolate.interp1d(t, y)
         tstart = t[0]
         tstop = t[-1]
         tstep = (t[1]-t[0])/sf
-        tnew =  np.arange(tstart,tstop,tstep)
-        xnew =fx(tnew)
-        ynew =fy(tnew)
+        tnew = np.arange(tstart, tstop, tstep)
+        xnew = fx(tnew)
+        ynew = fy(tnew)
         T = Trajectory()
         T.generate(ID=self.ID,
                    name=self.name,
                    t=tnew,
                    pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
                    unit='s',
-                   sf = sf)
+                   sf=sf)
+
         return T
 
 
@@ -451,13 +445,12 @@ class Trajectory(pd.DataFrame):
         """
 
         speedms = speedkmph/3.6
-        factor  = speedms/self.meansp
+        factor = speedms/self.meansp
         newtime = self.time()/factor
         pt = self.space(ndim=3)
         t = copy.copy(self)
-        t.generate(ID=self.ID,name=self.name,t=newtime,pt=pt)
+        t.generate(ID=self.ID, name=self.name, t=newtime, pt=pt)
         return(t)
-
 
     def distance(self,tk):
         """ recover distance at time tk
@@ -478,11 +471,11 @@ class Trajectory(pd.DataFrame):
 
         """
         t = self.time()
-        u = np.where((t>=tk-self.ts/2.)&(t<=tk+self.ts/2.))[0][0]
+        u = np.where((t >= tk-self.ts/2.) & (t <= tk+self.ts/2.))[0][0]
 
         return(self['s'][u])
 
-    def space(self,ndim=2):
+    def space(self, ndim=2):
         """ extract space information
 
         Parameters
@@ -497,13 +490,13 @@ class Trajectory(pd.DataFrame):
         pt : nd.array()
 
         """
-        if ndim==2:
-            pt = np.vstack((self['x'].values,self['y'].values)).T
-        if ndim==3:
-            pt = np.vstack((self['x'].values,self['y'].values,self['z'].values)).T
+        if ndim == 2:
+            pt = np.vstack((self['x'].values, self['y'].values)).T
+        if ndim == 3:
+            pt = np.vstack((self['x'].values, self['y'].values,self['z'].values)).T
         return(pt)
 
-    def time(self,unit=0):
+    def time(self, unit=0):
         """ extract time
 
         Parameters
@@ -520,12 +513,12 @@ class Trajectory(pd.DataFrame):
 
         """
         lt = self.index
-        t  = np.array(map(lambda x : x.value,lt))
+        t  = np.array(map(lambda x: x.value, lt))
         conv = 10**(unit-9)
         t = t * conv
         return (t)
 
-    def plot(self,fig=[],ax=[],Nlabels=5,typ='plot',L=[]):
+    def plot(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[]):
         """ plot trajectory
 
         Parameters
@@ -563,27 +556,27 @@ class Trajectory(pd.DataFrame):
         if ax == []:
             ax = plt.gca()
 
-        if L!=[]:
+        if L != []:
             if isinstance(L,Layout):
-                fig,ax=L.showGs(fig=fig,ax=ax)
+                fig, ax = L.showGs(fig=fig, ax=ax)
 
         if typ == 'plot':
-            ax.plot(self['x'],self['y'])
+            ax.plot(self['x'], self['y'])
         elif typ == 'scatter':
-            ax.scatter(self['x'],self['y'])
+            ax.scatter(self['x'], self['y'])
 
-        for k in np.linspace(0,len(self),Nlabels,endpoint=False):
+        for k in np.linspace(0, len(self), Nlabels, endpoint=False):
             k = int(k)
 
-            ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
-            ax.plot(self['x'][k],self['y'][k],'*r')
+            ax.text(self['x'][k], self['y'][k], str(self.index[k].strftime("%M:%S")))
+            ax.plot(self['x'][k], self['y'][k], '*r')
 
         plt.xlabel('x (meters)')
         plt.ylabel('y (meters)')
 
-        return fig,ax
+        return fig, ax
 
-    def replay(self,fig=[],ax=[],Nlabels=5,typ='plot',L=[],speed=1,**kwargs):
+    def replay(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[], speed=1, **kwargs):
         """
             replay a trajectory
 
@@ -610,36 +603,34 @@ class Trajectory(pd.DataFrame):
             ax = plt.gca()
 
         limkwargs = copy.copy(kwargs)
-        if 'c' in kwargs :
+        if 'c' in kwargs:
             limkwargs.pop('c')
         if 'color'in kwargs:
             limkwargs.pop('c')
-        limkwargs['marker']='*'
-        limkwargs['s']=20
+        limkwargs['marker'] = '*'
+        limkwargs['s'] = 20
 
         if ('m' or 'marker') not in kwargs:
-            kwargs['marker']='o'
+            kwargs['marker'] = 'o'
         if ('c' or 'color') not in kwargs:
-            kwargs['color']='b'
+            kwargs['color'] = 'b'
 
-
-        if L!=[]:
+        if L != []:
             if isinstance(L,Layout):
-                fig,ax=L.showGs(fig=fig,ax=ax,**kwargs)
+                fig, ax = L.showGs(fig=fig, ax=ax, **kwargs)
 
-        labels = np.linspace(0,len(self),Nlabels,endpoint=True).tolist()
+        labels = np.linspace(0, len(self), Nlabels, endpoint=True).tolist()
 
-        for ik,k in enumerate(self.index):
+        for ik, k in enumerate(self.index):
             time.sleep(1/(1.*speed))
             ax.scatter(self['x'][ik],self['y'][ik],**kwargs)
-            plt.title(str(self.index[ik].time())[:11].ljust(12),loc='left')
+            plt.title(str(self.index[ik].time())[:11].ljust(12), loc='left')
 
             if ik > labels[0]:
-                ax.text(self['x'][ik],self['y'][ik],str(self.index[ik].strftime("%M:%S")))
-                ax.scatter(self['x'][ik],self['y'][ik],**limkwargs)
+                ax.text(self['x'][ik], self['y'][ik], str(self.index[ik].strftime("%M:%S")))
+                ax.scatter(self['x'][ik], self['y'][ik], **limkwargs)
                 labels.pop(0)
             plt.draw()
-
 
         plt.ioff()
         # for k in :
@@ -647,7 +638,6 @@ class Trajectory(pd.DataFrame):
         #     ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
         #     ax.plot(self['x'][k],self['y'][k],'*r')
         #     plt.draw()
-
 def importsn(_filename='pos.csv'):
     """
     ****DEPRECATED
@@ -667,7 +657,7 @@ def importsn(_filename='pos.csv'):
     lt : list of trajectory
 
     """
-    filename = pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+    filename = pyu.getlong(_filename, pstruc['DIRNETSAVE'])
     dt = pd.read_csv(filename)
     dtk = dt.keys()
     N = len(dtk)
@@ -677,9 +667,9 @@ def importsn(_filename='pos.csv'):
         x = dt[dtk[3*it+1]].values
         y = dt[dtk[3*it+2]].values
         z = np.zeros(len(x))
-        pt = np.vstack((x,y,z))
+        pt = np.vstack((x, y, z))
         T=Trajectory()
-        lt.append(T.generate(t=dt['time'].values,pt=pt.T,unit='s'))
+        lt.append(T.generate(t=dt['time'].values, pt=pt.T, unit='s'))
 
     return(lt)
 
@@ -718,7 +708,5 @@ def importsn(_filename='pos.csv'):
 if __name__ == '__main__':
     plt.ion()
     doctest.testmod()
-
-
 
 
