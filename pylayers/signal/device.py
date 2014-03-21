@@ -133,8 +133,6 @@ class Device(object):
             self.std[k]['chan'] = W.chan.keys()[0]
             self.std[k]['epwr'] = W.power(self.std[k]['chan'])
             self.std[k]['sens'] = [0]*len(self.std[k]['ant'])
-            import ipdb
-            ipdb.set_trace()
             self.std[k]['cr'] = W['crate'][0]
             self.std[k]['mod'] = W['modulation'][0]
             self.std[k]['cca'] = ''
