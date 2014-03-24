@@ -298,12 +298,18 @@ class Network(nx.MultiDiGraph):
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
             s = s + str(self.nodes()) + '\n'
             for n in self.nodes():
-                s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
-                s = s + 'wstd: ' + str(self.node[n]['wstd'].keys()) + '\n'
+                try:
+                    s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
+                except: 
+                    s = s + 'node ID: ' + str(n) + '\n'
+                try :
+                    s = s + 'wstd: ' + str(self.node[n]['wstd'].keys()) + '\n'
+                except:
+                    s = s + 'wstd: ' + str(self.node[n]['wstd']) + '\n'
                 try:
                     s = s + 'grp: ' + str(self.node[n]['grp']) + '\n'
                 except:
-                    pass
+                    s = s + 'type: ' + str(self.node[n]['typ']) + '\n'
                 try:
                     s = s + 'pos: ' + str(self.node[n]['p']) + '\n'
                 except:
@@ -653,7 +659,10 @@ class Network(nx.MultiDiGraph):
             for i in itertools.combinations(self.wstd[wstd],2):
                 self.link[wstd].append(i)
             self.relink[wstd]=[(i[1],i[0]) for i in self.link[wstd]]
-        self.get_grp()
+        try:
+            tryself.get_grp()
+        except:
+            pass
 
 
     def get_grp(self):

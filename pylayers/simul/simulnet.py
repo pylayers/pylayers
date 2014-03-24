@@ -153,7 +153,7 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\nDestination of agents choosed: ' + self.meca_opt['choose_destination']
 
         s = s + '\n\nNetwork' + '\n-------' 
-        s = s + '\nNodes per RATs: ' + str(self.net.RAT)
+        s = s + '\nNodes per wstd: ' + str(self.net.wstd)
 
         s = s + '\n\nLocalization'  + '------------' 
         s = s + '\nLocalization enable: ' + self.loc_opt['localization'] 
@@ -229,7 +229,7 @@ class Simul(SimulationRT): # Sympy 2
             self.lAg.append(Agent(
                             ID=ag_opt['id'],
                             name=ag_opt['name'],
-                            type=ag_opt['type'],
+                            typ=ag_opt['typ'],
                             color=eval(ag_opt['color']),
                             pdshow=str2bool(self.meca_opt['pdshow']),
                             pos=np.array(eval(ag_opt['pos'])),
@@ -244,10 +244,10 @@ class Simul(SimulationRT): # Sympy 2
                             L=self.L,
                             network=str2bool(self.net_opt['network']),
                             net=self.net,
-                            epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
-                            sens=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
+                            epwr=dict([(eval((ag_opt['wstd']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['wstd']))))]),
+                            sens=dict([(eval((ag_opt['wstd']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['wstd']))))]),
                             world=self.the_world,
-                            RAT=eval(ag_opt['rat']),
+                            wstd=eval(ag_opt['wstd']),
                             save=eval(self.save_opt['save']),
                             gcom=self.gcom,
                             comm_mode=eval(self.net_opt['communication_mode']),
@@ -276,7 +276,7 @@ class Simul(SimulationRT): # Sympy 2
 
             # create All Personnal networks
             for n in self.net.nodes():
-                self.net.node[n]['PN'].get_RAT()
+                self.net.node[n]['PN'].get_wstd()
                 self.net.node[n]['PN'].get_SubNet()
             self.gcom.create()
 
@@ -366,13 +366,13 @@ class Simul(SimulationRT): # Sympy 2
         store = pd.HDFStore(filename+'_'+layfile+'.h5','w')
         for a in self.lAg :
 
-            if a.type != 'ap':
+            if a.typ != 'ap':
                 store.put( a.ID,a.meca.df.convert_objects() ) 
 
             else : # if agent acces point, its position is saved
                 store.put( a.ID,a.posdf )
 
-            store.get_storer(a.ID).attrs.typ = a.type
+            store.get_storer(a.ID).attrs.typ = a.typ
             store.get_storer(a.ID).attrs.name = a.name
             store.get_storer(a.ID).attrs.ID = a.ID
             store.get_storer(a.ID).attrs.layout = self.L.filename

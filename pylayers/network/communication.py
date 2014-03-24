@@ -184,17 +184,17 @@ class TX(Process):
 #        while 1:
 #            if self.sim.verbose:
 #                print 'request TOA', self.ID
-#            for rat in self.PN.SubNet.keys():
-#                for n in self.PN.SubNet[rat].edge[self.ID].keys():
+#            for wstd in self.PN.SubNet.keys():
+#                for n in self.PN.SubNet[wstd].edge[self.ID].keys():
 #                    # check nodes in visibility
-#                    if self.net.edge[self.ID][n][rat]['vis']:
-#                        key='(\''+self.ID+'\', \''+n+'\', \''+rat+'\')'
+#                    if self.net.edge[self.ID][n][wstd]['vis']:
+#                        key='(\''+self.ID+'\', \''+n+'\', \''+wstd+'\')'
 #                        self.devt[eval(key)].signal()
 #            yield hold, self, self.refreshTOA
 ##                    devt[]
-##                [self.PN.edge[self.ID][n][rat].update(
-##                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-##                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
+##                [self.PN.edge[self.ID][n][wstd].update(
+##                {'TOA':self.net.edge[self.ID][n][wstd]['TOA'],'tTOA':self.sim.now()})
+##                for n in self.PN.SubNet[wstd].edge[self.ID].keys() if self.net.edge[self.ID][n][wstd]['vis']]
 ##            print 'refresh TOA node', self.ID, ' @',self.sim.now()
 
 
@@ -203,16 +203,16 @@ class TX(Process):
         """ interpret decision rule from self.dec
         """
 
-        # n dict{rat:np.array([node ids])}
+        # n dict{wstd:np.array([node ids])}
         n={}
-        # loop on rat
-        for rat in self.dec['rat']:
+        # loop on wstd
+        for wstd in self.dec['wstd']:
             try:
-            # get all nodes connecteed to self.ID on subnetwork rat
-                n[rat]=np.array(self.PN.SubNet[rat].edges())[:,1]
+            # get all nodes connecteed to self.ID on subnetwork wstd
+                n[wstd]=np.array(self.PN.SubNet[wstd].edges())[:,1]
 
                 # initialize remained nodes to True
-                rn = [True]*len(n[rat])
+                rn = [True]*len(n[wstd])
                 # loop on condition
                 for r in self.dec['rule']:
 
@@ -222,7 +222,7 @@ class TX(Process):
                 # mettre boolean dans variable pour condition a plus d41 regle
                     if 'rssth' in r:
                         # rssth<100
-                        rntmp = np.array(nx.get_edge_attributes(self.PN.SubNet[rat],'Pr').values())
+                        rntmp = np.array(nx.get_edge_attributes(self.PN.SubNet[wstd],'Pr').values())
                         if len(r.split('<')) > 1:
                             rn = rn and ( rntmp  < eval(r.split('<')[1]) )
                         elif len(r.split('>')) > 1:
@@ -230,16 +230,16 @@ class TX(Process):
 
     #                elif 'distance' in r :
     #                    # distance < 10
-    #                    rntmp = np.array(nx.get_edge_attributes(self.net.SubNet[rat],'d').values())
+    #                    rntmp = np.array(nx.get_edge_attributes(self.net.SubNet[wstd],'d').values())
     #                    if len(r.split('<')) > 1:
     #                        rn = rn and ( rntmp  < eval(r.split('<')[1]) )
     #                    elif len(r.split('>')) > 1:
     #                        rn = rn and ( rntmp  > eval(r.split('<')[1]) )
 
-                n[rat][np.where(rn)]
+                n[wstd][np.where(rn)]
 
             except:
-                n[rat]=np.array(())
+                n[wstd]=np.array(())
 
         # retrun only node id which are compliant with rules
         return (n)
@@ -262,11 +262,11 @@ class TX(Process):
 
 
             # send a signal (a.k.a. request transmission) to nodes in n
-            for rat in rn.keys():
-                for n in rn[rat]:
+            for wstd in rn.keys():
+                for n in rn[wstd]:
                     # check if nodes in visibility
-                    if self.net.edge[self.ID][n][rat]['vis']:
-                        key='(\''+self.ID+'\', \''+n+'\', \''+rat+'\')'
+                    if self.net.edge[self.ID][n][wstd]['vis']:
+                        key='(\''+self.ID+'\', \''+n+'\', \''+wstd+'\')'
                         # WARNING : PLEASE LEAVE THE 2 FOLLOWING LINES
                         # this is not a bad copy paste. It is required
                         # to force signalization ( probably a SimPy bug)
@@ -422,19 +422,19 @@ class RX(Process):
         """
         self.create_evt()
         while 1:
-            for rat in self.PN.SubNet.keys():
+            for wstd in self.PN.SubNet.keys():
             # 2 approach to determine visibility
             ##  1) test visibility during the refresh
-#                [self.PN.edge[self.ID][n][rat].update(
-#                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],
+#                [self.PN.edge[self.ID][n][wstd].update(
+#                {'Pr':self.net.edge[self.ID][n][wstd]['Pr'],
 #                'tPr':self.sim.now(),
-#                'vis':self.net.edge[self.ID][n][rat]['Pr'][0]>self.net.node[self.ID]['sens'][rat]})
-#                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+#                'vis':self.net.edge[self.ID][n][wstd]['Pr'][0]>self.net.node[self.ID]['sens'][wstd]})
+#                for n in self.PN.SubNet[wstd].edge[self.ID].keys()]
 
             #  2) copy the visibility information from network layer
-                [self.PN.edge[self.ID][n][rat].update(
-                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
+                [self.PN.edge[self.ID][n][wstd].update(
+                {'Pr':self.net.edge[self.ID][n][wstd]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][wstd]['vis']})
+                for n in self.PN.SubNet[wstd].edge[self.ID].keys() ]
 
             if self.sim.verbose:
                 print 'refresh RSS node', self.ID, ' @',self.sim.now()
@@ -453,18 +453,18 @@ class RX(Process):
 #        self.create_evt()
 
 #        while 1:
-#            for rat in self.PN.SubNet.keys():
+#            for wstd in self.PN.SubNet.keys():
 
 #                # 2 approaches :
 #                ## 1) that commented code allow refresh TOA only when visibility
-##                [self.PN.edge[self.ID][n][rat].update(
-##                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-##                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
+##                [self.PN.edge[self.ID][n][wstd].update(
+##                {'TOA':self.net.edge[self.ID][n][wstd]['TOA'],'tTOA':self.sim.now()})
+##                for n in self.PN.SubNet[wstd].edge[self.ID].keys() if self.net.edge[self.ID][n][wstd]['vis']]
 
 #                # 2 refresj TOa whatever visibility or not
-#                [self.PN.edge[self.ID][n][rat].update(
-#                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-#                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
+#                [self.PN.edge[self.ID][n][wstd].update(
+#                {'TOA':self.net.edge[self.ID][n][wstd]['TOA'],'tTOA':self.sim.now()})
+#                for n in self.PN.SubNet[wstd].edge[self.ID].keys() ]
 
 #            if self.sim.verbose:
 #                print 'refresh TOA node', self.ID, ' @',self.sim.now()
@@ -472,14 +472,14 @@ class RX(Process):
 #            yield hold, self, self.refreshTOA
 
 
-    def fill_req(self,n,rat):
+    def fill_req(self,n,wstd):
         """ update values of the personnal network of a requester in regard
              with the action define in self.gcom.dec[requester.id]
 
             Attributes
             ----------
                 n   : id of the requester
-                rat : used rat
+                wstd : used wstd
         """
 
 
@@ -493,8 +493,8 @@ class RX(Process):
         # update range
         if 'range' in a:
             # WARNING here, the PN of the requester is filled
-            self.net.node[n]['PN'].edge[n][self.ID][rat].update(
-            {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
+            self.net.node[n]['PN'].edge[n][self.ID][wstd].update(
+            {'TOA':self.net.edge[self.ID][n][wstd]['TOA'],'tTOA':self.sim.now()})
         # get position estimation from the requester
         if 'pe' in a:
             self.net.node[n]['PN'].node[self.ID]['pe']=self.PN.node[self.ID]['pe']
@@ -520,11 +520,11 @@ class RX(Process):
                 if evt.occurred:
                     # evt.name[0] = requester
                     # evt.name[1] = requested ( = self.ID)
-                    # evt.name[2] = rat
+                    # evt.name[2] = wstd
                     # update personal network
                     self.fill_req(evt.name[0],evt.name[2])
                     if self.sim.verbose:
-                        print 'Done request from',evt.name[0],'to',evt.name[1], 'on rat', evt.name[2]
+                        print 'Done request from',evt.name[0],'to',evt.name[1], 'on wstd', evt.name[2]
 
 
 
@@ -543,7 +543,7 @@ class RX(Process):
 #                if evt.occurred:
 #                    # evt.name[0] = requester
 #                    # evt.name[1] = requested ( = self.ID)
-#                    # evt.name[2] = rat
+#                    # evt.name[2] = wstd
 #                    # update personal network TOA value
 #                    self.PN.edge[evt.name[1]][evt.name[0]][evt.name[2]].update(
 #                    {'TOA':self.net.edge[evt.name[1]][evt.name[0]][evt.name[2]]['TOA'],'tTOA':self.sim.now()})
@@ -576,7 +576,7 @@ class Gcom(nx.MultiDiGraph):
     Contrary to pylayers.network, which is an undirected graph, here edge are directed.
 
     Hence the dictionnary of simpy events (devt) can be created.
-    The keys of devt are a tuple (nodeid#1, nodeid#2 , rat).
+    The keys of devt are a tuple (nodeid#1, nodeid#2 , wstd).
 
     """
 
@@ -591,24 +591,24 @@ class Gcom(nx.MultiDiGraph):
         self.fileini='communication.ini'
         self.dec={}
         self.devt={}
+
     def load_dec_file(self):
         self.config     = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
         nodes=self.config.sections()
-        ntype=nx.get_node_attributes(self.net,'type')
-
+        ntype=nx.get_node_attributes(self.net,'typ')
         for n in self:
             try:
                 if ntype[n]=='ag':
                     self.dec[n]={}
                     di = self.config.items(n)
-                    self.dec[n]['rat']=eval(dict(self.config.items(n))['rat'])
+                    self.dec[n]['wstd']=eval(dict(self.config.items(n))['wstd'])
                     self.dec[n]['action']=eval(dict(self.config.items(n))['action'])
                     self.dec[n]['rule']=eval(dict(self.config.items(n))['rule'])
             except:
                 nconfig     = ConfigParser.ConfigParser()
                 nconfig.add_section(n)
-                nconfig.set(n,'rat',[self.net.node[n]['RAT'][0]])
+                nconfig.set(n,'wstd',[self.net.node[n]['wstd'][0]])
                 nconfig.set(n,'rule',['always'])
                 nconfig.set(n,'action',['range'])
                 fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
@@ -641,18 +641,18 @@ class Gcom(nx.MultiDiGraph):
         """
             Create the communication graph from the Network graph
         """
-        for rat in self.net.SubNet:
-            for n in self.net.SubNet[rat].nodes():
-                G=nx.DiGraph(self.net.SubNet[rat])
+        for wstd in self.net.SubNet:
+            for n in self.net.SubNet[wstd].nodes():
+                G=nx.DiGraph(self.net.SubNet[wstd])
                 le = G.edges(n)
                 ld = [{'message':[],'t':-1}] * len(le)
                 try:
                     if le[0][0] == n :
-                        self.add_edges_from(self.net.Gen_tuple(G.edges_iter(n),rat,ld))
+                        self.add_edges_from(self.net.Gen_tuple(G.edges_iter(n),wstd,ld))
                     else :
-                        self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),rat,ld))
+                        self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),wstd,ld))
                 except:
-                    print 'WARNING : no edge on rat',rat
+                    print 'WARNING : no edge on wstd',wstd
 
 
 
@@ -670,9 +670,9 @@ class Gcom(nx.MultiDiGraph):
 
 
 
-#    def fill_edge(self,le,rat,mess):
+#    def fill_edge(self,le,wstd,mess):
 
-#        for i,r in enumerate(rat):
+#        for i,r in enumerate(wstd):
 #            self.add_edges_from(self.net.Gen_tuple(le[i],r,mess[i]))
 
 
@@ -705,9 +705,9 @@ class Gcom(nx.MultiDiGraph):
 #                          pos=np.array(eval(ag_opt['pos'])),
 #                          Layout=L,
 #                          net=N,
-#                          RAT=eval(ag_opt['rat']),
+#                          RAT=eval(ag_opt['wstd']),
 #                          dcond=dcond(ag),
-#                          epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
+#                          epwr=dict([(eval((ag_opt['wstd']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['wstd']))))]),
 #                          sim=sim)
 #                  )
 
