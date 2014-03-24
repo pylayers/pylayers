@@ -384,8 +384,6 @@ class Trajectory(pd.DataFrame):
         super(Trajectory, self).__init__(df, columns=['x', 'y', 'z', 'vx', 'vy',
                                          'vz', 'ax', 'ay', 'az', 's'],
                                         index=td[:-2])
-        import ipdb
-        ipdb.set_trace()
         self.ID = kwargs['ID']
         self.name = kwargs['name']
         self.update()
