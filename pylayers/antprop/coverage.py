@@ -205,7 +205,7 @@ class Coverage(object):
             st = st + self.dap[k].__repr__()+'\n'
         st = st + '-----Rx------'+'\n'
         st= st+ 'rxsens (dBm) : '+ str(self.rxsens) + '\n'
-        st= st+ 'bandwith (Mhz) : '+ str(self.bandwidthmhz) + '\n'
+        st= st+ 'bandwith (Mhz) : '+ str(self.bmhz) + '\n'
         st= st+ 'temperature (K) : '+ str(self.temperaturek) + '\n'
         st= st+ 'noisefactor (dB) : '+ str(self.noisefactordb) + '\n\n'
         st = st + '--- Grid ----'+'\n'

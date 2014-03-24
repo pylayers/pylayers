@@ -76,7 +76,6 @@ class Device(object):
 
 
         # s = s + '{0:7} | {1:20} |{2:20} '.format('on/off', 'standard', 'antenna(s)') + '\n'
-        
         # for k in self.std:
         #     if self.std[k]['on']:
         #         power = 'on'
@@ -99,7 +98,7 @@ class Device(object):
 
         Parameters
         ----------
-        
+
         devname : string
             Name of the device to be loaded
 
@@ -120,11 +119,13 @@ class Device(object):
         # meter conversion
         self.dim = np.array((dim['height'], dim['width'], dim['depth'])) / 1000
         self.ant = {}
+
         for k in ant.keys():
             self.ant[k] = {}
             self.ant[k]['p'] = np.array(eval(ant[k]['p']))
             self.ant[k]['T'] = np.array(eval(ant[k]['T']))
         self.std = {}
+
         for k in std.keys():
             self.std[k] = {}
             W = Wstandard(k)
