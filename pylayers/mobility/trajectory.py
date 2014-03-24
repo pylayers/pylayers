@@ -351,8 +351,9 @@ class Trajectory(pd.DataFrame):
                      'sf' : 1
                     }
 
-        for k in defaults:
-            kwargs[k] = defaults[k]
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
 
         t = kwargs['t']
         pt = kwargs['pt']
@@ -383,8 +384,10 @@ class Trajectory(pd.DataFrame):
         super(Trajectory, self).__init__(df, columns=['x', 'y', 'z', 'vx', 'vy',
                                          'vz', 'ax', 'ay', 'az', 's'],
                                         index=td[:-2])
-        self.ID = ID
-        self.name = name
+        import ipdb
+        ipdb.set_trace()
+        self.ID = kwargs['ID']
+        self.name = kwargs['name']
         self.update()
         return self
 
