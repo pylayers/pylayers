@@ -44,7 +44,7 @@ class Device(object):
 
     """
 
-    def __init__(self, devname='Telephone1', ID =0, owner='',typ='ap'):
+    def __init__(self, devname='Telephone', ID =0, owner='',typ='ap'):
         """ init of Device class
                 
         Attributes
@@ -103,7 +103,7 @@ class Device(object):
                 power = 'on'
             else :
                 power ='off'
-            ant = str([a for a in self.wstd[k]['ant']])
+            ant = str([self.ant[a]['name'] for a in self.wstd[k]['ant']])
             s = s + str(k) + '\n'
             s = s + '-'*len(k) + '\n'
             s = s + '{0:5} | {1:7} |{2:10} | {3:10} | {4:10} '.format('power', 'channel', 'modulation', 'code rate', 'antenna(s)') + '\n'
@@ -123,7 +123,7 @@ class Device(object):
         s = s + '\n\nAntennas' + '\n'
         s = s + '========' + '\n'
         for k in self.ant:
-            s = s + str(k) + '\n'
+            s = s + str(self.ant[k]['name']) + '\n'
             s = s + '-'*len(k) + '\n'
             s = s + 'On device Relative position: \n' + str(self.ant[k]['p']) + '\n'
             s = s + 'On device Rotation Matrice: \n' + str(self.ant[k]['T']) + '\n\n'
@@ -156,9 +156,11 @@ class Device(object):
         # meter conversion
         self.dim = np.array((dim['height'], dim['width'], dim['depth'])) / 1000
         self.ant = {}
+
         for k in ant.keys():
             self.ant[k] = {}
-            self.ant[k]['p'] = np.array(eval(ant[k]['p']))
+            self.ant[k]['name'] = ant[k]['name']
+            self.ant[k]['p'] = np.array(ant[k]['p'])
             self.ant[k]['T'] = np.array(eval(ant[k]['T']))
         self.wstd = {}
         for k in wstd.keys():
