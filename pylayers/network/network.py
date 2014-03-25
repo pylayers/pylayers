@@ -383,7 +383,10 @@ class Network(nx.MultiDiGraph):
             dev=[dev]
         if p == []:
             p = np.nan*np.zeros((len(dev),3))
-        elif (p.shape[0] != len(dev)):
+        elif len(p.shape) == 1:
+            p = p.reshape(1,3)
+
+        if (p.shape[0] != len(dev)):
             raise AttributeError('number of devices != nb pos')
 
         # check if unique ID (in dev and in network ) else raise error

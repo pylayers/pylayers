@@ -164,7 +164,7 @@ class Trajectories(list):
                 lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit], 'o',
                              color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)
-        else:
+            else:
                 lines.extend(ax.plot(T['x'][0], T['y'][0], '^', ms=12,
                              color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)

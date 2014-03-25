@@ -32,10 +32,13 @@ import pylayers.util.geomutil as geu
 import pylayers.util.plotutil as plu
 import pylayers.signal.waveform as wvf
 import pylayers.signal.bsignal as bs
+from pylayers.signal.device import Device
+
 # Handle Layout
 from pylayers.gis.layout import Layout
 # Handle VectChannel and ScalChannel
 from pylayers.antprop import antenna, signature
+from pylayers.network.network import Network
 from pylayers.simul.link import *
 # Handle directory hierarchy
 from pylayers.util.project import *
@@ -81,8 +84,8 @@ class Simul(object):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.links=[]
         self.load(_filesimul)
+        self.gen_net()
 
     def __repr__(self):
 
@@ -110,7 +113,7 @@ class Simul(object):
         return s
 
     def load(self, _filesimul):
-        """  load
+        """  load a simultraj configuration file
 
         Parameters
         ----------
@@ -145,84 +148,51 @@ class Simul(object):
                 self.dpersons.update({t.name: person})
                 
             else:
-                import ipdb
-                ipdb.set_trace()
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
                 self.dap.update({t.ID: {'pos': pos,
-                                        'ant' : antenna.Antenna()
+                                        'ant': antenna.Antenna(),
+                                        'name': t.name
                                         }
-                                })
+                                 })
 
         self.Nag = len(self.dpersons.keys())
         self.Nap = len(self.dap.keys())
         self.traj = traj
-        
 
+    def gen_net(self):
+        """ generate Network and associated links
 
-    # def gen_links2(self, B2B=False, OB=True, B2I=False):
-    #     """ generate links
+        Notes
+        -----
 
-    #     Parameters
-    #     ----------
+        Create self.N : Network object
 
-    #     B2B : boolean
-    #         Body to Body links
-    #     OB  : boolean
-    #         On-Body links
-    #     B2I : boolean
-    #         Body to infrastructure links
+        See Also
+        --------
 
+        pylayers.network.network
 
-    #     """
+        """
 
-    #     self.B2B = B2B
-    #     self.OB = OB
-    #     self.B2I = B2I
-
-    #     lAP = self.dap.keys()
-    #     lperson = self.dpersons.values()
-    #     dlink = {}
-    #     dlink['OB']=[]
-    #     dlink['B2B']=[]
-    #     dlink['B2I']=[]
-    #     # pdb.set_trace()
-
-
-    #     for person in lperson:
-    #         if OB:
-    #             # get list of synamic devices on body:
-    #             oblink=[]
-    #             for x in itertools.combinations(person.dev, 2):
-    #                 if ((person.dev[x[0]]['typ'] != 'static') or (person.dev[x[1]]['typ'] != 'static')):
-    #                     oblink.append([(person.name, x[0]), (person.name, x[1])])
-    #             dlink['OB'].extend(oblink)
-
-
-    #         if B2I:
-    #             for ap in lAP:
-    #                 # may be criteria on distance between person and AP
-    #                 for dev in person.dev:
-    #                     # if person.dev[dev1]['infra']:
-    #                     # in the future port would be an antenna port for MIMO
-    #                     # AP
-    #                     dlink['B2I'].append([(](ap, 'port'), (person.name, dev)])
-
-    #         if B2B:
-    #             for dev1 in person.dev:
-    #                 # if person.dev[dev1]['tobody']:
-    #                 for alter in lperson:
-    #                     if alter.name != person.name:
-    #                         for dev2 in alter.dev:
-    #                             # if alter.dev[dev2]['tobody']:
-    #                             dlink['B2B'].append(
-    #                                 [((person.name, dev1), (alter.name, dev2)])
-
-    #     self.links = dlink
+        N = Network()
+        # get devices on bodies
+        for p in self.dpersons:
+            D = []
+            for dev in self.dpersons[p].dev:
+                D.append(Device(self.dpersons[p].dev[dev]['name'], ID=dev+'_'+p))
+            N.add_devices(D, grp=p)
+        # get access point devices 
+        for ap in self.dap:
+            D=Device(self.dap[ap]['name'], ID=ap)
+            N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
+        # create Network
+        N.create()
+        self.N = N
 
 
     def gen_links(self, B2B=False, OB=True, B2I=False):
-        """ generate links
-
+        """  DEPRECATED
+        generate links
         Parameters
         ----------
 
@@ -240,7 +210,6 @@ class Simul(object):
         self.B2B = B2B
         self.OB = OB
         self.B2I = B2I
-
         lAP = self.dap.keys()
         lperson = self.dpersons.values()
         dlink = {}
