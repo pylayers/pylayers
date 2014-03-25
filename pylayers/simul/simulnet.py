@@ -276,8 +276,8 @@ class Simul(SimulationRT): # Sympy 2
 
             # create All Personnal networks
             for n in self.net.nodes():
-                self.net.node[n]['PN'].get_wstd()
-                self.net.node[n]['PN'].get_SubNet()
+                self.net.node[n]['PN']._get_wstd()
+                self.net.node[n]['PN']._get_SubNet()
             self.gcom.create()
 
 
