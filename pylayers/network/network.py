@@ -59,11 +59,12 @@ Network update
 .. autosummary::
     :toctree: generated/
 
+    Network.update_pos
+    Network.update_orient
     Network.update_edges
     Network.update_PN
     Network.compute_LDPs
     Network.update_LDPs
-    Network.update_pos
 
 
 Network Utilities
@@ -294,16 +295,21 @@ class Network(nx.MultiDiGraph):
         self.lidx = 0
         self.isPN=PN
 
-    # def __repr__(self):
+    def __repr__(self):
 
 
-    #     if not self.isPN:
-    #         s = 'Network information\n*******************\n'
-    #         s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
-    #         s = s + str(self.nodes()) + '\n'
-    #         return s
+        if not self.isPN:
+            s = 'Network information\n*******************\n'
+            s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
+            # s = s + str(self.nodes()) + '\n'
+            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
+            s = s + title + '\n' + '-'*len(title) + '\n'
+            for n in self.nodes():
+                s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
+                .format(self.node[n]['ID'], self.node[n]['name'],
+                self.node[n]['grp'], self.node[n]['typ'], self.node[n]['p'][0],
+                self.node[n]['p'][1],self.node[n]['p'][2],self.node[n]['wstd'].keys()) + '\n'
 
-            # for n in self.nodes():
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
     #             except: 
@@ -344,27 +350,28 @@ class Network(nx.MultiDiGraph):
     #         #     for sub in self.SubNet.keys():
     #         #         s = s + '\t'+ sub + '\n' +  self.SubNet[sub].__repr__() + '\n'
 
-    #     else:
-    #         s = 'Personnal Network of node ' +str(self.owner)+ ' information\n***************************************\n'
-    #         s = s + '{0:5} |{1:20} | {2:5} | {3:7}| {4:7}| {5:7}| {6:7}| {7:7}| {8:10}|'.format('peer','wstd', 'TOA','std TOA','tTOA', 'Pr', 'std Pr', 'tPr','visibility')
-    #         for e1,e2 in self.edges():
-    #             for r in self.edge[e1][e2].keys():
-    #                 TOA = self.edge[e1][e2][r]['TOA'][0]
-    #                 stdTOA = self.edge[e1][e2][r]['TOA'][1]
-    #                 pr = self.edge[e1][e2][r]['Pr'][0]
-    #                 stdpr = self.edge[e1][e2][r]['Pr'][1]
-    #                 try :
-    #                     tTOA = self.edge[e1][e2][r]['tTOA']
-    #                 except:
-    #                     tTOA = 'nan'
-    #                 try :
-    #                     tpr = self.edge[e1][e2][r]['tPr']
-    #                 except:
-    #                     tpr = 'nan'
-    #                 vis = self.edge[e1][e2][r]['vis']
-    #                 np.set_printoptions(precision=3)
+        else:
+            s = 'Personnal Network of node ' +str(self.owner)+ ' information\n***************************************\n'
+            s = s + '{0:7} |{1:20} | {2:5} | {3:7}| {4:7}| {5:7}| {6:7}| {7:7}| {8:10}|'.format('peer','wstd', 'TOA','std TOA','tTOA', 'Pr', 'std Pr', 'tPr','visibility')
+            for e1,e2 in self.edges():
+                for r in self.edge[e1][e2].keys():
+                    TOA = self.edge[e1][e2][r]['TOA'][0]
+                    stdTOA = self.edge[e1][e2][r]['TOA'][1]
+                    pr = self.edge[e1][e2][r]['Pr'][0]
+                    stdpr = self.edge[e1][e2][r]['Pr'][1]
+                    try :
+                        tTOA = self.edge[e1][e2][r]['tTOA']
+                    except:
+                        tTOA = 'nan'
+                    try :
+                        tpr = self.edge[e1][e2][r]['tPr']
+                    except:
+                        tpr = 'nan'
+                    vis = self.edge[e1][e2][r]['vis']
+                    np.set_printoptions(precision=3)
 
-    #                 s = s + '\n' + '{0:5} |{1:20} | {2:5.2f} | {3:7.2f}| {4:7}| {5:7.2f}| {6:7.2f}| {7:7}| {8:10}|'.format(e2 ,r ,TOA ,stdTOA ,tTOA ,pr , stdpr ,tpr, vis)
+                    s = s + '\n' + '{0:7} |{1:20} | {2:5.2f} | {3:7.2f}| {4:7}| {5:7.2f}| {6:7.2f}| {7:7}| {8:10}|'.format(e2 ,r ,TOA ,stdTOA ,tTOA ,pr , stdpr ,tpr, vis)
+        return s
 
 
 
@@ -401,18 +408,21 @@ class Network(nx.MultiDiGraph):
             typ = 'ap'
         else :
             typ = 'ag'
-        [d.__dict__.update({'p': p[ud, :],
-                            'grp':grp,
-                            'typ':typ
-                            }) for ud, d in enumerate(dev)]
 
+        [d.__dict__.update({'p': p[ud, :],
+              'T': np.eye(3),
+              'grp':grp,
+              'typ':typ,
+              'dev':d,
+                    }) for ud, d in enumerate(dev)]
+# 
+        # self.add_nodes_from([(d.ID, ldic[ud]) for ud,d in enumerate(dev)])
         self.add_nodes_from([(d.ID, d.__dict__) for d in dev])
 
         # create personnal netwrk
         for ud, d in enumerate(dev):
             self.node[d.ID]['PN']= Network(owner=d.ID, PN=True)
             self.node[d.ID]['PN'].add_nodes_from([(d.ID,d.__dict__)])
-
         self._get_wstd()
         # for d in dev:
         #     for s in d.wstd.keys():
@@ -1001,10 +1011,40 @@ class Network(nx.MultiDiGraph):
         self.update_LDPs(iter(e+re),wstd,lD)
 
 
+    def update_orient(self, n, T, now=0.):
+        """
+        Update Orientation(s) of a Device(s)/node(s)
+
+        Parameters
+        ----------
+
+        n      : float/string (or a list of) 
+            node ID (Nn x 3)
+        T    : np.array  ( or a list of )
+            node orientation (Nn x 3 x 3)
+
+        """
+
+        if (isinstance(T,np.ndarray)) or (isinstance(n,list) and isinstance(T,list) ):
+            # Tranfrom input as list
+            if not(isinstance(n,list)):
+                n=[n]
+                T=[T]
+            if len(n) == len(T):    
+                d=dict(zip(n,T))    # transform data to be complient with nx.set_node_attributes            
+                nowd=dict(zip(n,[now]*len(n)))
+            else :
+                raise TypeError('n and T must have the same length')
+            # update position
+            nx.set_node_attributes(self,'T',d)        
+            # update time of ground truth position
+            nx.set_node_attributes(self,'t',nowd)
+        else :
+            raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
 
     def update_pos(self, n, p, now=0., p_pe='p'):
         """
-        Update Position of a node
+        Update Position(s) of Device(s)/node(s)
 
         Parameters
         ----------
@@ -1256,6 +1296,7 @@ class Network(nx.MultiDiGraph):
             self.coll_plot['edge'][0]=self.coll_plot['edge'][1]
             self.coll_plot['label'][0]=self.coll_plot['label'][1]
 
+        return fig, ax
     # def compute_Sg(self,tx,rx):
     #     if self.pos == {}:
     #         self.pos=self.get_pos()

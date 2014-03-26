@@ -61,7 +61,9 @@ class Trajectories(list):
         """ initialization
         """
         super(list, self).__init__()
-
+        self.name=[]
+        self.typ=[]
+        self.ID=[]
     def __repr__(self):
 
         try:
@@ -80,6 +82,26 @@ class Trajectories(list):
         except:
             s = 'Issue in Trajectories. Are you sure any Trajectory is loaded ?'
         return s
+
+
+    def append(self,obj):
+        """ overload list.append
+        """
+
+        super(Trajectories,self).append(obj)
+        self.name.append(obj.name)
+        self.typ.append(obj.typ)
+        self.ID.append(obj.ID)
+
+
+    def pop(self,idx=-1):
+        """ overloaded list.pop
+        """
+
+        super(Trajectories,self).pop(idx)
+        self.name.pop(idx)
+        self.typ.pop(idx)
+        self.ID.pop(idx)
 
     def loadh5(self, _filename='simulnet_TA-Office.h5'):
 
@@ -129,6 +151,8 @@ class Trajectories(list):
             self.append(Trajectory(df=df,ID=ID,name=name,typ=typ))
         fil.close()
         self.Lfilename = layout
+
+
 
     def ishow(self):
         """
@@ -259,7 +283,7 @@ class Trajectory(pd.DataFrame):
             # total time
             T = self.tmax-self.tmin
             st = ''
-            st = st + 'Agent : '+ self.name + ': \n'
+            st = st + self.name + '\n'
             st = st + "ID : " + str(self.ID)+'\n'
             st = st + '---'+'\n'
             st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'

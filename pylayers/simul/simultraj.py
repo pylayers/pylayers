@@ -14,7 +14,7 @@ Simul class
 
      Simul.__init__
      Simul.load
-     Simul.links_generation
+     Simul.gen_net
      Simul.run
 
 """
@@ -37,7 +37,7 @@ from pylayers.signal.device import Device
 # Handle Layout
 from pylayers.gis.layout import Layout
 # Handle VectChannel and ScalChannel
-from pylayers.antprop import antenna, signature
+from pylayers.antprop import antenna, signature, statModel
 from pylayers.network.network import Network
 from pylayers.simul.link import *
 # Handle directory hierarchy
@@ -47,7 +47,6 @@ import pdb
 import pylayers.mobility.trajectory as tr
 from pylayers.mobility.ban.body import *
 from pylayers.antprop.statModel import *
-import itertools
 
 class Simul(object):
 
@@ -86,6 +85,7 @@ class Simul(object):
         self.Nap = 0
         self.load(_filesimul)
         self.gen_net()
+        self.Li = Link(L=self.L)
 
     def __repr__(self):
 
@@ -146,6 +146,7 @@ class Simul(object):
                 t = t.resample(2)
                 person = Body(t.name+'.ini')
                 self.dpersons.update({t.name: person})
+                self.time = t.time()
                 
             else:
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
@@ -188,6 +189,143 @@ class Simul(object):
         # create Network
         N.create()
         self.N = N
+
+
+    def show(self):
+        """
+        """
+        fig,ax = self.L.showGs()
+        fig,ax = self.N.show(fig=fig, ax=ax)
+        return fig,ax
+
+    def evaldeter(self):
+        """ deterministic evaluation of a link
+        """
+        pass
+
+    def evalstat(self):
+        """ statistical evaluation of a link
+        """
+        pass
+
+    def run2(self, **kwargs):
+        """
+        """
+        defaults = {'OB': True,
+                    'B2B': False,
+                    'B2I': True,
+                    'I2I': False,
+                    'llink': [],
+                    'wstd':[],
+                    't': [],
+                    'fstep':1.
+                     }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        llink = kwargs.pop('llink')
+        wstd = kwargs.pop('wstd')
+        OB = kwargs.pop('OB')
+        B2B = kwargs.pop('B2B')
+        B2I = kwargs.pop('B2I')
+        I2I = kwargs.pop('I2I')
+        todo = []
+        if OB : 
+            todo.append('OB')
+        if B2B : 
+            todo.append('B2B')
+        if B2I : 
+            todo.append('B2I')
+        if I2I : 
+            todo.append('I2I')
+
+
+        ##### Check attributes
+        if llink == []:
+            llink = self.N.links
+        elif not isinstance(llink, list):
+            llink=[llink]
+
+        checkl = [l in self.N.links for l in llink]
+        if sum(checkl) != len(self.N.links):
+            uwrong = np.where(np.array(checkl) == False)[0]
+            raise AttributeError(str(np.array(llink)[uwrong])
+                                 +' links does not exist in Network')
+
+        ##### Check attributes
+        if wstd == []:
+            wstd = self.N.wstd.keys()
+        elif not isinstance(wstd, list):
+            wstd = [wstd]
+
+        checkw = [w in self.N.wstd.keys() for w in wstd]
+        if sum(checkw) != len(self.N.wstd.keys()):
+            uwrong = np.where(np.array(checkw) == False)[0]
+            raise AttributeError(str(np.array(wstd)[uwrong])
+                                 +' wstd are not in Network')
+
+        ##### Check attributes
+        if kwargs['t'] == []:
+            t = self.time
+        else:
+            if kwargs['t'][0] >= self.time[0] and\
+               kwargs['t'][-1] <= self.time[-1]:
+                t = self.time[kwargs['t']]
+            else :
+                raise AttributeError('Requested timestamp not available')
+
+        #########################
+        ##### Code
+        #########################
+        
+
+
+        # lt = ['OB', 'B2B', 'B2I', 'I2I']
+        # dlink = {w: {t: [] for t in lt} for w in self.N.wstd.keys()}
+
+        for ut, it in enumerate(t):
+            # if a bodies are involved in simulation
+            if (('OB' in todo) or
+                 ('B2B' in todo) or
+                  ('B2I' in todo)):
+                nodeid = []
+                pos = []
+                orient = []
+                for up, person in enumerate(self.dpersons.values()):
+
+                    person.settopos(self.traj[up], t=t[ut], cs=True)
+                    name = person.name
+                    dev = person.dev.keys()
+                    pos.extend([person.dcs[d][:, 0] for d in dev])
+                    orient.extend([person.acs[d] for d in dev])
+                    nodeid.extend([n+'_'+name for n in dev])
+                # in a future version , the network update must also update 
+                # antenna positon in the device coordinate system
+                self.N.update_pos(nodeid,pos,now=it)
+                self.N.update_orient(nodeid,orient,now=it)
+
+
+            for w in wstd:
+                for na, nb, typ in llink[w]:
+                    if typ in todo:
+
+                        if typ == 'OB':
+                            pa = self.N.node[na]['p']
+                            pb = self.N.node[nb]['p']
+                            name = na.split('_')[1]
+                            inter = self.dpersons[name].intersectBody3(pa, pb, topos=True)
+                            import ipdb
+                            ipdb.set_trace()
+                        else :
+                            self.Li.a = self.N.node[na]['p']
+                            self.Li.Ta = self.N.node[na]['T']
+                            self.Li.b = self.N.node[na]['p']
+                            self.Li.Tb = self.N.node[na]['T']
+                            # self.Li.eval()
+                        # import ipdb
+                        # ipdb.set_trace()
 
 
     def gen_links(self, B2B=False, OB=True, B2I=False):
