@@ -948,7 +948,17 @@ class Link(object):
             rays.to3D number of ceil/floor reflexions
 
 
+        Returns
+        -------
 
+        a ,t 
+
+        a : ndarray
+            alpha_k
+        t : ndarray
+            tau_k
+
+        Friss is applyed on H 
 
         See Also
         --------
@@ -1044,8 +1054,13 @@ class Link(object):
             H=C.prop2tran(a=self.Aa,b=self.Ab)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
-        self.H = H      
+        self.H = H
+        self.H.applyFriis()
+        a = np.real(np.sqrt(np.sum(self.H.y * np.conj(self.H.y), axis=1))
+                                                             / len(self.H.y))
+        t = H.tau0
 
+        return a, t
 
     def _show3(self,rays=True,newfig = False,**kwargs):
         """ display of the simulation configuration

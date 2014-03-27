@@ -33,11 +33,12 @@ import pylayers.util.plotutil as plu
 import pylayers.signal.waveform as wvf
 import pylayers.signal.bsignal as bs
 from pylayers.signal.device import Device
+import pandas as pd
 
 # Handle Layout
 from pylayers.gis.layout import Layout
 # Handle VectChannel and ScalChannel
-from pylayers.antprop import antenna, signature, statModel
+from pylayers.antprop import antenna, signature
 from pylayers.network.network import Network
 from pylayers.simul.link import *
 # Handle directory hierarchy
@@ -83,9 +84,11 @@ class Simul(object):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.load(_filesimul)
+        self.load_config(_filesimul)
         self.gen_net()
         self.Li = Link(L=self.L)
+        self.filename = 'simultraj_' + self._trajname
+        self._saveh5_init()
 
     def __repr__(self):
 
@@ -112,7 +115,9 @@ class Simul(object):
 
         return s
 
-    def load(self, _filesimul):
+
+
+    def load_config(self, _filesimul):
         """  load a simultraj configuration file
 
         Parameters
@@ -140,6 +145,7 @@ class Simul(object):
         # get the trajectory
         traj = tr.Trajectories()
         traj.loadh5(di['trajectory']['traj'])
+        self._trajname = di['trajectory']['traj']
         # resample trajectory
         for t in traj:
             if t.typ == 'ag':
@@ -159,6 +165,22 @@ class Simul(object):
         self.Nag = len(self.dpersons.keys())
         self.Nap = len(self.dap.keys())
         self.traj = traj
+
+
+    def _saveh5_init(self):
+        """
+        """
+        filenameh5=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        import ipdb
+        try:
+            f5=h5py.File(filenameh5,'w')
+            f5.create_dataset('time',shape=self.time.shape,data=self.time)
+            f5.close()
+        except:
+            f5.close()
+            raise NameError('simultra.saveinit: \
+                            issue when writting h5py file')
+
 
     def gen_net(self):
         """ generate Network and associated links
@@ -198,15 +220,98 @@ class Simul(object):
         fig,ax = self.N.show(fig=fig, ax=ax)
         return fig,ax
 
-    def evaldeter(self):
-        """ deterministic evaluation of a link
-        """
-        pass
+    def evaldeter(self, na, nb, wstd, fmode='band',nf = 10):
+        """ Deterministic evaluation of a link
 
-    def evalstat(self):
-        """ statistical evaluation of a link
+        Parameters
+        ----------
+
+        na : string:
+            node a id in self.N (Netwrok)
+        nb : string:
+            node b id in self.N (Netwrok)
+        wstd : string:
+            wireless standard used for commmunication between na and nb
+        fmode : string ('center'|'band')
+            mode of frequency evaluation
+            center : only on the centered frequency
+            band : on the whole band
+        nf : int:
+            number of frequency points (if fmode = 'band')
+
+        Returns
+        -------
+        (a, t ) 
+
+        a : ndarray
+            alpha_k
+        t : ndarray
+            tau_k
+
         """
-        pass
+        self.Li.a = self.N.node[na]['p']
+        self.Li.Ta = self.N.node[na]['T']
+        self.Li.b = self.N.node[nb]['p']
+        self.Li.Tb = self.N.node[nb]['T']
+        if fmode == 'center':
+            self.Li.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
+        else :
+            minb = self.N.node[na]['wstd'][wstd]['fbminghz']
+            maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
+            self.Li.fGHz = np.linspace(minb,maxb,nf)
+
+        a, t = self.Li.eval()
+
+        return a, t
+
+    def evalstat(self, na, nb):
+        """ Statistical evaluation of a link
+
+        Parameters
+        ----------
+
+        na : string:
+            node a id in self.N (Netwrok)
+        nb : string:
+            node b id in self.N (Netwrok)
+
+        Returns frequency points (if fmode = 'band')
+
+        -------
+        (a, t ) 
+
+        a : ndarray
+            alpha_k
+        t : ndarray
+            tau_k
+        """
+
+        pa = self.N.node[na]['p']
+        pb = self.N.node[nb]['p']
+        dida, name = na.split('_')
+        didb, name = nb.split('_')
+
+        # inter to be replace by engaement
+        inter = self.dpersons[name].intersectBody3(pa, pb, topos=True)
+        
+        condition = 'nlos'
+        if inter == 1:
+            condition = 'los'
+        
+        empA = self.dpersons[name].dev[dida]['cyl']
+        empB = self.dpersons[name].dev[didb]['cyl']
+
+        emp = empA
+        if empA == 'trunkb':
+            emp = empB
+        if emp == 'forearml':
+            emp = 'forearmr'
+        if emp == 'trunku':
+            condition = 'los'
+        a, t = getchannel(
+            emplacement=emp, condition=condition, intersection=inter)
+
+        return a, t, inter
 
     def run2(self, **kwargs):
         """
@@ -216,9 +321,9 @@ class Simul(object):
                     'B2I': True,
                     'I2I': False,
                     'llink': [],
-                    'wstd':[],
+                    'wstd': [],
                     't': [],
-                    'fstep':1.
+                    'fstep': 1.
                      }
 
         for k in defaults:
@@ -242,7 +347,7 @@ class Simul(object):
             todo.append('I2I')
 
 
-        ##### Check attributes
+        ##### Check link attribute
         if llink == []:
             llink = self.N.links
         elif not isinstance(llink, list):
@@ -254,7 +359,7 @@ class Simul(object):
             raise AttributeError(str(np.array(llink)[uwrong])
                                  +' links does not exist in Network')
 
-        ##### Check attributes
+        ##### Check wstd attribute
         if wstd == []:
             wstd = self.N.wstd.keys()
         elif not isinstance(wstd, list):
@@ -266,7 +371,7 @@ class Simul(object):
             raise AttributeError(str(np.array(wstd)[uwrong])
                                  +' wstd are not in Network')
 
-        ##### Check attributes
+        ##### Check time attribute
         if kwargs['t'] == []:
             t = self.time
         else:
@@ -281,10 +386,6 @@ class Simul(object):
         #########################
         
 
-
-        # lt = ['OB', 'B2B', 'B2I', 'I2I']
-        # dlink = {w: {t: [] for t in lt} for w in self.N.wstd.keys()}
-
         for ut, it in enumerate(t):
             # if a bodies are involved in simulation
             if (('OB' in todo) or
@@ -294,38 +395,125 @@ class Simul(object):
                 pos = []
                 orient = []
                 for up, person in enumerate(self.dpersons.values()):
-
                     person.settopos(self.traj[up], t=t[ut], cs=True)
                     name = person.name
                     dev = person.dev.keys()
+                    nodeid.extend([n+'_'+name for n in dev])
                     pos.extend([person.dcs[d][:, 0] for d in dev])
                     orient.extend([person.acs[d] for d in dev])
-                    nodeid.extend([n+'_'+name for n in dev])
                 # in a future version , the network update must also update 
                 # antenna positon in the device coordinate system
                 self.N.update_pos(nodeid,pos,now=it)
                 self.N.update_orient(nodeid,orient,now=it)
-
+            # TODO : to be moved on the network edges
+            self._ddis = self.N.update_dis()
 
             for w in wstd:
                 for na, nb, typ in llink[w]:
                     if typ in todo:
-
+                        eng = 0
                         if typ == 'OB':
-                            pa = self.N.node[na]['p']
-                            pb = self.N.node[nb]['p']
-                            name = na.split('_')[1]
-                            inter = self.dpersons[name].intersectBody3(pa, pb, topos=True)
-                            import ipdb
-                            ipdb.set_trace()
+                            _ak, _tk, eng = self.evalstat(na, nb)
                         else :
-                            self.Li.a = self.N.node[na]['p']
-                            self.Li.Ta = self.N.node[na]['T']
-                            self.Li.b = self.N.node[na]['p']
-                            self.Li.Tb = self.N.node[na]['T']
-                            # self.Li.eval()
-                        # import ipdb
-                        # ipdb.set_trace()
+                            _ak, _tk = self.evaldeter(na, nb, w)
+                            # fill panda dataframe 2D trajectory
+                        self._ak=_ak
+                        self._tk=_tk
+                        kw = {'d': self._ddis[(na,nb)],
+                              'eng': eng,
+                              'typ': typ,
+                              'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
+                              'fbminghz': self.Li.fmin,
+                              'fbmaxghz': self.Li.fmax,
+                              'fstep': self.Li.fstep,
+                              'Link_sig_grpname': self.Li.dexist['sig']['grpname'],
+                              'Link_ray_grpname': self.Li.dexist['ray']['grpname'],
+                              'Link_Ct_grpname': self.Li.dexist['Ct']['grpname'],
+                              'Link_H_grpname': self.Li.dexist['H']['grpname'],
+                              }
+
+                        self._saveh5(ut, na, nb, w, **kw)
+
+    def _saveh5(self, t, ida, idb, wstd, **kwargs):
+        """ Save in h5py format 
+
+        Parameters
+        ----------
+
+        grpname : string 
+            groupname of the h5py file (timeidx_nodeid&_nodeidb)
+        
+        Notes
+        -----
+
+        Dataset organisation:
+
+        simultraj_<trajectory_filename.h5>.h5
+            |
+            |time
+            |    ...
+            |
+            |/tidx_ida_idb_wstd/ |attrs
+            |                    |a_k
+            |                    |t_k
+
+
+        Root dataset :
+        time : array
+            range of simulation time
+
+        Group identifier :
+            tidx : index in time dataset
+            ida : node a index in Network
+            idb : node b index in Network
+            wstd : wireless standar of link interest
+
+
+        Inside group:
+            a_k : alpha_k values
+            t_k : tau_k values
+
+        Attributes of group:
+        'd': distance between nodes
+        'eng': engagement
+        'typ': type of link (OB,B2B,B2I,I2I),
+        'fcghz': central frequency of evaluation
+        'fbminghz': min freq of evalutaion
+        'fbmaxghz': max freq of evalutaion
+        'fstep' : numberof evaluation point for frequency
+        'Link_sig_grpname': self.Li.dexist['sig']['grpname'],
+        'Link_ray_grpname': self.Li.dexist['ray']['grpname'],
+        'Link_Ct_grpname': self.Li.dexist['Ct']['grpname'],
+        'Link_H_grpname':
+
+        See Also
+        --------
+
+        pylayers.simul.links
+
+        """
+
+        filenameh5=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        grpname = str(t)+'_'+ida+'_'+idb+'_'+wstd
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            fh5=h5py.File(filenameh5,'a')
+            if not grpname in fh5.keys():
+                fh5.create_group(grpname)
+            else:
+                print grpname +'already exists in '+filenameh5
+
+            f = fh5[grpname]
+            for k in kwargs:
+                f.attrs[k]=kwargs[k]
+
+            f.create_dataset('alphak', shape=self._ak.shape, maxshape=(None), data=self._ak)
+            f.create_dataset('tauk', shape=self._tk.shape, maxshape=(None), data=self._tk)
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Simultraj.save: issue when writting h5py file')
 
 
     def gen_links(self, B2B=False, OB=True, B2I=False):
@@ -715,6 +903,8 @@ class Simul(object):
 
                 interA = self.dpersons[
                     A[0]].intersectBody3(pA, pB, topos=True)
+                import ipdb
+                ipdb.set_trace()
                 #interB = self.dpersons[B[0]].intersectBody2(pA,pB, topos = True)
 
                 condition = 'nlos'
