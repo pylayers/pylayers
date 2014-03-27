@@ -419,7 +419,7 @@ class Link(object):
 
     @fGHz.setter
     def fGHz(self,freq):
-        self._freq = freq
+        self._fGHz = freq
         self.fmin = freq[0]
         self.fmax = freq[-1]
         self.fstep = freq[1]-freq[0]
