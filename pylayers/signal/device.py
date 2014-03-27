@@ -44,7 +44,7 @@ class Device(object):
 
     """
 
-    def __init__(self, devname='Telephone1', ID =0, owner='',typ='ap'):
+    def __init__(self, devname='Telephone', ID =0, owner='',typ='ap'):
         """ init of Device class
 
         Attributes
@@ -103,7 +103,7 @@ class Device(object):
                 power = 'on'
             else :
                 power ='off'
-            ant = str([a for a in self.wstd[k]['ant']])
+            ant = str([self.ant[a]['name'] for a in self.wstd[k]['ant']])
             s = s + str(k) + '\n'
             s = s + '-'*len(k) + '\n'
             s = s + '{0:5} | {1:7} |{2:10} | {3:10} | {4:10} '.format('power', 'channel', 'modulation', 'code rate', 'antenna(s)') + '\n'
@@ -124,12 +124,34 @@ class Device(object):
         s = s + '\n\nAntennas' + '\n'
         s = s + '========' + '\n'
         for k in self.ant:
-            s = s + str(k) + '\n'
+            s = s + str(self.ant[k]['name']) + '\n'
             s = s + '-'*len(k) + '\n'
-            s = s + 'On device Relative position: \n' + str(self.ant[k]['p']) + '\n'
-            s = s + 'On device Rotation Matrice: \n' + str(self.ant[k]['T']) + '\n\n'
+            s = s + 'Antenna Relative position on device: \n' + str(self.ant[k]['p']) + '\n'
+            s = s + 'Antenna Rotation Matrice on device: \n' + str(self.ant[k]['T']) + '\n\n'
 
         return s
+
+    def setchan(self,wstd,channel):
+        """ set channel for a given wstd
+            and update information about the channel
+
+        Parameters
+        ----------
+        wstd : string
+            worerless standard
+        channel : int
+            channel number
+        """
+
+        W = Wstandard(wstd)
+        self.wstd[wstd]['chan'] = channel
+        self.wstd[wstd]['fbminghz'] = W.chan[channel].fghz[0]
+        self.wstd[wstd]['fbmaxghz'] = W.chan[channel].fghz[-1]
+        self.wstd[wstd]['fcghz'] = W.chan[channel]['fcGHz']
+        self.wstd[wstd]['bmhz'] = W.chan[channel]['BMHz']
+        self.wstd[wstd]['gmhz'] = W.chan[channel]['GMHz']
+        self.wstd[wstd]['power'] = W.power(self.wstd[wstd]['chan'])
+
 
     def load(self, devname):
         """ load a device
@@ -160,7 +182,8 @@ class Device(object):
 
         for k in ant.keys():
             self.ant[k] = {}
-            self.ant[k]['p'] = np.array(eval(ant[k]['p']))
+            self.ant[k]['name'] = ant[k]['name']
+            self.ant[k]['p'] = np.array(ant[k]['p'])
             self.ant[k]['T'] = np.array(eval(ant[k]['T']))
         self.wstd = {}
         for k in wstd.keys():
@@ -168,8 +191,7 @@ class Device(object):
             W = Wstandard(k)
             self.wstd[k]['power']=True
             self.wstd[k]['ant'] = wstd[k]['antenna']
-            self.wstd[k]['chan'] = W.chan.keys()[0]
-            self.wstd[k]['epwr'] = W.power(self.wstd[k]['chan'])
+            self.setchan(wstd=k, channel=W.chan.keys()[0])
             self.wstd[k]['sens'] = [0]*len(self.wstd[k]['ant'])
             self.wstd[k]['cr'] = W['crate'][0]
             self.wstd[k]['mod'] = W['modulation'][0]

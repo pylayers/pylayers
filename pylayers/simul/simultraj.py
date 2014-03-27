@@ -12,10 +12,30 @@ Simul class
 .. autosummary::
     :toctree: generated/
 
-     Simul.__init__
-     Simul.load
-     Simul.links_generation
-     Simul.run
+Run simulation and data exploitation
+------------------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Simul.__init__
+    Simul.run2
+    Simul.gen_net
+    Simul.evaldeter
+    Simul.evalstat
+    Simul.show
+
+Internal configuration
+----------------------
+
+.. autosummary::
+    :toctree: generated/
+
+
+    Simul.load_config
+    Simul.load_config
+    Simul._saveh5_init
+    Simul._saveh5
 
 """
 import doctest
@@ -32,10 +52,14 @@ import pylayers.util.geomutil as geu
 import pylayers.util.plotutil as plu
 import pylayers.signal.waveform as wvf
 import pylayers.signal.bsignal as bs
+from pylayers.signal.device import Device
+import pandas as pd
+
 # Handle Layout
 from pylayers.gis.layout import Layout
 # Handle VectChannel and ScalChannel
 from pylayers.antprop import antenna, signature
+from pylayers.network.network import Network
 from pylayers.simul.link import *
 # Handle directory hierarchy
 from pylayers.util.project import *
@@ -44,7 +68,6 @@ import pdb
 import pylayers.mobility.trajectory as tr
 from pylayers.mobility.ban.body import *
 from pylayers.antprop.statModel import *
-import itertools
 
 class Simul(object):
 
@@ -81,8 +104,11 @@ class Simul(object):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.links=[]
-        self.load(_filesimul)
+        self.load_config(_filesimul)
+        self.gen_net()
+        self.Li = Link(L=self.L)
+        self.filename = 'simultraj_' + self._trajname
+        self._saveh5_init()
 
     def __repr__(self):
 
@@ -109,14 +135,16 @@ class Simul(object):
 
         return s
 
-    def load(self, _filesimul):
-        """  load
+
+
+    def load_config(self, _filesimul):
+        """  load a simultraj configuration file
 
         Parameters
         ----------
 
-        _filesimul :
-
+        _filesimul : string
+            name of simulation file to be loaded
         """
         self.filesimul = _filesimul
         filesimul = pyu.getlong(self.filesimul, "ini")
@@ -137,92 +165,400 @@ class Simul(object):
         # get the trajectory
         traj = tr.Trajectories()
         traj.loadh5(di['trajectory']['traj'])
+        self._trajname = di['trajectory']['traj']
         # resample trajectory
         for t in traj:
             if t.typ == 'ag':
                 t = t.resample(2)
                 person = Body(t.name+'.ini')
                 self.dpersons.update({t.name: person})
+                self.time = t.time()
                 
             else:
-                import ipdb
-                ipdb.set_trace()
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
                 self.dap.update({t.ID: {'pos': pos,
-                                        'ant' : antenna.Antenna()
+                                        'ant': antenna.Antenna(),
+                                        'name': t.name
                                         }
-                                })
+                                 })
 
         self.Nag = len(self.dpersons.keys())
         self.Nap = len(self.dap.keys())
         self.traj = traj
+
+
+    def _saveh5_init(self):
+        """ initialization of the h5py file
+        """
+        filenameh5=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        import ipdb
+        try:
+            f5=h5py.File(filenameh5,'w')
+            f5.create_dataset('time',shape=self.time.shape,data=self.time)
+            f5.close()
+        except:
+            f5.close()
+            raise NameError('simultra.saveinit: \
+                            issue when writting h5py file')
+
+
+    def gen_net(self):
+        """ generate Network and associated links
+
+        Notes
+        -----
+
+        Create self.N : Network object
+
+        See Also
+        --------
+
+        pylayers.network.network
+
+        """
+
+        N = Network()
+        # get devices on bodies
+        for p in self.dpersons:
+            D = []
+            for dev in self.dpersons[p].dev:
+                D.append(Device(self.dpersons[p].dev[dev]['name'], ID=dev+'_'+p))
+            N.add_devices(D, grp=p)
+        # get access point devices 
+        for ap in self.dap:
+            D=Device(self.dap[ap]['name'], ID=ap)
+            N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
+        # create Network
+        N.create()
+        self.N = N
+
+
+    def show(self):
+        """ show actual simlulation configuration
+        """
+        fig,ax = self.L.showGs()
+        fig,ax = self.N.show(fig=fig, ax=ax)
+        return fig,ax
+
+    def evaldeter(self, na, nb, wstd, fmode='band',nf = 10):
+        """ Deterministic evaluation of a link
+
+        Parameters
+        ----------
+
+        na : string:
+            node a id in self.N (Netwrok)
+        nb : string:
+            node b id in self.N (Netwrok)
+        wstd : string:
+            wireless standard used for commmunication between na and nb
+        fmode : string ('center'|'band')
+            mode of frequency evaluation
+            center : only on the centered frequency
+            band : on the whole band
+        nf : int:
+            number of frequency points (if fmode = 'band')
+
+        Returns
+        -------
+        
+        (a, t ) 
+
+        a : ndarray
+            alpha_k
+        t : ndarray
+            tau_k
+
+        """
+        self.Li.a = self.N.node[na]['p']
+        self.Li.Ta = self.N.node[na]['T']
+        self.Li.b = self.N.node[nb]['p']
+        self.Li.Tb = self.N.node[nb]['T']
+        if fmode == 'center':
+            self.Li.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
+        else :
+            minb = self.N.node[na]['wstd'][wstd]['fbminghz']
+            maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
+            self.Li.fGHz = np.linspace(minb,maxb,nf)
+
+        a, t = self.Li.eval()
+
+        return a, t
+
+    def evalstat(self, na, nb):
+        """ Statistical evaluation of a link
+
+        Parameters
+        ----------
+
+        na : string:
+            node a id in self.N (Netwrok)
+        nb : string:
+            node b id in self.N (Netwrok)
+
+        Returns 
+        -------
+
+        (a, t ) 
+
+        a : ndarray
+            alpha_k
+        t : ndarray
+            tau_k
+        """
+
+        pa = self.N.node[na]['p']
+        pb = self.N.node[nb]['p']
+        dida, name = na.split('_')
+        didb, name = nb.split('_')
+
+        # inter to be replace by engaement
+        inter = self.dpersons[name].intersectBody3(pa, pb, topos=True)
+        
+        condition = 'nlos'
+        if inter == 1:
+            condition = 'los'
+        
+        empA = self.dpersons[name].dev[dida]['cyl']
+        empB = self.dpersons[name].dev[didb]['cyl']
+
+        emp = empA
+        if empA == 'trunkb':
+            emp = empB
+        if emp == 'forearml':
+            emp = 'forearmr'
+        if emp == 'trunku':
+            condition = 'los'
+        a, t = getchannel(
+            emplacement=emp, condition=condition, intersection=inter)
+
+        return a, t, inter
+
+    def run2(self, **kwargs):
+        """ Run teh evaluation of link along a trajectory
+
+        Parameters
+        ----------
+
+        'OB': boolean
+            perform on body statistical link evaluation
+        'B2B':  boolean
+            perform body to body deterministic link evaluation
+        'B2I': boolean
+            perform body to infrastructure deterministic link evaluation
+        'I2I':  boolean
+            perform infrastructure to infrastructure deterministic link evaluation
+        'llink': list
+            list of link to be evaluated (if [], all link are considered)
+        'wstd': list
+            list of wstd to be evaluated (if [], all wstd are considered)
+        't': list
+            list of timestamp to be evaluated (if [], all timestamps are considered)
+
+
+        """
+        defaults = {'OB': True,
+                    'B2B': False,
+                    'B2I': True,
+                    'I2I': False,
+                    'llink': [],
+                    'wstd': [],
+                    't': [],
+                     }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        llink = kwargs.pop('llink')
+        wstd = kwargs.pop('wstd')
+        OB = kwargs.pop('OB')
+        B2B = kwargs.pop('B2B')
+        B2I = kwargs.pop('B2I')
+        I2I = kwargs.pop('I2I')
+        todo = []
+        if OB : 
+            todo.append('OB')
+        if B2B : 
+            todo.append('B2B')
+        if B2I : 
+            todo.append('B2I')
+        if I2I : 
+            todo.append('I2I')
+
+
+        ##### Check link attribute
+        if llink == []:
+            llink = self.N.links
+        elif not isinstance(llink, list):
+            llink=[llink]
+
+        checkl = [l in self.N.links for l in llink]
+        if sum(checkl) != len(self.N.links):
+            uwrong = np.where(np.array(checkl) == False)[0]
+            raise AttributeError(str(np.array(llink)[uwrong])
+                                 +' links does not exist in Network')
+
+        ##### Check wstd attribute
+        if wstd == []:
+            wstd = self.N.wstd.keys()
+        elif not isinstance(wstd, list):
+            wstd = [wstd]
+
+        checkw = [w in self.N.wstd.keys() for w in wstd]
+        if sum(checkw) != len(self.N.wstd.keys()):
+            uwrong = np.where(np.array(checkw) == False)[0]
+            raise AttributeError(str(np.array(wstd)[uwrong])
+                                 +' wstd are not in Network')
+
+        ##### Check time attribute
+        if kwargs['t'] == []:
+            t = self.time
+        else:
+            if kwargs['t'][0] >= self.time[0] and\
+               kwargs['t'][-1] <= self.time[-1]:
+                t = self.time[kwargs['t']]
+            else :
+                raise AttributeError('Requested timestamp not available')
+
+        #########################
+        ##### Code
+        #########################
         
 
+        for ut, it in enumerate(t):
+            # if a bodies are involved in simulation
+            if (('OB' in todo) or
+                 ('B2B' in todo) or
+                  ('B2I' in todo)):
+                nodeid = []
+                pos = []
+                orient = []
+                for up, person in enumerate(self.dpersons.values()):
+                    person.settopos(self.traj[up], t=t[ut], cs=True)
+                    name = person.name
+                    dev = person.dev.keys()
+                    nodeid.extend([n+'_'+name for n in dev])
+                    pos.extend([person.dcs[d][:, 0] for d in dev])
+                    orient.extend([person.acs[d] for d in dev])
+                # in a future version , the network update must also update 
+                # antenna positon in the device coordinate system
+                self.N.update_pos(nodeid,pos,now=it)
+                self.N.update_orient(nodeid,orient,now=it)
+            # TODO : to be moved on the network edges
+            self._ddis = self.N.update_dis()
 
-    # def gen_links2(self, B2B=False, OB=True, B2I=False):
-    #     """ generate links
+            for w in wstd:
+                for na, nb, typ in llink[w]:
+                    if typ in todo:
+                        eng = 0
+                        if typ == 'OB':
+                            _ak, _tk, eng = self.evalstat(na, nb)
+                        else :
+                            _ak, _tk = self.evaldeter(na, nb, w)
+                            # fill panda dataframe 2D trajectory
+                        self._ak=_ak
+                        self._tk=_tk
+                        kw = {'d': self._ddis[(na,nb)],
+                              'eng': eng,
+                              'typ': typ,
+                              'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
+                              'fbminghz': self.Li.fmin,
+                              'fbmaxghz': self.Li.fmax,
+                              'fstep': self.Li.fstep,
+                              'Link_sig_grpname': self.Li.dexist['sig']['grpname'],
+                              'Link_ray_grpname': self.Li.dexist['ray']['grpname'],
+                              'Link_Ct_grpname': self.Li.dexist['Ct']['grpname'],
+                              'Link_H_grpname': self.Li.dexist['H']['grpname'],
+                              }
 
-    #     Parameters
-    #     ----------
+                        self._saveh5(ut, na, nb, w, **kw)
 
-    #     B2B : boolean
-    #         Body to Body links
-    #     OB  : boolean
-    #         On-Body links
-    #     B2I : boolean
-    #         Body to infrastructure links
+    def _saveh5(self, t, ida, idb, wstd, **kwargs):
+        """ Save in h5py format 
 
+        Parameters
+        ----------
 
-    #     """
+        grpname : string 
+            groupname of the h5py file (timeidx_nodeid&_nodeidb)
+        
+        Notes
+        -----
 
-    #     self.B2B = B2B
-    #     self.OB = OB
-    #     self.B2I = B2I
+        Dataset organisation:
 
-    #     lAP = self.dap.keys()
-    #     lperson = self.dpersons.values()
-    #     dlink = {}
-    #     dlink['OB']=[]
-    #     dlink['B2B']=[]
-    #     dlink['B2I']=[]
-    #     # pdb.set_trace()
-
-
-    #     for person in lperson:
-    #         if OB:
-    #             # get list of synamic devices on body:
-    #             oblink=[]
-    #             for x in itertools.combinations(person.dev, 2):
-    #                 if ((person.dev[x[0]]['typ'] != 'static') or (person.dev[x[1]]['typ'] != 'static')):
-    #                     oblink.append([(person.name, x[0]), (person.name, x[1])])
-    #             dlink['OB'].extend(oblink)
+        simultraj_<trajectory_filename.h5>.h5
+            |
+            |time
+            |    ...
+            |
+            |/tidx_ida_idb_wstd/ |attrs
+            |                    |a_k
+            |                    |t_k
 
 
-    #         if B2I:
-    #             for ap in lAP:
-    #                 # may be criteria on distance between person and AP
-    #                 for dev in person.dev:
-    #                     # if person.dev[dev1]['infra']:
-    #                     # in the future port would be an antenna port for MIMO
-    #                     # AP
-    #                     dlink['B2I'].append([(](ap, 'port'), (person.name, dev)])
+        Root dataset :
+        time : array
+            range of simulation time
 
-    #         if B2B:
-    #             for dev1 in person.dev:
-    #                 # if person.dev[dev1]['tobody']:
-    #                 for alter in lperson:
-    #                     if alter.name != person.name:
-    #                         for dev2 in alter.dev:
-    #                             # if alter.dev[dev2]['tobody']:
-    #                             dlink['B2B'].append(
-    #                                 [((person.name, dev1), (alter.name, dev2)])
+        Group identifier :
+            tidx : index in time dataset
+            ida : node a index in Network
+            idb : node b index in Network
+            wstd : wireless standar of link interest
 
-    #     self.links = dlink
+
+        Inside group:
+            a_k : alpha_k values
+            t_k : tau_k values
+
+        Attributes of group:
+        'd': distance between nodes
+        'eng': engagement
+        'typ': type of link (OB,B2B,B2I,I2I),
+        'fcghz': central frequency of evaluation
+        'fbminghz': min freq of evalutaion
+        'fbmaxghz': max freq of evalutaion
+        'fstep' : numberof evaluation point for frequency
+        'Link_sig_grpname': self.Li.dexist['sig']['grpname'],
+        'Link_ray_grpname': self.Li.dexist['ray']['grpname'],
+        'Link_Ct_grpname': self.Li.dexist['Ct']['grpname'],
+        'Link_H_grpname':
+
+        See Also
+        --------
+
+        pylayers.simul.links
+
+        """
+
+        filenameh5=pyu.getlong(self.filename,pstruc['DIRLNK'])
+        grpname = str(t)+'_'+ida+'_'+idb+'_'+wstd
+        # try/except to avoid loosing the h5 file if 
+        # read/write error
+        try:
+            fh5=h5py.File(filenameh5,'a')
+            if not grpname in fh5.keys():
+                fh5.create_group(grpname)
+            else:
+                print grpname +'already exists in '+filenameh5
+
+            f = fh5[grpname]
+            for k in kwargs:
+                f.attrs[k]=kwargs[k]
+
+            f.create_dataset('alphak', shape=self._ak.shape, maxshape=(None), data=self._ak)
+            f.create_dataset('tauk', shape=self._tk.shape, maxshape=(None), data=self._tk)
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Simultraj.save: issue when writting h5py file')
 
 
     def gen_links(self, B2B=False, OB=True, B2I=False):
-        """ generate links
-
+        """  DEPRECATED
+        generate links
         Parameters
         ----------
 
@@ -240,7 +576,6 @@ class Simul(object):
         self.B2B = B2B
         self.OB = OB
         self.B2I = B2I
-
         lAP = self.dap.keys()
         lperson = self.dpersons.values()
         dlink = {}
@@ -279,7 +614,8 @@ class Simul(object):
 
 
     def runB2I(self, llink=[], t=[]):
-
+        """  DEPRECATED
+        """
 
 
         if llink == []:
@@ -358,6 +694,8 @@ class Simul(object):
 
     def run(self, llink=[], t=[]):
         """
+        DEPRECATED
+
         Parameters
         ----------
 
@@ -469,7 +807,7 @@ class Simul(object):
         return resultEnv  # , resultOb
 
     def runEnv(self, llink=[], t=[], show=False):
-        """
+        """ DEPRECATED
         Parameters
         ----------
 
@@ -565,7 +903,7 @@ class Simul(object):
         # return resultEnv, cira
 
     def runOb(self, llink=[], t=[], show=False):
-        """
+        """DEPRECATED
         Parameters
         ----------
 
@@ -608,6 +946,8 @@ class Simul(object):
 
                 interA = self.dpersons[
                     A[0]].intersectBody3(pA, pB, topos=True)
+                import ipdb
+                ipdb.set_trace()
                 #interB = self.dpersons[B[0]].intersectBody2(pA,pB, topos = True)
 
                 condition = 'nlos'

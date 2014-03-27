@@ -258,7 +258,7 @@
             "ism24": {
                 "bmhz": 20,
                 "fstart": 2.412,
-                "fstep": "5",
+                "fstep": 5,
                 "fstop": 2.472,
                 "gmhz": 2,
                 "pmaxmw": 100,
@@ -275,14 +275,16 @@
     },
     "ieee80211g": {
         "channels": {
-            "bmhz": 20,
-            "fstart": 2.412,
-            "fstep": "5",
-            "fstop": 2.472,
-            "gmhz": 2,
-            "pmaxmw": 50,
-            "smhz": 5,
-            "zone": "Europe"
+            "ism24": {
+                "bmhz": 20,
+                "fstart": 2.412,
+                "fstep": 5,
+                "fstop": 2.472,
+                "gmhz": 2,
+                "pmaxmw": 50,
+                "smhz": 5,
+                "zone": "Europe"
+            }
         },
         "crate": [
             0.5,

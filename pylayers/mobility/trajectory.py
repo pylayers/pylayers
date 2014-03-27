@@ -61,7 +61,9 @@ class Trajectories(list):
         """ initialization
         """
         super(list, self).__init__()
-
+        self.name=[]
+        self.typ=[]
+        self.ID=[]
     def __repr__(self):
 
         try:
@@ -80,6 +82,26 @@ class Trajectories(list):
         except:
             s = 'Issue in Trajectories. Are you sure any Trajectory is loaded ?'
         return s
+
+
+    def append(self,obj):
+        """ overload list.append
+        """
+
+        super(Trajectories,self).append(obj)
+        self.name.append(obj.name)
+        self.typ.append(obj.typ)
+        self.ID.append(obj.ID)
+
+
+    def pop(self,idx=-1):
+        """ overloaded list.pop
+        """
+
+        super(Trajectories,self).pop(idx)
+        self.name.pop(idx)
+        self.typ.pop(idx)
+        self.ID.pop(idx)
 
     def loadh5(self, _filename='simulnet_TA-Office.h5'):
 
@@ -130,6 +152,8 @@ class Trajectories(list):
         fil.close()
         self.Lfilename = layout
 
+
+
     def ishow(self):
         """
             interactive show of trajectories
@@ -164,7 +188,7 @@ class Trajectories(list):
                 lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit], 'o',
                              color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)
-        else:
+            else:
                 lines.extend(ax.plot(T['x'][0], T['y'][0], '^', ms=12,
                              color=colors[iT], visible=False))
                 labels.append(T.name + ':' + T.ID)
@@ -259,7 +283,7 @@ class Trajectory(pd.DataFrame):
             # total time
             T = self.tmax-self.tmin
             st = ''
-            st = st + 'Agent : '+ self.name + ': \n'
+            st = st + self.name + '\n'
             st = st + "ID : " + str(self.ID)+'\n'
             st = st + '---'+'\n'
             st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'
@@ -351,8 +375,9 @@ class Trajectory(pd.DataFrame):
                      'sf' : 1
                     }
 
-        for k in defaults:
-            kwargs[k] = defaults[k]
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
 
         t = kwargs['t']
         pt = kwargs['pt']
@@ -383,8 +408,8 @@ class Trajectory(pd.DataFrame):
         super(Trajectory, self).__init__(df, columns=['x', 'y', 'z', 'vx', 'vy',
                                          'vz', 'ax', 'ay', 'az', 's'],
                                         index=td[:-2])
-        self.ID = ID
-        self.name = name
+        self.ID = kwargs['ID']
+        self.name = kwargs['name']
         self.update()
         return self
 

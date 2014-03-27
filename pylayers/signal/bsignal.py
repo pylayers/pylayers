@@ -3332,18 +3332,11 @@ class FUsignal(FBsignal, Usignal):
         return(EMH2)
      
     def applyFriis(self):
-
+        """ Apply Friss Factor
+        """
         factor = 0.3/(4*np.pi*self.x)
         self.y = self.y*factor[np.newaxis,:]
-         
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
+
 
     def enthrsh(self, thresh=99.99):
         """ Energy thresholding of an FUsignal
