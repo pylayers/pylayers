@@ -1242,7 +1242,7 @@
         <span class="n">upos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">&gt;</span> <span class="mf">1e-4</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">tcc</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Geomview"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomview.html#pylayers.util.geomutil.Geomview">[docs]</a><span class="k">class</span> <span class="nc">Geomview</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Geomview</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Geomview file class</span>
 
 <span class="sd">    This class is parent of  GeomVect Geomlist Geomoff</span>
@@ -1253,13 +1253,13 @@
 <span class="sd">    show3</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Geomview.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomview.html#pylayers.util.geomutil.Geomview.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="s">&quot;geom&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="k">if</span> <span class="n">clear</span><span class="p">:</span>
             <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
             <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</div>
+
     <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. todo:</span>
@@ -1269,8 +1269,8 @@
         <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview  -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 
-</div>
-<div class="viewcode-block" id="Geomlist"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomlist.html#pylayers.util.geomutil.Geomlist">[docs]</a><span class="k">class</span> <span class="nc">Geomlist</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">Geomlist</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1286,8 +1286,8 @@
         <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">strg</span><span class="p">)</span>
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-</div></div>
-<div class="viewcode-block" id="GeomVect"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.GeomVect.html#pylayers.util.geomutil.GeomVect">[docs]</a><span class="k">class</span> <span class="nc">GeomVect</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">GeomVect</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Geomview VECT file class</span>
 
 <span class="sd">       + NPolylines  NVertices  NColors</span>
@@ -1512,8 +1512,8 @@
                 <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> 1</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-</div></div>
-<div class="viewcode-block" id="Geomoff"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Geomoff.html#pylayers.util.geomutil.Geomoff">[docs]</a><span class="k">class</span> <span class="nc">Geomoff</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
+</div>
+<span class="k">class</span> <span class="nc">Geomoff</span><span class="p">(</span><span class="n">Geomview</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Notes</span>
@@ -1868,7 +1868,7 @@
                 <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
 
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</div></div>
+</div>
 <div class="viewcode-block" id="angular"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.angular.html#pylayers.util.geomutil.angular">[docs]</a><span class="k">def</span> <span class="nf">angular</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; determine angle between p1 and p2 in [0 2pi]</span>
 
