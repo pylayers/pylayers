@@ -585,8 +585,6 @@ class Link(object):
             f.close()
             raise NameError('Links: issue when initializing h5py file')
 
-
-
     def stack(self,key,array):
         """ stack new array in h5py file
             for a given key (dataframe/group)
@@ -1044,7 +1042,7 @@ class Link(object):
             H=C.prop2tran(a=self.Aa,b=self.Ab)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
-        self.H = H      
+        self.H = H
 
 
     def _show3(self,rays=True,newfig = False,**kwargs):
@@ -1069,7 +1067,7 @@ class Link(object):
 
         Examples
         --------
-        
+
         .. plot::
             :include-source:
 
@@ -1110,7 +1108,7 @@ class Link(object):
 
         if not Arx.evaluated:
             Arx.Fsynth()
-        elif len(Arx.SqG.shape) == 2 : 
+        elif len(Arx.SqG.shape) == 2 :
             Arx.Fsynth()
 
         self.L._show3(newfig=False,opacity=0.7,centered=centered)

@@ -406,7 +406,7 @@ class Ways(object):
                     mask = np.vstack((mask,np.array([[0,0]])))
                 tpt = np.vstack((tpt,np.array([[0,0]])))
                 mask = np.vstack((mask,np.array([[1,1]])))
-        
+
         if lonlat:
             (lon,lat) = m(tpt[:,0],tpt[:,1],inverse=True)
             tpt = np.vstack([lon,lat]).T

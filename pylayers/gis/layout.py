@@ -7224,7 +7224,7 @@ class Layout(object):
         else :
             f = mlab.gcf()
             f.scene.background=(1,1,1)
-            
+
         surf = mlab.pipeline.surface(mesh, opacity=opacity)
         mlab.pipeline.surface(mlab.pipeline.extract_edges(surf),
                                     color=(0, 0, 0), )
