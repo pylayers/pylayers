@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.simul.simultraj.Simul._saveh5 &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.simul.simultraj" href="../pylayers.simul.simultraj.html" />
+    <link rel="next" title="pylayers.simul.link" href="../pylayers.simul.link.html" />
+    <link rel="prev" title="pylayers.simul.simultraj.Simul._saveh5_init" href="pylayers.simul.simultraj.Simul._saveh5_init.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../pylayers.simul.link.html" title="pylayers.simul.link"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simultraj.Simul._saveh5_init.html" title="pylayers.simul.simultraj.Simul._saveh5_init"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.simul.simultraj.html" accesskey="U">pylayers.simul.simultraj</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.simul.simultraj.Simul._saveh5_init.html"
+                        title="previous chapter">pylayers.simul.simultraj.Simul._saveh5_init</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../pylayers.simul.link.html"
+                        title="next chapter">pylayers.simul.link</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.simul.simultraj.Simul._saveh5.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-simul-simultraj-simul-saveh5">
+<h1>pylayers.simul.simultraj.Simul._saveh5<a class="headerlink" href="#pylayers-simul-simultraj-simul-saveh5" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.simul.simultraj.Simul._saveh5">
+<tt class="descclassname">Simul.</tt><tt class="descname">_saveh5</tt><big>(</big><em>t</em>, <em>ida</em>, <em>idb</em>, <em>wstd</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/simultraj.html#Simul._saveh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simultraj.Simul._saveh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save in h5py format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grpname</strong> : string</p>
+<blockquote class="last">
+<div><p>groupname of the h5py file (timeidx_nodeid&amp;_nodeidb)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.links</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Dataset organisation:</p>
+<dl class="docutils">
+<dt>simultraj_&lt;trajectory_filename.h5&gt;.h5</dt>
+<dd><div class="first line-block">
+<div class="line"><br /></div>
+</div>
+<p class="last"><a href="#id1"><span class="problematic" id="id2">|</span></a>time
+|    ...
+|
+<a href="#id3"><span class="problematic" id="id4">|</span></a>/tidx_ida_idb_wstd/ <a href="#id5"><span class="problematic" id="id6">|</span></a>attrs
+|                    <a href="#id7"><span class="problematic" id="id8">|</span></a>a_k
+|                    <a href="#id9"><span class="problematic" id="id10">|</span></a>t_k</p>
+</dd>
+</dl>
+<p>Root dataset :
+time : array</p>
+<blockquote>
+<div>range of simulation time</div></blockquote>
+<dl class="docutils">
+<dt>Group identifier :</dt>
+<dd>tidx : index in time dataset
+ida : node a index in Network
+idb : node b index in Network
+wstd : wireless standar of link interest</dd>
+<dt>Inside group:</dt>
+<dd>a_k : alpha_k values
+t_k : tau_k values</dd>
+</dl>
+<p>Attributes of group:
+&#8216;d&#8217;: distance between nodes
+&#8216;eng&#8217;: engagement
+&#8216;typ&#8217;: type of link (OB,B2B,B2I,I2I),
+&#8216;fcghz&#8217;: central frequency of evaluation
+&#8216;fbminghz&#8217;: min freq of evalutaion
+&#8216;fbmaxghz&#8217;: max freq of evalutaion
+&#8216;fstep&#8217; : numberof evaluation point for frequency
+&#8216;Link_sig_grpname&#8217;: self.Li.dexist[&#8216;sig&#8217;][&#8216;grpname&#8217;],
+&#8216;Link_ray_grpname&#8217;: self.Li.dexist[&#8216;ray&#8217;][&#8216;grpname&#8217;],
+&#8216;Link_Ct_grpname&#8217;: self.Li.dexist[&#8216;Ct&#8217;][&#8216;grpname&#8217;],
+&#8216;Link_H_grpname&#8217;:</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../pylayers.simul.link.html" title="pylayers.simul.link"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.simul.simultraj.Simul._saveh5_init.html" title="pylayers.simul.simultraj.Simul._saveh5_init"
+             >previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.simul.simultraj.html" >pylayers.simul.simultraj</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, PyLayers developer team.
+      Last updated on mars 27, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

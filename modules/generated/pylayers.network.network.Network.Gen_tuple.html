@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="pylayers.network.network" href="../pylayers.network.network.html" />
-    <link rel="next" title="pylayers.network.network.Network.get_RAT" href="pylayers.network.network.Network.get_RAT.html" />
+    <link rel="next" title="pylayers.network.network.Network.dist_edge" href="pylayers.network.network.Network.dist_edge.html" />
     <link rel="prev" title="pylayers.network.network.Network.combi" href="pylayers.network.network.Network.combi.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.network.network.Network.get_RAT.html" title="pylayers.network.network.Network.get_RAT"
+          <a href="pylayers.network.network.Network.dist_edge.html" title="pylayers.network.network.Network.dist_edge"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.network.network.Network.combi.html" title="pylayers.network.network.Network.combi"
@@ -68,8 +68,8 @@
   <p class="topless"><a href="pylayers.network.network.Network.combi.html"
                         title="previous chapter">pylayers.network.network.Network.combi</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.network.network.Network.get_RAT.html"
-                        title="next chapter">pylayers.network.network.Network.get_RAT</a></p>
+  <p class="topless"><a href="pylayers.network.network.Network.dist_edge.html"
+                        title="next chapter">pylayers.network.network.Network.dist_edge</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.network.network.Network.Gen_tuple.txt"
@@ -100,14 +100,14 @@
 <h1>pylayers.network.network.Network.Gen_tuple<a class="headerlink" href="#pylayers-network-network-network-gen-tuple" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.network.network.Network.Gen_tuple">
-<tt class="descclassname">Network.</tt><tt class="descname">Gen_tuple</tt><big>(</big><em>gene</em>, <em>rat</em>, <em>var</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network.Gen_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.Gen_tuple" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Network.</tt><tt class="descname">Gen_tuple</tt><big>(</big><em>gene</em>, <em>wstd</em>, <em>var</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network.Gen_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.Gen_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>generate a specific tuple</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>gene</strong> : tuple(x,y) iterator</p>
-<p><strong>rat</strong> : str</p>
+<p><strong>wstd</strong> : str</p>
 <p><strong>var</strong> : list</p>
 <blockquote class="last">
 <div><p>len(var) = len(gene)</p>
@@ -122,15 +122,15 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tup</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 <span class="go">[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;string rat&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wstd</span><span class="o">=</span><span class="s">&#39;string wstd&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">var</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">=</span><span class="n">N</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="n">rat</span><span class="p">,</span><span class="n">var</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">=</span><span class="n">N</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="n">wstd</span><span class="p">,</span><span class="n">var</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-<span class="go">(0, 0, &#39;string rat&#39;, 10)</span>
+<span class="go">(0, 0, &#39;string wstd&#39;, 10)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-<span class="go">(1, 1, &#39;string rat&#39;, 11)</span>
+<span class="go">(1, 1, &#39;string wstd&#39;, 11)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -153,7 +153,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.network.network.Network.get_RAT.html" title="pylayers.network.network.Network.get_RAT"
+          <a href="pylayers.network.network.Network.dist_edge.html" title="pylayers.network.network.Network.dist_edge"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.network.network.Network.combi.html" title="pylayers.network.network.Network.combi"
@@ -170,7 +170,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 21, 2014.
+      Last updated on mars 27, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

@@ -3411,18 +3411,11 @@
         <span class="k">return</span><span class="p">(</span><span class="n">EMH2</span><span class="p">)</span>
      </div>
 <div class="viewcode-block" id="FUsignal.applyFriis"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.applyFriis.html#pylayers.signal.bsignal.FUsignal.applyFriis">[docs]</a>    <span class="k">def</span> <span class="nf">applyFriis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot; Apply Friss Factor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">factor</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
-         
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
+
 </div>
 <div class="viewcode-block" id="FUsignal.enthrsh"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.enthrsh.html#pylayers.signal.bsignal.FUsignal.enthrsh">[docs]</a>    <span class="k">def</span> <span class="nf">enthrsh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">99.99</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Energy thresholding of an FUsignal</span>
@@ -4848,7 +4841,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 21, 2014.
+      Last updated on mars 27, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

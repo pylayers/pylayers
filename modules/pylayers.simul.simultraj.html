@@ -66,7 +66,11 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">pylayers.simul.simultraj</a><ul>
-<li><a class="reference internal" href="#simul-class">Simul class</a></li>
+<li><a class="reference internal" href="#simul-class">Simul class</a><ul>
+<li><a class="reference internal" href="#run-simulation-and-data-exploitation">Run simulation and data exploitation</a></li>
+<li><a class="reference internal" href="#internal-configuration">Internal configuration</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -113,44 +117,60 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+</tbody>
+</table>
+<div class="section" id="run-simulation-and-data-exploitation">
+<h3>Run simulation and data exploitation<a class="headerlink" href="#run-simulation-and-data-exploitation" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.__init__.html#pylayers.simul.simultraj.Simul.__init__" title="pylayers.simul.simultraj.Simul.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.__init__</span></tt></a>([_filesimul])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.load.html#pylayers.simul.simultraj.Simul.load" title="pylayers.simul.simultraj.Simul.load"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.load</span></tt></a>(_filesimul)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.run2.html#pylayers.simul.simultraj.Simul.run2" title="pylayers.simul.simultraj.Simul.run2"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.run2</span></tt></a>(**kwargs)</td>
+<td>Run teh evaluation of link along a trajectory</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.gen_net.html#pylayers.simul.simultraj.Simul.gen_net" title="pylayers.simul.simultraj.Simul.gen_net"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.gen_net</span></tt></a>()</td>
+<td>generate Network and associated links</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.evaldeter.html#pylayers.simul.simultraj.Simul.evaldeter" title="pylayers.simul.simultraj.Simul.evaldeter"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.evaldeter</span></tt></a>(na,&nbsp;nb,&nbsp;wstd[,&nbsp;fmode,&nbsp;nf])</td>
+<td>Deterministic evaluation of a link</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.evalstat.html#pylayers.simul.simultraj.Simul.evalstat" title="pylayers.simul.simultraj.Simul.evalstat"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.evalstat</span></tt></a>(na,&nbsp;nb)</td>
+<td>Statistical evaluation of a link</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.show.html#pylayers.simul.simultraj.Simul.show" title="pylayers.simul.simultraj.Simul.show"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.show</span></tt></a>()</td>
+<td>show actual simlulation configuration</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="internal-configuration">
+<h3>Internal configuration<a class="headerlink" href="#internal-configuration" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.load_config.html#pylayers.simul.simultraj.Simul.load_config" title="pylayers.simul.simultraj.Simul.load_config"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.load_config</span></tt></a>(_filesimul)</td>
+<td>load a simultraj configuration file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.load_config.html#pylayers.simul.simultraj.Simul.load_config" title="pylayers.simul.simultraj.Simul.load_config"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.load_config</span></tt></a>(_filesimul)</td>
+<td>load a simultraj configuration file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._saveh5_init.html#pylayers.simul.simultraj.Simul._saveh5_init" title="pylayers.simul.simultraj.Simul._saveh5_init"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5_init</span></tt></a>()</td>
+<td>initialization of the h5py file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._saveh5.html#pylayers.simul.simultraj.Simul._saveh5" title="pylayers.simul.simultraj.Simul._saveh5"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5</span></tt></a>(t,&nbsp;ida,&nbsp;idb,&nbsp;wstd,&nbsp;**kwargs)</td>
+<td>Save in h5py format    :Parameters:      <strong>grpname</strong> : string          groupname of the h5py file (timeidx_nodeid&amp;_nodeidb)  ..</td>
 </tr>
 </tbody>
 </table>
-</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.links_generation.html#pylayers.simul.simultraj.Simul.links_generation" title="pylayers.simul.simultraj.Simul.links_generation"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.links_generation</span></tt></a>([bB2B,&nbsp;bOB,&nbsp;bB2I])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.run.html#pylayers.simul.simultraj.Simul.run" title="pylayers.simul.simultraj.Simul.run"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.run</span></tt></a>([llink,&nbsp;t])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+</div>
 </div>
 </div>
 
@@ -186,7 +206,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 21, 2014.
+      Last updated on mars 27, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

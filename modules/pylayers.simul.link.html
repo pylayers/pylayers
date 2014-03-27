@@ -25,7 +25,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
-    <link rel="prev" title="pylayers.simul.simultraj.Simul.run" href="generated/pylayers.simul.simultraj.Simul.run.html" /> 
+    <link rel="next" title="pylayers.simul.link.Link.eval" href="generated/pylayers.simul.link.Link.eval.html" />
+    <link rel="prev" title="pylayers.simul.simultraj.Simul._saveh5" href="generated/pylayers.simul.simultraj.Simul._saveh5.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,7 +47,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simultraj.Simul.run.html" title="pylayers.simul.simultraj.Simul.run"
+          <a href="generated/pylayers.simul.link.Link.eval.html" title="pylayers.simul.link.Link.eval"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.simul.simultraj.Simul._saveh5.html" title="pylayers.simul.simultraj.Simul._saveh5"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -62,14 +66,23 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">pylayers.simul.link</a><ul>
-<li><a class="reference internal" href="#link-class">Link Class</a></li>
+<li><a class="reference internal" href="#link-class">Link Class</a><ul>
+<li><a class="reference internal" href="#link-simulation">Link simulation</a></li>
+<li><a class="reference internal" href="#link-init">Link init</a></li>
+<li><a class="reference internal" href="#search-in-h5py-file">search in h5py file</a></li>
+<li><a class="reference internal" href="#modify-h5py-file">Modify h5py file</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pylayers.simul.simultraj.Simul.run.html"
-                        title="previous chapter">pylayers.simul.simultraj.Simul.run</a></p>
+  <p class="topless"><a href="generated/pylayers.simul.simultraj.Simul._saveh5.html"
+                        title="previous chapter">pylayers.simul.simultraj.Simul._saveh5</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/pylayers.simul.link.Link.eval.html"
+                        title="next chapter">pylayers.simul.link.Link.eval</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/modules/pylayers.simul.link.txt"
@@ -108,35 +121,105 @@ It handles the storage of simulated object in <cite>hdf5</cite> format.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.__init__</span></tt></td>
-<td></td>
+</tbody>
+</table>
+<div class="section" id="link-simulation">
+<h3>Link simulation<a class="headerlink" href="#link-simulation" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.eval.html#pylayers.simul.link.Link.eval" title="pylayers.simul.link.Link.eval"><tt class="xref py py-obj docutils literal"><span class="pre">Link.eval</span></tt></a>(**kwargs)</td>
+<td>Evaluate the link   :Parameters:      <strong>force_save</strong> : boolean          Force the computation (even if obj already exists)         AND save (replace previous computations)               <strong>Advanced features :</strong> :                 <strong>si.algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;)          siganture.run algo type      <strong>ra.ceil_height_meter</strong> : int          rays.to3D ceil height in mteres      <strong>ra.number_mirror_cf</strong> : int          rays.to3D number of ceil/floor reflexions  :Returns:      <strong>a ,t</strong> :                 <strong>a</strong> : ndarray          alpha_k      <strong>t</strong> : ndarray          tau_k               <strong>Friss is applyed on H</strong> :             ..</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.checkh5</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.save_init</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.stack</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.save</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.get_idx</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.array_exist</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link.eval</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Link._show3</span></tt></td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.Link._show3.html#pylayers.simul.link.Link._show3" title="pylayers.simul.link.Link._show3"><tt class="xref py py-obj docutils literal"><span class="pre">Link._show3</span></tt></a>([rays,&nbsp;newfig])</td>
+<td>display of the simulation configuration</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="link-init">
+<h3>Link init<a class="headerlink" href="#link-init" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.__init__.html#pylayers.simul.link.Link.__init__" title="pylayers.simul.link.Link.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Link.__init__</span></tt></a>(**kwargs)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.__repr__.html#pylayers.simul.link.Link.__repr__" title="pylayers.simul.link.Link.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Link.__repr__</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.reset_config.html#pylayers.simul.link.Link.reset_config" title="pylayers.simul.link.Link.reset_config"><tt class="xref py py-obj docutils literal"><span class="pre">Link.reset_config</span></tt></a>()</td>
+<td>reset configuration when new layout loaded</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.fill_dexist.html#pylayers.simul.link.Link.fill_dexist" title="pylayers.simul.link.Link.fill_dexist"><tt class="xref py py-obj docutils literal"><span class="pre">Link.fill_dexist</span></tt></a>(key,&nbsp;grpname)</td>
+<td>Check if the data of a key with a given groupname     already exists in the h5py file   :Parameters:      <strong>key: string</strong> :           key of the h5py group      <strong>grpname</strong> : string          groupe name of the h5py file  ..</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="search-in-h5py-file">
+<h3>search in h5py file<a class="headerlink" href="#search-in-h5py-file" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.checkh5.html#pylayers.simul.link.Link.checkh5" title="pylayers.simul.link.Link.checkh5"><tt class="xref py py-obj docutils literal"><span class="pre">Link.checkh5</span></tt></a>()</td>
+<td>check existence of previous simulation run with the same parameters.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.array_exist.html#pylayers.simul.link.Link.array_exist" title="pylayers.simul.link.Link.array_exist"><tt class="xref py py-obj docutils literal"><span class="pre">Link.array_exist</span></tt></a>(key,&nbsp;array[,&nbsp;tol])</td>
+<td>check if an array of a given key (h5py group)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.get_grpname.html#pylayers.simul.link.Link.get_grpname" title="pylayers.simul.link.Link.get_grpname"><tt class="xref py py-obj docutils literal"><span class="pre">Link.get_grpname</span></tt></a>()</td>
+<td>Determine if the group name of the data regarding the given configuration   ..</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.get_idx.html#pylayers.simul.link.Link.get_idx" title="pylayers.simul.link.Link.get_idx"><tt class="xref py py-obj docutils literal"><span class="pre">Link.get_idx</span></tt></a>(key,&nbsp;array[,&nbsp;tol])</td>
+<td>try to get the index of the requested array in the group key</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="modify-h5py-file">
+<h3>Modify h5py file<a class="headerlink" href="#modify-h5py-file" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.save_init.html#pylayers.simul.link.Link.save_init" title="pylayers.simul.link.Link.save_init"><tt class="xref py py-obj docutils literal"><span class="pre">Link.save_init</span></tt></a>(filename_long)</td>
+<td>initilaize save Link</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.save.html#pylayers.simul.link.Link.save" title="pylayers.simul.link.Link.save"><tt class="xref py py-obj docutils literal"><span class="pre">Link.save</span></tt></a>(obj,&nbsp;key,&nbsp;grpname[,&nbsp;force])</td>
+<td>Save a given object in the correct group</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.load.html#pylayers.simul.link.Link.load" title="pylayers.simul.link.Link.load"><tt class="xref py py-obj docutils literal"><span class="pre">Link.load</span></tt></a>(obj,&nbsp;grpname)</td>
+<td>Load a given object in the correct grp</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.Link.stack.html#pylayers.simul.link.Link.stack" title="pylayers.simul.link.Link.stack"><tt class="xref py py-obj docutils literal"><span class="pre">Link.stack</span></tt></a>(key,&nbsp;array)</td>
+<td>stack new array in h5py file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.Link._delete.html#pylayers.simul.link.Link._delete" title="pylayers.simul.link.Link._delete"><tt class="xref py py-obj docutils literal"><span class="pre">Link._delete</span></tt></a>(key,&nbsp;grpname)</td>
+<td>Delete a key and associated data into h5py file</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 
@@ -156,7 +239,10 @@ It handles the storage of simulated object in <cite>hdf5</cite> format.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simultraj.Simul.run.html" title="pylayers.simul.simultraj.Simul.run"
+          <a href="generated/pylayers.simul.link.Link.eval.html" title="pylayers.simul.link.Link.eval"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.simul.simultraj.Simul._saveh5.html" title="pylayers.simul.simultraj.Simul._saveh5"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -169,7 +255,7 @@ It handles the storage of simulated object in <cite>hdf5</cite> format.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Mar 21, 2014.
+      Last updated on mars 27, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
