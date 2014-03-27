@@ -12,10 +12,30 @@ Simul class
 .. autosummary::
     :toctree: generated/
 
-     Simul.__init__
-     Simul.load
-     Simul.gen_net
-     Simul.run
+Run simulation and data exploitation
+------------------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Simul.__init__
+    Simul.run2
+    Simul.gen_net
+    Simul.evaldeter
+    Simul.evalstat
+    Simul.show
+
+Internal configuration
+----------------------
+
+.. autosummary::
+    :toctree: generated/
+
+
+    Simul.load_config
+    Simul.load_config
+    Simul._saveh5_init
+    Simul._saveh5
 
 """
 import doctest
@@ -123,8 +143,8 @@ class Simul(object):
         Parameters
         ----------
 
-        _filesimul :
-
+        _filesimul : string
+            name of simulation file to be loaded
         """
         self.filesimul = _filesimul
         filesimul = pyu.getlong(self.filesimul, "ini")
@@ -168,7 +188,7 @@ class Simul(object):
 
 
     def _saveh5_init(self):
-        """
+        """ initialization of the h5py file
         """
         filenameh5=pyu.getlong(self.filename,pstruc['DIRLNK'])
         import ipdb
@@ -214,7 +234,7 @@ class Simul(object):
 
 
     def show(self):
-        """
+        """ show actual simlulation configuration
         """
         fig,ax = self.L.showGs()
         fig,ax = self.N.show(fig=fig, ax=ax)
@@ -241,6 +261,7 @@ class Simul(object):
 
         Returns
         -------
+        
         (a, t ) 
 
         a : ndarray
@@ -275,9 +296,9 @@ class Simul(object):
         nb : string:
             node b id in self.N (Netwrok)
 
-        Returns frequency points (if fmode = 'band')
-
+        Returns 
         -------
+
         (a, t ) 
 
         a : ndarray
@@ -314,7 +335,27 @@ class Simul(object):
         return a, t, inter
 
     def run2(self, **kwargs):
-        """
+        """ Run teh evaluation of link along a trajectory
+
+        Parameters
+        ----------
+
+        'OB': boolean
+            perform on body statistical link evaluation
+        'B2B':  boolean
+            perform body to body deterministic link evaluation
+        'B2I': boolean
+            perform body to infrastructure deterministic link evaluation
+        'I2I':  boolean
+            perform infrastructure to infrastructure deterministic link evaluation
+        'llink': list
+            list of link to be evaluated (if [], all link are considered)
+        'wstd': list
+            list of wstd to be evaluated (if [], all wstd are considered)
+        't': list
+            list of timestamp to be evaluated (if [], all timestamps are considered)
+
+
         """
         defaults = {'OB': True,
                     'B2B': False,
@@ -323,7 +364,6 @@ class Simul(object):
                     'llink': [],
                     'wstd': [],
                     't': [],
-                    'fstep': 1.
                      }
 
         for k in defaults:
@@ -574,7 +614,8 @@ class Simul(object):
 
 
     def runB2I(self, llink=[], t=[]):
-
+        """  DEPRECATED
+        """
 
 
         if llink == []:
@@ -653,6 +694,8 @@ class Simul(object):
 
     def run(self, llink=[], t=[]):
         """
+        DEPRECATED
+
         Parameters
         ----------
 
@@ -764,7 +807,7 @@ class Simul(object):
         return resultEnv  # , resultOb
 
     def runEnv(self, llink=[], t=[], show=False):
-        """
+        """ DEPRECATED
         Parameters
         ----------
 
@@ -860,7 +903,7 @@ class Simul(object):
         # return resultEnv, cira
 
     def runOb(self, llink=[], t=[], show=False):
-        """
+        """DEPRECATED
         Parameters
         ----------
 
