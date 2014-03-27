@@ -133,6 +133,8 @@ class Device(object):
 
         W = Wstandard(wstd)
         self.wstd[wstd]['chan'] = channel
+        self.wstd[wstd]['fbminghz'] = W.chan[channel].fghz[0]
+        self.wstd[wstd]['fbmaxghz'] = W.chan[channel].fghz[-1]
         self.wstd[wstd]['fcghz'] = W.chan[channel]['fcGHz']
         self.wstd[wstd]['bmhz'] = W.chan[channel]['BMHz']
         self.wstd[wstd]['gmhz'] = W.chan[channel]['GMHz']
