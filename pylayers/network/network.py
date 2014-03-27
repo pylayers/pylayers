@@ -693,8 +693,6 @@ class Network(nx.MultiDiGraph):
                 # raise error if some nodes are note in the wstd
                 # no error raised if none nodes in wstd
                 if sum(nin) != len(nodes) and (sum(nin) != 0):
-                    import ipdb
-                    ipdb.set_trace()
                     unin = np.where(np.array(nin) == False)[0]
                     raise AttributeError(str(np.array(nodes)[unin]) +' are not in ' + w)
                 else :
@@ -982,7 +980,8 @@ class Network(nx.MultiDiGraph):
 
 
         """
-
+        import ipdb
+        ipdb.set_trace()
         self.SubNet[wstd].add_edges_from(self.Gen_tuple(ln,wstd,lD))
 
 
@@ -1073,6 +1072,17 @@ class Network(nx.MultiDiGraph):
                 nx.set_node_attributes(self,'t',nowd)
         else :
             raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
+
+    def update_dis(self):
+
+        p = self.get_pos()
+        e = self.edges()
+        lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
+        d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
+        return dict(zip(e,d))
+
+
+
 
 
     def get_pos(self,wstd=None):
@@ -1271,14 +1281,30 @@ class Network(nx.MultiDiGraph):
         for ii,rl in enumerate(rloop):
             pos = self.get_pos(rl) 
             pos = {k:v[:2] for k,v in pos.items()}
-            self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self,pos=pos,nodelist=self.SubNet[rl].nodes(),node_size=100.,node_color='r',ax=ax))
-            Cl=nx.draw_networkx_labels(self.SubNet[rl],pos=pos,font_size=10,ax=ax)
+            self.coll_plot['node'][1].append(nx.draw_networkx_nodes(
+                                            self,
+                                            pos=pos,
+                                            nodelist=self.SubNet[rl].nodes(),
+                                            node_size=100.,
+                                            node_color='r',
+                                            ax=ax))
+            Cl=nx.draw_networkx_labels(self.SubNet[rl],
+                                       pos=pos,
+                                       font_size=10,
+                                       ax=ax)
             self.coll_plot['label'][1].extend(Cl.values())
-            self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self,pos=pos,edgelist=self.SubNet[rl].edges(),width=2.,alpha=0.9,edge_color=wstdcolor[rl],style=wstdes[rl],ax=ax)))
+            self.coll_plot['edge'][1].append((nx.draw_networkx_edges(
+                                              self,
+                                              pos=pos,
+                                              edgelist=self.SubNet[rl].edges(),
+                                              arrows=False,
+                                              width=2.,
+                                              alpha=0.9,
+                                              edge_color=wstdcolor[rl],
+                                              style=wstdes[rl],
+                                              ax=ax)))
 
         if legend:
-            import ipdb
-            ipdb.set_trace()
             ax.legend((self.coll_plot['edge'][1]),(rloop),loc=3)
         if info :
             L=nx.get_edge_attributes(self,'TOA')
