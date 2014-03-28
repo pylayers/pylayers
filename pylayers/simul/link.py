@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 #
 """
-.. currentmodule:: pylayers.simul.link
 
-
-This module run the electromagnetic simulation at the link level
-It handles the storage of simulated object in `hdf5` format.
+This module runs the electromagnetic simulation at the link level
+It stores simulated objects in `hdf5` format.
 
 Link Class
 ==========
@@ -218,13 +216,13 @@ class Link(object):
         Examples
         --------
 
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.simul.link import *
-            >>> L=Link()
-            >>> L.eval()
-            >>> L._show3()
+        #.. plot::
+        #    :include-source:
+        #
+        #    >>> from pylayers.simul.link import *
+        #    >>> L=Link()
+        #    >>> L.eval()
+        #    >>> L._show3()
 
 
         """
@@ -549,7 +547,7 @@ class Link(object):
 
 
     def save_init(self,filename_long):
-        """ initilaize save Link
+        """ initialize save Link
 
         Parameters
         ----------
@@ -827,6 +825,7 @@ class Link(object):
         --------
 
         Links.array_exist
+
         """
 
         umap = self.array_exist(key,array,tol=tol)
@@ -928,18 +927,15 @@ class Link(object):
     def eval(self,**kwargs):
         """ Evaluate the link
 
+
         Parameters
         ----------
 
         force_save : boolean
             Force the computation (even if obj already exists)
             AND save (replace previous computations)
-
-
-        Advanced features :
-
         si.algo : str ('old'|'new')
-            siganture.run algo type
+            signature.run algo type
         ra.ceil_height_meter : int
             rays.to3D ceil height in mteres
         ra.number_mirror_cf : int
@@ -949,7 +945,7 @@ class Link(object):
         Returns
         -------
 
-        a ,t 
+        a ,t
 
         a : ndarray
             alpha_k
@@ -978,7 +974,7 @@ class Link(object):
 
         self.checkh5()
 
-      
+
         ############
         # Signatures
         ############
@@ -992,7 +988,7 @@ class Link(object):
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
-        self.Si = Si      
+        self.Si = Si
 
 
 
@@ -1010,7 +1006,7 @@ class Link(object):
             R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
-            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])  
+            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
 
@@ -1032,7 +1028,7 @@ class Link(object):
             # Ctilde...
             C=R.eval(self.fGHz)
             # ...save Ct
-            self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])  
+            self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
         self.C = C
 
@@ -1061,8 +1057,7 @@ class Link(object):
         return a, t
 
     def _show3(self,rays=True,newfig = False,**kwargs):
-        """ display of the simulation configuration
-            using Mayavi
+        """ display the simulation scene using Mayavi
 
         Parameters
         ----------
@@ -1083,13 +1078,13 @@ class Link(object):
         Examples
         --------
 
-        .. plot::
-            :include-source:
+        #.. plot::
+        #    :include-source:
 
-            >>> from pylayers.simul.link import *
-            >>> L=Link()
-            >>> L.eval()
-            >>> L._show3()
+        #    >>> from pylayers.simul.link import *
+        #    >>> L=Link()
+        #    >>> L.eval()
+        #    >>> L._show3()
 
         """
 
@@ -2518,7 +2513,7 @@ class Link(object):
 
     #         ctx = S.L.pt2cy(tx)
     #         crx = S.L.pt2cy(rx)
-          
+
     #         _filecir = prefix +'-cir-'+str(k)+'-'+str(link)+'-'+str((ctx,crx))
     #         D = {}
     #         D['Tx'] = tx
@@ -2543,7 +2538,7 @@ class Link(object):
 
     #         r2d = Si.rays(tx,rx)
     #         r2d.show(S.L)
-  
+
     #         r3d = r2d.to3D()
     #         r3d.locbas(S.L)
     #         r3d.fillinter(S.L)
@@ -2562,7 +2557,7 @@ class Link(object):
 
     #         filename = pyu.getlong(_filename, cirdir)
     #         spio.savemat(filename, D)
-          
+
     # def run(self, itx, srx=[], cirforce=True,verbose=False):
     #     """ run the simulation for 1 tx and a set of rx
 

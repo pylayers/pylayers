@@ -2586,9 +2586,9 @@ class TUsignal(TBsignal, Usignal):
         Parameters
         ----------
 
-        alphak : float
+        alphak : ndarray
             CIR path amplitude
-        tauk : float
+        tauk : ndarray
             CIR delay values
 
         Examples

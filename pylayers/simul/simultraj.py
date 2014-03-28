@@ -112,7 +112,7 @@ class Simul(object):
 
     def __repr__(self):
 
-        try: 
+        try:
             s = 'Simul trajectories class\n'
             s = s + '------------------------\n\n'
             s = s + 'Used layout: ' + self.L.filename + '\n'
@@ -145,6 +145,7 @@ class Simul(object):
 
         _filesimul : string
             name of simulation file to be loaded
+
         """
         self.filesimul = _filesimul
         filesimul = pyu.getlong(self.filesimul, "ini")
@@ -173,7 +174,7 @@ class Simul(object):
                 person = Body(t.name+'.ini')
                 self.dpersons.update({t.name: person})
                 self.time = t.time()
-                
+
             else:
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
                 self.dap.update({t.ID: {'pos': pos,
@@ -224,7 +225,7 @@ class Simul(object):
             for dev in self.dpersons[p].dev:
                 D.append(Device(self.dpersons[p].dev[dev]['name'], ID=dev+'_'+p))
             N.add_devices(D, grp=p)
-        # get access point devices 
+        # get access point devices
         for ap in self.dap:
             D=Device(self.dap[ap]['name'], ID=ap)
             N.add_devices(D, grp='ap', p=self.dap[ap]['pos'])
@@ -261,8 +262,8 @@ class Simul(object):
 
         Returns
         -------
-        
-        (a, t ) 
+
+        (a, t )
 
         a : ndarray
             alpha_k
@@ -296,10 +297,10 @@ class Simul(object):
         nb : string:
             node b id in self.N (Netwrok)
 
-        Returns 
+        Returns
         -------
 
-        (a, t ) 
+        (a, t )
 
         a : ndarray
             alpha_k
@@ -314,11 +315,11 @@ class Simul(object):
 
         # inter to be replace by engaement
         inter = self.dpersons[name].intersectBody3(pa, pb, topos=True)
-        
+
         condition = 'nlos'
         if inter == 1:
             condition = 'los'
-        
+
         empA = self.dpersons[name].dev[dida]['cyl']
         empB = self.dpersons[name].dev[didb]['cyl']
 
@@ -335,7 +336,7 @@ class Simul(object):
         return a, t, inter
 
     def run2(self, **kwargs):
-        """ Run teh evaluation of link along a trajectory
+        """ Run the link evaluation along a trajectory
 
         Parameters
         ----------
@@ -377,13 +378,13 @@ class Simul(object):
         B2I = kwargs.pop('B2I')
         I2I = kwargs.pop('I2I')
         todo = []
-        if OB : 
+        if OB :
             todo.append('OB')
-        if B2B : 
+        if B2B :
             todo.append('B2B')
-        if B2I : 
+        if B2I :
             todo.append('B2I')
-        if I2I : 
+        if I2I :
             todo.append('I2I')
 
 
@@ -424,7 +425,7 @@ class Simul(object):
         #########################
         ##### Code
         #########################
-        
+
 
         for ut, it in enumerate(t):
             # if a bodies are involved in simulation
@@ -441,7 +442,7 @@ class Simul(object):
                     nodeid.extend([n+'_'+name for n in dev])
                     pos.extend([person.dcs[d][:, 0] for d in dev])
                     orient.extend([person.acs[d] for d in dev])
-                # in a future version , the network update must also update 
+                # in a future version , the network update must also update
                 # antenna positon in the device coordinate system
                 self.N.update_pos(nodeid,pos,now=it)
                 self.N.update_orient(nodeid,orient,now=it)
@@ -475,14 +476,19 @@ class Simul(object):
                         self._saveh5(ut, na, nb, w, **kw)
 
     def _saveh5(self, t, ida, idb, wstd, **kwargs):
-        """ Save in h5py format 
+        """ Save in h5py format
 
         Parameters
         ----------
 
-        grpname : string 
+        t  :
+        ida :
+        idb :
+        wstd :
+
+        grpname : string
             groupname of the h5py file (timeidx_nodeid&_nodeidb)
-        
+
         Notes
         -----
 
@@ -506,7 +512,7 @@ class Simul(object):
             tidx : index in time dataset
             ida : node a index in Network
             idb : node b index in Network
-            wstd : wireless standar of link interest
+            wstd : wireless standard of the link of interest
 
 
         Inside group:
