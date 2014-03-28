@@ -368,11 +368,12 @@ class Trajectory(pd.DataFrame):
 
         """
         defaults  = { 'ID': 1,
-                     'name' : 'MyNameIsNoBody',
-                     't' : np.linspace(0,10,50),
-                     'pt' : np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,
-                     'unit' : 's',
-                     'sf' : 1
+                     'name': 'MyNameIsNoBody',
+                     'typ':'ag',
+                     't': np.linspace(0,10,50),
+                     'pt': np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,
+                     'unit': 's',
+                     'sf': 1
                     }
 
         for key, value in defaults.items():
@@ -410,6 +411,7 @@ class Trajectory(pd.DataFrame):
                                         index=td[:-2])
         self.ID = kwargs['ID']
         self.name = kwargs['name']
+        self.typ = kwargs['typ']
         self.update()
         return self
 
@@ -444,6 +446,7 @@ class Trajectory(pd.DataFrame):
         T = Trajectory()
         T.generate(ID=self.ID,
                    name=self.name,
+                   typ=self.typ,
                    t=tnew,
                    pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
                    unit='s',
