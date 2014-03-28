@@ -958,7 +958,7 @@ class Link(object):
         t : ndarray
             tau_k
 
-        Friss is applyed on H 
+        Friis is applyed on H 
 
         See Also
         --------
@@ -1055,12 +1055,8 @@ class Link(object):
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H
-        self.H.applyFriis()
-        a = np.real(np.sqrt(np.sum(self.H.y * np.conj(self.H.y), axis=1))
-                                                             / len(self.H.y))
-        t = H.tau0
 
-        return a, t
+        return H.ak, H.tk
 
     def _show3(self,rays=True,newfig = False,**kwargs):
         """ display of the simulation configuration
