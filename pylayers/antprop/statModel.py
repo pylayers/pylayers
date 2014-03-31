@@ -2,7 +2,7 @@ import scipy.stats as st
 import numpy as np
 
 
-def getchannel(emplacement = 'trunku',condition = 'los', intersection = 1):
+def getchannel(emplacement = 'trunku',intersection = 1):
 
 
     pdp = {'trunku':{'los':{'gamma':25.9,'gamma0':3.37,'k':26,'lambda-1':2.13,'sigma':4.02},
@@ -24,7 +24,12 @@ def getchannel(emplacement = 'trunku',condition = 'los', intersection = 1):
         'calfr':{'mu0':-62.93,'sigma0':1.69},
         }
 
-
+    condition ='nlos'
+    if intersection ==1:
+        condition = 'los'
+        
+    if emplacement == 'trunku':
+                condition = 'los'
 
     #number of paths
     K = pdp[emplacement][condition]['k']
