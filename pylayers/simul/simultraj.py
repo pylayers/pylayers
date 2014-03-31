@@ -175,6 +175,7 @@ class Simul(object):
                 person = Body(t.name + '.ini')
                 self.dpersons.update({t.name: person})
                 self.time = t.time()
+                self.timestep = self.time[1] - self.time[0]
 
             else:
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
@@ -233,9 +234,9 @@ class Simul(object):
         ----------
 
         na : string:
-            node a id in self.N (Netwrok)
+            node a id in self.N (Network)
         nb : string:
-            node b id in self.N (Netwrok)
+            node b id in self.N (Network)
         wstd : string:
             wireless standard used for commmunication between na and nb
         fmode : string ('center'|'band')
@@ -392,7 +393,7 @@ class Simul(object):
         else:
             if kwargs['t'][0] >= self.time[0] and\
                kwargs['t'][-1] <= self.time[-1]:
-                t = self.time[kwargs['t']]
+               t = self.time[kwargs['t']]
             else:
                 raise AttributeError('Requested timestamp not available')
 
@@ -401,26 +402,8 @@ class Simul(object):
         #
         init=True
         for ut, it in enumerate(t):
-            # if a bodies are involved in simulation
-            if (('OB' in todo) or
-                    ('B2B' in todo) or
-                    ('B2I' in todo)):
-                nodeid = []
-                pos = []
-                orient = []
-                for up, person in enumerate(self.dpersons.values()):
-                    person.settopos(self.traj[up], t=t[ut], cs=True)
-                    name = person.name
-                    dev = person.dev.keys()
-                    nodeid.extend([n + '_' + name for n in dev])
-                    pos.extend([person.dcs[d][:, 0] for d in dev])
-                    orient.extend([person.acs[d] for d in dev])
-                # in a future version , the network update must also update
-                # antenna positon in the device coordinate system
-                self.N.update_pos(nodeid, pos, now=it)
-                self.N.update_orient(nodeid, orient, now=it)
-            # TODO : to be moved on the network edges
-            self.N.update_dis()
+
+            self.update_pos(t, ut, todo)
 
             for w in wstd:
                 for na, nb, typ in llink[w]:
@@ -452,7 +435,7 @@ class Simul(object):
                         # self._saveh5(ut, na, nb, w, **kw)
 
                     self.data = self.data.append(pd.DataFrame({\
-                                't': ut,
+                                't': pd.Timestamp(ut),
                                 'id_a': na,
                                 'id_b': nb,
                                 'x_a': self.N.node[na]['p'][0],
@@ -484,6 +467,75 @@ class Simul(object):
    
                     self.tocsv(ut, na, nb, w,init=init)
                     init=False
+
+
+    def update_pos(self, t, ut, todo = ['OB','B2B','B2I','I2I']):
+        ''' update positions of devices and bodies for a given time index
+
+        Parameters
+        ----------
+        t : range
+            range of time
+        ut : int
+            time index in self.time
+        '''
+
+        # if a bodies are involved in simulation
+        if (('OB' in todo) or
+                ('B2B' in todo) or
+                ('B2I' in todo)):
+            nodeid = []
+            pos = []
+            orient = []
+            for up, person in enumerate(self.dpersons.values()):
+                person.settopos(self.traj[up], t=t[ut], cs=True)
+                name = person.name
+                dev = person.dev.keys()
+                nodeid.extend([n + '_' + name for n in dev])
+                pos.extend([person.dcs[d][:, 0] for d in dev])
+                orient.extend([person.acs[d] for d in dev])
+            # in a future version , the network update must also update
+            # antenna positon in the device coordinate system
+            self.N.update_pos(nodeid, pos, now=t[ut])
+            self.N.update_orient(nodeid, orient, now=t[ut])
+        # TODO : to be moved on the network edges
+        self.N.update_dis()
+
+    def _show3(self, **kwargs):
+        """ 3D show using Mayavi
+        
+        Parameters
+        ----------
+        
+        't': float 
+            time index
+        'lay': bool
+            show layout
+        'net': bool
+            show net
+        'body': bool
+            show bodies
+        'rays': bool
+            show rays
+        """
+            
+        defaults = {'t': 0,
+                    'lay': True,
+                    'net': True,
+                    'body': True,
+                    'rays': True
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        df = self.data.truncate(before=self.time[ut]-self.timestep,
+                                after=self.time[ut]+self.timestep)
+        #df[df.typ == 'OB']['ray_id']
+
+
+
     # def _saveh5_init(self):
     #     """ initialization of the h5py file
     #     """

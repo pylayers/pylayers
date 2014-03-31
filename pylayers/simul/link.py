@@ -1130,7 +1130,7 @@ class DLink(Link):
 
         return self.H.ak, self.H.tk
 
-    def _show3(self,rays=True,newfig = False,**kwargs):
+    def _show3(self,rays=True, lay=True, newfig = False,  **kwargs):
         """ display of the simulation configuration
             using Mayavi
 
@@ -1196,7 +1196,8 @@ class DLink(Link):
         elif len(Arx.SqG.shape) == 2 : 
             Arx.Fsynth()
 
-        self.L._show3(newfig=False,opacity=0.7,centered=centered)
+        if lay:
+            self.L._show3(newfig=False,opacity=0.7,centered=centered)
 
 
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,
