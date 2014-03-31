@@ -144,7 +144,7 @@ class Simul(object):
         traj  = tr.importsn(di['trajectory']['traj'])
         # resample trajectory
         for i in range(len(traj)):
-            traj[i] = traj[i].resample(10)
+            traj[i] = traj[i].resample(1)
         self.traj= traj
         self.ap = di['acces_point']['ap']
 
@@ -178,9 +178,10 @@ class Simul(object):
         for person in lperson:
             if bOB:
                 for dev1 in person.dev:
-                    if person.dev[dev1]['typ']=='dynamic':
-                        for dev2 in person.dev:
-                            if dev2<> dev1:
+                    #if person.dev[dev1]['typ']=='dynamic':
+                    for dev2 in person.dev:
+                        if dev2<> dev1:
+                            if ((person.name,dev2),(person.name,dev1)) not in llink :
                                 llink.append(((person.name,dev1),(person.name,dev2)))
             if bB2I:
                 for ap in lAP:
@@ -355,7 +356,8 @@ class Simul(object):
         x = np.arange(taumin,taumax,taustep)
         y = np.zeros(len(x))
         cira=bs.TUsignal(x,y)
-
+        self.dist = np.zeros(shape=(n_time,n_links))
+        self.vis  = np.zeros(shape=(n_time,n_links))   
         for kt in range(0,n_time):
 
             if time[kt]%int(time[kt]) == 0:
@@ -371,8 +373,15 @@ class Simul(object):
                 B = link[1]
                 pA = self.dpersons[A[0]].dcs[A[1]][:,0]
                 TA = self.dpersons[A[0]].acs[A[1]]
-                pB = self.dpersons[B[0]].dcs[B[1]][:,0]
+                pB = self.dpersons[B[0]].dcs[B[1]][:,0]               
                 TB = self.dpersons[B[0]].acs[B[1]]
+                
+                self.dist[kt,kl] = np.sqrt(sum((pA-pB)**2))
+                interA = self.dpersons[A[0]].intersectBody3(pA,pB, topos = True)
+               
+                #interB = self.dpersons[B[0]].intersectBody3(pA,pB, topos = True)
+                self.vis[kt,kl] = interA
+                
                 cylA = self.dpersons[A[0]].dev[A[1]]['cyl']
                 cylB = self.dpersons[B[0]].dev[B[1]]['cyl']
 
@@ -380,7 +389,7 @@ class Simul(object):
                 cycA =  self.L.pt2cy(pt = pA)
                 cycB =  self.L.pt2cy(pt = pB)
                 sig = signature.Signatures(self.L,cycA,cycB)
-                sig.run4(cutoff =1,algo='old')
+                sig.run5(cutoff=1,algo='old')
                 tx_2D = pA[0:2]
                 rx_2D = pB[0:2]
                 r2d = sig.rays(tx_2D,rx_2D)
@@ -411,9 +420,10 @@ class Simul(object):
                 resultEnv[kt,kl,:,:]= tab
                 if show:
                     print 'link  = ', link , '  pr env  = ',10*np.log10(sum((abs(alphak)**2)))
-                cira.aggcir(alphak,tauk)
+                #cira.aggcir(alphak,tauk)
+                #self.cira  = cira
                 self.chan = resultEnv
-                self.cira  = cira
+                
         #return resultEnv, cira
 
     def runOb(self,llink = [], t =[], show = False ):
@@ -464,9 +474,7 @@ class Simul(object):
                 #interB = self.dpersons[B[0]].intersectBody2(pA,pB, topos = True)
 
 
-                condition ='nlos'
-                if interA==1:
-                    condition = 'los'
+                
                 devIdA = A[1]
                 devIdB = B[1]
                 empA =self.dpersons[A[0]].dev[devIdA]['cyl']
@@ -478,9 +486,8 @@ class Simul(object):
                 if emp == 'forearml':
                     emp = 'forearmr'
 
-                if emp == 'trunku':
-                    condition = 'los'
-                alphakOb, taukOb = getchannel(emplacement = emp ,condition = condition, intersection = interA)
+                
+                alphakOb, taukOb = getchannel(emplacement = emp, intersection = interA)
 
 
                 alphak =  np.zeros(shape=(Kmax))

@@ -1190,7 +1190,7 @@ class Antenna(object):
             if 'col' in kwargs:
                 colr  = kwargs['col']
             else:           
-                corl = col[cpt]
+                colr = col[cpt]
                 
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
             if 'lab' in kwargs:
@@ -1200,7 +1200,7 @@ class Antenna(object):
             # all theta
             if 'phd' in kwargs:
                 itheta = np.arange(self.Nt)
-                #iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
+                #iphi1 = np.where(abs(self.phi[0,:]-kwargs[+'phd']*dtr)<dtheta)[0][0]
                 iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
                 Np = self.Np
 
@@ -1286,6 +1286,7 @@ class Antenna(object):
                      'colorbar':True,
                      'ilog':False,
                      'name':[]
+                     
                      }
 
 
@@ -1299,6 +1300,7 @@ class Antenna(object):
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
         po = kwargs['po']
+       
         # T is an unitary matrix
         T  = kwargs['T']
 
@@ -1912,8 +1914,8 @@ class Antenna(object):
             Nf = len(self.fa)
             Fth = Fth.reshape(Nf, Nt, Np)
             Fph = Fph.reshape(Nf, Nt, Np)
-
         return Fth, Fph
+
 
     def Fsynth2(self, theta, phi,pattern=False, typ = 'vsh'):
         """  pattern synthesis from shape 2 vsh coeff
@@ -2110,9 +2112,9 @@ class Antenna(object):
 
             lmax = self.S.Cx.lmax
             Y ,indx = SSHFunc2(lmax, theta,phi)
-            k = self.S.Cx.k2[:,0]
+            k = self.S.Cx.k2.reshape((max(self.S.Cx.k2.shape)))
             if pattern :
-
+            
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
@@ -2122,6 +2124,7 @@ class Antenna(object):
 
 
             else:
+                
 
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
