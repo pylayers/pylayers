@@ -501,37 +501,45 @@ class Simul(object):
         # TODO : to be moved on the network edges
         self.N.update_dis()
 
-    def _show3(self, **kwargs):
-        """ 3D show using Mayavi
+    # def _show3(self, **kwargs):
+    #     """ 3D show using Mayavi
         
-        Parameters
-        ----------
+    #     Parameters
+    #     ----------
         
-        't': float 
-            time index
-        'lay': bool
-            show layout
-        'net': bool
-            show net
-        'body': bool
-            show bodies
-        'rays': bool
-            show rays
-        """
+    #     't': float 
+    #         time index
+    #     'lay': bool
+    #         show layout
+    #     'net': bool
+    #         show net
+    #     'body': bool
+    #         show bodies
+    #     'rays': bool
+    #         show rays
+    #     """
             
-        defaults = {'t': 0,
-                    'lay': True,
-                    'net': True,
-                    'body': True,
-                    'rays': True
-                    }
+    #     defaults = {'t': 0,
+    #                 'lay': True,
+    #                 'net': True,
+    #                 'body': True,
+    #                 'rays': True
+    #                 }
         
-        for k in defaults:
-            if k not in kwargs:
-                kwargs[k] = defaults[k]
+    #     for k in defaults:
+    #         if k not in kwargs:
+    #             kwargs[k] = defaults[k]
 
-        df = self.data.truncate(before=self.time[ut]-self.timestep,
-                                after=self.time[ut]+self.timestep)
+    #     df = self.data.truncate(before=self.time[ut]-self.timestep,
+    #                             after=self.time[ut]+self.timestep)
+
+    #     if kwargs['net']
+
+
+
+        
+
+            
         #df[df.typ == 'OB']['ray_id']
 
 
