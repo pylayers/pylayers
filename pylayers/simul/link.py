@@ -85,7 +85,8 @@ from pylayers.antprop.signature import Signatures
 from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
 from pylayers.antprop.channel import Ctilde, Tchannel
-#from   Channel import *
+from pylayers.antprop.statModel import getchannel
+
 import h5py
 try:
     from tvtk.api import tvtk
@@ -101,15 +102,18 @@ class Link(object):
     def __init__(self):
         """ Link evaluation class
         """
-        pass
+        self.H = Tchannel()
+
 
     def __add__(self,l):
-        L = Link()
-        tk = np.hstack((self.tk,l.tk))
-        ak = np.hstack((self.ak,l.ak))
+        """ add ak tauk of 2 Links
+        """
+        L=Link()
+        tk = np.hstack((self.H.tk,l.H.tk))
+        ak = np.hstack((self.H.ak,l.H.ak))
         us = np.argsort(tk)
-        L.ak = ak[us]
-        L.tk = tk[us]
+        L.H.ak = ak[us]
+        L.H.tk = tk[us]
         return L
 
 
@@ -118,8 +122,7 @@ class SLink(Link):
     def __init__(self):
         """ Statistical Link evaluation class
         """
-        super(SLink,self).__init__()
-        pass
+        super(SLink, self).__init__()
 
 
     def onbody(self, B, dida, didb, a, b):
@@ -158,27 +161,21 @@ class SLink(Link):
         """
 
         # inter to be replace by engaement
-        engag = B.intersectBody3(a, b, topos=True)
+        eng = B.intersectBody3(a, b, topos=True)
+        empa = B.dev[dida]['cyl']
+        empb = B.dev[didb]['cyl']
 
-        condition = 'nlos'
-        if engag == 1:
-            condition = 'los'
-
-        empA = B.dev[dida]['cyl']
-        empB = B.dev[didb]['cyl']
-
-        emp = empA
-        if empA == 'trunkb':
-            emp = empB
+        emp = empa
+        if empa == 'trunkb':
+            emp = empb
         if emp == 'forearml':
             emp = 'forearmr'
-        if emp == 'trunku':
-            condition = 'los'
-        self.ak, self.tk = getchannel(
-            emplacement=emp, condition=condition, intersection=engag)
-        self.engag = engag
 
-        return ak, tk, engag
+        self.H.ak, self.H.tk = getchannel(
+            emplacement=emp, intersection=eng)
+        self.eng = eng
+
+        return self.H.ak, self.H.tk, self.eng
 
 
 
@@ -1131,10 +1128,7 @@ class DLink(Link):
 
         self.H = H
 
-        self.ak = H.ak
-        self.tk = H.tk
-
-        return self.ak, self.tk
+        return self.H.ak, self.H.tk
 
     def _show3(self,rays=True,newfig = False,**kwargs):
         """ display of the simulation configuration

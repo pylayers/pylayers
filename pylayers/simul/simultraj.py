@@ -59,6 +59,7 @@ import pylayers.mobility.trajectory as tr
 from pylayers.mobility.ban.body import *
 from pylayers.antprop.statModel import *
 import pandas as pd
+import csv
 
 class Simul(object):
 
@@ -97,6 +98,7 @@ class Simul(object):
         self.Nap = 0
         self.load_config(_filesimul)
         self.gen_net()
+        self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=verbose)
         self.filename = 'simultraj_' + self._trajname
         self.data = pd.DataFrame(columns=['t', 'id_a', 'id_b',
@@ -108,6 +110,8 @@ class Simul(object):
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ])
         self.data.set_index('t')
+        # self._saveh5_init()
+
 
     def __repr__(self):
 
@@ -280,40 +284,27 @@ class Simul(object):
         Returns
         -------
 
-        (a, t )
+        (a, t, eng)
 
         a : ndarray
             alpha_k
         t : ndarray
             tau_k
+        eng : float
+            engagement
         """
+
+
+
 
         pa = self.N.node[na]['p']
         pb = self.N.node[nb]['p']
         dida, name = na.split('_')
         didb, name = nb.split('_')
 
-        # inter to be replace by engaement
-        inter = self.dpersons[name].intersectBody3(pa, pb, topos=True)
+        ak, tk, eng = self.SL.onbody(self.dpersons[name], dida, didb, pa, pb)
 
-        condition = 'nlos'
-        if inter == 1:
-            condition = 'los'
-
-        empA = self.dpersons[name].dev[dida]['cyl']
-        empB = self.dpersons[name].dev[didb]['cyl']
-
-        emp = empA
-        if empA == 'trunkb':
-            emp = empB
-        if emp == 'forearml':
-            emp = 'forearmr'
-        if emp == 'trunku':
-            condition = 'los'
-        a, t = getchannel(
-            emplacement=emp, condition=condition, intersection=inter)
-
-        return a, t, inter
+        return ak, tk, eng
 
     def run(self, **kwargs):
         """ Run teh evaluation of link along a trajectory
@@ -407,7 +398,7 @@ class Simul(object):
         #
         # Code
         #
-
+        init=True
         for ut, it in enumerate(t):
             # if a bodies are involved in simulation
             if (('OB' in todo) or
@@ -434,14 +425,17 @@ class Simul(object):
                 for na, nb, typ in llink[w]:
                     if typ in todo:
                         eng = 0
-                        _akd, _tkd = self.evaldeter(na, nb, w)
+                        self.evaldeter(na, nb, w)
                         if typ == 'OB':
-                            _aks, _tks, eng = self.evalstat(na, nb)
-                            tk = np.hstack((_tkd,_tks))
-                            ak = np.hstack((_akd,_aks))
-                            us = np.argsort(tk)
-                            ak = ak[us]
-                            tk = tk[us]
+                            self.evalstat(na, nb)
+                            eng = self.SL.eng
+                            L = self.DL + self.SL
+                            self._ak = L.H.ak
+                            self._tk = L.H.tk
+                        else : 
+                            self._ak = self.DL.H.ak
+                            self._tk = self.DL.H.tk
+
                         # kw = {'d': self._ddis[(na, nb)],
                         #       'eng': eng,
                         #       'typ': typ,
@@ -454,6 +448,8 @@ class Simul(object):
                         #       'Link_Ct_grpname': self.DL.dexist['Ct']['grpname'],
                         #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
                         #       }
+                        # self._saveh5(ut, na, nb, w, **kw)
+
                     self.data = self.data.append(pd.DataFrame({\
                                 't': ut,
                                 'id_a': na,
@@ -484,9 +480,9 @@ class Simul(object):
                                           'fbminghz', 'fbmaxghz', 'fstep',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ],index=[it]))
-                        # self._saveh5(ut, na, nb, w, **kw)
-
-
+   
+                    self.csv(ut, na, nb, w,init=init)
+                    init=False
     # def _saveh5_init(self):
     #     """ initialization of the h5py file
     #     """
@@ -500,6 +496,7 @@ class Simul(object):
     #         f5.close()
     #         raise NameError('simultra.saveinit: \
     #                         issue when writting h5py file')
+
     # def _saveh5(self, ut, ida, idb, wstd, **kwargs):
     #     """ Save in h5py format
 
@@ -667,6 +664,28 @@ class Simul(object):
     #         fh5.close()
     #         raise NameError('Simultraj._loadh5: issue when reading h5py file')
 
+
+    def csv(self, ut, ida, idb, wstd,init=False):
+
+
+
+        with open('links.csv', 'a') as csvfile:
+            fil = csv.writer(csvfile, delimiter=';',
+                             quoting=csv.QUOTE_MINIMAL)
+            if init:
+                keys = self.data.iloc[-1].keys()
+                data = [k for k in keys]
+                data .append('ak')
+                data .append('tk')
+                fil.writerow(data)
+
+            values = self.data.iloc[-1].values
+            data = [v for v in values]
+            sak = str(self._ak.tolist())
+            stk = str(self._tk.tolist())
+            data.append(sak)
+            data.append(stk)
+            fil.writerow(data)
 
 if (__name__ == "__main__"):
     #plt.ion()
