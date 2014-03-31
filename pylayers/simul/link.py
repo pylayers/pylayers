@@ -122,6 +122,64 @@ class SLink(Link):
         pass
 
 
+    def onbody(self, B, dida, didb, a, b):
+        """ Statisitcal evaluation of a on-body link
+
+        Parameters
+        ----------
+
+        B : Body
+            Body object on which devices belong to
+        dida: int
+            device a id number on body
+        didb: int
+            device b id number on body
+        a : nd array 
+            postision of device a
+        b : nd array 
+            postision of device b
+
+        Returns
+        -------
+
+        (ak, tk, eng )
+
+        ak : ndarray
+            alpha_k
+        tk : ndarray
+            tau_k
+
+
+        See Also
+        --------
+
+        pylayers.mobility.ban.body
+
+        """
+
+        # inter to be replace by engaement
+        engag = B.intersectBody3(a, b, topos=True)
+
+        condition = 'nlos'
+        if engag == 1:
+            condition = 'los'
+
+        empA = B.dev[dida]['cyl']
+        empB = B.dev[didb]['cyl']
+
+        emp = empA
+        if empA == 'trunkb':
+            emp = empB
+        if emp == 'forearml':
+            emp = 'forearmr'
+        if emp == 'trunku':
+            condition = 'los'
+        self.ak, self.tk = getchannel(
+            emplacement=emp, condition=condition, intersection=engag)
+        self.engag = engag
+
+        return ak, tk, engag
+
 
 
 class DLink(Link):
