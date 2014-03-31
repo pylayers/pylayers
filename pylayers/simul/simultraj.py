@@ -110,6 +110,7 @@ class Simul(object):
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ])
         self.data.set_index('t')
+        self._filecsv = self.filename.split('.')[0] + '.csv'
         # self._saveh5_init()
 
 
@@ -419,7 +420,7 @@ class Simul(object):
                 self.N.update_pos(nodeid, pos, now=it)
                 self.N.update_orient(nodeid, orient, now=it)
             # TODO : to be moved on the network edges
-            self._ddis = self.N.update_dis()
+            self.N.update_dis()
 
             for w in wstd:
                 for na, nb, typ in llink[w]:
@@ -460,7 +461,7 @@ class Simul(object):
                                 'x_b': self.N.node[nb]['p'][0],
                                 'y_b': self.N.node[nb]['p'][1],
                                 'z_b': self.N.node[nb]['p'][2],
-                                'd': self._ddis[(na, nb)],
+                                'd': self.N.edge[na][nb]['d'],
                                 'eng': eng,
                                 'typ': typ,
                                 'wstd': w,
@@ -481,7 +482,7 @@ class Simul(object):
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ],index=[it]))
    
-                    self.csv(ut, na, nb, w,init=init)
+                    self.tocsv(ut, na, nb, w,init=init)
                     init=False
     # def _saveh5_init(self):
     #     """ initialization of the h5py file
@@ -665,11 +666,11 @@ class Simul(object):
     #         raise NameError('Simultraj._loadh5: issue when reading h5py file')
 
 
-    def csv(self, ut, ida, idb, wstd,init=False):
+    def tocsv(self, ut, ida, idb, wstd,init=False):
 
+        filecsv = pyu.getlong(self._filecsv,pstruc['DIRLNK'])
 
-
-        with open('links.csv', 'a') as csvfile:
+        with open(filecsv, 'a') as csvfile:
             fil = csv.writer(csvfile, delimiter=';',
                              quoting=csv.QUOTE_MINIMAL)
             if init:

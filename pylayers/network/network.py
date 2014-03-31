@@ -1077,7 +1077,7 @@ class Network(nx.MultiDiGraph):
         e = self.edges()
         lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
         d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
-        return dict(zip(e,d))
+        [self.edge[ve[0]][ve[1]].update({'d':d[ie]}) for ie,ve in enumerate(self.edges())]
 
 
 
