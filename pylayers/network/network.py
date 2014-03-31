@@ -153,12 +153,20 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 from pylayers.util.utilnet import str2bool
 import time
+import pylayers.util.pyutil as pyu
 
 
 from SimPy.SimulationRT import Process,hold
 import pprint
 import select
 import sys
+
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
+
+except:
+    print 'mayavi not installed'
 
 
 # How to take into account  1 specific key specifique for 1 MultiGraph
@@ -1321,37 +1329,51 @@ class Network(nx.MultiDiGraph):
             self.coll_plot['label'][0]=self.coll_plot['label'][1]
 
         return fig, ax
-    # def compute_Sg(self,tx,rx):
-    #     if self.pos == {}:
-    #         self.pos=self.get_pos()
-    #     return (self.EMS.L.signature(self.pos[tx],self.pos[rx]))
 
 
-    # def show_sig(self,Sg,tx,rx,ion=False,fig=None,ax=None):
-    #     if fig==None:
-    #         fig = plt.figure()
-    #         ax=fig.add_subplot(111)
-    #     elif ax== None:
-    #         ax=fig.add_subplot(111)
+    def _show3(self, wstd=None):
+        """ Mayavi _show3
 
-    #     try:
-    #         self.coll_plot['Sg'][1]=[]
-    #     except:
-    #         self.coll_plot['Sg']=[[]]
-    #         self.coll_plot['Sg'].append([])
+        Parameters
+        ----------
+
+        wstd : list
+            list of wireless standards
+
+        """
+
+        color = ['r', 'g', 'b', 'm', 'y', 'c']*5
+        wstdcolor = {k:color[uk] for uk, k in enumerate(self.SubNet.keys())}
+        cold = pyu.coldict()
 
 
-    #     fig,ax,self.coll_plot['Sg'][1]=self.EMS.L.showSig(Sg,Tx=self.pos[tx],Rx=self.pos[rx],sr=True,fig=fig,ax=ax)
+        if wstd == None:
+            rloop = self.wstd.keys()
 
+        else :
+            if isinstance(wstd,list):
+                rloop = wstd    
+            elif isinstance(wstd,str) :
+                rloop=[wstd]    
+            else :
+                raise AttributeError('Arg must be a string or a string list')
 
-    #     if ion:
-    #         try:
-    #             [jj.remove() for jj in self.coll_plot['Sg'][0]]
-    #         except:
-    #             pass
+        for ii,rl in enumerate(rloop):
+            
+            pos = self.get_pos(rl)
+            posv = pos.values()
+            mp = dict(zip(pos.keys(),range(len(pos.keys()))))
+            edg = self.SubNet[rl].edges()
+            connect = [(mp[e[0]],mp[e[1]]) for e in edg]
+            posv = np.array(posv)
 
-    #         plt.draw()
-    #         self.coll_plot['Sg'][0]=self.coll_plot['Sg'][1]
+            pts = mlab.points3d(posv[:,0], posv[:,1], posv[:,2],
+                                   scale_factor=0.01, resolution=10)
+            pts.mlab_source.dataset.lines = np.array(connect)
+            tube = mlab.pipeline.tube(pts, tube_radius=0.01)
+            colhex = cold[wstdcolor[rl]]
+            col = tuple(pyu.rgb(colhex)/255.)
+            mlab.pipeline.surface(tube, color=col)
 
 
 
