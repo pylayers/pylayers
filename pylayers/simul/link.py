@@ -135,9 +135,9 @@ class SLink(Link):
             device a id number on body
         didb: int
             device b id number on body
-        a : nd array 
+        a : nd array
             postision of device a
-        b : nd array 
+        b : nd array
             postision of device b
 
         Returns
@@ -300,9 +300,9 @@ class DLink(Link):
         Examples
         --------
 
-            >>> from pylayers.simul.link import *
-            >>> L=DLink(verbose=False)
-            >>> aktk = L.eval()
+        >>> from pylayers.simul.link import *
+        >>> L=DLink(verbose=False)
+        >>> aktk = L.eval()
 
 
         """
@@ -387,7 +387,7 @@ class DLink(Link):
         try:
             self.L.dumpr()
         except:
-            print('This is the first time the Layout is used. Graphs have to be build. Please Wait')
+            print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
             self.L.build()
             self.L.dumpw()
 
@@ -512,27 +512,27 @@ class DLink(Link):
 
         s = 'filename: ' + self.filename +'\n'
 
-        s = s + 'Actual Link considered is:\n'
-        s = s + '--------------------------\n'
-        s = s + 'Layout: ' + self.Lname + '\n\n'
-        s = s + 'Device a:  \n'
-        s = s + '---------  \n'
-        s = s + 'position: ' + str (self.a) + '\n'
-        s = s + 'Antenna: ' + str (self.Aa._filename) + '\n'
-        s = s + 'Antenna rotation matrice : \n ' + str (self.Ta) + '\n\n'
-        s = s + 'Device b:  \n'
-        s = s + '---------  \n'
-        s = s + 'position: ' + str (self.b) + '\n'
-        s = s + 'Antenna: ' + str (self.Ab._filename) + '\n'
-        s = s + 'Antenna rotation matrice : \n ' + str (self.Tb) + '\n\n'
-        s = s + 'Link evaluation information : \n '
-        s = s + '------------------ \n'
-        s = s + 'distance: ' + str(np.sqrt(np.sum((self.a-self.b)**2))) + 'm \n'
-        s = s + 'delay:' + str(np.sqrt(np.sum((self.a-self.b)**2))/0.3) + 'ns\n'
-        s = s + 'Frequency range :  \n'
-        s = s + 'fmin (fGHz):' + str(self.fGHz[0]) +'\n'
-        s = s + 'fmax (fGHz):' + str(self.fGHz[-1]) +'\n'
-        s = s + 'fstep (fGHz):' + str(self.fGHz[1]-self.fGHz[0]) +'\n '
+        s = s + 'Link Parameters :\n'
+        s = s + '------- --------\n'
+        s = s + 'Layout : ' + self.Lname + '\n\n'
+        s = s + 'Node a   \n'
+        s = s + '------  \n'
+        s = s + 'position : ' + str (self.a) + '\n'
+        s = s + 'Antenna : ' + str (self.Aa._filename) + '\n'
+        s = s + 'Rotation matrice : \n ' + str (self.Ta) + '\n\n'
+        s = s + 'Node b   \n'
+        s = s + '------  \n'
+        s = s + 'position : ' + str (self.b) + '\n'
+        s = s + 'Antenna : ' + str (self.Ab._filename) + '\n'
+        s = s + 'Rotation matrice : \n ' + str (self.Tb) + '\n\n'
+        s = s + 'Link evaluation information : \n'
+        s = s + '----------------------------- \n'
+        s = s + 'distance : ' + str("%6.3f" % np.sqrt(np.sum((self.a-self.b)**2))) + ' m \n'
+        s = s + 'delay : ' + str("%6.3f" % (np.sqrt(np.sum((self.a-self.b)**2))/0.3)) + ' ns\n'
+        #s = s + 'Frequency range :  \n'
+        s = s + 'fmin (fGHz) : ' + str(self.fGHz[0]) +'\n'
+        s = s + 'fmax (fGHz) : ' + str(self.fGHz[-1]) +'\n'
+        s = s + 'fstep (fGHz) : ' + str(self.fGHz[1]-self.fGHz[0]) +'\n '
 
         return s
 
@@ -691,7 +691,7 @@ class DLink(Link):
             f.close()
         except:
             f.close()
-            raise NameError('Link._delete: issue when deleteting in h5py file')
+            raise NameError('Link._delete: issue when deleting in h5py file')
 
 
 
@@ -744,7 +744,7 @@ class DLink(Link):
 
 
     def get_grpname(self):
-        """ Determine if the group name of the data regarding the given configuration
+        """ Determine the data group name for the given configuration
 
         Notes
         -----
@@ -812,7 +812,7 @@ class DLink(Link):
 
 
     def fill_dexist(self,key,grpname):
-        """Check if the data of a key with a given groupname
+        """Check if the key's data with a given groupname
             already exists in the h5py file
 
         Parameters
@@ -846,7 +846,6 @@ class DLink(Link):
         """ try to get the index of the requested array in the group key
             of the hdf5 file.
             If array doesn't exist, the hdf5file[key] array is stacked
-
 
 
         Parameters
@@ -1018,7 +1017,7 @@ class DLink(Link):
 
             >>> from pylayers.simul.link import *
             >>> L=DLink(verbose=False)
-            >>> iaktk = L.eval()
+            >>> aktk = L.eval()
 
 
         See Also
@@ -1078,7 +1077,7 @@ class DLink(Link):
         self.R = R
 
         if self.R.nray == 0:
-            raise NameError('No ray have been founded. Try to re-run the simulation with a higher S.cutoff ')
+            raise NameError('No ray has been found. Try to re-run the simulation with a higher S.cutoff ')
 
 
 
@@ -1186,7 +1185,7 @@ class DLink(Link):
 
             if not Arx.evaluated:
                 Arx.Fsynth()
-            elif len(Arx.SqG.shape) == 2 : 
+            elif len(Arx.SqG.shape) == 2 :
                 Arx.Fsynth()
             Atx._show3(T=Ttx.reshape(3,3),po=ptx,
                 title=False,colorbar=False,newfig=False)

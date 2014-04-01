@@ -4206,6 +4206,12 @@ class FUDAsignal(FUDsignal):
         phi_vb  :
             phi velocity termination b (in radians)
 
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
+
         """
 
         defaults = {'fcGHz':4.5,
