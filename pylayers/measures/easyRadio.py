@@ -4,6 +4,8 @@ import thread
 import pdb
 
 class LPRS(object):
+
+
     def __init__(self,portId=0,baud='U4'):
         self.port = '/dev/ttyUSB'+str(portId)
         self.baudrate={'U1':2400,
@@ -26,6 +28,15 @@ class LPRS(object):
                     'P8':6,
                     'P9':7}
 
+        self.bandplan = {'b0':0.8697,
+                         'b1':0.902,
+                         'b2':0.863 }
+        self.bandwidth = {'B0':12.5,
+                         'B1':25,
+                         'B2':50,
+                         'B3':100,
+                         'B6':150}
+
         self.ser = serial.Serial(
         port=self.port,
         baudrate= self.baudrate[baud],
@@ -35,6 +46,8 @@ class LPRS(object):
         timeout = 0.5
         )
 
+        self.exitflag = 0
+
     def __repr__(self):
         st = ''
         c = self.cmd('T3')
@@ -42,12 +55,17 @@ class LPRS(object):
         powerId = self.cmd('P?').replace('ER_CMD#','')
         power = self.power[powerId]
         st = st + 'RF Power Output : '+str(power)+' dBm\n'
-        ChannelNumber = self.cmd('C?')
-        bandplan = self.cmd('b?')
-        spacing = self.cmd('B?')
-        st = st + bandplan +'\n'
-        st = st + ChannelNumber +'\n'
-        st = st + spacing +'\n'
+        ChannelNumber = self.cmd('C?').replace('ER_CMD#','')
+        bandplan = self.cmd('b?').replace('ER_CMD#','')
+        Bandwidth = self.cmd('B?').replace('ER_CMD#','')
+        B  = self.bandwidth[Bandwidth]
+        f0 = self.bandplan[bandplan]
+        C  = eval(ChannelNumber.replace('C',''))
+        st = st + 'Band Plan '+bandplan +'\n'
+        st = st + 'ChannelNumber ' + ChannelNumber +'\n'
+        st = st + 'Bandwidth ' + str(self.bandwidth[Bandwidth])+ ' kHz \n'
+        fc = f0 + C*B/1e6+B/(2e6)
+        st = st + 'fc : '+str(fc*1000.)+' MHz\n'
 
         return(st)
 
@@ -88,9 +106,9 @@ class LPRS(object):
                         out += self.ser.read(1)
         return(out)
 
-    def listen(name,timeout):
+    def _listen(self,name,timeout):
         listen_txt = ''
-        exitflag = 0
+        print "Start listening"
         while True:
             while self.ser.inWaiting()>0:
                 time.sleep(0.005)
@@ -98,9 +116,14 @@ class LPRS(object):
                 if listen_txt !='':
                     print listen_txt
                     listen_txt = ''
-            if (exitflag == 1):
-                exitflag = 0
+            if (self.exitflag == 1):
+                print "Listening thread exit"
+                self.exitflag = 0
                 thread.exit()
+
+    def listen(self):
+        thread.start_new_thread( self._listen ,("Listen",2,))
+        return(0)
 
     def flush(self):
         numbytes = self.ser.inWaiting()
@@ -116,6 +139,7 @@ class LPRS(object):
             pass
 
 
+exitflag = 0 
 
 #
 #def listen(name,timeout):
