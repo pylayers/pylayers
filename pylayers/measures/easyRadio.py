@@ -113,9 +113,9 @@ class LPRS(object):
             while self.ser.inWaiting()>0:
                 time.sleep(0.005)
                 listen_txt += self.ser.read(1)
-                if listen_txt !='':
-                    print listen_txt
-                    listen_txt = ''
+            if listen_txt !='':
+                print listen_txt
+                listen_txt = ''
             if (self.exitflag == 1):
                 print "Listening thread exit"
                 self.exitflag = 0
@@ -123,6 +123,10 @@ class LPRS(object):
 
     def listen(self):
         thread.start_new_thread( self._listen ,("Listen",2,))
+        return(0)
+
+    def beacon(self):
+        thread.start_new_thread( self._beacon ,("Beacon",2,))
         return(0)
 
     def flush(self):
@@ -138,5 +142,13 @@ class LPRS(object):
         while self.ser.outWaiting()>0:
             pass
 
-
+    def _beacon(self,name,timeout=2):
+        print "Start beaconing"
+        while True:
+            time.sleep(timeout)
+            self.send('Beacon')
+            if self.exitflag==1:
+                print "Beaconing thread exit"
+                self.exitflag = 0
+                thread.exit()
 
