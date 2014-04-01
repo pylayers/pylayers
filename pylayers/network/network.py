@@ -47,6 +47,7 @@ Network attributes queries
     :toctree: generated/
 
     Network.get_pos
+    Network.get_orient
     Network.get_pos_est
     Network.overview
     Network.haspe
@@ -1089,7 +1090,30 @@ class Network(nx.MultiDiGraph):
 
 
 
+    def get_orient(self,wstd=None):
+        """ get node orientations
 
+        Parameters
+        ----------
+
+        wstd : specify a wstd to display node orientaion.
+               If None, all wstd are displayed    
+
+        Returns 
+        -------
+
+        dictionnary :     key     : node ID
+        value     : np.array node position
+
+
+        """
+        if wstd == None:
+            return nx.get_node_attributes(self,'T')
+        else :
+            try:
+                return nx.get_node_attributes(self.SubNet[wstd],'T')
+            except: 
+                raise AttributeError('invalid wstd name')
 
     def get_pos(self,wstd=None):
         """ get node positions
@@ -1331,7 +1355,7 @@ class Network(nx.MultiDiGraph):
         return fig, ax
 
 
-    def _show3(self, wstd=None):
+    def _show3(self, wstd=None,newfig=False):
         """ Mayavi _show3
 
         Parameters
@@ -1346,6 +1370,8 @@ class Network(nx.MultiDiGraph):
         wstdcolor = {k:color[uk] for uk, k in enumerate(self.SubNet.keys())}
         cold = pyu.coldict()
 
+        if not newfig:
+            f = mlab.gcf()
 
         if wstd == None:
             rloop = self.wstd.keys()

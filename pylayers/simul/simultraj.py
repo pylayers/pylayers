@@ -82,8 +82,8 @@ class Simul(object):
         self.config.add_section("person")
         self.config.add_section("trajectory")
 
-        self.progress = -1  # simulation not loaded
-
+        # self.progress = -1  # simulation not loaded
+        self.verbose = verbose
         self.cfield = []
         fmin = 3
         fmax = 6
@@ -99,18 +99,23 @@ class Simul(object):
         self.load_config(_filesimul)
         self.gen_net()
         self.SL = SLink()
-        self.DL = DLink(L=self.L,verbose=verbose)
+        self.DL = DLink(L=self.L,verbose=self.verbose)
         self.filename = 'simultraj_' + self._trajname
-        self.data = pd.DataFrame(columns=['t', 'id_a', 'id_b',
+        self.data = pd.DataFrame(columns=['t','id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
                                           'x_b', 'y_b', 'z_b',
                                           'd', 'eng', 'typ',
                                           'wstd', 'fcghz',
-                                          'fbminghz', 'fbmaxghz', 'fstep',
+                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                          ])
-        self.data.set_index('t')
+                                          ],index=[0])
+        # self.data.set_index('t')
         self._filecsv = self.filename.split('.')[0] + '.csv'
+        self._index=0
+
+        filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
+        if os.path.exists(filenameh5) :
+            self.loadpd()
         # self._saveh5_init()
 
 
@@ -176,6 +181,7 @@ class Simul(object):
                 person = Body(t.name + '.ini')
                 self.dpersons.update({t.name: person})
                 self.time = t.time()
+                self._time = pd.to_datetime(t.time(),unit='s')
                 self.timestep = self.time[1] - self.time[0]
 
             else:
@@ -331,7 +337,7 @@ class Simul(object):
             list of wstd to be evaluated 
             (if [], all wstd are considered)
         't': list
-            list of timestamp to be evaluated 
+            list of timestamp index to be evaluated 
             (if [], all timestamps are considered)
 
 
@@ -342,7 +348,7 @@ class Simul(object):
                     'I2I': False,
                     'llink': [],
                     'wstd': [],
-                    't': [],
+                    'ut': [],
                     }
 
         for k in defaults:
@@ -392,11 +398,12 @@ class Simul(object):
 
         # Check time attribute
         if kwargs['t'] == []:
-            t = self.time
+            kut = range(len(self.time))
         else:
             if kwargs['t'][0] >= self.time[0] and\
                kwargs['t'][-1] <= self.time[-1]:
-               t = self.time[kwargs['t']]
+               kut=map(lambda x: np.where(self.time<=x)[0][-1],kwargs['t'])
+
             else:
                 raise AttributeError('Requested timestamp not available')
 
@@ -404,13 +411,16 @@ class Simul(object):
         # Code
         #
         init=True
-        for ut, it in enumerate(t):
-
-            self.update_pos(t, ut, todo)
+        for ut in kut:
+            t = self.time[ut]
+            self.update_pos( ut, todo)
 
             for w in wstd:
                 for na, nb, typ in llink[w]:
                     if typ in todo:
+                        if self.verbose:
+                            print 'time:', t, 'time idx:', ut, '/',len(kut)
+                            print 'processing: ',na, ' <-> ', nb, 'wstd: ', w 
                         eng = 0
                         self.evaldeter(na, nb, w)
                         if typ == 'OB':
@@ -435,10 +445,9 @@ class Simul(object):
                         #       'Link_Ct_grpname': self.DL.dexist['Ct']['grpname'],
                         #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
                         #       }
-                        # self._saveh5(ut, na, nb, w, **kw)
-
+                        # 
                     self.data = self.data.append(pd.DataFrame({\
-                                't': pd.Timestamp(ut),
+                                't':self._time[ut],
                                 'id_a': na,
                                 'id_b': nb,
                                 'x_a': self.N.node[na]['p'][0],
@@ -455,6 +464,7 @@ class Simul(object):
                                 'fbminghz': self.DL.fmin,
                                 'fbmaxghz': self.DL.fmax,
                                 'fstep': self.DL.fstep,
+                                'aktk_id': str(ut) + '_' + na + '_' + nb + '_' + w,
                                 'sig_id': self.DL.dexist['sig']['grpname'],
                                 'ray_id': self.DL.dexist['ray']['grpname'],
                                 'Ct_id': self.DL.dexist['Ct']['grpname'],
@@ -464,21 +474,37 @@ class Simul(object):
                                           'x_b', 'y_b', 'z_b',
                                           'd', 'eng', 'typ',
                                           'wstd', 'fcghz',
-                                          'fbminghz', 'fbmaxghz', 'fstep',
+                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                          ],index=[it]))
-   
+                                          ],index=[self._index]))
+                    self._index = self._index + 1
+                    # save csv
                     self.tocsv(ut, na, nb, w,init=init)
+                    # save pandas self.data
+                    self.savepd()
+                    # save ak tauk
+                    self._saveh5(ut, na, nb, w)
                     init=False
 
+    def savepd(self):
+        """ save data information of a simulation
+        """
+        filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
+        store = pd.HDFStore(filenameh5,'a')
+        store['df'] = self.data
+        store.close()
 
-    def update_pos(self, t, ut, todo = ['OB','B2B','B2I','I2I']):
+    def loadpd(self):
+        """ load data from previous simulations
+        """
+        filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
+        self.data = pd.read_hdf(filenameh5,'df')
+
+    def update_pos(self, ut, todo = ['OB','B2B','B2I','I2I']):
         ''' update positions of devices and bodies for a given time index
 
         Parameters
         ----------
-        t : range
-            range of time
         ut : int
             time index in self.time
         '''
@@ -491,7 +517,7 @@ class Simul(object):
             pos = []
             orient = []
             for up, person in enumerate(self.dpersons.values()):
-                person.settopos(self.traj[up], t=t[ut], cs=True)
+                person.settopos(self.traj[up], t=self.time[ut], cs=True)
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])
@@ -499,51 +525,95 @@ class Simul(object):
                 orient.extend([person.acs[d] for d in dev])
             # in a future version , the network update must also update
             # antenna positon in the device coordinate system
-            self.N.update_pos(nodeid, pos, now=t[ut])
-            self.N.update_orient(nodeid, orient, now=t[ut])
+            self.N.update_pos(nodeid, pos, now=self.time[ut])
+            self.N.update_orient(nodeid, orient, now=self.time[ut])
         # TODO : to be moved on the network edges
         self.N.update_dis()
 
-    # def _show3(self, **kwargs):
-    #     """ 3D show using Mayavi
+    def _show3(self, **kwargs):
+        """ 3D show using Mayavi
         
-    #     Parameters
-    #     ----------
+        Parameters
+        ----------
         
-    #     't': float 
-    #         time index
-    #     'lay': bool
-    #         show layout
-    #     'net': bool
-    #         show net
-    #     'body': bool
-    #         show bodies
-    #     'rays': bool
-    #         show rays
-    #     """
+        t: float 
+            time index
+        link: list 
+            [id_a, id_b] 
+            id_a : node id a 
+            id_b : node id b 
+        'lay': bool
+            show layout
+        'net': bool
+            show net
+        'body': bool
+            show bodies
+        'rays': bool
+            show rays
+        """
             
-    #     defaults = {'t': 0,
-    #                 'lay': True,
-    #                 'net': True,
-    #                 'body': True,
-    #                 'rays': True
-    #                 }
+        defaults = {'t': 0,
+                    'link': [],
+                    'wstd':[],
+                    'lay': True,
+                    'net': True,
+                    'body': True,
+                    'rays': True,
+                    'ant': False
+
+                    }
         
-    #     for k in defaults:
-    #         if k not in kwargs:
-    #             kwargs[k] = defaults[k]
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
 
-    #     df = self.data.truncate(before=self.time[ut]-self.timestep,
-    #                             after=self.time[ut]+self.timestep)
+        if kwargs['link'] == []:
+            wstd= self.N.SubNet.keys()[0]
+            link = self.N.SubNet[wstd].edges()[0]
+        else:
+            link = kwargs['link']
+        import ipdb
+        ipdb.set_trace()
+        ut=np.where(self.time<=kwargs['t'])[0][-1]
+        df = self.data[self.data['t'] == self._time[ut]]
+        if len(df) == 0:
+            raise AttributeError('invalid time')
 
-    #     if kwargs['net']
+        # get info of the corresponding timestamp
+        line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])]
+        if len(line) == 0:
+            line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
+            if len(line) == 0:
+                raise AttributeError('invalid link')
+        rayid = line['ray_id'].values[0]
+
+
+        self.update_pos(ut)
+        self.DL.a = self.N.node[link[0]]['p']
+        self.DL.b = self.N.node[link[1]]['p']
+        self.DL.Ta = self.N.node[link[0]]['T']
+        self.DL.Tb = self.N.node[link[1]]['T']
+        try:
+            delattr(self.DL,'R')
+        except:
+            pass
+
+        self.DL._show3(newfig= False,
+                       lay= kwargs['lay'],
+                       rays= kwargs['rays'],
+                       ant=False)
+        if kwargs['net']:
+            self.N._show3(newfig=False)
+        if kwargs['body']:
+            for p in self.dpersons:
+                self.dpersons[p]._show3(newfig=False,
+                                        topos=True,
+                                        pattern=kwargs['ant'])
 
 
 
-        
 
-            
-        #df[df.typ == 'OB']['ray_id']
+
 
 
 
@@ -561,172 +631,136 @@ class Simul(object):
     #         raise NameError('simultra.saveinit: \
     #                         issue when writting h5py file')
 
-    # def _saveh5(self, ut, ida, idb, wstd, **kwargs):
-    #     """ Save in h5py format
+    def _saveh5(self, ut, ida, idb, wstd):
+        """ Save in h5py format
 
-    #     Parameters
-    #     ----------
+        Parameters
+        ----------
 
-    #     ut : int
-    #         time index in self.time
-    #     ida : string
-    #         node a index
-    #     idb : string
-    #         node b index
-    #     wstd : string
-    #         wireless standard of used link
+        ut : int
+            time index in self.time
+        ida : string
+            node a index
+        idb : string
+            node b index
+        wstd : string
+            wireless standard of used link
 
-    #     kwargs (attribute of dataset):
+        Notes
+        -----
 
-    #     d : ndarray
-    #         distrance between nodes
-    #     eng : float
-    #         engagement
-    #     typ : string
-    #         type of link (OB|B2B|B2I|I2I)
-    #     fcghz : float
-    #         central frequency of evaluation
-    #     fbminghz : float
-    #         min frequency of bandwidth
-    #     fbmaxghz : float
-    #         max frequency of bandwidth
-    #     fstep : int
-    #         frequency step
-    #     Link_sig_grpname : string
-    #         DLink hdf5 identifier for sig
-    #     Link_ray_grpname : string
-    #         DLink hdf5 identifier for ray
-    #     Link_Ct_grpname : string
-    #         DLink hdf5 identifier for Ct
-    #     Link_H_grpname : string
-    #         DLink hdf5 identifier for H
+        Dataset organisation:
 
-    #     Notes
-    #     -----
-
-    #     Dataset organisation:
-
-    #     simultraj_<trajectory_filename.h5>.h5
-    #         |
-    #         |time
-    #         |    ...
-    #         |
-    #         |/<tidx_ida_idb_wstd>/ |attrs
-    #         |                      |a_k
-    #         |                      |t_k
+        simultraj_<trajectory_filename.h5>.h5
+            |
+            |time
+            |    ...
+            |
+            |/<tidx_ida_idb_wstd>/ |attrs
+            |                      |a_k
+            |                      |t_k
 
 
-    #     Root dataset :
-    #     time : array
-    #         range of simulation time
+        Root dataset :
+        time : array
+            range of simulation time
 
-    #     Group identifier :
-    #         tidx : index in time dataset
-    #         ida : node a index in Network
-    #         idb : node b index in Network
-    #         wstd : wireless standar of link interest
-
-
-    #     Inside group:
-    #         a_k : alpha_k values
-    #         t_k : tau_k values
-
-    #     Attributes of group:
-    #     'd': distance between nodes
-    #     'eng': engagement
-    #     'typ': type of link (OB,B2B,B2I,I2I),
-    #     'fcghz': central frequency of evaluation
-    #     'fbminghz': min freq of evalutaion
-    #     'fbmaxghz': max freq of evalutaion
-    #     'fstep' : numberof evaluation point for frequency
-    #     'Link_sig_grpname': self.Li.dexist['sig']['grpname'],
-    #     'Link_ray_grpname': self.Li.dexist['ray']['grpname'],
-    #     'Link_Ct_grpname': self.Li.dexist['Ct']['grpname'],
-    #     'Link_H_grpname': self.Li.dexist['H']['grpname'],
-
-    #     See Also
-    #     --------
-
-    #     pylayers.simul.links
-
-    #     """
-
-    #     filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
-    #     grpname = str(ut) + '_' + ida + '_' + idb + '_' + wstd
-    #     # try/except to avoid loosing the h5 file if
-    #     # read/write error
-    #     try:
-    #         fh5 = h5py.File(filenameh5, 'a')
-    #         if not grpname in fh5.keys():
-    #             fh5.create_group(grpname)
-    #         else:
-    #             print grpname + ' already exists in ' + filenameh5
-    #         f = fh5[grpname]
-    #         for k in kwargs:
-    #             f.attrs[k] = kwargs[k]
-
-    #         f.create_dataset('alphak',
-    #                          shape=self._ak.shape,
-    #                          maxshape=(None),
-    #                          data=self._ak)
-    #         f.create_dataset('tauk',
-    #                          shape=self._tk.shape,
-    #                          maxshape=(None),
-    #                          data=self._tk)
-    #         fh5.close()
-    #     except:
-    #         fh5.close()
-    #         raise NameError('Simultraj._saveh5: issue when writting h5py file')
+        Group identifier :
+            tidx : index in time dataset
+            ida : node a index in Network
+            idb : node b index in Network
+            wstd : wireless standar of link interest
 
 
-    # def _loadh5(self, t, ida, idb, wstd):
-    #     """ Load in h5py format
+        Inside group:
+            a_k : alpha_k values
+            t_k : tau_k values
 
-    #     Parameters
-    #     ----------
+        See Also
+        --------
 
-    #    ut : int
-    #        time index in self.time
-    #    ida : string
-    #        node a index
-    #    idb : string
-    #        node b index
-    #    wstd : string
-    #        wireless standard of used link
+        pylayers.simul.links
 
-    #     Returns
-    #     -------
-    #     (ak, tk, conf)
+        """
 
-    #     ak : ndarray:
-    #         alpha_k
-    #     tk : ndarray:
-    #         alpha_k
-    #     conf : dict
-    #         dictionnary containing configuration setup
-    #     """
+        filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
+        grpname = str(ut) + '_' + ida + '_' + idb + '_' + wstd
+        # try/except to avoid loosing the h5 file if
+        # read/write error
+        try:
+            fh5 = h5py.File(filenameh5, 'a')
+            if not grpname in fh5.keys():
+                fh5.create_group(grpname)
+                f = fh5[grpname]
+                # for k in kwargs:
+                #     f.attrs[k] = kwargs[k]
 
-    #     filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
-    #     grpname = str(ut) + '_' + ida + '_' + idb + '_' + wstd
-    #     # try/except to avoid loosing the h5 file if
-    #     # read/write error
-    #     try:
-    #         fh5 = h5py.File(filenameh5, 'r')
-    #         if not grpname in fh5.keys():
-    #             fh5.close()
-    #             raise NameError(grpname + ' cannot be reached in ' + self.filename)
-    #         f = fh5[grpname]
-    #         conf={}
-    #         for k in f.attrs.keys():
-    #             conf[k]=f.attrs[k]
-    #         ak = f['alphak']
-    #         tk = f['tauk']
-    #         fh5.close()
+                f.create_dataset('alphak',
+                                 shape=self._ak.shape,
+                                 maxshape=(None),
+                                 data=self._ak)
+                f.create_dataset('tauk',
+                                 shape=self._tk.shape,
+                                 maxshape=(None),
+                                 data=self._tk)
+            else:
+                pass#print grpname + ' already exists in ' + filenameh5
 
-    #         return ak, tk, conf
-    #     except:
-    #         fh5.close()
-    #         raise NameError('Simultraj._loadh5: issue when reading h5py file')
+            
+            fh5.close()
+        except:
+            fh5.close()
+            raise NameError('Simultraj._saveh5: issue when writting h5py file')
+
+
+    def _loadh5(self, ut, ida, idb, wstd):
+        """ Load in h5py format
+
+        Parameters
+        ----------
+
+       ut : int
+           time index in self.time
+       ida : string
+           node a index
+       idb : string
+           node b index
+       wstd : string
+           wireless standard of used link
+
+        Returns
+        -------
+        (ak, tk, conf)
+
+        ak : ndarray:
+            alpha_k
+        tk : ndarray:
+            alpha_k
+        conf : dict
+            dictionnary containing configuration setup
+        """
+
+        filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
+        grpname = str(ut) + '_' + ida + '_' + idb + '_' + wstd
+        # try/except to avoid loosing the h5 file if
+        # read/write error
+        try:
+            fh5 = h5py.File(filenameh5, 'r')
+            if not grpname in fh5.keys():
+                fh5.close()
+                raise NameError(grpname + ' cannot be reached in ' + self.filename)
+            f = fh5[grpname]
+            conf={}
+            # for k in f.attrs.keys():
+            #     conf[k]=f.attrs[k]
+            ak = f['alphak'][:]
+            tk = f['tauk'][:]
+            fh5.close()
+
+            return ak, tk, conf
+        except:
+            fh5.close()
+            raise NameError('Simultraj._loadh5: issue when reading h5py file')
 
 
     def tocsv(self, ut, ida, idb, wstd,init=False):

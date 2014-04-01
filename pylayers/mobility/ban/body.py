@@ -786,37 +786,62 @@ class Body(object):
         colhex = cold[kwargs['color']]
         body_color = tuple(pyu.rgb(colhex)/255.)
 
-        for k in range(self.ncyl):
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        cylrad = self.sl[:,2]
+        if kwargs['topos']:
+            pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+            phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+        else:
+            pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
+            phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+        ax = phe-pta
+        l = np.sqrt(np.sum((ax**2), axis=0))
+        cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
+                               axis=(ax[0, i],ax[1, i],ax[2, i]), 
+                               radius=cylrad[i]*kwargs['widthfactor'],
+                               length=l[i]) for i in range(self.ncyl)]
+        [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
+         for i in range(self.ncyl)]
+        partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
+        [f.children[k].__setattr__('name', partnames[k]+str(k))
+         for k in range(self.ncyl)]
 
-            kta = int(self.sl[k,0])
-            khe = int(self.sl[k,1])
-            cylrad = self.sl[k,2]
-            if kwargs['topos']:
-                pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
-                phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
-            else:
-                pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
-                phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
-
-            ax = phe-pta
-            cc = (pta+phe)/2.
-            l = np.sqrt(np.sum(ax**2))
-            cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
-            mlab.pipeline.surface(cyl.polydata,color=body_color)
-            f.children[-1].name=self.name +' ' +self.idcyl[k]            
-
-            if kwargs['ccs']:
-
-                pt = pta+cylrad*kwargs['widthfactor']*self.ccs[k,:,0]
+        if kwargs['ccs']:
+            # to be improved
+            for k,key in enumerate(self.ccs):
+                pt = pta[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
-                mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)  
+                mlab.quiver3d(pte[0], pte[1], pte[2],
+                              self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
+                              scale_factor=0.2)
 
+        # for k in range(self.ncyl):
+
+        #     kta = int(self.sl[k,0])
+        #     khe = int(self.sl[k,1])
+        #     cylrad = self.sl[k,2]
+        #     if kwargs['topos']:
+        #         pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+        #         phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+        #     else:
+        #         pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
+        #         phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+
+
+            # cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
+            # mlab.pipeline.surface(cyl.polydata,color=body_color)
+            # f.children[-1].name=self.name +' ' +self.idcyl[k]            
+
+            # 
+
+            #     
         if kwargs['dcs']:
-                    for key in self.dcs.keys():               
-                        U = self.dcs[key]               
-                        pt = U[:,0]
-                        pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
-                        mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
+            for key in self.dcs.keys():               
+                U = self.dcs[key]               
+                pt = U[:,0]
+                pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
+                mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
 
 
         if kwargs['pattern']:
