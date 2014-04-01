@@ -127,11 +127,11 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.__init__.html#pylayers.simul.simultraj.Simul.__init__" title="pylayers.simul.simultraj.Simul.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.__init__</span></tt></a>([_filesimul])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.__init__.html#pylayers.simul.simultraj.Simul.__init__" title="pylayers.simul.simultraj.Simul.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.__init__</span></tt></a>([_filesimul,&nbsp;verbose])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.run2.html#pylayers.simul.simultraj.Simul.run2" title="pylayers.simul.simultraj.Simul.run2"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.run2</span></tt></a>(**kwargs)</td>
-<td>Run the link evaluation along a trajectory</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.run.html#pylayers.simul.simultraj.Simul.run" title="pylayers.simul.simultraj.Simul.run"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.run</span></tt></a>(**kwargs)</td>
+<td>Run the link evaluation along a trajectory   :Parameters:      <strong>&#8216;OB&#8217;: boolean</strong> :           perform on body statistical link evaluation      <strong>&#8216;B2B&#8217;:  boolean</strong> :           perform body to body deterministic link evaluation      <strong>&#8216;B2I&#8217;: boolean</strong> :           perform body to infrastructure deterministic link evaluation      <strong>&#8216;I2I&#8217;:  boolean</strong> :           perform infrastructure to infrastructure deterministic link eval.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.gen_net.html#pylayers.simul.simultraj.Simul.gen_net" title="pylayers.simul.simultraj.Simul.gen_net"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.gen_net</span></tt></a>()</td>
 <td>generate Network and associated links</td>
@@ -162,11 +162,11 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul.load_config.html#pylayers.simul.simultraj.Simul.load_config" title="pylayers.simul.simultraj.Simul.load_config"><tt class="xref py py-obj docutils literal"><span class="pre">Simul.load_config</span></tt></a>(_filesimul)</td>
 <td>load a simultraj configuration file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._saveh5_init.html#pylayers.simul.simultraj.Simul._saveh5_init" title="pylayers.simul.simultraj.Simul._saveh5_init"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5_init</span></tt></a>()</td>
-<td>initialization of the h5py file</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5_init</span></tt></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._saveh5.html#pylayers.simul.simultraj.Simul._saveh5" title="pylayers.simul.simultraj.Simul._saveh5"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5</span></tt></a>(t,&nbsp;ida,&nbsp;idb,&nbsp;wstd,&nbsp;**kwargs)</td>
-<td>Save in h5py format   :Parameters:      <strong>t  :</strong> :                 <strong>ida :</strong> :                 <strong>idb :</strong> :                 <strong>wstd :</strong> :                 <strong>grpname</strong> : string          groupname of the h5py file (timeidx_nodeid&amp;_nodeidb)  ..</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.simultraj.Simul._saveh5.html#pylayers.simul.simultraj.Simul._saveh5" title="pylayers.simul.simultraj.Simul._saveh5"><tt class="xref py py-obj docutils literal"><span class="pre">Simul._saveh5</span></tt></a>(ut,&nbsp;ida,&nbsp;idb,&nbsp;wstd)</td>
+<td>Save in h5py format   :Parameters:      <strong>ut</strong> : int          time index in self.time      <strong>ida</strong> : string          node a index      <strong>idb</strong> : string          node b index      <strong>wstd</strong> : string          wireless standard of used link  ..</td>
 </tr>
 </tbody>
 </table>
@@ -206,7 +206,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 27, 2014.
+      Last updated on avril 01, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

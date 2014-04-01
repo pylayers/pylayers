@@ -25,8 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="pylayers.simul.simultraj" href="../pylayers.simul.simultraj.html" />
-    <link rel="next" title="pylayers.simul.link" href="../pylayers.simul.link.html" />
-    <link rel="prev" title="pylayers.simul.simultraj.Simul._saveh5_init" href="pylayers.simul.simultraj.Simul._saveh5_init.html" /> 
+    <link rel="next" title="pylayers.simul.link" href="../pylayers.simul.link.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -49,9 +48,6 @@
         <li class="right" >
           <a href="../pylayers.simul.link.html" title="pylayers.simul.link"
              accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.simul.simultraj.Simul._saveh5_init.html" title="pylayers.simul.simultraj.Simul._saveh5_init"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
@@ -64,9 +60,6 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.simul.simultraj.Simul._saveh5_init.html"
-                        title="previous chapter">pylayers.simul.simultraj.Simul._saveh5_init</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../pylayers.simul.link.html"
                         title="next chapter">pylayers.simul.link</a></p>
@@ -100,19 +93,27 @@
 <h1>pylayers.simul.simultraj.Simul._saveh5<a class="headerlink" href="#pylayers-simul-simultraj-simul-saveh5" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.simul.simultraj.Simul._saveh5">
-<tt class="descclassname">Simul.</tt><tt class="descname">_saveh5</tt><big>(</big><em>t</em>, <em>ida</em>, <em>idb</em>, <em>wstd</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/simultraj.html#Simul._saveh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simultraj.Simul._saveh5" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Simul.</tt><tt class="descname">_saveh5</tt><big>(</big><em>ut</em>, <em>ida</em>, <em>idb</em>, <em>wstd</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/simultraj.html#Simul._saveh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.simultraj.Simul._saveh5" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save in h5py format</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>t  :</strong> :</p>
-<p><strong>ida :</strong> :</p>
-<p><strong>idb :</strong> :</p>
-<p><strong>wstd :</strong> :</p>
-<p><strong>grpname</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ut</strong> : int</p>
+<blockquote>
+<div><p>time index in self.time</p>
+</div></blockquote>
+<p><strong>ida</strong> : string</p>
+<blockquote>
+<div><p>node a index</p>
+</div></blockquote>
+<p><strong>idb</strong> : string</p>
+<blockquote>
+<div><p>node b index</p>
+</div></blockquote>
+<p><strong>wstd</strong> : string</p>
 <blockquote class="last">
-<div><p>groupname of the h5py file (timeidx_nodeid&amp;_nodeidb)</p>
+<div><p>wireless standard of used link</p>
 </div></blockquote>
 </td>
 </tr>
@@ -132,9 +133,9 @@
 <p class="last"><a href="#id1"><span class="problematic" id="id2">|</span></a>time
 |    ...
 |
-<a href="#id3"><span class="problematic" id="id4">|</span></a>/tidx_ida_idb_wstd/ <a href="#id5"><span class="problematic" id="id6">|</span></a>attrs
-|                    <a href="#id7"><span class="problematic" id="id8">|</span></a>a_k
-|                    <a href="#id9"><span class="problematic" id="id10">|</span></a>t_k</p>
+<a href="#id3"><span class="problematic" id="id4">|</span></a>/&lt;tidx_ida_idb_wstd&gt;/ <a href="#id5"><span class="problematic" id="id6">|</span></a>attrs
+|                      <a href="#id7"><span class="problematic" id="id8">|</span></a>a_k
+|                      <a href="#id9"><span class="problematic" id="id10">|</span></a>t_k</p>
 </dd>
 </dl>
 <p>Root dataset :
@@ -146,23 +147,11 @@ time : array</p>
 <dd>tidx : index in time dataset
 ida : node a index in Network
 idb : node b index in Network
-wstd : wireless standard of the link of interest</dd>
+wstd : wireless standar of link interest</dd>
 <dt>Inside group:</dt>
 <dd>a_k : alpha_k values
 t_k : tau_k values</dd>
 </dl>
-<p>Attributes of group:
-&#8216;d&#8217;: distance between nodes
-&#8216;eng&#8217;: engagement
-&#8216;typ&#8217;: type of link (OB,B2B,B2I,I2I),
-&#8216;fcghz&#8217;: central frequency of evaluation
-&#8216;fbminghz&#8217;: min freq of evalutaion
-&#8216;fbmaxghz&#8217;: max freq of evalutaion
-&#8216;fstep&#8217; : numberof evaluation point for frequency
-&#8216;Link_sig_grpname&#8217;: self.Li.dexist[&#8216;sig&#8217;][&#8216;grpname&#8217;],
-&#8216;Link_ray_grpname&#8217;: self.Li.dexist[&#8216;ray&#8217;][&#8216;grpname&#8217;],
-&#8216;Link_Ct_grpname&#8217;: self.Li.dexist[&#8216;Ct&#8217;][&#8216;grpname&#8217;],
-&#8216;Link_H_grpname&#8217;:</p>
 </dd></dl>
 
 </div>
@@ -185,9 +174,6 @@ t_k : tau_k values</dd>
         <li class="right" >
           <a href="../pylayers.simul.link.html" title="pylayers.simul.link"
              >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.simul.simultraj.Simul._saveh5_init.html" title="pylayers.simul.simultraj.Simul._saveh5_init"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
@@ -200,7 +186,7 @@ t_k : tau_k values</dd>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 27, 2014.
+      Last updated on avril 01, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

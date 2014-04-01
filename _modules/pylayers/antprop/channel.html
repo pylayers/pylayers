@@ -1396,6 +1396,10 @@
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">Fbt</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">*</span> <span class="n">Fbp</span>
 
         <span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">)</span>
+        <span class="n">H</span><span class="o">.</span><span class="n">applyFriis</span><span class="p">()</span>
+        <span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+                                                             <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">tau0</span>
         <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Ctilde.vec2scal"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.vec2scal.html#pylayers.antprop.channel.Ctilde.vec2scal">[docs]</a>    <span class="k">def</span> <span class="nf">vec2scal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1529,8 +1533,8 @@
 <span class="sd">        doa   :  direction of arrival  (nray x 2)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">bs</span><span class="o">.</span><span class="n">FUDAsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dod</span><span class="p">,</span> <span class="n">doa</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Tchannel</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">dod</span><span class="p">,</span> <span class="n">doa</span><span class="p">)</span>
+        <span class="c"># bs.FUDAsignal.__init__(self, fGHz, alpha, tau, dod, doa)</span>
 </div>
 <div class="viewcode-block" id="Tchannel.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.__repr__.html#pylayers.antprop.channel.Tchannel.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
@@ -1614,7 +1618,7 @@
         <span class="n">filename</span> <span class="o">=</span> <span class="n">Lfilename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.h5&#39;</span>
         <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRH&#39;</span><span class="p">])</span>
         
-        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c"># keys not saved as attribute of h5py file</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">va</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1685,14 +1689,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>    
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
-
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
             <span class="n">f</span> <span class="o">=</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;H/&#39;</span><span class="o">+</span><span class="n">grpname</span><span class="p">]</span>
 
             <span class="c"># keys not saved as attribute of h5py file</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">va</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s">&#39;tau1&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s">&#39;tau1&#39;</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">!=</span><span class="s">&#39;isFriis&#39;</span><span class="p">:</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">va</span><span class="p">[:])</span>
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">va</span><span class="p">)</span>
@@ -2572,7 +2575,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 27, 2014.
+      Last updated on avril 01, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

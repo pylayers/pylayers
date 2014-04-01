@@ -126,6 +126,7 @@
 <span class="sd">    :toctree: generated/</span>
 
 <span class="sd">    Network.get_pos</span>
+<span class="sd">    Network.get_orient</span>
 <span class="sd">    Network.get_pos_est</span>
 <span class="sd">    Network.overview</span>
 <span class="sd">    Network.haspe</span>
@@ -232,12 +233,20 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">str2bool</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 
 
 <span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span><span class="n">hold</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
 <span class="kn">import</span> <span class="nn">select</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+    <span class="kn">from</span> <span class="nn">tvtk.tools</span> <span class="kn">import</span> <span class="n">visual</span>
+
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;mayavi not installed&#39;</span>
 
 
 <span class="c"># How to take into account  1 specific key specifique for 1 MultiGraph</span>
@@ -1059,8 +1068,6 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">ipdb</span>
-        <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">wstd</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="n">ln</span><span class="p">,</span><span class="n">wstd</span><span class="p">,</span><span class="n">lD</span><span class="p">))</span>
 
 
@@ -1158,12 +1165,35 @@
         <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
         <span class="n">lp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))])</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
+        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">ve</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">ve</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;d&#39;</span><span class="p">:</span><span class="n">d</span><span class="p">[</span><span class="n">ie</span><span class="p">]})</span> <span class="k">for</span> <span class="n">ie</span><span class="p">,</span><span class="n">ve</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">())]</span>
 
 
 
+<div class="viewcode-block" id="Network.get_orient"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.get_orient.html#pylayers.network.network.Network.get_orient">[docs]</a>    <span class="k">def</span> <span class="nf">get_orient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wstd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get node orientations</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        wstd : specify a wstd to display node orientaion.</span>
+<span class="sd">               If None, all wstd are displayed    </span>
+
+<span class="sd">        Returns </span>
+<span class="sd">        -------</span>
+
+<span class="sd">        dictionnary :     key     : node ID</span>
+<span class="sd">        value     : np.array node position</span>
 
 
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">wstd</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;T&#39;</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">wstd</span><span class="p">],</span><span class="s">&#39;T&#39;</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span> 
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;invalid wstd name&#39;</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="Network.get_pos"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.get_pos.html#pylayers.network.network.Network.get_pos">[docs]</a>    <span class="k">def</span> <span class="nf">get_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wstd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get node positions</span>
 
@@ -1402,40 +1432,56 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
-    <span class="c"># def compute_Sg(self,tx,rx):</span>
-    <span class="c">#     if self.pos == {}:</span>
-    <span class="c">#         self.pos=self.get_pos()</span>
-    <span class="c">#     return (self.EMS.L.signature(self.pos[tx],self.pos[rx]))</span>
-
-
-    <span class="c"># def show_sig(self,Sg,tx,rx,ion=False,fig=None,ax=None):</span>
-    <span class="c">#     if fig==None:</span>
-    <span class="c">#         fig = plt.figure()</span>
-    <span class="c">#         ax=fig.add_subplot(111)</span>
-    <span class="c">#     elif ax== None:</span>
-    <span class="c">#         ax=fig.add_subplot(111)</span>
-
-    <span class="c">#     try:</span>
-    <span class="c">#         self.coll_plot[&#39;Sg&#39;][1]=[]</span>
-    <span class="c">#     except:</span>
-    <span class="c">#         self.coll_plot[&#39;Sg&#39;]=[[]]</span>
-    <span class="c">#         self.coll_plot[&#39;Sg&#39;].append([])</span>
-
-
-    <span class="c">#     fig,ax,self.coll_plot[&#39;Sg&#39;][1]=self.EMS.L.showSig(Sg,Tx=self.pos[tx],Rx=self.pos[rx],sr=True,fig=fig,ax=ax)</span>
-
-
-    <span class="c">#     if ion:</span>
-    <span class="c">#         try:</span>
-    <span class="c">#             [jj.remove() for jj in self.coll_plot[&#39;Sg&#39;][0]]</span>
-    <span class="c">#         except:</span>
-    <span class="c">#             pass</span>
-
-    <span class="c">#         plt.draw()</span>
-    <span class="c">#         self.coll_plot[&#39;Sg&#39;][0]=self.coll_plot[&#39;Sg&#39;][1]</span>
-
 
 </div>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wstd</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Mayavi _show3</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        wstd : list</span>
+<span class="sd">            list of wireless standards</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">5</span>
+        <span class="n">wstdcolor</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">color</span><span class="p">[</span><span class="n">uk</span><span class="p">]</span> <span class="k">for</span> <span class="n">uk</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>
+        <span class="n">cold</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">coldict</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">newfig</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">wstd</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">rloop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wstd</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wstd</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+                <span class="n">rloop</span> <span class="o">=</span> <span class="n">wstd</span>    
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wstd</span><span class="p">,</span><span class="nb">str</span><span class="p">)</span> <span class="p">:</span>
+                <span class="n">rloop</span><span class="o">=</span><span class="p">[</span><span class="n">wstd</span><span class="p">]</span>    
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Arg must be a string or a string list&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">rl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rloop</span><span class="p">):</span>
+            
+            <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pos</span><span class="p">(</span><span class="n">rl</span><span class="p">)</span>
+            <span class="n">posv</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="n">mp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">keys</span><span class="p">()))))</span>
+            <span class="n">edg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">rl</span><span class="p">]</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+            <span class="n">connect</span> <span class="o">=</span> <span class="p">[(</span><span class="n">mp</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">mp</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edg</span><span class="p">]</span>
+            <span class="n">posv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">posv</span><span class="p">)</span>
+
+            <span class="n">pts</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">points3d</span><span class="p">(</span><span class="n">posv</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">posv</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">posv</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span>
+                                   <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">pts</span><span class="o">.</span><span class="n">mlab_source</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">connect</span><span class="p">)</span>
+            <span class="n">tube</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">tube</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span> <span class="n">tube_radius</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">wstdcolor</span><span class="p">[</span><span class="n">rl</span><span class="p">]]</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span><span class="o">/</span><span class="mf">255.</span><span class="p">)</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">tube</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+
+
+
 <div class="viewcode-block" id="Network.csv_save"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.csv_save.html#pylayers.network.network.Network.csv_save">[docs]</a>    <span class="k">def</span> <span class="nf">csv_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save node positions into csv file</span>
 
@@ -2069,7 +2115,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 27, 2014.
+      Last updated on avril 01, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

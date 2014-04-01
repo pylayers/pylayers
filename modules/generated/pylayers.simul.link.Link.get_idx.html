@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.simul.link" href="../pylayers.simul.link.html" />
-    <link rel="next" title="pylayers.simul.link.Link.save_init" href="pylayers.simul.link.Link.save_init.html" />
-    <link rel="prev" title="pylayers.simul.link.Link.get_grpname" href="pylayers.simul.link.Link.get_grpname.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.simul.link.Link.save_init.html" title="pylayers.simul.link.Link.save_init"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.simul.link.Link.get_grpname.html" title="pylayers.simul.link.Link.get_grpname"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.simul.link.html" accesskey="U">pylayers.simul.link</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.simul.link.Link.get_grpname.html"
-                        title="previous chapter">pylayers.simul.link.Link.get_grpname</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.simul.link.Link.save_init.html"
-                        title="next chapter">pylayers.simul.link.Link.save_init</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.simul.link.Link.get_idx.txt"
@@ -98,51 +81,6 @@
             
   <div class="section" id="pylayers-simul-link-link-get-idx">
 <h1>pylayers.simul.link.Link.get_idx<a class="headerlink" href="#pylayers-simul-link-link-get-idx" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.simul.link.Link.get_idx">
-<tt class="descclassname">Link.</tt><tt class="descname">get_idx</tt><big>(</big><em>key</em>, <em>array</em>, <em>tol=0.001</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/simul/link.html#Link.get_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.simul.link.Link.get_idx" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>try to get the index of the requested array in the group key</dt>
-<dd>of the hdf5 file.
-If array doesn&#8217;t exist, the hdf5file[key] array is stacked</dd>
-</dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key: string</strong> :</p>
-<blockquote>
-<div><p>key of the h5py group</p>
-</div></blockquote>
-<p><strong>array</strong> : np.ndarray</p>
-<blockquote>
-<div><p>array type to check existency</p>
-</div></blockquote>
-<p><strong>tol</strong> : np.float64</p>
-<blockquote>
-<div><p>tolerance (in meter for key == &#8216;p_map&#8217;)</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(u_opt, u): tuple</strong> :</p>
-<p><strong>u</strong> : np.ndarray</p>
-<blockquote>
-<div><p>the index in the array of the file[key] group</p>
-</div></blockquote>
-<p><strong>u_opt</strong> : string (&#8216;r&#8217;|&#8217;s&#8217;)</p>
-<blockquote>
-<div><p>return &#8216;r&#8217; if array has been read into h5py file
-return &#8216;s&#8217; if array has been stacked into the array of group key</p>
-</div></blockquote>
-<p><strong>See Also:</strong> :</p>
-<p><strong>&#8212;&#8212;&#8211;</strong> :</p>
-<p class="last"><strong>Links.array_exist</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 
 
@@ -160,25 +98,17 @@ return &#8216;s&#8217; if array has been stacked into the array of group key</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.simul.link.Link.save_init.html" title="pylayers.simul.link.Link.save_init"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.simul.link.Link.get_grpname.html" title="pylayers.simul.link.Link.get_grpname"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.simul.link.html" >pylayers.simul.link</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 27, 2014.
+      Last updated on avril 01, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
