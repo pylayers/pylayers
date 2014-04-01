@@ -2,7 +2,7 @@ import scipy.stats as st
 import numpy as np
 
 
-def getchannel(emplacement = 'trunku',condition = 'los', intersection = 1):
+def getchannel(emplacement = 'trunku',intersection = 1):
 
 
     pdp = {'trunku':{'los':{'gamma':25.9,'gamma0':3.37,'k':26,'lambda-1':2.13,'sigma':4.02},
@@ -24,16 +24,21 @@ def getchannel(emplacement = 'trunku',condition = 'los', intersection = 1):
         'calfr':{'mu0':-62.93,'sigma0':1.69},
         }
 
-
+    condition = 'nlos'
+    if intersection == 1:
+        condition = 'los'
+        
+    if emplacement == 'trunku':
+                condition = 'los'
 
     #number of paths
     K = pdp[emplacement][condition]['k']
 
     #delay
-    Lambda  =  1/pdp[emplacement][condition]['lambda-1']
+    Lambda = 1/pdp[emplacement][condition]['lambda-1']
 
     Tk = st.expon(0,Lambda)
-    sampleTk=Tk.rvs(K)
+    sampleTk = Tk.rvs(K)
     tauk = np.cumsum(sampleTk)
 
     #exponential decay
@@ -45,7 +50,7 @@ def getchannel(emplacement = 'trunku',condition = 'los', intersection = 1):
     #path amplitude
     alpha_k_dB_m = gamma0 + 10*np.log10(np.exp(-tauk)/gamma)
 
-    sigmas =pdp[emplacement][condition]['sigma']
+    sigmas = pdp[emplacement][condition]['sigma']
     alpha_k_dB = st.norm(alpha_k_dB_m,sigmas)
 
     alphak = 10**(alpha_k_dB.rvs(size = len(tauk))/10)
@@ -54,9 +59,9 @@ def getchannel(emplacement = 'trunku',condition = 'los', intersection = 1):
     # mean channel gain
     mu0 = g0[emplacement]['mu0']-5
     sigma0 = g0[emplacement]['sigma0']
-    GdB_dist =st.norm(mu0,sigma0)
-    GdB      = GdB_dist.rvs()
-    G        = 10**(GdB/10.0)
+    GdB_dist = st.norm(mu0,sigma0)
+    GdB = GdB_dist.rvs()
+    G = 10**(GdB/10.0)
     alphak = np.sqrt(G)*alphak
 
 

@@ -83,7 +83,8 @@ from pylayers.antprop.signature import Signatures
 from pylayers.antprop.rays import Rays
 # Handle VectChannel and ScalChannel
 from pylayers.antprop.channel import Ctilde, Tchannel
-#from   Channel import *
+from pylayers.antprop.statModel import getchannel
+
 import h5py
 try:
     from tvtk.api import tvtk
@@ -99,15 +100,18 @@ class Link(object):
     def __init__(self):
         """ Link evaluation class
         """
-        pass
+        self.H = Tchannel()
+
 
     def __add__(self,l):
-        L = Link()
-        tk = np.hstack((self.tk,l.tk))
-        ak = np.hstack((self.ak,l.ak))
+        """ add ak tauk of 2 Links
+        """
+        L=Link()
+        tk = np.hstack((self.H.tk,l.H.tk))
+        ak = np.hstack((self.H.ak,l.H.ak))
         us = np.argsort(tk)
-        L.ak = ak[us]
-        L.tk = tk[us]
+        L.H.ak = ak[us]
+        L.H.tk = tk[us]
         return L
 
 
@@ -116,9 +120,60 @@ class SLink(Link):
     def __init__(self):
         """ Statistical Link evaluation class
         """
-        super(SLink,self).__init__()
-        pass
+        super(SLink, self).__init__()
 
+
+    def onbody(self, B, dida, didb, a, b):
+        """ Statisitcal evaluation of a on-body link
+
+        Parameters
+        ----------
+
+        B : Body
+            Body object on which devices belong to
+        dida: int
+            device a id number on body
+        didb: int
+            device b id number on body
+        a : nd array 
+            postision of device a
+        b : nd array 
+            postision of device b
+
+        Returns
+        -------
+
+        (ak, tk, eng )
+
+        ak : ndarray
+            alpha_k
+        tk : ndarray
+            tau_k
+
+
+        See Also
+        --------
+
+        pylayers.mobility.ban.body
+
+        """
+
+        # inter to be replace by engaement
+        eng = B.intersectBody3(a, b, topos=True)
+        empa = B.dev[dida]['cyl']
+        empb = B.dev[didb]['cyl']
+
+        emp = empa
+        if empa == 'trunkb':
+            emp = empb
+        if emp == 'forearml':
+            emp = 'forearmr'
+
+        self.H.ak, self.H.tk = getchannel(
+            emplacement=emp, intersection=eng)
+        self.eng = eng
+
+        return self.H.ak, self.H.tk, self.eng
 
 
 
@@ -1062,12 +1117,9 @@ class DLink(Link):
 
         self.H = H
 
-        self.ak = H.ak
-        self.tk = H.tk
+        return self.H.ak, self.H.tk
 
-        return self.ak, self.tk
-
-    def _show3(self,rays=True,newfig = False,**kwargs):
+    def _show3(self,rays=True, lay=True, newfig = False,  **kwargs):
         """ display the simulation scene using Mayavi
 
         Parameters
@@ -1129,7 +1181,8 @@ class DLink(Link):
         elif len(Arx.SqG.shape) == 2 :
             Arx.Fsynth()
 
-        self.L._show3(newfig=False,opacity=0.7,centered=centered)
+        if lay:
+            self.L._show3(newfig=False,opacity=0.7,centered=centered)
 
 
         Atx._show3(T=Ttx.reshape(3,3),po=ptx,

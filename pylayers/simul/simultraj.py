@@ -59,6 +59,7 @@ import pylayers.mobility.trajectory as tr
 from pylayers.mobility.ban.body import *
 from pylayers.antprop.statModel import *
 import pandas as pd
+import csv
 
 class Simul(object):
 
@@ -97,6 +98,7 @@ class Simul(object):
         self.Nap = 0
         self.load_config(_filesimul)
         self.gen_net()
+        self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=verbose)
         self.filename = 'simultraj_' + self._trajname
         self.data = pd.DataFrame(columns=['t', 'id_a', 'id_b',
@@ -108,6 +110,9 @@ class Simul(object):
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ])
         self.data.set_index('t')
+        self._filecsv = self.filename.split('.')[0] + '.csv'
+        # self._saveh5_init()
+
 
     def __repr__(self):
 
@@ -171,6 +176,7 @@ class Simul(object):
                 person = Body(t.name + '.ini')
                 self.dpersons.update({t.name: person})
                 self.time = t.time()
+                self.timestep = self.time[1] - self.time[0]
 
             else:
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
@@ -229,9 +235,9 @@ class Simul(object):
         ----------
 
         na : string:
-            node a id in self.N (Netwrok)
+            node a id in self.N (Network)
         nb : string:
-            node b id in self.N (Netwrok)
+            node b id in self.N (Network)
         wstd : string:
             wireless standard used for commmunication between na and nb
         fmode : string ('center'|'band')
@@ -281,40 +287,27 @@ class Simul(object):
         Returns
         -------
 
-        (a, t )
+        (a, t, eng)
 
         a : ndarray
             alpha_k
         t : ndarray
             tau_k
+        eng : float
+            engagement
         """
+
+
+
 
         pa = self.N.node[na]['p']
         pb = self.N.node[nb]['p']
         dida, name = na.split('_')
         didb, name = nb.split('_')
 
-        # inter to be replace by engaement
-        inter = self.dpersons[name].intersectBody3(pa, pb, topos=True)
+        ak, tk, eng = self.SL.onbody(self.dpersons[name], dida, didb, pa, pb)
 
-        condition = 'nlos'
-        if inter == 1:
-            condition = 'los'
-
-        empA = self.dpersons[name].dev[dida]['cyl']
-        empB = self.dpersons[name].dev[didb]['cyl']
-
-        emp = empA
-        if empA == 'trunkb':
-            emp = empB
-        if emp == 'forearml':
-            emp = 'forearmr'
-        if emp == 'trunku':
-            condition = 'los'
-        a, t = getchannel(
-            emplacement=emp, condition=condition, intersection=inter)
-
-        return a, t, inter
+        return ak, tk, eng
 
     def run(self, **kwargs):
         """ Run the link evaluation along a trajectory
@@ -403,48 +396,33 @@ class Simul(object):
         else:
             if kwargs['t'][0] >= self.time[0] and\
                kwargs['t'][-1] <= self.time[-1]:
-                t = self.time[kwargs['t']]
+               t = self.time[kwargs['t']]
             else:
                 raise AttributeError('Requested timestamp not available')
 
         #
         # Code
         #
-
+        init=True
         for ut, it in enumerate(t):
-            # if a bodies are involved in simulation
-            if (('OB' in todo) or
-                    ('B2B' in todo) or
-                    ('B2I' in todo)):
-                nodeid = []
-                pos = []
-                orient = []
-                for up, person in enumerate(self.dpersons.values()):
-                    person.settopos(self.traj[up], t=t[ut], cs=True)
-                    name = person.name
-                    dev = person.dev.keys()
-                    nodeid.extend([n + '_' + name for n in dev])
-                    pos.extend([person.dcs[d][:, 0] for d in dev])
-                    orient.extend([person.acs[d] for d in dev])
-                # in a future version , the network update must also update
-                # antenna positon in the device coordinate system
-                self.N.update_pos(nodeid, pos, now=it)
-                self.N.update_orient(nodeid, orient, now=it)
-            # TODO : to be moved on the network edges
-            self._ddis = self.N.update_dis()
+
+            self.update_pos(t, ut, todo)
 
             for w in wstd:
                 for na, nb, typ in llink[w]:
                     if typ in todo:
                         eng = 0
-                        _akd, _tkd = self.evaldeter(na, nb, w)
+                        self.evaldeter(na, nb, w)
                         if typ == 'OB':
-                            _aks, _tks, eng = self.evalstat(na, nb)
-                            tk = np.hstack((_tkd,_tks))
-                            ak = np.hstack((_akd,_aks))
-                            us = np.argsort(tk)
-                            ak = ak[us]
-                            tk = tk[us]
+                            self.evalstat(na, nb)
+                            eng = self.SL.eng
+                            L = self.DL + self.SL
+                            self._ak = L.H.ak
+                            self._tk = L.H.tk
+                        else : 
+                            self._ak = self.DL.H.ak
+                            self._tk = self.DL.H.tk
+
                         # kw = {'d': self._ddis[(na, nb)],
                         #       'eng': eng,
                         #       'typ': typ,
@@ -457,8 +435,10 @@ class Simul(object):
                         #       'Link_Ct_grpname': self.DL.dexist['Ct']['grpname'],
                         #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
                         #       }
+                        # self._saveh5(ut, na, nb, w, **kw)
+
                     self.data = self.data.append(pd.DataFrame({\
-                                't': ut,
+                                't': pd.Timestamp(ut),
                                 'id_a': na,
                                 'id_b': nb,
                                 'x_a': self.N.node[na]['p'][0],
@@ -467,7 +447,7 @@ class Simul(object):
                                 'x_b': self.N.node[nb]['p'][0],
                                 'y_b': self.N.node[nb]['p'][1],
                                 'z_b': self.N.node[nb]['p'][2],
-                                'd': self._ddis[(na, nb)],
+                                'd': self.N.edge[na][nb]['d'],
                                 'eng': eng,
                                 'typ': typ,
                                 'wstd': w,
@@ -487,7 +467,84 @@ class Simul(object):
                                           'fbminghz', 'fbmaxghz', 'fstep',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ],index=[it]))
-                        # self._saveh5(ut, na, nb, w, **kw)
+   
+                    self.tocsv(ut, na, nb, w,init=init)
+                    init=False
+
+
+    def update_pos(self, t, ut, todo = ['OB','B2B','B2I','I2I']):
+        ''' update positions of devices and bodies for a given time index
+
+        Parameters
+        ----------
+        t : range
+            range of time
+        ut : int
+            time index in self.time
+        '''
+
+        # if a bodies are involved in simulation
+        if (('OB' in todo) or
+                ('B2B' in todo) or
+                ('B2I' in todo)):
+            nodeid = []
+            pos = []
+            orient = []
+            for up, person in enumerate(self.dpersons.values()):
+                person.settopos(self.traj[up], t=t[ut], cs=True)
+                name = person.name
+                dev = person.dev.keys()
+                nodeid.extend([n + '_' + name for n in dev])
+                pos.extend([person.dcs[d][:, 0] for d in dev])
+                orient.extend([person.acs[d] for d in dev])
+            # in a future version , the network update must also update
+            # antenna positon in the device coordinate system
+            self.N.update_pos(nodeid, pos, now=t[ut])
+            self.N.update_orient(nodeid, orient, now=t[ut])
+        # TODO : to be moved on the network edges
+        self.N.update_dis()
+
+    # def _show3(self, **kwargs):
+    #     """ 3D show using Mayavi
+        
+    #     Parameters
+    #     ----------
+        
+    #     't': float 
+    #         time index
+    #     'lay': bool
+    #         show layout
+    #     'net': bool
+    #         show net
+    #     'body': bool
+    #         show bodies
+    #     'rays': bool
+    #         show rays
+    #     """
+            
+    #     defaults = {'t': 0,
+    #                 'lay': True,
+    #                 'net': True,
+    #                 'body': True,
+    #                 'rays': True
+    #                 }
+        
+    #     for k in defaults:
+    #         if k not in kwargs:
+    #             kwargs[k] = defaults[k]
+
+    #     df = self.data.truncate(before=self.time[ut]-self.timestep,
+    #                             after=self.time[ut]+self.timestep)
+
+    #     if kwargs['net']
+
+
+
+        
+
+            
+        #df[df.typ == 'OB']['ray_id']
+
 
 
     # def _saveh5_init(self):
@@ -503,6 +560,7 @@ class Simul(object):
     #         f5.close()
     #         raise NameError('simultra.saveinit: \
     #                         issue when writting h5py file')
+
     # def _saveh5(self, ut, ida, idb, wstd, **kwargs):
     #     """ Save in h5py format
 
@@ -670,6 +728,28 @@ class Simul(object):
     #         fh5.close()
     #         raise NameError('Simultraj._loadh5: issue when reading h5py file')
 
+
+    def tocsv(self, ut, ida, idb, wstd,init=False):
+
+        filecsv = pyu.getlong(self._filecsv,pstruc['DIRLNK'])
+
+        with open(filecsv, 'a') as csvfile:
+            fil = csv.writer(csvfile, delimiter=';',
+                             quoting=csv.QUOTE_MINIMAL)
+            if init:
+                keys = self.data.iloc[-1].keys()
+                data = [k for k in keys]
+                data .append('ak')
+                data .append('tk')
+                fil.writerow(data)
+
+            values = self.data.iloc[-1].values
+            data = [v for v in values]
+            sak = str(self._ak.tolist())
+            stk = str(self._tk.tolist())
+            data.append(sak)
+            data.append(stk)
+            fil.writerow(data)
 
 if (__name__ == "__main__"):
     #plt.ion()
