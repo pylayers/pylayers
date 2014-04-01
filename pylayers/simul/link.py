@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 #
 """
-.. currentmodule:: pylayers.simul.link
 
-
-This module run the electromagnetic simulation at the link level
-It handles the storage of simulated object in `hdf5` format.
+This module runs the electromagnetic simulation at the link level
+It stores simulated objects in `hdf5` format.
 
 DLink Class
 ==========
@@ -302,13 +300,9 @@ class DLink(Link):
         Examples
         --------
 
-        .. plot::
-            :include-source:
-
             >>> from pylayers.simul.link import *
-            >>> L=Link()
-            >>> L.eval()
-            >>> L._show3()
+            >>> L=DLink(verbose=False)
+            >>> aktk = L.eval()
 
 
         """
@@ -604,7 +598,7 @@ class DLink(Link):
 
 
     def save_init(self,filename_long):
-        """ initilaize save Link
+        """ initialize save Link
 
         Parameters
         ----------
@@ -639,8 +633,6 @@ class DLink(Link):
         except:
             f.close()
             raise NameError('Links: issue when initializing h5py file')
-
-
 
     def stack(self,key,array):
         """ stack new array in h5py file
@@ -884,6 +876,7 @@ class DLink(Link):
         --------
 
         Links.array_exist
+
         """
 
         umap = self.array_exist(key,array,tol=tol)
@@ -985,18 +978,15 @@ class DLink(Link):
     def eval(self,**kwargs):
         """ Evaluate the link
 
+
         Parameters
         ----------
 
         force_save : boolean
             Force the computation (even if obj already exists)
             AND save (replace previous computations)
-
-
-        Advanced features :
-
         si.algo : str ('old'|'new')
-            siganture.run algo type
+            signature.run algo type
         ra.ceil_height_meter : int
             rays.to3D ceil height in mteres
         ra.number_mirror_cf : int
@@ -1027,9 +1017,8 @@ class DLink(Link):
             :include-source:
 
             >>> from pylayers.simul.link import *
-            >>> L=Link()
-            >>> L.eval()
-            >>> L._show3()
+            >>> L=DLink(verbose=False)
+            >>> iaktk = L.eval()
 
 
         See Also
@@ -1052,7 +1041,7 @@ class DLink(Link):
 
         self.checkh5()
 
-      
+
         ############
         # Signatures
         ############
@@ -1066,7 +1055,7 @@ class DLink(Link):
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
-        self.Si = Si      
+        self.Si = Si
 
 
 
@@ -1084,7 +1073,7 @@ class DLink(Link):
             R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
-            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])  
+            self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
 
         self.R = R
 
@@ -1106,7 +1095,7 @@ class DLink(Link):
             # Ctilde...
             C=R.eval(self.fGHz)
             # ...save Ct
-            self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])  
+            self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 
         self.C = C
 
@@ -1131,8 +1120,9 @@ class DLink(Link):
         return self.H.ak, self.H.tk
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
-        """ display of the simulation configuration
+        """ display the simulation scene using Mayavi
             using Mayavi
+
 
         Parameters
         ----------
@@ -1152,14 +1142,11 @@ class DLink(Link):
 
         Examples
         --------
-        
-        .. plot::
-            :include-source:
+
 
             >>> from pylayers.simul.link import *
-            >>> L=Link()
-            >>> L.eval()
-            >>> L._show3()
+            >>> L=DLink(verbose=False)
+            >>> aktk = L.eval()
 
         """
 
@@ -1185,7 +1172,6 @@ class DLink(Link):
 
 
 
-
         if ant :
             Atx = self.tx.A
             Arx = self.rx.A
@@ -1207,7 +1193,6 @@ class DLink(Link):
             Arx._show3(T=Trx.reshape(3,3),po=prx,
                 title=False,colorbar=False,newfig=False,name = '')
 
-
         if lay:
             self.L._show3(newfig=False,opacity=0.7,centered=centered)
 
@@ -1217,8 +1202,6 @@ class DLink(Link):
                 self.R._show3(**kwargs)
             except:
                 print 'Rays not computed yet'
-
-
 
 if (__name__ == "__main__"):
     #plt.ion()

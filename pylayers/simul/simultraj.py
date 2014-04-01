@@ -148,6 +148,7 @@ class Simul(object):
 
         _filesimul : string
             name of simulation file to be loaded
+
         """
         self.filesimul = _filesimul
         filesimul = pyu.getlong(self.filesimul, "ini")
@@ -311,7 +312,8 @@ class Simul(object):
         return ak, tk, eng
 
     def run(self, **kwargs):
-        """ Run teh evaluation of link along a trajectory
+        """ Run the link evaluation along a trajectory
+
 
         Parameters
         ----------
@@ -356,6 +358,7 @@ class Simul(object):
         B2I = kwargs.pop('B2I')
         I2I = kwargs.pop('I2I')
         todo = []
+
         if OB:
             todo.append('OB')
         if B2B:

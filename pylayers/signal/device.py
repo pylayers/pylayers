@@ -46,7 +46,7 @@ class Device(object):
 
     def __init__(self, devname='Telephone', ID =0, owner='',typ='ap'):
         """ init of Device class
-                
+
         Attributes
         ----------
 
@@ -109,6 +109,18 @@ class Device(object):
             s = s + '{0:5} | {1:7} |{2:10} | {3:10} | {4:10} '.format('power', 'channel', 'modulation', 'code rate', 'antenna(s)') + '\n'
             s = s +'{0:5} | {1:7} |{2:10} | {3:10} | {4:10} '.format(power, self.wstd[k]['chan'], self.wstd[k]['mod'], self.wstd[k]['cr'], ant) + '\n\n'
 
+
+
+        # s = s + '{0:7} | {1:20} |{2:20} '.format('on/off', 'standard', 'antenna(s)') + '\n'
+        # for k in self.std:
+        #     if self.std[k]['on']:
+        # for k in self.wstd:
+        #     if self.wstd[k]['on']:
+        #         power = 'on'
+        #     else :
+        #         power ='off'
+        #     ant = str([a for a in self.wstd[k]['ant']])
+        #     s = s +'{0:7} | {1:20} |{2:20} '.format(power, str(k), ant ) + '\n'
         s = s + '\n\nAntennas' + '\n'
         s = s + '========' + '\n'
         for k in self.ant:
@@ -125,7 +137,7 @@ class Device(object):
 
         Parameters
         ----------
-        wstd : string 
+        wstd : string
             worerless standard
         channel : int
             channel number
@@ -146,7 +158,7 @@ class Device(object):
 
         Parameters
         ----------
-        
+
         devname : string
             Name of the device to be loaded
 
