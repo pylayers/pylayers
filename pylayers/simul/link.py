@@ -1130,7 +1130,7 @@ class DLink(Link):
 
         return self.H.ak, self.H.tk
 
-    def _show3(self,rays=True, lay=True, newfig = False,  **kwargs):
+    def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
         """ display of the simulation configuration
             using Mayavi
 
@@ -1163,6 +1163,9 @@ class DLink(Link):
 
         """
 
+        if not newfig:
+            f=mlab.gcf()
+
         if 'centered' in kwargs:
             centered = kwargs['centered']
         else :
@@ -1173,11 +1176,6 @@ class DLink(Link):
             pg[:2]=self.L.pg
 
 
-        Atx = self.tx.A
-        Arx = self.rx.A
-        Ttx = self.tx.orientation
-        Trx = self.rx.orientation
-
         if centered :
             ptx = self.tx.position-pg
             prx = self.rx.position-pg
@@ -1185,25 +1183,35 @@ class DLink(Link):
             ptx = self.tx.position
             prx = self.rx.position
 
-        # evaluate antenna if required
-        if not Atx.evaluated:
-            Atx.Fsynth()
-        elif len(Atx.SqG.shape) == 2 :
-            Atx.Fsynth()
 
-        if not Arx.evaluated:
-            Arx.Fsynth()
-        elif len(Arx.SqG.shape) == 2 : 
-            Arx.Fsynth()
+
+
+        if ant :
+            Atx = self.tx.A
+            Arx = self.rx.A
+            Ttx = self.tx.orientation
+            Trx = self.rx.orientation
+
+            # evaluate antenna if required
+            if not Atx.evaluated:
+                Atx.Fsynth()
+            elif len(Atx.SqG.shape) == 2 :
+                Atx.Fsynth()
+
+            if not Arx.evaluated:
+                Arx.Fsynth()
+            elif len(Arx.SqG.shape) == 2 : 
+                Arx.Fsynth()
+            Atx._show3(T=Ttx.reshape(3,3),po=ptx,
+                title=False,colorbar=False,newfig=False)
+            Arx._show3(T=Trx.reshape(3,3),po=prx,
+                title=False,colorbar=False,newfig=False,name = '')
+
 
         if lay:
             self.L._show3(newfig=False,opacity=0.7,centered=centered)
 
 
-        Atx._show3(T=Ttx.reshape(3,3),po=ptx,
-            title=False,colorbar=False,newfig=False)
-        Arx._show3(T=Trx.reshape(3,3),po=prx,
-            title=False,colorbar=False,newfig=False,name = '')
         if rays :
             try:
                 self.R._show3(**kwargs)
