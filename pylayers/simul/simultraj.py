@@ -106,7 +106,7 @@ class Simul(object):
                                           'x_b', 'y_b', 'z_b',
                                           'd', 'eng', 'typ',
                                           'wstd', 'fcghz',
-                                          'fbminghz', 'fbmaxghz', 'fstep',
+                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ],index=[0])
         # self.data.set_index('t')
@@ -446,7 +446,6 @@ class Simul(object):
                         #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
                         #       }
                         # 
-
                     self.data = self.data.append(pd.DataFrame({\
                                 't':self._time[ut],
                                 'id_a': na,
@@ -475,7 +474,7 @@ class Simul(object):
                                           'x_b', 'y_b', 'z_b',
                                           'd', 'eng', 'typ',
                                           'wstd', 'fcghz',
-                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktkid'
+                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                           ],index=[self._index]))
                     self._index = self._index + 1
@@ -692,20 +691,22 @@ class Simul(object):
             fh5 = h5py.File(filenameh5, 'a')
             if not grpname in fh5.keys():
                 fh5.create_group(grpname)
-            else:
-                print grpname + ' already exists in ' + filenameh5
-            f = fh5[grpname]
-            # for k in kwargs:
-            #     f.attrs[k] = kwargs[k]
+                f = fh5[grpname]
+                # for k in kwargs:
+                #     f.attrs[k] = kwargs[k]
 
-            f.create_dataset('alphak',
-                             shape=self._ak.shape,
-                             maxshape=(None),
-                             data=self._ak)
-            f.create_dataset('tauk',
-                             shape=self._tk.shape,
-                             maxshape=(None),
-                             data=self._tk)
+                f.create_dataset('alphak',
+                                 shape=self._ak.shape,
+                                 maxshape=(None),
+                                 data=self._ak)
+                f.create_dataset('tauk',
+                                 shape=self._tk.shape,
+                                 maxshape=(None),
+                                 data=self._tk)
+            else:
+                pass#print grpname + ' already exists in ' + filenameh5
+
+            
             fh5.close()
         except:
             fh5.close()
@@ -752,8 +753,8 @@ class Simul(object):
             conf={}
             # for k in f.attrs.keys():
             #     conf[k]=f.attrs[k]
-            ak = f['alphak']
-            tk = f['tauk']
+            ak = f['alphak'][:]
+            tk = f['tauk'][:]
             fh5.close()
 
             return ak, tk, conf
