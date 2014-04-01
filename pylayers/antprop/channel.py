@@ -1317,6 +1317,10 @@ class Ctilde(object):
         alpha = t1 * Fbt + t2 * Fbp
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
+        H.applyFriis()
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
+                                                             / len(H.y))
+        H.tk = H.tau0
         return(H)
 
     def vec2scal(self):
@@ -1450,8 +1454,8 @@ class Tchannel(bs.FUDAsignal):
         doa   :  direction of arrival  (nray x 2)
 
         """
-
-        bs.FUDAsignal.__init__(self, fGHz, alpha, tau, dod, doa)
+        super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
+        # bs.FUDAsignal.__init__(self, fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
@@ -1535,7 +1539,7 @@ class Tchannel(bs.FUDAsignal):
         filename = Lfilename.split('.')[0] +'_' + str(idx).zfill(5) + '.h5'
         filenameh5 = pyu.getlong(filename,pstruc['DIRH'])
         
-        f=h5py.File(filenameh5,'r')
+        f=h5py.File(filenameh5, 'r')
         try:
             # keys not saved as attribute of h5py file
             for k,va in f.items():
@@ -1606,14 +1610,13 @@ class Tchannel(bs.FUDAsignal):
 
         """    
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-
         try:
             fh5=h5py.File(filename,'r')
             f = fh5['H/'+grpname]
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-                if k != 'tau1':
+                if k != 'tau1' and k !='isFriis':
                     setattr(self,str(k),va[:])
                 else :
                     setattr(self,str(k),va)

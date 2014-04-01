@@ -980,8 +980,6 @@ class Network(nx.MultiDiGraph):
 
 
         """
-        import ipdb
-        ipdb.set_trace()
         self.SubNet[wstd].add_edges_from(self.Gen_tuple(ln,wstd,lD))
 
 

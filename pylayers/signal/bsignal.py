@@ -358,7 +358,6 @@ class Bsignal(object):
                     print "y : ", ly
 
 
-
     def __repr__(self):
         return '%s :  %s  %s' % (
                             self.__class__.__name__,
@@ -3158,6 +3157,7 @@ class FUsignal(FBsignal, Usignal):
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         super(FUsignal,self).__init__(x,y)
+        self.isFriis = False
         #FBsignal.__init__(self, x, y)
 
     def __repr__(self):
@@ -3255,6 +3255,15 @@ class FUsignal(FBsignal, Usignal):
 
         self.y = self.y * w
 
+    def applyFriis(self):
+        """ Apply Friis Factor
+        """
+        if not self.isFriis:
+            factor = 0.3/(4*np.pi*self.x)
+            self.y = self.y*factor[np.newaxis,:]
+            self.isFriis = True
+
+
     def get(self, k):
         """
             get the kh signal
@@ -3331,12 +3340,6 @@ class FUsignal(FBsignal, Usignal):
 
         return(EMH2)
      
-    def applyFriis(self):
-        """ Apply Friss Factor
-        """
-        factor = 0.3/(4*np.pi*self.x)
-        self.y = self.y*factor[np.newaxis,:]
-
 
     def enthrsh(self, thresh=99.99):
         """ Energy thresholding of an FUsignal
@@ -4113,8 +4116,8 @@ class FUDAsignal(FUDsignal):
                  tau0 = np.array([]),
                  dod = np.array([]),
                  doa = np.array([])):
-
-        FUDsignal.__init__(self, x, y,tau0)
+        super(FUDAsignal,self).__init__(x, y, tau0)
+        # FUDsignal.__init__(self, x, y,tau0)
         self.dod  = dod
         self.doa  = doa
 
