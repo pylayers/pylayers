@@ -156,8 +156,11 @@ class LPRS(object):
             # wait for ack
                 if resp[-1]=='B':   
                 #print resp[-1]
-                    rssi = int(self.cmd('T8'),16)
-                    print cpt,rssi
+                    try:
+                        rssi = int(self.cmd('T8'),16)
+                        print cpt,rssi
+                    except:
+                        pass
                     cpt = cpt+1
                 if time.time()-tic>3:
                     tic = time.time()
@@ -177,8 +180,11 @@ class LPRS(object):
                 resp += self.ser.read(1)
             # wait for ack
             if (resp[-1]=='A'):
-                rssi = int(self.cmd('T8'),16)
-                print cpt,rssi
+                try:
+                    rssi = int(self.cmd('T8'),16)
+                    print cpt,rssi
+                except:
+                    pass
                 self.send('B')
                 time.sleep(0.005)
                 cpt = cpt+1
