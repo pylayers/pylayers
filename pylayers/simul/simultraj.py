@@ -695,20 +695,14 @@ class Simul(object):
             raise NameError('Simultraj._saveh5: issue when writting h5py file')
 
 
-    def _loadh5(self, ut, ida, idb, wstd):
+    def _loadh5(self, grpname):
         """ Load in h5py format
 
         Parameters
         ----------
 
-       ut : int
-           time index in self.time
-       ida : string
-           node a index
-       idb : string
-           node b index
-       wstd : string
-           wireless standard of used link
+       grpname : string
+            group name which can be found sin self.data aktk_idx column
 
         Returns
         -------
@@ -718,12 +712,9 @@ class Simul(object):
             alpha_k
         tk : ndarray:
             alpha_k
-        conf : dict
-            dictionnary containing configuration setup
         """
 
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
-        grpname = str(ut) + '_' + ida + '_' + idb + '_' + wstd
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
@@ -732,14 +723,13 @@ class Simul(object):
                 fh5.close()
                 raise NameError(grpname + ' cannot be reached in ' + self.filename)
             f = fh5[grpname]
-            conf={}
             # for k in f.attrs.keys():
             #     conf[k]=f.attrs[k]
             ak = f['alphak'][:]
             tk = f['tauk'][:]
             fh5.close()
 
-            return ak, tk, conf
+            return ak, tk
         except:
             fh5.close()
             raise NameError('Simultraj._loadh5: issue when reading h5py file')
