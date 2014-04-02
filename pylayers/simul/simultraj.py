@@ -74,13 +74,9 @@ class Simul(object):
 
     """
 
-    def __init__(self, _filesimul='simultraj.ini',verbose=False):
+    def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False):
 
-        self.filesimul = _filesimul
-        self.config = ConfigParser.ConfigParser()
-        self.config.add_section("layout")
-        self.config.add_section("person")
-        self.config.add_section("trajectory")
+        self.filetraj = _filetraj
 
         # self.progress = -1  # simulation not loaded
         self.verbose = verbose
@@ -96,11 +92,11 @@ class Simul(object):
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.load_config(_filesimul)
+        self.load_config(_filetraj)
         self.gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
-        self.filename = 'simultraj_' + self._trajname
+        self.filename = 'simultraj_' + self.filetraj
         self.data = pd.DataFrame(columns=['t','id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
                                           'x_b', 'y_b', 'z_b',
@@ -144,36 +140,24 @@ class Simul(object):
 
         return s
 
-    def load_config(self, _filesimul):
+    def load_config(self, _filetraj):
         """  load a simultraj configuration file
 
         Parameters
         ----------
 
-        _filesimul : string
+        _filetraj : string
             name of simulation file to be loaded
 
         """
-        self.filesimul = _filesimul
-        filesimul = pyu.getlong(self.filesimul, "ini")
+        self.filetraj = _filetraj
 
-        config = ConfigParser.ConfigParser()
-        config.read(filesimul)
-        sections = config.sections()
-        di = {}
 
-        for section in sections:
-            di[section] = {}
-            options = config.options(section)
-            for option in options:
-                di[section][option] = config.get(section, option)
-
-        # get the layout
-        self.L = Layout(di['layout']['layout'])
         # get the trajectory
         traj = tr.Trajectories()
-        traj.loadh5(di['trajectory']['traj'])
-        self._trajname = di['trajectory']['traj']
+        traj.loadh5(self.filetraj)
+        # get the layout
+        self.L = Layout(traj.Lfilename)
         # resample trajectory
         for ut, t in enumerate(traj):
             if t.typ == 'ag':
@@ -331,13 +315,13 @@ class Simul(object):
         'I2I':  boolean
             perform infrastructure to infrastructure deterministic link eval.
         'llink': list
-            list of link to be evaluated 
+            list of link to be evaluated
             (if [], all link are considered)
         'wstd': list
-            list of wstd to be evaluated 
+            list of wstd to be evaluated
             (if [], all wstd are considered)
         't': list
-            list of timestamp index to be evaluated 
+            list of timestamp index to be evaluated
             (if [], all timestamps are considered)
 
 
@@ -421,7 +405,7 @@ class Simul(object):
                     if typ in self.todo:
                         if self.verbose:
                             print 'time:', t, 'time idx:', ut, '/',len(kut)
-                            print 'processing: ',na, ' <-> ', nb, 'wstd: ', w 
+                            print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                         eng = 0
                         self.evaldeter(na, nb, w)
                         if typ == 'OB':
@@ -430,7 +414,7 @@ class Simul(object):
                             L = self.DL + self.SL
                             self._ak = L.H.ak
                             self._tk = L.H.tk
-                        else : 
+                        else :
                             self._ak = self.DL.H.ak
                             self._tk = self.DL.H.tk
 
@@ -446,7 +430,7 @@ class Simul(object):
                         #       'Link_Ct_grpname': self.DL.dexist['Ct']['grpname'],
                         #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
                         #       }
-                        # 
+                        #
                         self.data = self.data.append(pd.DataFrame({\
                                     't':self._time[ut],
                                     'id_a': na,
@@ -533,16 +517,16 @@ class Simul(object):
 
     def _show3(self, **kwargs):
         """ 3D show using Mayavi
-        
+
         Parameters
         ----------
-        
-        t: float 
+
+        t: float
             time index
-        link: list 
-            [id_a, id_b] 
-            id_a : node id a 
-            id_b : node id b 
+        link: list
+            [id_a, id_b]
+            id_a : node id a
+            id_b : node id b
         'lay': bool
             show layout
         'net': bool
@@ -552,7 +536,7 @@ class Simul(object):
         'rays': bool
             show rays
         """
-            
+
         defaults = {'t': 0,
                     'link': [],
                     'wstd':[],
@@ -563,7 +547,7 @@ class Simul(object):
                     'ant': False
 
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
@@ -704,7 +688,7 @@ class Simul(object):
             else:
                 pass#print grpname + ' already exists in ' + filenameh5
 
-            
+
             fh5.close()
         except:
             fh5.close()
