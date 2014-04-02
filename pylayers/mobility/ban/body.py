@@ -45,6 +45,7 @@ Miscelianous Functions
 import numpy as np
 import scipy.stats as sp
 import ConfigParser
+import os
 from pylayers.mobility.ban import c3d
 import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
@@ -175,6 +176,10 @@ class Body(object):
 
         """
         filebody = pyu.getlong(_filebody,'ini')
+        if not os.path.isfile(filebody):
+            raise NameError(_filebody + ' cannot be found in' 
+                             + pyu.getlong('','ini'))
+
         config = ConfigParser.ConfigParser()
         config.read(filebody)
         sections = config.sections()

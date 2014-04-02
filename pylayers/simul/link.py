@@ -409,7 +409,13 @@ class DLink(Link):
         self.fmax = self.fGHz[-1]
         self.fstep = self.fGHz[1]-self.fGHz[0]
 
-        # self.checkh5()
+
+        self.Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        self.R = Rays(self.a,self.b)
+        self.C=Ctilde()
+        self.H=Tchannel()
+
+
 
     @property
     def Lname(self):

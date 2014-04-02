@@ -17,125 +17,6 @@
         "crate": "[0.5,0.666,0.75]",
         "modulation": "[psk4,psk8]"
     },
-"ieee80211a": 
-    {"ofdm": { "nsd":48,
-               "nsp":4,
-               "dfmhz":0.3125,
-               "tplcp":16,
-               "tgi":0.8,
-               "tgi2":1.6,
-               "tshort":8,
-               "tlong":8
-              },
-    "modulation": [1,2,4,6],
-    "crate": [0.5,0.666,0.75],
-    "channels": {"uniil":
-                            {"fstart": 5.18, 
-                            "fstop": 5.24,
-                            "zone": "Europe", 
-                            "bmhz": 20,
-                            "smhz":20,
-                            "gmhz":0,
-                            "pmaxmw":40},
-                 "uniim":           
-                            {"fstart": 5.26, 
-                            "fstop": 5.32,
-                            "zone": "Europe", 
-                            "bmhz": 20,
-                            "smhz":20,
-                            "gmhz":0,
-                            "pmaxmw":200},
-                 "uniih":           
-                            {"fstart": 5.745, 
-                            "fstop": 5.805,
-                            "zone": "Europe", 
-                            "bmhz": 20,
-                            "smhz":20,
-                            "gmhz":0,
-                            "pmaxmw":800}
-
-                }
-     },
-"ieee80211b": 
-    {"modulation": "dsss", 
-    "crate": [0.5,0.666,0.75],
-    "channels": {"ism24" :
-                            {"fstart": 2.412, 
-                             "fstop": 2.472,
-                             "fstep": "5", 
-                             "zone": "Europe", 
-                             "bmhz": 20,
-                             "smhz":5,
-                             "gmhz":2,
-                             "pmaxmw":100}}
-    },                         
-"ieee80211g": 
-    {"ofdm": { "nsd":48,
-               "nsp":4,
-               "dfmhz":0.3125,
-               "tplcp":16,
-               "tgi":0.8,
-               "tgi2":1.6,
-               "tshort":8,
-               "tlong":8
-              },
-    "modulation": [1,2,4,6],
-    "crate": [0.5,0.666,0.75],
-    "channels": {"fstart": 2.412, 
-                 "fstop": 2.472,
-                 "fstep": "5", 
-                 "zone": "Europe", 
-                 "bmhz": 20,
-                 "smhz":5,
-                 "gmhz":2,
-                 "pmaxmw":50}},
-
-"bluetooth-class1": {"modulation":"[psk4,psk8]",
-    "crate": "[0.5,0.666,0.75]",
-    "channels": {"ism24" :
-                   {"fstart": 2.402, 
-                   "fstop": 2.484, 
-                   "fstep": "1",
-                   "zone": "Europe",
-                   "bmhz": 1,
-                   "smhz": 1,
-                   "gmhz": 0,
-                   "pmaxmw":100,
-                   "pminmw":1,
-                   "pstepmw":1.258  
-                   }}},
-
-"bluetooth-class2": {"modulation":"[psk4,psk8]",
-    "crate": [0.5,0.666,0.75],
-    "channels": {"ism24" :
-                   {"fstart": 2.402, 
-                   "fstop": 2.484, 
-                   "fstep": "1",
-                   "zone": "Europe",
-                   "bmhz": 1,
-                   "smhz": 1,
-                   "gmhz": 0,
-                   "pmaxmw":2.5118,
-                   "pminmw":0.25118,
-                   "pstepmw":1.258  
-                   }}},
-
-
-"bluetooth-class3": {"modulation":"[psk4,psk8]",
-    "crate": [0.5,0.666,0.75],
-    "channels": {"ism24" :
-                   {"fstart": 2.402, 
-                   "fstop": 2.484, 
-                   "fstep": "1",
-                   "zone": "Europe",
-                   "bmhz": 1,
-                   "smhz": 1,
-                   "gmhz": 0,
-                   "pmaxmw":1.0,
-                   "pminmw":1.0,
-                   "pstepmw":1.0  
-                   }}}
-}
     "bluetooth-class2": {
         "channels": {
             "ism24": {
@@ -258,7 +139,7 @@
             "ism24": {
                 "bmhz": 20,
                 "fstart": 2.412,
-                "fstep": 5,
+                "fstep": "5",
                 "fstop": 2.472,
                 "gmhz": 2,
                 "pmaxmw": 100,
@@ -275,16 +156,14 @@
     },
     "ieee80211g": {
         "channels": {
-            "ism24": {
-                "bmhz": 20,
-                "fstart": 2.412,
-                "fstep": 5,
-                "fstop": 2.472,
-                "gmhz": 2,
-                "pmaxmw": 50,
-                "smhz": 5,
-                "zone": "Europe"
-            }
+            "bmhz": 20,
+            "fstart": 2.412,
+            "fstep": "5",
+            "fstop": 2.472,
+            "gmhz": 2,
+            "pmaxmw": 50,
+            "smhz": 5,
+            "zone": "Europe"
         },
         "crate": [
             0.5,

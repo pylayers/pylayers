@@ -78,6 +78,8 @@ pstruc['DIRR3D'] = 'output/r3d'
 pstruc['DIRCT'] = 'output/Ct'
 pstruc['DIRH'] = 'output/H'
 pstruc['DIRLNK'] = 'output'
+pstruc['DIRBODY'] = 'body'
+pstruc['DIRC3D'] = 'body/c3d'
 
 # if basename directory does not exit it is created 
 try:
@@ -160,13 +162,13 @@ for nm,nv in pstruc.items():
 # copy files from /data/ini in project directory 
 #
 
-if basename<>pylayersdir+'/data':
+if basename != pylayersdir+'/data':
     dirlist=['ini','struc','struc/furnitures'
     ,'struc/osm','struc/str','struc/wrl'
     ,'struc/images','struc/ini'
     ,'ant','output/Tx001','output'
     ,'geom','output/sig','output/r2d'
-    ,'output/r3d']
+    ,'output/r3d','body/c3d']
     for dl in dirlist:
         filelist = os.listdir(pylayersdir+'/data/' + dl)
         for fi in filelist:

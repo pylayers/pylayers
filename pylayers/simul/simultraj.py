@@ -112,7 +112,7 @@ class Simul(object):
         # self.data.set_index('t')
         self._filecsv = self.filename.split('.')[0] + '.csv'
         self._index=0
-
+        self.todo = []
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         if os.path.exists(filenameh5) :
             self.loadpd()
@@ -343,7 +343,7 @@ class Simul(object):
 
         """
         defaults = {'OB': True,
-                    'B2B': False,
+                    'B2B': True,
                     'B2I': True,
                     'I2I': False,
                     'llink': [],
@@ -361,16 +361,15 @@ class Simul(object):
         B2B = kwargs.pop('B2B')
         B2I = kwargs.pop('B2I')
         I2I = kwargs.pop('I2I')
-        todo = []
-
+        self.todo = []
         if OB:
-            todo.append('OB')
+            self.todo.append('OB')
         if B2B:
-            todo.append('B2B')
+            self.todo.append('B2B')
         if B2I:
-            todo.append('B2I')
+            self.todo.append('B2I')
         if I2I:
-            todo.append('I2I')
+            self.todo.append('I2I')
 
         # Check link attribute
         if llink == []:
@@ -397,6 +396,8 @@ class Simul(object):
                                  + ' wstd are not in Network')
 
         # Check time attribute
+        if not isinstance(kwargs['t'],list):
+            kwargs['t'] = [kwargs['t']]
         if kwargs['t'] == []:
             kut = range(len(self.time))
         else:
@@ -413,11 +414,11 @@ class Simul(object):
         init=True
         for ut in kut:
             t = self.time[ut]
-            self.update_pos( ut, todo)
+            self.update_pos( ut)
 
             for w in wstd:
                 for na, nb, typ in llink[w]:
-                    if typ in todo:
+                    if typ in self.todo:
                         if self.verbose:
                             print 'time:', t, 'time idx:', ut, '/',len(kut)
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w 
@@ -446,45 +447,45 @@ class Simul(object):
                         #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
                         #       }
                         # 
-                    self.data = self.data.append(pd.DataFrame({\
-                                't':self._time[ut],
-                                'id_a': na,
-                                'id_b': nb,
-                                'x_a': self.N.node[na]['p'][0],
-                                'y_a': self.N.node[na]['p'][1],
-                                'z_a': self.N.node[na]['p'][2],
-                                'x_b': self.N.node[nb]['p'][0],
-                                'y_b': self.N.node[nb]['p'][1],
-                                'z_b': self.N.node[nb]['p'][2],
-                                'd': self.N.edge[na][nb]['d'],
-                                'eng': eng,
-                                'typ': typ,
-                                'wstd': w,
-                                'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
-                                'fbminghz': self.DL.fmin,
-                                'fbmaxghz': self.DL.fmax,
-                                'fstep': self.DL.fstep,
-                                'aktk_id': str(ut) + '_' + na + '_' + nb + '_' + w,
-                                'sig_id': self.DL.dexist['sig']['grpname'],
-                                'ray_id': self.DL.dexist['ray']['grpname'],
-                                'Ct_id': self.DL.dexist['Ct']['grpname'],
-                                'H_id': self.DL.dexist['H']['grpname'],
-                                            },columns=['t','id_a', 'id_b',
-                                          'x_a', 'y_a', 'z_a',
-                                          'x_b', 'y_b', 'z_b',
-                                          'd', 'eng', 'typ',
-                                          'wstd', 'fcghz',
-                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
-                                          'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                          ],index=[self._index]))
-                    self._index = self._index + 1
-                    # save csv
-                    self.tocsv(ut, na, nb, w,init=init)
-                    # save pandas self.data
-                    self.savepd()
-                    # save ak tauk
-                    self._saveh5(ut, na, nb, w)
-                    init=False
+                        self.data = self.data.append(pd.DataFrame({\
+                                    't':self._time[ut],
+                                    'id_a': na,
+                                    'id_b': nb,
+                                    'x_a': self.N.node[na]['p'][0],
+                                    'y_a': self.N.node[na]['p'][1],
+                                    'z_a': self.N.node[na]['p'][2],
+                                    'x_b': self.N.node[nb]['p'][0],
+                                    'y_b': self.N.node[nb]['p'][1],
+                                    'z_b': self.N.node[nb]['p'][2],
+                                    'd': self.N.edge[na][nb]['d'],
+                                    'eng': eng,
+                                    'typ': typ,
+                                    'wstd': w,
+                                    'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
+                                    'fbminghz': self.DL.fmin,
+                                    'fbmaxghz': self.DL.fmax,
+                                    'fstep': self.DL.fstep,
+                                    'aktk_id': str(ut) + '_' + na + '_' + nb + '_' + w,
+                                    'sig_id': self.DL.dexist['sig']['grpname'],
+                                    'ray_id': self.DL.dexist['ray']['grpname'],
+                                    'Ct_id': self.DL.dexist['Ct']['grpname'],
+                                    'H_id': self.DL.dexist['H']['grpname'],
+                                                },columns=['t','id_a', 'id_b',
+                                              'x_a', 'y_a', 'z_a',
+                                              'x_b', 'y_b', 'z_b',
+                                              'd', 'eng', 'typ',
+                                              'wstd', 'fcghz',
+                                              'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
+                                              'sig_id', 'ray_id', 'Ct_id', 'H_id'
+                                              ],index=[self._index]))
+                        self._index = self._index + 1
+                        # save csv
+                        self.tocsv(ut, na, nb, w,init=init)
+                        # save pandas self.data
+                        self.savepd()
+                        # save ak tauk
+                        self._saveh5(ut, na, nb, w)
+                        init=False
 
     def savepd(self):
         """ save data information of a simulation
@@ -500,7 +501,7 @@ class Simul(object):
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
         self.data = pd.read_hdf(filenameh5,'df')
 
-    def update_pos(self, ut, todo = ['OB','B2B','B2I','I2I']):
+    def update_pos(self, ut):
         ''' update positions of devices and bodies for a given time index
 
         Parameters
@@ -510,9 +511,9 @@ class Simul(object):
         '''
 
         # if a bodies are involved in simulation
-        if (('OB' in todo) or
-                ('B2B' in todo) or
-                ('B2I' in todo)):
+        if (('OB' in self.todo) or
+                ('B2B' in self.todo) or
+                ('B2I' in self.todo)):
             nodeid = []
             pos = []
             orient = []
@@ -567,20 +568,20 @@ class Simul(object):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        if kwargs['link'] == []:
-            wstd= self.N.SubNet.keys()[0]
-            link = self.N.SubNet[wstd].edges()[0]
-        else:
-            link = kwargs['link']
-        import ipdb
-        ipdb.set_trace()
+        link = kwargs['link']
+
         ut=np.where(self.time<=kwargs['t'])[0][-1]
         df = self.data[self.data['t'] == self._time[ut]]
         if len(df) == 0:
             raise AttributeError('invalid time')
 
-        # get info of the corresponding timestamp
-        line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])]
+        # default
+        if link ==[]:
+            line = df[df.index==1]
+            link = [line['id_a'].values[0],line['id_b'].values[0]]
+        else :
+            # get info of the corresponding timestamp
+            line = df[(df['id_a'] == link[0]) & (df['id_b'] == link[1])]
         if len(line) == 0:
             line = df[(df['id_b'] == link[0]) & (df['id_a'] == link[1])]
             if len(line) == 0:
@@ -593,10 +594,7 @@ class Simul(object):
         self.DL.b = self.N.node[link[1]]['p']
         self.DL.Ta = self.N.node[link[0]]['T']
         self.DL.Tb = self.N.node[link[1]]['T']
-        try:
-            delattr(self.DL,'R')
-        except:
-            pass
+        self.DL.load(self.DL.R,rayid)
 
         self.DL._show3(newfig= False,
                        lay= kwargs['lay'],
