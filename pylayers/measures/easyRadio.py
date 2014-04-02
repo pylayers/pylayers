@@ -137,6 +137,54 @@ class LPRS(object):
             if out != '':
                 return(out)
 
+
+    def master(self):
+        """
+            master send A and wait for B
+        """
+        cpt = 0
+        tic = time.time()
+        while True:
+            self.send('A')
+            time.sleep(0.005)
+            resp = ' '
+            while (resp[-1]<>'B'):
+                resp = ' '
+                while self.ser.inWaiting()>0:
+                #time.sleep(0.005)
+                    resp += self.ser.read(1)
+            # wait for ack
+                if resp[-1]=='B':   
+                #print resp[-1]
+                    rssi = int(self.cmd('T8'),16)
+                    print cpt,rssi
+                    cpt = cpt+1
+                if time.time()-tic>3:
+                    tic = time.time()
+                    break
+
+    def slave(self):
+        """
+            slave wait for A and send B
+        """
+        cpt = 0
+        tic = time.time()
+        while True:
+            # In buffer is not empty
+            resp = ' '
+            while self.ser.inWaiting()>0:
+                #time.sleep(0.005)
+                resp += self.ser.read(1)
+            # wait for ack
+            if (resp[-1]=='A'):
+                rssi = int(self.cmd('T8'),16)
+                print cpt,rssi
+                self.send('B')
+                time.sleep(0.005)
+                cpt = cpt+1
+
+
+
     def send(self,buf='test'):
         self.ser.write(buf)
         while self.ser.outWaiting()>0:
