@@ -204,15 +204,50 @@ class Node(nx.MultiGraph):
     RandomMac(): Generate a RAndom Mac adress
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=0.,pe=np.array(()),te=0.,wstd=[],epwr={},sens={},typ='ag', grp=''):
+    def __init__(self,**kwargs):
         nx.MultiGraph.__init__(self)
 
+        defaults = { 'ID':0,
+                     'name':'',
+                     'p':np.array(()),
+                     't':0.,
+                     'pe':np.array(()),
+                     'te':0.,
+                     'wstd':[],
+                     'epwr':{},
+                     'sens':{},
+                     'typ':'ag',
+                     'grp':'',
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
         # Personnal Network init
-        self.ID = ID
+        self.ID = kwargs['ID']
         self.PN = Network(owner=self.ID,PN=True)
-        self.PN.add_node(self.ID,dict(pe=pe,te=te,wstd=wstd,epwr=epwr,sens=sens,typ=typ))
+        self.PN.add_node(self.ID,dict(ID=kwargs['ID'],
+                                      name=kwargs['name'],
+                                      pe=kwargs['pe'],
+                                      te=kwargs['te'],
+                                      wstd=kwargs['wstd'],
+                                      epwr=kwargs['epwr'],
+                                      sens=kwargs['sens'],
+                                      typ=kwargs['typ'],
+                                      ))
         # Network init
-        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,wstd=wstd,epwr=epwr,sens=sens,typ=typ,grp=grp))
+        self.add_node(self.ID,dict(ID=kwargs['ID'],
+                              name=kwargs['name'],
+                              PN=self.PN,
+                              p=kwargs['p'],
+                              pe=self.PN.node[self.ID]['pe'],
+                              t=kwargs['t'],
+                              wstd=kwargs['wstd'],
+                              epwr=kwargs['epwr'],
+                              sens=kwargs['sens'],
+                              typ=kwargs['typ'],
+                              grp=kwargs['grp']))
         self.p   = self.node[self.ID]['p']
         self.pe  = self.PN.node[self.ID]['pe']
         self.t   = self.node[self.ID]['t']
@@ -314,10 +349,16 @@ class Network(nx.MultiDiGraph):
             title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
             s = s + title + '\n' + '-'*len(title) + '\n'
             for n in self.nodes():
+                # for compliance with simulnet and simultraj
+                # to be merged 
+                try:
+                    wstd = self.node[n]['wstd'].keys()
+                except:
+                    wstd = self.node[n]['wstd']
                 s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
                 .format(self.node[n]['ID'], self.node[n]['name'],
                 self.node[n]['grp'], self.node[n]['typ'], self.node[n]['p'][0],
-                self.node[n]['p'][1],self.node[n]['p'][2],self.node[n]['wstd'].keys()) + '\n'
+                self.node[n]['p'][1],self.node[n]['p'][2],wstd) + '\n'
 
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'

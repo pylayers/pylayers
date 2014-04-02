@@ -176,7 +176,7 @@ class Agent(object):
                                    Separation(), InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
             # Network init
-            self.node = Node(ID=self.ID, p=conv_vecarr(self.meca.position),
+            self.node = Node(ID=self.ID,name=self.name, p=conv_vecarr(self.meca.position),
                              t=self.sim.now(), wstd=args['wstd'],
                              epwr=self.epwr, sens=self.sens, typ=self.typ)
             self.net.add_nodes_from(self.node.nodes(data=True))
