@@ -61,11 +61,6 @@
                 "antenna": [
                     "A1"
                 ]
-            },
-            "ieee80211g": {
-                "antenna": [
-                    "A1"
-                ]
             }
         }
     },
@@ -110,6 +105,31 @@
         }
     },
     "Galaxy Gear": {
+        "antennas": {
+            "A1": {
+                "T": "[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]",
+                "name": "S2R2.sh3",
+                "p": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            }
+        },
+        "dimensions": {
+            "depth": 11.1,
+            "height": 36.8,
+            "width": 56.6
+        },
+        "standards": {
+            "bluetooth-class2": {
+                "antenna": [
+                    "A1"
+                ]
+            }
+        }
+    },
+    "cardio": {
         "antennas": {
             "A1": {
                 "T": "[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]",

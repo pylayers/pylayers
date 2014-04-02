@@ -343,9 +343,9 @@ class Simul(object):
 
         """
         defaults = {'OB': True,
-                    'B2B': False,
+                    'B2B': True,
                     'B2I': True,
-                    'I2I': False,
+                    'I2I': True,
                     'llink': [],
                     'wstd': [],
                     'ut': [],
@@ -397,6 +397,8 @@ class Simul(object):
                                  + ' wstd are not in Network')
 
         # Check time attribute
+        if not isinstance(kwargs['t'],list):
+            kwargs['t'] = [kwargs['t']]
         if kwargs['t'] == []:
             kut = range(len(self.time))
         else:
@@ -446,45 +448,45 @@ class Simul(object):
                         #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
                         #       }
                         # 
-                    self.data = self.data.append(pd.DataFrame({\
-                                't':self._time[ut],
-                                'id_a': na,
-                                'id_b': nb,
-                                'x_a': self.N.node[na]['p'][0],
-                                'y_a': self.N.node[na]['p'][1],
-                                'z_a': self.N.node[na]['p'][2],
-                                'x_b': self.N.node[nb]['p'][0],
-                                'y_b': self.N.node[nb]['p'][1],
-                                'z_b': self.N.node[nb]['p'][2],
-                                'd': self.N.edge[na][nb]['d'],
-                                'eng': eng,
-                                'typ': typ,
-                                'wstd': w,
-                                'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
-                                'fbminghz': self.DL.fmin,
-                                'fbmaxghz': self.DL.fmax,
-                                'fstep': self.DL.fstep,
-                                'aktk_id': str(ut) + '_' + na + '_' + nb + '_' + w,
-                                'sig_id': self.DL.dexist['sig']['grpname'],
-                                'ray_id': self.DL.dexist['ray']['grpname'],
-                                'Ct_id': self.DL.dexist['Ct']['grpname'],
-                                'H_id': self.DL.dexist['H']['grpname'],
-                                            },columns=['t','id_a', 'id_b',
-                                          'x_a', 'y_a', 'z_a',
-                                          'x_b', 'y_b', 'z_b',
-                                          'd', 'eng', 'typ',
-                                          'wstd', 'fcghz',
-                                          'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
-                                          'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                          ],index=[self._index]))
-                    self._index = self._index + 1
-                    # save csv
-                    self.tocsv(ut, na, nb, w,init=init)
-                    # save pandas self.data
-                    self.savepd()
-                    # save ak tauk
-                    self._saveh5(ut, na, nb, w)
-                    init=False
+                        self.data = self.data.append(pd.DataFrame({\
+                                    't':self._time[ut],
+                                    'id_a': na,
+                                    'id_b': nb,
+                                    'x_a': self.N.node[na]['p'][0],
+                                    'y_a': self.N.node[na]['p'][1],
+                                    'z_a': self.N.node[na]['p'][2],
+                                    'x_b': self.N.node[nb]['p'][0],
+                                    'y_b': self.N.node[nb]['p'][1],
+                                    'z_b': self.N.node[nb]['p'][2],
+                                    'd': self.N.edge[na][nb]['d'],
+                                    'eng': eng,
+                                    'typ': typ,
+                                    'wstd': w,
+                                    'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
+                                    'fbminghz': self.DL.fmin,
+                                    'fbmaxghz': self.DL.fmax,
+                                    'fstep': self.DL.fstep,
+                                    'aktk_id': str(ut) + '_' + na + '_' + nb + '_' + w,
+                                    'sig_id': self.DL.dexist['sig']['grpname'],
+                                    'ray_id': self.DL.dexist['ray']['grpname'],
+                                    'Ct_id': self.DL.dexist['Ct']['grpname'],
+                                    'H_id': self.DL.dexist['H']['grpname'],
+                                                },columns=['t','id_a', 'id_b',
+                                              'x_a', 'y_a', 'z_a',
+                                              'x_b', 'y_b', 'z_b',
+                                              'd', 'eng', 'typ',
+                                              'wstd', 'fcghz',
+                                              'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
+                                              'sig_id', 'ray_id', 'Ct_id', 'H_id'
+                                              ],index=[self._index]))
+                        self._index = self._index + 1
+                        # save csv
+                        self.tocsv(ut, na, nb, w,init=init)
+                        # save pandas self.data
+                        self.savepd()
+                        # save ak tauk
+                        self._saveh5(ut, na, nb, w)
+                        init=False
 
     def savepd(self):
         """ save data information of a simulation
@@ -572,8 +574,7 @@ class Simul(object):
             link = self.N.SubNet[wstd].edges()[0]
         else:
             link = kwargs['link']
-        import ipdb
-        ipdb.set_trace()
+
         ut=np.where(self.time<=kwargs['t'])[0][-1]
         df = self.data[self.data['t'] == self._time[ut]]
         if len(df) == 0:
