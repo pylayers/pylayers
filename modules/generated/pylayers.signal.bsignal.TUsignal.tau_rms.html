@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
+    <link rel="next" title="pylayers.signal.bsignal.TUsignal.show" href="pylayers.signal.bsignal.TUsignal.show.html" />
+    <link rel="prev" title="pylayers.signal.bsignal.TUsignal.delays" href="pylayers.signal.bsignal.TUsignal.delays.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.show.html" title="pylayers.signal.bsignal.TUsignal.show"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.delays.html" title="pylayers.signal.bsignal.TUsignal.delays"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TUsignal.delays.html"
+                        title="previous chapter">pylayers.signal.bsignal.TUsignal.delays</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TUsignal.show.html"
+                        title="next chapter">pylayers.signal.bsignal.TUsignal.show</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.TUsignal.tau_rms.txt"
@@ -81,6 +98,59 @@
             
   <div class="section" id="pylayers-signal-bsignal-tusignal-tau-rms">
 <h1>pylayers.signal.bsignal.TUsignal.tau_rms<a class="headerlink" href="#pylayers-signal-bsignal-tusignal-tau-rms" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.TUsignal.tau_rms">
+<tt class="descclassname">TUsignal.</tt><tt class="descname">tau_rms</tt><big>(</big><em>alpha=0.1</em>, <em>tau0=0</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TUsignal.tau_rms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.tau_rms" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate root mean square delay spread starting from delay tau_0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<p><strong>threshold</strong> : float</p>
+<blockquote>
+<div><p>( delay interval is defined between <img class="math" src="../../_images/math/301b769d08b32ffdfd8a5eff20129c24cf492650.png" alt="\tau(\alpha)"/> and <img class="math" src="../../_images/math/d5ab105336fdefc284143a7fe82ce0dfb03e1bc1.png" alt="\tau(1 -\alpha)"/> )</p>
+</div></blockquote>
+<p><strong>tau0</strong> : float</p>
+<blockquote class="last">
+<div><p>argument for specifying the delay start</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.TUsignal.ecdf.html#pylayers.signal.bsignal.TUsignal.ecdf" title="pylayers.signal.bsignal.TUsignal.ecdf"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.ecdf</span></tt></a>, <a class="reference internal" href="pylayers.signal.bsignal.TUsignal.tau_moy.html#pylayers.signal.bsignal.TUsignal.tau_moy" title="pylayers.signal.bsignal.TUsignal.tau_moy"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_moy</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<div class="math">
+<p><img src="../../_images/math/9771b5afe73ab0a22691177bb0fa896e34b78a02.png" alt="\sqrt{\frac{\int_{\tau(\alpha)}^{\tau(1-\alpha)} (\tau-\tau_m)^{2} PDP(\tau) d\tau} {\int_{\tau(\alpha)}^{\tau(1-\alpha)} PDP(\tau) d\tau}}"/></p>
+</div><p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">UWBMeasure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch4</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span><span class="p">,</span><span class="n">a1</span><span class="o">=</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tit0</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;WHERE1 M1 UWB Channel impulse response&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="p">,</span><span class="n">a2</span><span class="o">=</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tit1</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;WHERE1 M1 UWB Channel impulse response (Zoom 1)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">160</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f3</span><span class="p">,</span><span class="n">a3</span><span class="o">=</span><span class="n">ch4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tit2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&quot;WHERE1 M1 UWB Channel impulse response (Zoom 2)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax2</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="o">-</span><span class="mi">50</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tau_moy</span> <span class="o">=</span> <span class="n">ch4</span><span class="o">.</span><span class="n">tau_moy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;tau_moy: </span><span class="si">%2.2f</span><span class="s"> ns&quot;</span> <span class="o">%</span> <span class="n">tau_moy</span>
+<span class="go">tau_moy: 38.09 ns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tau_rms</span> <span class="o">=</span> <span class="n">ch4</span><span class="o">.</span><span class="n">tau_rms</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;tau_rms: </span><span class="si">%2.2f</span><span class="s"> ns&quot;</span> <span class="o">%</span> <span class="n">tau_rms</span>
+<span class="go">tau_rms: 13.79 ns</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TUsignal-tau_rms-1.py">Source code</a>)</p>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +168,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.show.html" title="pylayers.signal.bsignal.TUsignal.show"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.delays.html" title="pylayers.signal.bsignal.TUsignal.delays"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 

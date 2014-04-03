@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
+    <link rel="next" title="pylayers.signal.bsignal.TUsignal.__init__" href="pylayers.signal.bsignal.TUsignal.__init__.html" />
+    <link rel="prev" title="pylayers.signal.bsignal.TBsignal.translate" href="pylayers.signal.bsignal.TBsignal.translate.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.__init__.html" title="pylayers.signal.bsignal.TUsignal.__init__"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TBsignal.translate.html" title="pylayers.signal.bsignal.TBsignal.translate"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TBsignal.translate.html"
+                        title="previous chapter">pylayers.signal.bsignal.TBsignal.translate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TUsignal.__init__.html"
+                        title="next chapter">pylayers.signal.bsignal.TUsignal.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.TBsignal.b2u.txt"
@@ -81,6 +98,61 @@
             
   <div class="section" id="pylayers-signal-bsignal-tbsignal-b2u">
 <h1>pylayers.signal.bsignal.TBsignal.b2u<a class="headerlink" href="#pylayers-signal-bsignal-tbsignal-b2u" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.TBsignal.b2u">
+<tt class="descclassname">TBsignal.</tt><tt class="descname">b2u</tt><big>(</big><em>N</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TBsignal.b2u"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TBsignal.b2u" title="Permalink to this definition">¶</a></dt>
+<dd><p>conversion into an uniform signal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>N</strong> : integer</p>
+<blockquote>
+<div><p>Number of points</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>U</strong> : TUsignal</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function exploits linear interp1d</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="p">,</span> <span class="mi">6</span> <span class="p">,</span> <span class="mi">11</span> <span class="p">,</span> <span class="mi">18</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span> <span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span> <span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sb</span> <span class="o">=</span> <span class="n">TBsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su20</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">b2u</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su100</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">b2u</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fi</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sb</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">su20</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">su100</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;b2u : sb(blue) su20(black) su200(red)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1.py">Source code</a>)</p>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_00.png" src="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_00.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_00.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_01.png" src="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_01.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_01.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_02.png" src="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_02.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_02.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_02.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_02.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_03.png" src="../../_images/pylayers-signal-bsignal-TBsignal-b2u-1_03.png" />
+<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_03.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_03.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-TBsignal-b2u-1_03.pdf">pdf</a>)</p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +170,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.__init__.html" title="pylayers.signal.bsignal.TUsignal.__init__"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TBsignal.translate.html" title="pylayers.signal.bsignal.TBsignal.translate"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 

@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
+    <link rel="next" title="pylayers.signal.bsignal.TUsignal.tau_Emax" href="pylayers.signal.bsignal.TUsignal.tau_Emax.html" />
+    <link rel="prev" title="pylayers.signal.bsignal.TUsignal.Efirst_toath" href="pylayers.signal.bsignal.TUsignal.Efirst_toath.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.tau_Emax.html" title="pylayers.signal.bsignal.TUsignal.tau_Emax"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.Efirst_toath.html" title="pylayers.signal.bsignal.TUsignal.Efirst_toath"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TUsignal.Efirst_toath.html"
+                        title="previous chapter">pylayers.signal.bsignal.TUsignal.Efirst_toath</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TUsignal.tau_Emax.html"
+                        title="next chapter">pylayers.signal.bsignal.TUsignal.tau_Emax</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.TUsignal.Emax.txt"
@@ -81,6 +98,40 @@
             
   <div class="section" id="pylayers-signal-bsignal-tusignal-emax">
 <h1>pylayers.signal.bsignal.TUsignal.Emax<a class="headerlink" href="#pylayers-signal-bsignal-tusignal-emax" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.TUsignal.Emax">
+<tt class="descclassname">TUsignal.</tt><tt class="descname">Emax</tt><big>(</big><em>Tint=1</em>, <em>sym=0.5</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TUsignal.Emax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.Emax" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate the maximum of Energy integrated over a duration Tint</p>
+<p>A symetry of sym around the max value of the squared signal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Tint: float</strong> :</p>
+<blockquote>
+<div><p>Integration time (ns) default 1</p>
+</div></blockquote>
+<p><strong>sym</strong> : float</p>
+<blockquote>
+<div><p>Symmetry factor (default 0.5)</p>
+</div></blockquote>
+<p><strong>dB</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>W1-M1
+te     = 0.005 ns
+left  = 12
+Nright = 33
+Tint   = 45*te = 0.225 ns
+sym    = 0.25</p>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +149,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.tau_Emax.html" title="pylayers.signal.bsignal.TUsignal.tau_Emax"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.Efirst_toath.html" title="pylayers.signal.bsignal.TUsignal.Efirst_toath"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 

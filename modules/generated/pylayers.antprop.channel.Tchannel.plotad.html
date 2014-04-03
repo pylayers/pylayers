@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
+    <link rel="next" title="pylayers.antprop.channel.Tchannel.doadod" href="pylayers.antprop.channel.Tchannel.doadod.html" />
+    <link rel="prev" title="pylayers.antprop.channel.Tchannel.plotd" href="pylayers.antprop.channel.Tchannel.plotd.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.Tchannel.doadod.html" title="pylayers.antprop.channel.Tchannel.doadod"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.Tchannel.plotd.html" title="pylayers.antprop.channel.Tchannel.plotd"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.channel.html" accesskey="U">pylayers.antprop.channel</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.channel.Tchannel.plotd.html"
+                        title="previous chapter">pylayers.antprop.channel.Tchannel.plotd</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.channel.Tchannel.doadod.html"
+                        title="next chapter">pylayers.antprop.channel.Tchannel.doadod</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.plotad.txt"
@@ -81,6 +98,63 @@
             
   <div class="section" id="pylayers-antprop-channel-tchannel-plotad">
 <h1>pylayers.antprop.channel.Tchannel.plotad<a class="headerlink" href="#pylayers-antprop-channel-tchannel-plotad" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.plotad">
+<tt class="descclassname">Tchannel.</tt><tt class="descname">plotad</tt><big>(</big><em>a='phi'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#Tchannel.plotad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.plotad" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot angular delays</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d: &#8216;doa&#8217; | &#8216;dod&#8217;</strong> :</p>
+<blockquote>
+<div><p>display direction of departure | arrival</p>
+</div></blockquote>
+<p><strong>typ</strong> : &#8216;ns&#8217; | &#8216;m&#8217;</p>
+<blockquote>
+<div><p>display delays in nano seconds ( ns) or meter (m)</p>
+</div></blockquote>
+<p><strong>fig</strong> : plt.figure</p>
+<p><strong>ax</strong> : plt.axis</p>
+<p><strong>a</strong> : str</p>
+<blockquote>
+<div><p>angle &#8216;theta&#8217; | &#8216;phi&#8217;</p>
+</div></blockquote>
+<p><strong>normalize: bool</strong> :</p>
+<blockquote>
+<div><p>energy normalized</p>
+</div></blockquote>
+<p><strong>reverse</strong> : bool</p>
+<blockquote>
+<div><p>inverse theta and phi represenation</p>
+</div></blockquote>
+<p><strong>polar</strong> : bool</p>
+<blockquote>
+<div><p>polar representation</p>
+</div></blockquote>
+<p><strong>cmap: matplotlib.cmap</strong> :</p>
+<p><strong>mode: &#8216;center&#8217; | &#8216;mean&#8217; | &#8216;in&#8217;</strong> :</p>
+<blockquote>
+<div><p>see bsignal.energy</p>
+</div></blockquote>
+<p><strong>s</strong> : float</p>
+<blockquote>
+<div><p>scatter dot size</p>
+</div></blockquote>
+<p><strong>fontsize: float</strong> :</p>
+<p><strong>edgecolors: bool</strong> :</p>
+<p><strong>colorbar: bool</strong> :</p>
+<p><strong>titel</strong> : bool</p>
+<p><strong>&#8216;clipval&#8217;: float</strong> :</p>
+<blockquote class="last">
+<div><p>remove values below clipval in dB</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +172,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.Tchannel.doadod.html" title="pylayers.antprop.channel.Tchannel.doadod"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.Tchannel.plotd.html" title="pylayers.antprop.channel.Tchannel.plotd"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.antprop.channel.html" >pylayers.antprop.channel</a> &raquo;</li> 
       </ul>
     </div>
 

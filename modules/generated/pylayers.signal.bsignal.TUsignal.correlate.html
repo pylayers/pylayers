@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
+    <link rel="next" title="pylayers.signal.bsignal.TUsignal.corrgauss" href="pylayers.signal.bsignal.TUsignal.corrgauss.html" />
+    <link rel="prev" title="pylayers.signal.bsignal.TUsignal.filter" href="pylayers.signal.bsignal.TUsignal.filter.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,16 +46,30 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.corrgauss.html" title="pylayers.signal.bsignal.TUsignal.corrgauss"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.filter.html" title="pylayers.signal.bsignal.TUsignal.filter"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TUsignal.filter.html"
+                        title="previous chapter">pylayers.signal.bsignal.TUsignal.filter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.signal.bsignal.TUsignal.corrgauss.html"
+                        title="next chapter">pylayers.signal.bsignal.TUsignal.corrgauss</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.TUsignal.correlate.txt"
@@ -81,6 +98,49 @@
             
   <div class="section" id="pylayers-signal-bsignal-tusignal-correlate">
 <h1>pylayers.signal.bsignal.TUsignal.correlate<a class="headerlink" href="#pylayers-signal-bsignal-tusignal-correlate" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.signal.bsignal.TUsignal.correlate">
+<tt class="descclassname">TUsignal.</tt><tt class="descname">correlate</tt><big>(</big><em>s</em>, <em>normalized=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#TUsignal.correlate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.correlate" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>The time step dx should be the same</p>
+<p>The chosen time reference is the one of the self signal
+This means that this function can be used to detect events appearing
+in the self signal by correlating with signal ..math:<cite>s</cite>, maximum of
+the correlation function appears in the proper time of the self signal
+history.</p>
+<p><strong>Interpretation of the correlation levels</strong></p>
+<p>We assume that s1 is the self signal and s2 is the correlating signal</p>
+<p>s1 = a1 * sn(t-tau)   where sn is normalized in energy
+s2 = a2 * sn(t)             &#8221;   &#8221;   &#8221;   &#8221;  &#8220;</p>
+<p>the maximum of correlation appears at time tau and its value is</p>
+<blockquote>
+<div>max (s1.correlate(s2,True)) = a1*a2</div></blockquote>
+<dl class="docutils">
+<dt>In the case of the propagation simulation we have</dt>
+<dd>s1 : the time domain UWB received waveform
+s2 : the corresponding emitted waveform s2,</dd>
+</dl>
+<p>To determine the ratio a1/a2 or a2/a1 in order to evaluate the propagation Loss L = 20 log10(a2/a1)</p>
+<p>This calculus assumes implicitely that the shape of the transmitted signal
+has not been modified during the propagation, which is a strong hypothesis.
+This calculus is then a minorant of the received energy.</p>
+<p>L = max(s1.correlate(s2,True)/s1.Energy)   with a1**2 = sum(s1**s1)*dx</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>s</strong> : TUsignal</p>
+<p><strong>normalized</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default True</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -98,11 +158,19 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.corrgauss.html" title="pylayers.signal.bsignal.TUsignal.corrgauss"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.signal.bsignal.TUsignal.filter.html" title="pylayers.signal.bsignal.TUsignal.filter"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
+          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
       </ul>
     </div>
 

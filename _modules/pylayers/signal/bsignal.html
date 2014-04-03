@@ -1574,7 +1574,7 @@
 <span class="sd">            &gt;&gt;&gt; fi = plt.figure()</span>
 <span class="sd">            &gt;&gt;&gt; sb.stem()</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = su20.plot(color=&#39;k&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = su100.plot(color=&#39;r&#39;,fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = su100.plot(color=&#39;r&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; ti = plt.title(&#39;b2u : sb(blue) su20(black) su200(red)&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -3355,7 +3355,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">w</span>
 </div>
 <div class="viewcode-block" id="FUsignal.applyFriis"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.applyFriis.html#pylayers.signal.bsignal.FUsignal.applyFriis">[docs]</a>    <span class="k">def</span> <span class="nf">applyFriis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Apply Friis Factor</span>
+        <span class="sd">r&quot;&quot;&quot; apply Friis factor</span>
+
+<span class="sd">        The Friis factor is multiplied to y</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            y := \frac{c}{4\pif} y</span>
+
+<span class="sd">        boolean `isFriis` is set to `True`</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isFriis</span><span class="p">:</span>
             <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
@@ -3781,16 +3789,30 @@
         <span class="k">return</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FUsignal.ifft"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.ifft.html#pylayers.signal.bsignal.FUsignal.ifft">[docs]</a>    <span class="k">def</span> <span class="nf">ifft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Npt</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Inverse Fourier transform</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Npt : int</span>
 <span class="sd">            default -1 (same number as x) </span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        tc : TUsignal</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+
+<span class="sd">        .. math::</span>
+<span class="sd">            x = \trextrm{linspace}(0,\frac{1}{\delta f},N)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Npt</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">Npt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
         <span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">Npt</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
@@ -3999,6 +4021,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">FUDsignal</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">taud</span> <span class="o">=</span> <span class="n">taud</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">taue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">taud</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span>  <span class="o">=</span> <span class="n">taud</span>
 </div>
 <div class="viewcode-block" id="FUDsignal.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.__repr__.html#pylayers.signal.bsignal.FUDsignal.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -4054,6 +4077,8 @@
         <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="n">S</span> <span class="o">*</span> <span class="n">F</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">E</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">taue</span> <span class="o">=</span> <span class="o">-</span><span class="n">slope</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="c"># update total delay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">taue</span>
 </div>
 <div class="viewcode-block" id="FUDsignal.totud"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.totud.html#pylayers.signal.bsignal.FUDsignal.totud">[docs]</a>    <span class="k">def</span> <span class="nf">totud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform to TUDsignal</span>
@@ -4085,13 +4110,32 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        Nz : int</span>
+<span class="sd">            Number of zeros</span>
 <span class="sd">        tstart : float</span>
 <span class="sd">        tstop  : float</span>
 <span class="sd">        ffts   : int</span>
 <span class="sd">            fftshift indicator</span>
 
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        rf : TUsignal (1,N)</span>
+
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        TUsignal.translate</span>
+
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt;</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span>
         <span class="n">Nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="n">Nz</span><span class="p">,</span> <span class="n">ffts</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">x</span>
