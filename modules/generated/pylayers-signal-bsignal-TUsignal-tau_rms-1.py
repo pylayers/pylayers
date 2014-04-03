@@ -10,6 +10,7 @@ ax1=plt.axis([10,160,-90,-50])
 f3,a3=ch4.plot(color='k')
 tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
 ax2=plt.axis([20,120,-80,-50])
+plt.show()
 tau_moy = ch4.tau_moy()
 print "tau_moy: %2.2f ns" % tau_moy
 # tau_moy: 38.09 ns

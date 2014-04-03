@@ -372,7 +372,7 @@
 <td>calculate mean excess delay starting from delay tau_0</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.delays.html#pylayers.signal.bsignal.TUsignal.delays" title="pylayers.signal.bsignal.TUsignal.delays"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.delays</span></tt></a>()</td>
-<td>calculate delay parameters and othogonality factor from cir</td>
+<td>calculate delay parameters and orthogonality factor from cir</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.TUsignal.tau_rms.html#pylayers.signal.bsignal.TUsignal.tau_rms" title="pylayers.signal.bsignal.TUsignal.tau_rms"><tt class="xref py py-obj docutils literal"><span class="pre">TUsignal.tau_rms</span></tt></a>([alpha,&nbsp;tau0])</td>
 <td>calculate root mean square delay spread starting from delay tau_0</td>
@@ -629,10 +629,10 @@
 <td>resample the FUsignal using phase and module interpolation</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.dftresamp.html#pylayers.signal.bsignal.FUsignal.dftresamp" title="pylayers.signal.bsignal.FUsignal.dftresamp"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.dftresamp</span></tt></a>(df_new)</td>
-<td></td>
+<td>unfinished</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.resample.html#pylayers.signal.bsignal.FUsignal.resample" title="pylayers.signal.bsignal.FUsignal.resample"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.resample</span></tt></a>(x_new[,&nbsp;kind])</td>
-<td>resample(self,x_new,kind=&#8217;linear&#8217;):</td>
+<td>This function resamples the Usignal with a new x base which needs to be strictly included in the original x base of the Usignal.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.symH.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.symH</span></tt></a>(parity)</td>
 <td>enforce Hermitian symetry</td>
@@ -655,7 +655,7 @@
 </td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.ift.html#pylayers.signal.bsignal.FUsignal.ift" title="pylayers.signal.bsignal.FUsignal.ift"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.ift</span></tt></a>([Nz,&nbsp;ffts])</td>
-<td>inverse Fourier transform returns the associated TUsignal</td>
+<td>Inverse Fourier Transform - returns the associated TUsignal   :Parameters:      <strong>Nz</strong> : Number of zeros (-1) No forcing                <strong>ffts</strong> : 0 (no fftshift 1:fftshift)            :Returns:      <strong>uh :</strong> :             ..</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.signal.bsignal.FUsignal.iftshift.html#pylayers.signal.bsignal.FUsignal.iftshift" title="pylayers.signal.bsignal.FUsignal.iftshift"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.iftshift</span></tt></a>([Nz])</td>
 <td>apply the inverse fftshift operator to come back in time</td>

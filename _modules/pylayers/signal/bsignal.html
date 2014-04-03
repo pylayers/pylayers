@@ -79,7 +79,7 @@
   <h1>Source code for pylayers.signal.bsignal</h1><div class="highlight"><pre>
 <span class="c">#!/usr/bin/python</span>
 <span class="c">#-*- coding:Utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">.. currentmodule:: pylayers.signal.bsignal</span>
 
 <span class="sd">.. autosummary::</span>
@@ -394,7 +394,7 @@
 
 
 <span class="k">class</span> <span class="nc">Bsignal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Signal with an embedded time base</span>
+    <span class="sd">r&quot;&quot;&quot; Signal with an embedded time base</span>
 
 <span class="sd">    This class gathers a 1D signal and its axis indexation.</span>
 
@@ -409,7 +409,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Bsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.__init__.html#pylayers.signal.bsignal.Bsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -447,7 +447,7 @@
 
 </div>
 <div class="viewcode-block" id="Bsignal.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.extract.html#pylayers.signal.bsignal.Bsignal.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; extract y[u,:]</span>
+        <span class="sd">r&quot;&quot;&quot; extract y[u,:]</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -475,7 +475,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">O</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.save.html#pylayers.signal.bsignal.Bsignal.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">        Save Bsignal in Matlab File Format</span>
 
 <span class="sd">        Parameters</span>
@@ -506,7 +506,7 @@
         <span class="n">ios</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.load.html#pylayers.signal.bsignal.Bsignal.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; load a Bsignal saved in a Matlab File</span>
+        <span class="sd">r&quot;&quot;&quot; load a Bsignal saved in a Matlab File</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -519,7 +519,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="Bsignal.setx"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.setx.html#pylayers.signal.bsignal.Bsignal.setx">[docs]</a>    <span class="k">def</span> <span class="nf">setx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; setx : set x vector</span>
+        <span class="sd">r&quot;&quot;&quot; setx : set x vector</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -541,18 +541,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Np</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.sety"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.sety.html#pylayers.signal.bsignal.Bsignal.sety">[docs]</a>    <span class="k">def</span> <span class="nf">sety</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sety : set y vector</span>
+        <span class="sd">r&quot;&quot;&quot; sety : set y vector</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        fun : function </span>
+<span class="sd">        fun : function</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.stem"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.stem.html#pylayers.signal.bsignal.Bsignal.stem">[docs]</a>    <span class="k">def</span> <span class="nf">stem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stem display</span>
+        <span class="sd">r&quot;&quot;&quot; stem display</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -596,7 +596,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.step"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.step.html#pylayers.signal.bsignal.Bsignal.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; plot steps display</span>
+        <span class="sd">r&quot;&quot;&quot; plot steps display</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -614,7 +614,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;steps&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.cformat"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.cformat.html#pylayers.signal.bsignal.Bsignal.cformat">[docs]</a>    <span class="k">def</span> <span class="nf">cformat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; complex format</span>
+        <span class="sd">r&quot;&quot;&quot; complex format</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -693,7 +693,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">xn</span><span class="p">,</span><span class="n">yn</span><span class="p">,</span><span class="n">ylabels</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.imshow"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.imshow.html#pylayers.signal.bsignal.Bsignal.imshow">[docs]</a>    <span class="k">def</span> <span class="nf">imshow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; imshow of y matrix</span>
+        <span class="sd">r&quot;&quot;&quot; imshow of y matrix</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -771,7 +771,7 @@
             <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
 <div class="viewcode-block" id="Bsignal.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.plot.html#pylayers.signal.bsignal.Bsignal.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; plot signal</span>
+        <span class="sd">r&quot;&quot;&quot; plot signal</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -871,7 +871,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.flatteny"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.flatteny.html#pylayers.signal.bsignal.Bsignal.flatteny">[docs]</a>    <span class="k">def</span> <span class="nf">flatteny</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">yrange</span><span class="o">=</span><span class="p">[],</span><span class="n">reversible</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; flatten y array</span>
+        <span class="sd">r&quot;&quot;&quot; flatten y array</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        yrange : array of y index values to be flattenned</span>
@@ -888,7 +888,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">yrange</span><span class="p">,:],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.gating"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.gating.html#pylayers.signal.bsignal.Bsignal.gating">[docs]</a>    <span class="k">def</span> <span class="nf">gating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; gating between xmin and xmax</span>
+        <span class="sd">r&quot;&quot;&quot; gating between xmin and xmax</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -948,13 +948,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">w</span>
 </div>
 <div class="viewcode-block" id="Bsignal.len"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.len.html#pylayers.signal.bsignal.Bsignal.len">[docs]</a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; returm length of x axis</span>
+        <span class="sd">r&quot;&quot;&quot; returm length of x axis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
 
 </div>
 <span class="k">class</span> <span class="nc">Usignal</span><span class="p">(</span><span class="n">Bsignal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Signal with an embedded uniform Base</span>
+    <span class="sd">r&quot;&quot;&quot; Signal with an embedded uniform Base</span>
 
 <span class="sd">        This class inheritate from Bsignal. The only difference</span>
 <span class="sd">        is that the x base is supposed to be uniform</span>
@@ -1018,7 +1018,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.setx"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.setx.html#pylayers.signal.bsignal.Usignal.setx">[docs]</a>    <span class="k">def</span> <span class="nf">setx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">dx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; set the x array of the Usignal (y=0)</span>
+        <span class="sd">r&quot;&quot;&quot; set the x array of the Usignal (y=0)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1028,7 +1028,7 @@
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">       </span>
+
 <span class="sd">        &gt;&gt;&gt; u = Usignal()</span>
 <span class="sd">        &gt;&gt;&gt; u.setx(0,10,0.1)</span>
 
@@ -1038,7 +1038,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Usignal.dx"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.dx.html#pylayers.signal.bsignal.Usignal.dx">[docs]</a>    <span class="k">def</span> <span class="nf">dx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  get the time step of Usignal.x</span>
+        <span class="sd">r&quot;&quot;&quot;  get the time step of Usignal.x</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        ---------</span>
@@ -1049,16 +1049,17 @@
 <span class="sd">        &gt;&gt;&gt; assert(u.dx()==0.1)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-       
+
         <span class="k">return</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </div>
 <div class="viewcode-block" id="Usignal.width"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Usignal.width.html#pylayers.signal.bsignal.Usignal.width">[docs]</a>    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get the extension support of the Usignal</span>
+        <span class="sd">r&quot;&quot;&quot; get the extension support of the Usignal</span>
 
 <span class="sd">        width is conventionnaly equal to the difference between extremities + dx</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        w : float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1074,7 +1075,8 @@
 <span class="sd">            expansion factor</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        ------</span>
+<span class="sd">        -------</span>
+
 <span class="sd">        Usignal  : support extended signal</span>
 
 <span class="sd">        return a new Usignal with expanded factor a</span>
@@ -1099,6 +1101,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        m : maximum value of self.y</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1116,6 +1119,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        m : maximum value of self.y</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1182,6 +1186,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        TUsignal y extended TU signal, x bases are adjusted</span>
 
 <span class="sd">        Examples</span>
@@ -1303,6 +1308,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        Usignal</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2866,9 +2872,11 @@
         <span class="k">return</span><span class="p">(</span><span class="n">taum</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="TUsignal.delays"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.delays.html#pylayers.signal.bsignal.TUsignal.delays">[docs]</a>    <span class="k">def</span> <span class="nf">delays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculate delay parameters and othogonality factor from cir</span>
+        <span class="sd">r&quot;&quot;&quot; calculate delay parameters and orthogonality factor from cir</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        taum :</span>
 <span class="sd">            mean excess delay</span>
 <span class="sd">        delayspread</span>
@@ -2876,14 +2884,15 @@
 <span class="sd">        of  :</span>
 <span class="sd">            orthogonality factor</span>
 
-<span class="sd">        Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular</span>
-<span class="sd">        environments : Neelesh Metha, Andreas Molish, Lary Greenstein</span>
+<span class="sd">        Neelesh Metha, Andreas Molish, Lary Greenstein &quot;Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular</span>
+<span class="sd">        environments&quot; </span>
 
 <span class="sd">        .. :math:</span>
 
 <span class="sd">            \beta0 = 1 \frac{\sum_i=1^L}|\alpha_i|^4}{\left(\sum_i=1^L|\alpha_i|^2)^2}</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">flatteny</span><span class="p">(</span><span class="n">reversible</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yf</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">yf</span>
         <span class="n">y4</span> <span class="o">=</span> <span class="n">y2</span><span class="o">*</span><span class="n">y2</span>
@@ -2931,6 +2940,7 @@
 <span class="sd">            &gt;&gt;&gt; f3,a3=ch4.plot(color=&#39;k&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; tit2 = plt.title(&quot;WHERE1 M1 UWB Channel impulse response (Zoom 2)&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; ax2=plt.axis([20,120,-80,-50])</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
 <span class="sd">            &gt;&gt;&gt; tau_moy = ch4.tau_moy()</span>
 <span class="sd">            &gt;&gt;&gt; print &quot;tau_moy: %2.2f ns&quot; % tau_moy</span>
 <span class="sd">            tau_moy: 38.09 ns</span>
@@ -3538,21 +3548,36 @@
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FUsignal.dftresamp"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.dftresamp.html#pylayers.signal.bsignal.FUsignal.dftresamp">[docs]</a>    <span class="k">def</span> <span class="nf">dftresamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_new</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; unfinished </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        df_new :</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">FH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">fh</span> <span class="o">=</span> <span class="n">FH</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="FUsignal.resample"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.resample.html#pylayers.signal.bsignal.FUsignal.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_new</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        resample(self,x_new,kind=&#39;linear&#39;):</span>
+        <span class="sd">&quot;&quot;&quot; resample</span>
 
-<span class="sd">        This function resample the Usignal with a new x base</span>
+
+<span class="sd">        This function resamples the Usignal with a new x base</span>
 <span class="sd">        which needs to be strictly included in the original x</span>
 <span class="sd">        base of the Usignal.</span>
 <span class="sd">        x is a 1D array</span>
 <span class="sd">        y is a 2D array</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        x_new :</span>
+<span class="sd">        kind : string</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        interp.interp1d, splrep, splev</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s">&#39;linear&#39;</span><span class="p">:</span>
@@ -3583,11 +3608,15 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        parity : integer</span>
 <span class="sd">            0 even 1 odd</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        FHsignal</span>
+
+<span class="sd">        V  : FHsignal</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
         <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
@@ -3767,31 +3796,50 @@
         <span class="k">return</span> <span class="n">tc</span>
 </div>
 <div class="viewcode-block" id="FUsignal.ift"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.ift.html#pylayers.signal.bsignal.FUsignal.ift">[docs]</a>    <span class="k">def</span> <span class="nf">ift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; inverse Fourier transform returns the associated TUsignal</span>
+        <span class="sd">&quot;&quot;&quot; Inverse Fourier Transform - returns the associated TUsignal</span>
 
-<span class="sd">        Algorithm</span>
-<span class="sd">        ---------</span>
-<span class="sd">            1) Force Hermitian symmetry --&gt; FHsignal</span>
-<span class="sd">                with or without zero padding</span>
-<span class="sd">            2) Inverse Fourier transform</span>
-<span class="sd">                with or without fftshift</span>
-
-<span class="sd">        Parameters</span>
+<span class="sd">                Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Nz   : Number of zeros (-1) No forcing</span>
 <span class="sd">        ffts : 0 (no fftshift 1:fftshift)</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        uh :</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
 <span class="sd">        &gt;&gt;&gt; e  = EnImpulse()</span>
 <span class="sd">        &gt;&gt;&gt; E  = e.fft()</span>
 <span class="sd">        &gt;&gt;&gt; EU = E.unrex()</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        ------</span>
+
+<span class="sd">        1 - Force Hermitian symmetry --&gt; FHsignal with or without zero padding</span>
+<span class="sd">        2 - Inverse Fourier transform with or without fftshift</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        FHsignal.ifft, FUsignal.symH, Fusignal.symHz</span>
+
+
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># forcage de symetrie Hermitienne</span>
+        <span class="c"># enforce Hermitian Symetry</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">Nz</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">UH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">UH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="n">Nz</span><span class="p">)</span>
-        <span class="c"># retour en temps</span>
+        <span class="c"># Back in time </span>
+        <span class="c"># UH is an FHsignal</span>
+        <span class="c"># uh is a TUsignal</span>
         <span class="n">uh</span> <span class="o">=</span> <span class="n">UH</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">ffts</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">uh</span><span class="p">)</span>
 </div>
@@ -4014,6 +4062,11 @@
 <span class="sd">            Number of zeros for zero padding</span>
 <span class="sd">        ffts   : nt</span>
 <span class="sd">            fftshift indicator (default 0 )</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        FUsignal.ift</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">taue</span>
@@ -4449,6 +4502,7 @@
 
 <span class="sd">    ifft  : inverse Fourier transform --&gt; TUsignal</span>
 <span class="sd">    unrex : unredundant extraction    --&gt; FUsignal</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="FHsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FHsignal.__init__.html#pylayers.signal.bsignal.FHsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
         <span class="n">FUsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -4516,9 +4570,11 @@
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FHsignal.unrex"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FHsignal.unrex.html#pylayers.signal.bsignal.FHsignal.unrex">[docs]</a>    <span class="k">def</span> <span class="nf">unrex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        extraction of the non redundant part of a real signal</span>
+        <span class="sd">r&quot;&quot;&quot; extraction of the non redundant part of a real signal</span>
 <span class="sd">        expressed in the frequency domain</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; x = np.arange(0,6,1)</span>
 <span class="sd">        &gt;&gt;&gt; y = np.arange(0,6,1)</span>
