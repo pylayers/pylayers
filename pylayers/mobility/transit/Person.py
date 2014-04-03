@@ -230,6 +230,7 @@ class Person(Process):
         self.net=net
         self.wait=wait
         self.df = pd.DataFrame(columns=['t','x','y','vx','vy','ax','ay'])
+        self.df._metadata = self.ID
         self.save=save
 
 
@@ -298,24 +299,23 @@ class Person(Process):
                 # updating position
                 self.position = self.position + self.velocity * self.interval
 #                self.update()
+                self.position.z=0
                 self.world.update_boid(self)
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
-
-                p=conv_vecarr(self.position).reshape(2,1)
-                v=conv_vecarr(self.velocity).reshape(2,1)
-                a=conv_vecarr(self.acceleration).reshape(2,1)
+                p=conv_vecarr(self.position).reshape(3,1)
+                v=conv_vecarr(self.velocity).reshape(3,1)
+                a=conv_vecarr(self.acceleration).reshape(3,1)
 
                 # fill panda dataframe 2D trajectory
                 self.df = self.df.append(pd.DataFrame({'t':pd.Timestamp(self.sim.now(),unit='s'),
-                'id':self.ID,
                 'x':p[0],
                 'y':p[1],
                 'vx':v[0],
                 'vy':v[1],
                 'ax':a[0],
                 'ay':a[1]},
-                columns=['t','id','x','y','vx','vy','ax','ay']))
+                columns=['t','x','y','vx','vy','ax','ay']))
 
                 if self.pdshow:
                     plt.scatter(self.df['x'].tail(1),self.df['y'].tail(1),c=self.color,s=4,alpha=0.3)

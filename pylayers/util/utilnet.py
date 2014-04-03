@@ -3,7 +3,7 @@ import numpy as np
 #import MySQLdb as msql
 
 
-def conv_vecarr(vin,dim=2):
+def conv_vecarr(vin,dim=3):
     """ convert vec3 => np.array and  np.array => vec3 
 
     Parameters

@@ -21,39 +21,87 @@ Network Class
 
     Network.__init__
     Network.__repr__
+
+
+Network creation
+----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Network.add_devices
+    Network.create
+    Network._get_edges_typ
+    Network._get_grp
+    Network._get_llink
+    Network._get_wstd
+    Network._get_SubNet
+    Network._connect
+    Network._init_PN
+
+
+Network attributes queries
+--------------------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Network.get_pos
+    Network.get_orient
+    Network.get_pos_est
+    Network.overview
+    Network.haspe
+    Network.pp
+
+
+Network update
+--------------
+
+.. autosummary::
+    :toctree: generated/
+
+    Network.update_pos
+    Network.update_orient
+    Network.update_edges
+    Network.update_PN
+    Network.compute_LDPs
+    Network.update_LDPs
+
+
+Network Utilities
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
     Network.perm
     Network.combi
     Network.Gen_tuple
-    Network.get_RAT
-    Network.connect
-    Network.get_SubNet
-    Network.init_PN
-    Network.create
-    Network.update_PN
     Network.dist_edge
-    Network.update_LDPs
-    Network.compute_LDPs
-    Network.update_pos
-    Network.get_pos
-    Network.get_pos_est
-    Network.haspe
-    Network.overview
-    Network.pp
     Network.show
-    Network.compute_Sg
-    Network.show_sig
+
+
+
+Network save
+------------
+
+.. autosummary::
+    :toctree: generated/
+
     Network.csv_save
     Network.init_save
     Network.mat_save
     Network.txt_save
     Network.loc_save
-    Network.dual_save
     Network.pyray_save
     Network.loc_save
     Network.ini_save
 
+
 PNetwork Class
 ==============
+
+    SimPy Process compliant version of the Network class
 
      PNetwork.__init__
      PNetwork.run
@@ -106,12 +154,20 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 from pylayers.util.utilnet import str2bool
 import time
+import pylayers.util.pyutil as pyu
 
 
 from SimPy.SimulationRT import Process,hold
 import pprint
 import select
 import sys
+
+try:
+    from mayavi import mlab
+    from tvtk.tools import visual
+
+except:
+    print 'mayavi not installed'
 
 
 # How to take into account  1 specific key specifique for 1 MultiGraph
@@ -135,8 +191,8 @@ class Node(nx.MultiGraph):
             True position
     t    : time.time()
             Tag time
-    RAT    : list
-            available RAT of the node
+    wstd    : list
+            available wstd of the node
     PN    : Network.Network
             Personal vision of the Network
     pos    : Dictionnary
@@ -148,19 +204,54 @@ class Node(nx.MultiGraph):
     RandomMac(): Generate a RAndom Mac adress
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=0.,pe=np.array(()),te=0.,RAT=[],epwr={},sens={},type='ag'):
+    def __init__(self,**kwargs):
         nx.MultiGraph.__init__(self)
 
+        defaults = { 'ID':0,
+                     'name':'',
+                     'p':np.array(()),
+                     't':0.,
+                     'pe':np.array(()),
+                     'te':0.,
+                     'wstd':[],
+                     'epwr':{},
+                     'sens':{},
+                     'typ':'ag',
+                     'grp':'',
+                    }
+        
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
         # Personnal Network init
-        self.ID = ID
+        self.ID = kwargs['ID']
         self.PN = Network(owner=self.ID,PN=True)
-        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,epwr=epwr,sens=sens,type=type))
+        self.PN.add_node(self.ID,dict(ID=kwargs['ID'],
+                                      name=kwargs['name'],
+                                      pe=kwargs['pe'],
+                                      te=kwargs['te'],
+                                      wstd=kwargs['wstd'],
+                                      epwr=kwargs['epwr'],
+                                      sens=kwargs['sens'],
+                                      typ=kwargs['typ'],
+                                      ))
         # Network init
-        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,sens=sens,type=type))
+        self.add_node(self.ID,dict(ID=kwargs['ID'],
+                              name=kwargs['name'],
+                              PN=self.PN,
+                              p=kwargs['p'],
+                              pe=self.PN.node[self.ID]['pe'],
+                              t=kwargs['t'],
+                              wstd=kwargs['wstd'],
+                              epwr=kwargs['epwr'],
+                              sens=kwargs['sens'],
+                              typ=kwargs['typ'],
+                              grp=kwargs['grp']))
         self.p   = self.node[self.ID]['p']
         self.pe  = self.PN.node[self.ID]['pe']
         self.t   = self.node[self.ID]['t']
-        self.RAT = self.node[self.ID]['RAT']
+        self.wstd = self.node[self.ID]['wstd']
         self.epwr = self.node[self.ID]['epwr']
         self.sens = self.node[self.ID]['sens']
 
@@ -191,15 +282,15 @@ class Network(nx.MultiDiGraph):
     Attributes
     ----------
 
-    RAT : dictionnary
-        keys  = RAT
+    wstd : dictionnary
+        keys  = wstd
         value = list of nodes id
-    RATe : dictionnary
-        keys  = RAT
+    wstde : dictionnary
+        keys  = wstd
         value = list of edges id 
     SubNet : dictionnary
-        keys  = RAT
-        value = Subgraph of the given RAT
+        keys  = wstd
+        value = Subgraph of the given wstd
     pos : dictionnary
         keys  = node id
         value = node position
@@ -207,15 +298,15 @@ class Network(nx.MultiDiGraph):
     Methods
     -------
 
-    get_RAT(self)  : Get RAT from nodes of the network
-    connect(self)  : Connect each node from a rat
-    create(self)   : compute get_RAT(),get_pos() and connect()
-    update_LDP(self,n1,n2,RAT,LDP=None,value=[])    : update Location Dependent Parameter  
-    compute_LDP(self,RAT) : compute the LDP value thanks to a ElectroMag Solver 
+    _get_wstd(self)  : Get wstd from nodes of the network
+    _connect(self)  : Connect each node from a wireless standard
+    create(self)   : compute get_wstd(),get_pos() and connect()
+    update_LDP(self,n1,n2,wstd,LDP=None,value=[])    : update Location Dependent Parameter  
+    compute_LDP(self,wstd) : compute the LDP value thanks to a ElectroMag Solver 
     update_pos(self,n,p=np.array)  : update node (or node list) position
-    get_pos(self,RAT=None)         : get node positions
+    get_pos(self,wstd=None)         : get node positions
     pp(self)                    : pretty print on std out all edtges informations
-    show(Rat=None,legend=True)     : Display network for all rat or specified in Rat. 
+    show(rat=None,legend=True)     : Display network for all rat or specified in Rat. 
 
     """
 
@@ -234,55 +325,85 @@ class Network(nx.MultiDiGraph):
         """
         nx.MultiDiGraph.__init__(self)
         self.owner=owner
-        self.RAT={}
+        self.wstd={}
         self.LDP = ['TOA','Pr']
         self.SubNet={}
+        self.grp={}
         self.EMS=EMS
         self.coll_plot={}
         self.pos={}
         self.mat={}
-        self.link={}
-        self.relink={}
+        self.links={}
+        self.relinks={}
         self.idx = 0
         self.lidx = 0
         self.isPN=PN
 
     def __repr__(self):
 
-        if not self.isPN :
+
+        if not self.isPN:
             s = 'Network information\n*******************\n'
-            s = s + 'number of agents: ' + str(len(self.nodes())) +'\n'
-            s = s + str(self.nodes()) + '\n'
+            s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
+            title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
+            s = s + title + '\n' + '-'*len(title) + '\n'
+            for n in self.nodes():
+                # for compliance with simulnet and simultraj
+                # to be merged 
+                try:
+                    wstd = self.node[n]['wstd'].keys()
+                except:
+                    wstd = self.node[n]['wstd']
+                s = s + '{0:7} | {1:15} |{2:7} | {3:4} | {4:5.2f} {5:5.2f} {6:5.2f} | {7:10} '\
+                .format(self.node[n]['ID'], self.node[n]['name'],
+                self.node[n]['grp'], self.node[n]['typ'], self.node[n]['p'][0],
+                self.node[n]['p'][1],self.node[n]['p'][2],wstd) + '\n'
 
-            typ = nx.get_node_attributes(self,'type').values() 
+    #             try:
+    #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
+    #             except: 
+    #                 s = s + 'node ID: ' + str(n) + '\n'
+    #             try :
+    #                 s = s + 'wstd: ' + str(self.node[n]['wstd'].keys()) + '\n'
+    #             except:
+    #                 s = s + 'wstd: ' + str(self.node[n]['wstd']) + '\n'
+    #             try:
+    #                 s = s + 'grp: ' + str(self.node[n]['grp']) + '\n'
+    #             except:
+    #                 s = s + 'type: ' + str(self.node[n]['typ']) + '\n'
+    #             try:
+    #                 s = s + 'pos: ' + str(self.node[n]['p']) + '\n'
+    #             except:
+    #                 pass
+    #             s = s + '\n'
+    #         # typ = nx.get_node_attributes(self,'typ').values() 
 
-            nodes = np.array(nx.get_node_attributes(self,'type').items())
+    #         # nodes = np.array(nx.get_node_attributes(self,'typ').items())
 
-            nb_ag = len(np.where(nodes=='ag')[0])
-            nb_ap = len(np.where(nodes=='ap')[0])
+    #         # nb_ag = len(np.where(nodes=='ag')[0])
+    #         # nb_ap = len(np.where(nodes=='ap')[0])
 
-            pag=np.where(nodes=='ag')
-            pap=np.where(nodes=='ap')
+    #         # pag=np.where(nodes=='ag')
+    #         # pap=np.where(nodes=='ap')
 
-            s = s +  '\n' + str(nb_ag) + ' Mobile Agents\n  -------------\n'
-            s = s + 'Agents IDs : ' + str([nodes[i,0] for i in pag[0]]) +'\n'
+    #         # s = s +  '\n' + str(nb_ag) + ' Mobile Agents\n  -------------\n'
+    #         # s = s + 'Agents IDs : ' + str([nodes[i,0] for i in pag[0]]) +'\n'
 
 
-            s = s +  '\n' + str(nb_ap) + ' Access points\n  -------------\n'
-            s = s + 'number of access point  : ' + '\n'
-            s = s + 'access points  IDs : ' + str([nodes[i,0] for i in pap[0]]) +'\n'
+    #         # s = s +  '\n' + str(nb_ap) + ' Access points\n  -------------\n'
+    #         # s = s + 'number of access point  : ' + '\n'
+    #         # s = s + 'access points  IDs : ' + str([nodes[i,0] for i in pap[0]]) +'\n'
 
-            if len(self.SubNet.keys()) != 0 :
-                s = s + '\n\nSubNetworks :' +str(self.SubNet.keys()) + '\n===========\n'
-                for sub in self.SubNet.keys():
-                    s = s + '\t'+ sub + '\n' +  self.SubNet[sub].__repr__() + '\n'
+    #         # if len(self.SubNet.keys()) != 0 :
+    #         #     s = s + '\n\nSubNetworks :' +str(self.SubNet.keys()) + '\n===========\n'
+    #         #     for sub in self.SubNet.keys():
+    #         #         s = s + '\t'+ sub + '\n' +  self.SubNet[sub].__repr__() + '\n'
 
         else:
             s = 'Personnal Network of node ' +str(self.owner)+ ' information\n***************************************\n'
-            s = s + '{0:5} |{1:5} | {2:5} | {3:7}| {4:7}| {5:7}| {6:7}| {7:7}| {8:10}|'.format('peer','rat', 'TOA','std TOA','tTOA', 'Pr', 'std Pr', 'tPr','visibility')
+            s = s + '{0:7} |{1:20} | {2:5} | {3:7}| {4:7}| {5:7}| {6:7}| {7:7}| {8:10}|'.format('peer','wstd', 'TOA','std TOA','tTOA', 'Pr', 'std Pr', 'tPr','visibility')
             for e1,e2 in self.edges():
                 for r in self.edge[e1][e2].keys():
-                    rat = r
                     TOA = self.edge[e1][e2][r]['TOA'][0]
                     stdTOA = self.edge[e1][e2][r]['TOA'][1]
                     pr = self.edge[e1][e2][r]['Pr'][0]
@@ -298,11 +419,68 @@ class Network(nx.MultiDiGraph):
                     vis = self.edge[e1][e2][r]['vis']
                     np.set_printoptions(precision=3)
 
-                    s = s + '\n' + '{0:5} |{1:5} | {2:5.2f} | {3:7.2f}| {4:7}| {5:7.2f}| {6:7.2f}| {7:7}| {8:10}|'.format(e2 ,r ,TOA ,stdTOA ,tTOA ,pr , stdpr ,tpr, vis)
-
+                    s = s + '\n' + '{0:7} |{1:20} | {2:5.2f} | {3:7.2f}| {4:7}| {5:7.2f}| {6:7.2f}| {7:7}| {8:10}|'.format(e2 ,r ,TOA ,stdTOA ,tTOA ,pr , stdpr ,tpr, vis)
         return s
 
 
+
+    def add_devices(self, dev, p=[], grp=''):
+        """ add devices to the current network
+
+        dev : list
+            list of Devices 
+        p : ndarray (Ndev x 3)
+            np.array of devices' positions
+        grp : string
+            name of the group of device belong to.
+        """
+
+        if not isinstance(dev,list):
+            dev=[dev]
+        if p == []:
+            p = np.nan*np.zeros((len(dev),3))
+        elif len(p.shape) == 1:
+            p = p.reshape(1,3)
+
+        if (p.shape[0] != len(dev)):
+            raise AttributeError('number of devices != nb pos')
+
+        # check if unique ID (in dev and in network ) else raise error
+        ids = [d.ID for d in dev]
+        for d in dev:
+            if d.ID in self:
+                raise AttributeError('Devices must have a different ID')
+
+
+        # add spectific node informations
+        if 'ap' in grp:
+            typ = 'ap'
+        else :
+            typ = 'ag'
+
+        [d.__dict__.update({'p': p[ud, :],
+              'T': np.eye(3),
+              'grp':grp,
+              'typ':typ,
+              'dev':d,
+                    }) for ud, d in enumerate(dev)]
+# 
+        # self.add_nodes_from([(d.ID, ldic[ud]) for ud,d in enumerate(dev)])
+        self.add_nodes_from([(d.ID, d.__dict__) for d in dev])
+
+        # create personnal netwrk
+        for ud, d in enumerate(dev):
+            self.node[d.ID]['PN']= Network(owner=d.ID, PN=True)
+            self.node[d.ID]['PN'].add_nodes_from([(d.ID,d.__dict__)])
+        self._get_wstd()
+        # for d in dev:
+        #     for s in d.wstd.keys():
+        #         try:
+        #             self.wstd[s]
+        #             if d.ID not in self.wstd[s]:
+        #                 self.wstd[s].append(d.ID)
+        #         except :
+        #             self.wstd[s]=[d.ID]
 
 
     def perm(self,iterable,r,key,d=dict()):
@@ -326,11 +504,11 @@ class Network(nx.MultiDiGraph):
         Returns
         --------
 
-        out : tuple(node_list,r,RAT,d):
+        out : tuple(node_list,r,wstd,d):
         node_list    : list of node1
         r        : gather r node in the tuple
-        RAT        : the specified RAT
-        d        : dictionnary of RAT attribute
+        wstd        : the specified wstd
+        d        : dictionnary of wstd attribute
 
         Examples
         --------
@@ -405,11 +583,11 @@ class Network(nx.MultiDiGraph):
         Returns
         ------     
 
-        out : tuple(node_list,r,RAT,d):
+        out : tuple(node_list,r,wstd,d):
         node_list    : list of node1        
         r        : gather r node in the tuple
-        RAT        : the specified RAT
-        d        : dictionnary of RAT attribute
+        wstd        : the specified wstd
+        d        : dictionnary of wstd attribute
 
         Examples
         --------
@@ -452,7 +630,7 @@ class Network(nx.MultiDiGraph):
             yield tuple((pool[indices[0]],pool[indices[1]],key,d))
 
 
-    def Gen_tuple(self,gene,rat,var):
+    def Gen_tuple(self,gene,wstd,var):
         """
         generate a specific tuple  
 
@@ -460,14 +638,14 @@ class Network(nx.MultiDiGraph):
         ----------
 
         gene : tuple(x,y) iterator 
-        rat  : str
+        wstd  : str
         var  : list
             len(var) = len(gene)
 
         Yield
         -----
 
-        tuple : (gene[i][0],gene[i][1],rat,var[i]) for iteration i
+        tuple : (gene[i][0],gene[i][1],wstd,var[i]) for iteration i
 
         Examples
         --------
@@ -477,14 +655,14 @@ class Network(nx.MultiDiGraph):
         >>> tup = zip(range(5),range(5))
         [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)]
         >>> g = iter(tup)
-        >>> rat='string rat'
+        >>> wstd='string wstd'
         >>> var=[10,11,12,13,14]
 
-        >>> T=N.Gen_tuple(g,rat,var)
+        >>> T=N.Gen_tuple(g,wstd,var)
         >>> T.next()
-        (0, 0, 'string rat', 10)
+        (0, 0, 'string wstd', 10)
         >>> T.next()
-        (1, 1, 'string rat', 11)
+        (1, 1, 'string wstd', 11)
 
         """
 
@@ -492,15 +670,16 @@ class Network(nx.MultiDiGraph):
         while True:
             G=gene.next()
             Gvar=gvar.next()
-            yield(tuple((G[0],G[1],rat,Gvar)))
+            yield(tuple((G[0],G[1],wstd,Gvar)))
 
 
-    def get_RAT(self):
-        """ get rat from nodes of the network
+    def _get_wstd(self):
+        """ get wireless standards from nodes of the network
 
 
 
-        RAT argument specifies which RAt to append to the network. If None, all rat are appended.
+        wstd argument specifies which wireless standards to append to the network. 
+        If None, all wireless standards are appended.
 
         Examples
         --------
@@ -509,73 +688,184 @@ class Network(nx.MultiDiGraph):
         >>> N=Network()
         >>>    N=Network.Network()
         >>> for i in range(3):
-                no = Node.Node(ID=i,RAT=['wifi','bt'])
+                no = Node(ID=i,wstd=['wifi','bt'])
                 N.add_nodes_from(no.nodes(data=True))
 
-        >>> N.get_RAT()
+        >>> N._get_wstd()
         {'bt': [0, 1, 2], 'wifi': [0, 1, 2]}
 
         """
 #        if Rat !='None' :
-
         for no in self.nodes():
-            for r in self.node[no]['RAT']:
+            for r in self.node[no]['wstd']:
                 try:
-                    self.RAT[r].append(no)
+                    self.wstd[r].append(no)
                 except :
-                    self.RAT[r]=[no]
+                    self.wstd[r]=[no]
 #        else :
 #            for no in self.nodes(): 
-#                for r in self.node[no]['RAT']:
+#                for r in self.node[no]['wstd']:
 #                    try:
-#                        self.RAT[r].extend(no)
+#                        self.wstd[r].extend(no)
 #                    except :
-#                        self.RAT[r]=[no]
+#                        self.wstd[r]=[no]
 
         # uniquify results
-        for Rat in self.RAT.keys():
-            self.RAT[Rat]    = {}.fromkeys(self.RAT[Rat]).keys()
+        for ws in self.wstd.keys():
+            self.wstd[ws]    = {}.fromkeys(self.wstd[ws]).keys()
 
 
+    def update_edges(self, d , wstd, nodes=[]):
+        """ update edges information for a given wstd
 
-    def connect(self):
+        Parameters
+        ----------
+
+        d: dict :
+            dictionnary of information to be updated
+        wstd : list | dict
+            list of wstd where d has to be modified
+        nodes : list
+            list of nodes where information has to be applied 
+            raise error if nodes in the list are not in wstd
         """
-        Connect all nodes from the network sharing the same RAT and creating the associated Subnetwork
+        if isinstance(wstd,dict):
+            wstd = wstd.keys()
+        elif not isinstance(wstd, list):
+            wstd = [wstd]
+        
+        for w in wstd:
+            if nodes == []:
+                edges=self.perm(self.wstd[w], 2, w, d=d)
+            else:
+                nin = [n in self.wstd[w] for n in nodes]
+                # raise error if some nodes are note in the wstd
+                # no error raised if none nodes in wstd
+                if sum(nin) != len(nodes) and (sum(nin) != 0):
+                    unin = np.where(np.array(nin) == False)[0]
+                    raise AttributeError(str(np.array(nodes)[unin]) +' are not in ' + w)
+                else :
+                    edges=self.perm(nodes, 2, w, d=d)
+            try:
+                self.SubNet[w].add_edges_from(edges)
+            except:
+                self.add_edges_from(edges)
+            
+
+
+    def _connect(self):
+        """
+        This method 
+        1) Connect all nodes from the network sharing the same wstd 
+        2) Create the associated SubNetworks
+        3) Create lists of links : self.links and self.relinks
 
         """
 
         edge_dict={}
         for l in self.LDP:
-            edge_dict[l]=np.array((np.nan,np.nan))
-        edge_dict['vis']=False
+            edge_dict[l]=np.array((np.nan, np.nan))
+        edge_dict['vis'] = False
 
 
+        for wstd in self.wstd.keys():
+            self.update_edges(edge_dict,wstd)
+            self._get_SubNet(wstd)
 
-        for ratnb,Rat in enumerate(self.RAT.keys()):
-#            edges=self.combi(self.RAT[Rat],2,Rat,d=edge_dict)
-            edges=self.perm(self.RAT[Rat],2,Rat,d=edge_dict)
-            self.add_edges_from(edges)    
-            self.get_SubNet(Rat)
-            self.link[Rat]=[]
-            self.relink[Rat]=[]
-            for i in itertools.combinations(self.RAT[Rat],2):
-                self.link[Rat].append(i)
-            self.relink[Rat]=[(i[1],i[0]) for i in self.link[Rat]]
+        # update  edges type informatiosn 
+        self._get_edges_typ()
+        # create lists of links
+        self._get_llinks()
 
+    def _get_llinks(self):
+        """ get list of links from the Network 
 
-    def get_SubNet(self,Rat=None):
+        Notes
+        -----
+
+        Fill self.links and self.relinks
+        """
+
+        for wstd in self.wstd.keys():
+            self.links[wstd]=[]
+            self.relinks[wstd]=[]
+            for i in itertools.combinations(self.wstd[wstd],2):
+                self.links[wstd].append([i[0],i[1],self.edge[i[0]][i[1]][wstd]['typ']])
+                # if self.node[i[0]]['grp'] == self.node[i[1]]['grp']\
+                #     and (self.node[i[0]]['typ'] != 'ag'\
+                #         or self.node[i[0]]['typ'] != 'ag'):
+                #     self.links[wstd].append([i,'OB'])
+                # else :
+                #     nx.set_edge_attributes(self,i,{'typ':'OffB'})
+                #     self.links[wstd].append([i,'OffB'])
+
+            self.relinks[wstd]=[[i[1],i[0],i[2]] for i in self.links[wstd]]
+
+    def _get_edges_typ(self):
+        """ 
+            apply specific type on edges 
+
+        Notes
+        -----
+
+        types are :
+            OB : On body
+             when link' nodes of a link are: 
+                on the same agent 
+                and belong to the same group
+            B2B : Body to Body
+                when link' nodes of a link are: 
+                    between 2 agents
+            B2I : Body to Infrastructure
+                when link' nodes of a link are: 
+                    between an agent and an access point
+            I2I : Infrastructure to Infrastructure
+                when link' nodes of a link are: 
+                    between 2 access points
+        """
+        d = {}
+        for n in self.SubNet:
+            for e in self.SubNet[n].edges():
+                e0 = self.node[e[0]]
+                e1 = self.node[e[1]]
+                if e0['typ'] == e1['typ'] == 'ag':
+                    if e0['grp'] == e1['grp']:
+                        self.update_edges({'typ': 'OB'}, n, e)
+                    else :
+                        self.update_edges({'typ': 'B2B'}, n, e)
+                elif e0['typ'] == e1['typ'] == 'ap':
+                    # if e0['grp'] == e1['grp']:
+                    self.update_edges({'typ': 'I2I'}, n, e)
+                        # print str(e0['ID']),str(e1['ID']),'I2I'
+                else:    
+                    self.update_edges({'typ': 'B2I'}, n, e)
+
+    def _get_grp(self):
+        """ 
+            get group of the nodes of a network
+
+        """
+
+        for n in self.nodes():
+            grp = self.node[n]['grp']
+            if grp not in self.grp.keys():
+                self.grp[grp] = []
+            if n not in self.grp[grp]:
+                self.grp[grp].extend([n])
+
+    def _get_SubNet(self,wstd=[]):
         """
         get SubNetworks of a network
 
         Warnings
         --------
 
-        ALWAYS use self.get_RAT() BEFORE !
+        ALWAYS use self._get_wstd() BEFORE !
 
         Parameters
         ----------
 
-        Rat : specify which SubNet to create
+        wstd : specify which SubNet to create
 
         Examples
         --------
@@ -583,14 +873,14 @@ class Network(nx.MultiDiGraph):
         >>> from pylayers.network.network import *
         >>> N=Network()
         >>> for i in range(2):
-                no = Node.Node(ID=i,RAT=['wifi','bt'])
+                no = Node.Node(ID=i,wstd=['wifi','bt'])
                 N.add_nodes_from(no.nodes(data=True))
 
-        >>> no = Node.Node(ID=2,RAT=['wifi'])
+        >>> no = Node.Node(ID=2,wstd=['wifi'])
         >>>    N.add_nodes_from(no.nodes(data=True))
-        >>> N.get_RAT() # VERY IMPORTANT 
+        >>> N._get_wstd() # VERY IMPORTANT 
 
-        >>> N.get_SubNet()
+        >>> N._get_SubNet()
         >>> N.SubNet['bt'].nodes()
         [0, 1]
         >>> N.SubNet['wifi'].nodes()
@@ -598,99 +888,99 @@ class Network(nx.MultiDiGraph):
 
 
         """
-        if Rat == None:
-            for Rat in self.RAT:            
+        if wstd == []:
+            for wstd in self.wstd:            
                 # creating all SubNetworks 
-                self.SubNet[Rat]= self.subgraph(self.RAT[Rat])
+                self.SubNet[wstd]= self.subgraph(self.wstd[wstd])
                 # remove information from previous subnetwork (because subgraph copy the whole edge information)
-                ek = self.SubNet[Rat].edges(keys=True)
+                ek = self.SubNet[wstd].edges(keys=True)
                 for e in ek :
-                    if e[2] != Rat:
-                        self.SubNet[Rat].remove_edge(e[0],e[1],e[2])
-                for n in self.SubNet[Rat].nodes():
+                    if e[2] != wstd:
+                        self.SubNet[wstd].remove_edge(e[0],e[1],e[2])
+                for n in self.SubNet[wstd].nodes():
                     try:
-                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr']
-                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens']
+                        self.SubNet[wstd].node[n]['epwr']=self.SubNet[wstd].node[n]['epwr']
+                        self.SubNet[wstd].node[n]['sens']=self.SubNet[wstd].node[n]['sens']
                     except: 
                         pass
 
 
-        elif Rat in self.RAT:
+        elif wstd in self.wstd:
             # creating SubNetworks
-            self.SubNet[Rat]= self.subgraph(self.RAT[Rat])
+            self.SubNet[wstd]= self.subgraph(self.wstd[wstd])
             # remove information from previous subnetwork (because subgraph copy the whole edge information)
-            for k in self.RAT.keys():
-                if k != Rat:
+            for k in self.wstd.keys():
+                if k != wstd:
                     try:
-                        self.SubNet[Rat].remove_edges_from(self.SubNet[k].edges(keys=True))
+                        self.SubNet[wstd].remove_edges_from(self.SubNet[k].edges(keys=True))
                     except :
                         pass
-                for n in self.SubNet[Rat].nodes():
+                for n in self.SubNet[wstd].nodes():
                     try:
-                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr']
-                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens']
+                        self.SubNet[wstd].node[n]['epwr']=self.SubNet[wstd].node[n]['epwr']
+                        self.SubNet[wstd].node[n]['sens']=self.SubNet[wstd].node[n]['sens']
                     except: 
                         pass
 
 
         else :
-            raise NameError('invalid RAT name')
+            raise AttributeError('invalid wstd name')
 
 
-    def init_PN(self):
+    def _init_PN(self):
         """
         Initializing personnal networks
 
         """
 
 
-        for Sn in self.SubNet.iteritems():
-            for n in Sn[1].nodes():
-                for nn in Sn[1].nodes():
+        for wstd, subnet in self.SubNet.iteritems():
+            for n in subnet.nodes():
+                for nn in subnet.nodes():
                     if nn != n:
                         try:
-                            if Sn[0] not in Sn[1].node[n]['PN'].node[nn]['RAT'] : 
-                                Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
+                            if wstd not in subnet.node[n]['PN'].node[nn]['wstd']: 
+                                subnet.node[n]['PN'].node[nn]['wstd'].append(wstd)
                         except:
-                            Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=0.),type=Sn[1].node[nn]['type'])
+                            subnet.node[n]['PN'].add_node(nn,attr_dict=dict(wstd=[wstd],pe=np.array(()),te=0.),typ=subnet.node[nn]['typ'])
 
 
-                Z= Sn[1].edges(n,keys=True,data=True)
-                Sn[1].node[n]['PN'].add_edges_from(Z)
+                Z= subnet.edges(n,keys=True,data=True)
+                subnet.node[n]['PN'].add_edges_from(Z)
 
 
     def create(self):
         """ create the network
 
         This method computes :
-            * get_RAT()
-            * connect()
-            * connect_PN()
+            * _get_wstd()
+            * _get_grp()
+            * _connect()
+            * _init_PN
+            
 
 
 
         """
 
-        self.get_RAT()
-        self.connect()
-        self.init_PN()
+        self._get_wstd()
+        self._get_grp()
+        self._connect()
+        self._init_PN()
 
     def update_PN(self):
         """ update personnal network
-
-
-
         """
         ####################################################################################
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
-        for rat in self.RAT.iterkeys():
+        for wstd in self.wstd.iterkeys():
             for ldp in self.LDP:
-                self.compute_LDPs(self.nodes(),rat)
+                self.compute_LDPs(self.nodes(),wstd)
         for n in self.nodes():
-            self.node[n]['PN'].get_RAT()
-            self.node[n]['PN'].get_SubNet()
+            self.node[n]['PN']._get_wstd()
+            self.node[n]['PN']._get_SubNet()
             # Add access point position in each personal network (PN)
-            [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['type'] == 'ap']
+            [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['typ'] == 'ap']
 
         ####################################################################################
 
@@ -715,8 +1005,8 @@ class Network(nx.MultiDiGraph):
         return(np.array([np.sqrt(np.sum((dp[i[0]]-dp[i[1]])**2)) for i in e]))
 
 
-    def update_LDPs(self,ln,RAT,lD):
-        """Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT
+    def update_LDPs(self,ln,wstd,lD):   
+        """Set a value between 2 nodes (n1 and n2) for a specific LDP from a wstd
 
         This method update :     * The network edges 
                     * The personal network (PN) of both n1 and n2
@@ -726,8 +1016,8 @@ class Network(nx.MultiDiGraph):
 
         n1      : node ID
         n2      : node ID
-        RAT     : string
-            A specific RAT which exist in the network ( if not , raises an error)
+        wstd     : string
+            A specific wstd which exist in the network ( if not , raises an error)
         ln     : list 
             list of nodes
         lD     : list of dictionnary:
@@ -739,39 +1029,68 @@ class Network(nx.MultiDiGraph):
 
 
         """
-
-        self.SubNet[RAT].add_edges_from(self.Gen_tuple(ln,RAT,lD))
-
+        self.SubNet[wstd].add_edges_from(self.Gen_tuple(ln,wstd,lD))
 
 
-    def compute_LDPs(self,RAT):
+
+    def compute_LDPs(self,wstd):
         """compute edge LDP
 
         Parameters
         ----------
 
-        RAT     : string
-            A specific RAT which exists in the network ( if not , raises an error)
+        wstd     : string
+            A specific wstd which exists in the network ( if not , raises an error)
 
         """
         # value    : list : [LDP value , LDP standard deviation] 
         # method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
 
-        p=nx.get_node_attributes(self.SubNet[RAT],'p')
-        epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr')
-        sens=nx.get_node_attributes(self.SubNet[RAT],'sens')
-        e=self.link[RAT]#self.SubNet[RAT].edges()
-        re=self.relink[RAT] # reverse link aka other direction of link
+        p=nx.get_node_attributes(self.SubNet[wstd],'p')
+        epwr=nx.get_node_attributes(self.SubNet[wstd],'epwr')
+        sens=nx.get_node_attributes(self.SubNet[wstd],'sens')
+        e=self.links[wstd]#self.SubNet[wstd].edges()
+        re=self.relinks[wstd] # reverse link aka other direction of link
 
-        lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
+        lp,lt, d, v= self.EMS.solve(p,e,'all',wstd,epwr,sens)
         lD=[{'Pr':lp[i],'TOA':lt[np.mod(i,len(e))] ,'d':d[np.mod(i,len(e))],'vis':v[i]} for i in range(len(d))]
-        self.update_LDPs(iter(e+re),RAT,lD)
+        self.update_LDPs(iter(e+re),wstd,lD)
 
 
-
-    def update_pos(self,n,p,now=0.,p_pe='p'):
+    def update_orient(self, n, T, now=0.):
         """
-        Update Position of a node
+        Update Orientation(s) of a Device(s)/node(s)
+
+        Parameters
+        ----------
+
+        n      : float/string (or a list of) 
+            node ID (Nn x 3)
+        T    : np.array  ( or a list of )
+            node orientation (Nn x 3 x 3)
+
+        """
+
+        if (isinstance(T,np.ndarray)) or (isinstance(n,list) and isinstance(T,list) ):
+            # Tranfrom input as list
+            if not(isinstance(n,list)):
+                n=[n]
+                T=[T]
+            if len(n) == len(T):    
+                d=dict(zip(n,T))    # transform data to be complient with nx.set_node_attributes            
+                nowd=dict(zip(n,[now]*len(n)))
+            else :
+                raise TypeError('n and T must have the same length')
+            # update position
+            nx.set_node_attributes(self,'T',d)        
+            # update time of ground truth position
+            nx.set_node_attributes(self,'t',nowd)
+        else :
+            raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
+
+    def update_pos(self, n, p, now=0., p_pe='p'):
+        """
+        Update Position(s) of Device(s)/node(s)
 
         Parameters
         ----------
@@ -801,14 +1120,24 @@ class Network(nx.MultiDiGraph):
         else :
             raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
 
+    def update_dis(self):
 
-    def get_pos(self,RAT=None):
-        """ get node positions
+        p = self.get_pos()
+        e = self.edges()
+        lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
+        d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
+        [self.edge[ve[0]][ve[1]].update({'d':d[ie]}) for ie,ve in enumerate(self.edges())]
+
+
+
+    def get_orient(self,wstd=None):
+        """ get node orientations
 
         Parameters
         ----------
 
-        RAT : specify a RAT to display node position. If None, all RAT are displayed    
+        wstd : specify a wstd to display node orientaion.
+               If None, all wstd are displayed    
 
         Returns 
         -------
@@ -818,27 +1147,51 @@ class Network(nx.MultiDiGraph):
 
 
         """
-        if RAT == None:
+        if wstd == None:
+            return nx.get_node_attributes(self,'T')
+        else :
+            try:
+                return nx.get_node_attributes(self.SubNet[wstd],'T')
+            except: 
+                raise AttributeError('invalid wstd name')
+
+    def get_pos(self,wstd=None):
+        """ get node positions
+
+        Parameters
+        ----------
+
+        wstd : specify a wstd to display node position. If None, all wstd are displayed    
+
+        Returns 
+        -------
+
+        dictionnary :     key     : node ID
+        value     : np.array node position
+
+
+        """
+        if wstd == None:
             if self.node[self.nodes()[0]].has_key('p'):
                 return nx.get_node_attributes(self,'p')
             else :
                 return nx.get_node_attributes(self,'pe')
         else :
             try:
-                if self.SubNet[RAT].node[self.SubNet[RAT].nodes()[0]].has_key('p'):
-                    return nx.get_node_attributes(self.SubNet[RAT],'p')
+                if self.SubNet[wstd].node[self.SubNet[wstd].nodes()[0]].has_key('p'):
+                    return nx.get_node_attributes(self.SubNet[wstd],'p')
                 else :
-                    return nx.get_node_attributes(self.SubNet[RAT],'pe')
+                    return nx.get_node_attributes(self.SubNet[wstd],'pe')
             except: 
-                raise NameError('invalid RAT name')
+                raise AttributeError('invalid wstd name')
 
-    def get_pos_est(self,RAT=None):
+    def get_pos_est(self,wstd=None):
         """ get node estimated  positions ( only available in PN network)
 
         Parameters
         ----------
 
-        RAT : specify a RAT to display node position. If None, all RAT are displayed    
+        wstd : specify a wstd to display node position. If None, all wstd are displayed    
         
         Returns 
         ------
@@ -848,13 +1201,13 @@ class Network(nx.MultiDiGraph):
         
 
         """
-        if RAT == None:
+        if wstd == None:
             return nx.get_node_attributes(self,'pe')
         else :
             try:
-                return nx.get_node_attributes(self.SubNet[RAT],'pe')
+                return nx.get_node_attributes(self.SubNet[wstd],'pe')
             except: 
-                raise NameError('invalid RAT name')
+                raise AttributeError('invalid wstd name')
 
 
 
@@ -909,28 +1262,28 @@ class Network(nx.MultiDiGraph):
         Print information on edges connection and LDPs values and accuracy
 
         """
-        for rat in self.RAT.keys():
+        for wstd in self.wstd.keys():
             print '-'*30
-            print rat
+            print wstd
             print('{0:10} | {1:5} | {2:5} | {3:5} | {4:5} | {5:5} |'.format('Node link','TOA ','TOA std', 'Pr','Pr std', 'distance' ))
             print '-'*30
-            T=nx.get_edge_attributes(self.SubNet[rat],'TOA')
-            P=nx.get_edge_attributes(self.SubNet[rat],'Pr')
-            D=nx.get_edge_attributes(self.SubNet[rat],'d')
-            for i in self.SubNet[rat].edges(): # boucle sur toute les liaisons
+            T=nx.get_edge_attributes(self.SubNet[wstd],'TOA')
+            P=nx.get_edge_attributes(self.SubNet[wstd],'Pr')
+            D=nx.get_edge_attributes(self.SubNet[wstd],'d')
+            for i in self.SubNet[wstd].edges(): # boucle sur toute les liaisons
                 print('{0:10} | {1:1.4} | {2:7.4} | {3:1.4} | {4:7.4} | {5:7.4} |'.format(i,T[i][0],T[i][1],P[i][0],P[i][1],D[i]))
 
 
 
 
-    def show(self,RAT=None,legend=False,ion=False,info=False,fig=plt.figure(),ax=None,name=None):
+    def show(self, wstd=None, legend=False, ion=False, info=False, fig=plt.figure() ,ax=None, name=None):
         """ 
         Show the network
 
         Parameters 
         ----------
 
-        RAT     : specify a RAT to display. If None, all RAT are displayed
+        wstd     : specify a wstd to display. If None, all wstd are displayed
         legend     : Bool. Toggle display edge legend
         ion     : interactive mode for matplotlib 
         info    : plot information on edges 
@@ -940,24 +1293,30 @@ class Network(nx.MultiDiGraph):
 
 
         """
-        C=ConfigParser.ConfigParser()
-        C.read(pyu.getlong('show.ini','ini'))
-        RATcolor=dict(C.items('RATcolor'))
-        RATes    =dict(C.items('RATestyle'))
+        C = ConfigParser.ConfigParser()
+        C.read(pyu.getlong('show.ini', 'ini'))
+        color = ['r', 'g', 'b', 'm', 'y', 'c']*5
+        style = ['-']*10
+
+        wstdcolor = {k:color[uk] for uk, k in enumerate(self.SubNet.keys())}
+        wstdes = {k:style[uk] for uk, k in enumerate(self.SubNet.keys())}
+
+        # stdcolor = dict(C.items('wstdcolor'))
+        # wstdes = dict(C.items('wstdestyle'))
 
 
 
 
-        if RAT == None:
-            rloop = self.RAT.keys()
+        if wstd == None:
+            rloop = self.wstd.keys()
 
         else :
-            if isinstance(RAT,list):
-                rloop = RAT    
-            elif isinstance(RAT,str) :
-                rloop=[RAT]    
+            if isinstance(wstd,list):
+                rloop = wstd    
+            elif isinstance(wstd,str) :
+                rloop=[wstd]    
             else :
-                raise NameError('Arg must be a string or a string list')
+                raise AttributeError('Arg must be a string or a string list')
 
         if fig==None:
             fig = plt.figure()
@@ -985,12 +1344,35 @@ class Network(nx.MultiDiGraph):
             self.coll_plot['edge'].append([])
             Cl=[]
 
+
+
+
+
         for ii,rl in enumerate(rloop):
-            pos = self.get_pos(rl)
-            self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self,pos=pos,nodelist=self.SubNet[rl].nodes(),node_size=100.,node_color='r',ax=ax))
-            Cl=nx.draw_networkx_labels(self.SubNet[rl],pos=pos,font_size=10,ax=ax)
+            pos = self.get_pos(rl) 
+            pos = {k:v[:2] for k,v in pos.items()}
+            self.coll_plot['node'][1].append(nx.draw_networkx_nodes(
+                                            self,
+                                            pos=pos,
+                                            nodelist=self.SubNet[rl].nodes(),
+                                            node_size=100.,
+                                            node_color='r',
+                                            ax=ax))
+            Cl=nx.draw_networkx_labels(self.SubNet[rl],
+                                       pos=pos,
+                                       font_size=10,
+                                       ax=ax)
             self.coll_plot['label'][1].extend(Cl.values())
-            self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self,pos=pos,edgelist=self.SubNet[rl].edges(),width=2.,alpha=0.9,edge_color=RATcolor[rl],style=RATes[rl],ax=ax)))
+            self.coll_plot['edge'][1].append((nx.draw_networkx_edges(
+                                              self,
+                                              pos=pos,
+                                              edgelist=self.SubNet[rl].edges(),
+                                              arrows=False,
+                                              width=2.,
+                                              alpha=0.9,
+                                              edge_color=wstdcolor[rl],
+                                              style=wstdes[rl],
+                                              ax=ax)))
 
         if legend:
             ax.legend((self.coll_plot['edge'][1]),(rloop),loc=3)
@@ -1010,37 +1392,54 @@ class Network(nx.MultiDiGraph):
             self.coll_plot['edge'][0]=self.coll_plot['edge'][1]
             self.coll_plot['label'][0]=self.coll_plot['label'][1]
 
-    def compute_Sg(self,tx,rx):
-        if self.pos == {}:
-            self.pos=self.get_pos()
-        return (self.EMS.L.signature(self.pos[tx],self.pos[rx]))
+        return fig, ax
 
 
-    def show_sig(self,Sg,tx,rx,ion=False,fig=None,ax=None):
-        if fig==None:
-            fig = plt.figure()
-            ax=fig.add_subplot(111)
-        elif ax== None:
-            ax=fig.add_subplot(111)
+    def _show3(self, wstd=None,newfig=False):
+        """ Mayavi _show3
 
-        try:
-            self.coll_plot['Sg'][1]=[]
-        except:
-            self.coll_plot['Sg']=[[]]
-            self.coll_plot['Sg'].append([])
+        Parameters
+        ----------
 
+        wstd : list
+            list of wireless standards
 
-        fig,ax,self.coll_plot['Sg'][1]=self.EMS.L.showSig(Sg,Tx=self.pos[tx],Rx=self.pos[rx],sr=True,fig=fig,ax=ax)
+        """
 
+        color = ['r', 'g', 'b', 'm', 'y', 'c']*5
+        wstdcolor = {k:color[uk] for uk, k in enumerate(self.SubNet.keys())}
+        cold = pyu.coldict()
 
-        if ion:
-            try:
-                [jj.remove() for jj in self.coll_plot['Sg'][0]]
-            except:
-                pass
+        if not newfig:
+            f = mlab.gcf()
 
-            plt.draw()
-            self.coll_plot['Sg'][0]=self.coll_plot['Sg'][1]
+        if wstd == None:
+            rloop = self.wstd.keys()
+
+        else :
+            if isinstance(wstd,list):
+                rloop = wstd    
+            elif isinstance(wstd,str) :
+                rloop=[wstd]    
+            else :
+                raise AttributeError('Arg must be a string or a string list')
+
+        for ii,rl in enumerate(rloop):
+            
+            pos = self.get_pos(rl)
+            posv = pos.values()
+            mp = dict(zip(pos.keys(),range(len(pos.keys()))))
+            edg = self.SubNet[rl].edges()
+            connect = [(mp[e[0]],mp[e[1]]) for e in edg]
+            posv = np.array(posv)
+
+            pts = mlab.points3d(posv[:,0], posv[:,1], posv[:,2],
+                                   scale_factor=0.01, resolution=10)
+            pts.mlab_source.dataset.lines = np.array(connect)
+            tube = mlab.pipeline.tube(pts, tube_radius=0.01)
+            colhex = cold[wstdcolor[rl]]
+            col = tuple(pyu.rgb(colhex)/255.)
+            mlab.pipeline.surface(tube, color=col)
 
 
 
@@ -1094,7 +1493,7 @@ class Network(nx.MultiDiGraph):
 
         ## find Agent and Acces point
         for i in range(len(pos)):
-            if self.node[pos[i][0]]['type'] =='ap':
+            if self.node[pos[i][0]]['typ'] =='ap':
                 AP.append(pos[i][0])
                 if not os.path.isfile(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE'])):
                     file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
@@ -1268,7 +1667,7 @@ class Network(nx.MultiDiGraph):
 
         pos=nx.get_node_attributes(self,'p')
         pe=nx.get_node_attributes(self,'pe_alg')
-        typ = nx.get_node_attributes(self,'type')
+        typ = nx.get_node_attributes(self,'typ')
         if self.idx == 0:
             entete = 'NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp\n'
             file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','write')
@@ -1287,86 +1686,86 @@ class Network(nx.MultiDiGraph):
             pass
 
 
-    def dual_save(self,S):
-        """
-        DEPRECATED 
+    # def dual_save(self,S):
+    #     """
+    #     DEPRECATED 
 
-        REPLACED BY pylayers.util.save
+    #     REPLACED BY pylayers.util.save
 
-        DEPRECATED 
-
-
-
-        save txt 
+    #     DEPRECATED 
 
 
 
-        Parameters
-        ----------
-
-        S        : Simulation
-                   Scipy.Simulation object
-
-        """
-
-        pos=nx.get_node_attributes(self,'p')
-        pclust = nx.get_node_attributes(self,'pe_clust')
-        typ = nx.get_node_attributes(self,'type')
-        if self.idx == 0:
-            entete = 'Timestamp, True Position x, True Position y, Est Position1 x, Est Position1 y,Est Position2 x, Est Position2 y\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','write')
-            file.write(entete)
-            file.close()
-            file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','write')
-            entete2 = 'Timestamp, link, linkid, Pr, distance\n'
-            file2.write(entete2)
-            file2.close()
-            file3=open(basename+'/' + pstruc['DIRNETSAVE'] +'/anchorposition.txt','write')
-            data3 = 'node,pos x, pos y\n'
-            file3.write(data3)
-            for n in self.nodes():
-                data3= n + ',' + str(self.node[n]['p'][0]) + ',' + str(self.node[n]['p'][1]) + '\n'
-                file3.write(data3)
-            file3.close()
-            file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','w')
-            entete4 = 'Timestamp, type, toaid, toa,distance\n'
-            file4.write(entete4)
-            file4.close()
-
-        try:
-
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','a')
-            file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','a')
-            file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','a')
-            for n in self.nodes():
-                if n == '1':
-                    data =  pyu.timestamp(S.now()) +','+ str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pclust[n][0,0]) + ',' + str(pclust[n][0,1]) + ',' + str(pclust[n][1,0]) + ',' + str(pclust[n][1,1]) +'\n'
-                    for e in self.edge[n].keys():
-                        if e != '6' and e !='7':
-                            try:
-                                data2 = data2 +',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
-                            except:
-                                data2 = pyu.timestamp(S.now()) + ',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
-                        else :
-                            try:
-                                data4 = data4 +',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
-                            except:
-
-                                data4 = pyu.timestamp(S.now()) + ',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' +str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
-
-            data2=data2 + '\n'
-            data4=data4 + '\n'
-            file.write(data)
-            file2.write(data2)
-            file4.write(data4)
+    #     save txt 
 
 
-            file.close()
-            file2.close()
-            file4.close()
-            self.idx = self.idx +1
-        except:
-            pass
+
+    #     Parameters
+    #     ----------
+
+    #     S        : Simulation
+    #                Scipy.Simulation object
+
+    #     """
+
+    #     pos=nx.get_node_attributes(self,'p')
+    #     pclust = nx.get_node_attributes(self,'pe_clust')
+    #     typ = nx.get_node_attributes(self,'typ')
+    #     if self.idx == 0:
+    #         entete = 'Timestamp, True Position x, True Position y, Est Position1 x, Est Position1 y,Est Position2 x, Est Position2 y\n'
+    #         file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','write')
+    #         file.write(entete)
+    #         file.close()
+    #         file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','write')
+    #         entete2 = 'Timestamp, link, linkid, Pr, distance\n'
+    #         file2.write(entete2)
+    #         file2.close()
+    #         file3=open(basename+'/' + pstruc['DIRNETSAVE'] +'/anchorposition.txt','write')
+    #         data3 = 'node,pos x, pos y\n'
+    #         file3.write(data3)
+    #         for n in self.nodes():
+    #             data3= n + ',' + str(self.node[n]['p'][0]) + ',' + str(self.node[n]['p'][1]) + '\n'
+    #             file3.write(data3)
+    #         file3.close()
+    #         file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','w')
+    #         entete4 = 'Timestamp, typ, toaid, toa,distance\n'
+    #         file4.write(entete4)
+    #         file4.close()
+
+    #     try:
+
+    #         file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','a')
+    #         file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','a')
+    #         file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','a')
+    #         for n in self.nodes():
+    #             if n == '1':
+    #                 data =  pyu.timestamp(S.now()) +','+ str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pclust[n][0,0]) + ',' + str(pclust[n][0,1]) + ',' + str(pclust[n][1,0]) + ',' + str(pclust[n][1,1]) +'\n'
+    #                 for e in self.edge[n].keys():
+    #                     if e != '6' and e !='7':
+    #                         try:
+    #                             data2 = data2 +',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+    #                         except:
+    #                             data2 = pyu.timestamp(S.now()) + ',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+    #                     else :
+    #                         try:
+    #                             data4 = data4 +',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+    #                         except:
+
+    #                             data4 = pyu.timestamp(S.now()) + ',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' +str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+
+    #         data2=data2 + '\n'
+    #         data4=data4 + '\n'
+    #         file.write(data)
+    #         file2.write(data2)
+    #         file4.write(data4)
+
+
+    #         file.close()
+    #         file2.close()
+    #         file4.close()
+    #         self.idx = self.idx +1
+    #     except:
+    #         pass
 
 
     def pyray_save(self,S):
@@ -1384,7 +1783,7 @@ class Network(nx.MultiDiGraph):
 
 
         assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
-        is used , only 1 rat must be involved in the Network.\
+        is used , only 1 wstd must be involved in the Network.\
         Please modify agent.ini')
 
 
@@ -1396,7 +1795,7 @@ class Network(nx.MultiDiGraph):
             self.init_save(height=height)
         ### save agent positions
         for i in range(len(pos)):
-            if self.node[pos[i][0]]['type'] !='ap':
+            if self.node[pos[i][0]]['typ'] !='ap':
                 config = ConfigParser.ConfigParser()
                 config.read(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']))
                 config.set('coordinates',str(self.idx+1),value = str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
@@ -1432,7 +1831,7 @@ class Network(nx.MultiDiGraph):
         p = nx.get_node_attributes(self,'p')
         ### save agent positions estimations
         for n in node:
-            if self.node[n]['type'] !='ap':
+            if self.node[n]['typ'] !='ap':
                 config = ConfigParser.ConfigParser()
                 config.read(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']))
                 if pe_alg != {} :
@@ -1454,7 +1853,7 @@ class Network(nx.MultiDiGraph):
         DEPRECATED
         ----------
         Save an .ini file of node position . 
-        Only links  which involve mobile nodes (type 'ag') are kept.
+        Only links  which involve mobile nodes (typ 'ag') are kept.
 
         The produced init file is filled as follow:
 
@@ -1483,7 +1882,7 @@ class Network(nx.MultiDiGraph):
         """
 
         assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
-        is used , only 1 rat must be involved in the Network.\
+        is used , only 1 wstd must be involved in the Network.\
         Please modify agent.ini')
 
 
@@ -1496,7 +1895,7 @@ class Network(nx.MultiDiGraph):
         timestamp = pyu.timestamp(S.now())
         config.add_section(timestamp)
         for e in self.edges():
-            if not ((self.node[e[0][0]]['type'] == 'ap') and  (self.node[e[1][0]]['type'] == 'ap')):
+            if not ((self.node[e[0][0]]['typ'] == 'ap') and  (self.node[e[1][0]]['typ'] == 'ap')):
                 key=str(e[0]) +'_' +str(e[1])
                 value1 = str(self.node[e[0][0]]['p'][0])+ ',' +str(self.node[e[0][0]]['p'][1])+','+str(height)
                 value2 = str(self.node[e[1][0]]['p'][0])+ ',' +str(self.node[e[1][0]]['p'][1])+','+str(height)
@@ -1573,13 +1972,13 @@ class PNetwork(Process):
 
         ####################################################################################
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
-        for rat in self.net.RAT.iterkeys():
-            self.net.compute_LDPs(rat)
+        for wstd in self.net.wstd.iterkeys():
+            self.net.compute_LDPs(wstd)
         for n in self.net.nodes():
-            self.net.node[n]['PN'].get_RAT()
-            self.net.node[n]['PN'].get_SubNet()
+            self.net.node[n]['PN']._get_wstd()
+            self.net.node[n]['PN']._get_SubNet()
             # Add access point position in each personal network (PN)
-            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
+            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['typ'] == 'ap']
                 
         ####################################################################################
         self.pos=self.net.get_pos()
@@ -1604,8 +2003,8 @@ class PNetwork(Process):
         while True:
 
             ############### compute LDP
-            for rat in self.net.RAT.iterkeys():
-                self.net.compute_LDPs(rat)
+            for wstd in self.net.wstd.iterkeys():
+                self.net.compute_LDPs(wstd)
             
             if self.show_sg:
                 ############### compute Signature (Sg)

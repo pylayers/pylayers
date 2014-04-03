@@ -45,7 +45,8 @@ Miscelianous Functions
 import numpy as np
 import scipy.stats as sp
 import ConfigParser
-from pylayers.mobility.body import c3d
+import os
+from pylayers.mobility.ban import c3d
 import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
 import pylayers.antprop.antenna as ant
@@ -148,6 +149,8 @@ class Body(object):
         if 'vmocap' in dir(self):
             st = st + 'Mocap Speed : ' + str(self.vmocap)+'\n'
 
+        st = st + '\n'
+        
         return(st)
 
 
@@ -173,6 +176,10 @@ class Body(object):
 
         """
         filebody = pyu.getlong(_filebody,'ini')
+        if not os.path.isfile(filebody):
+            raise NameError(_filebody + ' cannot be found in' 
+                             + pyu.getlong('','ini'))
+
         config = ConfigParser.ConfigParser()
         config.read(filebody)
         sections = config.sections()
@@ -735,7 +742,11 @@ class Body(object):
                     'pattern':False,
                     'lccs':[],
                     'ccs':False,
-                    'k':46}
+
+                    'dcs':False,
+                    'color':'white',
+                    'k':0}
+
 
         for k in defaults:
             if k not in kwargs:
@@ -750,17 +761,43 @@ class Body(object):
 
         fId = kwargs['iframe']
 
-        for k in range(self.ncyl):
 
-            kta = int(self.sl[k,0])
-            khe = int(self.sl[k,1])
-            cylrad = self.sl[k,2]
-            if kwargs['topos']:
-                pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
-                phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
-            else:
-                pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
-                phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+
+        cold = pyu.coldict()
+        colhex = cold[kwargs['color']]
+        body_color = tuple(pyu.rgb(colhex)/255.)
+
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        cylrad = self.sl[:,2]
+        if kwargs['topos']:
+            pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+            phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+        else:
+            pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
+            phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+        ax = phe-pta
+        l = np.sqrt(np.sum((ax**2), axis=0))
+        cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
+                               axis=(ax[0, i],ax[1, i],ax[2, i]), 
+                               radius=cylrad[i]*kwargs['widthfactor'],
+                               length=l[i]) for i in range(self.ncyl)]
+        [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
+         for i in range(self.ncyl)]
+        partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
+        [f.children[k].__setattr__('name', partnames[k]+str(k))
+         for k in range(self.ncyl)]
+
+        if kwargs['ccs']:
+            # to be improved
+            for k,key in enumerate(self.ccs):
+                pt = pta[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
+                pte = np.repeat(pt[:,np.newaxis],3,axis=1)
+                mlab.quiver3d(pte[0], pte[1], pte[2],
+                              self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
+                              scale_factor=0.2)
+
+
 
             ax = phe-pta
             cc = (pta+phe)/2.
@@ -774,6 +811,7 @@ class Body(object):
                     pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
                     mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)
         
+
         if kwargs['dcs']:
             for key in self.dcs.keys():               
                 U = self.dcs[key]               
@@ -1299,6 +1337,7 @@ class Body(object):
              
         return intersect
         
+ 
     def intersectBody3(self,A,B, topos = True, frameId = 0):
         """
 
@@ -1310,6 +1349,7 @@ class Body(object):
         topos
         frameId
         cyl
+
 
         Returns
         -------
@@ -1356,18 +1396,21 @@ class Body(object):
             loss2_dB = 0 
 
 
-            
+
+
             if dmin < self.sl[k,2]:
                 
-                
+
                 """
                 in this case intersection is True
                 """
                 #pdb.set_trace()                                                            
                 dAB = np.sqrt(sum((A-B)**2))
                 #nu1 =(self.sl[k,2]-dmin)*np.sqrt((2/lmd)*dAB*abs(alpha)*abs(1-alpha)))
-                nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.1
-                nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.1
+
+                nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
+                nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
+
               
                 if -0.7 < nu1 : 
                 
@@ -1385,7 +1428,7 @@ class Body(object):
                 loss_lin  =1.0/10**(loss_dB/10.0)
               
         return loss_lin#, loss_dB, loss1_dB, loss2_dB 
-        
+
 
     def body_link(self, topos = True,frameId = 0):
         """

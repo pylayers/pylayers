@@ -309,7 +309,7 @@ from pylayers.util.pyutil import *
 from pylayers.util.plotutil import *
 import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin , correlate
-from sklearn import mixture
+#from sklearn import mixture
 import scipy.stats as st
 
 
@@ -318,15 +318,13 @@ class Bsignal(object):
 
     This class gathers a 1D signal and its axis indexation.
 
-    This class offers a transparent back and forth mechanism between time and frequency domain.
-
     The x base is not necessarily uniform
 
     x can have 1 or two axis
 
     The first axis of x and y have the same length
 
-    By construction len(y):=len(x), len(x) takes priority in case of observed conflict
+    By construction shape(y)[1] :=len(x), len(x) takes priority in case of observed conflict
 
     """
 
@@ -339,7 +337,6 @@ class Bsignal(object):
         x : ndarray (,Nx)
             time or frequency axis
 
-        x : ndarray
         y : ndarray
             values  (Nx,Ny)
 
@@ -359,7 +356,6 @@ class Bsignal(object):
                     print "Error in Bsignal : Dimension incompatibility "
                     print "x : ", lx
                     print "y : ", ly
-
 
 
     def __repr__(self):
@@ -391,6 +387,7 @@ class Bsignal(object):
 
         """
         O = copy(self)
+        O.x = O.x[u]
         O.y = O.y[u,:]
         return(O)
 
@@ -2590,9 +2587,9 @@ class TUsignal(TBsignal, Usignal):
         Parameters
         ----------
 
-        alphak : float
+        alphak : ndarray
             CIR path amplitude
-        tauk : float
+        tauk : ndarray
             CIR delay values
 
         Examples
@@ -3162,6 +3159,7 @@ class FUsignal(FBsignal, Usignal):
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         super(FUsignal,self).__init__(x,y)
+        self.isFriis = False
         #FBsignal.__init__(self, x, y)
 
     def __repr__(self):
@@ -3259,6 +3257,15 @@ class FUsignal(FBsignal, Usignal):
 
         self.y = self.y * w
 
+    def applyFriis(self):
+        """ Apply Friis Factor
+        """
+        if not self.isFriis:
+            factor = 0.3/(4*np.pi*self.x)
+            self.y = self.y*factor[np.newaxis,:]
+            self.isFriis = True
+
+
     def get(self, k):
         """
             get the kh signal
@@ -3335,19 +3342,6 @@ class FUsignal(FBsignal, Usignal):
 
         return(EMH2)
      
-    def applyFriis(self):
-
-        factor = 0.3/(4*np.pi*self.x)
-        self.y = self.y*factor[np.newaxis,:]
-         
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
 
     def enthrsh(self, thresh=99.99):
         """ Energy thresholding of an FUsignal
@@ -4124,8 +4118,8 @@ class FUDAsignal(FUDsignal):
                  tau0 = np.array([]),
                  dod = np.array([]),
                  doa = np.array([])):
-
-        FUDsignal.__init__(self, x, y,tau0)
+        super(FUDAsignal,self).__init__(x, y, tau0)
+        # FUDsignal.__init__(self, x, y,tau0)
         self.dod  = dod
         self.doa  = doa
 
@@ -4213,6 +4207,12 @@ class FUDAsignal(FUDsignal):
             theta velocity termination b (in radians)
         phi_vb  :
             phi velocity termination b (in radians)
+
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
 
         """
 
@@ -4441,8 +4441,10 @@ class Noise(TUsignal):
     """
     def __init__(self, Tobs=100, fe=50, DSPdBmpHz=-174, NF=0, R=50, seed=[]):
         """
+
         Parameters
         ----------
+
         Tobs      : Time duration
         fe        : sampling frequency
         DSPdBmpHz : Power Spectral Density Noise (dBm/Hz)
@@ -4450,6 +4452,7 @@ class Noise(TUsignal):
         NF        : 0
         R         : 50
         seed      : []
+
         """
         TUsignal.__init__(self)
         P = DSPdBmpHz + NF

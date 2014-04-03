@@ -79,7 +79,7 @@ class Localization(object):
 
         return s
 
-#    def get_const(self, RAT=None, LDP=None):
+#    def get_const(self, wstd=None, LDP=None):
 #        """ get constraints
 #
 #   get the constraint of the networl followinf rule given in self.rule list.
@@ -87,14 +87,14 @@ class Localization(object):
 #
 #                args[key]=value
 #
-#    def get_const(self,RAT=None,LDP=None):
+#    def get_const(self,wstd=None,LDP=None):
 #        """ get constraints
 #
 #            get the constraint of the network following rule given in self.rule list.
 #            These rules are defined in Loca_Rule
 #
 #        """
-#        self.dc= merge_rules(self,RAT=RAT,LDP=LDP)
+#        self.dc= merge_rules(self,wstd=wstd,LDP=LDP)
 
 
 
@@ -107,7 +107,7 @@ class Localization(object):
         -----
 
         loop on edges
-            loop on rat
+            loop on wstd
                 append cla with available LDP among (RSS,TOA)
 
         Warning
@@ -118,45 +118,45 @@ class Localization(object):
         """
         ## loop on edges
         for e in self.net.node[self.ID]['PN'].edge[self.ID].keys():
-            ## loop on rat
-            for rat in self.net.node[self.ID]['PN'].edge[self.ID][e].keys():
+            ## loop on wstd
+            for wstd in self.net.node[self.ID]['PN'].edge[self.ID][e].keys():
                 try:
-                    param = dict(self.config.items(rat+'_PLM'))
+                    param = dict(self.config.items(wstd+'_PLM'))
                     self.cla.append(
-                        RSS(id = rat+'-Pr-'+self.ID+'-'+e,
-                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][0],
-                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][1],
+                        RSS(id = wstd+'-Pr-'+self.ID+'-'+e,
+                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][wstd]['Pr'][0],
+                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][wstd]['Pr'][1],
                             model = PLSmodel(f = eval(param['f']),
                                              rssnp = eval(param['rssnp']),
                                              d0 = eval(param['d0']),
                                              method = param['method']),
                             p = self.net.node[self.ID]['PN'].node[e]['pe'],
-                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
+                            origin={'id':self.ID,'link':[e],'wstd':wstd,'ldp':'Pr'}
                             )
                                     )
                 except:
-                    param = dict(self.config.items(rat+'_PLM'))
+                    param = dict(self.config.items(wstd+'_PLM'))
                     self.cla.append(
-                        RSS(id = rat+'-Pr-'+self.ID+'-'+e,
+                        RSS(id = wstd+'-Pr-'+self.ID+'-'+e,
                             p = self.net.node[self.ID]['PN'].node[e]['pe'],
-                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
+                            origin={'id':self.ID,'link':[e],'wstd':wstd,'ldp':'Pr'}
                             )
                                     )
 
                 try:
                     self.cla.append(
-                        TOA(id = rat+'-TOA-'+self.ID+'-'+e,
-                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0],
-                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1],
+                        TOA(id = wstd+'-TOA-'+self.ID+'-'+e,
+                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][wstd]['TOA'][0],
+                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][wstd]['TOA'][1],
                             p= self.net.node[self.ID]['PN'].node[e]['pe'],
-                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
+                            origin={'id':self.ID,'link':[e],'wstd':wstd,'ldp':'TOA'}
                             )
                                     )
                 except:
                     self.cla.append(
-                        TOA(id = rat+'-TOA-'+self.ID+'-'+e,
+                        TOA(id = wstd+'-TOA-'+self.ID+'-'+e,
                             p= self.net.node[self.ID]['PN'].node[e]['pe'],
-                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
+                            origin={'id':self.ID,'link':[e],'wstd':wstd,'ldp':'TOA'}
                             )
                                     )
 
@@ -167,13 +167,13 @@ class Localization(object):
 
 
 
-    def update(self,rat='all',ldp='all'):
+    def update(self,wstd='all',ldp='all'):
         """
             update constraints information (anchor position, value and std)
             from the network graph
         """
-        if rat == 'all':
-            rat=self.net.node[self.ID]['PN'].SubNet.keys()
+        if wstd == 'all':
+            wstd=self.net.node[self.ID]['PN'].SubNet.keys()
         if ldp == 'all':
             ldp=['Pr','TOA','TDOA']
         else:
@@ -183,14 +183,14 @@ class Localization(object):
         self.algloc.nodes={}
         self.algloc.ldp={}
         for c in self.cla.c:
-            crat,cldp,e,own=c.origin.values()
+            cwstd,cldp,e,own=c.origin.values()
 
-            if (crat in rat) and (cldp in ldp) :
-                if self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat]['vis']:
+            if (cwstd in wstd) and (cldp in ldp) :
+                if self.net.node[self.ID]['PN'].edge[self.ID][e[0]][cwstd]['vis']:
                     c.visible = True
                     pos = self.net.node[self.ID]['PN'].node[e[0]]['pe']
-                    value = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat][cldp][0]
-                    std = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat][cldp][1]
+                    value = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][cwstd][cldp][0]
+                    std = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][cwstd][cldp][1]
                     if 'geo' in self.method :
                         # methods from constraint.py
                         c.updc('p',pos)
@@ -243,7 +243,7 @@ class Localization(object):
 
 
 
-    def compute_geo(self,rat='all',ldp='all',now=0.,pe=True):
+    def compute_geo(self,wstd='all',ldp='all',now=0.,pe=True):
         """
             Compute position with the geometric algorithm
 
@@ -271,7 +271,7 @@ class Localization(object):
         else :
             return False
 
-    def compute_alg(self,rat='all',ldp='all',now=0.,pe=True):
+    def compute_alg(self,wstd='all',ldp='all',now=0.,pe=True):
         """
             Compute position with the algebraic algorithm
         Returns
@@ -294,7 +294,7 @@ class Localization(object):
 
 
 
-#    def compute_crb(self,rat='all',ldp='all',now=0.,pe=True):
+#    def compute_crb(self,wstd='all',ldp='all',now=0.,pe=True):
 #        """
 #            Compute CramerRao bound
 #        """

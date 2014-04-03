@@ -65,6 +65,7 @@ from pylayers.network.network import Network, Node, PNetwork
 from pylayers.network.communication import Gcom
 from pylayers.network.show import ShowNet, ShowTable
 from pylayers.mobility.agent import Agent
+from pylayers.mobility.trajectory import *
 from pylayers.network.emsolver import EMSolver
 from pylayers.gis.layout import Layout
 from pylayers.antprop.slab import Slab
@@ -124,7 +125,7 @@ class Simul(SimulationRT): # Sympy 2
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
         self.seed = eval(self.sim_opt['seed'])
-
+        self.traj=Trajectories()
 
         self.verbose = str2bool(self.sim_opt['verbose'])
         if str2bool(self.net_opt['ipython_nb_show']):
@@ -149,10 +150,11 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\n\nAgents => self.lAg[i]' + '\n------' 
         s = s + '\nNumber of agents :' + str(len(self.lAg))
         s = s + '\nAgents IDs: ' + str([self.lAg[i].ID for i in range(len(self.lAg))])
+        s = s + '\nAgents names: ' + str([self.lAg[i].name for i in range(len(self.lAg))])
         s = s + '\nDestination of agents choosed: ' + self.meca_opt['choose_destination']
 
         s = s + '\n\nNetwork' + '\n-------' 
-        s = s + '\nNodes per RATs: ' + str(self.net.RAT)
+        s = s + '\nNodes per wstd: ' + str(self.net.wstd)
 
         s = s + '\n\nLocalization'  + '------------' 
         s = s + '\nLocalization enable: ' + self.loc_opt['localization'] 
@@ -228,7 +230,7 @@ class Simul(SimulationRT): # Sympy 2
             self.lAg.append(Agent(
                             ID=ag_opt['id'],
                             name=ag_opt['name'],
-                            type=ag_opt['type'],
+                            typ=ag_opt['typ'],
                             color=eval(ag_opt['color']),
                             pdshow=str2bool(self.meca_opt['pdshow']),
                             pos=np.array(eval(ag_opt['pos'])),
@@ -243,10 +245,10 @@ class Simul(SimulationRT): # Sympy 2
                             L=self.L,
                             network=str2bool(self.net_opt['network']),
                             net=self.net,
-                            epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
-                            sens=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
+                            epwr=dict([(eval((ag_opt['wstd']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['wstd']))))]),
+                            sens=dict([(eval((ag_opt['wstd']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['wstd']))))]),
                             world=self.the_world,
-                            RAT=eval(ag_opt['rat']),
+                            wstd=eval(ag_opt['wstd']),
                             save=eval(self.save_opt['save']),
                             gcom=self.gcom,
                             comm_mode=eval(self.net_opt['communication_mode']),
@@ -275,8 +277,8 @@ class Simul(SimulationRT): # Sympy 2
 
             # create All Personnal networks
             for n in self.net.nodes():
-                self.net.node[n]['PN'].get_RAT()
-                self.net.node[n]['PN'].get_SubNet()
+                self.net.node[n]['PN']._get_wstd()
+                self.net.node[n]['PN']._get_SubNet()
             self.gcom.create()
 
 
@@ -357,6 +359,30 @@ class Simul(SimulationRT): # Sympy 2
             self.activate(self.sht,self.sht.run(),1.0)
 
 
+    def savepandas(self):
+        """ Save mechanic in pandas hdf5 format
+        """
+        filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
+        layfile = self.L.filename.split('.')[0]
+        store = pd.HDFStore(filename+'_'+layfile+'.h5','w')
+        for a in self.lAg :
+
+            if a.typ != 'ap':
+                store.put( a.ID,a.meca.df.convert_objects() ) 
+
+            else : # if agent acces point, its position is saved
+                store.put( a.ID,a.posdf )
+
+            store.get_storer(a.ID).attrs.typ = a.typ
+            store.get_storer(a.ID).attrs.name = a.name
+            store.get_storer(a.ID).attrs.ID = a.ID
+            store.get_storer(a.ID).attrs.layout = self.L.filename
+        #saving metadata
+        store.close()
+        self.traj.loadh5(eval(self.sim_opt["filename"])+'_'+layfile+'.h5')
+
+
+
     def runsimul(self):
         """ Run simulation
         """
@@ -374,11 +400,7 @@ class Simul(SimulationRT): # Sympy 2
 
 
         if str2bool(self.save_opt['savepd']):
-            filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
-            layfile = self.L.filename.split('.')[0]
-            store = pd.HDFStore(filename+'_'+layfile+'.h5','w')
-            [store.append(a.ID,a.meca.df.convert_objects()) for a in self.lAg if a.type != 'ap']    
-            store.close()
+            self.savepandas()
 
 if __name__ == '__main__':
 

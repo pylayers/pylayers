@@ -74,10 +74,10 @@ class Save(Process):
         self.opt = dict(self.C.items('config'))
         self.pos = dict(self.C.items('position'))
         self.ldp = dict(self.C.items('ldp'))
-        self.rat = dict(self.C.items('rat'))
+        self.wstd = dict(self.C.items('wstd'))
         self.lpos = eval(self.pos['position'])
         self.lldp = eval(self.ldp['ldp'])
-        self.lrat = eval(self.rat['rat'])
+        self.lwstd = eval(self.wstd['wstd'])
 
 
         self.sim = args['sim']
@@ -137,7 +137,7 @@ class Save(Process):
 
             for o in self.save['saveopt']:
                 if o =='subnet' and inn == 0:
-                    for r in self.save['saveopt']['lrat']:
+                    for r in self.save['saveopt']['lwstd']:
                         li=self.save['saveopt'][o][r]
                         self.savemat['saveopt'][o][r]=['node_'+l for l in li]
                 
@@ -161,7 +161,7 @@ class Save(Process):
         self.save['saveopt']={}
         self.save['saveopt']['lpos']=self.lpos
         self.save['saveopt']['lldp']=self.lldp
-        self.save['saveopt']['lrat']=self.lrat
+        self.save['saveopt']['lwstd']=self.lwstd
         self.save['saveopt']['nbsamples']=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
         self.save['saveopt']['duration']=eval(self.sim.sim_opt['duration'])
         self.save['saveopt']['save_update_time']=eval(self.opt['save_update_time'])
@@ -178,12 +178,12 @@ class Save(Process):
 
 
         self.save['saveopt']['subnet']={}
-        for rat in self.lrat:
-            self.save['saveopt']['subnet'][rat]=self.net.SubNet[rat].nodes()
+        for wstd in self.lwstd:
+            self.save['saveopt']['subnet'][wstd]=self.net.SubNet[wstd].nodes()
 
         [self.save.update({n:{}}) for n in self.net.nodes()]
 
-        # find the size of save array regarding the simulation duration and
+        # find the size of save array regarding the simulation duwstdion and
         # the saved sample time
         nb_sample=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
 
@@ -197,19 +197,19 @@ class Save(Process):
         for e in self.net.edges():
             self.save[e[0]][e[1]]={}
             self.save[e[1]][e[0]]={}
-            for rat in self.lrat:
-                self.save[e[0]][e[1]][rat]={}
-                self.save[e[1]][e[0]][rat]={}
+            for wstd in self.lwstd:
+                self.save[e[0]][e[1]][wstd]={}
+                self.save[e[1]][e[0]][wstd]={}
                 for ldp in self.lldp:
-                    self.save[e[0]][e[1]][rat][ldp]=np.zeros((nb_sample,2))*np.nan
-                    self.save[e[1]][e[0]][rat][ldp]=np.zeros((nb_sample,2))*np.nan
+                    self.save[e[0]][e[1]][wstd][ldp]=np.zeros((nb_sample,2))*np.nan
+                    self.save[e[1]][e[0]][wstd][ldp]=np.zeros((nb_sample,2))*np.nan
 
 
         while True:
             rl={}
-            for rat in self.lrat:
+            for wstd in self.lwstd:
                 for ldp in self.lldp:
-                    rl[rat+ldp]=nx.get_edge_attributes(self.net.SubNet[rat],ldp)
+                    rl[wstd+ldp]=nx.get_edge_attributes(self.net.SubNet[wstd],ldp)
 
             for n in self.net.nodes():
                 for position in self.lpos:
@@ -220,11 +220,11 @@ class Save(Process):
                         pass
 
             for e in self.net.edges():
-                for rat in self.lrat:
+                for wstd in self.lwstd:
                     for ldp in self.lldp:
                         try:
-                            self.save[e[0]][e[1]][rat][ldp][self.idx]=rl[rat+ldp][e]
-                            self.save[e[1]][e[0]][rat][ldp][self.idx]=rl[rat+ldp][e]
+                            self.save[e[0]][e[1]][wstd][ldp][self.idx]=rl[wstd+ldp][e]
+                            self.save[e[1]][e[0]][wstd][ldp][self.idx]=rl[wstd+ldp][e]
                         except:
                             pass
             self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'a')
