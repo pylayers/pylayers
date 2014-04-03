@@ -1397,8 +1397,7 @@
 
         <span class="n">H</span> <span class="o">=</span> <span class="n">Tchannel</span><span class="p">(</span><span class="n">alpha</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">)</span>
         <span class="n">H</span><span class="o">.</span><span class="n">applyFriis</span><span class="p">()</span>
-        <span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-                                                             <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">H</span><span class="o">.</span><span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">tau0</span>
         <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
 </div>
@@ -2575,7 +2574,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 01, 2014.
+      Last updated on avril 03, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
