@@ -546,8 +546,7 @@ class Simul(object):
 
         link = kwargs['link']
 
-        ut=np.where(self.time<=kwargs['t'])[0][-1]
-        df = self.data[self.data['t'] == self._time[ut]]
+        df = self.data[self.data['t'] == kwargs['t']]
         if len(df) == 0:
             raise AttributeError('invalid time')
 
@@ -565,7 +564,7 @@ class Simul(object):
         rayid = line['ray_id'].values[0]
 
 
-        self.update_pos(ut)
+        self.update_pos(kwargs['t'])
         self.DL.a = self.N.node[link[0]]['p']
         self.DL.b = self.N.node[link[1]]['p']
         self.DL.Ta = self.N.node[link[0]]['T']
