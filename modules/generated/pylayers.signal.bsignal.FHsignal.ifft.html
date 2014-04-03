@@ -101,18 +101,24 @@
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FHsignal.ifft">
 <tt class="descclassname">FHsignal.</tt><tt class="descname">ifft</tt><big>(</big><em>ffts=0</em>, <em>tt='centered'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FHsignal.ifft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FHsignal.ifft" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inverse Fourier Transform
-Parameters
-&#8212;&#8212;&#8212;-</p>
-<blockquote>
-<div>ffts = 0 : no fftshift (default)
-ffts = 1 : apply fftshift
-tt = &#8216;centered&#8217;  default</div></blockquote>
+<dd><p>Inverse Fourier Transform</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>return a real TUsignal</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ffts</strong> : int</p>
+<blockquote>
+<div><p>0 no fftshift (default)
+1 apply fftshift</p>
+</div></blockquote>
+<p><strong>tt</strong> : string</p>
+<blockquote>
+<div><p>&#8216;centered&#8217;  default</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>a real TUsignal</strong> :</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -160,7 +166,7 @@ tt = &#8216;centered&#8217;  default</div></blockquote>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 03, 2014.
+      Last updated on Apr 03, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

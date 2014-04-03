@@ -3862,7 +3862,7 @@
             <span class="n">UH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">UH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="n">Nz</span><span class="p">)</span>
-        <span class="c"># Back in time </span>
+        <span class="c"># Back in time</span>
         <span class="c"># UH is an FHsignal</span>
         <span class="c"># uh is a TUsignal</span>
         <span class="n">uh</span> <span class="o">=</span> <span class="n">UH</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">ffts</span><span class="p">)</span>
@@ -4018,6 +4018,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="FUDsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.__init__.html#pylayers.signal.bsignal.FUDsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">taud</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        x : np.array()</span>
+<span class="sd">        y : np.array()</span>
+<span class="sd">        taud : np.array(</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FUDsignal</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">taud</span> <span class="o">=</span> <span class="n">taud</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">taue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">taud</span><span class="p">))</span>
@@ -4097,10 +4106,10 @@
 <span class="sd">        FUsignal.ift</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">taue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">taue</span>
         <span class="n">Nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="n">Nz</span><span class="p">,</span> <span class="n">ffts</span><span class="p">)</span>
-        <span class="n">tud</span> <span class="o">=</span> <span class="n">TUDsignal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+        <span class="n">tud</span> <span class="o">=</span> <span class="n">TUDsignal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">tud</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FUDsignal.iftd"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.iftd.html#pylayers.signal.bsignal.FUDsignal.iftd">[docs]</a>    <span class="k">def</span> <span class="nf">iftd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">tstop</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -4298,8 +4307,6 @@
         <span class="n">U</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">V</span>
 
         <span class="k">return</span> <span class="n">U</span>
-
-
 </div>
 <span class="k">class</span> <span class="nc">FUDAsignal</span><span class="p">(</span><span class="n">FUDsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; FUDAsignal : Frequency domain Uniform signal with Delays and Angles</span>
@@ -4566,18 +4573,21 @@
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FHsignal.ifft"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FHsignal.ifft.html#pylayers.signal.bsignal.FHsignal.ifft">[docs]</a>    <span class="k">def</span> <span class="nf">ifft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tt</span><span class="o">=</span><span class="s">&#39;centered&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Inverse Fourier Transform</span>
+        <span class="sd">&quot;&quot;&quot; Inverse Fourier Transform</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            ffts = 0 : no fftshift (default)</span>
-<span class="sd">            ffts = 1 : apply fftshift</span>
-<span class="sd">            tt = &#39;centered&#39;  default</span>
+
+<span class="sd">        ffts : int</span>
+<span class="sd">            0 no fftshift (default)</span>
+<span class="sd">            1 apply fftshift</span>
+<span class="sd">        tt : string</span>
+<span class="sd">            &#39;centered&#39;  default</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">            return a real TUsignal</span>
+<span class="sd">        a real TUsignal</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -4987,7 +4997,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 03, 2014.
+      Last updated on Apr 03, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
