@@ -2261,7 +2261,10 @@
         <span class="k">return</span><span class="p">(</span><span class="n">efirst</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="TUsignal.taumax"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUsignal.taumax.html#pylayers.signal.bsignal.TUsignal.taumax">[docs]</a>    <span class="k">def</span> <span class="nf">taumax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculate taumax</span>
+        <span class="sd">r&quot;&quot;&quot; calculate taumax</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \max_{\tau} y^{2}(\tau)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -3798,7 +3801,7 @@
 <div class="viewcode-block" id="FUsignal.ift"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.ift.html#pylayers.signal.bsignal.FUsignal.ift">[docs]</a>    <span class="k">def</span> <span class="nf">ift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Inverse Fourier Transform - returns the associated TUsignal</span>
 
-<span class="sd">                Parameters</span>
+<span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        Nz   : Number of zeros (-1) No forcing</span>
