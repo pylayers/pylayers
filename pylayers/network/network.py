@@ -345,7 +345,6 @@ class Network(nx.MultiDiGraph):
         if not self.isPN:
             s = 'Network information\n*******************\n'
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
-            # s = s + str(self.nodes()) + '\n'
             title = '{0:7} | {1:15} |{2:7} | {3:4} | {4:17} | {5:10} '.format('ID', 'name', 'group', 'type', 'position (x,y,z)','wstd')
             s = s + title + '\n' + '-'*len(title) + '\n'
             for n in self.nodes():
