@@ -3980,11 +3980,13 @@
 <span class="sd">            &gt;&gt;&gt; tau1 = np.array([1,2,3])[:,np.newaxis]</span>
 <span class="sd">            &gt;&gt;&gt; y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]</span>
 <span class="sd">            &gt;&gt;&gt; H = FUDsignal(x=fGHz,y=y,taud=np.array([15,17,18]))</span>
-<span class="sd">            &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;],xlabels=[&#39;Frequency GHz&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; t1 = plt.title(&#39;Before minimal phase compensation&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; H.minphas()</span>
 <span class="sd">            &gt;&gt;&gt; H.taue</span>
 <span class="sd">            array([ 1.,  2.,  3.])</span>
 <span class="sd">            &gt;&gt;&gt; f,a = H.plot(typ=[&#39;ru&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; t2 = plt.title(&#39;After minimal phase compensation&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
