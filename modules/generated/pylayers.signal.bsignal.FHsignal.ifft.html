@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
-    <link rel="next" title="pylayers.signal.bsignal.FHsignal.unrex" href="pylayers.signal.bsignal.FHsignal.unrex.html" />
-    <link rel="prev" title="pylayers.signal.bsignal.FHsignal.__mul__" href="pylayers.signal.bsignal.FHsignal.__mul__.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FHsignal.unrex.html" title="pylayers.signal.bsignal.FHsignal.unrex"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FHsignal.__mul__.html" title="pylayers.signal.bsignal.FHsignal.__mul__"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.FHsignal.__mul__.html"
-                        title="previous chapter">pylayers.signal.bsignal.FHsignal.__mul__</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.FHsignal.unrex.html"
-                        title="next chapter">pylayers.signal.bsignal.FHsignal.unrex</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.FHsignal.ifft.txt"
@@ -98,33 +81,6 @@
             
   <div class="section" id="pylayers-signal-bsignal-fhsignal-ifft">
 <h1>pylayers.signal.bsignal.FHsignal.ifft<a class="headerlink" href="#pylayers-signal-bsignal-fhsignal-ifft" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.signal.bsignal.FHsignal.ifft">
-<tt class="descclassname">FHsignal.</tt><tt class="descname">ifft</tt><big>(</big><em>ffts=0</em>, <em>tt='centered'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FHsignal.ifft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FHsignal.ifft" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inverse Fourier Transform
-Parameters
-&#8212;&#8212;&#8212;-</p>
-<blockquote>
-<div>ffts = 0 : no fftshift (default)
-ffts = 1 : apply fftshift
-tt = &#8216;centered&#8217;  default</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>return a real TUsignal</strong> :</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span>  <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">(</span><span class="n">fe</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">E</span>  <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ee</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">ee</span><span class="o">.</span><span class="n">y</span><span class="p">))</span><span class="o">&lt;</span><span class="mf">1e-13</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -142,19 +98,11 @@ tt = &#8216;centered&#8217;  default</div></blockquote>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FHsignal.unrex.html" title="pylayers.signal.bsignal.FHsignal.unrex"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FHsignal.__mul__.html" title="pylayers.signal.bsignal.FHsignal.__mul__"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

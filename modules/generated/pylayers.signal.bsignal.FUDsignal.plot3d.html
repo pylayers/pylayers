@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
-    <link rel="next" title="pylayers.signal.bsignal.FUDsignal.ft2" href="pylayers.signal.bsignal.FUDsignal.ft2.html" />
-    <link rel="prev" title="pylayers.signal.bsignal.FUDsignal.cir" href="pylayers.signal.bsignal.FUDsignal.cir.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUDsignal.ft2.html" title="pylayers.signal.bsignal.FUDsignal.ft2"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUDsignal.cir.html" title="pylayers.signal.bsignal.FUDsignal.cir"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.FUDsignal.cir.html"
-                        title="previous chapter">pylayers.signal.bsignal.FUDsignal.cir</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.FUDsignal.ft2.html"
-                        title="next chapter">pylayers.signal.bsignal.FUDsignal.ft2</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUDsignal.plot3d.txt"
@@ -98,26 +81,6 @@
             
   <div class="section" id="pylayers-signal-bsignal-fudsignal-plot3d">
 <h1>pylayers.signal.bsignal.FUDsignal.plot3d<a class="headerlink" href="#pylayers-signal-bsignal-fudsignal-plot3d" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.signal.bsignal.FUDsignal.plot3d">
-<tt class="descclassname">FUDsignal.</tt><tt class="descname">plot3d</tt><big>(</big><em>fig=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FUDsignal.plot3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUDsignal.plot3d" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">taud</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">FUDsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">taud</span><span class="o">=</span><span class="n">taud</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">plot3d</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-FUDsignal-plot3d-1.py">Source code</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-FUDsignal-plot3d-1.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-FUDsignal-plot3d-1.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-FUDsignal-plot3d-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../../_images/pylayers-signal-bsignal-FUDsignal-plot3d-1.png" src="../../_images/pylayers-signal-bsignal-FUDsignal-plot3d-1.png" />
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -135,19 +98,11 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUDsignal.ft2.html" title="pylayers.signal.bsignal.FUDsignal.ft2"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUDsignal.cir.html" title="pylayers.signal.bsignal.FUDsignal.cir"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

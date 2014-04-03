@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
-    <link rel="next" title="pylayers.signal.bsignal.FUsignal.iftshift" href="pylayers.signal.bsignal.FUsignal.iftshift.html" />
-    <link rel="prev" title="pylayers.signal.bsignal.FUsignal.ifft" href="pylayers.signal.bsignal.FUsignal.ifft.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUsignal.iftshift.html" title="pylayers.signal.bsignal.FUsignal.iftshift"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUsignal.ifft.html" title="pylayers.signal.bsignal.FUsignal.ifft"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.FUsignal.ifft.html"
-                        title="previous chapter">pylayers.signal.bsignal.FUsignal.ifft</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.FUsignal.iftshift.html"
-                        title="next chapter">pylayers.signal.bsignal.FUsignal.iftshift</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.FUsignal.ift.txt"
@@ -98,39 +81,6 @@
             
   <div class="section" id="pylayers-signal-bsignal-fusignal-ift">
 <h1>pylayers.signal.bsignal.FUsignal.ift<a class="headerlink" href="#pylayers-signal-bsignal-fusignal-ift" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.signal.bsignal.FUsignal.ift">
-<tt class="descclassname">FUsignal.</tt><tt class="descname">ift</tt><big>(</big><em>Nz=1</em>, <em>ffts=0</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#FUsignal.ift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.ift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inverse Fourier Transform - returns the associated TUsignal</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : Number of zeros (-1) No forcing</p>
-<p><strong>ffts</strong> : 0 (no fftshift 1:fftshift)</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>uh :</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.FHsignal.ifft.html#pylayers.signal.bsignal.FHsignal.ifft" title="pylayers.signal.bsignal.FHsignal.ifft"><tt class="xref py py-obj docutils literal"><span class="pre">FHsignal.ifft</span></tt></a>, <a class="reference internal" href="pylayers.signal.bsignal.FUsignal.symH.html#pylayers.signal.bsignal.FUsignal.symH" title="pylayers.signal.bsignal.FUsignal.symH"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.symH</span></tt></a>, <tt class="xref py py-obj docutils literal"><span class="pre">Fusignal.symHz</span></tt></p>
-</div>
-<p class="rubric">Notes</p>
-<p>1 - Force Hermitian symmetry &#8211;&gt; FHsignal with or without zero padding
-2 - Inverse Fourier transform with or without fftshift</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span>  <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">E</span>  <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">EU</span> <span class="o">=</span> <span class="n">E</span><span class="o">.</span><span class="n">unrex</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -148,19 +98,11 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUsignal.iftshift.html" title="pylayers.signal.bsignal.FUsignal.iftshift"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.FUsignal.ifft.html" title="pylayers.signal.bsignal.FUsignal.ifft"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

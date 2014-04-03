@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
-    <link rel="next" title="pylayers.signal.bsignal.Bsignal.save" href="pylayers.signal.bsignal.Bsignal.save.html" />
-    <link rel="prev" title="pylayers.signal.bsignal.Bsignal.__repr__" href="pylayers.signal.bsignal.Bsignal.__repr__.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.Bsignal.save.html" title="pylayers.signal.bsignal.Bsignal.save"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.Bsignal.__repr__.html" title="pylayers.signal.bsignal.Bsignal.__repr__"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.Bsignal.__repr__.html"
-                        title="previous chapter">pylayers.signal.bsignal.Bsignal.__repr__</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.Bsignal.save.html"
-                        title="next chapter">pylayers.signal.bsignal.Bsignal.save</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.Bsignal.extract.txt"
@@ -98,29 +81,6 @@
             
   <div class="section" id="pylayers-signal-bsignal-bsignal-extract">
 <h1>pylayers.signal.bsignal.Bsignal.extract<a class="headerlink" href="#pylayers-signal-bsignal-bsignal-extract" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.signal.bsignal.Bsignal.extract">
-<tt class="descclassname">Bsignal.</tt><tt class="descname">extract</tt><big>(</big><em>u</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#Bsignal.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.extract" title="Permalink to this definition">¶</a></dt>
-<dd><p>extract y[u,:]</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>O</strong> : Usignal</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Bsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">su</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -138,19 +98,11 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.Bsignal.save.html" title="pylayers.signal.bsignal.Bsignal.save"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.Bsignal.__repr__.html" title="pylayers.signal.bsignal.Bsignal.__repr__"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

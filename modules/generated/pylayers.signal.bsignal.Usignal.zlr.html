@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="pylayers.signal.bsignal" href="../pylayers.signal.bsignal.html" />
-    <link rel="next" title="pylayers.signal.bsignal.TBsignal.__init__" href="pylayers.signal.bsignal.TBsignal.__init__.html" />
-    <link rel="prev" title="pylayers.signal.bsignal.Usignal.zleft" href="pylayers.signal.bsignal.Usignal.zleft.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -46,30 +43,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.TBsignal.__init__.html" title="pylayers.signal.bsignal.TBsignal.__init__"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.Usignal.zleft.html" title="pylayers.signal.bsignal.Usignal.zleft"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" accesskey="U">pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.Usignal.zleft.html"
-                        title="previous chapter">pylayers.signal.bsignal.Usignal.zleft</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.signal.bsignal.TBsignal.__init__.html"
-                        title="next chapter">pylayers.signal.bsignal.TBsignal.__init__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.signal.bsignal.Usignal.zlr.txt"
@@ -98,46 +81,6 @@
             
   <div class="section" id="pylayers-signal-bsignal-usignal-zlr">
 <h1>pylayers.signal.bsignal.Usignal.zlr<a class="headerlink" href="#pylayers-signal-bsignal-usignal-zlr" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="pylayers.signal.bsignal.Usignal.zlr">
-<tt class="descclassname">Usignal.</tt><tt class="descname">zlr</tt><big>(</big><em>xmin</em>, <em>xmax</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/bsignal.html#Usignal.zlr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Usignal.zlr" title="Permalink to this definition">¶</a></dt>
-<dd><p>This corresponds to a gating between xmin and xmax</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xmin</strong> : float</p>
-<blockquote>
-<div><p>add zeros before xmin</p>
-</div></blockquote>
-<p><strong>xmax</strong> : float</p>
-<blockquote class="last">
-<div><p>add zeros after xmax</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-Usignal-zlr-1.py">Source code</a>)</p>
-<div class="figure">
-<img alt="../../_images/pylayers-signal-bsignal-Usignal-zlr-1_00.png" src="../../_images/pylayers-signal-bsignal-Usignal-zlr-1_00.png" />
-<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-Usignal-zlr-1_00.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-Usignal-zlr-1_00.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-Usignal-zlr-1_00.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../../_images/pylayers-signal-bsignal-Usignal-zlr-1_01.png" src="../../_images/pylayers-signal-bsignal-Usignal-zlr-1_01.png" />
-<p class="caption">(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-Usignal-zlr-1_01.png">png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-Usignal-zlr-1_01.hires.png">hires.png</a>, <a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-Usignal-zlr-1_01.pdf">pdf</a>)</p>
-</div>
-</dd></dl>
-
 </div>
 
 
@@ -155,19 +98,11 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.TBsignal.__init__.html" title="pylayers.signal.bsignal.TBsignal.__init__"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pylayers.signal.bsignal.Usignal.zleft.html" title="pylayers.signal.bsignal.Usignal.zleft"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../pylayers.html" >PyLayers</a> &raquo;</li>
-          <li><a href="../pylayers.signal.bsignal.html" >pylayers.signal.bsignal</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
