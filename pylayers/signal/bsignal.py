@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
-"""
+r"""
 .. currentmodule:: pylayers.signal.bsignal
 
 .. autosummary::
@@ -127,7 +127,7 @@ Energy Functions
     :toctree: generated/
 
     TUsignal.Epercent
-    TUsignal.Etaud
+    TUsignal.Etau0
     TUsignal.Ewin
     TUsignal.Etot
     TUsignal.Efirst
@@ -291,6 +291,7 @@ MaskImpulse Class
 
     MaskImpulse.__init__
     MaskImpulse.show
+
 """
 import doctest
 import os
@@ -314,7 +315,7 @@ import scipy.stats as st
 
 
 class Bsignal(object):
-    """ Signal with an embedded time base
+    r""" Signal with an embedded time base
 
     This class gathers a 1D signal and its axis indexation.
 
@@ -329,7 +330,7 @@ class Bsignal(object):
     """
 
     def __init__(self, x=np.array([]), y=np.array([])):
-        """
+        r"""
 
         Parameters
         ----------
@@ -367,7 +368,7 @@ class Bsignal(object):
 
 
     def extract(self,u):
-        """ extract y[u,:]
+        r""" extract y[u,:]
 
         Returns
         -------
@@ -395,7 +396,7 @@ class Bsignal(object):
         return(O)
 
     def save(self, filename):
-        """
+        r"""
         Save Bsignal in Matlab File Format
 
         Parameters
@@ -426,7 +427,7 @@ class Bsignal(object):
         ios.savemat(filename, d)
 
     def load(self, filename):
-        """ load a Bsignal saved in a Matlab File
+        r""" load a Bsignal saved in a Matlab File
 
         Parameters
         ----------
@@ -439,7 +440,7 @@ class Bsignal(object):
         self.y = d['y'][:, 0]
 
     def setx(self, x):
-        """ setx : set x vector
+        r""" setx : set x vector
 
         Parameters
         ----------
@@ -461,18 +462,18 @@ class Bsignal(object):
         self.y = np.zeros(Np, dtype=float)
 
     def sety(self, fun):
-        """ sety : set y vector
+        r""" sety : set y vector
 
         Parameters
         ----------
 
-        fun : function 
+        fun : function
 
         """
         self.y = function(self.x)
 
     def stem(self, **kwargs):
-        """ stem display
+        r""" stem display
 
         Parameters
         ----------
@@ -516,7 +517,7 @@ class Bsignal(object):
         return(fig,ax)
 
     def step(self, color='b'):
-        """ plot steps display
+        r""" plot steps display
 
         Parameters
         ----------
@@ -534,7 +535,7 @@ class Bsignal(object):
             plt.plot(self.x, self.y, color, linestyle='steps')
 
     def cformat(self,**kwargs):
-        """ complex format
+        r""" complex format
 
         Parameters
         ----------
@@ -613,7 +614,7 @@ class Bsignal(object):
         return(xn,yn,ylabels)
 
     def imshow(self,**kwargs):
-        """ imshow of y matrix
+        r""" imshow of y matrix
 
         Parameters
         ----------
@@ -691,7 +692,7 @@ class Bsignal(object):
             return fig,ax
 
     def plot(self, **kwargs):
-        """ plot signal
+        r""" plot signal
 
         Parameters
         ----------
@@ -791,7 +792,7 @@ class Bsignal(object):
         return(fig,ax)
 
     def flatteny(self,yrange=[],reversible=False):
-        """ flatten y array
+        r""" flatten y array
         Parameters
         ----------
         yrange : array of y index values to be flattenned
@@ -808,7 +809,7 @@ class Bsignal(object):
                 self.y = np.sum(self.y[yrange,:],axis=0)
 
     def gating(self, xmin, xmax):
-        """ gating between xmin and xmax
+        r""" gating between xmin and xmax
 
         Parameters
         ----------
@@ -868,13 +869,13 @@ class Bsignal(object):
         self.y = self.y * w
 
     def len(self):
-        """ returm length of x axis
+        r""" returm length of x axis
         """
         return(len(self.x))
 
 
 class Usignal(Bsignal):
-    """ Signal with an embedded uniform Base
+    r""" Signal with an embedded uniform Base
 
         This class inheritate from Bsignal. The only difference
         is that the x base is supposed to be uniform
@@ -938,7 +939,7 @@ class Usignal(Bsignal):
         return(U)
 
     def setx(self, start, stop, dx):
-        """ set the x array of the Usignal (y=0)
+        r""" set the x array of the Usignal (y=0)
 
         Parameters
         ----------
@@ -948,7 +949,7 @@ class Usignal(Bsignal):
 
         Examples
         --------
-       
+
         >>> u = Usignal()
         >>> u.setx(0,10,0.1)
 
@@ -958,7 +959,7 @@ class Usignal(Bsignal):
         self.y = 1.0 * np.zeros(Np)
 
     def dx(self):
-        """  get the time step of Usignal.x
+        r"""  get the time step of Usignal.x
 
         Examples
         ---------
@@ -969,16 +970,17 @@ class Usignal(Bsignal):
         >>> assert(u.dx()==0.1)
 
         """
-       
+
         return(self.x[1] - self.x[0])
 
     def width(self):
-        """ get the extension support of the Usignal
+        r""" get the extension support of the Usignal
 
         width is conventionnaly equal to the difference between extremities + dx
 
         Returns
         -------
+
         w : float
 
         """
@@ -994,7 +996,8 @@ class Usignal(Bsignal):
             expansion factor
 
         Returns
-        ------
+        -------
+
         Usignal  : support extended signal
 
         return a new Usignal with expanded factor a
@@ -1019,6 +1022,7 @@ class Usignal(Bsignal):
 
         Returns
         -------
+
         m : maximum value of self.y
 
         """
@@ -1036,6 +1040,7 @@ class Usignal(Bsignal):
 
         Returns
         -------
+
         m : maximum value of self.y
 
         """
@@ -1102,6 +1107,7 @@ class Usignal(Bsignal):
 
         Returns
         -------
+
         TUsignal y extended TU signal, x bases are adjusted
 
         Examples
@@ -1223,6 +1229,7 @@ class Usignal(Bsignal):
 
         Returns
         -------
+
         Usignal
 
         """
@@ -1478,19 +1485,18 @@ class TBsignal(Bsignal):
         .. plot::
             :include-source:
 
-            #>>> from pylayers.signal.bsignal import *
-            #>>> import matplotlib.pyplot as plt
-            #>>> x = np.array( [ 1, 3 , 6 , 11 , 18])
-            #>>> y = np.array( [ 0,1 ,-5, 8 , 10])
-            #>>> sb = TBsignal(x,y)
-            #>>> su20 = sb.b2u(20)
-            #>>> su100 = sb.b2u(100)
-            #>>> fi = plt.figure()
-            #>>> sb.stem()
-            #>>> fig,ax = su20.plot(color='k')
-            #>>> fig,ax = su100.plot(color='r',fig=fig,ax=ax)
-            #>>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
-            #>>> plt.show()
+            >>> from pylayers.signal.bsignal import *
+            >>> import matplotlib.pyplot as plt
+            >>> x = np.array( [ 1, 3 , 6 , 11 , 18])
+            >>> y = np.array( [ 0,1 ,-5, 8 , 10])
+            >>> sb = TBsignal(x,y)
+            >>> su20 = sb.b2u(20)
+            >>> su100 = sb.b2u(100)
+            >>> fi = plt.figure()
+            >>> sb.stem()
+            >>> fig,ax = su20.plot(color='k')
+            >>> fig,ax = su100.plot(color='r',fig=fig,ax=ax)
+            >>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
 
         """
 
@@ -2176,7 +2182,10 @@ class TUsignal(TBsignal, Usignal):
         return(efirst)
 
     def taumax(self):
-        """ calculate taumax
+        r""" calculate taumax
+
+        .. math::
+            \max_{\tau} y^{2}(\tau)
 
         """
 
@@ -2787,9 +2796,11 @@ class TUsignal(TBsignal, Usignal):
         return(taum)
 
     def delays(self):
-        """ calculate delay parameters and othogonality factor from cir
+        r""" calculate delay parameters and orthogonality factor from cir
+
         Returns
         -------
+
         taum :
             mean excess delay
         delayspread
@@ -2797,14 +2808,15 @@ class TUsignal(TBsignal, Usignal):
         of  :
             orthogonality factor
 
-        Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
-        environments : Neelesh Metha, Andreas Molish, Lary Greenstein
+        Neelesh Metha, Andreas Molish, Lary Greenstein "Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
+        environments" 
 
         .. :math:
 
             \beta0 = 1 \frac{\sum_i=1^L}|\alpha_i|^4}{\left(\sum_i=1^L|\alpha_i|^2)^2}
 
         """
+
         self.flatteny(reversible=True)
         y2 = self.yf*self.yf
         y4 = y2*y2
@@ -2852,6 +2864,7 @@ class TUsignal(TBsignal, Usignal):
             >>> f3,a3=ch4.plot(color='k')
             >>> tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
             >>> ax2=plt.axis([20,120,-80,-50])
+            >>> plt.show()
             >>> tau_moy = ch4.tau_moy()
             >>> print "tau_moy: %2.2f ns" % tau_moy
             tau_moy: 38.09 ns
@@ -3459,21 +3472,36 @@ class FUsignal(FBsignal, Usignal):
         return(U)
 
     def dftresamp(self, df_new):
-        """
+        """ unfinished 
+        Parameters
+        ----------
+
+        df_new :
 
         """
         FH = self.symH(0)
         fh = FH.ifft()
 
     def resample(self, x_new, kind='linear'):
-        """
-        resample(self,x_new,kind='linear'):
+        """ resample
 
-        This function resample the Usignal with a new x base
+
+        This function resamples the Usignal with a new x base
         which needs to be strictly included in the original x
         base of the Usignal.
         x is a 1D array
         y is a 2D array
+
+        Parameters
+        ----------
+
+        x_new :
+        kind : string
+
+        See Also
+        --------
+
+        interp.interp1d, splrep, splev
         """
 
         if kind == 'linear':
@@ -3504,11 +3532,15 @@ class FUsignal(FBsignal, Usignal):
 
         Parameters
         ----------
+
         parity : integer
             0 even 1 odd
+
         Returns
         -------
-        FHsignal
+
+        V  : FHsignal
+
         """
         f = self.x
         U = self.y
@@ -3688,14 +3720,7 @@ class FUsignal(FBsignal, Usignal):
         return tc
 
     def ift(self, Nz=1, ffts=0):
-        """ inverse Fourier transform returns the associated TUsignal
-
-        Algorithm
-        ---------
-            1) Force Hermitian symmetry --> FHsignal
-                with or without zero padding
-            2) Inverse Fourier transform
-                with or without fftshift
+        """ Inverse Fourier Transform - returns the associated TUsignal
 
         Parameters
         ----------
@@ -3703,16 +3728,42 @@ class FUsignal(FBsignal, Usignal):
         Nz   : Number of zeros (-1) No forcing
         ffts : 0 (no fftshift 1:fftshift)
 
+        Returns
+        -------
+
+        uh :
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
         >>> e  = EnImpulse()
         >>> E  = e.fft()
         >>> EU = E.unrex()
+
+        Notes
+        ------
+
+        1 - Force Hermitian symmetry --> FHsignal with or without zero padding
+        2 - Inverse Fourier transform with or without fftshift
+
+        See Also
+        --------
+
+        FHsignal.ifft, FUsignal.symH, Fusignal.symHz
+
+
+
+
         """
-        # forcage de symetrie Hermitienne
+        # enforce Hermitian Symetry
         if (Nz == -1):
             UH = self.symH(1)
         else:
             UH = self.symHz(Nz)
-        # retour en temps
+        # Back in time 
+        # UH is an FHsignal
+        # uh is a TUsignal
         uh = UH.ifft(ffts)
         return(uh)
 
@@ -3901,11 +3952,13 @@ class FUDsignal(FUsignal):
             >>> tau1 = np.array([1,2,3])[:,np.newaxis]
             >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
             >>> H = FUDsignal(x=fGHz,y=y,taud=np.array([15,17,18]))
-            >>> f,a = H.plot(typ=['ru'])
+            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
+            >>> t1 = plt.suptitle('Before minimal phase compensation')
             >>> H.minphas()
             >>> H.taue
             array([ 1.,  2.,  3.])
-            >>> f,a = H.plot(typ=['ru'])
+            >>> f,a = H.plot(typ=['ru'],xlabels=['Frequency GHz'])
+            >>> t2 = plt.suptitle('After minimal phase compensation')
 
         """
 
@@ -3933,6 +3986,11 @@ class FUDsignal(FUsignal):
             Number of zeros for zero padding
         ffts   : nt
             fftshift indicator (default 0 )
+
+        See Also
+        --------
+
+        FUsignal.ift
 
         """
         tau = self.taud + self.taue
@@ -4040,14 +4098,17 @@ class FUDsignal(FUsignal):
         Examples
         --------
 
-        >>> from pylayers.signal.bsignal import *
-        >>> import numpy as np
-        >>> N = 2
-        >>> fGHz = np.arange(1,3,1)
-        >>> taud = np.sort(np.random.rand(N))
-        >>> alpha = np.random.rand(N,len(fGHz))
-        >>> s = FUDsignal(x=fGHz,y=alpha,taud=taud)
-        >>> s.plot3d()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import numpy as np
+            >>> N = 20
+            >>> fGHz = np.arange(1,3,1)
+            >>> taud = np.sort(np.random.rand(N))
+            >>> alpha = np.random.rand(N,len(fGHz))
+            >>> s = FUDsignal(x=fGHz,y=alpha,taud=taud)
+            >>> s.plot3d()
 
         """
         Ntau = np.shape(self.y)[0]
@@ -4365,6 +4426,7 @@ class FHsignal(FUsignal):
 
     ifft  : inverse Fourier transform --> TUsignal
     unrex : unredundant extraction    --> FUsignal
+
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         FUsignal.__init__(self, x, y)
@@ -4432,9 +4494,11 @@ class FHsignal(FUsignal):
         return(s)
 
     def unrex(self):
-        """
-        extraction of the non redundant part of a real signal
+        r""" extraction of the non redundant part of a real signal
         expressed in the frequency domain
+
+        Examples
+        --------
 
         >>> x = np.arange(0,6,1)
         >>> y = np.arange(0,6,1)
