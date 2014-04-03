@@ -3276,7 +3276,15 @@ class FUsignal(FBsignal, Usignal):
         self.y = self.y * w
 
     def applyFriis(self):
-        """ Apply Friis Factor
+       r""" apply Friis factor
+
+        The Friis factor is multiplied to y
+
+        .. math::
+            y := \frac{c}{4\pif} y 
+
+        boolean `isFriis` is set to `True`
+
         """
         if not self.isFriis:
             factor = 0.3/(4*np.pi*self.x)
@@ -3702,16 +3710,30 @@ class FUsignal(FBsignal, Usignal):
         return(u1, u2)
 
     def ifft(self, Npt=-1):
-        """
+        """ Inverse Fourier transform
+
         Parameters
         ----------
 
         Npt : int
             default -1 (same number as x) 
 
+        Returns
+        -------
+
+        tc : TUsignal
+
+        Notes
+        -----
+
+
+        .. math::
+            x = \trextrm{linspace}(0,\frac{1}{\delta f},N)
+
         """
         if Npt == -1:
             Npt = len(self.x)
+
         Y = self.y
         y = ifft(Y, Npt)
         df = self.dx()
@@ -3920,6 +3942,7 @@ class FUDsignal(FUsignal):
         super(FUDsignal,self).__init__(x,y)
         self.taud = taud
         self.taue = np.zeros(len(taud))
+        self.tau  = taud
 
     def __repr__(self):
         s = FUsignal.__repr__(self)
@@ -3975,6 +3998,8 @@ class FUDsignal(FUsignal):
         E = np.exp(-1j * S * F)
         self.y = self.y * E
         self.taue = -slope / (2 * np.pi)
+        # update total delay
+        self.tau = self.tau+self.taue
 
     def totud(self, Nz=1, ffts=0):
         """ transform to TUDsignal
@@ -4006,13 +4031,32 @@ class FUDsignal(FUsignal):
         ----------
 
         Nz : int
+            Number of zeros
         tstart : float
         tstop  : float
         ffts   : int
             fftshift indicator
 
+
+        Returns
+        -------
+
+        rf : TUsignal (1,N)
+
+
+        See Also
+        --------
+
+        TUsignal.translate
+
+
+        Examples
+        --------
+
+        >>>
+
         """
-        tau = self.taud
+        tau = self.tau
         Nray = len(tau)
         s = self.ift(Nz, ffts)
         x = s.x
