@@ -1557,19 +1557,18 @@
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
-<span class="sd">            #&gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
-<span class="sd">            #&gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">            #&gt;&gt;&gt; x = np.array( [ 1, 3 , 6 , 11 , 18])</span>
-<span class="sd">            #&gt;&gt;&gt; y = np.array( [ 0,1 ,-5, 8 , 10])</span>
-<span class="sd">            #&gt;&gt;&gt; sb = TBsignal(x,y)</span>
-<span class="sd">            #&gt;&gt;&gt; su20 = sb.b2u(20)</span>
-<span class="sd">            #&gt;&gt;&gt; su100 = sb.b2u(100)</span>
-<span class="sd">            #&gt;&gt;&gt; fi = plt.figure()</span>
-<span class="sd">            #&gt;&gt;&gt; sb.stem()</span>
-<span class="sd">            #&gt;&gt;&gt; fig,ax = su20.plot(color=&#39;k&#39;)</span>
-<span class="sd">            #&gt;&gt;&gt; fig,ax = su100.plot(color=&#39;r&#39;,fig=fig,ax=ax)</span>
-<span class="sd">            #&gt;&gt;&gt; ti = plt.title(&#39;b2u : sb(blue) su20(black) su200(red)&#39;)</span>
-<span class="sd">            #&gt;&gt;&gt; plt.show()</span>
+<span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">            &gt;&gt;&gt; x = np.array( [ 1, 3 , 6 , 11 , 18])</span>
+<span class="sd">            &gt;&gt;&gt; y = np.array( [ 0,1 ,-5, 8 , 10])</span>
+<span class="sd">            &gt;&gt;&gt; sb = TBsignal(x,y)</span>
+<span class="sd">            &gt;&gt;&gt; su20 = sb.b2u(20)</span>
+<span class="sd">            &gt;&gt;&gt; su100 = sb.b2u(100)</span>
+<span class="sd">            &gt;&gt;&gt; fi = plt.figure()</span>
+<span class="sd">            &gt;&gt;&gt; sb.stem()</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = su20.plot(color=&#39;k&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = su100.plot(color=&#39;r&#39;,fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; ti = plt.title(&#39;b2u : sb(blue) su20(black) su200(red)&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -4121,14 +4120,17 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
-<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">        &gt;&gt;&gt; N = 2</span>
-<span class="sd">        &gt;&gt;&gt; fGHz = np.arange(1,3,1)</span>
-<span class="sd">        &gt;&gt;&gt; taud = np.sort(np.random.rand(N))</span>
-<span class="sd">        &gt;&gt;&gt; alpha = np.random.rand(N,len(fGHz))</span>
-<span class="sd">        &gt;&gt;&gt; s = FUDsignal(x=fGHz,y=alpha,taud=taud)</span>
-<span class="sd">        &gt;&gt;&gt; s.plot3d()</span>
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
+<span class="sd">            &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">            &gt;&gt;&gt; N = 20</span>
+<span class="sd">            &gt;&gt;&gt; fGHz = np.arange(1,3,1)</span>
+<span class="sd">            &gt;&gt;&gt; taud = np.sort(np.random.rand(N))</span>
+<span class="sd">            &gt;&gt;&gt; alpha = np.random.rand(N,len(fGHz))</span>
+<span class="sd">            &gt;&gt;&gt; s = FUDsignal(x=fGHz,y=alpha,taud=taud)</span>
+<span class="sd">            &gt;&gt;&gt; s.plot3d()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Ntau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
