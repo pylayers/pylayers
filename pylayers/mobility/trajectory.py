@@ -69,14 +69,6 @@ class Trajectories(list):
         try:
             s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
             for a in self:
-                typ = a.typ
-                if typ == 'ag':
-
-                    string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID
-                else :
-                    string ='Access point ' + a.name + ' with ID ' + a.ID
-                s = s + string + '\n'
-                s = s + '-'*len(string) + '\n'
                 s = s + a.__repr__()
                 s = s + '\n'
         except:
@@ -283,12 +275,22 @@ class Trajectory(pd.DataFrame):
             # total time
             T = self.tmax-self.tmin
             st = ''
-            st = st + self.name + '\n'
-            st = st + "ID : " + str(self.ID)+'\n'
-            st = st + '---'+'\n'
-            st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'
-            st = st+'dtot (m) : '+ str("%3.2f" %dtot)+'\n'
-            st = st+'Vmoy (m/s) : '+ str("%3.2f" % (dtot/T))+'\n'
+            typ = self.typ
+            if typ == 'ag':
+                string ='Trajectory of agent ' + self.name + ' with ID ' + self.ID
+            else :
+                string ='Access point ' + self.name + ' with ID ' + self.ID
+            st = st + string + '\n'
+            st = st + '-'*len(string) + '\n'
+
+            if self.typ == 'ag':
+                st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'
+                st = st+'dtot (m) : '+ str("%3.2f" %dtot)+'\n'
+                st = st+'Vmoy (m/s) : '+ str("%3.2f" % (dtot/T))+'\n'
+            else :
+                st = st+'t (s) : '+ str("%3.2f" %self.tmin) + '\n'
+                st = st+'Vmoy (m/s) : '+ str(self['vx'].values[0]) +'\n'
+            st = st + str(self.head(2)) + '\n'
         except:
             st = 'void Trajectory'
         return(st)
@@ -382,7 +384,6 @@ class Trajectory(pd.DataFrame):
 
         t = kwargs['t']
         pt = kwargs['pt']
-
         npt = len(t)
         td = pd.to_datetime(t,unit=kwargs['unit'])
         # velocity vector
