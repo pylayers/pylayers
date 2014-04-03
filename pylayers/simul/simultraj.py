@@ -39,8 +39,8 @@ Internal configuration
 
 """
 import doctest
-import ConfigParser
 import numpy as np
+import copy
 import matplotlib.pylab as plt
 import pylayers.util.pyutil as pyu
 import pylayers.signal.waveform as wvf
@@ -74,33 +74,23 @@ class Simul(object):
 
     """
 
-    def __init__(self, _filesimul='simultraj.ini',verbose=False):
+    def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False):
 
-        self.filesimul = _filesimul
-        self.config = ConfigParser.ConfigParser()
-        self.config.add_section("layout")
-        self.config.add_section("person")
-        self.config.add_section("trajectory")
+        self.filetraj = _filetraj
 
         # self.progress = -1  # simulation not loaded
         self.verbose = verbose
         self.cfield = []
-        fmin = 3
-        fmax = 6
-        fstep = 0.05
-        nf = (fmax - fmin) / fstep
-        self.fGHz = np.linspace(fmin, fmax, nf, endpoint=True)
-        self.wav = wvf.Waveform()
-
         self.dpersons = {}
+
         self.dap = {}
         self.Nag = 0
         self.Nap = 0
-        self.load_config(_filesimul)
+        self.load_config(_filetraj)
         self.gen_net()
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
-        self.filename = 'simultraj_' + self._trajname
+        self.filename = 'simultraj_' + self.filetraj
         self.data = pd.DataFrame(columns=['t','id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
                                           'x_b', 'y_b', 'z_b',
@@ -111,8 +101,11 @@ class Simul(object):
                                           ],index=[0])
         # self.data.set_index('t')
         self._filecsv = self.filename.split('.')[0] + '.csv'
-        self._index=0
-        self.todo = []
+        self._index = 0
+        self.todo = {'OB': True,
+                    'B2B': True,
+                    'B2I': True,
+                    'I2I': False}
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         if os.path.exists(filenameh5) :
             self.loadpd()
@@ -121,69 +114,52 @@ class Simul(object):
 
     def __repr__(self):
 
-        try:
-            s = 'Simul trajectories class\n'
-            s = s + '------------------------\n\n'
-            s = s + 'Used layout: ' + self.L.filename + '\n'
-            s = s + 'Number of Agents: ' + str(self.Nag) + '\n'
-            s = s + 'Number of Access Points: ' + str(self.Nap) + '\n'
-            s = s + 'Number of Acces points:' + str(self.Nap) + '\n\n'
+        s = 'Simul trajectories class\n'
+        s = s + '------------------------\n'
+        s = s +'\n'
+        s = s + 'Used layout: ' + self.L.filename + '\n'
+        s = s + 'Number of Agents: ' + str(self.Nag) + '\n'
+        s = s + 'Number of Access Points: ' + str(self.Nap) + '\n'
+        s = s + 'Link to be evaluated: ' + str(self.todo) + '\n'
+        s = s + 'tmin: ' + str(self._tmin) + '\n'
+        s = s + 'tmax: ' + str(self._tmax) + '\n'
+        s = s +'\n'
+        # network info
+        s = s + 'self.N :\n'
+        s = s + self.N.__repr__() + '\n'
+        s = s + 'CURRENT TIME: ' + str(self.ctime) + '\n'
 
-            s = s + 'Considered links:\n'
-            s = s + '-----------------\n'
 
-            if len(self.links) == 0:
-                s = s + 'No link generated\n'
-            else:
-                s = s + "Body 2 body: " + str(self.B2B) + '\n'
-                s = s + "On Body: " + str(self.OB) + '\n'
-                s = s + "Body 2 Infrastructure " + str(self.B2I) + '\n'
 
-        except:
-            s = 'No trajectory loaded'
 
         return s
 
-    def load_config(self, _filesimul):
+    def load_config(self, _filetraj):
         """  load a simultraj configuration file
 
         Parameters
         ----------
 
-        _filesimul : string
+        _filetraj : string
             name of simulation file to be loaded
 
         """
-        self.filesimul = _filesimul
-        filesimul = pyu.getlong(self.filesimul, "ini")
+        self.filetraj = _filetraj
 
-        config = ConfigParser.ConfigParser()
-        config.read(filesimul)
-        sections = config.sections()
-        di = {}
 
-        for section in sections:
-            di[section] = {}
-            options = config.options(section)
-            for option in options:
-                di[section][option] = config.get(section, option)
-
-        # get the layout
-        self.L = Layout(di['layout']['layout'])
         # get the trajectory
         traj = tr.Trajectories()
-        traj.loadh5(di['trajectory']['traj'])
-        self._trajname = di['trajectory']['traj']
+        traj.loadh5(self.filetraj)
+        # get the layout
+        self.L = Layout(traj.Lfilename)
         # resample trajectory
         for ut, t in enumerate(traj):
             if t.typ == 'ag':
-                t = t.resample(2)
                 person = Body(t.name + '.ini')
+                tt = t.time()
                 self.dpersons.update({t.name: person})
-                self.time = t.time()
-                self._time = pd.to_datetime(t.time(),unit='s')
-                self.timestep = self.time[1] - self.time[0]
-
+                self._tmin = tt[0]
+                self._tmax = tt[-1]
             else:
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
                 self.dap.update({t.ID: {'pos': pos,
@@ -191,10 +167,11 @@ class Simul(object):
                                         'name': t.name
                                         }
                                  })
-            traj[ut] = t
+        self.ctime = np.nan
         self.Nag = len(self.dpersons.keys())
         self.Nap = len(self.dap.keys())
         self.traj = traj
+
 
     def gen_net(self):
         """ generate Network and associated links
@@ -331,13 +308,13 @@ class Simul(object):
         'I2I':  boolean
             perform infrastructure to infrastructure deterministic link eval.
         'llink': list
-            list of link to be evaluated 
+            list of link to be evaluated
             (if [], all link are considered)
         'wstd': list
-            list of wstd to be evaluated 
+            list of wstd to be evaluated
             (if [], all wstd are considered)
-        't': list
-            list of timestamp index to be evaluated 
+        't': np.array
+            list of timestamp to be evaluated
             (if [], all timestamps are considered)
 
 
@@ -348,7 +325,7 @@ class Simul(object):
                     'I2I': False,
                     'llink': [],
                     'wstd': [],
-                    'ut': [],
+                    't': np.array([]),
                     }
 
         for k in defaults:
@@ -361,15 +338,7 @@ class Simul(object):
         B2B = kwargs.pop('B2B')
         B2I = kwargs.pop('B2I')
         I2I = kwargs.pop('I2I')
-        self.todo = []
-        if OB:
-            self.todo.append('OB')
-        if B2B:
-            self.todo.append('B2B')
-        if B2I:
-            self.todo.append('B2I')
-        if I2I:
-            self.todo.append('I2I')
+        self.todo.update({'OB':OB,'B2B':B2B,'B2I':B2I,'I2I':I2I})
 
         # Check link attribute
         if llink == []:
@@ -395,33 +364,54 @@ class Simul(object):
             raise AttributeError(str(np.array(wstd)[uwrong])
                                  + ' wstd are not in Network')
 
-        # Check time attribute
-        if not isinstance(kwargs['t'],list):
-            kwargs['t'] = [kwargs['t']]
-        if kwargs['t'] == []:
-            kut = range(len(self.time))
-        else:
-            if kwargs['t'][0] >= self.time[0] and\
-               kwargs['t'][-1] <= self.time[-1]:
-               kut=map(lambda x: np.where(self.time<=x)[0][-1],kwargs['t'])
+        # force time attribute compliant
 
-            else:
-                raise AttributeError('Requested timestamp not available')
+        if not isinstance(kwargs['t'],np.ndarray):
+            if isinstance(kwargs['t'],list):
+                lt = np.array(kwargs['t'])
+            elif (isinstance(kwargs['t'], int)
+                 or isinstance(kwargs['t'],float)):
+                lt = np.array([kwargs['t']])
+        else :
+            lt = kwargs['t']
+
+        if len(lt) == 0:
+            lt = np.array([0])
+        # check time attribute
+        if not lt[0] >= self._tmin and\
+               lt[-1] <= self._tmax:
+               raise AttributeError('Requested time range not available')
+
+        # self._traj is a copy of self.traj, which is affected by resampling.
+        # it is only a temporary attribute for a given run
+
+        if len(lt) > 1:
+            sf = 1/(1.*lt[1]-lt[0])
+            self._traj = self.traj.resample(sf=sf, tstart=lt[0], tstop=lt[-1])
+
+        else:
+            self._traj = self.traj.resample(sf=1.0,tstart=lt[0],tstop=lt[-1])
+            self._traj.time()
+
+        self.time = self._traj.t
+        self._time = pd.to_datetime(self.time)
 
         #
         # Code
         #
-        init=True
-        for ut in kut:
-            t = self.time[ut]
-            self.update_pos( ut)
 
+        init = True
+        for ut, t in enumerate(lt):
+            self.ctime = t
+            self.update_pos(t)
             for w in wstd:
                 for na, nb, typ in llink[w]:
-                    if typ in self.todo:
+                    if self.todo[typ]:
                         if self.verbose:
-                            print 'time:', t, 'time idx:', ut, '/',len(kut)
-                            print 'processing: ',na, ' <-> ', nb, 'wstd: ', w 
+                            print '-'*30
+                            print 'time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(lt)
+                            print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
+                            print '-'*30
                         eng = 0
                         self.evaldeter(na, nb, w)
                         if typ == 'OB':
@@ -430,23 +420,10 @@ class Simul(object):
                             L = self.DL + self.SL
                             self._ak = L.H.ak
                             self._tk = L.H.tk
-                        else : 
+                        else :
                             self._ak = self.DL.H.ak
                             self._tk = self.DL.H.tk
 
-                        # kw = {'d': self._ddis[(na, nb)],
-                        #       'eng': eng,
-                        #       'typ': typ,
-                        #       'fcghz': self.N.node[na]['wstd'][w]['fcghz'],
-                        #       'fbminghz': self.DL.fmin,
-                        #       'fbmaxghz': self.DL.fmax,
-                        #       'fstep': self.DL.fstep,
-                        #       'Link_sig_grpname': self.DL.dexist['sig']['grpname'],
-                        #       'Link_ray_grpname': self.DL.dexist['ray']['grpname'],
-                        #       'Link_Ct_grpname': self.DL.dexist['Ct']['grpname'],
-                        #       'Link_H_grpname': self.DL.dexist['H']['grpname'],
-                        #       }
-                        # 
                         self.data = self.data.append(pd.DataFrame({\
                                     't':self._time[ut],
                                     'id_a': na,
@@ -481,11 +458,12 @@ class Simul(object):
                         self._index = self._index + 1
                         # save csv
                         self.tocsv(ut, na, nb, w,init=init)
+                        init=False
+
                         # save pandas self.data
                         self.savepd()
                         # save ak tauk
                         self._saveh5(ut, na, nb, w)
-                        init=False
 
     def savepd(self):
         """ save data information of a simulation
@@ -501,24 +479,22 @@ class Simul(object):
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
         self.data = pd.read_hdf(filenameh5,'df')
 
-    def update_pos(self, ut):
+    def update_pos(self, t):
         ''' update positions of devices and bodies for a given time index
 
         Parameters
         ----------
         ut : int
-            time index in self.time
+            time value 
         '''
 
         # if a bodies are involved in simulation
-        if (('OB' in self.todo) or
-                ('B2B' in self.todo) or
-                ('B2I' in self.todo)):
+        if ((self.todo['OB']) or (self.todo['B2B']) or (self.todo['B2I'])):
             nodeid = []
             pos = []
             orient = []
             for up, person in enumerate(self.dpersons.values()):
-                person.settopos(self.traj[up], t=self.time[ut], cs=True)
+                person.settopos(self._traj[up], t=t, cs=True)
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])
@@ -526,23 +502,23 @@ class Simul(object):
                 orient.extend([person.acs[d] for d in dev])
             # in a future version , the network update must also update
             # antenna positon in the device coordinate system
-            self.N.update_pos(nodeid, pos, now=self.time[ut])
-            self.N.update_orient(nodeid, orient, now=self.time[ut])
+            self.N.update_pos(nodeid, pos, now=t)
+            self.N.update_orient(nodeid, orient, now=t)
         # TODO : to be moved on the network edges
         self.N.update_dis()
 
     def _show3(self, **kwargs):
         """ 3D show using Mayavi
-        
+
         Parameters
         ----------
-        
-        t: float 
+
+        t: float
             time index
-        link: list 
-            [id_a, id_b] 
-            id_a : node id a 
-            id_b : node id b 
+        link: list
+            [id_a, id_b]
+            id_a : node id a
+            id_b : node id b
         'lay': bool
             show layout
         'net': bool
@@ -552,7 +528,7 @@ class Simul(object):
         'rays': bool
             show rays
         """
-            
+
         defaults = {'t': 0,
                     'link': [],
                     'wstd':[],
@@ -563,15 +539,14 @@ class Simul(object):
                     'ant': False
 
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
         link = kwargs['link']
 
-        ut=np.where(self.time<=kwargs['t'])[0][-1]
-        df = self.data[self.data['t'] == self._time[ut]]
+        df = self.data[self.data['t'] == kwargs['t']]
         if len(df) == 0:
             raise AttributeError('invalid time')
 
@@ -589,7 +564,7 @@ class Simul(object):
         rayid = line['ray_id'].values[0]
 
 
-        self.update_pos(ut)
+        self.update_pos(kwargs['t'])
         self.DL.a = self.N.node[link[0]]['p']
         self.DL.b = self.N.node[link[1]]['p']
         self.DL.Ta = self.N.node[link[0]]['T']
@@ -704,27 +679,21 @@ class Simul(object):
             else:
                 pass#print grpname + ' already exists in ' + filenameh5
 
-            
+
             fh5.close()
         except:
             fh5.close()
             raise NameError('Simultraj._saveh5: issue when writting h5py file')
 
 
-    def _loadh5(self, ut, ida, idb, wstd):
+    def _loadh5(self, grpname):
         """ Load in h5py format
 
         Parameters
         ----------
 
-       ut : int
-           time index in self.time
-       ida : string
-           node a index
-       idb : string
-           node b index
-       wstd : string
-           wireless standard of used link
+       grpname : string
+            group name which can be found sin self.data aktk_idx column
 
         Returns
         -------
@@ -734,12 +703,9 @@ class Simul(object):
             alpha_k
         tk : ndarray:
             alpha_k
-        conf : dict
-            dictionnary containing configuration setup
         """
 
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
-        grpname = str(ut) + '_' + ida + '_' + idb + '_' + wstd
         # try/except to avoid loosing the h5 file if
         # read/write error
         try:
@@ -748,14 +714,13 @@ class Simul(object):
                 fh5.close()
                 raise NameError(grpname + ' cannot be reached in ' + self.filename)
             f = fh5[grpname]
-            conf={}
             # for k in f.attrs.keys():
             #     conf[k]=f.attrs[k]
             ak = f['alphak'][:]
             tk = f['tauk'][:]
             fh5.close()
 
-            return ak, tk, conf
+            return ak, tk
         except:
             fh5.close()
             raise NameError('Simultraj._loadh5: issue when reading h5py file')

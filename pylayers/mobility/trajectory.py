@@ -52,6 +52,7 @@ import doctest
 from matplotlib.widgets import Slider, CheckButtons
 
 
+
 class Trajectories(list):
     """  Define a list of trajectory
 
@@ -61,22 +62,16 @@ class Trajectories(list):
         """ initialization
         """
         super(list, self).__init__()
-        self.name=[]
-        self.typ=[]
-        self.ID=[]
+        self.name = []
+        self.typ = []
+        self.ID = []
+        self.t = []
+
     def __repr__(self):
 
         try:
             s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
             for a in self:
-                typ = a.typ
-                if typ == 'ag':
-
-                    string ='Trajectory of agent ' + a.name + ' with ID ' + a.ID
-                else :
-                    string ='Access point ' + a.name + ' with ID ' + a.ID
-                s = s + string + '\n'
-                s = s + '-'*len(string) + '\n'
                 s = s + a.__repr__()
                 s = s + '\n'
         except:
@@ -103,7 +98,7 @@ class Trajectories(list):
         self.typ.pop(idx)
         self.ID.pop(idx)
 
-    def loadh5(self, _filename='simulnet_TA-Office.h5'):
+    def loadh5(self, _filename='simulnet_TA-Office.h5',append =False):
 
 
         """ import simulnet h5 file
@@ -113,6 +108,8 @@ class Trajectories(list):
 
         filename : string
             default simulnet + Layout_filename . h5
+        append : boolean
+            if True : append new trajectories to preexisting ones
 
         Returns
         -------
@@ -136,7 +133,8 @@ class Trajectories(list):
             fil = pd.HDFStore(filename)
         else:
             raise NameError(filename + ' not founded')
-
+        if not append:
+            [self.pop(0) for i in range(len(self))]
         for k in fil.keys():
             df = fil[k]
             df = df.set_index('t')
@@ -151,7 +149,60 @@ class Trajectories(list):
             self.append(Trajectory(df=df,ID=ID,name=name,typ=typ))
         fil.close()
         self.Lfilename = layout
+        self.time()
 
+
+    def resample(self, sf=2, tstart = -1, tstop = -1):
+        """ resample trajectories
+
+        Parameters
+        ----------
+
+        sf : int
+            sampling factor
+        tstart : float
+            new start time (must be > original start time).
+            if tstart = -1 : original start conserved
+        tstop : float
+            new stop time (must be < original stop time)
+            if tstop = -1 : original stop conserved
+
+        Returns
+        -------
+
+        T : Trajectories
+            new trajectories object updated
+
+        """
+        T=Trajectories()
+        for t in self:
+            if t.typ != 'ap':
+                T.append(t.resample(sf=sf, tstart=tstart, tstop=tstop))
+            else:
+                T.append(t)
+        T.Lfilename = self.Lfilename
+        T.time()
+        return T
+
+    def time(self,unit='s'):
+        """ extract time from a trajectory
+
+        Parameters
+        ----------
+
+        unit : integer
+            default 0 (s) - 3 (ms) 6 (mus) 9 (ns)
+
+        Returns
+        -------
+
+        update self.t
+
+
+        """
+
+        ut = np.where(np.array(self.typ) == 'ag')[0][0]
+        self.t = self[ut].time()
 
 
     def ishow(self):
@@ -186,17 +237,17 @@ class Trajectories(list):
         for iT, T in enumerate(self):
             if T.typ == 'ag':
                 lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit], 'o',
-                             color=colors[iT], visible=False))
+                             color=colors[iT], visible=True))
                 labels.append(T.name + ':' + T.ID)
             else:
                 lines.extend(ax.plot(T['x'][0], T['y'][0], '^', ms=12,
-                             color=colors[iT], visible=False))
+                             color=colors[iT], visible=True))
                 labels.append(T.name + ':' + T.ID)
 
         t = self[0].time()
 
         # init boolean value for visible in checkbutton
-        blabels = [False]*len(labels)
+        blabels = [True]*len(labels)
 
 
         ########
@@ -283,15 +334,26 @@ class Trajectory(pd.DataFrame):
             # total time
             T = self.tmax-self.tmin
             st = ''
-            st = st + self.name + '\n'
-            st = st + "ID : " + str(self.ID)+'\n'
-            st = st + '---'+'\n'
-            st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'
-            st = st+'dtot (m) : '+ str("%3.2f" %dtot)+'\n'
-            st = st+'Vmoy (m/s) : '+ str("%3.2f" % (dtot/T))+'\n'
+            typ = self.typ
+            if typ == 'ag':
+                string ='Trajectory of agent ' + self.name + ' with ID ' + self.ID
+            else :
+                string ='Access point ' + self.name + ' with ID ' + self.ID
+            st = st + string + '\n'
+            st = st + '-'*len(string) + '\n'
+
+            if self.typ == 'ag':
+                st = st+'t (s) : '+ str("%3.2f" %self.tmin)+" : "+ str("%3.2f" % self.ts) +" : " +str("%3.2f" % self.tmax)+'\n'
+                st = st+'dtot (m) : '+ str("%3.2f" %dtot)+'\n'
+                st = st+'Vmoy (m/s) : '+ str("%3.2f" % (dtot/T))+'\n'
+            else :
+                st = st+'t (s) : '+ str("%3.2f" %self.tmin) + '\n'
+                st = st+'Vmoy (m/s) : '+ str(self['vx'].values[0]) +'\n'
+            st = st + str(self.head(2)) + '\n'
         except:
             st = 'void Trajectory'
         return(st)
+
 
     def update(self):
         """ update class member data
@@ -381,8 +443,9 @@ class Trajectory(pd.DataFrame):
                 kwargs[key] = value
 
         t = kwargs['t']
+        if len(t) < 2:
+            raise AttributeError('Trajectory.generate requieres at least 3 time stamps')
         pt = kwargs['pt']
-
         npt = len(t)
         td = pd.to_datetime(t,unit=kwargs['unit'])
         # velocity vector
@@ -415,14 +478,20 @@ class Trajectory(pd.DataFrame):
         self.update()
         return self
 
-    def resample(self, sf=2):
+    def resample(self, sf=2, tstart=-1, tstop =-1):
         """ resample trajectory
 
         Parameters
         ----------
 
-        sf : int
+        sf : float
             sampling factor
+        tstart : float
+            new start time (must be > original start time).
+            if tstart = -1 : original start conserved
+        tstop : float
+            new stop time (must be < original stop time)
+            if tstop = -1 : original stop conserved
 
         Returns
         -------
@@ -437,13 +506,31 @@ class Trajectory(pd.DataFrame):
         y = self.space()[:, 1]
         fx = sp.interpolate.interp1d(t, x)
         fy = sp.interpolate.interp1d(t, y)
-        tstart = t[0]
-        tstop = t[-1]
+        if tstart == -1:
+            tstart = t[0]
+        else:
+            if t[0] <= tstart:
+                tstart = tstart
+            else :
+                raise AttributeError('tstart < tmin')
+        if tstop == -1:
+            if t[-1] >= tstop:
+                tstop = t[-1]
+            else :
+                raise AttributeError('tstop > tmax')
+        else:
+            tstop = tstop
+        if tstart == tstop:
+            tstop = 3*tstart
         tstep = (t[1]-t[0])/sf
-        tnew = np.arange(tstart, tstop, tstep)
+        # need to add at least 3 values gor generate to estomate acceleration
+        tnew = np.arange(tstart, tstop+3*tstep, tstep)
+        # generate requieres 3 measures at least 
         xnew = fx(tnew)
         ynew = fy(tnew)
         T = Trajectory()
+
+
         T.generate(ID=self.ID,
                    name=self.name,
                    typ=self.typ,
@@ -451,7 +538,7 @@ class Trajectory(pd.DataFrame):
                    pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
                    unit='s',
                    sf=sf)
-
+        T.update()
         return T
 
 
