@@ -127,7 +127,7 @@ Energy Functions
     :toctree: generated/
 
     TUsignal.Epercent
-    TUsignal.Etau0
+    TUsignal.Etaud
     TUsignal.Ewin
     TUsignal.Etot
     TUsignal.Efirst
@@ -381,14 +381,17 @@ class Bsignal(object):
         >>> import numpy as np
         >>> x = np.arange(0,1,0.01)
         >>> y = np.sin(2*np.pi*x)
-        >>> s =Bsignal(x,y)
-        >>> su = s.extact(np.arange(4,20))
+        >>> s = Bsignal(x,y)
+        >>> su = s.extract(np.arange(4,20))
 
 
         """
         O = copy(self)
         O.x = O.x[u]
-        O.y = O.y[u,:]
+        try:
+            O.y = O.y[u,:]
+        except:
+            O.y = O.y[u]
         return(O)
 
     def save(self, filename):
@@ -558,7 +561,7 @@ class Bsignal(object):
         else:
             u = kwargs['uy']
 
-        # radians to degree coefficient  
+        # radians to degree coefficient
         rtd = 180./np.pi
 
         t = kwargs['typ']
@@ -784,7 +787,7 @@ class Bsignal(object):
                     ax[l,c].axvline(vline[i], color=tcolor[i])
                 for i in range(len(hline)):
                     ax.axhline(hline[i] * conversion, color='red')
-        
+
         return(fig,ax)
 
     def flatteny(self,yrange=[],reversible=False):
@@ -1078,7 +1081,7 @@ class Usignal(Bsignal):
         if t == 'FUsignal':
             U = FUsignal(x_new, y_new)
         if t == 'FUDsignal':
-            U = FUDsignal(x_new, y_new, self.tau0)
+            U = FUDsignal(x_new, y_new, self.taud)
 
         #if 'U' not in locals():
             #pdb.set_trace()
@@ -1284,12 +1287,16 @@ class Usignal(Bsignal):
 
         Parameters
         ----------
+
         xmin : float
+            add zeros before xmin
         xmax : float
+            add zeros after xmax
 
         Summary
         --------
-        This is a gating between xmin and xmax
+
+        This corresponds to a gating between xmin and xmax
 
         Examples
         --------
@@ -1297,13 +1304,12 @@ class Usignal(Bsignal):
         .. plot::
             :include-source:
 
-            >>> from pylayers.signal import *
+            >>> from pylayers.signal.bsignal import *
             >>> from matplotlib.pylab import *
             >>> ip = EnImpulse()
-            >>> fig,ax = ip.plot(typ=['v'])
+            >>> f,a = ip.plot(typ=['v'])
             >>> ip.zlr(-10,10)
-            >>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
-            >>> show()
+            >>> f,a = ip.plot(typ=['v'])
 
         """
         dx = self.dx()
@@ -2604,7 +2610,7 @@ class TUsignal(TBsignal, Usignal):
             >>> y = np.zeros(len(tau))
             >>> CIR = TUsignal(tau,y)
             >>> CIR.aggcir(alphak,tauk)
-            >>> CIR.plot(typ='v')
+            >>> f,a =CIR.plot(typ=['v'])
 
         """
         shy = np.shape(self.y)
@@ -2839,18 +2845,18 @@ class TUsignal(TBsignal, Usignal):
             >>> M = UWBMeasure(1)
             >>> ch4 = M.tdd.ch4
             >>> f1,a1=ch4.plot(color='k')
-            >>> plt.title("WHERE1 M1 UWB Channel impulse response")
+            >>> tit0 = plt.title("WHERE1 M1 UWB Channel impulse response")
             >>> f2,a2=ch4.plot(color='k')
-            >>> plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
+            >>> tit1= plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 1)")
             >>> ax1=plt.axis([10,160,-90,-50])
             >>> f3,a3=ch4.plot(color='k')
-            >>> plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
+            >>> tit2 = plt.title("WHERE1 M1 UWB Channel impulse response (Zoom 2)")
             >>> ax2=plt.axis([20,120,-80,-50])
             >>> tau_moy = ch4.tau_moy()
             >>> print "tau_moy: %2.2f ns" % tau_moy
             tau_moy: 38.09 ns
             >>> tau_rms = ch4.tau_rms()
-            >>> print "tau_rms: %2.2f" % tau_rms
+            >>> print "tau_rms: %2.2f ns" % tau_rms
             tau_rms: 13.79 ns
 
 
@@ -3007,7 +3013,7 @@ class FBsignal(Bsignal):
         iy : index of y value to be displayed
             default [0]  only first the line is displayed
 
-        Examples 
+        Examples
         --------
 
         >>> from pylayers.signal.bsignal import *
@@ -3018,16 +3024,18 @@ class FBsignal(Bsignal):
         >>> S.y = cos(2*pi*S.x)+1j*sin(3*pi*S.x+pi/3)
         >>> fig,ax = S.plot()
         >>> plt.show()
-   
+
         See Also
         --------
 
         Bsignal.plot
+        pylayers.util.plotutil.mulcplot
 
         """
 
         if 'typ' not in kwargs:
             kwargs['typ'] = ['l20']
+            kwargs['xlabels'] = ['Frequency (GHz)']
 
         fig,ax = Bsignal.plot(self,**kwargs)
 
@@ -3148,7 +3156,6 @@ class FUsignal(FBsignal, Usignal):
     resample : resampling with a new base
     newdf    : resampling with a new df
     zp       : zero padding until len(x) = N
-    plot     : plot modulus and phase
     plotri   : plot real part and imaginary part
     plotdB   : plot modulus in dB
     get      : get k th ray
@@ -3339,7 +3346,7 @@ class FUsignal(FBsignal, Usignal):
             EMH2  = MH2[:,len(self.x)/2]
 
         return(EMH2)
-     
+
 
     def enthrsh(self, thresh=99.99):
         """ Energy thresholding of an FUsignal
@@ -3372,7 +3379,7 @@ class FUsignal(FBsignal, Usignal):
 
         self.indices = indices
         self.y = H[indices, :]
-        self.tau0 = self.tau0[indices]
+        self.taud = self.taud[indices]
 
         return indices
 
@@ -3816,13 +3823,13 @@ class FUsignal(FBsignal, Usignal):
         Ntap=kwargs['Ntap']
         # yb : tau x f x 1
         if baseband:
-            yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.tau0[:,np.newaxis,np.newaxis] * fcGHz )
+            yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.taud[:,np.newaxis,np.newaxis] * fcGHz )
         else:
             yb = self.y[:,:,np.newaxis]
         # l : 1 x 1 x tap
         l  = np.arange(Ntap)[np.newaxis,np.newaxis,:]
         # l : tau x 1 x 1
-        tau = self.tau0[:,np.newaxis,np.newaxis]
+        tau = self.taud[:,np.newaxis,np.newaxis]
         # S : tau x f x tap (form 2.34 [Tse])
         S   = np.sinc(l-tau*WMHz/1000.)
         # sum over tau : htap : f x tap
@@ -3845,8 +3852,8 @@ class FUDsignal(FUsignal):
 
     x    : ndarray 1xN
     y    : ndarray MxN
-    tau0 : delay
-    tau1 : additional delay
+    taud : direct delay (Time of Flight)
+    taue : excess delay
 
     Methods
     -------
@@ -3858,10 +3865,10 @@ class FUDsignal(FUsignal):
     ft2     :
 
     """
-    def __init__(self, x=np.array([]), y=np.array([]), tau0=np.array([])):
-        FUsignal.__init__(self, x, y)
-        self.tau0 = tau0
-        self.tau1 = 0.0
+    def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([])):
+        super(FUDsignal,self).__init__(x,y)
+        self.taud = taud
+        self.taue = np.zeros(len(taud))
 
     def __repr__(self):
         s = FUsignal.__repr__(self)
@@ -3878,6 +3885,28 @@ class FUDsignal(FUsignal):
         - update delay of FUDSignal
         - Compensation of phase slope to obtain minimal phase
 
+        This methods updates the excess delay `taue` member.
+
+        The samplinf frequency step should be
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal.bsignal import *
+            >>> import numpy as np
+            >>> fGHz = np.arange(2,11,0.1)
+            >>> tau1 = np.array([1,2,3])[:,np.newaxis]
+            >>> y = np.exp(-2*1j*np.pi*fGHz[np.newaxis,:]*tau1)/fGHz[np.newaxis,:]
+            >>> H = FUDsignal(x=fGHz,y=y,taud=np.array([15,17,18]))
+            >>> f,a = H.plot(typ=['ru'])
+            >>> H.minphas()
+            >>> H.taue
+            array([ 1.,  2.,  3.])
+            >>> f,a = H.plot(typ=['ru'])
+
         """
 
         f = self.x
@@ -3886,13 +3915,13 @@ class FUDsignal(FUsignal):
         df = self.x[-1] - self.x[0]
         slope = dphi / df
         #if slope >0:
-        #   print 'minphas Warning : non causal FUSignal'
+        #   print 'm  inphas Warning : non causal FUSignal'
         #phi0      = +1j*slope*(f[-1]+f[0]/2)
         F, S = np.meshgrid(f, slope)
         #E   = exp(-1j*slope*f+phi0)
         E = np.exp(-1j * S * F)
         self.y = self.y * E
-        self.tau1 = -slope / (2 * np.pi)
+        self.taue = -slope / (2 * np.pi)
 
     def totud(self, Nz=1, ffts=0):
         """ transform to TUDsignal
@@ -3906,7 +3935,7 @@ class FUDsignal(FUsignal):
             fftshift indicator (default 0 )
 
         """
-        tau = self.tau0 + self.tau1
+        tau = self.taud + self.taue
         Nray = len(tau)
         s = self.ift(Nz, ffts)
         tud = TUDsignal(s.x, s.y, tau)
@@ -3925,7 +3954,7 @@ class FUDsignal(FUsignal):
             fftshift indicator
 
         """
-        tau = self.tau0
+        tau = self.taud
         Nray = len(tau)
         s = self.ift(Nz, ffts)
         x = s.x
@@ -3961,7 +3990,7 @@ class FUDsignal(FUsignal):
 
 
         """
-        tau = self.tau0
+        tau = self.taud
         self.s = self.ift(Nz, ffts)
         x = self.s.x
         r = TUsignal(x, np.zeros(len(x)))
@@ -3989,7 +4018,7 @@ class FUDsignal(FUsignal):
         -------
         r : TUsignal
         """
-        tau = self.tau0
+        tau = self.taud
         s = self.ift(Nz, ffts)
         x = s.x
         r = TUsignal(x, np.zeros(len(x)))
@@ -4015,9 +4044,9 @@ class FUDsignal(FUsignal):
         >>> import numpy as np
         >>> N = 2
         >>> fGHz = np.arange(1,3,1)
-        >>> tau0 = np.sort(np.random.rand(N))
+        >>> taud = np.sort(np.random.rand(N))
         >>> alpha = np.random.rand(N,len(fGHz))
-        >>> s = FUDsignal(x=fGHz,y=alpha,tau0=tau0)
+        >>> s = FUDsignal(x=fGHz,y=alpha,taud=taud)
         >>> s.plot3d()
 
         """
@@ -4031,11 +4060,11 @@ class FUDsignal(FUsignal):
             ax  = fig.add_subplot(111, projection = '3d')
 
         for k,f in enumerate(self.x):
-            for i,j in zip(self.tau0,abs(self.y[:,k])):
+            for i,j in zip(self.taud,abs(self.y[:,k])):
                 ax.plot([i,i],[f,f],[0,j],color= 'k')
 
         ax.set_xlabel('Delay (ns)')
-        ax.set_xlim3d(0,max(self.tau0))
+        ax.set_xlim3d(0,max(self.taud))
 
         ax.set_ylabel('Frequency (fGHz)')
         ax.set_ylim3d(self.x[0],self.x[-1])
@@ -4070,7 +4099,7 @@ class FUDsignal(FUsignal):
         """
         fmin = self.x[0]
         fmax = self.x[-1]
-        tau = self.tau0
+        tau = self.taud
 
         f = np.arange(fmin, fmax, df)
 
@@ -4097,7 +4126,7 @@ class FUDAsignal(FUDsignal):
 
     x    : ndarray 1xN
     y    : ndarray MxN
-    tau0 : delay
+    taud : delay
     tau1 : additional delay
 
     Methods
@@ -4113,11 +4142,11 @@ class FUDAsignal(FUDsignal):
     def __init__(self,
                  x = np.array([]),
                  y = np.array([]),
-                 tau0 = np.array([]),
+                 taud = np.array([]),
                  dod = np.array([]),
                  doa = np.array([])):
-        super(FUDAsignal,self).__init__(x, y, tau0)
-        # FUDsignal.__init__(self, x, y,tau0)
+        super(FUDAsignal,self).__init__(x, y, taud)
+        # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod
         self.doa  = doa
 
@@ -4134,7 +4163,7 @@ class FUDAsignal(FUDsignal):
         E = self.eprfl()
         cumE = np.cumsum(E)/sum(E)
         v = np.where(cumE<threshold)[0]
-        self.tau0 = self.tau0[v]
+        self.taud = self.taud[v]
         self.doa = self.doa[v]
         self.dod = self.dod[v]
         self.y = self.y[v,:]
@@ -4153,13 +4182,13 @@ class FUDAsignal(FUDsignal):
         """
 
         if typ == 'tau':
-            u = np.argsort(self.tau0)
+            u = np.argsort(self.taud)
 
         if typ == 'energy':
             E = self.eprfl()
             u = np.argsort(E)[::-1]
 
-        self.tau0 = self.tau0[u]
+        self.taud = self.taud[u]
         self.doa = self.doa[u]
         self.dod = self.dod[u]
         self.y = self.y[u,:]
@@ -4194,7 +4223,7 @@ class FUDAsignal(FUDsignal):
             number of spatial realizations
         Nm : int
             number of time samples
-            the channel is sample along a distance of half a wavelength
+            the channel is sampled along a distance of half a wavelength
         Va : velocity of link termination a
         Vb : velocity of link termination b
         theta_va : float
@@ -4313,7 +4342,7 @@ class FUDAsignal(FUDsignal):
         # r x f x s x m x tap
         l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
         # l : r x f x s x m x tap
-        tau = self.tau0[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
 
         ba  = betaa*Va*m/(0.3*WMHz*1e6)
         bb  = betab*Vb*m/(0.3*WMHz*1e6)

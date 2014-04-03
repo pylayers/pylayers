@@ -1318,8 +1318,7 @@ class Ctilde(object):
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
         H.applyFriis()
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
-                                                             / len(H.y))
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))/len(H.y))
         H.tk = H.tau0
         return(H)
 
