@@ -65,6 +65,7 @@ from pylayers.network.network import Network, Node, PNetwork
 from pylayers.network.communication import Gcom
 from pylayers.network.show import ShowNet, ShowTable
 from pylayers.mobility.agent import Agent
+from pylayers.mobility.trajectory import *
 from pylayers.network.emsolver import EMSolver
 from pylayers.gis.layout import Layout
 from pylayers.antprop.slab import Slab
@@ -124,7 +125,7 @@ class Simul(SimulationRT): # Sympy 2
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
         self.seed = eval(self.sim_opt['seed'])
-
+        self.traj=Trajectories()
 
         self.verbose = str2bool(self.sim_opt['verbose'])
         if str2bool(self.net_opt['ipython_nb_show']):
@@ -378,6 +379,7 @@ class Simul(SimulationRT): # Sympy 2
             store.get_storer(a.ID).attrs.layout = self.L.filename
         #saving metadata
         store.close()
+        self.traj.loadh5(eval(self.sim_opt["filename"])+'_'+layfile+'.h5')
 
 
 

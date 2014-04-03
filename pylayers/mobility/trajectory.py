@@ -145,6 +145,24 @@ class Trajectories(list):
         self.Lfilename = layout
 
 
+    def resample(self, sf=2):
+        """ resample trajectories
+
+        Parameters
+        ----------
+
+        sf : int
+            sampling factor
+
+        Returns
+        -------
+
+        update each trajctory of self 
+        if trajectroy is an agent
+
+        """
+        [self.__setitem__(it,t.resample(sf))
+         for it, t in enumerate(self) if t.typ != 'ap']
 
     def ishow(self):
         """
@@ -178,17 +196,17 @@ class Trajectories(list):
         for iT, T in enumerate(self):
             if T.typ == 'ag':
                 lines.extend(ax.plot(T['x'][0:valinit],T['y'][0:valinit], 'o',
-                             color=colors[iT], visible=False))
+                             color=colors[iT], visible=True))
                 labels.append(T.name + ':' + T.ID)
             else:
                 lines.extend(ax.plot(T['x'][0], T['y'][0], '^', ms=12,
-                             color=colors[iT], visible=False))
+                             color=colors[iT], visible=True))
                 labels.append(T.name + ':' + T.ID)
 
         t = self[0].time()
 
         # init boolean value for visible in checkbutton
-        blabels = [False]*len(labels)
+        blabels = [True]*len(labels)
 
 
         ########
