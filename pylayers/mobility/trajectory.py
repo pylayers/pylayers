@@ -520,6 +520,8 @@ class Trajectory(pd.DataFrame):
                 raise AttributeError('tstop > tmax')
         else:
             tstop = tstop
+        if tstart == tstop:
+            tstop = 3*tstart
         tstep = (t[1]-t[0])/sf
         # need to add at least 3 values gor generate to estomate acceleration
         tnew = np.arange(tstart, tstop+3*tstep, tstep)
