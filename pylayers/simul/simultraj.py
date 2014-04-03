@@ -445,13 +445,9 @@ class Simul(object):
 
         n_time =len(time)
         n_links = len(llink)
-        Kmax = 100
+        Kmax =30
         resultEnv  = np.zeros(shape=(n_time,n_links,Kmax,2))
         resultOb  = np.zeros(shape=(n_time,n_links,Kmax,2))
-
-        #~ prev_lstate = list(np.zeros(shape = (n_links)))
-        #~ prev_alphakOb = []
-        #~ prev_taukOb = []
 
         for kt in range(0,n_time):
 
@@ -507,3 +503,162 @@ class Simul(object):
                     print 'link  = ', link , '  pr ob  = ',10*np.log10(sum((abs(alphak)**2)))
 
         return resultOb
+        
+    def runObF(self,llink = [], t =[]):
+        """
+        Parameters
+        ----------
+
+        llink : list
+
+        """
+
+        if llink ==[]:
+            llink = self.links
+        if t  == []:
+            time =  self.traj[0].time()
+        else:
+            time =  self.traj[0].time()[t]
+
+
+        n_time =len(time)
+        n_links = len(llink)
+        Kmax = 30
+        resultOb  = np.zeros(shape=(n_time,n_links,Kmax,2))
+        slink  = np.zeros(shape=(n_time,n_links))
+        tlink  = []
+        for kl in range(0,n_links):
+            link = llink[kl]
+            A = link[0]
+            B = link[1]
+            typA = self.dpersons[A[0]].dev[A[1]]['typ']
+            typB = self.dpersons[B[0]].dev[B[1]]['typ']
+            if typA == 'dynamic':
+                tlink.append(typA)
+            else:
+                if typB == 'dynamic':
+                    tlink.append(typB)
+                else:
+                    tlink.append(typA)
+           
+        salpha = []
+        stau   = []
+        for kt in range(0,n_time):
+
+            for kp, person in enumerate(self.dpersons.values()):
+                person.settopos(self.traj[kp],t=time[kt],cs=True)
+
+
+            for kl in range(0,n_links):
+                link = llink[kl]
+                A = link[0]
+                B = link[1]
+                pA = self.dpersons[A[0]].dcs[A[1]][:,0]
+                TA = self.dpersons[A[0]].acs[A[1]]
+                pB = self.dpersons[B[0]].dcs[B[1]][:,0]
+                TB = self.dpersons[B[0]].acs[B[1]]
+                cylA = self.dpersons[A[0]].dev[A[1]]['cyl']
+                cylB = self.dpersons[B[0]].dev[B[1]]['cyl']
+
+                interA = self.dpersons[A[0]].intersectBody3(pA,pB, topos = True)
+                #interB = self.dpersons[B[0]].intersectBody2(pA,pB, topos = True)
+
+
+                
+                devIdA = A[1]
+                devIdB = B[1]
+                empA =self.dpersons[A[0]].dev[devIdA]['cyl']
+                empB =self.dpersons[B[0]].dev[devIdB]['cyl']
+
+                emp  = empA
+                if empA == 'trunkb':
+                    emp = empB
+                if emp == 'forearml':
+                    emp = 'forearmr'
+
+                if kt ==0:
+                    
+                    a, d = getchannel(emplacement = emp, intersection = interA)
+                    alpha_e0  = np.zeros(shape=(Kmax))
+                    alpha_e0[0:len(a)]= a
+                    tau_e0 = np.zeros(shape=(Kmax))
+                    tau_e0[0:len(d)]= d
+                    alpha =  np.zeros(shape=(Kmax))
+                    tau   =  np.zeros(shape=(Kmax))
+                    ntraj = len(a)
+                    if ntraj < Kmax:
+                        alpha[0:ntraj] =  alpha_e0[0:ntraj]
+                        tau[0:ntraj] =  tau_e0[0:ntraj]
+                    else:
+                        alpha =  alpha_e0[0:Kmax]
+                        tau =  tau_e0[0:Kmax]
+                        print ' warning ntraj > Kmax'
+                    
+                    tab = np.vstack((alpha,tau)).T
+                    resultOb[kt,kl,:,:]= tab
+                    salpha.append(alpha_e0)
+                    stau.append(tau_e0)
+                else:
+                    
+                    if tlink[kl]== 'static':
+                        bf = np.array([ 2*0.04343642])
+                        af = np.array([ 1.,         -0.91312716])
+                        gf =  0.2
+                    else:
+                        bf = np.array([ 2*0.40185134 ])
+                        af = np.array([ 1. ,        -0.19629732])
+                        gf = 0.63
+                    
+                    a, t = getchannel(emplacement = emp, intersection = interA)
+                    alpha_e1  = np.zeros(shape=(Kmax))
+                    alpha_e1[0:len(a)]= a
+                    tau_e1 = np.zeros(shape=(Kmax))
+                    tau_e1[0:len(t)]= t
+                    
+                    
+                    alpha =  np.zeros(shape=(Kmax))
+                    tau  =  np.zeros(shape=(Kmax))
+                    ntraj = len(a)
+                    if ntraj < Kmax:
+                        alpha[0:ntraj] =  abs(bf[0]*(alpha_e1[0:ntraj]-(1-gf)*salpha[kl][0:ntraj]/kt)/gf-af[1]*resultOb[kt-1,kl,0:ntraj,0])
+                        tau[0:ntraj] =  (bf[0]*(tau_e1[0:ntraj]-(1-gf)*stau[kl][0:ntraj]/kt)/gf-af[1]*resultOb[kt-1,kl,0:ntraj,1])
+                        
+                    else:
+                        alpha =  (bf[0]*alpha_e1[0:Kmax]-af[1]*resultOb[kt-1,kl,0:ntraj,0])
+                        tau =  (bf[0]*tau_e1[0:Kmax]-af[1]*resultOb[kt-1,kl,0:ntraj,1])
+                        print ' warning ntraj > Kmax'
+                    
+                    tab = np.vstack((alpha,tau)).T
+                    resultOb[kt,kl,:,:]= tab
+                    salpha[kl] = salpha[kl]+alpha_e1
+                    stau[kl] = stau[kl]+tau_e1
+        
+        
+        return resultOb
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
