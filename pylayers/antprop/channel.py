@@ -2297,6 +2297,11 @@ class Tchannel(bs.FUDAsignal):
         Nray   :  int
             number of rays to be displayed
 
+        See Also
+        --------
+
+        pylayers.signal.bsignal.FUsignal.iftd
+
         """
         # Construire W
         W = w.ft()

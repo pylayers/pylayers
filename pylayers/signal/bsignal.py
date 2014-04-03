@@ -1495,7 +1495,7 @@ class TBsignal(Bsignal):
             >>> fi = plt.figure()
             >>> sb.stem()
             >>> fig,ax = su20.plot(color='k')
-            >>> fig,ax = su100.plot(color='r',fig=fig,ax=ax)
+            >>> fig,ax = su100.plot(color='r')
             >>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
 
         """
@@ -2916,7 +2916,7 @@ class TUDsignal(TUsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([]), tau=np.array([])):
-        super(TUDsigal,self).__init__(x,y)
+        super(TUDsignal,self).__init__(x,y)
         #TUsignal.__init__(self, x, y)
         self.tau = tau
 
@@ -3276,12 +3276,12 @@ class FUsignal(FBsignal, Usignal):
         self.y = self.y * w
 
     def applyFriis(self):
-       r""" apply Friis factor
+        r""" apply Friis factor
 
         The Friis factor is multiplied to y
 
         .. math::
-            y := \frac{c}{4\pif} y 
+            y := \frac{c}{4\pif} y
 
         boolean `isFriis` is set to `True`
 
@@ -3783,7 +3783,7 @@ class FUsignal(FBsignal, Usignal):
             UH = self.symH(1)
         else:
             UH = self.symHz(Nz)
-        # Back in time 
+        # Back in time
         # UH is an FHsignal
         # uh is a TUsignal
         uh = UH.ifft(ffts)
@@ -3862,7 +3862,7 @@ class FUsignal(FBsignal, Usignal):
 
 
     def tap(self,**kwargs):
-        """ calculate channel tap
+        r""" calculates channel taps
 
         Parameters
         ----------
@@ -3875,11 +3875,16 @@ class FUsignal(FBsignal, Usignal):
         baseband : boolean
             default : True
 
+        Returns
+        -------
+
+        htapi
+
+
         Notes
         -----
 
-        see [Tse] http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf
-        page 26
+        [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26
 
         """
         defaults = { 'fcGHz':4.5,
@@ -3939,6 +3944,15 @@ class FUDsignal(FUsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([])):
+        """
+        Parameters
+        ----------
+
+        x : np.array()
+        y : np.array()
+        taud : np.array(
+
+        """
         super(FUDsignal,self).__init__(x,y)
         self.taud = taud
         self.taue = np.zeros(len(taud))
@@ -4017,11 +4031,26 @@ class FUDsignal(FUsignal):
 
         FUsignal.ift
 
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+           >>> from pylayers.simul.link import *
+           >>> L = DLink()
+           >>> aktk = L.eval()
+           >>> H = L.H
+           >>> f,a H.show(cmap='jet')
+           >>> H.cut()
+           >>> f,a H.show(cmap='jet')
+
+
         """
-        tau = self.taud + self.taue
-        Nray = len(tau)
+        self.tau = self.taud + self.taue
+        Nray = len(self.tau)
         s = self.ift(Nz, ffts)
-        tud = TUDsignal(s.x, s.y, tau)
+        tud = TUDsignal(s.x, s.y, self.tau)
         return(tud)
 
     def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
@@ -4220,8 +4249,6 @@ class FUDsignal(FUsignal):
 
         return U
 
-
-
 class FUDAsignal(FUDsignal):
     """ FUDAsignal : Frequency domain Uniform signal with Delays and Angles
 
@@ -4263,12 +4290,15 @@ class FUDAsignal(FUDsignal):
         """ cut the signal at an Energy threshold level
 
         threshold : float
+            default 0.99
         """
         self.sort(typ='energy')
         E = self.eprfl()
         cumE = np.cumsum(E)/sum(E)
         v = np.where(cumE<threshold)[0]
         self.taud = self.taud[v]
+        self.taue = self.taue[v]
+        self.tau = self.tau[v]
         self.doa = self.doa[v]
         self.dod = self.dod[v]
         self.y = self.y[v,:]
@@ -4487,18 +4517,21 @@ class FHsignal(FUsignal):
         return(U)
 
     def ifft(self, ffts=0, tt='centered'):
-        """
-        Inverse Fourier Transform
+        """ Inverse Fourier Transform
+
         Parameters
         ----------
-            ffts = 0 : no fftshift (default)
-            ffts = 1 : apply fftshift
-            tt = 'centered'  default
+
+        ffts : int
+            0 no fftshift (default)
+            1 apply fftshift
+        tt : string
+            'centered'  default
 
         Returns
         -------
 
-            return a real TUsignal
+        a real TUsignal
 
         Examples
         --------
