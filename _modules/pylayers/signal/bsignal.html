@@ -4094,7 +4094,7 @@
         <span class="c"># update total delay</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">taue</span>
 </div>
-<div class="viewcode-block" id="FUDsignal.totud"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.totud.html#pylayers.signal.bsignal.FUDsignal.totud">[docs]</a>    <span class="k">def</span> <span class="nf">totud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">totime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform to TUDsignal</span>
 
 <span class="sd">        Parameters</span>
@@ -4113,18 +4113,26 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        #.. plot::</span>
-<span class="sd">        #    :include-source:</span>
-<span class="sd">        #</span>
-<span class="sd">        #   &gt;&gt;&gt; from pylayers.simul.link import *</span>
-<span class="sd">        #   &gt;&gt;&gt; L = DLink()</span>
-<span class="sd">        #   &gt;&gt;&gt; aktk = L.eval()</span>
-<span class="sd">        #   &gt;&gt;&gt; H = L.H</span>
-<span class="sd">        # </span>
-<span class="sd">        #   &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
-<span class="sd">        #   &gt;&gt;&gt; H.cut()</span>
-<span class="sd">        #   &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
-<span class="sd">        #   &gt;&gt;&gt; T = H.totud()</span>
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">           &gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">           &gt;&gt;&gt; L = DLink(verbose=False)</span>
+<span class="sd">           &gt;&gt;&gt; aktk = L.eval()</span>
+
+<span class="sd">           All the rays transfer fuction are kept separated</span>
+
+<span class="sd">           &gt;&gt;&gt; H = L.H</span>
+<span class="sd">           &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
+
+<span class="sd">           Then we select only the significant rays</span>
+
+<span class="sd">           &gt;&gt;&gt; H.cut()</span>
+<span class="sd">           &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
+
+<span class="sd">           Then go to time domain (Inverse Fourier Transform)</span>
+
+<span class="sd">           &gt;&gt;&gt; T = H.totud()</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -4133,7 +4141,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="n">Nz</span><span class="p">,</span> <span class="n">ffts</span><span class="p">)</span>
         <span class="n">tud</span> <span class="o">=</span> <span class="n">TUDsignal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">tud</span><span class="p">)</span>
-</div>
+
 <div class="viewcode-block" id="FUDsignal.iftd"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.iftd.html#pylayers.signal.bsignal.FUDsignal.iftd">[docs]</a>    <span class="k">def</span> <span class="nf">iftd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">tstop</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ffts</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; time pasting</span>
 
