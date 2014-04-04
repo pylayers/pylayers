@@ -252,7 +252,6 @@ class Simul(object):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-
         a, t = self.DL.eval()
 
         return a, t
@@ -395,7 +394,7 @@ class Simul(object):
             self._traj.time()
 
         self.time = self._traj.t
-        self._time = pd.to_datetime(self.time)
+        self._time = pd.to_datetime(self.time,unit='s')
 
         #
         # Code
@@ -405,6 +404,7 @@ class Simul(object):
         for ut, t in enumerate(lt):
             self.ctime = t
             self.update_pos(t)
+            print self.N.__repr__()
             for w in wstd:
                 for na, nb, typ in llink[w]:
                     if self.todo[typ]:
@@ -424,8 +424,7 @@ class Simul(object):
                         else :
                             self._ak = self.DL.H.ak
                             self._tk = self.DL.H.tk
-
-                        self.data = self.data.append(pd.DataFrame({\
+                        df = pd.DataFrame({\
                                     't':self._time[ut],
                                     'id_a': na,
                                     'id_b': nb,
@@ -455,7 +454,8 @@ class Simul(object):
                                               'wstd', 'fcghz',
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                              ],index=[self._index]))
+                                              ],index=[self._index])
+                        self.data = self.data.append(df)
                         self._index = self._index + 1
                         # save csv
                         self.tocsv(ut, na, nb, w,init=init)
