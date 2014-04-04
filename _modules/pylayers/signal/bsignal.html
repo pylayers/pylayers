@@ -4119,17 +4119,19 @@
 <span class="sd">        &gt;&gt;&gt; L = lk.DLink(verbose=False)</span>
 <span class="sd">        &gt;&gt;&gt; aktk = L.eval()</span>
 <span class="sd">        &gt;&gt;&gt; H = L.H</span>
-<span class="sd">        &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
-
-<span class="sd">        We keep only the significant rays</span>
-
-<span class="sd">        &gt;&gt;&gt; H.cut()</span>
-<span class="sd">        &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
-
-<span class="sd">        We then transform into the time domain</span>
 
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
+
+<span class="sd">            We keep only the significant rays</span>
+
+<span class="sd">            &gt;&gt;&gt; H.cut()</span>
+<span class="sd">            &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
+
+<span class="sd">            We then transform into the time domain</span>
+
 
 <span class="sd">            &gt;&gt;&gt; T1 = H.totime()</span>
 <span class="sd">            &gt;&gt;&gt; T1.plot()</span>
