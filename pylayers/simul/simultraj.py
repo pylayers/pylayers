@@ -160,6 +160,7 @@ class Simul(object):
                 self.dpersons.update({t.name: person})
                 self._tmin = tt[0]
                 self._tmax = tt[-1]
+                self.time = tt
             else:
                 pos = np.array([t.x[0], t.y[0], t.z[0]])
                 self.dap.update({t.ID: {'pos': pos,
@@ -376,7 +377,7 @@ class Simul(object):
             lt = kwargs['t']
 
         if len(lt) == 0:
-            lt = np.array([0])
+            lt = self.time
         # check time attribute
         if not lt[0] >= self._tmin and\
                lt[-1] <= self._tmax:
@@ -384,7 +385,8 @@ class Simul(object):
 
         # self._traj is a copy of self.traj, which is affected by resampling.
         # it is only a temporary attribute for a given run
-
+        import ipdb
+        ipdb.set_trace()
         if len(lt) > 1:
             sf = 1/(1.*lt[1]-lt[0])
             self._traj = self.traj.resample(sf=sf, tstart=lt[0], tstop=lt[-1])
