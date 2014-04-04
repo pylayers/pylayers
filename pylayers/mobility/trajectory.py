@@ -525,6 +525,10 @@ class Trajectory(pd.DataFrame):
         tstep = (t[1]-t[0])/sf
         # need to add at least 3 values gor generate to estomate acceleration
         tnew = np.arange(tstart, tstop+3*tstep, tstep)
+        # check if generate resmaple is not longer that original
+        ut = np.where(tnew<self.tmax)
+        tnew=tnew[ut]
+
         # generate requieres 3 measures at least 
         xnew = fx(tnew)
         ynew = fy(tnew)
