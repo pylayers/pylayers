@@ -385,12 +385,14 @@ Description With Scalar Spherical Harmonics
 
 
 
-To calcultae scalar spherical harmonics use method ``ssh(A,L)``
+To calculate scalar spherical harmonics coefficient the method ``ssh(A,L)`` is
+used.
 
 .. code-block:: python
 
     L = 5
     A = ssh(A,L=5)
+
 .. code-block:: python
 
     A
@@ -476,12 +478,9 @@ To calcultae scalar spherical harmonics use method ``ssh(A,L)``
     plot(abs(A.S.Cx.s3[0]))
 
 
-
 .. parsed-literal::
 
     [<matplotlib.lines.Line2D at 0x87e8550>]
-
-
 
 
 .. image:: AP-AntennaSSH_files/AP-AntennaSSH_11_1.png

@@ -243,7 +243,7 @@ class Antenna(object):
         else:
             self.fromfile = True
 
-
+        self.tau = 0
         self.evaluated = False
 
         if self.fromfile:
@@ -1589,53 +1589,87 @@ class Antenna(object):
 
         return Err_rel, Errth_rel, Errph_rel
 
-    def getdelay(self,freq,delayCandidates = np.arange(-10,10,0.001)):
+    def getdelay(self,delayCandidates = np.arange(-10,10,0.001)):
         """ getelectrical delay
 
         Parameters
         ----------
+
         delayCandidates : ndarray
             default np.arange(-10,10,0.001)
 
         Returns
         -------
+
         electricalDelay  : float
 
         Author : Troels Pedersen (Aalborg University)
                  B.Uguen
 
         """
-        maxPowerInd  = np.unravel_index(np.argmax(abs(self.Ftheta)),np.shape(self.Ftheta))
-        electricalDelay  = delayCandidates[np.argmax(abs(
-            np.dot(self.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]
-                ,np.exp(2j*np.pi*freq.reshape(len(freq),1)
-                  *delayCandidates.reshape(1,len(delayCandidates))))
-                ))]
-        return(electricalDelay)
+        if self.evaluated:
+            maxPowerInd  = np.unravel_index(np.argmax(abs(self.Ftheta)),np.shape(self.Ftheta))
+            elD  = delayCandidates[np.argmax(abs(
+                np.dot(self.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]
+                       ,np.exp(2j*np.pi*self.fa[:,np.newaxis]
+                               *delayCandidates[np.newaxis,:]))))]
+            #electricalDelay  = delayCandidates[np.argmax(abs(
+            #    np.dot(self.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]
+            #        ,np.exp(2j*np.pi*freq.reshape(len(freq),1)
+            #          *delayCandidates.reshape(1,len(delayCandidates))))
+            #        ))]
+            return(elD)
+        else:
+            raise Warning('Antenna has not been evaluated')
 
-    def elec_delay(self):
-        """ apply an electrical delay
+    def elec_delay(self,tau):
+        r""" apply an electrical delay
 
-         Notes
-         -----
-         This function apply an electrical delay math::`\\exp{2 j \\pi f \\tau)`
-         on the phase of diagram math::``F_{\\theta}`` and math::`F_{\\phi}`
+        Parameters
+        ----------
+
+        tau : float
+            electrical delay in nanoseconds
+
+        Notes
+        -----
+
+         This function applies an electrical delay math::`\exp{+2 j \pi f \tau)`
+         on the phase of diagram math::``F_{\theta}`` and math::`F_{\phi}`
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.antenna import *
+            >>> A = Antenna('S2R2.sh3')
+            >>> A.Fsynth()
+            >>> tau = A.getdelay()
+            >>> A.elec_delay(tau)
+
+        
 
         """
-        tau = self.tau
-        Ftheta = self.Ftheta
-        Fphi = self.Fphi
-        sh = np.shape(Ftheta)
-        e = np.exp(2 * pi * 1j * self.fa * tau)
-        E = np.outer(e, ones(sh[1] * sh[2]))
-
-        Fth = Ftheta.reshape(sh[0], sh[1] * sh[2])
-        EFth = Fth * E
-        self.Ftheta = EFth.reshape(sh[0], sh[1], sh[2])
-
-        Fph = Fphi.reshape(sh[0], sh[1] * sh[2])
-        EFph = Fph * E
-        self.Fphi = EFph.reshape(sh[0], sh[1], sh[2])
+        
+        self.tau = self.tau+tau
+        if self.evaluated:
+            Ftheta = self.Ftheta
+            Fphi = self.Fphi
+            sh = np.shape(Ftheta)
+            e = np.exp(2 * np.pi * 1j * self.fa[:,np.newaxis,np.newaxis]* tau)
+            #E = np.outer(e, ones(sh[1] * sh[2]))
+            #Fth = Ftheta.reshape(sh[0], sh[1] * sh[2])
+            #EFth = Fth * E
+            #self.Ftheta = EFth.reshape(sh[0], sh[1], sh[2])
+            self.Ftheta = self.Ftheta*e
+            self.Fphi = self.Fphi*e
+            #Fph = Fphi.reshape(sh[0], sh[1] * sh[2])
+            #EFph = Fph * E
+            #self.Fphi = EFph.reshape(sh[0], sh[1], sh[2])
+        else:
+            raise Warning('antenna has not been evaluated')
 
     def demo(self):
         """ display few commands for executing little demo
@@ -2103,13 +2137,16 @@ class Antenna(object):
 
             lmax = self.S.Cx.lmax
             Y ,indx = SSHFunc2(lmax, theta,phi)
-            k = self.S.Cx.k2[:,0]
+            try:
+                k = self.S.Cx.k2[:,0]
+            except:
+                k = self.S.Cx.k2[:]
             if pattern :
 
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
-                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True )
+                Fth,Fph = CartToSphere(theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True )
                 Fth = Fth.reshape(Nf,Nt,Np)
                 Fph = Fph.reshape(Nf,Nt,Np)
 
