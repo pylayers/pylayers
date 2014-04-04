@@ -1155,7 +1155,7 @@
             <span class="n">y_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="n">posmin</span><span class="p">:</span><span class="n">posmax</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">y_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">posmin</span><span class="p">:</span><span class="n">posmax</span><span class="p">]</span>
-       
+
         <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s">&#39;Usignal&#39;</span><span class="p">:</span>
             <span class="n">U</span> <span class="o">=</span> <span class="n">Usignal</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y_new</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s">&#39;Tchannel&#39;</span><span class="p">:</span>
@@ -2995,7 +2995,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="TUDsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.TUDsignal.__init__.html#pylayers.signal.bsignal.TUDsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">tau</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TUDsigal</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TUDsignal</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
         <span class="c">#TUsignal.__init__(self, x, y)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span>
 </div>
@@ -3851,7 +3851,7 @@
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        FHsignal.ifft, FUsignal.symH, Fusignal.symHz</span>
+<span class="sd">        FHsignal.ifft, FUsignal.symH, FUsignal.symHz</span>
 
 
 
@@ -3941,7 +3941,7 @@
 
 </div>
 <div class="viewcode-block" id="FUsignal.tap"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.tap.html#pylayers.signal.bsignal.FUsignal.tap">[docs]</a>    <span class="k">def</span> <span class="nf">tap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; calculate channel tap</span>
+        <span class="sd">r&quot;&quot;&quot; calculates channel taps</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -3954,11 +3954,16 @@
 <span class="sd">        baseband : boolean</span>
 <span class="sd">            default : True</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        htapi</span>
+
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        see [Tse] http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf</span>
-<span class="sd">        page 26</span>
+<span class="sd">        [Tse] David Tse, http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf page 26</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;fcGHz&#39;</span><span class="p">:</span><span class="mf">4.5</span><span class="p">,</span>
@@ -4105,9 +4110,26 @@
 
 <span class="sd">        FUsignal.ift</span>
 
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        #.. plot::</span>
+<span class="sd">        #    :include-source:</span>
+<span class="sd">        #</span>
+<span class="sd">        #   &gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">        #   &gt;&gt;&gt; L = DLink()</span>
+<span class="sd">        #   &gt;&gt;&gt; aktk = L.eval()</span>
+<span class="sd">        #   &gt;&gt;&gt; H = L.H</span>
+<span class="sd">        # </span>
+<span class="sd">        #   &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
+<span class="sd">        #   &gt;&gt;&gt; H.cut()</span>
+<span class="sd">        #   &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
+<span class="sd">        #   &gt;&gt;&gt; T = H.totud()</span>
+
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">taue</span>
-        <span class="n">Nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
+        <span class="n">Nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="n">Nz</span><span class="p">,</span> <span class="n">ffts</span><span class="p">)</span>
         <span class="n">tud</span> <span class="o">=</span> <span class="n">TUDsignal</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">tud</span><span class="p">)</span>
@@ -4349,12 +4371,15 @@
         <span class="sd">&quot;&quot;&quot; cut the signal at an Energy threshold level</span>
 
 <span class="sd">        threshold : float</span>
+<span class="sd">            default 0.99</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;energy&#39;</span><span class="p">)</span>
         <span class="n">E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eprfl</span><span class="p">()</span>
         <span class="n">cumE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">E</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cumE</span><span class="o">&lt;</span><span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">taud</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">taue</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">doa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doa</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dod</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">v</span><span class="p">,:]</span>
@@ -4997,7 +5022,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Apr 03, 2014.
+      Last updated on avril 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

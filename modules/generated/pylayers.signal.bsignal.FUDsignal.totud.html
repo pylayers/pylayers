@@ -122,6 +122,19 @@
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="pylayers.signal.bsignal.FUsignal.ift.html#pylayers.signal.bsignal.FUsignal.ift" title="pylayers.signal.bsignal.FUsignal.ift"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.ift</span></tt></a></p>
 </div>
+<p class="rubric">Examples</p>
+<p>#.. plot::
+#    :include-source:
+#
+#   &gt;&gt;&gt; from pylayers.simul.link import *
+#   &gt;&gt;&gt; L = DLink()
+#   &gt;&gt;&gt; aktk = L.eval()
+#   &gt;&gt;&gt; H = L.H
+# 
+#   &gt;&gt;&gt; f,a = H.show(cmap=&#8217;jet&#8217;)
+#   &gt;&gt;&gt; H.cut()
+#   &gt;&gt;&gt; f,a = H.show(cmap=&#8217;jet&#8217;)
+#   &gt;&gt;&gt; T = H.totud()</p>
 </dd></dl>
 
 </div>
@@ -159,7 +172,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Apr 03, 2014.
+      Last updated on avril 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

@@ -131,6 +131,7 @@
 <span class="kn">from</span> <span class="nn">matplotlib.widgets</span> <span class="kn">import</span> <span class="n">Slider</span><span class="p">,</span> <span class="n">CheckButtons</span>
 
 
+
 <span class="k">class</span> <span class="nc">Trajectories</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  Define a list of trajectory</span>
 
@@ -140,22 +141,16 @@
         <span class="sd">&quot;&quot;&quot; initialization</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">=</span><span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">=</span><span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+</div>
 <div class="viewcode-block" id="Trajectories.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectories.__repr__.html#pylayers.mobility.trajectory.Trajectories.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Trajectories performed in Layout : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span>
             <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-                <span class="n">typ</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">typ</span>
-                <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;ag&#39;</span><span class="p">:</span>
-
-                    <span class="n">string</span> <span class="o">=</span><span class="s">&#39;Trajectory of agent &#39;</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; with ID &#39;</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span>
-                <span class="k">else</span> <span class="p">:</span>
-                    <span class="n">string</span> <span class="o">=</span><span class="s">&#39;Access point &#39;</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; with ID &#39;</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">ID</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="n">__repr__</span><span class="p">()</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">except</span><span class="p">:</span>
@@ -182,7 +177,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Trajectories.loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectories.loadh5.html#pylayers.mobility.trajectory.Trajectories.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span><span class="s">&#39;simulnet_TA-Office.h5&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Trajectories.loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectories.loadh5.html#pylayers.mobility.trajectory.Trajectories.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span><span class="s">&#39;simulnet_TA-Office.h5&#39;</span><span class="p">,</span><span class="n">append</span> <span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
 
         <span class="sd">&quot;&quot;&quot; import simulnet h5 file</span>
@@ -192,6 +187,8 @@
 
 <span class="sd">        filename : string</span>
 <span class="sd">            default simulnet + Layout_filename . h5</span>
+<span class="sd">        append : boolean</span>
+<span class="sd">            if True : append new trajectories to preexisting ones</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -215,7 +212,8 @@
             <span class="n">fil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">HDFStore</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s">&#39; not founded&#39;</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">append</span><span class="p">:</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))]</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fil</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">fil</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
@@ -230,9 +228,62 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Trajectory</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span><span class="n">ID</span><span class="o">=</span><span class="n">ID</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">))</span>
         <span class="n">fil</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span> <span class="o">=</span> <span class="n">layout</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
 </div>
+    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tstart</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tstop</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; resample trajectories</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        sf : int</span>
+<span class="sd">            sampling factor</span>
+<span class="sd">        tstart : float</span>
+<span class="sd">            new start time (must be &gt; original start time).</span>
+<span class="sd">            if tstart = -1 : original start conserved</span>
+<span class="sd">        tstop : float</span>
+<span class="sd">            new stop time (must be &lt; original stop time)</span>
+<span class="sd">            if tstop = -1 : original stop conserved</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        T : Trajectories</span>
+<span class="sd">            new trajectories object updated</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">:</span>
+                <span class="n">T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=</span><span class="n">tstart</span><span class="p">,</span> <span class="n">tstop</span><span class="o">=</span><span class="n">tstop</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">T</span><span class="o">.</span><span class="n">Lfilename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span>
+        <span class="n">T</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">T</span>
+
+    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; extract time from a trajectory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        unit : integer</span>
+<span class="sd">            default 0 (s) - 3 (ms) 6 (mus) 9 (ns)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        update self.t</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;ag&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">ut</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+
 <div class="viewcode-block" id="Trajectories.ishow"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectories.ishow.html#pylayers.mobility.trajectory.Trajectories.ishow">[docs]</a>    <span class="k">def</span> <span class="nf">ishow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            interactive show of trajectories</span>
@@ -265,17 +316,17 @@
         <span class="k">for</span> <span class="n">iT</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">T</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;ag&#39;</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">valinit</span><span class="p">],</span><span class="n">T</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">valinit</span><span class="p">],</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
-                             <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">iT</span><span class="p">],</span> <span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+                             <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">iT</span><span class="p">],</span> <span class="n">visible</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
                 <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">T</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">T</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;^&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
-                             <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">iT</span><span class="p">],</span> <span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+                             <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">iT</span><span class="p">],</span> <span class="n">visible</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
                 <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;:&#39;</span> <span class="o">+</span> <span class="n">T</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
         <span class="c"># init boolean value for visible in checkbutton</span>
-        <span class="n">blabels</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="n">blabels</span> <span class="o">=</span> <span class="p">[</span><span class="bp">True</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
 
 
         <span class="c">########</span>
@@ -362,15 +413,26 @@
             <span class="c"># total time</span>
             <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span>
             <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;ID : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;---&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;t (s) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; : &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="p">)</span> <span class="o">+</span><span class="s">&quot; : &quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;dtot (m) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">dtot</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Vmoy (m/s) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dtot</span><span class="o">/</span><span class="n">T</span><span class="p">))</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">typ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span>
+            <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;ag&#39;</span><span class="p">:</span>
+                <span class="n">string</span> <span class="o">=</span><span class="s">&#39;Trajectory of agent &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; with ID &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">string</span> <span class="o">=</span><span class="s">&#39;Access point &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39; with ID &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="n">string</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;ag&#39;</span><span class="p">:</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;t (s) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; : &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts</span><span class="p">)</span> <span class="o">+</span><span class="s">&quot; : &quot;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;dtot (m) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">dtot</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Vmoy (m/s) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dtot</span><span class="o">/</span><span class="n">T</span><span class="p">))</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;t (s) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%3.2f</span><span class="s">&quot;</span> <span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;Vmoy (m/s) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;vx&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;void Trajectory&#39;</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+
 </div>
 <div class="viewcode-block" id="Trajectory.update"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.update.html#pylayers.mobility.trajectory.Trajectory.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; update class member data</span>
@@ -460,8 +522,9 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="n">t</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Trajectory.generate requieres at least 3 time stamps&#39;</span><span class="p">)</span>
         <span class="n">pt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pt&#39;</span><span class="p">]</span>
-
         <span class="n">npt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">td</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;unit&#39;</span><span class="p">])</span>
         <span class="c"># velocity vector</span>
@@ -494,14 +557,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
-<div class="viewcode-block" id="Trajectory.resample"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.resample.html#pylayers.mobility.trajectory.Trajectory.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="Trajectory.resample"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.resample.html#pylayers.mobility.trajectory.Trajectory.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tstop</span> <span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; resample trajectory</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        sf : int</span>
+<span class="sd">        sf : float</span>
 <span class="sd">            sampling factor</span>
+<span class="sd">        tstart : float</span>
+<span class="sd">            new start time (must be &gt; original start time).</span>
+<span class="sd">            if tstart = -1 : original start conserved</span>
+<span class="sd">        tstop : float</span>
+<span class="sd">            new stop time (must be &lt; original stop time)</span>
+<span class="sd">            if tstop = -1 : original stop conserved</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -516,13 +585,35 @@
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">fx</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
         <span class="n">fy</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">tstart</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">tstop</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tstart</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">tstart</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">tstart</span><span class="p">:</span>
+                <span class="n">tstart</span> <span class="o">=</span> <span class="n">tstart</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;tstart &lt; tmin&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tstop</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tstop</span><span class="p">:</span>
+                <span class="n">tstop</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;tstop &gt; tmax&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tstop</span> <span class="o">=</span> <span class="n">tstop</span>
+        <span class="k">if</span> <span class="n">tstart</span> <span class="o">==</span> <span class="n">tstop</span><span class="p">:</span>
+            <span class="n">tstop</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">tstart</span>
         <span class="n">tstep</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">sf</span>
-        <span class="n">tnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tstart</span><span class="p">,</span> <span class="n">tstop</span><span class="p">,</span> <span class="n">tstep</span><span class="p">)</span>
+        <span class="c"># need to add at least 3 values gor generate to estomate acceleration</span>
+        <span class="n">tnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tstart</span><span class="p">,</span> <span class="n">tstop</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">tstep</span><span class="p">,</span> <span class="n">tstep</span><span class="p">)</span>
+        <span class="c"># check if generate resmaple is not longer that original</span>
+        <span class="n">ut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tnew</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">)</span>
+        <span class="n">tnew</span><span class="o">=</span><span class="n">tnew</span><span class="p">[</span><span class="n">ut</span><span class="p">]</span>
+
+        <span class="c"># generate requieres 3 measures at least </span>
         <span class="n">xnew</span> <span class="o">=</span> <span class="n">fx</span><span class="p">(</span><span class="n">tnew</span><span class="p">)</span>
         <span class="n">ynew</span> <span class="o">=</span> <span class="n">fy</span><span class="p">(</span><span class="n">tnew</span><span class="p">)</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+
+
         <span class="n">T</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                    <span class="n">typ</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">,</span>
@@ -530,7 +621,7 @@
                    <span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">xnew</span><span class="p">,</span><span class="n">ynew</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tnew</span><span class="p">)),))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                    <span class="n">unit</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">,</span>
                    <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">)</span>
-
+        <span class="n">T</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">T</span>
 
 
@@ -842,7 +933,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Apr 03, 2014.
+      Last updated on avril 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

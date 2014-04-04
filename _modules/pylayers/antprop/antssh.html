@@ -258,7 +258,6 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">es</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">ex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nray</span><span class="p">)</span> <span class="p">,</span> <span class="n">dtype</span>  <span class="o">=</span> <span class="nb">complex</span>  <span class="p">)</span>
 
-
     <span class="n">es</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ex</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ey</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">ez</span>
     <span class="n">es</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ex</span> <span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">ey</span>
     <span class="c">#~ if pattern:</span>
@@ -270,7 +269,7 @@
     <span class="k">return</span> <span class="n">es</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">es</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 </div>
-<span class="k">def</span> <span class="nf">ssh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">ssh</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="o">=</span> <span class="mi">20</span><span class="p">,</span><span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -366,7 +365,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Apr 03, 2014.
+      Last updated on avril 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

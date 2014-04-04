@@ -313,8 +313,6 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
             <span class="n">AntennaName</span><span class="p">,</span><span class="n">Extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">typ</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="o">==</span><span class="s">&#39;&#39;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">fromfile</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="k">else</span><span class="p">:</span>
@@ -322,7 +320,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fromfile</span> <span class="o">=</span> <span class="bp">True</span>
 
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fromfile</span><span class="p">:</span>
@@ -335,7 +333,6 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;sh3&#39;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">loadsh3</span><span class="p">()</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;sh2&#39;</span><span class="p">:</span>
-
                     <span class="bp">self</span><span class="o">.</span><span class="n">loadsh2</span><span class="p">()</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;trx1&#39;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">load_trx</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;directory&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
@@ -1668,53 +1665,87 @@
 
         <span class="k">return</span> <span class="n">Err_rel</span><span class="p">,</span> <span class="n">Errth_rel</span><span class="p">,</span> <span class="n">Errph_rel</span>
 </div>
-<div class="viewcode-block" id="Antenna.getdelay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.getdelay.html#pylayers.antprop.antenna.Antenna.getdelay">[docs]</a>    <span class="k">def</span> <span class="nf">getdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">delayCandidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.001</span><span class="p">)):</span>
+<div class="viewcode-block" id="Antenna.getdelay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.getdelay.html#pylayers.antprop.antenna.Antenna.getdelay">[docs]</a>    <span class="k">def</span> <span class="nf">getdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">delayCandidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.001</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; getelectrical delay</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        delayCandidates : ndarray</span>
 <span class="sd">            default np.arange(-10,10,0.001)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        electricalDelay  : float</span>
 
 <span class="sd">        Author : Troels Pedersen (Aalborg University)</span>
 <span class="sd">                 B.Uguen</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">maxPowerInd</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">))</span>
-        <span class="n">electricalDelay</span>  <span class="o">=</span> <span class="n">delayCandidates</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,</span><span class="n">maxPowerInd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">maxPowerInd</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-                <span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">freq</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
-                  <span class="o">*</span><span class="n">delayCandidates</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">delayCandidates</span><span class="p">))))</span>
-                <span class="p">))]</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">electricalDelay</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="n">maxPowerInd</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">))</span>
+            <span class="n">elD</span>  <span class="o">=</span> <span class="n">delayCandidates</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,</span><span class="n">maxPowerInd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">maxPowerInd</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+                       <span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+                               <span class="o">*</span><span class="n">delayCandidates</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]))))]</span>
+            <span class="c">#electricalDelay  = delayCandidates[np.argmax(abs(</span>
+            <span class="c">#    np.dot(self.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]</span>
+            <span class="c">#        ,np.exp(2j*np.pi*freq.reshape(len(freq),1)</span>
+            <span class="c">#          *delayCandidates.reshape(1,len(delayCandidates))))</span>
+            <span class="c">#        ))]</span>
+            <span class="k">return</span><span class="p">(</span><span class="n">elD</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s">&#39;Antenna has not been evaluated&#39;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Antenna.elec_delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.elec_delay.html#pylayers.antprop.antenna.Antenna.elec_delay">[docs]</a>    <span class="k">def</span> <span class="nf">elec_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; apply an electrical delay</span>
+<div class="viewcode-block" id="Antenna.elec_delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.elec_delay.html#pylayers.antprop.antenna.Antenna.elec_delay">[docs]</a>    <span class="k">def</span> <span class="nf">elec_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tau</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; apply an electrical delay</span>
 
-<span class="sd">         Notes</span>
-<span class="sd">         -----</span>
-<span class="sd">         This function apply an electrical delay math::`\\exp{2 j \\pi f \\tau)`</span>
-<span class="sd">         on the phase of diagram math::``F_{\\theta}`` and math::`F_{\\phi}`</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        tau : float</span>
+<span class="sd">            electrical delay in nanoseconds</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">         This function applies an electrical delay math::`\exp{+2 j \pi f \tau)`</span>
+<span class="sd">         on the phase of diagram math::``F_{\theta}`` and math::`F_{\phi}`</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
+<span class="sd">            &gt;&gt;&gt; A = Antenna(&#39;S2R2.sh3&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; A.Fsynth()</span>
+<span class="sd">            &gt;&gt;&gt; tau = A.getdelay()</span>
+<span class="sd">            &gt;&gt;&gt; A.elec_delay(tau)</span>
+
+<span class="sd">        </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span>
-        <span class="n">Ftheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span>
-        <span class="n">Fphi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span>
-        <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Ftheta</span><span class="p">)</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span> <span class="o">*</span> <span class="n">tau</span><span class="p">)</span>
-        <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">ones</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-
-        <span class="n">Fth</span> <span class="o">=</span> <span class="n">Ftheta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">EFth</span> <span class="o">=</span> <span class="n">Fth</span> <span class="o">*</span> <span class="n">E</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span> <span class="o">=</span> <span class="n">EFth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-
-        <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fphi</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">EFph</span> <span class="o">=</span> <span class="n">Fph</span> <span class="o">*</span> <span class="n">E</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span> <span class="o">=</span> <span class="n">EFph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="o">+</span><span class="n">tau</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="n">Ftheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span>
+            <span class="n">Fphi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span>
+            <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Ftheta</span><span class="p">)</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span> <span class="n">tau</span><span class="p">)</span>
+            <span class="c">#E = np.outer(e, ones(sh[1] * sh[2]))</span>
+            <span class="c">#Fth = Ftheta.reshape(sh[0], sh[1] * sh[2])</span>
+            <span class="c">#EFth = Fth * E</span>
+            <span class="c">#self.Ftheta = EFth.reshape(sh[0], sh[1], sh[2])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="o">*</span><span class="n">e</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span><span class="o">*</span><span class="n">e</span>
+            <span class="c">#Fph = Fphi.reshape(sh[0], sh[1] * sh[2])</span>
+            <span class="c">#EFph = Fph * E</span>
+            <span class="c">#self.Fphi = EFph.reshape(sh[0], sh[1], sh[2])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s">&#39;antenna has not been evaluated&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Antenna.demo"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.demo.html#pylayers.antprop.antenna.Antenna.demo">[docs]</a>    <span class="k">def</span> <span class="nf">demo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display few commands for executing little demo</span>
@@ -2182,13 +2213,14 @@
 
             <span class="n">lmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">lmax</span>
             <span class="n">Y</span> <span class="p">,</span><span class="n">indx</span> <span class="o">=</span> <span class="n">SSHFunc2</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">k2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c">#k = self.S.Cx.k2[:,0]</span>
+            <span class="c"># same k for x y and z</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">k2</span>
             <span class="k">if</span> <span class="n">pattern</span> <span class="p">:</span>
-
                 <span class="n">Ex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span><span class="n">Y</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
                 <span class="n">Ey</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span><span class="n">Y</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
                 <span class="n">Ez</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">cz</span><span class="p">,</span><span class="n">Y</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-                <span class="n">Fth</span><span class="p">,</span><span class="n">Fph</span> <span class="o">=</span> <span class="n">CartToSphere</span> <span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Ey</span><span class="p">,</span><span class="n">Ez</span><span class="p">,</span> <span class="n">bfreq</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">pattern</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
+                <span class="n">Fth</span><span class="p">,</span><span class="n">Fph</span> <span class="o">=</span> <span class="n">CartToSphere</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Ey</span><span class="p">,</span><span class="n">Ez</span><span class="p">,</span> <span class="n">bfreq</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">pattern</span> <span class="o">=</span> <span class="bp">True</span> <span class="p">)</span>
                 <span class="n">Fth</span> <span class="o">=</span> <span class="n">Fth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span><span class="n">Nt</span><span class="p">,</span><span class="n">Np</span><span class="p">)</span>
                 <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span><span class="n">Nt</span><span class="p">,</span><span class="n">Np</span><span class="p">)</span>
 
@@ -2530,7 +2562,7 @@
                         <span class="n">lmax</span> <span class="o">=</span> <span class="n">lmax</span><span class="p">,</span>
                         <span class="n">data</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.s3&#39;</span><span class="p">],</span>
                         <span class="n">ind</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.ind&#39;</span><span class="p">],</span>
-                        <span class="n">k</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.k&#39;</span><span class="p">])</span>
+                        <span class="n">k</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.k&#39;</span><span class="p">]))</span>
 
 
             <span class="n">Cy</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span> <span class="s">&#39;s3&#39;</span><span class="p">,</span>
@@ -2539,7 +2571,7 @@
                         <span class="n">lmax</span> <span class="o">=</span> <span class="n">lmax</span><span class="p">,</span>
                         <span class="n">data</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.s3&#39;</span><span class="p">],</span>
                         <span class="n">ind</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.ind&#39;</span><span class="p">],</span>
-                        <span class="n">k</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.k&#39;</span><span class="p">])</span>
+                        <span class="n">k</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.k&#39;</span><span class="p">]))</span>
 
 
 
@@ -2547,10 +2579,9 @@
                         <span class="n">fmin</span> <span class="o">=</span> <span class="n">fmin</span> <span class="p">,</span>
                         <span class="n">fmax</span> <span class="o">=</span> <span class="n">fmax</span> <span class="p">,</span>
                         <span class="n">data</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.s3&#39;</span><span class="p">],</span>
-
                         <span class="n">lmax</span> <span class="o">=</span> <span class="n">lmax</span><span class="p">,</span>
                         <span class="n">ind</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.ind&#39;</span><span class="p">],</span>
-                        <span class="n">k</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.k&#39;</span><span class="p">])</span>
+                        <span class="n">k</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.k&#39;</span><span class="p">]))</span>
 
 
             <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;S&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -2573,7 +2604,7 @@
         <span class="c"># create vsh2 file</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
             <span class="n">_filevsh2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.trx&#39;</span><span class="p">,</span> <span class="s">&#39;.vsh2&#39;</span><span class="p">)</span>
-            
+
         <span class="n">_filevsh2</span>  <span class="o">=</span> <span class="n">filename</span> 
         <span class="n">filevsh2</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filevsh2</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRANT&#39;</span><span class="p">])</span>
 
@@ -3337,7 +3368,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Apr 03, 2014.
+      Last updated on avril 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

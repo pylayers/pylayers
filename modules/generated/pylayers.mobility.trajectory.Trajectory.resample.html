@@ -100,15 +100,25 @@
 <h1>pylayers.mobility.trajectory.Trajectory.resample<a class="headerlink" href="#pylayers-mobility-trajectory-trajectory-resample" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.mobility.trajectory.Trajectory.resample">
-<tt class="descclassname">Trajectory.</tt><tt class="descname">resample</tt><big>(</big><em>sf=2</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/trajectory.html#Trajectory.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.resample" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Trajectory.</tt><tt class="descname">resample</tt><big>(</big><em>sf=2</em>, <em>tstart=-1</em>, <em>tstop=-1</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/trajectory.html#Trajectory.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.trajectory.Trajectory.resample" title="Permalink to this definition">¶</a></dt>
 <dd><p>resample trajectory</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sf</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sf</strong> : float</p>
 <blockquote>
 <div><p>sampling factor</p>
+</div></blockquote>
+<p><strong>tstart</strong> : float</p>
+<blockquote>
+<div><p>new start time (must be &gt; original start time).
+if tstart = -1 : original start conserved</p>
+</div></blockquote>
+<p><strong>tstop</strong> : float</p>
+<blockquote>
+<div><p>new stop time (must be &lt; original stop time)
+if tstop = -1 : original stop conserved</p>
 </div></blockquote>
 </td>
 </tr>
@@ -157,7 +167,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 03, 2014.
+      Last updated on avril 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

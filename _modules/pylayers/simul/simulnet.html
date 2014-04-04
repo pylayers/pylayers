@@ -144,6 +144,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.network.communication</span> <span class="kn">import</span> <span class="n">Gcom</span>
 <span class="kn">from</span> <span class="nn">pylayers.network.show</span> <span class="kn">import</span> <span class="n">ShowNet</span><span class="p">,</span> <span class="n">ShowTable</span>
 <span class="kn">from</span> <span class="nn">pylayers.mobility.agent</span> <span class="kn">import</span> <span class="n">Agent</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.network.emsolver</span> <span class="kn">import</span> <span class="n">EMSolver</span>
 <span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="n">Slab</span>
@@ -203,7 +204,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mysql&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;seed&#39;</span><span class="p">])</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;verbose&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;ipython_nb_show&#39;</span><span class="p">]):</span>
@@ -457,6 +458,7 @@
             <span class="n">store</span><span class="o">.</span><span class="n">get_storer</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span>
         <span class="c">#saving metadata</span>
         <span class="n">store</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traj</span><span class="o">.</span><span class="n">loadh5</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&quot;filename&quot;</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;_&#39;</span><span class="o">+</span><span class="n">layfile</span><span class="o">+</span><span class="s">&#39;.h5&#39;</span><span class="p">)</span>
 
 
 
@@ -510,7 +512,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Apr 03, 2014.
+      Last updated on avril 04, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
