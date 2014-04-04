@@ -496,7 +496,7 @@ class Simul(object):
             nodeid = []
             pos = []
             orient = []
-            for up, person in enumerate(self.dpersons.values()):
+            for up, person in enumerate(self.dpersons.values()):   
                 person.settopos(self._traj[up], t=t, cs=True)
                 name = person.name
                 dev = person.dev.keys()
