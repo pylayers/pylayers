@@ -385,12 +385,13 @@ class Simul(object):
 
         # self._traj is a copy of self.traj, which is affected by resampling.
         # it is only a temporary attribute for a given run
+
         if len(lt) > 1:
             sf = 1/(1.*lt[1]-lt[0])
             self._traj = self.traj.resample(sf=sf, tstart=lt[0], tstop=lt[-1])
 
         else:
-            self._traj = self.traj.resample(sf=1.0,tstart=lt[0],tstop=lt[-1])
+            self._traj = self.traj.resample(sf=1.0,tstart=lt[0])
             self._traj.time()
 
         self.time = self._traj.t

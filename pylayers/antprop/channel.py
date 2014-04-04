@@ -1317,9 +1317,11 @@ class Ctilde(object):
         alpha = t1 * Fbt + t2 * Fbp
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
+        
         H.applyFriis()
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))/len(H.y))
-        H.tk = H.tau0
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
+                                                             / len(H.y))
+        H.tk = H.taud
         return(H)
 
     def vec2scal(self):
@@ -1460,8 +1462,8 @@ class Tchannel(bs.FUDAsignal):
         st = ''
         st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
         st = st + 'shape  :'+str(np.shape(self.y))+"\n"
-        st = st + 'tau :'+str(min(self.tau0))+' '+str(max(self.tau0))+"\n"
-        st = st + 'dist :'+str(min(0.3*self.tau0))+' '+str(max(0.3*self.tau0))+"\n"
+        st = st + 'tau :'+str(min(self.taud))+' '+str(max(self.taud))+"\n"
+        st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
         return(st)
 
 
@@ -1542,10 +1544,10 @@ class Tchannel(bs.FUDAsignal):
         try:
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-                if k != 'tau1':
-                    setattr(self,str(k),va[:])
-                else :
-                    setattr(self,str(k),va)
+                # if k != 'tau1':
+                #     setattr(self,str(k),va[:])
+                # else :
+                setattr(self,str(k),va)
 
             a = f.attrs['a']
             b = f.attrs['b']
@@ -1553,7 +1555,7 @@ class Tchannel(bs.FUDAsignal):
             Tb = f.attrs['Tb']
             f.close()
 
-            self.__init__(self.x, self.y, self.tau0, self.dod, self.doa)
+            self.__init__(self.x, self.y, self.taud, self.dod, self.doa)
 
             if output :
                 return a,b,Ta,Tb
@@ -1615,14 +1617,14 @@ class Tchannel(bs.FUDAsignal):
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-                if k != 'tau1' and k !='isFriis':
+                if k !='isFriis':
                     setattr(self,str(k),va[:])
                 else :
                     setattr(self,str(k),va)
 
             
             fh5.close()
-            self.__init__(self.x, self.y, self.tau0, self.dod, self.doa)
+            self.__init__(self.x, self.y, self.taud, self.dod, self.doa)
 
         except:
             fh5.close()
@@ -1657,7 +1659,7 @@ class Tchannel(bs.FUDAsignal):
         """
 
         U = self * W
-        V = bs.FUDAsignal(U.x, U.y, self.tau0, self.dod, self.doa)
+        V = bs.FUDAsignal(U.x, U.y, self.taud, self.dod, self.doa)
 
         return(V)
 
@@ -1720,7 +1722,7 @@ class Tchannel(bs.FUDAsignal):
 
 
 
-        h = bs.FUDsignal(self.x, self.y, self.tau0)
+        h = bs.FUDsignal(self.x, self.y, self.taud)
         htap = h.chantap(**kwargs)
         return htap
 
@@ -1998,7 +2000,7 @@ class Tchannel(bs.FUDAsignal):
         else :
             ang = np.array((-180,180))
 
-        delay = self.tau0
+        delay = self.taud
         if typ =='m':
             delay = delay*0.3
 
@@ -2296,11 +2298,6 @@ class Tchannel(bs.FUDAsignal):
         w      :  waveform
         Nray   :  int
             number of rays to be displayed
-
-        See Also
-        --------
-
-        pylayers.signal.bsignal.FUsignal.iftd
 
         """
         # Construire W
