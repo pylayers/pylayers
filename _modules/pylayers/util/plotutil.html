@@ -426,7 +426,8 @@
                     <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s">&#39;&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">k</span> <span class="o">=</span> <span class="n">l</span><span class="o">*</span><span class="n">ncol</span><span class="o">+</span><span class="n">c</span>
@@ -460,9 +461,10 @@
 
                 <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nxlabels</span><span class="p">])</span>
                 <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabels</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">nylabels</span><span class="p">])</span>
-
                 <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">k</span><span class="o">%</span><span class="n">ntitles</span><span class="p">])</span>
-                <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s">&#39;&#39;</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
                 <span class="c">#ax[l,c].get_xaxis().set_visible(False)</span>
                 <span class="c">#ax[l,c].get_yaxis().set_visible(False)</span>
 

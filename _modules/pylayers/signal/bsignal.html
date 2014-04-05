@@ -4108,17 +4108,15 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        .. plot::</span>
-<span class="sd">            :include-source:</span>
-
-<span class="sd">            &gt;&gt;&gt; L = DLink(verbose=False)</span>
-<span class="sd">            &gt;&gt;&gt; aktk = L.eval()</span>
-<span class="sd">            &gt;&gt;&gt; L.H.cut()</span>
-<span class="sd">            &gt;&gt;&gt; T1 = L.H.totime()</span>
-<span class="sd">            &gt;&gt;&gt; T1.plot()</span>
-<span class="sd">            &gt;&gt;&gt; L.H.minphas()</span>
-<span class="sd">            &gt;&gt;&gt; T2 = L.H.totime()</span>
-<span class="sd">            &gt;&gt;&gt; T2.plot()</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.simul.link import *</span>
+<span class="sd">        &gt;&gt;&gt; L = DLink(verbose=False)</span>
+<span class="sd">        &gt;&gt;&gt; aktk = L.eval()</span>
+<span class="sd">        &gt;&gt;&gt; L.H.cut()</span>
+<span class="sd">        &gt;&gt;&gt; T1 = L.H.totime()</span>
+<span class="sd">        &gt;&gt;&gt; f,a = T1.plot(typ=&#39;v&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L.H.minphas()</span>
+<span class="sd">        &gt;&gt;&gt; T2 = L.H.totime()</span>
+<span class="sd">        &gt;&gt;&gt; f,a = T2.plot(typ=&#39;v&#39;)</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
@@ -4162,7 +4160,6 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span>
