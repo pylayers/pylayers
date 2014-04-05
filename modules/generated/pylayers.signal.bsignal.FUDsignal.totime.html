@@ -107,27 +107,33 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nz</strong> : int</p>
-<blockquote class="last">
-<div><blockquote>
+<blockquote>
 <div><p>Number of zeros for zero padding</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>ffts <span class="classifier-delimiter">:</span> <span class="classifier">nt</span></dt>
-<dd><p class="first last">fftshift indicator (default 0 )</p>
-</dd>
-</dl>
+<p><strong>ffts</strong> : nt</p>
+<blockquote class="last">
+<div><p>fftshift indicator (default 0 )</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>#           &gt;&gt;&gt; L.H.cut()
-#        &gt;&gt;&gt; f,a = H.show(cmap=&#8217;jet&#8217;)
-#        &gt;&gt;&gt; T1 = H.totime()
-#        &gt;&gt;&gt; T1.plot()
-#        &gt;&gt;&gt; H.minphas()
-#        &gt;&gt;&gt; T2 = H.totime()
-#        &gt;&gt;&gt; T2.plot()</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.signal.bsignal.FUsignal.ift.html#pylayers.signal.bsignal.FUsignal.ift" title="pylayers.signal.bsignal.FUsignal.ift"><tt class="xref py py-obj docutils literal"><span class="pre">FUsignal.ift</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">DLink</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aktk</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">cut</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T1</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">totime</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T1</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">minphas</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T2</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">totime</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T2</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-signal-bsignal-FUDsignal-totime-1.py">Source code</a>)</p>
 </dd></dl>
 
 </div>
@@ -165,7 +171,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 05, 2014.
+      Last updated on Apr 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

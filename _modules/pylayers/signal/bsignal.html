@@ -4111,18 +4111,14 @@
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
-<span class="sd">            &gt;&gt;&gt; from pylayers.simul.link import *</span>
 <span class="sd">            &gt;&gt;&gt; L = DLink(verbose=False)</span>
 <span class="sd">            &gt;&gt;&gt; aktk = L.eval()</span>
-<span class="sd">            &gt;&gt;&gt; f,a = L.H.show(cmap=&#39;jet&#39;)</span>
-
-<span class="sd">#           &gt;&gt;&gt; L.H.cut()</span>
-<span class="sd">#        &gt;&gt;&gt; f,a = H.show(cmap=&#39;jet&#39;)</span>
-<span class="sd">#        &gt;&gt;&gt; T1 = H.totime()</span>
-<span class="sd">#        &gt;&gt;&gt; T1.plot()</span>
-<span class="sd">#        &gt;&gt;&gt; H.minphas()</span>
-<span class="sd">#        &gt;&gt;&gt; T2 = H.totime()</span>
-<span class="sd">#        &gt;&gt;&gt; T2.plot()</span>
+<span class="sd">            &gt;&gt;&gt; L.H.cut()</span>
+<span class="sd">            &gt;&gt;&gt; T1 = L.H.totime()</span>
+<span class="sd">            &gt;&gt;&gt; T1.plot()</span>
+<span class="sd">            &gt;&gt;&gt; L.H.minphas()</span>
+<span class="sd">            &gt;&gt;&gt; T2 = L.H.totime()</span>
+<span class="sd">            &gt;&gt;&gt; T2.plot()</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
@@ -5025,7 +5021,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 05, 2014.
+      Last updated on Apr 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
