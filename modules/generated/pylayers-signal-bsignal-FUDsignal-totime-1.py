@@ -1,3 +1,7 @@
+L = lk.DLink(verbose=False)
+aktk = L.eval()
+H = L.H
+
 f,a = H.show(cmap='jet')
 
 # We keep only the significant rays
