@@ -121,10 +121,10 @@
 <span class="sd">    Tchannel.__repr__</span>
 <span class="sd">    Tchannel.info</span>
 <span class="sd">    Tchannel.apply</span>
-<span class="sd">    Tchannel.applywavC</span>
 <span class="sd">    Tchannel.chantap</span>
-<span class="sd">    Tchannel.applywavB</span>
 <span class="sd">    Tchannel.applywavA</span>
+<span class="sd">    Tchannel.applywavB</span>
+<span class="sd">    Tchannel.applywavC</span>
 <span class="sd">    Tchannel.plotd</span>
 <span class="sd">    Tchannel.plotad</span>
 <span class="sd">    Tchannel.doadod</span>
@@ -1701,7 +1701,6 @@
                 <span class="k">else</span> <span class="p">:</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="n">va</span><span class="p">)</span>
 
-            
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">taud</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dod</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">doa</span><span class="p">)</span>
 
@@ -1725,14 +1724,24 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        W :  Bsignal.FUsignal</span>
 
 <span class="sd">        It exploits multigrid convolution from Bsignal.</span>
 
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        V : FUDAsignal</span>
+<span class="sd">        :math:`W(f) T_k(f)`</span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
+
 <span class="sd">            + W may have a more important number of points and a smaller frequency band.</span>
-<span class="sd">            + If the frequency band of the waveform exceeds the one of the ScalChannei, a warning is sent.</span>
+<span class="sd">            + If the frequency band of the waveform exceeds the one of the</span>
+<span class="sd">            Transmission Channel, a warning is sent.</span>
 <span class="sd">            + W is a FUsignal whose shape doesn&#39;t need to be homogeneous with FUDsignal H</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1747,7 +1756,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        w     :</span>
+<span class="sd">        w :</span>
 <span class="sd">            waveform</span>
 <span class="sd">        dxw</span>
 

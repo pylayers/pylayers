@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="pylayers.antprop.channel" href="../pylayers.antprop.channel.html" />
-    <link rel="next" title="pylayers.antprop.channel.Tchannel.applywavC" href="pylayers.antprop.channel.Tchannel.applywavC.html" />
+    <link rel="next" title="pylayers.antprop.channel.Tchannel.chantap" href="pylayers.antprop.channel.Tchannel.chantap.html" />
     <link rel="prev" title="pylayers.antprop.channel.Tchannel.info" href="pylayers.antprop.channel.Tchannel.info.html" /> 
   </head>
   <body>
@@ -47,7 +47,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.channel.Tchannel.applywavC.html" title="pylayers.antprop.channel.Tchannel.applywavC"
+          <a href="pylayers.antprop.channel.Tchannel.chantap.html" title="pylayers.antprop.channel.Tchannel.chantap"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pylayers.antprop.channel.Tchannel.info.html" title="pylayers.antprop.channel.Tchannel.info"
@@ -68,8 +68,8 @@
   <p class="topless"><a href="pylayers.antprop.channel.Tchannel.info.html"
                         title="previous chapter">pylayers.antprop.channel.Tchannel.info</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pylayers.antprop.channel.Tchannel.applywavC.html"
-                        title="next chapter">pylayers.antprop.channel.Tchannel.applywavC</a></p>
+  <p class="topless"><a href="pylayers.antprop.channel.Tchannel.chantap.html"
+                        title="next chapter">pylayers.antprop.channel.Tchannel.chantap</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/generated/pylayers.antprop.channel.Tchannel.apply.txt"
@@ -107,7 +107,11 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>W</strong> :  Bsignal.FUsignal</p>
-<p class="last"><strong>It exploits multigrid convolution from Bsignal.</strong> :</p>
+<p><strong>It exploits multigrid convolution from Bsignal.</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>V</strong> : FUDAsignal</p>
+<p class="last"><strong>:math:`W(f) T_k(f)`</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -115,9 +119,10 @@
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li>W may have a more important number of points and a smaller frequency band.</li>
-<li>If the frequency band of the waveform exceeds the one of the ScalChannei, a warning is sent.</li>
-<li>W is a FUsignal whose shape doesn&#8217;t need to be homogeneous with FUDsignal H</li>
+<li>If the frequency band of the waveform exceeds the one of the</li>
 </ul>
+<p>Transmission Channel, a warning is sent.
++ W is a FUsignal whose shape doesn&#8217;t need to be homogeneous with FUDsignal H</p>
 </dd></dl>
 
 </div>
@@ -138,7 +143,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pylayers.antprop.channel.Tchannel.applywavC.html" title="pylayers.antprop.channel.Tchannel.applywavC"
+          <a href="pylayers.antprop.channel.Tchannel.chantap.html" title="pylayers.antprop.channel.Tchannel.chantap"
              >next</a> |</li>
         <li class="right" >
           <a href="pylayers.antprop.channel.Tchannel.info.html" title="pylayers.antprop.channel.Tchannel.info"
@@ -155,7 +160,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 05, 2014.
+      Last updated on Apr 05, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
