@@ -234,8 +234,6 @@ class Antenna(object):
         if isinstance(typ,str):
             AntennaName,Extension = os.path.splitext(typ)
             self.typ = Extension[1:]
-
-
             if self.typ=='':
                 self.fromfile = False
             else:
@@ -256,7 +254,6 @@ class Antenna(object):
                 if self.typ == 'sh3':
                     self.loadsh3()
                 if self.typ == 'sh2':
-
                     self.loadsh2()
                 if self.typ == 'trx1':
                     self.load_trx(kwargs['directory'], self.Nf, self.Nt, self.Np)
@@ -2137,12 +2134,10 @@ class Antenna(object):
 
             lmax = self.S.Cx.lmax
             Y ,indx = SSHFunc2(lmax, theta,phi)
-            try:
-                k = self.S.Cx.k2[:,0]
-            except:
-                k = self.S.Cx.k2[:]
+            #k = self.S.Cx.k2[:,0]
+            # same k for x y and z
+            k = self.S.Cx.k2
             if pattern :
-
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
@@ -2488,7 +2483,7 @@ class Antenna(object):
                         lmax = lmax,
                         data = coeff['Cx.s3'],
                         ind =  coeff['Cx.ind'],
-                        k =  coeff['Cx.k'])
+                        k =  np.squeeze(coeff['Cx.k']))
 
 
             Cy = SCoeff(typ= 's3',
@@ -2497,7 +2492,7 @@ class Antenna(object):
                         lmax = lmax,
                         data = coeff['Cy.s3'],
                         ind =  coeff['Cy.ind'],
-                        k =  coeff['Cy.k'])
+                        k =  np.squeeze(coeff['Cy.k']))
 
 
 
@@ -2505,10 +2500,9 @@ class Antenna(object):
                         fmin = fmin ,
                         fmax = fmax ,
                         data = coeff['Cz.s3'],
-
                         lmax = lmax,
                         ind =  coeff['Cz.ind'],
-                        k =  coeff['Cz.k'])
+                        k =  np.squeeze(coeff['Cz.k']))
 
 
             if not 'S' in self.__dict__.keys():
@@ -2531,7 +2525,7 @@ class Antenna(object):
         # create vsh2 file
         if filename == '':
             _filevsh2 = self._filename.replace('.trx', '.vsh2')
-            
+
         _filevsh2  = filename 
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
