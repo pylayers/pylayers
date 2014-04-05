@@ -110,19 +110,21 @@
 <p><strong>It exploits multigrid convolution from Bsignal.</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>V</strong> : FUDAsignal</p>
-<p class="last"><strong>:math:`W(f) T_k(f)`</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>V</strong> : FUDAsignal</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<ul class="simple">
+<p>Returns <img class="math" src="../../_images/math/9d0692f9cf985f7faf98e8d987e1a1cca7bded4c.png" alt="W(f) H_k(f)"/></p>
+<blockquote>
+<div><ul class="simple">
 <li>W may have a more important number of points and a smaller frequency band.</li>
 <li>If the frequency band of the waveform exceeds the one of the</li>
 </ul>
 <p>Transmission Channel, a warning is sent.
 + W is a FUsignal whose shape doesn&#8217;t need to be homogeneous with FUDsignal H</p>
+</div></blockquote>
 </dd></dl>
 
 </div>
