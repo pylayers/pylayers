@@ -201,14 +201,16 @@ class Person(Process):
         #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         self.wp       =  self.L.waypointGw(self.roomId,self.nextroomId)
         for tup in self.wp[1:]:
-                self.waypoints.append(vec3(tup)  ) 
+                self.waypoints.append(vec3(tup))
+
         try:
             self.position = vec3(L.Gr.pos[self.roomId][0],L.Gr.pos[self.roomId][1])
         except:     
             self.position = vec3()
 #           self.old_pos = vec3()
-        self.stuck = 0           
+        self.stuck = 0
         self.destination = self.waypoints[0]
+        self.arrived_in = False
         self.velocity = vec3()
         self.acceleration = vec3()
         self.localx = vec3(1, 0)
@@ -328,13 +330,16 @@ class Person(Process):
                     pyu.writemeca(self.ID,self.sim.now(),p,v,a)
 
                 # new target when arrived in poi
+
                 if self.arrived:
                     self.arrived = False
                     if self.endpoint:
                         self.endpoint=False
-                        #pr = self.sim.roomlist.index(self.nextroomId)
-                        #self.sim.roomlist.pop(pr)
                         self.roomId = self.nextroomId
+                        # remove the remaining waypoint which correspond 
+                        # to current room position
+                        del self.waypoints[0]
+
                     #
                     # If door lets continue 
                     #
@@ -361,7 +366,7 @@ class Person(Process):
                         #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
                         wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
-                            self.waypoints.append(vec3(tup)  ) 
+                            self.waypoints.append(vec3(tup)) 
                     #nextroom = adjroom[k]
                     #    print "room : ",self.roomId
                     #    print "nextroom : ",self.nextroomId
@@ -379,16 +384,7 @@ class Person(Process):
                     #print p2
                     #pdoor = (np.array(p1)+np.array(p2))/2
                         self.destination = self.waypoints[0]
-                    #waittime = random.uniform(0,10)
-
-                    #if self.manager:
-                    #    if self.manager(self, *self.manager_args):
-                    #    yield hold , self , waittime
-                    #else:
-                    #    yield hold, self , waittime 
-
-#                        self.wait=abs(random.gauss(50,50))
-#                        self.wait=abs(random.gauss(1,1))
+                    
                         if self.sim.verbose:
                             print 'meca: ag ' + self.ID + ' wait ' + str(self.wait)#*self.interval) 
                         yield hold, self, self.wait
