@@ -170,15 +170,15 @@ class Simul(SimulationRT): # Sympy 2
 
         """
 
-        self.the_world = world(width = float(self.lay_opt['the_world_width']), 
-                               height = float(self.lay_opt['the_world_height']),
-                               scale=float(self.lay_opt['the_world_scale']))
+        # self.the_world = world(width = float(self.lay_opt['the_world_width']), 
+        #                        height = float(self.lay_opt['the_world_height']),
+        #                        scale=float(self.lay_opt['the_world_scale']))
 
         _filename = self.lay_opt['filename']
 
         self.L = Layout(_filename)
 
-
+        self.the_world = world()
 
         try:
             self.L.dumpr()
@@ -190,17 +190,16 @@ class Simul(SimulationRT): # Sympy 2
             Layout graphs are curently being built, it may take few minutes.'
             self.L.build()     
             self.L.dumpw()
-        x_offset = 0  # float(self.lay_opt['x_offset'])
-        y_offset = 0  # float(self.lay_opt['y_offset'])
-        for ks in self.L.Gs.pos.keys():
-            self.L.Gs.pos[ks] = (self.L.Gs.pos[ks][0] +
-                                 x_offset, self.L.Gs.pos[ks][1] + y_offset)
-        for ks in self.L.Gr.pos.keys():
-            self.L.Gr.pos[ks] = (self.L.Gr.pos[ks][0] +
-                                 x_offset, self.L.Gr.pos[ks][1] + y_offset)
-        for ks in self.L.Gw.pos.keys():
-            self.L.Gw.pos[ks] = (self.L.Gw.pos[ks][0] +
-                                 x_offset, self.L.Gw.pos[ks][1] + y_offset)
+
+        # for ks in self.L.Gs.pos.keys():
+        #     self.L.Gs.pos[ks] = (self.L.Gs.pos[ks][0] +
+        #                          x_offset, self.L.Gs.pos[ks][1] + y_offset)
+        # for ks in self.L.Gr.pos.keys():
+        #     self.L.Gr.pos[ks] = (self.L.Gr.pos[ks][0] +
+        #                          x_offset, self.L.Gr.pos[ks][1] + y_offset)
+        # for ks in self.L.Gw.pos.keys():
+        #     self.L.Gw.pos[ks] = (self.L.Gw.pos[ks][0] +
+        #                          x_offset, self.L.Gw.pos[ks][1] + y_offset)
 
         #
         # Create Layout

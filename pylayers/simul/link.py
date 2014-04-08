@@ -669,7 +669,7 @@ class DLink(Link):
                 f[key].resize((sc[0]+1,sc[1],sc[2]))
                 f[key][-1,:,:]=array
             f.close()
-            return np.array([sc[0]+1])
+            return np.array([sc[0]])
         except:
             f.close()
             raise NameError('Link stack: issue during stacking')
