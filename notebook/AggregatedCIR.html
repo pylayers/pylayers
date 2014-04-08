@@ -83,7 +83,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x746fe90&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x77d6dd0&gt;
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">taumin</span>  <span class="o">=</span> <span class="mi">0</span>
@@ -115,15 +115,11 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="n">CIRa</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
-  warnings.warn(&quot;No labeled objects found. &quot;
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x88ab950&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x8981090&gt;]], dtype=object))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x89479d0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x8954110&gt;]], dtype=object))
-</pre></div>
-</div>
-<img alt="./AggregatedCIR_files/AggregatedCIR_5_2.png" src="./AggregatedCIR_files/AggregatedCIR_5_2.png" />
+<img alt="../_images/AggregatedCIR_5_1.png" src="../_images/AggregatedCIR_5_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">aggcir</span><span class="p">(</span><span class="n">CIRa</span><span class="p">,</span><span class="n">alphak</span><span class="p">,</span><span class="n">tauk</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; aggregation of CIR from (alphak,tauk)</span>
 
@@ -167,10 +163,10 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">CIRa</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7fccb45c67d0&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f36c43e3b90&gt;]
 </pre></div>
 </div>
-<img alt="./AggregatedCIR_files/AggregatedCIR_9_1.png" src="./AggregatedCIR_files/AggregatedCIR_9_1.png" />
+<img alt="../_images/AggregatedCIR_9_1.png" src="../_images/AggregatedCIR_9_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">alphak</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 <span class="n">tauk</span>   <span class="o">=</span> <span class="n">taumax</span> <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 <span class="n">CIRa</span><span class="o">=</span><span class="n">aggcir</span><span class="p">(</span><span class="n">CIRa</span><span class="p">,</span><span class="n">alphak</span><span class="p">,</span><span class="n">tauk</span><span class="p">)</span>
@@ -185,10 +181,10 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">CIRa</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x8a52410&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7f36c45800d0&gt;]
 </pre></div>
 </div>
-<img alt="./AggregatedCIR_files/AggregatedCIR_12_1.png" src="./AggregatedCIR_files/AggregatedCIR_12_1.png" />
+<img alt="../_images/AggregatedCIR_12_1.png" src="../_images/AggregatedCIR_12_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">imshow</span><span class="p">(</span><span class="n">CIRa</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
@@ -196,10 +192,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1499.5</span><span class="p">,</span> <span class="mf">100.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./AggregatedCIR_files/AggregatedCIR_13_1.png" src="./AggregatedCIR_files/AggregatedCIR_13_1.png" />
-<div class="highlight-python"><div class="highlight"><pre>
-</pre></div>
-</div>
+<img alt="../_images/AggregatedCIR_13_1.png" src="../_images/AggregatedCIR_13_1.png" />
 
 
           </div>
@@ -226,7 +219,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 02, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

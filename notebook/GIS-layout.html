@@ -105,7 +105,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8de9fd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x749edd0&gt;
 </pre></div>
 </div>
 <div class="section" id="getting-the-list-of-all-available-layouts-the-ls-method">
@@ -116,29 +116,22 @@
 <span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;11D-E1.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DLR2.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;Lstruc.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;W2PTIN.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;WHERE1.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;creationPiece_09_SceneInitiale.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;d24.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;defstr.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;defstr3.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;example.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;klepal.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;mokadem.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;newfm.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;w2ptin.ini&#39;</span><span class="p">,</span>
- <span class="s">&#39;where1.ini&#39;</span><span class="p">]</span>
+ <span class="s">&#39;klepal.ini&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;osm&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;DLR.osm&#39;</span><span class="p">,</span> <span class="s">&#39;DLR2.osm&#39;</span><span class="p">,</span> <span class="s">&#39;where1.osm&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;DLR.osm&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.osm&#39;</span><span class="p">)</span>
@@ -170,8 +163,8 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x8ea4d90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x8fdb450&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x74bc6d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f2f5c133e10&gt;)
 </pre></div>
 </div>
 <img alt="../_images/GIS-layout_13_1.png" src="../_images/GIS-layout_13_1.png" />
@@ -179,53 +172,14 @@
 <span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>----------------
-11D-E1.ini
-----------------
-
-Number of points  : 204
-Number of segments  : 190
-Number of sub segments  : 0
-Number of cycles  : 0
-Number of rooms  : 0
-degree 0 : []
-degree 1 : [-214 -213 -212 -211 -210 -206 -204 -202 -201 -200 -198 -197 -196 -195 -194
- -193 -191 -188 -184 -183 -182 -179 -178 -177 -175 -174 -172 -171 -167 -166
- -164 -162 -161 -156 -154 -152 -150 -148 -147 -145 -144 -142 -140 -139 -137
- -135 -134 -132 -130 -129 -128 -126 -124 -123 -122 -120 -118 -116 -115 -113
- -112 -110 -109 -107 -105 -103 -102 -100  -98  -96  -94  -92  -90  -88  -87
-  -85  -80  -78  -75  -73  -71  -70  -68  -67  -65  -63  -62  -59  -57  -55
-  -54  -52  -51  -49  -48  -46  -43  -41  -40  -39  -37  -36  -33  -31  -30
-  -28  -25  -24  -21  -20  -18  -15  -13  -12  -10   -9   -8   -7   -6   -5
-   -4   -3]
-degree 2 : 14
-degree 3 : 42
-degree 4 : [-190 -185 -181 -176 -170 -163 -149 -143 -138 -131 -127 -121 -114 -108 -101
-  -79  -72  -66  -53  -50  -38  -35  -22  -19  -14  -11]
-
-xrange :(-2.536, 73.369)
-yrange :(-0.096, 15.004)
-
-Useful dictionnaries
-----------------
-sl {slab name : slab dictionary}
-name :  {slab :seglist}
-
-Useful arrays
-----------------
-tsg : get segment index in Gs from tahe
-isss :  sub-segment index above Nsmax
-tgs : get segment index in tahe from Gs
-lsss : list of segments with sub-segment
-sla : list of all slab names (Nsmax+Nss+1)
-degree : degree of nodes
+<div class="highlight-python"><div class="highlight"><pre>&lt;repr(&lt;pylayers.gis.layout.Layout at 0x7f2f5d3e2990&gt;) failed: AttributeError: &#39;Layout&#39; object has no attribute &#39;degree&#39;&gt;
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x3174b90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x8fdb390&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2f5d3e2f50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f2f5c158690&gt;)
 </pre></div>
 </div>
 <img alt="../_images/GIS-layout_15_1.png" src="../_images/GIS-layout_15_1.png" />
@@ -233,23 +187,20 @@ degree : degree of nodes
 <span class="n">L</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>problem to construct geomfile
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre>----------------
 klepal.ini
 Image(&#39;/home/uguen/Bureau/P1/struc/images/IMG-Layout-Klepal.png&#39;)
 ----------------
 
-Number of points  : 54
-Number of segments  : 67
+Number of points  : 53
+Number of segments  : 65
 Number of sub segments  : 0
 Number of cycles  : 0
 Number of rooms  : 0
 degree 0 : [-85 -84 -79 -32]
 degree 1 : []
-degree 2 : 23
-degree 3 : 20
+degree 2 : 24
+degree 3 : 18
 degree 4 : [-69 -68 -67 -66 -65 -64 -42]
 
 xrange :(0.043999999999999997, 48.914999999999999)
@@ -274,8 +225,8 @@ degree : degree of nodes
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fc4c1e71b10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fc4c1e79650&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2f5d4529d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f2f5d458a10&gt;)
 </pre></div>
 </div>
 <img alt="../_images/GIS-layout_18_1.png" src="../_images/GIS-layout_18_1.png" />
@@ -285,8 +236,8 @@ degree : degree of nodes
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fc4c0738710&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fc4c0762e50&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2f5c12d7d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f2f5d483d10&gt;)
 </pre></div>
 </div>
 <img alt="../_images/GIS-layout_20_1.png" src="../_images/GIS-layout_20_1.png" />
@@ -393,9 +344,9 @@ because none segment has 0 as an index.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">seg2pts</span><span class="p">(</span><span class="n">aseg</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">29.785</span><span class="p">,</span>   <span class="mf">0.044</span><span class="p">,</span>  <span class="mf">22.538</span><span class="p">],</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">29.785</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.754</span><span class="p">,</span>  <span class="mf">22.538</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mf">6.822</span><span class="p">,</span>  <span class="mf">23.078</span><span class="p">,</span>   <span class="mf">8.711</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">29.785</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.754</span><span class="p">,</span>  <span class="mf">20.326</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">29.785</span><span class="p">,</span>   <span class="mf">0.044</span><span class="p">,</span>  <span class="mf">20.326</span><span class="p">],</span>
        <span class="p">[</span>  <span class="mf">8.921</span><span class="p">,</span>  <span class="mf">23.078</span><span class="p">,</span>   <span class="mf">8.693</span><span class="p">]])</span>
 </pre></div>
 </div>
@@ -409,8 +360,8 @@ because none segment has 0 as an index.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">displot</span><span class="p">(</span><span class="n">pth</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,:],</span><span class="n">pth</span><span class="p">[</span><span class="mi">2</span><span class="p">:,:])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x9352850&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x934de50&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f2f5c268110&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f2f5c263710&gt;)
 </pre></div>
 </div>
 <img alt="../_images/GIS-layout_45_1.png" src="../_images/GIS-layout_45_1.png" />
@@ -442,7 +393,7 @@ because none segment has 0 as an index.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

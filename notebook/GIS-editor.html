@@ -176,7 +176,7 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8130fd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x860cdd0&gt;
 </pre></div>
 </div>
 </div>
@@ -199,13 +199,17 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;DIRANT&#39;</span><span class="p">:</span> <span class="s">&#39;ant&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRBODY&#39;</span><span class="p">:</span> <span class="s">&#39;body&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRC3D&#39;</span><span class="p">:</span> <span class="s">&#39;body/c3d&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRCIR&#39;</span><span class="p">:</span> <span class="s">&#39;output&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRCT&#39;</span><span class="p">:</span> <span class="s">&#39;output/Ct&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRFUR&#39;</span><span class="p">:</span> <span class="s">&#39;struc/furnitures&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRGEOM&#39;</span><span class="p">:</span> <span class="s">&#39;geom&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRH&#39;</span><span class="p">:</span> <span class="s">&#39;output/H&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRIMAGE&#39;</span><span class="p">:</span> <span class="s">&#39;struc/images&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRINI&#39;</span><span class="p">:</span> <span class="s">&#39;struc/ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRLCH&#39;</span><span class="p">:</span> <span class="s">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRLNK&#39;</span><span class="p">:</span> <span class="s">&#39;output&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRMAT&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRMAT2&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRMES&#39;</span><span class="p">:</span> <span class="s">&#39;meas&#39;</span><span class="p">,</span>
@@ -233,7 +237,7 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
     ls *.osm
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">DLR</span><span class="o">.</span><span class="n">osm</span>
+<div class="highlight-python"><div class="highlight"><pre>ls: impossible d&#39;accéder à *.osm: Aucun fichier ou dossier de ce type
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>%%bash
@@ -243,34 +247,11 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
     tail -17 DLR.osm
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
-&lt;osm version=&#39;0.6&#39; upload=&#39;false&#39; generator=&#39;PyLayers&#39;&gt;
-&lt;node id=&#39;-212&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100855114&#39; lon=&#39;-1.98980710934&#39; /&gt;
-&lt;node id=&#39;-210&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100789151&#39; lon=&#39;-1.9897910381&#39; /&gt;
-&lt;node id=&#39;-208&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100738861&#39; lon=&#39;-1.98977878545&#39; /&gt;
-&lt;node id=&#39;-206&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0100616861&#39; lon=&#39;-1.98982814281&#39; /&gt;
-&lt;node id=&#39;-204&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101583649&#39; lon=&#39;-1.98982436917&#39; /&gt;
-&lt;node id=&#39;-202&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101656174&#39; lon=&#39;-1.98981796656&#39; /&gt;
-&lt;node id=&#39;-200&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101843662&#39; lon=&#39;-1.98977935424&#39; /&gt;
-&lt;node id=&#39;-198&#39; action=&#39;modify&#39; visible=&#39;true&#39; lat=&#39;47.0101791636&#39; lon=&#39;-1.98982426816&#39; /&gt;
----
-&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
-&lt;/way&gt;
-&lt;way id=&#39;-10000123&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
-&lt;nd ref=&#39;-200&#39; /&gt;
-&lt;nd ref=&#39;-100&#39; /&gt;
-&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
-&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
-&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
-&lt;/way&gt;
-&lt;way id=&#39;-10000124&#39; action=&#39;modify&#39; visible=&#39;true&#39;&gt;
-&lt;nd ref=&#39;-166&#39; /&gt;
-&lt;nd ref=&#39;-188&#39; /&gt;
-&lt;tag k=&#39;name&#39; v=&#39;WALL&#39; /&gt;
-&lt;tag k=&#39;z&#39; v=&quot;(&#39;0.0&#39;, &#39;3.0&#39;)&quot; /&gt;
-&lt;tag k=&#39;transition&#39; v=&#39;False&#39; /&gt;
-&lt;/way&gt;
-&lt;/osm&gt;
+<div class="highlight-python"><div class="highlight"><pre>---
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>head: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
+tail: impossible d&#39;ouvrir «DLR.osm» en lecture: Aucun fichier ou dossier de ce type
 </pre></div>
 </div>
 <p>To read a new layout in osm format :</p>
@@ -307,23 +288,21 @@ Nc  = Gr.node[nroom][&#39;cycles&#39;]
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:183: RuntimeWarning: invalid value encountered in arccos
+<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:202: RuntimeWarning: invalid value encountered in arccos
   pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5142: RuntimeWarning: invalid value encountered in greater
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5500: RuntimeWarning: invalid value encountered in greater
   isegkeep = isegments[prob&gt;0]
-/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5144: RuntimeWarning: invalid value encountered in greater
+/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py:5502: RuntimeWarning: invalid value encountered in greater
   dsegprob = {k:v for k,v in zip(isegkeep,prob[prob&gt;0])}
-/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:156: RuntimeWarning: invalid value encountered in arccos
+/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:175: RuntimeWarning: invalid value encountered in arccos
   pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
-/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:174: RuntimeWarning: invalid value encountered in arccos
+/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:193: RuntimeWarning: invalid value encountered in arccos
   pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
+/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:184: RuntimeWarning: invalid value encountered in arccos
+  pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">14</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:165: RuntimeWarning: invalid value encountered in arccos
-  pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
 </pre></div>
 </div>
 <p>The topological graph <img class="math" src="../_images/math/81225d898fa4a260a2c7eb990cc0e37b3d34ab5f.png" alt="\mathcal{G}_t"/> or graph of non overlapping
@@ -539,11 +518,11 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xa058750&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x8307ed0&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x9c33d10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x9c69650&gt;)
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0xa058510&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x9c33fd0&gt;
 </pre></div>
 </div>
 <img alt="../_images/GIS-editor_53_2.png" src="../_images/GIS-editor_53_2.png" />
@@ -633,7 +612,7 @@ a segment (wall,door,window,...).</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

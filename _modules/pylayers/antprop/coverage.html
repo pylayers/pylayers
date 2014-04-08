@@ -880,10 +880,7 @@
 
             <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;capacity&#39;</span><span class="p">:</span>
                 <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;Capacity : &#39;</span><span class="o">+</span><span class="s">&#39; fc = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">f</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; GHz&#39;</span><span class="o">+</span> <span class="s">&#39; polar : &#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">polar</span>
-                <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Mbit/s&#39;</span>
+                <span class="n">legcb</span> <span class="o">=</span> <span class="s">&#39;Mbit/s&#39;</span>
                 <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmhz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">sinr</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;pr&#39;</span><span class="p">:</span>
@@ -1044,7 +1041,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on Apr 05, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

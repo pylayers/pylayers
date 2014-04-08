@@ -112,7 +112,7 @@ electromagnetic simulation.</p>
 <span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7ed5fd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x9083dd0&gt;
 </pre></div>
 </div>
 <div class="section" id="generation-of-an-impulse-of-normalized-energy">
@@ -212,7 +212,7 @@ fileini    :  radiotx.ini
 filespa    :  radiotx.spa
 filegeom   :  radiotx.off
 fileant    :  defant.vsh3
-filestr    :  defstr.str2
+filestr    :  defstr3.str
 None
 Rx Info :
 npos       :  1
@@ -225,7 +225,7 @@ fileini    :  radiorx.ini
 filespa    :  radiorx.spa
 filegeom   :  radiorx.off
 fileant    :  defant.vsh3
-filestr    :  defstr.str2
+filestr    :  defstr3.str
 None
 </pre></div>
 </div>
@@ -290,10 +290,10 @@ None
   <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
   <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
 </pre></div>
@@ -487,9 +487,8 @@ the <tt class="docutils literal"><span class="pre">prop2tran</span></tt> method 
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The ScalChannel object contains all the information about the ray
-transfer functions. The transmission channel is obtained by applying a
-vector radiation pattern using an antenna file.</p>
+<p>The transmission channel is obtained by applying a vector radiation
+pattern using an antenna file.</p>
 <p>In the presented case, it comes from a real antenna which has been used
 during the <strong>FP7 project WHERE1</strong> measurement campaign M1.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span>
@@ -530,29 +529,25 @@ waveform with the channel impulse response to get the received waveform.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>
-         <span class="mf">1.58498226e-13</span><span class="p">,</span>   <span class="mf">2.67900783e-15</span><span class="p">,</span>   <span class="mf">4.14172694e-16</span><span class="p">])</span>
+         <span class="mf">1.64613992e-13</span><span class="p">,</span>   <span class="mf">1.62228333e-13</span><span class="p">,</span>   <span class="mf">9.79447382e-15</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">20</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">u&#39;Received Waveform $r(t)$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
-  warnings.warn(&quot;No labeled objects found. &quot;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xb33e5d0&gt;
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f6c716c3ad0&gt;
-</pre></div>
-</div>
-<img alt="../_images/PHY-signal_53_2.png" src="../_images/PHY-signal_53_2.png" />
+<img alt="../_images/PHY-signal_53_1.png" src="../_images/PHY-signal_53_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="o">-</span><span class="mf">0.3</span>
           <span class="p">,</span><span class="mf">0.3</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">u&#39;Received Waveform $r(t)$&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f6c2f0fec50&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xb305e50&gt;
 </pre></div>
 </div>
 <img alt="../_images/PHY-signal_54_1.png" src="../_images/PHY-signal_54_1.png" />
@@ -571,7 +566,7 @@ which maintains the proper binding between signal samples and their
 indexation either in time or in frequency domain.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wgam</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span>
 <span class="n">Y</span>    <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">wgam</span><span class="p">)</span>
-<span class="n">tau</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">tau0</span>
+<span class="n">tau</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">taud</span>
 <span class="n">dod</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">dod</span>
 <span class="n">doa</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">doa</span>
 </pre></div>
@@ -652,15 +647,15 @@ padding of 500 points</p>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7f6c265a8850&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fce77dab7d0&gt;
 </pre></div>
 </div>
 <img alt="../_images/PHY-signal_70_1.png" src="../_images/PHY-signal_70_1.png" />
 <p>The ray channel has been applied to the UWB waveform. Notice the small
 delay introduced by dielectrics material crossing.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="mf">0.0012</span><span class="o">+</span><span class="mf">0.0034</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">*</span><span class="mf">1e8</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="mf">0.00012</span><span class="o">+</span><span class="mf">0.00034</span><span class="p">)</span>
 <span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.002</span><span class="p">,</span><span class="mf">0.008</span><span class="p">)</span>
+<span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.002</span><span class="p">,</span><span class="mf">0.002</span><span class="p">)</span>
 <span class="n">legend</span><span class="p">([</span><span class="s">&#39;Ray channel filtered waveform&#39;</span><span class="p">,</span><span class="s">&#39;Original Waveform *1.2e-3 +0.0034&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time (ns)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Inverse Fourier Transform of an FH signal&#39;</span><span class="p">)</span>
@@ -695,7 +690,7 @@ delay introduced by dielectrics material crossing.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

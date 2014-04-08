@@ -95,7 +95,7 @@ illustrates the main features of the Antenna class.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x74f9e90&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7efcdd0&gt;
 </pre></div>
 </div>
 <p>Lets start by loading an antenna from a <tt class="docutils literal"><span class="pre">vsh3</span></tt> file.</p>
@@ -112,16 +112,78 @@ Nf : 104
 Not evaluated
 </pre></div>
 </div>
-<p>In fact this is not a void antenna. There is a default file which has
-been loaded and there is an antenna down there. The only thing we know
-at that point is the name of the file which has extension &#8216;.vsh3&#8217; which
-means vector spherical harmonics in shape 3. To list all the availble
-antenna files in the dedicated directory of the project it i possible to
-invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;sh3&#39;</span><span class="p">)</span>
+<p>The extension &#8216;.vsh3&#8217; means that the file contains vector spherical
+harmonics in shape 3. At loading time the antenna is not evaluated yet.
+To list all the availble antenna files in the dedicated directory of the
+project it is possible to invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;S1R1.sh3&#39;</span><span class="p">,</span> <span class="s">&#39;S2R2.sh3&#39;</span><span class="p">,</span> <span class="s">&#39;WP_COR.sh3&#39;</span><span class="p">,</span> <span class="s">&#39;WirePlateMeas.sh3&#39;</span><span class="p">,</span> <span class="s">&#39;simulCEA.sh3&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;S1R1.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R10.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R11.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R12.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R13.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R14.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R15.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R16.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R17.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R2.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R3.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R4.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R5.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R6.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R7.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R8.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S1R9.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R1.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R10.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R11.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R12.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R13.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R14.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R15.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R16.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R17.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R18.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R19.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R2.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R20.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R21.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R22.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R23.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R3.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R4.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R5.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R6.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R7.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R8.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S2R9.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R10.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R11.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R12.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R13.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R14.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R15.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R16.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R17.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R18.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R19.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R2.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R20.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R21.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R22.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R23.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R24.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R25.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R3.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R4.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R5.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R6.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R7.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R8.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;S3R9.vsh3&#39;</span><span class="p">,</span>
+ <span class="s">&#39;defant.vsh3&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">)</span>
@@ -197,7 +259,39 @@ invoke the <tt class="docutils literal"><span class="pre">ls()</span></tt> metho
 <p>At that point the radiation pattern of the antenna has not yet been
 evaluated. For a shape 3 pattern the method to calculate the pattern is
 <tt class="docutils literal"><span class="pre">Fsynth3()</span></tt> with the <tt class="docutils literal"><span class="pre">pattern</span></tt> option set to true.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Br
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Bi
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Cr
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+
+Ci
+-------------
+Nf   : 104
+fmin (GHz) : 0.8
+fmax (GHz) : 5.95
+Ncoeff s3 : 72
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The <tt class="docutils literal"><span class="pre">polar()</span></tt> method allow to superpose different pattern for a list o
@@ -211,7 +305,7 @@ as a function of <img class="math" src="../_images/math/10e009bdb83f96c5f47c58b3
 <span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">thd</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">GmaxdB</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a2</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/AP-Antenna1_11_0.png" src="../_images/AP-Antenna1_11_0.png" />
+<img alt="../_images/AP-Antenna1_12_0.png" src="../_images/AP-Antenna1_12_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
 </pre></div>
 </div>
@@ -235,10 +329,11 @@ GmaxDB : 2.23 dB
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/AP-Antenna1_13_0.png" src="../_images/AP-Antenna1_13_0.png" />
+<img alt="../_images/AP-Antenna1_14_0.png" src="../_images/AP-Antenna1_14_0.png" />
 <div class="section" id="defining-antenna-gain-from-analytic-formulas">
 <h2>Defining Antenna gain from analytic formulas<a class="headerlink" href="#defining-antenna-gain-from-analytic-formulas" title="Permalink to this headline">¶</a></h2>
-<p>An antenna can be defined from closed-form expressions.</p>
+<p>An antenna can be defined from closed-form expressions. Available
+antennas are the following + Omni + Gauss + WirePlate</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Omni&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -248,11 +343,21 @@ GmaxDB : 2.23 dB
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f8680d13c90&gt;,
- &lt;matplotlib.projections.polar.PolarAxes at 0x7f86af347690&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x8b05e10&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fb5b001fed0&gt;)
 </pre></div>
 </div>
-<img alt="../_images/AP-Antenna1_18_1.png" src="../_images/AP-Antenna1_18_1.png" />
+<img alt="../_images/AP-Antenna1_19_1.png" src="../_images/AP-Antenna1_19_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;Gauss&#39;</span><span class="p">)</span>
+<span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
+<span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fb5b003a510&gt;,
+ &lt;matplotlib.projections.polar.PolarAxes at 0x7fb5b0ce3cd0&gt;)
+</pre></div>
+</div>
+<img alt="../_images/AP-Antenna1_20_1.png" src="../_images/AP-Antenna1_20_1.png" />
 </div>
 </div>
 
@@ -281,7 +386,7 @@ GmaxDB : 2.23 dB
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 27, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

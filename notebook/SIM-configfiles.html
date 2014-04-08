@@ -99,7 +99,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x725ffd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8f1edd0&gt;
 </pre></div>
 </div>
 <div class="section" id="network-simulation-configuration">
@@ -155,7 +155,7 @@ mecanic_update_time = 1
 ;&#39;random&#39; ; file
 choose_destination = &#39;random&#39;
 ; experimental show for debug purpose
-pdshow=True
+pdshow=False
 
 [Network]
 ; simulate the network
@@ -177,11 +177,11 @@ dispinfo = False
 
 [Localization]
 ; perform localization
-localization = True
+localization = False
 ; time to refresh localization
 localization_update_time = 1.0
 ; list of used methods method = [&#39;alg&#39;,&#39;geo&#39;]
-method = [&#39;alg&#39;]
+method = [&#39;geo&#39;]
 
 
 
@@ -199,7 +199,7 @@ showtk   = False
 ; choose seed for random mobiliity
 seed = 1
 ; verbose output
-verbose = True
+verbose = False
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Cp</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -344,7 +344,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;choose_destination&#39;</span><span class="p">:</span> <span class="s">&quot;&#39;random&#39;&quot;</span><span class="p">,</span>
  <span class="s">&#39;mecanic_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;1&#39;</span><span class="p">,</span>
- <span class="s">&#39;pdshow&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
+ <span class="s">&#39;pdshow&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Setup how agent choose their target:</p>
@@ -373,16 +373,16 @@ periodically refreshed at the network_update_time</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;localization&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;localization&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
  <span class="s">&#39;localization_update_time&#39;</span><span class="p">:</span> <span class="s">&#39;1.0&#39;</span><span class="p">,</span>
- <span class="s">&#39;method&#39;</span><span class="p">:</span> <span class="s">&quot;[&#39;alg&#39;]&quot;</span><span class="p">}</span>
+ <span class="s">&#39;method&#39;</span><span class="p">:</span> <span class="s">&quot;[&#39;geo&#39;]&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>enable/disable localizaiton of the agents</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;localization&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
 </pre></div>
 </div>
 <p>Select localization methods :</p>
@@ -393,7 +393,7 @@ periodically refreshed at the network_update_time</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;[&#39;alg&#39;]&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;[&#39;geo&#39;]&quot;</span>
 </pre></div>
 </div>
 <p>Time step for localization update</p>
@@ -415,7 +415,7 @@ periodically refreshed at the network_update_time</li>
  <span class="s">&#39;show_interval&#39;</span><span class="p">:</span> <span class="s">&#39;0.5&#39;</span><span class="p">,</span>
  <span class="s">&#39;showtk&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">,</span>
  <span class="s">&#39;speedratio&#39;</span><span class="p">:</span> <span class="s">&#39;50.&#39;</span><span class="p">,</span>
- <span class="s">&#39;verbose&#39;</span><span class="p">:</span> <span class="s">&#39;True&#39;</span><span class="p">}</span>
+ <span class="s">&#39;verbose&#39;</span><span class="p">:</span> <span class="s">&#39;False&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Setup simulation duration in second</p>
@@ -436,7 +436,7 @@ periodically refreshed at the network_update_time</li>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))[</span><span class="s">&#39;verbose&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;True&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;False&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">FileLink</span>
@@ -542,7 +542,7 @@ Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of 
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

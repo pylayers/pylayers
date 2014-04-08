@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Coverage with a Multi Wall model &mdash; PyLayers</title>
+    <title>Indoor Coverage with the PyLayers Multi Wall model &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -53,18 +53,6 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Coverage with a Multi Wall model</a></li>
-<li><a class="reference internal" href="#calculating-received-power-coverage">Calculating Received Power Coverage</a><ul>
-<li><a class="reference internal" href="#f-400-mhz">f = 400 MHz</a></li>
-<li><a class="reference internal" href="#f-2-4ghz">f = 2.4GHz</a></li>
-<li><a class="reference internal" href="#f-100-ghz">f = 100 GHz</a></li>
-<li><a class="reference internal" href="#the-excess-delay-due-to-crossing-the-wall-can-also-be-evaluted">The excess delay due to crossing the wall can also be evaluted.</a></li>
-</ul>
-</li>
-</ul>
-
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/./AP-coverage.txt"
@@ -91,58 +79,58 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="coverage-with-a-multi-wall-model">
-<h1>Coverage with a Multi Wall model<a class="headerlink" href="#coverage-with-a-multi-wall-model" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="indoor-coverage-with-the-pylayers-multi-wall-model">
+<h1>Indoor Coverage with the PyLayers Multi Wall model<a class="headerlink" href="#indoor-coverage-with-the-pylayers-multi-wall-model" title="Permalink to this headline">¶</a></h1>
 <blockquote>
-<div>Sometimes it might be useful to get a fast estimate about
-propagation losses in an indoor environment. Ray tracing is
-generally more time consuming and depending on the purpose of the
-study, it could be relevant to proceed with a simpler approach while
-staying site-specific. <tt class="docutils literal"><span class="pre">PyLayers</span></tt> provides such a tool which
-heavily relies on the core module <tt class="docutils literal"><span class="pre">slab.py</span></tt></div></blockquote>
-<p>First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module</p>
+<div><p>A Multi wall model accounts only for the attenuation along the
+direct path between Tx and Rx.</p>
+<p>It is an approach which can&#8217;t provide any information about delay
+spread or multi paths but which can useful in different context when
+the point is optimization of an indoor radio network. The main
+advantage of the MultiWall approach is that is provides a fast
+indication about propagation losses.</p>
+<p>A ray tracing approach is much more precise, but also is more time
+consuming and depending on the purpose, it could be relevant to
+proceed with a simpler and faster site-specific approach as the
+Multiwall model.</p>
+<p><tt class="docutils literal"><span class="pre">PyLayers</span></tt> provides a multiwall module which heavily relies on the
+core class <tt class="docutils literal"><span class="pre">Slab</span></tt>. Notice that, the same core modules are used for
+Ray tracing and MultiWall model approaches.</p>
+</div></blockquote>
+<p>Let see, how it works. First let&#8217;s import the <tt class="docutils literal"><span class="pre">coverage</span></tt> module. And
+the <tt class="docutils literal"><span class="pre">time</span></tt> module for performance evaluation.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8f7dfd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x8dd6dd0&gt;
 </pre></div>
 </div>
-<p>Instantiate a coverage object. By defaut, <tt class="docutils literal"><span class="pre">TA-Office.str</span></tt> layout
-strucure is loaded.</p>
-<p>This information can be modified in the <strong>coverage.ini</strong> file in the
+<p>Instantiate a coverage object. By defaut the <tt class="docutils literal"><span class="pre">TA-Office.ini</span></tt> layout is
+loaded.</p>
+<p>The coverage information is placed in the <strong>coverage.ini</strong> file in the
 project directory.</p>
-<p>Below is an example of how the content of the file looks like</p>
+<p>Below is an example such a configuration file.</p>
 <div class="highlight-python"><div class="highlight"><pre>!cat $BASENAME/ini/coverage.ini
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[pl_model]
-sigrss = 3.0
-fGHz = 3.0
-rssnp = 2.64
-d0 = 1.0
-
-
-[grid]
-nx = 80
-ny = 40
+<div class="highlight-python"><div class="highlight"><pre>[grid]
+nx = 20
+ny = 10
 boundary = [20,0,30,20]
 full = True
 
 [layout]
-filename = TA-Office.ini
+filename = TA-Office.ini ; 0 40 0 15
 ;filename = W2PTIN.ini
 ;filename = Lstruc.str
 
-[tx]
-fGHz = 3.0
-x = 25
-y = 5
-;transmitted power (dBm)
-ptdbm = 0
-; frame length in bytes
-framelengthbytes = 50000
-
+[ap]
+0 = {&#39;name&#39;:&#39;room1&#39;,&#39;wstd&#39;:&#39;ieee80211b&#39;,&#39;p&#39;:(1,12,1.2),&#39;PtdBm&#39;:0,&#39;chan&#39;:[11]}
+1 = {&#39;name&#39;:&#39;room2&#39;,&#39;wstd&#39;:&#39;ieee80211b&#39;,&#39;p&#39;:(10,2,1.2),&#39;PtdBm&#39;:0,&#39;chan&#39;:[11]}
+2 = {&#39;name&#39;:&#39;room3&#39;,&#39;wstd&#39;:&#39;ieee80211b&#39;,&#39;p&#39;:(20,1,1.2),&#39;PtdBm&#39;:0,&#39;chan&#39;:[11]}
+3 = {&#39;name&#39;:&#39;room4&#39;,&#39;wstd&#39;:&#39;ieee80211b&#39;,&#39;p&#39;:(36.5,1.5,1.2),&#39;PtdBm&#39;:0,&#39;chan&#39;:[11]}
+4 = {&#39;name&#39;:&#39;room5&#39;,&#39;wstd&#39;:&#39;ieee80211b&#39;,&#39;p&#39;:(25,12,1.2),&#39;PtdBm&#39;:0,&#39;chan&#39;:[11]}
 [rx]
 sensitivity  = -80
 bandwidthmhz = 3
@@ -153,152 +141,192 @@ noisefactordb = 13
 show = True
 </pre></div>
 </div>
+<p>The ini file contains 5 sections.</p>
+<ul>
+<li><p class="first">[grid] section</p>
+<p>This section precise the size of the grid. By default the grid is
+placed over the whole region of the Layout. A selected region can
+also be defined whith the <tt class="docutils literal"><span class="pre">boundary</span></tt> list</p>
+</li>
+<li><p class="first">[layout] section</p>
+<p>The name of the layout file</p>
+</li>
+<li><p class="first">[ap] section</p>
+<p>A dictionnary of access point precising the standard, the used
+channel, the emitted power and the position of the access point.</p>
+</li>
+<li><p class="first">[show] section</p>
+</li>
+</ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Create a Coverage object from coverag.ini file</span>
-<span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">(</span><span class="s">&#39;coverage.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The coverage object has a <tt class="docutils literal"><span class="pre">__repr__</span></tt> which summarizes the different
+<p><tt class="docutils literal"><span class="pre">C</span></tt> has a dictionnary <tt class="docutils literal"><span class="pre">dap</span></tt> which gathered various information about
+each access points of the simulation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">dap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>name : room1
+p : (1, 12, 1.2)
+PtdBm : 0
+chanels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+</pre></div>
+</div>
+<p>We can now check which frequencies have been selected. We have asked for
+the IEEE.802.11.a standard, so we get the following list.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">2.412</span><span class="p">,</span>  <span class="mf">2.417</span><span class="p">,</span>  <span class="mf">2.422</span><span class="p">,</span>  <span class="mf">2.427</span><span class="p">,</span>  <span class="mf">2.432</span><span class="p">,</span>  <span class="mf">2.437</span><span class="p">,</span>  <span class="mf">2.442</span><span class="p">,</span>  <span class="mf">2.447</span><span class="p">,</span>
+        <span class="mf">2.452</span><span class="p">,</span>  <span class="mf">2.457</span><span class="p">,</span>  <span class="mf">2.462</span><span class="p">,</span>  <span class="mf">2.467</span><span class="p">,</span>  <span class="mf">2.472</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The coverage object has a <tt class="docutils literal"><span class="pre">__repr__</span></tt> method which summarizes different
 parameters of the current coverage object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>Layout file : TA-Office.ini
 
------Tx------
-tx (coord) : [25  5]
-fghz : 3.0
-Pt (dBm) : 0
+-----list of Access Points ------
+name : room1
+p : (1, 12, 1.2)
+PtdBm : 0
+chanels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+
+name : room2
+p : (10, 2, 1.2)
+PtdBm : 0
+chanels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+
+name : room3
+p : (20, 1, 1.2)
+PtdBm : 0
+chanels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+
+name : room4
+p : (36.5, 1.5, 1.2)
+PtdBm : 0
+chanels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
+
+name : room5
+p : (25, 12, 1.2)
+PtdBm : 0
+chanels  : [11]   2.462 : [2.451,2.473]
+sensdBm : -94
+nant : 1
 
 -----Rx------
 rxsens (dBm) : -80
-bandwith (Mhz) : 3
+bandwith (Mhz) : [20 20 20 20 20]
 temperature (K) : 300
 noisefactor (dB) : 13
 
 --- Grid ----
-nx : 80
-ny : 40
+nx : 20
+ny : 10
+nlink : 1000
 full grid : True
 boundary (xmin,ymin,xmax,ymax) : [20, 0, 30, 20]
-
----- PL Model------
-plm : {&#39;fghz&#39;: &#39;3.0&#39;, &#39;rssnp&#39;: &#39;2.64&#39;, &#39;d0&#39;: &#39;1.0&#39;, &#39;sigrss&#39;: &#39;3.0&#39;}
 </pre></div>
 </div>
 <p>Then, the coverage calculation is launched by calling the <tt class="docutils literal"><span class="pre">cover()</span></tt>
 method</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># evaluate coverage</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Execution time : </span><span class="si">%2.3f</span><span class="s"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>Execution time : 1.852
+</pre></div>
 </div>
-<div class="section" id="calculating-received-power-coverage">
-<h1>Calculating Received Power Coverage<a class="headerlink" href="#calculating-received-power-coverage" title="Permalink to this headline">¶</a></h1>
 <p>Let display the current Layout with hidding nodes.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-<span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xa852bd0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0xa71f310&gt;)
-</pre></div>
-</div>
-<img alt="../_images/AP-coverage_13_1.png" src="../_images/AP-coverage_13_1.png" />
+<img alt="../_images/AP-coverage_17_0.png" src="../_images/AP-coverage_17_0.png" />
 <p>The shadowing map coverage results can be displayed by invoquing various
 functions.</p>
-<ul class="simple">
-<li>showLoss : display the path loss</li>
-<li>showPower : display the received powercover</li>
-</ul>
-<p>The following examples represent the estimated received power for 3
-different frequencies</p>
-<div class="section" id="f-400-mhz">
-<h2>f = 400 MHz<a class="headerlink" href="#f-400-mhz" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">0.400</span>
-<span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">)</span>
-<span class="n">toc</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">&#39;Elapsed time : {0:.2f} seconds&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/numpy/ma/core.py:3847: UserWarning: Warning: converting a masked element to nan.
-  warnings.warn(&quot;Warning: converting a masked element to nan.&quot;)
-</pre></div>
-</div>
-<img alt="../_images/AP-coverage_17_1.png" src="../_images/AP-coverage_17_1.png" />
-<div class="highlight-python"><div class="highlight"><pre>Elapsed time : 1.44 seconds
-</pre></div>
-</div>
-</div>
-<div class="section" id="f-2-4ghz">
-<h2>f = 2.4GHz<a class="headerlink" href="#f-2-4ghz" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span>
-<span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">)</span>
-<span class="n">toc</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">&#39;Elapsed time : {0:.2f} seconds&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/AP-coverage_19_0.png" src="../_images/AP-coverage_19_0.png" />
-<div class="highlight-python"><div class="highlight"><pre>Elapsed time : 1.41 seconds
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span>
-<span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">)</span>
-<span class="n">toc</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">&#39;Elapsed time : {0:.2f} seconds&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/AP-coverage_20_0.png" src="../_images/AP-coverage_20_0.png" />
-<div class="highlight-python"><div class="highlight"><pre>Elapsed time : 1.52 seconds
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The transmitter coordinates are :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">tx</span>
+<img alt="../_images/AP-coverage_21_0.png" src="../_images/AP-coverage_21_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span>  <span class="mi">5</span><span class="p">])</span>
+<img alt="../_images/AP-coverage_22_0.png" src="../_images/AP-coverage_22_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This can be modified on the flight, and the coverage is updated
-accordingly</p>
-</div>
-<div class="section" id="f-100-ghz">
-<h2>f = 100 GHz<a class="headerlink" href="#f-100-ghz" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">100</span>
-<span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">21</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-
-<span class="o">%</span><span class="n">timeit</span>
-<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">)</span>
-<span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;jet&#39;</span><span class="p">)</span>
+<img alt="../_images/AP-coverage_23_0.png" src="../_images/AP-coverage_23_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sinr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/AP-coverage_25_0.png" src="../_images/AP-coverage_25_0.png" />
-<img alt="../_images/AP-coverage_25_1.png" src="../_images/AP-coverage_25_1.png" />
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xb66c610&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0xb64c750&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fccedecfb10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xb666b90&gt;)
 </pre></div>
 </div>
-</div>
-<div class="section" id="the-excess-delay-due-to-crossing-the-wall-can-also-be-evaluted">
-<h2>The excess delay due to crossing the wall can also be evaluted.<a class="headerlink" href="#the-excess-delay-due-to-crossing-the-wall-can-also-be-evaluted" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span>
-<span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<img alt="../_images/AP-coverage_24_1.png" src="../_images/AP-coverage_24_1.png" />
+<p>As you have noticed the calculation has been done for all the center
+frequencies of the selected standard. This is done in prevision of
+further channel optimizations.</p>
+<p>Let&#8217;s consider an other standard</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C2</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">(</span><span class="s">&#39;coverage2.ini&#39;</span><span class="p">)</span>
+<span class="n">C2</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/AP-coverage_27_0.png" src="../_images/AP-coverage_27_0.png" />
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7f4174eb0bd0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f4174eb0290&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;pr&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xb132b10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fccedee1e50&gt;)
+</pre></div>
+</div>
+<img alt="../_images/AP-coverage_28_1.png" src="../_images/AP-coverage_28_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;capacity&#39;</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fccededbfd0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xc1814d0&gt;)
+</pre></div>
+</div>
+<img alt="../_images/AP-coverage_29_1.png" src="../_images/AP-coverage_29_1.png" />
+<p>All simulated quantities are stored in linear scale.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C2</span><span class="o">.</span><span class="n">Lw</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">0.27294476543198881</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C2</span><span class="o">.</span><span class="n">freespace</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">9.4414212324159392e-07</span>
+</pre></div>
 </div>
 </div>
 
@@ -327,7 +355,7 @@ accordingly</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

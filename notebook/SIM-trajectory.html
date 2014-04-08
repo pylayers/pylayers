@@ -106,7 +106,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x71d3fd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x84f1dd0&gt;
 </pre></div>
 </div>
 <p>This function has to be moved in simulem module. It is a temporary
@@ -174,6 +174,9 @@ run a full simulation and returns a list of channel impulse response.</p>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">14</span><span class="p">]</span>
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;DLR WP4 WHERE2 measurement site&#39;</span>
@@ -221,7 +224,7 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x9318990&gt;]
+<div class="highlight-python"><div class="highlight"><pre>[&lt;matplotlib.lines.Line2D at 0x7fea70273f50&gt;]
 </pre></div>
 </div>
 <img alt="../_images/SIM-trajectory_11_1.png" src="../_images/SIM-trajectory_11_1.png" />
@@ -244,8 +247,8 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <div class="highlight-python"><div class="highlight"><pre>Warning : no furniture file loaded
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x7fdd4a157410&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x8f70f90&gt;)
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xa2e32d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xa2e3990&gt;)
 </pre></div>
 </div>
 <img alt="../_images/SIM-trajectory_15_2.png" src="../_images/SIM-trajectory_15_2.png" />
@@ -280,6 +283,14 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
         <span class="n">ttcir</span><span class="o">=</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+<span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">102</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">1.01214575e-02</span><span class="p">,</span>   <span class="mf">3.03643725e-02</span><span class="p">,</span>   <span class="mf">5.06072874e-02</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>
+         <span class="mf">1.49949393e+02</span><span class="p">,</span>   <span class="mf">1.49969636e+02</span><span class="p">,</span>   <span class="mf">1.49989879e+02</span><span class="p">])</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">
 <h2>Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
@@ -298,19 +309,15 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/SIM-trajectory_25_1.png" src="../_images/SIM-trajectory_25_1.png" />
+<img alt="../_images/SIM-trajectory_26_1.png" src="../_images/SIM-trajectory_26_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>/home/uguen/anaconda/lib/python2.7/site-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label=&#39;...&#39; kwarg on individual plots.
-  warnings.warn(&quot;No labeled objects found. &quot;
+<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0xa2e82d0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fea73f931d0&gt;]], dtype=object))
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>(&lt;matplotlib.figure.Figure at 0x90f2690&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x8f6e990&gt;]], dtype=object))
-</pre></div>
-</div>
-<img alt="../_images/SIM-trajectory_26_2.png" src="../_images/SIM-trajectory_26_2.png" />
+<img alt="../_images/SIM-trajectory_27_1.png" src="../_images/SIM-trajectory_27_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -318,23 +325,23 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x7fdd381be310&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0x10f3bd50&gt;
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0xe2e4b50&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x7fea73d8b710&gt;
 </pre></div>
 </div>
-<img alt="../_images/SIM-trajectory_27_2.png" src="../_images/SIM-trajectory_27_2.png" />
+<img alt="../_images/SIM-trajectory_28_2.png" src="../_images/SIM-trajectory_28_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xe1adb50&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xaed94d0&gt;
 </pre></div>
 </div>
-<img alt="../_images/SIM-trajectory_28_1.png" src="../_images/SIM-trajectory_28_1.png" />
+<img alt="../_images/SIM-trajectory_29_1.png" src="../_images/SIM-trajectory_29_1.png" />
 </div>
 </div>
 
@@ -363,7 +370,7 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

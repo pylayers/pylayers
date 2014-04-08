@@ -83,7 +83,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="n">dist</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x863cfd0&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.figure.Figure at 0x755ddd0&gt;
 </pre></div>
 </div>
 <div class="section" id="example-of-tdoa">
@@ -105,8 +105,8 @@ anchor nodes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOA</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.25671287</span><span class="p">,</span>  <span class="mf">0.48383071</span><span class="p">,</span>  <span class="mf">0.31754575</span><span class="p">,</span>  <span class="mf">0.11375823</span><span class="p">,</span>  <span class="mf">0.05374619</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.0863571</span> <span class="p">,</span>  <span class="mf">0.22940795</span><span class="p">,</span>  <span class="mf">0.36639866</span><span class="p">,</span>  <span class="mf">0.16760423</span><span class="p">,</span>  <span class="mf">0.83518302</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.4604512</span> <span class="p">,</span>  <span class="mf">0.50788454</span><span class="p">,</span>  <span class="mf">0.76035605</span><span class="p">,</span>  <span class="mf">0.26389134</span><span class="p">,</span>  <span class="mf">0.01567406</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.42328944</span><span class="p">,</span>  <span class="mf">0.70890667</span><span class="p">,</span>  <span class="mf">0.27959875</span><span class="p">,</span>  <span class="mf">0.76845739</span><span class="p">,</span>  <span class="mf">0.29124707</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOAr1</span>
@@ -119,8 +119,8 @@ anchor nodes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOAr2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.05374619</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.83518302</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.01567406</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.29124707</span><span class="p">]])</span>
 </pre></div>
 </div>
 <p>The figure below illustrates the situation, in red the anchor nodes, the
@@ -149,10 +149,9 @@ blue star is the blind node.</p>
 <span class="k">print</span> <span class="n">tdoa2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>[ -1.11255013e+00  -8.74432246e-01  -1.39934765e+00  -1.32266661e+00
-   2.22044605e-16]
-[-0.4650432  -0.22692531 -0.75184071 -0.67515967  0.64750693]
-[-1.11255013 -0.87443225 -1.39934765 -1.32266661  0.        ]
+<div class="highlight-python"><div class="highlight"><pre>[ 0.34541498  1.09107775  1.25397889  0.96086878  0.        ]
+[-0.2413233   0.50433947  0.6672406   0.3741305  -0.58673828]
+[ 0.34541498  1.09107775  1.25397889  0.96086878  0.        ]
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">node</span><span class="o">=</span><span class="p">{}</span>
@@ -170,12 +169,11 @@ blue star is the blind node.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Nodes :  {&#39;RN_TDOA&#39;: array([[ 0.25671287,  0.48383071,  0.31754575,  0.11375823,  0.05374619],
-       [ 0.0863571 ,  0.22940795,  0.36639866,  0.16760423,  0.83518302]]), &#39;BN&#39;: array([[ 0.2],
-       [ 0.3]]), &#39;RNr_TDOA&#39;: array([[ 0.05374619],
-       [ 0.83518302]])}
-Location dependent parameters :  {&#39;TDOA&#39;: array([ -1.11255013e+00,  -8.74432246e-01,  -1.39934765e+00,
-        -1.32266661e+00,   2.22044605e-16]), &#39;TDOA_std&#39;: array([ 1.,  1.,  1.,  1.,  1.])}
+<div class="highlight-python"><div class="highlight"><pre>Nodes :  {&#39;RN_TDOA&#39;: array([[ 0.4604512 ,  0.50788454,  0.76035605,  0.26389134,  0.01567406],
+       [ 0.42328944,  0.70890667,  0.27959875,  0.76845739,  0.29124707]]), &#39;BN&#39;: array([[ 0.2],
+       [ 0.3]]), &#39;RNr_TDOA&#39;: array([[ 0.01567406],
+       [ 0.29124707]])}
+Location dependent parameters :  {&#39;TDOA&#39;: array([ 0.34541498,  1.09107775,  1.25397889,  0.96086878,  0.        ]), &#39;TDOA_std&#39;: array([ 1.,  1.,  1.,  1.,  1.])}
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
@@ -184,8 +182,8 @@ Location dependent parameters :  {&#39;TDOA&#39;: array([ -1.11255013e+00,  -8.7
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">toa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.19996091</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.30005543</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.1999583</span> <span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.29994375</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;BN&#39;</span><span class="p">]</span>
@@ -225,7 +223,7 @@ Location dependent parameters :  {&#39;TDOA&#39;: array([ -1.11255013e+00,  -8.7
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 04, 2014.
+      Last updated on avril 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
