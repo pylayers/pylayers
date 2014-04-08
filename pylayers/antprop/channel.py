@@ -1456,7 +1456,6 @@ class Tchannel(bs.FUDAsignal):
 
         """
         super(Tchannel,self).__init__(fGHz, alpha, tau, dod, doa)
-        # bs.FUDAsignal.__init__(self, fGHz, alpha, tau, dod, doa)
 
     def __repr__(self):
         st = ''
@@ -1768,7 +1767,7 @@ class Tchannel(bs.FUDAsignal):
         # return a FUDsignal
         #
         Y = self.apply(Wgam)
-        ri = Y.ft1(500, 1)
+        ri = Y.ft1(Nz=500,ffts=1)
 
         return(ri)
 
@@ -1783,25 +1782,30 @@ class Tchannel(bs.FUDAsignal):
 
         The overall received signal is built in frequency domain
 
+        See Also
+        --------
+
+        pylayers.signal.bsignal
+
         """
         Hab = self.H.ft2(0.001)
         HabW = Hab * Wgam
         RI = HabW.symHz(10000)
-        ri = RI.ifft(0, 'natural')
+        ri = RI.ifft(0,'natural')
         ri.translate(-Tw)
         return(ri)
 
-   
+
     def plotd (self, d='doa', **kwargs):
-        """plot direction of arrival/departure
+        """plot direction of arrival and departure
 
         Parameters
         ----------
 
-        d: 'doa' | 'dod'        
+        d: 'doa' | 'dod'
             display direction of departure | arrival
         fig : plt.figure
-        ax : plt.axis    
+        ax : plt.axis
         phi: tuple (-180, 180)
             phi angle
         normalize: bool
@@ -1869,11 +1873,8 @@ class Tchannel(bs.FUDAsignal):
             Emax = max(Etot)
             Etot = Etot / Emax
         #
-        #
-        #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
         # WARNING polar plot require radian angles
-        #
         #
         if polar :
             al = 1.
@@ -2123,7 +2124,6 @@ class Tchannel(bs.FUDAsignal):
                     'edgecolors':'none',
                     'polar':False,
                     'mode':'mean'
-        
                     }
 
 
@@ -2135,7 +2135,7 @@ class Tchannel(bs.FUDAsignal):
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
-        
+
         kwargs['colorbar']=False
         fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
         kwargs['colorbar']=True

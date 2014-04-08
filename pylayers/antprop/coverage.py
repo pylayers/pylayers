@@ -801,10 +801,7 @@ class Coverage(object):
 
             if typ=='capacity':
                 title = title + 'Capacity : '+' fc = '+str(self.fGHz[f])+' GHz'+ ' polar : '+self.polar
-                if dB:
-                    legcb = ''
-                else:
-                    legcb = 'Mbit/s'
+                legcb = 'Mbit/s'
                 V = self.bmhz[np.newaxis,np.newaxis,:]*np.log(1+self.sinr)/np.log(2)
 
             if typ=='pr':

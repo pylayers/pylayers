@@ -339,7 +339,7 @@ class Simul(SimulationRT): # Sympy 2
             self.activate(self.save,self.save.run(),0.0)
 
     def create_show(self):
-        """ 
+        """
         """
 
         plt.ion()

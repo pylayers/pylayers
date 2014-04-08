@@ -57,7 +57,7 @@ class Waveform(dict):
             30
 
         typ  :  'generic','W1compensate','W1offset'
-           
+
         """
         defaults = {'typ':'generic',
                 'bandGHz': 0.499,
@@ -65,7 +65,7 @@ class Waveform(dict):
                 'feGHz': 100,
                 'threshdB': 3,
                 'twns': 30}
-        
+
         for key, value in defaults.items():
             if key not in kwargs:
                 self[key] = value
@@ -127,7 +127,7 @@ class Waveform(dict):
         ----------
 
         Tpns : float
-        
+
         """
         plt.subplot(211)
         self.st.plot()
@@ -140,7 +140,7 @@ class Waveform(dict):
         """    Create an Energy normalized Gaussian impulse (Usignal)
 
         ip_generic(self,parameters)
-        
+
 
         """
         Tw     = self['twns']
@@ -173,7 +173,7 @@ class Waveform(dict):
 
         """
 
-        M = mesuwb.UWBMesure(1,h=1)
+        M = mesuwb.UWBMeasure(1,h=1)
         w = bs.TUsignal()
 
         ts = M.RAW_DATA.timetx[0]
@@ -222,7 +222,7 @@ class Waveform(dict):
         >>> wav.show()
 
         """
-        M = mesuwb.UWBMesure(1,1)
+        M = mesuwb.UWBMeasure(1,1)
         w = bs.TUsignal()
 
         ts = M.RAW_DATA.timetx[0]
