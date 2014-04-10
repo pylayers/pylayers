@@ -4963,8 +4963,8 @@ class Layout(object):
         d_id_index = d_id + 1
         for e in self.Gr.edges_iter(): # iterator on Gr edges
 
-            self.Gw.add_node(e[0],{'room':e[0]})
-            self.Gw.add_node(e[1],{'room':e[1]})
+            self.Gw.add_node(e[0],{'room':e[0],'door':False})
+            self.Gw.add_node(e[1],{'room':e[1],'door':False})
 
             trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
             trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
@@ -4997,28 +4997,28 @@ class Layout(object):
                 if self.Gr.node[e[0]]['polyg'].contains(P0):
                     upd0 = d_id_index
                     self.Gw.pos[upd0] = pdoor0
-                    self.Gw.add_node(upd0,{'room':e[0]})
+                    self.Gw.add_node(upd0,{'room':e[0],'door':True})
                     # if self.seginline(pdoor0,ep0).shape[1] <= 1:
                     #     self.Gw.add_edges_from([(e[0],upd0)])
                     d_id_index = d_id_index +1
 
                     upd1 = d_id_index
                     self.Gw.pos[upd1] = pdoor1
-                    self.Gw.add_node(upd1,{'room':e[1]})
+                    self.Gw.add_node(upd1,{'room':e[1],'door':True})
                     # if self.seginline(pdoor1,ep1).shape[1] <= 1:
                     #     self.Gw.add_edges_from([(e[1],upd1)])
                     d_id_index = d_id_index +1
                 else :
                     upd0 = d_id_index
                     self.Gw.pos[upd0] = pdoor0
-                    self.Gw.add_node(upd0,{'room':e[1]})
+                    self.Gw.add_node(upd0,{'room':e[1],'door':True})
                     # if self.seginline(pdoor0,ep1).shape[1] <= 1:
                     #     self.Gw.add_edges_from([(e[1],upd0)])
                     d_id_index = d_id_index +1
 
                     upd1 = d_id_index
                     self.Gw.pos[upd1] = pdoor1
-                    self.Gw.add_node(upd1,{'room':e[0]})
+                    self.Gw.add_node(upd1,{'room':e[0],'door':True})
                     # if self.seginline(pdoor1,ep0).shape[1] <= 1:
                     #     self.Gw.add_edges_from([(e[0],upd1)])
                     d_id_index = d_id_index +1
@@ -5089,7 +5089,7 @@ class Layout(object):
                         # vector to add to the convex point position
                         v = nvn*thick
                         pid = uc+pcid
-                        self.Gw.add_node(pid,{'diff':True,'room':n})
+                        self.Gw.add_node(pid,{'diff':True,'room':n,'door':False})
                         self.Gw.pos.update({pid:p[uu]+v[:2]})
                         pcid = pcid +1
 
