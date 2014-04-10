@@ -7,7 +7,7 @@ import pdb
 # This has to be 50% more than influence radius for the sub-tiling to work
 # 1.71 from Pascal Stucki, Obstacles in Pedestrian Simulations
 tile_size = 1.5
-DIST_OBST = 2.0  # Distance A laquelle les obstacles ou les murs sont pruis en compte par les noeuds
+DIST_OBST = 2.0  # Distance from where wall have no influence on boids
 
 _world = None
 
