@@ -170,10 +170,6 @@ class Simul(SimulationRT): # Sympy 2
 
         """
 
-        # self.the_world = world(width = float(self.lay_opt['the_world_width']), 
-        #                        height = float(self.lay_opt['the_world_height']),
-        #                        scale=float(self.lay_opt['the_world_scale']))
-
         _filename = self.lay_opt['filename']
 
         self.L = Layout(_filename)
@@ -191,22 +187,11 @@ class Simul(SimulationRT): # Sympy 2
             self.L.build()     
             self.L.dumpw()
 
-        # for ks in self.L.Gs.pos.keys():
-        #     self.L.Gs.pos[ks] = (self.L.Gs.pos[ks][0] +
-        #                          x_offset, self.L.Gs.pos[ks][1] + y_offset)
-        # for ks in self.L.Gr.pos.keys():
-        #     self.L.Gr.pos[ks] = (self.L.Gr.pos[ks][0] +
-        #                          x_offset, self.L.Gr.pos[ks][1] + y_offset)
-        # for ks in self.L.Gw.pos.keys():
-        #     self.L.Gw.pos[ks] = (self.L.Gw.pos[ks][0] +
-        #                          x_offset, self.L.Gw.pos[ks][1] + y_offset)
-
         #
         # Create Layout
         #
         walls = self.L.thwall(0, 0)
         for wall in walls:
-            points = []
             for ii in range(0, len(wall) - 1):
                 self.the_world.add_wall(wall[ii], wall[ii + 1])
 

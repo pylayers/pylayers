@@ -31,12 +31,10 @@ Internal configuration
 .. autosummary::
     :toctree: generated/
 
-
-    Simul.load_config
-    Simul.load_config
-    Simul._saveh5_init
     Simul._saveh5
+    Simul._loadh5
 
+    
 """
 import doctest
 import numpy as np

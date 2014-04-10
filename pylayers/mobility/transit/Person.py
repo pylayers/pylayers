@@ -199,7 +199,7 @@ class Person(Process):
            self.nextroomId=self.room_seq[self.room_counter]
            self.wait=self.room_wait[self.room_counter]
         #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
-        self.wp       =  self.L.waypointGw(self.roomId,self.nextroomId)
+        self.rooms, self.wp =  self.L.waypointGw(self.roomId,self.nextroomId)
         for tup in self.wp[1:]:
                 self.waypoints.append(vec3(tup))
 
@@ -251,8 +251,9 @@ class Person(Process):
         s = s + 'velocity: ' + str(conv_vecarr(self.velocity)) +'\n'
         s = s + 'acceleration: ' + str(conv_vecarr(self.acceleration)) +'\n'
 
-        s = s + '\ncurrent room ID -----> destination room ID\n'
-        s = s + str(self.roomId).ljust(15) +' -----> ' + str(self.nextroomId) + '\n'
+        s = s + '\ncurrent room ID --->' + ' current room ID ' +'---> destination room ID\n'
+        s = s + str(self.roomId).ljust(15) +' ---> '+\
+              str(self.L.pt2ro(self.position)).ljust(16) +'---> ' + str(self.nextroomId) + '\n'
 
         s = s + 'pos destination room ID: ' + str(conv_vecarr(self.destination)) +'\n'
         s = s + 'forbiden room list: ' + str(self.forbidroomId) +'\n'
@@ -332,6 +333,7 @@ class Person(Process):
                 # new target when arrived in poi
 
                 if self.arrived:
+
                     self.arrived = False
                     if self.endpoint:
                         self.endpoint=False
@@ -364,7 +366,7 @@ class Person(Process):
                            self.nextroomId=self.room_seq[self.room_counter]
                            self.wait=self.room_wait[self.room_counter]
                         #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
-                        wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
+                        self.rooms, wp =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
                             self.waypoints.append(vec3(tup)) 
                     #nextroom = adjroom[k]
