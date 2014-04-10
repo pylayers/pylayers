@@ -43,7 +43,7 @@ class Waveform(dict):
         Parameters
         ----------
 
-        'typ' : string 
+        'typ' : string
             'generic',
          'bandGHz': float
             0.499
@@ -51,7 +51,7 @@ class Waveform(dict):
             4.493
          'fsGHz': float
             100,
-         'threshdB': 
+         'threshdB':
               3,
          'twns': float
             30
@@ -76,9 +76,8 @@ class Waveform(dict):
     def eval(self):
         """ evaluate waveform
 
-            The lambda/4*pi factor which is necessary to get the proper budget 
-            link ( from the Friis formula) is introduced in this function.
-        """
+        The lambda/4*pi factor which is necessary to get the proper budget
+        link ( from the Friis formula) is introduced in this function.  """
 
         if self['typ']  == 'generic':
             [st,sf]=self.ip_generic()
