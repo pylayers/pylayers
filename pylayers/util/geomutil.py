@@ -2474,7 +2474,7 @@ def intersect(a, b, c, d):
         >>> import matplotlib.pylab as plt
         >>> N = 10
         >>> A = sp.rand(2,N)
-        >>> B = sp.rand(2,N)Id + d_id
+        >>> B = sp.rand(2,N)
         >>> C = sp.rand(2,N)
         >>> D = sp.rand(2,N)
         >>> b1 = intersect(A,B,C,D)

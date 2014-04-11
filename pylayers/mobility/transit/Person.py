@@ -200,9 +200,9 @@ class Person(Process):
            self.wait=self.room_wait[self.room_counter]
         #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         self.rooms, self.wp =  self.L.waypointGw(self.roomId,self.nextroomId)
+        # self.dlist =  [i in self.L.Gw.ldo for i in self.rooms]
         for tup in self.wp[1:]:
                 self.waypoints.append(vec3(tup))
-
         try:
             self.position = vec3(L.Gr.pos[self.roomId][0],L.Gr.pos[self.roomId][1])
         except:     
@@ -247,16 +247,19 @@ class Person(Process):
     def __repr__(self):
         s = 'Mechanical information\n***********************\n'
         s = s + 'agent ID: ' + str(self.ID) +'\n'
+        s = s + 'color: ' + str(self.color) +'\n'
+
         s = s + '\nposition: ' + str(conv_vecarr(self.position)) +'\n'
         s = s + 'velocity: ' + str(conv_vecarr(self.velocity)) +'\n'
         s = s + 'acceleration: ' + str(conv_vecarr(self.acceleration)) +'\n'
 
-        s = s + '\ncurrent room ID --->' + ' current room ID ' +'---> destination room ID\n'
-        s = s + str(self.roomId).ljust(15) +' ---> '+\
-              str(self.L.pt2ro(self.position)).ljust(16) +'---> ' + str(self.nextroomId) + '\n'
-
-        s = s + 'pos destination room ID: ' + str(conv_vecarr(self.destination)) +'\n'
-        s = s + 'forbiden room list: ' + str(self.forbidroomId) +'\n'
+        s = s + '\nOriginal room ID --->' + ' Current room ID ' +'---> Destination room ID\n'
+        s = s + str(self.roomId).ljust(16) +' ---> '+\
+              str(self.L.pt2ro(self.position)).ljust(16) +'---> ' + str(self.nextroomId)
+        s = s + '\ncurrent waypoint ID :' + str(self.rooms[0])
+        s = s + '\nremaining waypoint ID :' + str(self.rooms)
+        s = s + '\npos destination room ID: ' + str(conv_vecarr(self.destination))
+        s = s + '\nforbiden room list: ' + str(self.forbidroomId)
         return s
 
 
@@ -268,12 +271,17 @@ class Person(Process):
 
         """
         if self.pdshow:
-            self.L.showGs(figsize=(20,20))
+            self.L.showG('w',labels=True,alphacy=0.,edges=False)
 
         while True:
             if self.moving:
                 if self.sim.verbose:
                     print 'meca: updt ag ' + self.ID + ' @ ',self.sim.now()
+                
+                # if np.allclose(conv_vecarr(self.destination)[:2],self.L.Gw.pos[47]):
+                #     import ipdb
+                #     ipdb.set_trace()
+
 
                 while self.cancelled:
                     yield passivate, self
@@ -321,7 +329,8 @@ class Person(Process):
                 columns=['t','x','y','vx','vy','ax','ay']))
 
                 if self.pdshow:
-                    plt.scatter(self.df['x'].tail(1),self.df['y'].tail(1),c=self.color,s=4,alpha=0.3)
+                    plt.scatter(self.df['x'].tail(1),self.df['y'].tail(1),
+                                c=self.color,s=self.radius*4**4,alpha=0.3)
                     plt.draw()
 
                 if 'mysql' in self.save:
@@ -332,16 +341,22 @@ class Person(Process):
 
                 # new target when arrived in poi
 
-                if self.arrived:
+                if self.arrived and\
+                    (self.L.pt2ro(self.position) ==\
+                        self.L.Gw.node[self.rooms[1]]['room']):
 
                     self.arrived = False
+                    if self.rooms[0] == 2:
+                        import ipdb
+                        ipdb.set_trace()
                     if self.endpoint:
                         self.endpoint=False
                         self.roomId = self.nextroomId
                         # remove the remaining waypoint which correspond 
                         # to current room position
                         del self.waypoints[0]
-
+                        del self.rooms[0]
+                        # del self.dlist[0]
                     #
                     # If door lets continue 
                     #
@@ -367,6 +382,7 @@ class Person(Process):
                            self.wait=self.room_wait[self.room_counter]
                         #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
                         self.rooms, wp =  self.L.waypointGw(self.roomId,self.nextroomId)
+                        # self.dlist =  [i in self.L.Gw.ldo for i in self.rooms]
                         for tup in wp[1:]:
                             self.waypoints.append(vec3(tup)) 
                     #nextroom = adjroom[k]
@@ -393,6 +409,8 @@ class Person(Process):
 
                     else:
                         del self.waypoints[0]
+                        del self.rooms[0]
+                        # del self.dlist[0]
                     #print "wp : ", self.waypoints
                         if len(self.waypoints)==1:
                             self.endpoint=True
