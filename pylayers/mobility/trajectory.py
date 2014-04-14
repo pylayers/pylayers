@@ -152,7 +152,7 @@ class Trajectories(list):
         self.time()
 
 
-    def resample(self, sf=2, tstart = -1, tstop = -1):
+    def resample(self, sf=2, tstart = -1):
         """ resample trajectories
 
         Parameters
@@ -163,9 +163,6 @@ class Trajectories(list):
         tstart : float
             new start time (must be > original start time).
             if tstart = -1 : original start conserved
-        tstop : float
-            new stop time (must be < original stop time)
-            if tstop = -1 : original stop conserved
 
         Returns
         -------
@@ -177,7 +174,7 @@ class Trajectories(list):
         T=Trajectories()
         for t in self:
             if t.typ != 'ap':
-                T.append(t.resample(sf=sf, tstart=tstart, tstop=tstop))
+                T.append(t.resample(sf=sf, tstart=tstart))
             else:
                 T.append(t)
         T.Lfilename = self.Lfilename
@@ -478,7 +475,7 @@ class Trajectory(pd.DataFrame):
         self.update()
         return self
 
-    def resample(self, sf=2, tstart=-1, tstop =-1):
+    def resample(self, sf=2, tstart=-1):
         """ resample trajectory
 
         Parameters
@@ -489,9 +486,6 @@ class Trajectory(pd.DataFrame):
         tstart : float
             new start time (must be > original start time).
             if tstart = -1 : original start conserved
-        tstop : float
-            new stop time (must be < original stop time)
-            if tstop = -1 : original stop conserved
 
         Returns
         -------
@@ -513,27 +507,15 @@ class Trajectory(pd.DataFrame):
                 tstart = tstart
             else :
                 raise AttributeError('tstart < tmin')
-        if tstop == -1:
-            if t[-1] >= tstop:
-                tstop = t[-1]
-            else :
-                raise AttributeError('tstop > tmax')
-        else:
-            tstop = tstop
-        if tstart == tstop:
-            tstop = 3*tstart
+
         tstep = (t[1]-t[0])/sf
         # need to add at least 3 values gor generate to estomate acceleration
-        tnew = np.arange(tstart, tstop+3*tstep, tstep)
-        # check if generate resmaple is not longer that original
-        ut = np.where(tnew<self.tmax)
-        tnew=tnew[ut]
+        tnew = np.arange(tstart, t[-1], tstep)
 
         # generate requieres 3 measures at least 
         xnew = fx(tnew)
         ynew = fy(tnew)
         T = Trajectory()
-
 
         T.generate(ID=self.ID,
                    name=self.name,

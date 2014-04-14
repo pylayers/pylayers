@@ -31,12 +31,10 @@ Internal configuration
 .. autosummary::
     :toctree: generated/
 
-
-    Simul.load_config
-    Simul.load_config
-    Simul._saveh5_init
     Simul._saveh5
+    Simul._loadh5
 
+    
 """
 import doctest
 import numpy as np
@@ -91,17 +89,16 @@ class Simul(object):
         self.SL = SLink()
         self.DL = DLink(L=self.L,verbose=self.verbose)
         self.filename = 'simultraj_' + self.filetraj
-        self.data = pd.DataFrame(columns=['t','id_a', 'id_b',
+        self.data = pd.DataFrame(columns=['id_a', 'id_b',
                                           'x_a', 'y_a', 'z_a',
                                           'x_b', 'y_b', 'z_b',
                                           'd', 'eng', 'typ',
                                           'wstd', 'fcghz',
                                           'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                           'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                          ],index=[0])
-        # self.data.set_index('t')
+                                          ])
+        self.data.index.name='t'
         self._filecsv = self.filename.split('.')[0] + '.csv'
-        self._index = 0
         self.todo = {'OB': True,
                     'B2B': True,
                     'B2I': True,
@@ -252,7 +249,6 @@ class Simul(object):
             minb = self.N.node[na]['wstd'][wstd]['fbminghz']
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
-
         a, t = self.DL.eval()
 
         return a, t
@@ -388,14 +384,14 @@ class Simul(object):
 
         if len(lt) > 1:
             sf = 1/(1.*lt[1]-lt[0])
-            self._traj = self.traj.resample(sf=sf, tstart=lt[0], tstop=lt[-1])
+            self._traj = self.traj.resample(sf=sf, tstart=lt[0])
 
         else:
-            self._traj = self.traj.resample(sf=1.0,tstart=lt[0])
+            self._traj = self.traj.resample(sf=1.0, tstart=lt[0])
             self._traj.time()
 
         self.time = self._traj.t
-        self._time = pd.to_datetime(self.time)
+        self._time = pd.to_datetime(self.time,unit='s')
 
         #
         # Code
@@ -405,6 +401,7 @@ class Simul(object):
         for ut, t in enumerate(lt):
             self.ctime = t
             self.update_pos(t)
+            print self.N.__repr__()
             for w in wstd:
                 for na, nb, typ in llink[w]:
                     if self.todo[typ]:
@@ -424,9 +421,7 @@ class Simul(object):
                         else :
                             self._ak = self.DL.H.ak
                             self._tk = self.DL.H.tk
-
-                        self.data = self.data.append(pd.DataFrame({\
-                                    't':self._time[ut],
+                        df = pd.DataFrame({\
                                     'id_a': na,
                                     'id_b': nb,
                                     'x_a': self.N.node[na]['p'][0],
@@ -448,29 +443,60 @@ class Simul(object):
                                     'ray_id': self.DL.dexist['ray']['grpname'],
                                     'Ct_id': self.DL.dexist['Ct']['grpname'],
                                     'H_id': self.DL.dexist['H']['grpname'],
-                                                },columns=['t','id_a', 'id_b',
+                                                },columns=['id_a', 'id_b',
                                               'x_a', 'y_a', 'z_a',
                                               'x_b', 'y_b', 'z_b',
                                               'd', 'eng', 'typ',
                                               'wstd', 'fcghz',
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
-                                              ],index=[self._index]))
-                        self._index = self._index + 1
-                        # save csv
-                        self.tocsv(ut, na, nb, w,init=init)
-                        init=False
+                                              ],index=[self._time[ut]])
+                        if not self.check_exist(df):
+                            self.data = self.data.append(df)
+                            # self._index = self._index + 1
+                            # save csv
+                            self.tocsv(ut, na, nb, w,init=init)
+                            init=False
 
-                        # save pandas self.data
-                        self.savepd()
-                        # save ak tauk
-                        self._saveh5(ut, na, nb, w)
+                            # save pandas self.data
+                            self.savepd()
+                            # save ak tauk
+                            self._saveh5(ut, na, nb, w)
+
+
+    def check_exist(self, df):
+        """check if a dataframe df already exists in self.data
+        
+        Parameters
+        ----------
+        df : pd.DataFrame
+        
+        Returns
+        -------
+        
+        boolean
+            True if already exists
+            False otherwise
+        
+        """
+
+        ud = self.data[(self.data.index == df.index) 
+                        & (self.data['id_a'] == df['id_a'].values[0])
+                        & (self.data['id_b'] == df['id_b'].values[0])
+                        & (self.data['wstd'] == df['wstd'].values[0])
+                        ]
+        if len(ud) == 0:
+            return False
+        else :
+            return True
+
 
     def savepd(self):
         """ save data information of a simulation
         """
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
         store = pd.HDFStore(filenameh5,'a')
+        self.data=self.data.sort()
         store['df'] = self.data
         store.close()
 

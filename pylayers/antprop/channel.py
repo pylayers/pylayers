@@ -290,7 +290,7 @@ class Ctilde(object):
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
-            
+
             fh5=h5py.File(filename,'a')
             if not grpname in fh5['Ct'].keys(): 
                 fh5['Ct'].create_group(grpname)
@@ -888,7 +888,7 @@ class Ctilde(object):
         fGHz = self.fGHz
 
         # if rot matrices are passed
-        if (Tt <>[]) & (Tr<>[]):
+        if (Tt != []) & (Tr != []):
             if self.islocal:
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
                     # run locbas to return to global basis
@@ -898,22 +898,20 @@ class Ctilde(object):
             self.Tt = Tt
             self.Tr = Tr
             self.islocal = True
-            
-
         # if a return to gloabl is requested
-        elif b2g :
+        elif b2g:
             if self.islocal :
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
                     self.Tt = self.Tt.transpose()
                     self.Tr = self.Tr.transpose()
                     self.islocal = False
-                else :
+                else:
                     raise NameError ('self.Tt and self.Tr should exist')
             else:
                 print "nothing to do to return in global basis"
                 return self
         # if Tt and Tr == []
-        else :
+        else:
             return self
 
         # get angular axes
@@ -947,33 +945,33 @@ class Ctilde(object):
         #
 
         #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:,np.newaxis]
+        r0 = Rr[0,0,:][:, np.newaxis]
         #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:,np.newaxis]
+        r1 = Rr[0,1,:][:, np.newaxis]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:,np.newaxis]
+        r0 = Rr[1, 0,:][:, np.newaxis]
         #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:,np.newaxis]
+        r1 = Rr[1, 1,:][:, np.newaxis]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0,0,:][:,np.newaxis]
+        r0 = Rt[0, 0, :][:, np.newaxis]
         #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1,0,:][:,np.newaxis]
+        r1 = Rt[1, 0, :][:, np.newaxis]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
         #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0,1,:][:,np.newaxis]
+        r0 = Rt[0, 1, :][:, np.newaxis]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1,1,:][:,np.newaxis]
+        r1 = Rt[1, 1, :][:, np.newaxis]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -983,10 +981,7 @@ class Ctilde(object):
         self.Cpt = bs.FUsignal(fGHz, Cptl)
         self.Cpp = bs.FUsignal(fGHz, Cppl)
 
-
-
         return self
-
 
     def Cg2Cl(self, Tt=[], Tr=[]):
         """ global reference frame to local reference frame
@@ -1014,11 +1009,11 @@ class Ctilde(object):
 
         fGHz = self.fGHz
 
-        if (Tt <>[]) & (Tr<>[]):
+        if (Tt !=[]) & (Tr!=[]):
             self.Tt = Tt
             self.Tr = Tr
         else:
-            if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+            if (hasattr(self,'Tt')) & (hasattr(self, 'Tr')):
                 self.Tt = self.Tt.transpose()
                 self.Tr = self.Tr.transpose()
             else:

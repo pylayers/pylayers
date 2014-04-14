@@ -3,11 +3,14 @@ from SimPy.SimulationRT import *
 from math import pi, sin, cos
 import os
 from pylayers.mobility.transit.vec3 import vec3
+import pylayers.util.plotutil as plu
+import numpy as np
+
 import pdb
 # This has to be 50% more than influence radius for the sub-tiling to work
 # 1.71 from Pascal Stucki, Obstacles in Pedestrian Simulations
 tile_size = 1.5
-DIST_OBST = 2.0  # Distance A laquelle les obstacles ou les murs sont pruis en compte par les noeuds
+DIST_OBST = 2.0  # Distance from where wall have no influence on boids
 
 _world = None
 
@@ -172,6 +175,27 @@ class World:
         return vec3(boid.localy.y * xx - boid.localy.x * yy,
                     -boid.localx.y * xx + boid.localx.x * yy)
 
+    def plot(self):
+        ''' plot obstacles from the world
+
+        Example
+        -------
+
+            >>> from pylayers.simul.simulnet import *
+            >>> S=Simul()
+            >>> S.the_world.plot()
+        '''
+
+        X = self._obstacles
+        xv = X.values()
+        tahe = []
+        for i in range(len(xv)):
+            for u in range(len(xv[i])):
+                tahe.append(xv[i][u])
+        tahe=np.array(tahe)
+        ta = tahe[:, 0, :]
+        he = tahe[:, 1, :]
+        plu.displot(ta.T,he.T)
 # 
 # class TkWorld:
 #     def __init__(self, **args):

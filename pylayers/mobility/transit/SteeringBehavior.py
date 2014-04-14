@@ -108,7 +108,7 @@ class Seek:
         displacement = boid.destination - boid.position
         desired_velocity = displacement.normalize() * boid.desired_speed
         steering = desired_velocity - boid.velocity
-        if displacement.length() < 0.25:
+        if (displacement.length() < boid.radius):
             boid.arrived = True
         return steering
 
@@ -213,9 +213,9 @@ class Separation:
                 separation = other.position - boid.position
                 force = separation.scale(-1 / separation.length() ** 2)
                 # create orthogonal vector in order to make boids avoidance
-                force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
-#                force2 = vec3(-force[1],force[0],0)
-                acceleration += 3*force2
+#                force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
+                force2 = vec3(-force[1],force[0],0)
+                acceleration += force2 #3*force2
         return acceleration
 
 class Queuing:
@@ -282,7 +282,7 @@ class Containment:
     
 #    print speed
 #    # parabolic speed 
-        d_no_influ = 0.1 # m
+        d_no_influ = 0.3 # m
         repuls     = boid.velocity.length() #/ boid.max_speed
 #        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
 #        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
