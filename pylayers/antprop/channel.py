@@ -290,7 +290,7 @@ class Ctilde(object):
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
-            
+
             fh5=h5py.File(filename,'a')
             if not grpname in fh5['Ct'].keys(): 
                 fh5['Ct'].create_group(grpname)
