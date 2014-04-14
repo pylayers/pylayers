@@ -888,7 +888,7 @@ class Ctilde(object):
         fGHz = self.fGHz
 
         # if rot matrices are passed
-        if (Tt <>[]) & (Tr<>[]):
+        if (Tt != []) & (Tr != []):
             if self.islocal:
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
                     # run locbas to return to global basis
@@ -898,22 +898,20 @@ class Ctilde(object):
             self.Tt = Tt
             self.Tr = Tr
             self.islocal = True
-            
-
         # if a return to gloabl is requested
-        elif b2g :
+        elif b2g:
             if self.islocal :
                 if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
                     self.Tt = self.Tt.transpose()
                     self.Tr = self.Tr.transpose()
                     self.islocal = False
-                else :
+                else:
                     raise NameError ('self.Tt and self.Tr should exist')
             else:
                 print "nothing to do to return in global basis"
                 return self
         # if Tt and Tr == []
-        else :
+        else:
             return self
 
         # get angular axes
@@ -947,33 +945,33 @@ class Ctilde(object):
         #
 
         #r0 = np.outer(Rr[0, 0,:], uf)
-        r0 = Rr[0,0,:][:,np.newaxis]
+        r0 = Rr[0,0,:][:, np.newaxis]
         #r1 = np.outer(Rr[0, 1,:], uf)
-        r1 = Rr[0,1,:][:,np.newaxis]
+        r1 = Rr[0,1,:][:, np.newaxis]
 
         t00 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t01 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rr[1, 0,:], uf)
-        r0 = Rr[1, 0,:][:,np.newaxis]
+        r0 = Rr[1, 0,:][:, np.newaxis]
         #r1 = np.outer(Rr[1, 1,:], uf)
-        r1 = Rr[1, 1,:][:,np.newaxis]
+        r1 = Rr[1, 1,:][:, np.newaxis]
 
         t10 = r0 * self.Ctt.y + r1 * self.Cpt.y
         t11 = r0 * self.Ctp.y + r1 * self.Cpp.y
 
         #r0 = np.outer(Rt[0, 0,:], uf)
-        r0 = Rt[0,0,:][:,np.newaxis]
+        r0 = Rt[0, 0, :][:, np.newaxis]
         #r1 = np.outer(Rt[1, 0,:], uf)
-        r1 = Rt[1,0,:][:,np.newaxis]
+        r1 = Rt[1, 0, :][:, np.newaxis]
 
         Cttl = t00 * r0 + t01 * r1
         Cptl = t10 * r0 + t11 * r1
 
         #r0 = np.outer(Rt[0, 1,:], uf)
-        r0 = Rt[0,1,:][:,np.newaxis]
+        r0 = Rt[0, 1, :][:, np.newaxis]
         #r1 = np.outer(Rt[1, 1,:], uf)
-        r1 = Rt[1,1,:][:,np.newaxis]
+        r1 = Rt[1, 1, :][:, np.newaxis]
 
         Ctpl = t00 * r0 + t01 * r1
         Cppl = t10 * r0 + t11 * r1
@@ -983,10 +981,7 @@ class Ctilde(object):
         self.Cpt = bs.FUsignal(fGHz, Cptl)
         self.Cpp = bs.FUsignal(fGHz, Cppl)
 
-
-
         return self
-
 
     def Cg2Cl(self, Tt=[], Tr=[]):
         """ global reference frame to local reference frame
@@ -1014,11 +1009,11 @@ class Ctilde(object):
 
         fGHz = self.fGHz
 
-        if (Tt <>[]) & (Tr<>[]):
+        if (Tt !=[]) & (Tr!=[]):
             self.Tt = Tt
             self.Tr = Tr
         else:
-            if (hasattr(self,'Tt')) & (hasattr(self,'Tr')):
+            if (hasattr(self,'Tt')) & (hasattr(self, 'Tr')):
                 self.Tt = self.Tt.transpose()
                 self.Tr = self.Tr.transpose()
             else:
@@ -1317,8 +1312,12 @@ class Ctilde(object):
         alpha = t1 * Fbt + t2 * Fbp
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
+        
         H.applyFriis()
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))/len(H.y))
+
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
+                                                             / len(H.y))
+
         H.tk = H.taud
         return(H)
 
@@ -1460,8 +1459,8 @@ class Tchannel(bs.FUDAsignal):
         st = ''
         st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
         st = st + 'shape  :'+str(np.shape(self.y))+"\n"
-        st = st + 'tau :'+str(min(self.tau0))+' '+str(max(self.tau0))+"\n"
-        st = st + 'dist :'+str(min(0.3*self.tau0))+' '+str(max(0.3*self.tau0))+"\n"
+        st = st + 'tau :'+str(min(self.taud))+' '+str(max(self.taud))+"\n"
+        st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
         return(st)
 
 
@@ -1542,10 +1541,12 @@ class Tchannel(bs.FUDAsignal):
         try:
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-                if k != 'taue':
-                    setattr(self,str(k),va[:])
-                else :
-                    setattr(self,str(k),va)
+
+                # if k != 'tau1':
+                #     setattr(self,str(k),va[:])
+                # else :
+                setattr(self,str(k),va)
+
 
             a = f.attrs['a']
             b = f.attrs['b']
@@ -1615,7 +1616,9 @@ class Tchannel(bs.FUDAsignal):
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-                if k != 'taue' and k !='isFriis':
+
+                if k !='isFriis':
+
                     setattr(self,str(k),va[:])
                 else :
                     setattr(self,str(k),va)
@@ -1657,7 +1660,7 @@ class Tchannel(bs.FUDAsignal):
         """
 
         U = self * W
-        V = bs.FUDAsignal(U.x, U.y, self.tau0, self.dod, self.doa)
+        V = bs.FUDAsignal(U.x, U.y, self.taud, self.dod, self.doa)
 
         return(V)
 
@@ -1720,7 +1723,7 @@ class Tchannel(bs.FUDAsignal):
 
 
 
-        h = bs.FUDsignal(self.x, self.y, self.tau0)
+        h = bs.FUDsignal(self.x, self.y, self.taud)
         htap = h.chantap(**kwargs)
         return htap
 
@@ -1998,7 +2001,7 @@ class Tchannel(bs.FUDAsignal):
         else :
             ang = np.array((-180,180))
 
-        delay = self.tau0
+        delay = self.taud
         if typ =='m':
             delay = delay*0.3
 
@@ -2296,11 +2299,6 @@ class Tchannel(bs.FUDAsignal):
         w      :  waveform
         Nray   :  int
             number of rays to be displayed
-
-        See Also
-        --------
-
-        pylayers.signal.bsignal.FUsignal.iftd
 
         """
         # Construire W

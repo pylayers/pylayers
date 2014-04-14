@@ -3774,7 +3774,7 @@ class FUsignal(FBsignal, Usignal):
         See Also
         --------
 
-        FHsignal.ifft, FUsignal.symH, Fusignal.symHz
+        FHsignal.ifft, FUsignal.symH, FUsignal.symHz
 
 
 
@@ -4043,9 +4043,9 @@ class FUDsignal(FUsignal):
            >>> L = DLink()
            >>> aktk = L.eval()
            >>> H = L.H
-           >>> f,a H.show(cmap='jet')
+           >>> f,a = H.show(cmap='jet')
            >>> H.cut()
-           >>> f,a H.show(cmap='jet')
+           >>> f,a = H.show(cmap='jet')
 
 
         """
