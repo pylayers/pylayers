@@ -3301,7 +3301,7 @@ class FUsignal(FBsignal, Usignal):
 
         """
         if not self.isFriis:
-            factor = 0.3/(4*np.pi*self.x)
+            factor = -1j*0.3/(4*np.pi*self.x)
             self.y = self.y*factor[np.newaxis,:]
             self.isFriis = True
 
