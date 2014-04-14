@@ -1,7 +1,7 @@
 from SimPy.SimulationRT import Simulation
 from pylayers.mobility.transit.Person import Person
 from pylayers.mobility.transit.World import world
-from pylayers.mobility.transit.SteeringBehavior import Seek, Separation, Containment, InterpenetrationConstraint, queue_steering_mind, default_steering_mind
+from pylayers.mobility.transit.SteeringBehavior import Seek, Separation, Containment, InterpenetrationConstraint, queue_steering_mind
 
 
 import numpy as np

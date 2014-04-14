@@ -4700,7 +4700,6 @@ class Layout(object):
         setattr(self,'di', read_gpickle(basename+'/struc/gpickle/di_'+self.filename+'.gpickle'))
         setattr(self,'dca', read_gpickle(basename+'/struc/gpickle/dca_'+self.filename+'.gpickle'))
 
-
     def buildGc(self):
         """ build the connectivity graph
 
@@ -5105,10 +5104,6 @@ class Layout(object):
                 if self.seginline(pf[0],pf[1]).shape[1] <= 1:
                     d = np.sqrt(np.sum((pf[0]-pf[1])**2))
                     self.Gw.add_edges_from([(nw[0],nw[1])],weight=d)
-
-
-
-
 
             # kudr = [kdr[u] for u in udr]
             # cdr = combinations(dr.keys()[udr],2)
@@ -6069,7 +6064,9 @@ class Layout(object):
 
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='k'
-
+            kwargs['fig'],kwargs['ax'] = gru.draw(self.Gs,
+                              nodes=False,edges=True,alphacy=1.,
+                              fig=kwargs['fig'],ax=kwargs['ax'],labels=False)
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
