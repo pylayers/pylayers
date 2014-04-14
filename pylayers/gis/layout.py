@@ -6487,7 +6487,7 @@ class Layout(object):
 
         Notes
         -----
-       
+
         adjascent rooms are connected
         Gr is at first a deep copy of Gt
 
@@ -6516,7 +6516,7 @@ class Layout(object):
                             Ga.add_node(cy)
                             Ga.pos[cy]=self.Gt.pos[cy]
                         Ga.add_edge(k,cy)
-       
+
         # connected list of connected components of Gt
         connected = nx.connected_components(Ga)
         self.Gr = copy.deepcopy(self.Gt)
@@ -6547,7 +6547,7 @@ class Layout(object):
                 if len(path) < 1:
                     print licy
                     tomerge.insert(0,ncy)
-                else:   
+                else:
                     neigh = nx.neighbors(self.Gr,ncy) # all neighbors of 5
                     self.Gr.node[root]['cycle']+=self.Gr.node[ncy]['cycle'] # here the merging
                     self.Gr.node[root]['polyg']+=self.Gr.node[ncy]['polyg'] # here the merging
@@ -6555,15 +6555,15 @@ class Layout(object):
                     for k in neigh:
                         if k<> root:
                             self.Gr.add_edge(root,k)
-            # remove merged cycles           
-            for cy in merged:           
+            # remove merged cycles
+            for cy in merged:
                 self.Gr.remove_node(cy)
             # update pos of root cycle with new center of gravity
             self.Gr.pos[root]=tuple(self.Gr.node[root]['cycle'].g)
 
 
-            ltrans = self.listtransition
-            ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
+        ltrans = self.listtransition
+        ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
 
         # Destroy cycles which have no doors
 
@@ -6592,7 +6592,7 @@ class Layout(object):
             if not keep:
                 self.Gr.remove_edge(*e)
 
-        return(Ga)       
+        return(Ga)
 
 
     def buildGr3(self):
