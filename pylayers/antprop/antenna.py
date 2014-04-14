@@ -1635,8 +1635,8 @@ class Antenna(object):
         Ftheta = self.Ftheta
         Fphi = self.Fphi
         sh = np.shape(Ftheta)
-        e = np.exp(2 * pi * 1j * self.fa * tau)
-        E = np.outer(e, ones(sh[1] * sh[2]))
+        e = np.exp(2 * np.pi * 1j * self.fa * tau)
+        E = np.outer(e, np.ones(sh[1] * sh[2]))
 
         Fth = Ftheta.reshape(sh[0], sh[1] * sh[2])
         EFth = Fth * E

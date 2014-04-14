@@ -1319,7 +1319,7 @@ class Ctilde(object):
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
         H.applyFriis()
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))/len(H.y))
-        H.tk = H.tau0
+        H.tk = H.taud
         return(H)
 
     def vec2scal(self):
@@ -1542,7 +1542,7 @@ class Tchannel(bs.FUDAsignal):
         try:
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-                if k != 'tau1':
+                if k != 'taue':
                     setattr(self,str(k),va[:])
                 else :
                     setattr(self,str(k),va)
@@ -1553,7 +1553,7 @@ class Tchannel(bs.FUDAsignal):
             Tb = f.attrs['Tb']
             f.close()
 
-            self.__init__(self.x, self.y, self.tau0, self.dod, self.doa)
+            self.__init__(self.x, self.y, self.taud, self.dod, self.doa)
 
             if output :
                 return a,b,Ta,Tb
@@ -1615,14 +1615,14 @@ class Tchannel(bs.FUDAsignal):
 
             # keys not saved as attribute of h5py file
             for k,va in f.items():
-                if k != 'tau1' and k !='isFriis':
+                if k != 'taue' and k !='isFriis':
                     setattr(self,str(k),va[:])
                 else :
                     setattr(self,str(k),va)
 
             
             fh5.close()
-            self.__init__(self.x, self.y, self.tau0, self.dod, self.doa)
+            self.__init__(self.x, self.y, self.taud, self.dod, self.doa)
 
         except:
             fh5.close()

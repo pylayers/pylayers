@@ -343,7 +343,7 @@ class SSHCoeff(object):
         Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0) # integrates energy over freq axis = 0 
         Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
         Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
-
+        pdb.set_trace()
 
         E = Ex + Ey + Ez
 

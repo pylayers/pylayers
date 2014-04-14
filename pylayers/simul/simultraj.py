@@ -378,7 +378,7 @@ class Simul(object):
                 lt = np.array([kwargs['t']])
         else :
             lt = kwargs['t']
-
+        
         if len(lt) == 0:
             lt = self.time
         # check time attribute
@@ -393,7 +393,7 @@ class Simul(object):
             self._traj = self.traj.resample(sf=sf, tstart=lt[0], tstop=lt[-1])
 
         else:
-            self._traj = self.traj.resample(sf=1.0,tstart=lt[0],tstop=lt[-1])
+            self._traj = self.traj.resample(sf=1.0,tstart=lt[0])
             self._traj.time()
 
         self.time = self._traj.t

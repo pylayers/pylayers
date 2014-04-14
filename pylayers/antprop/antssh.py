@@ -247,11 +247,11 @@ def ssh(A, dsf=1, L= 20):
     cy  =  np.dot(Ey,Ypinv)
     cz  =  np.dot(Ez,Ypinv)
     lmax = L
-
+    pdb.set_trace()
     Cx = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cx,ind =ssh_index)
     Cy = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cy,ind =ssh_index)
     Cz = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cz,ind =ssh_index)
-
+    
     A.S = SSHCoeff(Cx,Cy,Cz)
 
 

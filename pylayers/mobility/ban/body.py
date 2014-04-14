@@ -314,7 +314,7 @@ class Body(object):
         #
         # vt : speed vector along trajectory
         #
-
+        
         vt = np.array([traj['vx'][kt],traj['vy'][kt]])
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
@@ -387,7 +387,7 @@ class Body(object):
         #
         # kt : trajectory integer index  
         # kf : frame integer index  
-
+        
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
 
         psa = np.array([0,0])
