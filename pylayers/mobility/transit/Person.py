@@ -346,9 +346,6 @@ class Person(Process):
                         self.L.Gw.node[self.rooms[1]]['room']):
 
                     self.arrived = False
-                    if self.rooms[0] == 2:
-                        import ipdb
-                        ipdb.set_trace()
                     if self.endpoint:
                         self.endpoint=False
                         self.roomId = self.nextroomId
