@@ -179,7 +179,6 @@ def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
     else:
         es = np.ndarray(shape = (2, ex.shape[0], nray) , dtype  = complex  )
 
-
     es[0] = np.cos(theta)*np.cos(phi)*ex + np.cos(theta)*np.sin(phi)*ey -np.sin(theta)*ez
     es[1] = -np.sin(phi)*ex +np.cos(phi)*ey
     #~ if pattern:
@@ -191,7 +190,7 @@ def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
     return es[0],es[1]
 
 
-def ssh(A, dsf=1, L= 20):
+def ssh(A,L= 20,dsf=1):
     """
 
     Parameters

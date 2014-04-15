@@ -230,7 +230,7 @@ FUDsignal Class
     FUDsignal.__init__
     FUDsignal.__repr__
     FUDsignal.minphas
-    FUDsignal.totud
+    FUDsignal.totime
     FUDsignal.iftd
     FUDsignal.ft1
     FUDsignal.ftau
@@ -1076,7 +1076,7 @@ class Usignal(Bsignal):
             y_new = self.y[:, posmin:posmax]
         else:
             y_new = self.y[posmin:posmax]
-       
+
         if t == 'Usignal':
             U = Usignal(x_new, y_new)
         if t == 'Tchannel':
@@ -1493,7 +1493,7 @@ class TBsignal(Bsignal):
             >>> su20 = sb.b2u(20)
             >>> su100 = sb.b2u(100)
             >>> fi = plt.figure()
-            >>> sb.stem()
+            >>> st = sb.stem()
             >>> fig,ax = su20.plot(color='k')
             >>> fig,ax = su100.plot(color='r')
             >>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
@@ -2906,19 +2906,20 @@ class TUDsignal(TUsignal):
 
     Attributes
     ----------
+
     x   : ndarray
     y   : ndarray
-    tau : float or ndarray
-
-
-    .. todo::
-        build a tunfold time restitution of delays 
+    taud : ndarray
+        direct delay
+    taue : ndarray
+        excess delay
 
     """
-    def __init__(self, x=np.array([]), y=np.array([]), tau=np.array([])):
+    def __init__(self,x=np.array([]),y=np.array([]),taud=np.array([]),taue=np.array([])):
         super(TUDsignal,self).__init__(x,y)
         #TUsignal.__init__(self, x, y)
-        self.tau = tau
+        self.taud = taud
+        self.taue = taue
 
     def __repr__(self):
         s = TUsignal.__repr__(self)
@@ -2929,6 +2930,7 @@ class TUDsignal(TUsignal):
 
         Parameters
         ----------
+
         N : int
             number of y signal to plot
 
@@ -3937,7 +3939,7 @@ class FUDsignal(FUsignal):
     -------
 
     minphas : force minimal phase    (Not tested)
-    totud   : transform to a TUD signal
+    totime  : transform to a TUD signal
     iftd    : inverse Fourier transform
     ft1     : construct CIR from ifft(RTF)
     ft2     :
@@ -4015,43 +4017,41 @@ class FUDsignal(FUsignal):
         # update total delay
         self.tau = self.tau+self.taue
 
-    def totud(self, Nz=1, ffts=0):
+    def totime(self, Nz=1, ffts=0):
         """ transform to TUDsignal
 
         Parameters
         ----------
 
-        Nz     : int
-            Number of zeros for zero padding
-        ffts   : nt
-            fftshift indicator (default 0 )
+            Nz : int
+                Number of zeros for zero padding
+            ffts : nt
+                fftshift indicator (default 0 )
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.link import *
+        >>> L = DLink(verbose=False)
+        >>> aktk = L.eval()
+        >>> L.H.cut()
+        >>> T1 = L.H.totime()
+        >>> f,a = T1.plot(typ='v')
+        >>> L.H.minphas()
+        >>> T2 = L.H.totime()
+        >>> f,a = T2.plot(typ='v')
 
         See Also
         --------
 
         FUsignal.ift
 
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-           >>> from pylayers.simul.link import *
-           >>> L = DLink()
-           >>> aktk = L.eval()
-           >>> H = L.H
-           >>> f,a = H.show(cmap='jet')
-           >>> H.cut()
-           >>> f,a = H.show(cmap='jet')
-
 
         """
-        self.tau = self.taud + self.taue
-        Nray = len(self.tau)
+        Nray = len(self.taud)
         s = self.ift(Nz, ffts)
-        tud = TUDsignal(s.x, s.y, self.tau)
-        return(tud)
+        h = TUDsignal(s.x, s.y, self.taud,self.taue)
+        return(h)
 
     def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
         """ time pasting
@@ -4082,7 +4082,6 @@ class FUDsignal(FUsignal):
         Examples
         --------
 
-        >>>
 
         """
         tau = self.tau
@@ -4250,7 +4249,7 @@ class FUDsignal(FUsignal):
         return U
 
 class FUDAsignal(FUDsignal):
-    """ FUDAsignal : Frequency domain Uniform signal with Delays and Angles
+    """ UDAsignal : Uniform signal with Delays and Angles
 
 
     Attributes
@@ -4265,7 +4264,7 @@ class FUDAsignal(FUDsignal):
     -------
 
     minphas : force minimal phase    (Not tested)
-    totud   : transform to a TUD signal
+    totime  : transform to a TUD signal
     iftd    : inverse Fourier transform
     ft1     : construct CIR from ifft(RTF)
     ft2     :
@@ -4276,11 +4275,13 @@ class FUDAsignal(FUDsignal):
                  y = np.array([]),
                  taud = np.array([]),
                  dod = np.array([]),
-                 doa = np.array([])):
+                 doa = np.array([])
+                 domain='frequency'):
         super(FUDAsignal,self).__init__(x, y, taud)
         # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod
         self.doa  = doa
+        self.domain = domain
 
     def __repr__(self):
         s = FUDsignal.__repr__(self)
@@ -4855,7 +4856,7 @@ def test():
 #
 
 if __name__ == "__main__":
-    #plt.ion()
+    plt.ion()
     doctest.testmod()
     #ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)

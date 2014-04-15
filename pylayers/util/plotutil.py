@@ -347,7 +347,8 @@ def mulcplot(x,y,**kwargs):
                     ax[l,c].set_title(titles[l,c])
                 else:
                     ax[l,c].set_title(titles[0])
-                ax[l,c].legend()
+                if labels[0]!='':
+                    ax[l,c].legend()
 
             else:
                 k = l*ncol+c
@@ -381,9 +382,10 @@ def mulcplot(x,y,**kwargs):
 
                 ax[l,c].set_xlabel(xlabels[k%nxlabels])
                 ax[l,c].set_ylabel(ylabels[k%nylabels])
-
                 ax[l,c].set_title(titles[k%ntitles])
-                ax[l,c].legend()
+
+                if labels[0]!='':
+                    ax[l,c].legend()
                 #ax[l,c].get_xaxis().set_visible(False)
                 #ax[l,c].get_yaxis().set_visible(False)
 
