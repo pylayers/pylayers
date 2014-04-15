@@ -394,22 +394,25 @@ class Simul(object):
             self._traj = self.traj.resample(sf=1.0, tstart=lt[0])
 
             self._traj.time()
-
+        
         self.time = self._traj.t
         self._time = pd.to_datetime(self.time,unit='s')
 
         #
         # Code
         #
-
+       
         init = True
         for ut, t in enumerate(lt):
-            self.ctime = t
+            self.ctime = t            
             self.update_pos(t)
-            print self.N.__repr__()
-            for w in wstd:
+            #print self.N.__repr__()
+            print 'ut = ', ut, 't = ', t
+            for w in wstd:                
                 for na, nb, typ in llink[w]:
+                    
                     if self.todo[typ]:
+                        print 'na = ', na, 'nb = ', nb, 'typ = ', typ
                         if self.verbose:
                             print '-'*30
                             print 'time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(lt)
@@ -420,7 +423,7 @@ class Simul(object):
                         if typ == 'OB':
                             self.evalstat(na, nb)
                             eng = self.SL.eng
-                            L = self.DL + self.SL
+                            L = self.DL #+ self.SL
                             self._ak = L.H.ak
                             self._tk = L.H.tk
                         else :
@@ -456,17 +459,17 @@ class Simul(object):
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
-                        if not self.check_exist(df):
-                            self.data = self.data.append(df)
-                            # self._index = self._index + 1
-                            # save csv
-                            self.tocsv(ut, na, nb, w,init=init)
-                            init=False
+                        #if not self.check_exist(df):
+                        self.data = self.data.append(df)
+                        # self._index = self._index + 1
+                        # save csv
+                        self.tocsv(ut, na, nb, w,init=init)
+                        init=False
 
-                            # save pandas self.data
-                            self.savepd()
-                            # save ak tauk
-                            self._saveh5(ut, na, nb, w)
+                        # save pandas self.data
+                        #self.savepd()
+                        # save ak tauk
+                        self._saveh5(ut, na, nb, w)
 
 
     def check_exist(self, df):

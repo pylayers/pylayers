@@ -42,10 +42,10 @@ Tchannel Class
     Tchannel.__repr__
     Tchannel.info
     Tchannel.apply
-    Tchannel.applywavC
     Tchannel.chantap
-    Tchannel.applywavB
     Tchannel.applywavA
+    Tchannel.applywavB
+    Tchannel.applywavC
     Tchannel.plotd
     Tchannel.plotad
     Tchannel.doadod
@@ -290,7 +290,7 @@ class Ctilde(object):
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
-            
+
             fh5=h5py.File(filename,'a')
             if not grpname in fh5['Ct'].keys(): 
                 fh5['Ct'].create_group(grpname)
@@ -1623,7 +1623,6 @@ class Tchannel(bs.FUDAsignal):
                 else :
                     setattr(self,str(k),va)
 
-            
             fh5.close()
             self.__init__(self.x, self.y, self.taud, self.dod, self.doa)
 
@@ -1647,14 +1646,25 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
+
         W :  Bsignal.FUsignal
 
         It exploits multigrid convolution from Bsignal.
 
+
+        Returns
+        -------
+
+        V : FUDAsignal
+
         Notes
         -----
+
+        Returns :math:`W(f) H_k(f)`
+
             + W may have a more important number of points and a smaller frequency band.
-            + If the frequency band of the waveform exceeds the one of the ScalChannei, a warning is sent.
+            + If the frequency band of the waveform exceeds the one of the
+            Transmission Channel, a warning is sent.
             + W is a FUsignal whose shape doesn't need to be homogeneous with FUDsignal H
 
         """
@@ -1669,7 +1679,7 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
-        w     :
+        w :
             waveform
         dxw
 

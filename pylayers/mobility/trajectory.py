@@ -438,7 +438,7 @@ class Trajectory(pd.DataFrame):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-
+        
         t = kwargs['t']
         if len(t) < 2:
             raise AttributeError('Trajectory.generate requieres at least 3 time stamps')
@@ -494,7 +494,7 @@ class Trajectory(pd.DataFrame):
             resampled trajectory
 
         """
-
+       
         t = self.time()
         x = self.space()[:, 0]
         y = self.space()[:, 1]
@@ -524,7 +524,9 @@ class Trajectory(pd.DataFrame):
                    pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
                    unit='s',
                    sf=sf)
+        
         T.update()
+       
         return T
 
 
@@ -572,6 +574,7 @@ class Trajectory(pd.DataFrame):
 
         """
         t = self.time()
+       
         u = np.where((t >= tk-self.ts/2.) & (t <= tk+self.ts/2.))[0][0]
 
         return(self['s'][u])
