@@ -6562,8 +6562,8 @@ class Layout(object):
             self.Gr.pos[root]=tuple(self.Gr.node[root]['cycle'].g)
 
 
-            ltrans = self.listtransition
-            ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
+        ltrans = self.listtransition
+        ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
 
         # Destroy cycles which have no doors
 
