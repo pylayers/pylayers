@@ -108,7 +108,7 @@ class Seek:
         displacement = boid.destination - boid.position
         desired_velocity = displacement.normalize() * boid.desired_speed
         steering = desired_velocity - boid.velocity
-        if (displacement.length() < 0.25):
+        if (displacement.length() < 1.5*boid.radius):
             boid.arrived = True
         return steering
 
