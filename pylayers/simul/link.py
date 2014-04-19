@@ -104,7 +104,7 @@ class Link(object):
 
 
     def __add__(self,l):
-        """ add ak tauk of 2 Links
+        """ merge ak tauk of 2 Links
         """
         L=Link()
         tk = np.hstack((self.H.tk,l.H.tk))
@@ -124,7 +124,7 @@ class SLink(Link):
 
 
     def onbody(self, B, dida, didb, a, b):
-        """ Statisitcal evaluation of a on-body link
+        """ Statistical evaluation of a on-body link
 
         Parameters
         ----------
@@ -136,9 +136,9 @@ class SLink(Link):
         didb: int
             device b id number on body
         a : nd array
-            postision of device a
+            position of device a
         b : nd array
-            postision of device b
+            position of device b
 
         Returns
         -------
@@ -185,8 +185,6 @@ class DLink(Link):
         Parameters
         ----------
 
-        Basic
-
         L : Layout
             Layout to be used
         a : np.ndarray (3,)
@@ -203,7 +201,7 @@ class DLink(Link):
             Rotation matrice of Antenna of device dev_b relative to global Layout scene
         fGHz : np.ndarray (Nptf,)
             frequency range of Nptf poitns used for evaluation of channel in GHz
-        wav : Waform
+        wav : Waveform
             Waveform to be applied on the channel
         save_idx : int
             number to differenciate the h5 file generated
@@ -220,13 +218,13 @@ class DLink(Link):
         Notes
         -----
 
-        All simulation are stored into a unique file in your <PyProject>/output directory
+        All simulations are stored into a unique file in your <PyProject>/output directory
         using the following convention:
 
         Links_<save_idx>_<LayoutFilename>.h5
 
         where
-            <save_idx> is a integer number to be able to discriminate different links simulations
+            <save_idx> is an integer number to distinguish different links simulations
         and <LayoutFilename> is the Layout used for the link simulation.
 
 
@@ -983,17 +981,15 @@ class DLink(Link):
     def eval(self,**kwargs):
         """ Evaluate the link
 
-
         Parameters
         ----------
 
-        force_save : boolean
-            Force the computation (even if obj already exists)
-            AND save (replace previous computations)
+        force : boolean
+            Force the computation (even if obj already exists) AND save (replace previous computations)
         si.algo : str ('old'|'new')
             signature.run algo type
         ra.ceil_height_meter : int
-            rays.to3D ceil height in mteres
+            rays.to3D ceil height in meters
         ra.number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
 
@@ -1006,6 +1002,8 @@ class DLink(Link):
         tk : ndarray
             tau_k
 
+        Notes
+        -----
 
         update self.ak and self.tk
 
@@ -1015,8 +1013,8 @@ class DLink(Link):
             tau_k
 
 
-        Example
-        -------
+        Examples
+        --------
 
         .. plot::
             :include-source:
@@ -1035,9 +1033,9 @@ class DLink(Link):
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
-                   'si.algo':'old',
-                   'ra.ceil_height_meter':3,
-                   'ra.number_mirror_cf':1,
+                   'si_algo':'old',
+                   'ra_ceil_height_meter':3,
+                   'ra_number_mirror_cf':1,
                    'force':False,
                    }
         for key, value in defaults.items():
@@ -1056,7 +1054,7 @@ class DLink(Link):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
-            Si.run5(cutoff=self.cutoff,algo=kwargs['si.algo'])
+            Si.run5(cutoff=self.cutoff,algo=kwargs['si_algo'])
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
@@ -1075,7 +1073,7 @@ class DLink(Link):
         else :
             # perform computation...
             r2d = Si.rays(self.a,self.b)
-            R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
+            R = r2d.to3D(self.L,H=kwargs['ra_ceil_height_meter'], N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
@@ -1117,7 +1115,7 @@ class DLink(Link):
             # Ctilde antenna
             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
-            H=C.prop2tran(a=self.Aa,b=self.Ab)
+            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H

@@ -131,13 +131,13 @@ class Ctilde(object):
             s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
             s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
             s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
-        s = s + '\n methods :'+'\n---------\n'
-        s = s + 'prop2tran(a=theta,b=phi)\n'
-        s = s + 'energy()\n'
-        s = s + 'doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
-        s = s + 'mobility(v,dt)\n'
-        s = s + 'show(mode=linear)\n'
-        s = s + 'sort()\n'
+        s = s + 'Methods'+'\n---------\n'
+        s = s + ' prop2tran(a=theta,b=phi,Friis=False)\n'
+        s = s + ' energy()\n'
+        s = s + ' doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
+        s = s + ' mobility(v,dt)\n'
+        s = s + ' show(mode=linear)\n'
+        s = s + ' sort()\n'
 
         return(s)
 
@@ -649,19 +649,19 @@ class Ctilde(object):
             print "len(di):", len(dir)
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
-      
+
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
             ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
             ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
-            
+
         else:
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
             ax.axis((the[0], the[1], phi[0], phi[1]))
             ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
             ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
-            
+
         if title:
             ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
@@ -679,30 +679,39 @@ class Ctilde(object):
         Parameters
         ----------
 
-                
-        phi: tuple (-180, 180)
+        phi : tuple (-180, 180)
             phi angle
-        normalize: bool
+        normalize : bool
             energy normalized
         reverse : bool
-            inverse theta and phi represenation
+            inverse theta and phi representation
         polar : bool
             polar representation
-        cmap: matplotlib.cmap
-        mode: 'center' | 'mean' | 'in'
-            see bsignal.energy
+        cmap : matplotlib.cmap
+        mode : string
+            'center' | 'mean' | 'in'
         s : float
             scatter dot size
-        fontsize: float
-        edgecolors: bool
-        colorbar bool
+        fontsize : float
+        edgecolors : bool
+        colorbar : bool
 
         Summary
         --------
 
         scatter plot of the DoA-DoD channel structure
-        the energy is colorcoded over all couples of DoA-DoD
+        the energy is color coded over all couples of DoA-DoD
 
+        Examples
+        --------
+
+        >>> from pylayers.antprop.channel import *
+
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.energy
 
         """
         defaults = {
@@ -723,14 +732,20 @@ class Ctilde(object):
             if key not in kwargs:
                 kwargs[key] = value
 
-        fig = plt.figure()
+        if 'fig' not in kwargs:
+            fig = gcf()
+            kwargs['fig']=fig
+        else:
+            fig = kwargs['fig']
+
+
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
         kwargs['colorbar']=False
-        fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
+        fig,ax = self.plotd(d='dod',ax=ax1,**kwargs)
         kwargs['colorbar']=True
-        fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
+        fig,ax = self.plotd(d='doa',ax=ax2,**kwargs)
         return fig,ax
 
 
@@ -1226,8 +1241,8 @@ class Ctilde(object):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[]):
-        """ transform propagation channel into transmission channel
+    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[],Friis=True):
+        r""" transform propagation channel into transmission channel
 
         Parameters
         ----------
@@ -1239,6 +1254,11 @@ class Ctilde(object):
 
             0 : theta
             1 : phi
+
+        Ta : []
+        Tb : []
+        Friis : boolean
+            if True scale with :math:`-j\frac{\lambda}{f}`
 
         Returns
         -------
@@ -1313,7 +1333,9 @@ class Ctilde(object):
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
 
-        H.applyFriis()
+        if Friis:
+            H.applyFriis()
+
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
                                                              / len(H.y))
         H.tk = H.taud

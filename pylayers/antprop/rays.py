@@ -222,8 +222,8 @@ class Rays(dict):
 
         filename=pyu.getlong(filenameh5,pstruc['DIRR3D'])
 
-        
-        # try/except to avoid loosing the h5 file if 
+
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filename,'r')
@@ -240,10 +240,10 @@ class Rays(dict):
 
             f.close()
             raise NameError('Rays: issue when reading h5py file')
-            
+
         # fill if save was filled
 
-        # temporary solution in order to avoir 
+        # temporary solution in order to avoir
         # creating save for Interactions classes
         if self.filled:
             Lname = self.filename.split('_')[0] + '.ini'
@@ -261,9 +261,9 @@ class Rays(dict):
 
         filenameh5 : string
             filename of the h5py file (from Links Class)
-        grpname : string 
+        grpname : string
             groupname of the h5py file (from Links Class)
-        
+
         See Also
         --------
 
@@ -272,12 +272,12 @@ class Rays(dict):
         """
 
         filenameh5=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
-            
+
             fh5=h5py.File(filenameh5,'a')
-            if not grpname in fh5['ray'].keys(): 
+            if not grpname in fh5['ray'].keys():
                 fh5['ray'].create_group(grpname)
             else :
                 print 'ray/'+grpname +'already exists in '+filenameh5
@@ -297,7 +297,7 @@ class Rays(dict):
                         pass
                     elif kk == 'nbrays':
                         f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
-                    else:    
+                    else:
                         f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
             fh5.close()
         except:
@@ -325,7 +325,7 @@ class Rays(dict):
                 
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             fh5=h5py.File(filename,'r')
@@ -343,10 +343,10 @@ class Rays(dict):
 
             fh5.close()
             raise NameError('Rays: issue when reading h5py file')
-            
+
         # fill if save was filled
 
-        # temporary solution in order to avoir 
+        # temporary solution in order to avoid
         # creating save for Interactions classes
 
         if self.filled:
@@ -354,7 +354,7 @@ class Rays(dict):
             self.fillinter(L)
 
         if self.evaluated:
-            return self.eval(self.fGHz) 
+            return self.eval(self.fGHz)
 
 
     def reciprocal(self):
@@ -1454,11 +1454,16 @@ class Rays(dict):
 
         L      : Layout
         append : Boolean
-            if   True append new rays to existing structure
-            else True append new rays to existing structure
+            If True append new rays to existing structure
+
+
+        Returns
+        -------
+
+        Update self.I , self.B , self.I0
 
         """
-      
+
         # reinitilized ray pointer if not in append mode
         if not append:
             self.raypt = 0
@@ -1605,7 +1610,7 @@ class Rays(dict):
                 # first unitary matrix (2x2xr)
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
-                # dimension i and r are merged   
+                # dimension i and r are merged
                 b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
 
                 ## find used slab
@@ -1721,7 +1726,7 @@ class Rays(dict):
         fGHz : array
             frequency in GHz array
         ib : list of intercation block
-           
+
         """
 
         #print 'Rays evaluation'
@@ -1752,7 +1757,7 @@ class Rays(dict):
 
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
-        # loop on interaction blocks   
+        # loop on interaction blocks
         if ib==[]:
             ib=self.keys()
 
