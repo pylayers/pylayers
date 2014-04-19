@@ -301,8 +301,8 @@
 
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRR3D&#39;</span><span class="p">])</span>
 
-        
-        <span class="c"># try/except to avoid loosing the h5 file if </span>
+
+        <span class="c"># try/except to avoid loosing the h5 file if</span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
@@ -319,10 +319,10 @@
 
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Rays: issue when reading h5py file&#39;</span><span class="p">)</span>
-            
+
         <span class="c"># fill if save was filled</span>
 
-        <span class="c"># temporary solution in order to avoir </span>
+        <span class="c"># temporary solution in order to avoir</span>
         <span class="c"># creating save for Interactions classes</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">:</span>
             <span class="n">Lname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span>
@@ -340,9 +340,9 @@
 
 <span class="sd">        filenameh5 : string</span>
 <span class="sd">            filename of the h5py file (from Links Class)</span>
-<span class="sd">        grpname : string </span>
+<span class="sd">        grpname : string</span>
 <span class="sd">            groupname of the h5py file (from Links Class)</span>
-<span class="sd">        </span>
+
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 
@@ -351,12 +351,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">filenameh5</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
-        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># try/except to avoid loosing the h5 file if</span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
-            
+
             <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">grpname</span> <span class="ow">in</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span> 
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">grpname</span> <span class="ow">in</span> <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">fh5</span><span class="p">[</span><span class="s">&#39;ray&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">grpname</span><span class="p">)</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">print</span> <span class="s">&#39;ray/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span>
@@ -376,7 +376,7 @@
                         <span class="k">pass</span>
                     <span class="k">elif</span> <span class="n">kk</span> <span class="o">==</span> <span class="s">&#39;nbrays&#39;</span><span class="p">:</span>
                         <span class="n">f</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">kk</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">kk</span><span class="p">]]))</span>
-                    <span class="k">else</span><span class="p">:</span>    
+                    <span class="k">else</span><span class="p">:</span>
                         <span class="n">f</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">kk</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">kk</span><span class="p">]),</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">kk</span><span class="p">])</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
@@ -404,7 +404,7 @@
                 
 
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
-        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># try/except to avoid loosing the h5 file if</span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
@@ -422,10 +422,10 @@
 
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Rays: issue when reading h5py file&#39;</span><span class="p">)</span>
-            
+
         <span class="c"># fill if save was filled</span>
 
-        <span class="c"># temporary solution in order to avoir </span>
+        <span class="c"># temporary solution in order to avoid</span>
         <span class="c"># creating save for Interactions classes</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">:</span>
@@ -433,7 +433,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span> 
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Rays.reciprocal"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays.reciprocal.html#pylayers.antprop.rays.Rays.reciprocal">[docs]</a>    <span class="k">def</span> <span class="nf">reciprocal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1533,11 +1533,16 @@
 
 <span class="sd">        L      : Layout</span>
 <span class="sd">        append : Boolean</span>
-<span class="sd">            if   True append new rays to existing structure</span>
-<span class="sd">            else True append new rays to existing structure</span>
+<span class="sd">            If True append new rays to existing structure</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        Update self.I , self.B , self.I0</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-      
+
         <span class="c"># reinitilized ray pointer if not in append mode</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">append</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">raypt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1684,7 +1689,7 @@
                 <span class="c"># first unitary matrix (2x2xr)</span>
                 <span class="n">b0</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">0</span><span class="p">,:]</span>
                 <span class="c"># first unitary matrix 1:</span>
-                <span class="c"># dimension i and r are merged   </span>
+                <span class="c"># dimension i and r are merged</span>
                 <span class="n">b</span>  <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;B&#39;</span><span class="p">][:,:,</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size2</span><span class="o">-</span><span class="n">nbray</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s">&#39;F&#39;</span><span class="p">)</span>
 
                 <span class="c">## find used slab</span>
@@ -1800,7 +1805,7 @@
 <span class="sd">        fGHz : array</span>
 <span class="sd">            frequency in GHz array</span>
 <span class="sd">        ib : list of intercation block</span>
-<span class="sd">           </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c">#print &#39;Rays evaluation&#39;</span>
@@ -1831,7 +1836,7 @@
 
         <span class="n">aod</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">))</span>
         <span class="n">aoa</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">))</span>
-        <span class="c"># loop on interaction blocks   </span>
+        <span class="c"># loop on interaction blocks</span>
         <span class="k">if</span> <span class="n">ib</span><span class="o">==</span><span class="p">[]:</span>
             <span class="n">ib</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
@@ -2460,7 +2465,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 09, 2014.
+      Last updated on avril 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

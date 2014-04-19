@@ -231,7 +231,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tstart</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tstop</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tstart</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; resample trajectories</span>
 
 <span class="sd">        Parameters</span>
@@ -242,9 +242,6 @@
 <span class="sd">        tstart : float</span>
 <span class="sd">            new start time (must be &gt; original start time).</span>
 <span class="sd">            if tstart = -1 : original start conserved</span>
-<span class="sd">        tstop : float</span>
-<span class="sd">            new stop time (must be &lt; original stop time)</span>
-<span class="sd">            if tstop = -1 : original stop conserved</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -256,7 +253,7 @@
         <span class="n">T</span><span class="o">=</span><span class="n">Trajectories</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">:</span>
-                <span class="n">T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=</span><span class="n">tstart</span><span class="p">,</span> <span class="n">tstop</span><span class="o">=</span><span class="n">tstop</span><span class="p">))</span>
+                <span class="n">T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=</span><span class="n">tstart</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">T</span><span class="o">.</span><span class="n">Lfilename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lfilename</span>
@@ -557,7 +554,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
-<div class="viewcode-block" id="Trajectory.resample"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.resample.html#pylayers.mobility.trajectory.Trajectory.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tstop</span> <span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Trajectory.resample"><a class="viewcode-back" href="../../../modules/generated/pylayers.mobility.trajectory.Trajectory.resample.html#pylayers.mobility.trajectory.Trajectory.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">tstart</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; resample trajectory</span>
 
 <span class="sd">        Parameters</span>
@@ -568,9 +565,6 @@
 <span class="sd">        tstart : float</span>
 <span class="sd">            new start time (must be &gt; original start time).</span>
 <span class="sd">            if tstart = -1 : original start conserved</span>
-<span class="sd">        tstop : float</span>
-<span class="sd">            new stop time (must be &lt; original stop time)</span>
-<span class="sd">            if tstop = -1 : original stop conserved</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -592,27 +586,15 @@
                 <span class="n">tstart</span> <span class="o">=</span> <span class="n">tstart</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;tstart &lt; tmin&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">tstop</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tstop</span><span class="p">:</span>
-                <span class="n">tstop</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">else</span> <span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;tstop &gt; tmax&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">tstop</span> <span class="o">=</span> <span class="n">tstop</span>
-        <span class="k">if</span> <span class="n">tstart</span> <span class="o">==</span> <span class="n">tstop</span><span class="p">:</span>
-            <span class="n">tstop</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">tstart</span>
+
         <span class="n">tstep</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">sf</span>
         <span class="c"># need to add at least 3 values gor generate to estomate acceleration</span>
-        <span class="n">tnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tstart</span><span class="p">,</span> <span class="n">tstop</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">tstep</span><span class="p">,</span> <span class="n">tstep</span><span class="p">)</span>
-        <span class="c"># check if generate resmaple is not longer that original</span>
-        <span class="n">ut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tnew</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">)</span>
-        <span class="n">tnew</span><span class="o">=</span><span class="n">tnew</span><span class="p">[</span><span class="n">ut</span><span class="p">]</span>
+        <span class="n">tnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tstart</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tstep</span><span class="p">)</span>
 
         <span class="c"># generate requieres 3 measures at least </span>
         <span class="n">xnew</span> <span class="o">=</span> <span class="n">fx</span><span class="p">(</span><span class="n">tnew</span><span class="p">)</span>
         <span class="n">ynew</span> <span class="o">=</span> <span class="n">fy</span><span class="p">(</span><span class="n">tnew</span><span class="p">)</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
-
 
         <span class="n">T</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span>
                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
@@ -933,7 +915,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 09, 2014.
+      Last updated on avril 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

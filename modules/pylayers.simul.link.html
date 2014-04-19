@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="PyLayers" href="pylayers.html" />
     <link rel="next" title="pylayers.simul.link.DLink.eval" href="generated/pylayers.simul.link.DLink.eval.html" />
-    <link rel="prev" title="pylayers.simul.simultraj.Simul._saveh5" href="generated/pylayers.simul.simultraj.Simul._saveh5.html" /> 
+    <link rel="prev" title="pylayers.simul.simultraj.Simul._loadh5" href="generated/pylayers.simul.simultraj.Simul._loadh5.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -50,7 +50,7 @@
           <a href="generated/pylayers.simul.link.DLink.eval.html" title="pylayers.simul.link.DLink.eval"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simultraj.Simul._saveh5.html" title="pylayers.simul.simultraj.Simul._saveh5"
+          <a href="generated/pylayers.simul.simultraj.Simul._loadh5.html" title="pylayers.simul.simultraj.Simul._loadh5"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -78,8 +78,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pylayers.simul.simultraj.Simul._saveh5.html"
-                        title="previous chapter">pylayers.simul.simultraj.Simul._saveh5</a></p>
+  <p class="topless"><a href="generated/pylayers.simul.simultraj.Simul._loadh5.html"
+                        title="previous chapter">pylayers.simul.simultraj.Simul._loadh5</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pylayers.simul.link.DLink.eval.html"
                         title="next chapter">pylayers.simul.link.DLink.eval</a></p>
@@ -132,7 +132,7 @@ It stores simulated objects in <cite>hdf5</cite> format.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.eval.html#pylayers.simul.link.DLink.eval" title="pylayers.simul.link.DLink.eval"><tt class="xref py py-obj docutils literal"><span class="pre">DLink.eval</span></tt></a>(**kwargs)</td>
-<td>Evaluate the link   :Parameters:      <strong>force_save</strong> : boolean          Force the computation (even if obj already exists)         AND save (replace previous computations)      <strong>si.algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;)          signature.run algo type      <strong>ra.ceil_height_meter</strong> : int          rays.to3D ceil height in mteres      <strong>ra.number_mirror_cf</strong> : int          rays.to3D number of ceil/floor reflexions  :Returns:      <strong>ak</strong> : ndarray          alpha_k      <strong>tk</strong> : ndarray          tau_k               <strong>update self.ak and self.tk</strong> :                 <strong>self.ak</strong> : ndarray          alpha_k      <strong>self.tk</strong> : ndarray          tau_k  ..</td>
+<td>Evaluate the link   :Parameters:      <strong>force</strong> : boolean          Force the computation (even if obj already exists) AND save (replace previous computations)      <strong>si.algo</strong> : str (&#8216;old&#8217;|&#8217;new&#8217;)          signature.run algo type      <strong>ra.ceil_height_meter</strong> : int          rays.to3D ceil height in meters      <strong>ra.number_mirror_cf</strong> : int          rays.to3D number of ceil/floor reflexions  :Returns:      <strong>ak</strong> : ndarray          alpha_k      <strong>tk</strong> : ndarray          tau_k  ..</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink._show3.html#pylayers.simul.link.DLink._show3" title="pylayers.simul.link.DLink._show3"><tt class="xref py py-obj docutils literal"><span class="pre">DLink._show3</span></tt></a>([rays,&nbsp;lay,&nbsp;ant,&nbsp;newfig])</td>
 <td>display the simulation scene using Mayavi</td>
@@ -149,7 +149,7 @@ It stores simulated objects in <cite>hdf5</cite> format.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.__init__.html#pylayers.simul.link.DLink.__init__" title="pylayers.simul.link.DLink.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">DLink.__init__</span></tt></a>(**kwargs)</td>
-<td>Deterministic Link evaluation   :Parameters:      <strong>Basic</strong> :                 <strong>L</strong> : Layout          Layout to be used      <strong>a</strong> : np.ndarray (3,)          position of a device dev_a      <strong>b</strong> : np.ndarray (3,)          position of a device dev_b      <strong>Aa</strong> : Antenna          Antenna of device dev_a      <strong>Ab</strong> : Antenna          Antenna of device dev_b      <strong>Ta</strong> : np.ndarray (3,3)          Rotation matrice of Antenna of device dev_a relative to global Layout scene      <strong>Tb</strong> : np.ndarray (3,3)          Rotation matrice of Antenna of device dev_b relative to global Layout scene      <strong>fGHz</strong> : np.ndarray (Nptf,)          frequency range of Nptf poitns used for evaluation of channel in GHz      <strong>wav</strong> : Waform          Waveform to be applied on the channel      <strong>save_idx</strong> : int          number to differenciate the h5 file generated               <strong>Advanced (change only if you really know what you do !)</strong> :                 <strong>save_opt</strong> : list ([&#8216;sig&#8217;,&#8217;ray&#8217;,&#8217;Ct&#8217;,&#8217;H&#8217;])          information to be saved in the Links h5 file.</td>
+<td>Deterministic Link evaluation   :Parameters:      <strong>L</strong> : Layout          Layout to be used      <strong>a</strong> : np.ndarray (3,)          position of a device dev_a      <strong>b</strong> : np.ndarray (3,)          position of a device dev_b      <strong>Aa</strong> : Antenna          Antenna of device dev_a      <strong>Ab</strong> : Antenna          Antenna of device dev_b      <strong>Ta</strong> : np.ndarray (3,3)          Rotation matrice of Antenna of device dev_a relative to global Layout scene      <strong>Tb</strong> : np.ndarray (3,3)          Rotation matrice of Antenna of device dev_b relative to global Layout scene      <strong>fGHz</strong> : np.ndarray (Nptf,)          frequency range of Nptf poitns used for evaluation of channel in GHz      <strong>wav</strong> : Waveform          Waveform to be applied on the channel      <strong>save_idx</strong> : int          number to differenciate the h5 file generated               <strong>Advanced (change only if you really know what you do !)</strong> :                 <strong>save_opt</strong> : list ([&#8216;sig&#8217;,&#8217;ray&#8217;,&#8217;Ct&#8217;,&#8217;H&#8217;])          information to be saved in the Links h5 file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.simul.link.DLink.__repr__.html#pylayers.simul.link.DLink.__repr__" title="pylayers.simul.link.DLink.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">DLink.__repr__</span></tt></a>()</td>
 <td></td>
@@ -234,7 +234,7 @@ It stores simulated objects in <cite>hdf5</cite> format.</p>
           <a href="generated/pylayers.simul.link.DLink.eval.html" title="pylayers.simul.link.DLink.eval"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pylayers.simul.simultraj.Simul._saveh5.html" title="pylayers.simul.simultraj.Simul._saveh5"
+          <a href="generated/pylayers.simul.simultraj.Simul._loadh5.html" title="pylayers.simul.simultraj.Simul._loadh5"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -247,7 +247,7 @@ It stores simulated objects in <cite>hdf5</cite> format.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 09, 2014.
+      Last updated on avril 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
