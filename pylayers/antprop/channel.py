@@ -733,7 +733,7 @@ class Ctilde(object):
                 kwargs[key] = value
 
         if 'fig' not in kwargs:
-            fig = gcf()
+            fig = plt.gcf()
             kwargs['fig']=fig
         else:
             fig = kwargs['fig']
