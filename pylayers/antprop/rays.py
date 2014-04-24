@@ -366,7 +366,7 @@ class Rays(dict):
         r = Rays(self.pRx,self.pTx)
         r.is3D = self.is3D
         r.nray = self.nray
-        r.origin_sig_name = self.origin_seig_name
+        r.origin_sig_name = self.origin_sig_name
         r.nb_origin_sig = self.nb_origin_sig
 
         for k in self:
