@@ -453,6 +453,12 @@ class DLink(Link):
     def fGHz(self):
         return self._fGHz
 
+    @L.setter
+    def L(self,L):
+        # change layout and build/load
+        self._L = L
+        self.reset_config()
+
     @Lname.setter
     def Lname(self,Lname):
         # change layout and build/load
@@ -990,11 +996,11 @@ class DLink(Link):
         force_save : boolean
             Force the computation (even if obj already exists)
             AND save (replace previous computations)
-        si.algo : str ('old'|'new')
+        si_algo : str ('old'|'new')
             signature.run algo type
-        ra.ceil_height_meter : int
+        ra_ceil_height_meter : int
             rays.to3D ceil height in mteres
-        ra.number_mirror_cf : int
+        ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
 
 
@@ -1035,9 +1041,9 @@ class DLink(Link):
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
-                   'si.algo':'old',
-                   'ra.ceil_height_meter':3,
-                   'ra.number_mirror_cf':1,
+                   'si_algo':'old',
+                   'ra_ceil_height_meter':3,
+                   'ra_number_mirror_cf':1,
                    'force':False,
                    }
         for key, value in defaults.items():
@@ -1056,7 +1062,7 @@ class DLink(Link):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
-            Si.run5(cutoff=self.cutoff,algo=kwargs['si.algo'])
+            Si.run5(cutoff=self.cutoff,algo=kwargs['si_algo'])
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
@@ -1075,7 +1081,7 @@ class DLink(Link):
         else :
             # perform computation...
             r2d = Si.rays(self.a,self.b)
-            R = r2d.to3D(self.L,H=kwargs['ra.ceil_height_meter'], N=kwargs['ra.number_mirror_cf'])
+            R = r2d.to3D(self.L,H=kwargs['ra_ceil_height_meter'], N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
             # ...and save
             self.save(R,'ray',self.dexist['ray']['grpname'],force = kwargs['force'])
