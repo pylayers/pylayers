@@ -147,10 +147,10 @@ class Body(object):
         if 'tmocap' in dir(self):
             st = st + 'Mocap Duration : ' + str(self.Tmocap)+'\n'
         if 'vmocap' in dir(self):
-            st = st + 'Mocap Speed : ' + str(self.vmocap)+'\n'
+            st = st + 'Mocap Speed : ' + "%2.3f" % self.vmocap+' m/s \n'
 
         st = st + '\n'
-        
+
         return(st)
 
 
