@@ -737,8 +737,6 @@ class Body(object):
             frame index (default 0 )
         widthfactor : float
             cylinder scaling factor (default 1.0)
-        topos : boolean
-            show topos if True
         pattern : boolean
             show pattern if True
         ccs : boolean
@@ -763,7 +761,6 @@ class Body(object):
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
-                    'topos':False,
                     'pattern':False,
                     'ccs':False,
                     'dcs':False,
@@ -794,7 +791,7 @@ class Body(object):
         kta = self.sl[:,0].astype(int)
         khe = self.sl[:,1].astype(int)
         cylrad = self.sl[:,2]
-        if kwargs['topos']:
+        if 'topos' in dir(self):
             pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
             phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         else:
@@ -922,7 +919,7 @@ class Body(object):
             kta = self.sl[k,0]
             khe = self.sl[k,1]
             cylrad = self.sl[k,2]
-            if kwargs['topos']:
+            if 'topos' in dir(self):
                 pta =  np.array([self.topos[ax1, kta], self.topos[ax2, kta]])[:,np.newaxis]
                 phe =  np.array([self.topos[ax1, khe], self.topos[ax2, khe]])[:,np.newaxis]
             else:
@@ -1204,6 +1201,7 @@ class Body(object):
         1st vector
         2nd
         """
+
 
         nc = self.ncyl
         #
