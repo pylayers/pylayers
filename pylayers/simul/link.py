@@ -14,7 +14,7 @@ DLink Class
 
 
 DLink simulation
----------------
+----------------
 
 .. autosummary::
     :toctree: generated/
@@ -24,7 +24,7 @@ DLink simulation
 
 
 DLink init
----------
+----------
 
 .. autosummary::
     :toctree: generated/
@@ -180,7 +180,7 @@ class SLink(Link):
 class DLink(Link):
 
     def __init__(self, **kwargs):
-        """ Deterministic Link evaluation
+        """ deterministic link evaluation
 
         Parameters
         ----------
@@ -200,11 +200,11 @@ class DLink(Link):
         Tb : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_b relative to global Layout scene
         fGHz : np.ndarray (Nptf,)
-            frequency range of Nptf poitns used for evaluation of channel in GHz
+            frequency range of Nptf points used for evaluation of channel
         wav : Waveform
             Waveform to be applied on the channel
         save_idx : int
-            number to differenciate the h5 file generated
+            number to identify the h5 file generated
 
         Advanced (change only if you really know what you do !)
 
@@ -365,7 +365,7 @@ class DLink(Link):
         ##############
         #### init save
         ###############
-        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5' 
+        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
         if not os.path.exists(filenameh5) or force:
@@ -392,12 +392,24 @@ class DLink(Link):
 
         ###########
         # init pos & cycles
+        #
+        # If a and b are not specified
+        #  they are chosen as center of gravity of cycle 0
+        #
         ###########
+        if len(kwargs['a'])==0:
+            self.ca = 0
+            self.a = self.L.cy2pt(self.ca)
+        else:
+            self.a = kwargs['a']
+            self.ca = self.L.pt2cy(self.a)
 
-        self.ca = 0
-        self.cb = 1
-        self.a = self.L.cy2pt(self.ca)
-        self.b = self.L.cy2pt(self.cb)
+        if len(kwargs['b'])==0:
+            self.cb = 0
+            self.b = self.L.cy2pt(self.cb)
+        else:
+            self.b = kwargs['b']
+            self.cb = self.L.pt2cy(self.b)
 
 
         ###########
@@ -408,10 +420,10 @@ class DLink(Link):
         self.fstep = self.fGHz[1]-self.fGHz[0]
 
 
-        self.Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        self.Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
         self.R = Rays(self.a,self.b)
-        self.C=Ctilde()
-        self.H=Tchannel()
+        self.C = Ctilde()
+        self.H = Tchannel()
 
 
 
@@ -1127,6 +1139,32 @@ class DLink(Link):
         self.H = H
 
         return self.H.ak, self.H.tk
+
+    def show(self,**kwargs):
+        """ show the link
+        """
+        defaults ={'s':80,
+                   'ca':'b',
+                   'cb':'r',
+                   'alpha':1,
+                   'figsize':(20,10),
+                   'fontsize':20}
+
+        for key in defaults:
+            if key not in kwargs:
+                kwargs[key]=defaults[key]
+
+        fig,ax=self.L.showG('s',nodes=False,figsize=kwargs['figsize'])
+        plt.axis('off')
+        ax.scatter(self.a[0],
+                   self.a[1], c=kwargs['ca'], s=kwargs['s'],
+                   alpha=kwargs['alpha'])
+        ax.text(self.a[0]+0.1,self.a[1]+0.1,'A',fontsize=kwargs['fontsize'])
+        ax.scatter(self.b[0],
+                   self.b[1], c=kwargs['cb'], s=kwargs['s'],
+                   alpha=kwargs['alpha'])
+        ax.text(self.b[0]+0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
+        return fig,ax
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
         """ display the simulation scene using Mayavi

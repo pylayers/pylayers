@@ -4241,7 +4241,7 @@ class Layout(object):
         alpha : float
             transparency
         width : int
-            if width = 0 linewidth depends on slab property
+            if width = 0 width depends on slab property
         color : string
             default black'
         dnodes :
@@ -4275,7 +4275,7 @@ class Layout(object):
                 linewidth = slab['linewidth'] / 3.
             else:
                 linewidth = width
-            if fGHz==[]:   
+            if fGHz==[]:
                 color = slab['color']
             else:
                 if (name<>'METAL') & (name<>'METALIC'):
@@ -5879,7 +5879,7 @@ class Layout(object):
                     'labels': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
-                    'linewidth': 2,
+                    'width': 2,
                     'node_color':'w',
                     'edge_color':'k',
                     'node_size':20,
@@ -5936,7 +5936,7 @@ class Layout(object):
             True
         nded : boolean
             True
-        linewidth : int
+        width : int
             2
         nodelist : list
             []
@@ -5977,13 +5977,13 @@ class Layout(object):
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
-                    'nodes': True,
+                    'nodes': False,
                     'edges': True,
                     'airwalls': False,
                     'labels': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
-                    'linewidth': 2,
+                    'width': 2,
                     'node_color':'w',
                     'edge_color':'k',
                     'node_size':20,
@@ -6020,11 +6020,9 @@ class Layout(object):
             G = self.Gr
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='g'
-            print kwargs['linewidth']
             kwargs['fig'],kwargs['ax'] = gru.draw(self.Gs,
                               nodes=False,edges=True,alphacy=1.,
                               fig=kwargs['fig'],ax=kwargs['ax'],labels=False)
-            print kwargs['linewidth']
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6209,13 +6207,13 @@ class Layout(object):
 
         if kwargs['eded']:
             nx.draw_networkx_edges(self.Gv, self.Gs.pos,
-                                   edgelist=eded, edge_color='blue', linewidth=2)
+                                   edgelist=eded, edge_color='blue', width=2)
         if kwargs['ndnd']:
             nx.draw_networkx_edges(self.Gv, self.Gs.pos,
-                                   edgelist=ndnd, edge_color='red', linewidth=2)
+                                   edgelist=ndnd, edge_color='red', width=2)
         if kwargs['nded']:
             nx.draw_networkx_edges(self.Gv, self.Gs.pos,
-                                   edgelist=nded, edge_color='green', linewidth=2)
+                                   edgelist=nded, edge_color='green', width=2)
 
         if kwargs['show']:
             plt.show()
@@ -6347,6 +6345,11 @@ class Layout(object):
         -----
             If a cycle contains point pt this function returns the cycle number
 
+        See Also
+        --------
+
+        Layout.cy2pt
+
         """
 
         ptsh = sh.Point(pt[0], pt[1])
@@ -6374,6 +6377,11 @@ class Layout(object):
         -------
 
         point  : nd.array
+
+        See Also
+        --------
+
+        Layout.pt2cy
 
         """
 

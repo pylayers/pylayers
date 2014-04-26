@@ -36,11 +36,10 @@ def draw(G,**kwargs):
     'edges':True,
     'airwalls':False,
     'labels':True,
-    'linewidth': 2,
+    'width': 2,
     'node_color':'w',
     'edge_color':'k',
     'node_size': 200,
-    'linewidth': 2,
     'font_size': 30,
     'alphan': 0.8,
     'alphae': 1.0,
@@ -62,11 +61,11 @@ def draw(G,**kwargs):
                 'edges':True,
                 'airwalls':False,
                 'labels':True,
-                'linewidth': 2,
+                'width': 2,
                 'node_color':'w',
                 'edge_color':'k',
                 'node_size': 200,
-                'linewidth': 2,
+                'width': 2,
                 'font_size': 30,
                 'alphan': 0.8,
                 'alphae': 1.0,
@@ -138,12 +137,11 @@ def draw(G,**kwargs):
                                 labels={n:n for n in nodelist},
                                 font_size=kwargs['font_size'],ax=ax)
 
-    print kwargs['linewidth']
     if kwargs['edges']:
         nx.draw_networkx_edges(G, G.pos,
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],
-                               width = kwargs['linewidth'],
+                               width = kwargs['width'],
                                alpha = kwargs['alphae'],ax=ax)
     if kwargs['show']:
         plt.show()
