@@ -492,6 +492,11 @@ class Layout(object):
             self.name[k] = []
         self.load(_filename)
         self.boundary()
+        # If a the layout has already been built then load the built structure
+        try:
+            self.dumpr()
+        except:
+            pass
 
     def __repr__(self):
         st = '\n'
@@ -4557,7 +4562,7 @@ class Layout(object):
 
         """
         # list of built graphs
-       
+
 
         if 't' in graph:
             self.buildGt()
@@ -7882,6 +7887,7 @@ class Layout(object):
 
 
 if __name__ == "__main__":
+    pass
     #plt.ion()
     #doctest.testmod()
     #L = Layout('defstr3.ini')
