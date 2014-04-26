@@ -491,13 +491,21 @@
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.signal.bsignal import *</span>
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">            &gt;&gt;&gt; e = EnImpulse()</span>
+<span class="sd">            &gt;&gt;&gt; e = EnImpulse(fe=100)</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = e.plot(typ=[&#39;v&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; plt.title(&#39;original waveform&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; e.save(&#39;impulse.mat&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; del e</span>
 <span class="sd">            &gt;&gt;&gt; h = TUsignal()</span>
 <span class="sd">            &gt;&gt;&gt; h.load(&#39;impulse.mat&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = h.plot(typ=[&#39;v&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; plt.title(&#39;retrieved waveform&#39;)</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Bsignal.load</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
@@ -513,10 +521,16 @@
 
 <span class="sd">        filename : string</span>
 
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Bsignal.save</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">ios</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="Bsignal.setx"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.setx.html#pylayers.signal.bsignal.Bsignal.setx">[docs]</a>    <span class="k">def</span> <span class="nf">setx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot; setx : set x vector</span>
