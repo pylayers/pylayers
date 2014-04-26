@@ -641,6 +641,8 @@ class Bsignal(object):
             'auto' (default) ,'equal','scalar'
         dB : boolean
             False
+        function : string
+            {'imshow'|'pcolormesh'}
 
         Examples
         --------
@@ -655,6 +657,7 @@ class Bsignal(object):
         defaults = {'interpolation':'none',
                     'cmap':plt.cm.BrBG,
                     'aspect':'auto',
+                    'fontsize':20,
                     'typ':'l20',
                     'function':'imshow'}
 
@@ -693,13 +696,22 @@ class Bsignal(object):
                            aspect = kwargs['aspect'],
                            extent = (xn[0],xn[-1],0,yn.shape[0]),
                            interpolation=kwargs['interpolation'],
-                           cmap=kwargs['cmap'])
+                           cmap=kwargs['cmap'],
+                           )
+            ll = ax.get_xticklabels()+ax.get_yticklabels()
+            for l in ll:
+                l.set_fontsize(kwargs['fontsize'])
+
 
             if kwargs['function'] =='pcolormesh':
                 im = ax.pcolormesh(xn,np.arange(yn.shape[0]),yn)
 
             cb = fig.colorbar(im)
-            cb.set_label(ylabels)
+            cb.set_label(ylabels,size=kwargs['fontsize'])
+
+            for t in cb.ax.get_yticklabels():
+                t.set_fontsize(kwargs['fontsize'])
+
             plt.axis('auto')
             fig.tight_layout()
 

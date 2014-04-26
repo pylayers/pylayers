@@ -1211,12 +1211,12 @@ class Ctilde(object):
 
         typ  : string
             which parameter to sort '
-                tauk : (default)
-                att  : theta Tx
-                atp  : phi Tx
-                art  : theta Rx
-                arp  : phi Rx
-                energy
+                'tauk'   : (default)
+                'att'    : theta Tx
+                'atp'    : phi Tx
+                'art'    : theta Rx
+                'arp'    : phi Rx
+                'energy' : energy
 
         """
         if typ == 'tauk':
