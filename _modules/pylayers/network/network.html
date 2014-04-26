@@ -547,7 +547,7 @@
         <span class="c"># self.add_nodes_from([(d.ID, ldic[ud]) for ud,d in enumerate(dev)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([(</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dev</span><span class="p">])</span>
 
-        <span class="c"># create personnal netwrk</span>
+        <span class="c"># create personnal network</span>
         <span class="k">for</span> <span class="n">ud</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dev</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">PN</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([(</span><span class="n">d</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">d</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)])</span>
@@ -1148,6 +1148,11 @@
 <span class="sd">        T    : np.array  ( or a list of )</span>
 <span class="sd">            node orientation (Nn x 3 x 3)</span>
 
+<span class="sd">        Todo</span>
+<span class="sd">        ----</span>
+
+<span class="sd">        update the orientation of the antenna in the ACS (for now only DCS is updated)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="p">):</span>
@@ -1178,6 +1183,11 @@
 <span class="sd">            node ID</span>
 <span class="sd">        p    : np.array  ( or a list of )</span>
 <span class="sd">            node position </span>
+
+<span class="sd">        Todo</span>
+<span class="sd">        ----</span>
+
+<span class="sd">        update the position of the antenna in the ACS (for now only DCS is updated)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1240,7 +1250,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        wstd : specify a wstd to display node position. If None, all wstd are displayed    </span>
+<span class="sd">        wstd : specify a wstd to display node position. If None, all wstd are return</span>
 
 <span class="sd">        Returns </span>
 <span class="sd">        -------</span>
@@ -2155,7 +2165,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 19, 2014.
+      Last updated on avril 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

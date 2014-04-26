@@ -211,6 +211,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">roomlist</span><span class="o">=</span><span class="p">[]</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Simul.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.__repr__.html#pylayers.simul.simulnet.Simul.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -449,21 +450,24 @@
 <div class="viewcode-block" id="Simul.runsimul"><a class="viewcode-back" href="../../../modules/generated/pylayers.simul.simulnet.Simul.runsimul.html#pylayers.simul.simulnet.Simul.runsimul">[docs]</a>    <span class="k">def</span> <span class="nf">runsimul</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Run simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">until</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]),</span>
-                      <span class="n">real_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                      <span class="n">rel_speed</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;speedratio&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="o">.</span><span class="n">_boids</span><span class="o">=</span><span class="p">{}</span>
-
-
-        <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savep&#39;</span><span class="p">]):</span>
-            <span class="k">print</span> <span class="s">&#39;Processing save results, please wait&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">mat_export</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="p">:</span>
+            <span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">until</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]),</span>
+                          <span class="n">real_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                          <span class="n">rel_speed</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;speedratio&#39;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span><span class="o">.</span><span class="n">_boids</span><span class="o">=</span><span class="p">{}</span>
 
 
-        <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savepd&#39;</span><span class="p">]):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">savepandas</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savep&#39;</span><span class="p">]):</span>
+                <span class="k">print</span> <span class="s">&#39;Processing save results, please wait&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">mat_export</span><span class="p">()</span>
+
+
+            <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savepd&#39;</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">savepandas</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Reinstantiate a new simul object to run again&#39;</span><span class="p">)</span>
 </div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 
@@ -496,7 +500,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 19, 2014.
+      Last updated on avril 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

@@ -225,7 +225,7 @@
 <span class="sd">    Layout._show3</span>
 <span class="sd">    Layout.show3</span>
 
-<span class="sd">Showing Graphs </span>
+<span class="sd">Showing Graphs</span>
 <span class="sd">---------------</span>
 
 <span class="sd">.. autosummary::</span>
@@ -571,6 +571,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
+        <span class="c"># If a the layout has already been built then load the built structure</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
 </div>
 <div class="viewcode-block" id="Layout.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.__repr__.html#pylayers.gis.layout.Layout.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
@@ -4636,7 +4641,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># list of built graphs</span>
-       
+
 
         <span class="k">if</span> <span class="s">&#39;t&#39;</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
@@ -5796,17 +5801,17 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c"># from 2 connected segments</span>
                         <span class="n">cn</span><span class="o">.</span><span class="n">from2csegs</span><span class="p">(</span><span class="n">pseg0</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
-                <span class="c"># if starting from point </span>
+                <span class="c"># if starting from point</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nstr0</span><span class="p">])</span>
                     <span class="n">cn</span><span class="o">.</span><span class="n">fromptseg</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">pseg1</span><span class="p">)</span>
-           
+
                 <span class="c"># list all potential successors of interaction i1</span>
                 <span class="n">i2</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">))</span>
                 <span class="n">ipoints</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span> <span class="p">,</span><span class="n">i2</span><span class="p">)</span>
                 <span class="c"># filter tuple (R | T)</span>
                 <span class="n">istup</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">==</span><span class="nb">tuple</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
-                <span class="c"># map first argument segment number </span>
+                <span class="c"># map first argument segment number</span>
                 <span class="n">isegments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="n">istup</span><span class="p">))</span>
 
                 <span class="c">#if ((i0==(32, 75)) and (i1==(170, 75, 74))):</span>
@@ -5827,7 +5832,7 @@
                         <span class="c">#if ~bs.any():</span>
                         <span class="c">#    plu.displot(pta[:,~bs],phe[:,~bs],color=&#39;k&#39;)</span>
                     <span class="c"># i1 : interaction R --&gt; mirror</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>   
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
                         <span class="n">Mpta</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
                         <span class="n">Mphe</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">phe</span><span class="p">,</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pseg1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
                         <span class="n">typ</span><span class="p">,</span><span class="n">prob</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">belong_seg</span><span class="p">(</span><span class="n">Mpta</span><span class="p">,</span><span class="n">Mphe</span><span class="p">)</span>
@@ -5840,11 +5845,11 @@
                         <span class="c">#    plu.displot(pta[:,~bs],phe[:,~bs],color=&#39;m&#39;)</span>
                         <span class="c">#    plt.show()</span>
                         <span class="c">#    pdb.set_trace()</span>
-                    <span class="n">isegkeep</span> <span class="o">=</span> <span class="n">isegments</span><span class="p">[</span><span class="n">prob</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>    
+                    <span class="n">isegkeep</span> <span class="o">=</span> <span class="n">isegments</span><span class="p">[</span><span class="n">prob</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
                     <span class="c"># dict num segment : proba</span>
                     <span class="n">dsegprob</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">isegkeep</span><span class="p">,</span><span class="n">prob</span><span class="p">[</span><span class="n">prob</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">])}</span>
                     <span class="n">output</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">isegkeep</span> <span class="p">,</span><span class="n">istup</span><span class="p">)</span>
-                    <span class="n">probint</span>  <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">dsegprob</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span><span class="n">output</span><span class="p">)</span>
+                    <span class="n">probint</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">dsegprob</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span><span class="n">output</span><span class="p">)</span>
                     <span class="c"># dict interaction : proba</span>
                     <span class="n">dintprob</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="n">probint</span><span class="p">)}</span>
 
@@ -5854,8 +5859,6 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i0</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">i1</span><span class="p">),</span><span class="n">output</span><span class="o">=</span><span class="n">dintprob</span><span class="p">)</span>
 
-
-       
 
 <span class="c">#    def showGraph(self,**kwargs):</span>
 <span class="c">#        &quot;&quot;&quot;</span>
@@ -6028,12 +6031,18 @@
 <span class="sd">            &gt;&gt;&gt; tiv = plt.title(&quot;Gv&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.util.graphutil.draw</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
                     <span class="s">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;airwalls&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;labels&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;alphan&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
                     <span class="s">&#39;alphae&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -6093,6 +6102,7 @@
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">fig</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ax</span>
+
         <span class="c">#</span>
         <span class="c"># v : visibility graph</span>
         <span class="c">#</span>
@@ -7358,7 +7368,7 @@
         <span class="k">return</span> <span class="n">pg</span>
 </div>
     <span class="nd">@mlab.show</span>
-<div class="viewcode-block" id="Layout._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._show3.html#pylayers.gis.layout.Layout._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a .off geomview file</span>
 
 <span class="sd">        Parameters</span>
@@ -7578,7 +7588,7 @@
                                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Layout &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
 
-</div>
+
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show3.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
@@ -7959,8 +7969,9 @@
 
 </div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">pass</span>
     <span class="c">#plt.ion()</span>
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    <span class="c">#doctest.testmod()</span>
     <span class="c">#L = Layout(&#39;defstr3.ini&#39;)</span>
 </pre></div>
 
@@ -7989,7 +8000,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 19, 2014.
+      Last updated on avril 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

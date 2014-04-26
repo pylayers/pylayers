@@ -187,7 +187,7 @@
         <span class="n">displacement</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">destination</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
         <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
         <span class="n">steering</span> <span class="o">=</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">boid</span><span class="o">.</span><span class="n">radius</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">1.5</span><span class="o">*</span><span class="n">boid</span><span class="o">.</span><span class="n">radius</span><span class="p">):</span>
             <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">steering</span>
 </div>
@@ -504,9 +504,9 @@
             <span class="k">if</span> <span class="n">obstacle</span> <span class="ow">in</span> <span class="n">checked</span><span class="p">:</span> <span class="k">continue</span>
             <span class="n">checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obstacle</span><span class="p">)</span>
             <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_to_line</span><span class="p">,</span> <span class="n">normal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_from_line</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">obstacle</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_to_line</span> <span class="o">&lt;</span> <span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_to_line</span> <span class="o">&lt;</span> <span class="n">radius</span><span class="p">:</span>
                 <span class="n">wall_found</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="n">normal</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">-</span> <span class="n">distance_to_line</span><span class="p">)</span>
+                <span class="n">normal</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">radius</span> <span class="o">-</span> <span class="n">distance_to_line</span><span class="p">)</span>
                 <span class="n">boid</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">normal</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">wall_found</span><span class="p">:</span>
             <span class="n">checked</span> <span class="o">=</span> <span class="p">[]</span>
@@ -516,8 +516,22 @@
                 <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="p">(</span><span class="n">obstacle</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">obstacle</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                     <span class="n">offset</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="n">vec3</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
                     <span class="n">distance</span> <span class="o">=</span> <span class="n">offset</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">:</span>
-                        <span class="n">boid</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">offset</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">-</span> <span class="n">distance</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">radius</span><span class="p">:</span>
+                        <span class="n">boid</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">offset</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">radius</span> <span class="o">-</span> <span class="n">distance</span><span class="p">)</span>
+    <span class="c"># if intersect and distance_to_line &lt; radius * 1.2:</span>
+    <span class="c">#             wall_found = True</span>
+    <span class="c">#             normal = normal.scale(radius * 1.2 - distance_to_line)</span>
+    <span class="c">#             boid.position += normal</span>
+    <span class="c">#     if not wall_found:</span>
+    <span class="c">#         checked = []</span>
+    <span class="c">#         for obstacle in the_world.obstacles(boid):</span>
+    <span class="c">#             if obstacle in checked: continue</span>
+    <span class="c">#             checked.append(obstacle)</span>
+    <span class="c">#             for point in (obstacle[0], obstacle[1]):</span>
+    <span class="c">#                 offset = position - vec3(point)</span>
+    <span class="c">#                 distance = offset.length()</span>
+    <span class="c">#                 if distance &lt; radius * 1.2:</span>
+    <span class="c">#                     boid.position += offset.scale(radius * 1.2 - distance)</span>
 
         <span class="k">return</span> <span class="n">vec3</span><span class="p">()</span>
 
@@ -608,7 +622,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 19, 2014.
+      Last updated on avril 26, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
