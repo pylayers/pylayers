@@ -109,10 +109,10 @@ def draw(G,**kwargs):
         edgelist =  G.edges()
     else:
         edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
-
     if not kwargs['airwalls']:
         try:
-            pno = filter(lambda x : G.nodes()[x]>0,nodelist)
+            #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
+            pno = filter(lambda x : x>0,nodelist)
             # node == air
             na = filter(lambda x : G.node[x]['name']=='AIR',pno)
             # edge == air
@@ -132,18 +132,19 @@ def draw(G,**kwargs):
                                nodelist = nodelist,
                                node_color = kwargs['node_color'],
                                node_size  = kwargs['node_size'],
-                               alpha = kwargs['alphan'])
+                               alpha = kwargs['alphan'],ax=ax)
     if kwargs['labels']:
         nx.draw_networkx_labels(G, G.pos,
                                 labels={n:n for n in nodelist},
-                                font_size=kwargs['font_size'])
+                                font_size=kwargs['font_size'],ax=ax)
 
+    print kwargs['linewidth']
     if kwargs['edges']:
         nx.draw_networkx_edges(G, G.pos,
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],
-                               linewidth = kwargs['linewidth'],
-                               alpha = kwargs['alphae'])
+                               width = kwargs['linewidth'],
+                               alpha = kwargs['alphae'],ax=ax)
     if kwargs['show']:
         plt.show()
 
@@ -182,6 +183,15 @@ def edgetype(G):
 
 
 def find_all_paths(graph, start, end):
+    """
+    Parameters
+    ----------
+
+    graph :
+    start:
+    end :
+
+    """
     path  = []
     paths = []
     queue = [(start, end, path)]

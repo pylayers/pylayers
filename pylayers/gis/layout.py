@@ -159,8 +159,8 @@ Showing Graphs
     Layout.showG
     Layout.showGv
 
-Building Graphs 
-----------------
+Building Graphs
+---------------
 
 .. autosummary::
     :toctree: generated/
@@ -1198,7 +1198,6 @@ class Layout(object):
 
 
         # convert graph Gs to numpy arrays for speed up post processing
-        pdb.set_trace()
         self.g2npy()
 
 
@@ -4291,6 +4290,9 @@ class Layout(object):
     def showGi(self, **kwargs):
         """  show graph of interactions Gi
 
+        Parameters
+        ----------
+
         en  : int
             edge number
 
@@ -4301,7 +4303,7 @@ class Layout(object):
 
         print "int0 : ",int0
         print "int1 : ",int1
-       
+
         # if interaction is tuple (R or T)
         if ((type(eval(int0))==tuple) & (type(eval(int1))==tuple)):
             # segment number associated to interaction
@@ -5890,7 +5892,7 @@ class Layout(object):
             if key not in kwargs:
                 kwargs[key] = value
 
-        segfilt = filter(lambda x : x not in self.name['AIR'], self.tsg) 
+        segfilt = filter(lambda x : x not in self.name['AIR'], self.tsg)
         # get the association between segment and nx edges
         edges = self.Gs.edges()
         Ne = len(edges)
@@ -5899,7 +5901,7 @@ class Layout(object):
 
         #pdb.set_trace()
 
-        edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))   
+        edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))
         # Warning edgelist is to be understood as edge of graph and not segments of layout
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
 
@@ -5910,7 +5912,7 @@ class Layout(object):
         #     if k==1:
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,edges=False,nodes=True,node_size=50,node_color='c')
         #     if k==4:
-        #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')      
+        #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
     def showG(self, graph='r', **kwargs):
         """ show graphs
@@ -5938,6 +5940,8 @@ class Layout(object):
             2
         nodelist : list
             []
+        mode : string
+            'cycle' | 'none' | 'room'
 
         Examples
         --------
@@ -5987,7 +5991,7 @@ class Layout(object):
                     'nodelist': [],
                     'edgelist': [],
                     'figsize': (5,5),
-                    'mode':'cycle',
+                    'mode':'nocycle',
                     'alphacy':0.8,
                     'colorcy':'#abcdef'
                     }
@@ -5995,7 +5999,7 @@ class Layout(object):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-        # overriding first argument graph        
+        # overriding first argument graph
         if 'graph' in kwargs:
             graph = kwargs['graph']
         #
@@ -6016,9 +6020,11 @@ class Layout(object):
             G = self.Gr
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='g'
+            print kwargs['linewidth']
             kwargs['fig'],kwargs['ax'] = gru.draw(self.Gs,
                               nodes=False,edges=True,alphacy=1.,
                               fig=kwargs['fig'],ax=kwargs['ax'],labels=False)
+            print kwargs['linewidth']
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
@@ -6101,7 +6107,7 @@ class Layout(object):
                     fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
                     args['fig']=fig
                     args['ax']=ax
-            else:
+            if kwargs['mode']=='room':
                 for k, nro in enumerate(self.Gr.node.keys()):
                     fig,ax = self.Gr.node[nro]['cycle'].show(**args)
                     args['fig']=fig
@@ -6125,8 +6131,8 @@ class Layout(object):
                 yoff = (1+ns[1])*0.05*norm[1]
                 ax.plot(x+xoff, y+yoff, linewidth=2, color=color)
 
-       
-                 
+
+
         if kwargs['show']:
             plt.show()
 
