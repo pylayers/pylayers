@@ -412,13 +412,21 @@ class Bsignal(object):
 
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
-            >>> e = EnImpulse()
+            >>> e = EnImpulse(fe=100)
             >>> fig,ax = e.plot(typ=['v'])
+            >>> plt.title('original waveform')
             >>> e.save('impulse.mat')
             >>> del e
             >>> h = TUsignal()
             >>> h.load('impulse.mat')
             >>> fig,ax = h.plot(typ=['v'])
+            >>> plt.title('retrieved waveform')
+
+        See Also
+        --------
+
+        Bsignal.load
+
         """
 
         d = {}
@@ -434,10 +442,16 @@ class Bsignal(object):
 
         filename : string
 
+
+        See Also
+        --------
+
+        Bsignal.save
+
         """
         d = ios.loadmat(filename)
-        self.x = d['x'][:, 0]
-        self.y = d['y'][:, 0]
+        self.x = d['x'][0,:]
+        self.y = d['y']
 
     def setx(self, x):
         r""" setx : set x vector

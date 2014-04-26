@@ -1,16 +1,34 @@
+#-*- coding:Utf-8 -*-
+"""
+.. currentmodule:: pylayers.util.graphutil
+
+This class handle the description of an Indoor layout
+
+Utility functions
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    draw
+    edgetype
+    find_all_paths
+
+"""
 import numpy as np
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import networkx as nx
 import doctest
 import pdb
 
 def draw(G,**kwargs):
     """ draw a networkx graph
-    G : Graph with pos (geometric graph)
 
-    
+
     Parameters
     ----------
+
+    G : Graph with pos (geometric graph)
     show : False
     fig : []
     ax : []
@@ -29,6 +47,12 @@ def draw(G,**kwargs):
     'nodelist': [],
     'edgelist': [],
     'figsize': (8,8)
+
+    See Also
+    --------
+
+    pylayers.gis.layout.showG
+
     """
 
     defaults = {'show': False,
@@ -178,7 +202,7 @@ if __name__=="__main__":
     doctest.testmod()
 #    points  = shg.MultiPoint([(0, 0),(0, 1),(2.5,1),(2.5,2),(2.8,2),(2.8,1.1),(3.2, 1.1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
 #    polyg   = Polygon(points)
-#    Gv      = polyg.buildGv() 
+#    Gv      = polyg.buildGv()
 #    plt.title('Testing buildGv : wrong design ')
 #    #plt.show()
 #    A=edgetype(Gv)

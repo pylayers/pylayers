@@ -146,7 +146,7 @@ Vizualisation
     Layout._show3
     Layout.show3
 
-Showing Graphs 
+Showing Graphs
 ---------------
 
 .. autosummary::
@@ -512,10 +512,10 @@ class Layout(object):
         st = st + "Number of cycles  : "+ str(len(self.Gt.node))+"\n"
         st = st + "Number of rooms  : "+ str(len(self.Gr.node))+"\n"
         for k in self.degree:
-                if  (k < 2) or (k>3):
-                    st = st + 'degree '+str(k)+' : '+str(self.degree[k])+"\n"
-                else:
-                    st = st + 'degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
+            if  (k < 2) or (k>3):
+                st = st + 'degree '+str(k)+' : '+str(self.degree[k])+"\n"
+            else:
+                st = st + 'degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
         st = st + "\n"
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
@@ -733,7 +733,7 @@ class Layout(object):
         Notes
         -----
 
-        This function updates from Gs:
+        This function updates the following arrays:
 
         self.pt (2xNp)
         self.tahe (2xNs)
@@ -775,7 +775,7 @@ class Layout(object):
         lairwall = self.name['AIR']
 
         #
-        # function to count airwall connected to a point  
+        # function to count airwall connected to a point
         #  probably this is not the faster solution
         #
 
@@ -894,12 +894,12 @@ class Layout(object):
                         self.sla[index] = slabname
                         self.isss.append(index)
                         index = index+1
-            # calculate extremum of segments           
+            # calculate extremum of segments
             self.extrseg()
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
-       
+
         Parameters
         ----------
 
@@ -911,7 +911,7 @@ class Layout(object):
 
         In JOSM nodes are numbered with negative indexes. It is not valid to
         have a positive node number. To stay compliant with the PyLayers
-        convention which tells that <0 node are points and >0 are segments,  
+        convention which tells that <0 node are points and >0 are segments,
         in the osm format, segments are numbered negatively with a known offset
         of 1e7=10000000. The convention is set back when loading the osm file.
 
@@ -1082,7 +1082,7 @@ class Layout(object):
                     d['ss_name']=[d['ss_name']]
                     del(d['ss_zmin'])
                     del(d['ss_zmax'])
-   
+
                 d['connect'] = nx.neighbors(self.Gs,n)
                 try:
                     if d['transition']:
@@ -1198,6 +1198,7 @@ class Layout(object):
 
 
         # convert graph Gs to numpy arrays for speed up post processing
+        pdb.set_trace()
         self.g2npy()
 
 
@@ -1266,27 +1267,36 @@ class Layout(object):
             .str   : binary file with visibility DIRSTRUC
             .osm   : opens street map format  DIROSM
 
-   
+
         layout files are stored in the directory pstruc['DIRxxx']
 
         """
+
         filename,ext=os.path.splitext(_filename)
         if ext=='.osm':
             filename = pyu.getlong(_filename,pstruc['DIROSM'])
             if os.path.exists(filename):
                 self.loadosm(_filename)
+            else:
+                raise NameError(filename+ ' non existing file')
         elif ext=='.str':
             filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
             if os.path.exists(filename):
                 self.loadstr(_filename,self.filematini,self.fileslabini)
+            else:
+                raise NameError(filename+ ' non existing file')
         elif ext=='.str2':
             filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
             if os.path.exists(filename):
                 self.loadstr2(_filename,self.filematini,self.fileslabini)
+            else:
+                raise NameError(filename+ ' non existing file')
         elif ext=='.ini':
             filename = pyu.getlong(_filename,pstruc['DIRINI'])
             if os.path.exists(filename):
                 self.loadini(_filename)
+            else:
+                raise NameError(filename+ ' non existing file')
         else:
             raise NameError('layout filename extension not recognized')
 
@@ -2298,11 +2308,11 @@ class Layout(object):
         # test if list
         if (type(lp) <> list):
             lp = [lp]
-       
+
         print "lp : ",lp
         # get segments involved in points list
         ls = self.nd2seg(lp)
-         
+
         print "ls : ",ls
         # 1) delete involved segments
         for k in ls:
@@ -2318,9 +2328,9 @@ class Layout(object):
             del self.Gs.pos[n1]
             self.labels.pop(n1)
             self.Np = self.Np - 1
-        # 3) updating structures    
+        # 3) updating structures
         self.g2npy()
-           
+
     def del_segment(self,le):
         """ delete segment e
 
@@ -2329,8 +2339,10 @@ class Layout(object):
 
         le : list of segment number
 
-        Notes
-        -----
+        See Also
+        --------
+
+        pylayers.gis.layout.Layout.del_node
 
         """
         if (type(le) == np.ndarray):
@@ -2588,9 +2600,9 @@ class Layout(object):
         ns : int
             segment number
 
-        ss_name : list of Nss  string    
+        ss_name : list of Nss  string
             name of the different constitutive SLAB of the multi-segments
-      
+
         ss_z : list of Nss tuple (zmin,zmax)
 
         Examples
@@ -2609,7 +2621,7 @@ class Layout(object):
                 if ss_z<>[]:
                     self.Gs.node[ns]['ss_z']=ss_z
 
-                # update Layout information   
+                # update Layout information
                 self.g2npy()
 
     def edit_segment(self, e1 , gui=True):
@@ -2620,7 +2632,7 @@ class Layout(object):
 
         e1 : integer
             edge number
-        gui : boolean    
+        gui : boolean
 
         Notes
         -----
@@ -5722,17 +5734,17 @@ class Layout(object):
                     else:
                         # from 2 connected segments
                         cn.from2csegs(pseg0,pseg1)
-                # if starting from point 
+                # if starting from point
                 else:
                     pt = np.array(self.Gs.pos[nstr0])
                     cn.fromptseg(pt,pseg1)
-           
+
                 # list all potential successors of interaction i1
                 i2 = nx.neighbors(self.Gi,str(i1))
                 ipoints = filter(lambda x: eval(x)<0 ,i2)
                 # filter tuple (R | T)
                 istup = filter(lambda x : type(eval(x))==tuple,i2)
-                # map first argument segment number 
+                # map first argument segment number
                 isegments = np.unique(map(lambda x : eval(x)[0],istup))
 
                 #if ((i0==(32, 75)) and (i1==(170, 75, 74))):
@@ -5753,7 +5765,7 @@ class Layout(object):
                         #if ~bs.any():
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
                     # i1 : interaction R --> mirror
-                    if len(i1)==2:   
+                    if len(i1)==2:
                         Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
                         Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
                         typ,prob = cn.belong_seg(Mpta,Mphe)
@@ -5766,11 +5778,11 @@ class Layout(object):
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                         #    plt.show()
                         #    pdb.set_trace()
-                    isegkeep = isegments[prob>0]    
+                    isegkeep = isegments[prob>0]
                     # dict num segment : proba
                     dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
                     output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
-                    probint  = map(lambda x: dsegprob[eval(x)[0]],output)
+                    probint = map(lambda x: dsegprob[eval(x)[0]],output)
                     # dict interaction : proba
                     dintprob = {k:v for k,v in zip(output,probint)}
 
@@ -5780,8 +5792,6 @@ class Layout(object):
 
             self.Gi.add_edge(str(i0),str(i1),output=dintprob)
 
-
-       
 
 #    def showGraph(self,**kwargs):
 #        """
@@ -5953,6 +5963,11 @@ class Layout(object):
             >>> fig,ax = L.showG('v',fig=fig,ax=ax)
             >>> tiv = plt.title("Gv")
             >>> plt.show()
+
+        See Also
+        --------
+
+        pylayers.util.graphutil.draw
 
         """
         defaults = {'show': False,
