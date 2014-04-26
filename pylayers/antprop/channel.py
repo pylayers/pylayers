@@ -79,10 +79,10 @@ class Ctilde(object):
     Attributes
     ----------
 
-    Ctt : FUsignal
-    Ctp : FUsignal
-    Cpt : FUsignal
-    Cpp : FUsignal
+    Ctt : bsignal.FUsignal
+    Ctp : bsignal.FUsignal
+    Cpt : bsignal.FUsignal
+    Cpp : bsignal.FUsignal
 
     tauk : ndarray delays
     tang : ndarray angles of departure
@@ -329,7 +329,7 @@ class Ctilde(object):
             file name of h5py file Link format
         grpname  : int
             groupname in filenameh5
-        
+
 
         """
 
@@ -542,10 +542,10 @@ class Ctilde(object):
         Parameters
         ----------
 
-        d: 'doa' | 'dod'        
+        d: 'doa' | 'dod'
             display direction of departure | arrival
         fig : plt.figure
-        ax : plt.axis    
+        ax : plt.axis
         phi: tuple (-180, 180)
             phi angle
         normalize: bool
@@ -620,7 +620,7 @@ class Ctilde(object):
         #
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-        # WARNING polar plot require radian angles 
+        # WARNING polar plot require radian angles
         if polar :
             al = 1.
             alb = 180. / np.pi
@@ -1114,11 +1114,13 @@ class Ctilde(object):
         ----------
 
         typ   : 'm', 'l20' , 'r'
+        cmap  : colormap
 
         """
 
         defaults = {'typ': 'm',
-                   'cmap': plt.cm.hot}
+                   'cmap': plt.cm.hot,
+                    'fontsize':14}
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -1131,23 +1133,23 @@ class Ctilde(object):
 
         ax1 = fig.add_subplot(221)
         fig, ax1 = self.Ctt.imshow(fig=fig,ax=ax1,**kwargs)
-        ax1.set_xlabel('f (GHz)')
-        ax1.set_title(u'$C_{\\theta\\theta}$')
+        ax1.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax1.set_title(u'$C_{\\theta\\theta}$',fontsize=kwargs['fontsize'])
 
         ax2 = fig.add_subplot(222)
         fig, ax2 = self.Ctp.imshow(fig=fig,ax=ax2,**kwargs)
-        ax2.set_xlabel('f (GHz)')
-        ax2.set_title(u'$C_{\\theta\phi}$')
+        ax2.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax2.set_title(u'$C_{\\theta\phi}$',fontsize=kwargs['fontsize'])
 
         ax3 = fig.add_subplot(223)
         fig, ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
-        ax3.set_xlabel('f (GHz)')
-        ax3.set_title(u'$C_{\phi\\theta}$')
+        ax3.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax3.set_title(u'$C_{\phi\\theta}$',fontsize=kwargs['fontsize'])
 
         ax4 = fig.add_subplot(224)
         fig, ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
-        ax4.set_xlabel('f (GHz)')
-        ax4.set_title(u'$C_{\phi\phi}$')
+        ax4.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax4.set_title(u'$C_{\phi\phi}$',fontsize=kwargs['fontsize'])
 
         return fig, (ax1, ax2, ax3, ax4)
 
