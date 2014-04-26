@@ -108,7 +108,7 @@ class Seek:
         displacement = boid.destination - boid.position
         desired_velocity = displacement.normalize() * boid.desired_speed
         steering = desired_velocity - boid.velocity
-        if (displacement.length() < boid.radius):
+        if (displacement.length() < 1.5*boid.radius):
             boid.arrived = True
         return steering
 
@@ -425,9 +425,9 @@ class InterpenetrationConstraint:
             if obstacle in checked: continue
             checked.append(obstacle)
             intersect, distance_to_line, normal = self.distance_from_line(position, obstacle)
-            if intersect and distance_to_line < radius * 1.2:
+            if intersect and distance_to_line < radius:
                 wall_found = True
-                normal = normal.scale(radius * 1.2 - distance_to_line)
+                normal = normal.scale(radius - distance_to_line)
                 boid.position += normal
         if not wall_found:
             checked = []
@@ -437,8 +437,22 @@ class InterpenetrationConstraint:
                 for point in (obstacle[0], obstacle[1]):
                     offset = position - vec3(point)
                     distance = offset.length()
-                    if distance < radius * 1.2:
-                        boid.position += offset.scale(radius * 1.2 - distance)
+                    if distance < radius:
+                        boid.position += offset.scale(radius - distance)
+    # if intersect and distance_to_line < radius * 1.2:
+    #             wall_found = True
+    #             normal = normal.scale(radius * 1.2 - distance_to_line)
+    #             boid.position += normal
+    #     if not wall_found:
+    #         checked = []
+    #         for obstacle in the_world.obstacles(boid):
+    #             if obstacle in checked: continue
+    #             checked.append(obstacle)
+    #             for point in (obstacle[0], obstacle[1]):
+    #                 offset = position - vec3(point)
+    #                 distance = offset.length()
+    #                 if distance < radius * 1.2:
+    #                     boid.position += offset.scale(radius * 1.2 - distance)
 
         return vec3()
 

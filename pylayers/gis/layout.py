@@ -5955,6 +5955,7 @@ class Layout(object):
                     'ax': [],
                     'nodes': True,
                     'edges': True,
+                    'airwalls': False,
                     'labels': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
@@ -6014,6 +6015,7 @@ class Layout(object):
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
+
         #
         # v : visibility graph
         #

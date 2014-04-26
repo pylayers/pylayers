@@ -1299,16 +1299,24 @@ class Rays(dict):
                 # nw : i x r
                 #
                 #
-                # to do fic the colinear bug
+                # to do fix the colinear bug
                 #
                 nw = np.sqrt(np.sum(w*w, axis=0))
                 if (nw.any()==0):
                     u = np.where(nw==0)
-                    uv = np.array(filter(lambda x : abs(vn[2,u])>0.99,u))
-                    uh = np.setdiff1d(u,uv)
-                    w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
-                    w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
-                    pdb.set_trace()
+                    # uv = np.array(filter(lambda x : abs(vn[2,x])>0.99,u))
+                    # # reshape information for the filter
+                    uu = np.array([u[0],u[1]]).T
+                    uv = np.array(filter(lambda x : abs(vn[2,x[:,0],x[:,1]])>0.99,[uu]))
+                    uh = np.setdiff1d(uu,uv)
+                    try:
+                        w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
+                    except:
+                        pass
+                    try:
+                        w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
+                    except:
+                        pass
                 #assert(nw.all()>0), pdb.set_trace()
                 wn = w/nw
                 # Handling channel reciprocity s_in --> -s_in

@@ -451,6 +451,12 @@ class DLink(Link):
     def fGHz(self):
         return self._fGHz
 
+    @L.setter
+    def L(self,L):
+        # change layout and build/load
+        self._L = L
+        self.reset_config()
+
     @Lname.setter
     def Lname(self,Lname):
         # change layout and build/load
