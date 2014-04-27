@@ -4390,12 +4390,16 @@ class FUDAsignal(FUDsignal):
     def cut(self,threshold=0.99):
         """ cut the signal at an Energy threshold level
 
+        Parameters
+        ----------
+
         threshold : float
             default 0.99
+
         """
         self.sort(typ='energy')
         E = self.eprfl()
-        cumE = np.cumsum(E)/sum(E)
+        cuE = np.cumsum(E)/sum(E)
         v = np.where(cumE<threshold)[0]
         self.taud = self.taud[v]
         self.taue = self.taue[v]

@@ -202,21 +202,24 @@ class Rays(dict):
                         pass
                     elif kk == 'nbrays':
                         f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
-                    else:    
+                    else:
                         f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
             f.close()
         except:
             f.close()
             raise NameError('Rays: issue when writting h5py file')
-        
-        
+
+
 
     def loadh5(self,filename=[],idx=0):
-        """ save rays 
-            pyh5 format
-        """ 
+        """ load rays hdf5 format
+
+        Parameters
+        ----------
+
+        """
         if filename == []:
-            filenameh5 = self.filename+'_'+str(idx)+'.h5' 
+            filenameh5 = self.filename+'_'+str(idx)+'.h5'
         else :
             filenameh5 = filename
 
@@ -312,9 +315,9 @@ class Rays(dict):
 
         filenameh5 : string
             filename of the h5py file (from Links Class)
-        grpname : string 
+        grpname : string
             groupname of the h5py file (from Links Class)
-        
+
 
         See Also
         --------
@@ -322,7 +325,7 @@ class Rays(dict):
         pylayers.simul.links
 
         """
-                
+
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         # try/except to avoid loosing the h5 file if
@@ -453,31 +456,49 @@ class Rays(dict):
         r[ni]['nrays']=1
         return(r)
 
-    def show(self,L,**kwargs):
+    def show(self,**kwargs):
         """  plot 2D rays within the simulated environment
 
         Parameters
         ----------
 
-        L : Layout
         i : list or -1 (default = all groups)
             list of interaction group numbers
         r : list or -1 (default = all rays)
             list of indices of ray in interaction group
-        graph : type of graph to be displayed
-
+        graph : string t
+            type of graph to be displayed
+            's','r','t',..
+        fig : figure
+        ax  : axis
+        L   : Layout
+        alpharay : float
+            1
+        widthray : float
+            0.1
+        colray : string
+            'black'
+        ms : int
+            marker size :  5
+        layout : boolean
+            True
+        points : boolean
+            True
 
         """
         defaults = {'i':-1,
                    'r':-1,
                    'fig':[],
                    'ax':[],
+                    'L':[],
                    'graph':'s',
                     'color':'black',
                     'alpharay':1,
                     'widthray':0.1,
                     'colray':'black',
-                    'ms':5
+                    'ms':5,
+                    'layout':True,
+                    'points':True
                    }
         for key, value in defaults.items():
             if key not in kwargs:
@@ -485,19 +506,27 @@ class Rays(dict):
 
         #if kwargs['fig'] ==[]:
         #    fig = plt.figure()
-        #if kwargs['ax'] ==[]:   
+        #if kwargs['ax'] ==[]:
         #    ax = fig.add_subplot(111)
-
-        fig,ax = L.showG(**kwargs)
-        ax.plot(self.pTx[0], self.pTx[1], 'or',ms=kwargs['ms'])
-        ax.plot(self.pRx[0], self.pRx[1], 'og',ms=kwargs['ms'])
+        if kwargs['layout'] ==True:
+            fig,ax = kwargs['L'].showG(**kwargs)
+        else:
+            fig = kwargs['fig']
+            ax = kwargs['ax']
+        #
+        # display Tx and Rx
+        #
+        if kwargs['points'] ==True:
+            ax.plot(self.pTx[0], self.pTx[1], 'or',ms=kwargs['ms'])
+            ax.plot(self.pRx[0], self.pRx[1], 'og',ms=kwargs['ms'])
         # i=-1 all rays
         # else block of interactions i
+
         if kwargs['i']==-1:
             lgrint = self.keys()
         else:
             lgrint = [kwargs['i']]
-           
+
 
         for i in lgrint:
             if kwargs['r']==-1:
@@ -516,7 +545,7 @@ class Rays(dict):
                 ax.axis('off')
                 if self.filled :
                     ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
-        return(fig,ax)      
+        return(fig,ax)
 
     def mirror(self, H=3, N=1):
         """ mirror

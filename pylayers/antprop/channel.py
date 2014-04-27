@@ -179,7 +179,7 @@ class Ctilde(object):
         if self.islocal:
             self.locbas(b2g=True)
 
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filename,'w')
@@ -205,7 +205,7 @@ class Ctilde(object):
             f.close()
             raise NameError('Channel.Ctilde: issue when writting h5py file')
 
-    
+
 
 
     def loadh5(self,Lfilename,idx,output=True):
@@ -1166,6 +1166,16 @@ class Ctilde(object):
     def energy(self,mode='mean',Friis=True,sumray=False):
         """ Calculates energy on each channel
 
+        Parameters
+        ----------
+        mode : string
+            'mean'
+        Friis: boolean
+            True
+        sumray: boolean
+            False
+
+
         Returns
         -------
 
@@ -1203,6 +1213,29 @@ class Ctilde(object):
 
         return ECtt, ECpp, ECtp, ECpt
 
+    def cut(self,threshold=0.99):
+        """
+        Parameters
+        ----------
+
+        threshold : float
+            default 0.99
+
+        """
+        Ett, Epp, Etp, Ept = self.energy()
+        Etot = Ett+Epp+Etp+Ept
+        u = np.argsort(Etot)
+        cumE = np.cumsum(Etot)/sum(Etot)
+        v = np.where(cumE<threshold)[0]
+
+        self.tauk = self.tauk[v]
+        self.tang = self.tang[v,:]
+        self.rang = self.rang[v,:]
+        self.Ctt.y = self.Ctt.y[v,:]
+        self.Cpp.y = self.Cpp.y[v,:]
+        self.Ctp.y = self.Ctp.y[v,:]
+        self.Cpt.y = self.Cpt.y[v,:]
+
     def sort(self,typ='tauk'):
         """ sort Ctilde with respect to typ (default tauk)
 
@@ -1210,8 +1243,8 @@ class Ctilde(object):
         ----------
 
         typ  : string
-            which parameter to sort '
-                'tauk'   : (default)
+            sort w.r.t
+                'tauk'   : delay (default)
                 'att'    : theta Tx
                 'atp'    : phi Tx
                 'art'    : theta Rx

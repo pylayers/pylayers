@@ -1142,28 +1142,101 @@ class DLink(Link):
 
     def show(self,**kwargs):
         """ show the link
+
+        Parameters
+        ----------
+
+        s   : int
+        ca  : string
+            color a
+        cb  : string
+            color b
+        alpha : int
+        figsize : tuple
+            (20,10)
+        fontsize : int
+            20
+        rays : boolean
+            False
+        cmap : colormap
+        pol : string
+            'tt','pp','tp','pt','co','cross',tot'
         """
+
         defaults ={'s':80,
                    'ca':'b',
                    'cb':'r',
                    'alpha':1,
                    'figsize':(20,10),
-                   'fontsize':20}
+                   'fontsize':20,
+                   'rays':False,
+                   'cmap':plt.cm.jet,
+                   'pol':'tot',
+                   'dB':False,
+                   'dyn':70}
 
         for key in defaults:
             if key not in kwargs:
                 kwargs[key]=defaults[key]
 
-        fig,ax=self.L.showG('s',nodes=False,figsize=kwargs['figsize'])
+        #
+        # Layout
+        #
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'])
         plt.axis('off')
+        #
+        # Point A
+        #
         ax.scatter(self.a[0],
                    self.a[1], c=kwargs['ca'], s=kwargs['s'],
                    alpha=kwargs['alpha'])
         ax.text(self.a[0]+0.1,self.a[1]+0.1,'A',fontsize=kwargs['fontsize'])
+        #
+        # Point B
+        #
         ax.scatter(self.b[0],
                    self.b[1], c=kwargs['cb'], s=kwargs['s'],
                    alpha=kwargs['alpha'])
         ax.text(self.b[0]+0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
+        #
+        # Rays
+        #
+        if kwargs['rays']:
+            ECtt,ECpp,ECtp,ECpt = self.C.energy()
+            if kwargs['pol']=='tt':
+                val = ECtt
+            if kwargs['pol']=='pp':
+                val = ECpp
+            if kwargs['pol']=='tp':
+                val = ECtp
+            if kwargs['pol']=='pt':
+                val = ECpt
+            if kwargs['pol']=='tot':
+                val = ECtt+ECpp+ECpt+ECtp
+            if kwargs['pol']=='tot':
+                val = ECtt+ECpp
+            if kwargs['pol']=='cross':
+                val = ECtp+ECpt
+
+            clm = kwargs['cmap']
+            rk  = self.R.keys()
+            for i  in rk:
+                lr = self.R[i]['rayidx']
+                for r in range(len(lr)):
+                    ir = lr[r]
+                    if kwargs['dB']:
+                        RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    else:
+                        RayEnergy=val[ir]/val.max()
+                    col = clm(RayEnergy)
+                    fig,ax = self.R.show(i=i,r=r,
+                                   colray=col,
+                                   widthray=RayEnergy,
+                                   alpharay=RayEnergy,
+                                   fig=fig,ax=ax,
+                                   layout=False,
+                                   points=False)
+
         return fig,ax
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
