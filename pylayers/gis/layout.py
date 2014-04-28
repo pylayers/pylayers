@@ -4593,10 +4593,10 @@ class Layout(object):
             self.buildGv()
             self.lbltg.extend('v')
         if 'i' in graph:
-            # why is there 2 call to buildGi and buildGi2 ?
+            # why is there 2 calls to buildGi and buildGi2 ?
             self.buildGi()
             self.outputGi()
-            self.buildGi2()
+            #self.buildGi2()
             self.lbltg.extend('i')
 
         # dictionnary of cycles which have an air wall
@@ -5707,6 +5707,8 @@ class Layout(object):
             i0 = eval(e[0])
             i1 = eval(e[1])
 
+            #if ((i0==(3, 0, 1)) & (i1==(5, 1))):
+            #    pdb.set_trace()
 
             try:
                 nstr0 = i0[0]
@@ -5755,7 +5757,10 @@ class Layout(object):
                 istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
                 isegments = np.unique(map(lambda x : eval(x)[0],istup))
-
+                # if nstr0 and nstr1 are adjescent segment remove nstr0 from
+                # potential next interaction
+                if len(np.intersect1d(self.Gs.neighbors(nstr0),self.Gs.neighbors(nstr1)))>0:
+                       isegments = np.array(filter(lambda x : x!=nstr0,isegments)) 
                 #if ((i0==(32, 75)) and (i1==(170, 75, 74))):
                 #    pdb.set_trace()
                 # there are one or more segments

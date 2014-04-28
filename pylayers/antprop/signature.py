@@ -993,6 +993,7 @@ class Signatures(dict):
                     try:
                         dout[len(path)].append([di[p] for p in path])
                     except:
+                        #print "non existing : ",len(path)
                         dout[len(path)]=[]
                         dout[len(path)].append([di[p] for p in path])
                     #print visited + [target]
@@ -1734,8 +1735,6 @@ class Signatures(dict):
             #for target interaction in list of target interactions
 
             for ut,t in enumerate(lit):
-                if ((s=='(3, 0, 1)') & (t =='(2, 1, 0)')):
-                    pdb.set_trace()
 
                 if progress :
 
@@ -1752,6 +1751,8 @@ class Signatures(dict):
                         dout= self.procone2(self.L,Gi,dout=dout, source=s,target=t,cutoff=cutoff)
                     else :
                         dout = self.propaths2(Gi,di=self.L.di,dout=dout,source=s,target=t,cutoff=cutoff,bt=bt)
+                        #if ((s=='(3, 0, 1)') & (t =='(2, 1, 0)')):
+                        #    pdb.set_trace()
                 else:
                     try:
                         dout[1].append(self.L.di[s])
@@ -1759,6 +1760,7 @@ class Signatures(dict):
                         dout[1]=[]
                         dout[1].append(self.L.di[s])
 
+        pdb.set_trace()
         for k in dout.keys():
             adout=np.array((dout[k]))
             shad = np.shape(adout)
