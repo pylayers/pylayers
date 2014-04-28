@@ -128,11 +128,11 @@ class Cone(object):
 
         dtaw = np.sum(ptama*w,axis=0)
         dhew = np.sum(phema*w,axis=0)
-        
+
         blta = (dtaw>0)
         blhe = (dhew>0)
         #if 'seg1' in self.__dict__:
-        #    pa =  self.seg1[:,0].reshape(2,1)  
+        #    pa =  self.seg1[:,0].reshape(2,1)
         #    pb = (self.seg1[:,0]+w).reshape(2,1)
         #else:
         #    pa = self.apex.reshape(2,1)
@@ -140,8 +140,8 @@ class Cone(object):
         #blta = geu.isleft(pa,pb,pta)
         #blhe = geu.isleft(pa,pb,phe)
         # segment candidate for being above segment 1 (,Nseg)
-        boup = blta & blhe  
-        # type of segment 
+        boup = blta & blhe
+        # type of segment
         if prob:
             proba = np.zeros(np.shape(pta)[1])
         else :
@@ -356,23 +356,23 @@ class Cone(object):
         self.apex = pt 
         a = seg[:,0]
         b = seg[:,1]
-        v0 = b - pt 
-        v1 = a - pt 
+        v0 = b - pt
+        v1 = a - pt
         v0n = v0/np.sqrt(np.dot(v0,v0))
         v1n = v1/np.sqrt(np.dot(v1,v1))
-        
+
         if np.cross(v0n,v1n) > 0:
             self.u = v0n
             self.v = v1n
             self.seg1 = seg
-        else:  
+        else:
             self.u = v1n
             self.v = v0n
-            self.seg1 = seg[:,::-1]      
+            self.seg1 = seg[:,::-1]
 
         self.dot = np.dot(self.u,self.v)
         self.cross = np.cross(self.u,self.v)
-       
+
 
         if self.cross < 1e-15:
             self.degenerated=True
@@ -385,15 +385,21 @@ class Cone(object):
         ----------
 
         seg0 : 2 x 2  (Ndim x Npoints)
-        seg1 : 2 x 2 
+        seg1 : 2 x 2
 
         Notes
         -----
 
         The only way for the cone to be degenerated is when the two segments are on the same line.
 
+        See Also
+        --------
 
-        """ 
+        pylayers.gis.layout.Layout.buildGi
+
+
+
+        """
         # bv : (4,1)
 
 

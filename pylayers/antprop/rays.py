@@ -104,7 +104,7 @@ class Rays(dict):
     the height from floor to ceil, and the number N of
     multiple reflections to take into account.
 
-    Once the 3d rays have been calculated, the 
+    Once the 3d rays have been calculated, the
     the local basis are evaluated along those rays. This is
     done through the **locbas** method
 
@@ -120,12 +120,12 @@ class Rays(dict):
         self.pRx = pRx
         self.nray = 0
         self.raypt = 0
-        self.los=False
-        self.is3D=False
-        self.isbased=False
+        self.los = False
+        self.is3D = False
+        self.isbased = False
         self.filled = False
         self.evaluated = False
-       
+
     def __len__(self):
         Nray = 0
         for k in self.keys():
@@ -1042,13 +1042,14 @@ class Rays(dict):
         #   pt =  [tx,rx]
         #   sig = [0,0]
         #
-        if self.los :
-            r3d[0]={}
-            r3d[0]['sig']=np.zeros((2,2,1))
-            r3d[0]['sig2d']=np.zeros((2,2,1))
-            r3d[0]['pt']=np.zeros((3,2,1))
-            r3d[0]['pt'][:,0,:]=tx[:,np.newaxis]
-            r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
+        
+        if (self.los) & (np.sum(tx-rx,axis=0)<>0):
+            r3d[0] = {}
+            r3d[0]['sig'] = np.zeros((2,2,1))
+            r3d[0]['sig2d'] = np.zeros((2,2,1))
+            r3d[0]['pt'] = np.zeros((3,2,1))
+            r3d[0]['pt'][:,0,:] = tx[:,np.newaxis]
+            r3d[0]['pt'][:,1,:] = rx[:,np.newaxis]
 
         # r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint)
         # count total number of ray
@@ -1440,7 +1441,7 @@ class Rays(dict):
 
                 ray2nbi = np.ones((nbray))
 
-               
+
                 try:
                     self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
                 except:

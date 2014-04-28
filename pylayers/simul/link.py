@@ -397,14 +397,14 @@ class DLink(Link):
         #  they are chosen as center of gravity of cycle 0
         #
         ###########
-        if len(kwargs['a'])==0:
+        if len(self.a)==0:
             self.ca = 0
             self.a = self.L.cy2pt(self.ca)
         else:
             self.a = kwargs['a']
             self.ca = self.L.pt2cy(self.a)
 
-        if len(kwargs['b'])==0:
+        if len(self.b)==0:
             self.cb = 0
             self.b = self.L.cy2pt(self.cb)
         else:
@@ -1066,7 +1066,7 @@ class DLink(Link):
         ############
         # Signatures
         ############
-        Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
 
         if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
@@ -1161,17 +1161,29 @@ class DLink(Link):
         cmap : colormap
         pol : string
             'tt','pp','tp','pt','co','cross',tot'
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.link import *
+        >>> L=Link()
+
         """
 
         defaults ={'s':80,
                    'ca':'b',
                    'cb':'r',
                    'alpha':1,
+                   'i':-1,
                    'figsize':(20,10),
                    'fontsize':20,
                    'rays':False,
                    'cmap':plt.cm.jet,
                    'pol':'tot',
+                   'col':'k',
+                   'width':1,
+                   'alpha':1,
+                   'col':'k',
                    'dB':False,
                    'dyn':70}
 
@@ -1182,7 +1194,7 @@ class DLink(Link):
         #
         # Layout
         #
-        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'])
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=True)
         plt.axis('off')
         #
         # Point A
@@ -1197,7 +1209,7 @@ class DLink(Link):
         ax.scatter(self.b[0],
                    self.b[1], c=kwargs['cb'], s=kwargs['s'],
                    alpha=kwargs['alpha'])
-        ax.text(self.b[0]+0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
+        ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
         #
         # Rays
         #
@@ -1219,8 +1231,15 @@ class DLink(Link):
                 val = ECtp+ECpt
 
             clm = kwargs['cmap']
-            rk  = self.R.keys()
-            for i  in rk:
+            #
+            # Select group of interactions
+            #
+            if kwargs['i']==-1:
+                li  = self.R.keys()
+            else:
+                li = kwargs['i']
+
+            for i  in li:
                 lr = self.R[i]['rayidx']
                 for r in range(len(lr)):
                     ir = lr[r]
@@ -1228,11 +1247,19 @@ class DLink(Link):
                         RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
                     else:
                         RayEnergy=val[ir]/val.max()
-                    col = clm(RayEnergy)
+                    if kwargs['col']=='cmap':
+                        col = clm(RayEnergy)
+                        width = RayEnergy
+                        alpha = RayEnergy
+                    else:
+                        col = kwargs['col']
+                        width = kwargs['width']
+                        alpha = kwargs['alpha']
+
                     fig,ax = self.R.show(i=i,r=r,
                                    colray=col,
-                                   widthray=RayEnergy,
-                                   alpharay=RayEnergy,
+                                   widthray=width,
+                                   alpharay=alpha,
                                    fig=fig,ax=ax,
                                    layout=False,
                                    points=False)

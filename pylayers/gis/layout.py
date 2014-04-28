@@ -4593,13 +4593,14 @@ class Layout(object):
             self.buildGv()
             self.lbltg.extend('v')
         if 'i' in graph:
+            # why is there 2 call to buildGi and buildGi2 ?
             self.buildGi()
             self.outputGi()
             self.buildGi2()
             self.lbltg.extend('i')
 
         # dictionnary of cycles which have an air wall
-        #self.build()
+        # self.build()
         self.dca={}
         for seg,d in self.Gs.node.items():
             if seg >0 :
@@ -5377,8 +5378,8 @@ class Layout(object):
 
 
             # udeg1 = self.degree[1]
-            # udeg2 = self.degree[2]       
-            #print udeg2   
+            # udeg2 = self.degree[2]
+            #print udeg2
             Gv = polyg.buildGv(show=show,udeg1=udeg1,udeg2=udeg2)
             #if icycle == 78:
             #    pdb.set_trace()
@@ -5618,7 +5619,7 @@ class Layout(object):
     #                                    print node1, node2
                                         #pdb_set_trace()
                             else:                 # D diffraction
-                                node1 = str(n)  # 
+                                node1 = str(n)  #
                                 node2 = str(nb) #
                                 if ((node1 in self.Gi.node.keys())
                                  & (node2 in self.Gi.node.keys())):
@@ -5665,7 +5666,7 @@ class Layout(object):
                                     #pdb.set_trace()
 
         self.di={} # dictionnary which link nodes of Gi to node of Gs and interaction type
-                # string 2 list
+        # 2 lists
         [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
         [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
@@ -5686,6 +5687,12 @@ class Layout(object):
         , whatever the type of nstr0 and nstr1.
         The feasible outputs from nstr0 to nstr1 are stored in an output field of
         edge (nstr0,nstr1)
+
+        See Also
+        --------
+
+        pylayers.util.cone.Cone.from2seg
+        pylayers.util.cone.Cone.belong_seg
 
 
         """
@@ -5711,10 +5718,10 @@ class Layout(object):
                 # Transmission
                 if len(i1)>2:
                     typ=2
-                # Reflexion   
+                # Reflexion
                 else :
                     typ=1
-            # Diffraction       
+            # Diffraction
             except:
                 nstr1 = i1
                 typ = 3
@@ -5759,6 +5766,7 @@ class Layout(object):
                     #print points
                     #print segments
                     #cn.show()
+
                     # i1 : interaction T
                     if len(i1)==3:
                         typ,prob = cn.belong_seg(pta,phe)
@@ -5766,6 +5774,7 @@ class Layout(object):
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         #if ~bs.any():
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+
                     # i1 : interaction R --> mirror
                     if len(i1)==2:
                         Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
@@ -5783,11 +5792,10 @@ class Layout(object):
                     isegkeep = isegments[prob>0]
                     # dict num segment : proba
                     dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
-                    output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
+                    output = filter(lambda x : eval(x)[0] in isegkeep, istup)
                     probint = map(lambda x: dsegprob[eval(x)[0]],output)
                     # dict interaction : proba
                     dintprob = {k:v for k,v in zip(output,probint)}
-
 
                     # keep all segment above nstr1 and in Cone if T
                     # keep all segment below nstr1 and in Cone if R
@@ -5867,7 +5875,7 @@ class Layout(object):
 #                ax.plot(x,y,linewidth=2,color=color)
 #        if kwargs['show']:
 #            plt.show()
-   
+
     def show(self,**kwargs):
         """
         """
