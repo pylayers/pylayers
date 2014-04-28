@@ -1159,6 +1159,8 @@ class DLink(Link):
         rays : boolean
             False
         cmap : colormap
+        labels : boolean
+            enabling edge label (useful for signature identification)
         pol : string
             'tt','pp','tp','pt','co','cross',tot'
 
@@ -1185,6 +1187,7 @@ class DLink(Link):
                    'alpha':1,
                    'col':'k',
                    'dB':False,
+                   'labels':False,
                    'dyn':70}
 
         for key in defaults:
@@ -1194,7 +1197,7 @@ class DLink(Link):
         #
         # Layout
         #
-        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=True)
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'])
         plt.axis('off')
         #
         # Point A
@@ -1225,7 +1228,7 @@ class DLink(Link):
                 val = ECpt
             if kwargs['pol']=='tot':
                 val = ECtt+ECpp+ECpt+ECtp
-            if kwargs['pol']=='tot':
+            if kwargs['pol']=='co':
                 val = ECtt+ECpp
             if kwargs['pol']=='cross':
                 val = ECtp+ECpt

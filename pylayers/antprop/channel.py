@@ -68,6 +68,7 @@ import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
 from pylayers.antprop.raysc import GrRay3D
 from pylayers.util.project import *
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 try:
     import h5py
 except:
@@ -587,8 +588,10 @@ class Ctilde(object):
 
 
         if d =='dod':
+            tit = 'DOD : A'
             di = getattr(self, 'tang')
         elif d == 'doa':
+            tit = 'DOA : B'
             di = getattr(self, 'rang')
         else :
             raise AttributeError('d attribute can only be doa or dod')
@@ -606,11 +609,12 @@ class Ctilde(object):
         normalize = kwargs.pop('normalize')
         mode = kwargs.pop('mode')
         title = kwargs.pop('title')
+
         if fig == []:
             fig = plt.figure()
 
 
-        Ett, Epp, Etp, Ept = self.energy(mode=mode)
+        Ett, Epp, Etp, Ept = self.energy(mode=mode,Friis=True)
         Etot = Ett+Epp+Etp+Ept + 1e-15
 
         if normalize:
@@ -639,7 +643,7 @@ class Ctilde(object):
                 the[0] = the[0]*np.pi/180
                 the[1] = the[1]*np.pi/180
         else :
-            al = 180. / np.pi
+            al  = 180. / np.pi
             alb = 180. / np.pi
 
         col = 10 * np.log10(Etot)
@@ -663,13 +667,23 @@ class Ctilde(object):
             ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
 
         if title:
-            ax.set_title(d, fontsize=fontsize+2)
+            ax.set_title(tit, fontsize=fontsize+2)
+
+        ll = ax.get_xticklabels()+ax.get_yticklabels()
+        for l in ll:
+            l.set_fontsize(fontsize)
+
         if colorbar:
-            b=fig.colorbar(scat)
+            #divider = make_axes_locatable(ax)
+            #cax = divider.append_axes("right",size="5%",pad=0.05)
+            clb = plt.colorbar(scat,ax=ax)
             if normalize:
-                b.set_label('dB')
+                clb.set_label('dB',size=fontsize)
             else:
-                b.set_label('Path Loss (dB)')
+                clb.set_label('Path Loss (dB)',size=fontsize)
+
+            for t in clb.ax.get_yticklabels():
+                t.set_fontsize(fontsize)
 
         return (fig, ax)
 
@@ -695,6 +709,8 @@ class Ctilde(object):
         fontsize : float
         edgecolors : bool
         colorbar : bool
+        xa :
+        xb :
 
         Summary
         --------
@@ -724,13 +740,19 @@ class Ctilde(object):
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
-                    'mode':'mean'
+                    'mode':'mean',
+                    'colorbar':False,
+                    'xa':0,
+                    'xb':1
                     }
 
 
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
+
+        xa = kwargs.pop('xa')
+        xb = kwargs.pop('xb')
 
         if 'fig' not in kwargs:
             fig = plt.gcf()
@@ -742,11 +764,15 @@ class Ctilde(object):
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
-        kwargs['colorbar']=False
-        fig,ax = self.plotd(d='dod',ax=ax1,**kwargs)
-        kwargs['colorbar']=True
-        fig,ax = self.plotd(d='doa',ax=ax2,**kwargs)
-        return fig,ax
+        if xa<xb:
+            fig,ax1 = self.plotd(d='dod',ax=ax1,**kwargs)
+            fig,ax2 = self.plotd(d='doa',ax=ax2,**kwargs)
+        else:
+            fig,ax1 = self.plotd(d='doa',ax=ax1,**kwargs)
+            fig,ax2 = self.plotd(d='dod',ax=ax2,**kwargs)
+
+        return fig,[ax1,ax2]
+        #return fig,ax1
 
 
     # def doadod(self, **kwargs):
@@ -1970,11 +1996,14 @@ class Tchannel(bs.FUDAsignal):
         if title:
             ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
-            b=fig.colorbar(scat)
+            b = plt.colorbar(scat,cax=ax)
             if normalize:
                 b.set_label('dB')
             else:
                 b.set_label('Path Loss (dB)')
+            
+            for t in b.ax.get_yticklabels():
+                t.set_fontsize(fontsize)
 
         return (fig, ax)
 
@@ -2175,23 +2204,27 @@ class Tchannel(bs.FUDAsignal):
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
-                    'mode':'mean'
+                    'mode':'mean',
+                    'xa':0,
+                    'xb':0
                     }
 
 
+        fig = plt.figure()
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
-        fig = plt.figure()
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
 
-        kwargs['colorbar']=False
-        fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
-        kwargs['colorbar']=True
-        fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
+        if kwargs['xa']<kwargs['xb']:
+            fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
+            fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
+        else:
+            fig,ax = self.plotd(d='doa',fig=fig,ax=ax1,**kwargs)
+            fig,ax = self.plotd(d='dod',fig=fig,ax=ax2,**kwargs)
         return fig,ax
 
     def energy(self,mode='mean',Friis=True,sumray=False):

@@ -738,7 +738,7 @@ class SCoeff(object):
                 p = plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap,
                             linewidth=0, vmin=-seuildb, vmax=0)
                 cb = plt.colorbar()
-                cb.set_labe('Level dB')
+                cb.set_label('Level dB')
                 plt.draw()
             else:
                 v = np.abs(self.s1[k, 0:N, 0:M])
@@ -748,12 +748,12 @@ class SCoeff(object):
                                 vmin=-seuildb, vmax=0)
                     plt.title(titre)
                     cb = plt.colorbar()
-                    cb.set_labe('Level dB')
+                    cb.set_label('Level dB')
                 else:
                     plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap, linewidth=0)
                     plt.title(titre)
                     cb = plt.colorbar()
-                    cb.set_labe('Level (linear scale)')
+                    cb.set_label('Level (linear scale)')
 
                 if xl:
                     plt.xlabel('m', fontsize=fontsize)

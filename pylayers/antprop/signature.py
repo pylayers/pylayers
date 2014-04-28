@@ -1760,7 +1760,6 @@ class Signatures(dict):
                         dout[1]=[]
                         dout[1].append(self.L.di[s])
 
-        pdb.set_trace()
         for k in dout.keys():
             adout=np.array((dout[k]))
             shad = np.shape(adout)

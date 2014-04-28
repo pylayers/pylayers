@@ -4585,8 +4585,9 @@ class Layout(object):
             self.buildGr()
             self.lbltg.extend('r')
         if 'w' in graph and len(self.Gr.nodes())>1:
-            self.buildGw()
-            self.lbltg.extend('w')
+            pass
+            #self.buildGw()
+            #self.lbltg.extend('w')
         #if 'c' in graph:
         #    self.buildGc()
         if 'v' in graph:
@@ -4971,7 +4972,7 @@ class Layout(object):
 
         for all edges of Gr (adjascent room)
             if room1 and room2 have a common transition
-           
+
 
         """
 
@@ -4994,6 +4995,7 @@ class Layout(object):
             up1 = self.Gs.pos[unode[1]]
 
             name = self.Gs.node[Id]['name']
+
             if name != 'AIR':
                 pn = self.Gs.node[Id]['norm']
                 sl = self.sl[name]
@@ -5002,10 +5004,10 @@ class Layout(object):
 
 
                 # middle of the common door
-                pdoor0 = (np.array(up0) + pn[:2] * thick +\
-                          np.array(up1) + pn[:2] * thick) / 2  
-                pdoor1 = (np.array(up0) - pn[:2] * thick +\
-                          np.array(up1) - pn[:2] * thick) / 2  
+                pdoor0 = (np.array(up0) + pn[:2] * thick +
+                          np.array(up1) + pn[:2] * thick) / 2.
+                pdoor1 = (np.array(up0) - pn[:2] * thick +
+                          np.array(up1) - pn[:2] * thick) / 2.
                 P0 = sh.Point(pdoor0)
                 P1 = sh.Point(pdoor1)
 
@@ -5077,16 +5079,15 @@ class Layout(object):
         #         self.Gw.add_edges_from([(e[1], Id + d_id)])
         #     self.Gw.pos.update(self.Gr.pos)
 ####################
-
         # ADD CONVEX POINTS
         d_id = max(self.Gw.nodes())+1
         pcid = d_id
         tmp = []
         for n in self.Gr.nodes():
-            # get semgnet number of the room
+            # get segment number of the room
             tcc, nn = self.Gr.node[n]['polyg'].ptconvex()
-
             uconvex = np.nonzero(tcc == 1)[0]
+
             if len(uconvex) != 0 :
                 lr = self.Gr.node[n]['polyg'].exterior
                 x,y = lr.xy
@@ -5097,7 +5098,7 @@ class Layout(object):
                 for uu,uc in enumerate(uconvex):
                     # convex point position take into account wall width
                     npc = nx.neighbors(self.Gs,pc[uu])
-                    # only corner are considered (point with 3 neigbors are not)
+                    # only corner are considered (point with 3 neighbors are not)
                     if len(npc) <=2:
                         nname = [self.Gs.node[nd]['name'] for nd in npc]
                         npos = [self.Gs.pos[nd] for nd in npc]
@@ -5127,7 +5128,7 @@ class Layout(object):
 
             # kudr = [kdr[u] for u in udr]
             # cdr = combinations(dr.keys()[udr],2)
-            # for 
+            # for
             # import ipdb
             # ipdb.set_trace()
 
