@@ -108,6 +108,8 @@ def draw(G,**kwargs):
         edgelist =  G.edges()
     else:
         edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
+
+    # remove airwalls
     if not kwargs['airwalls']:
         try:
             #pno = filter(lambda x : G.nodes()[x]>0,nodelist)

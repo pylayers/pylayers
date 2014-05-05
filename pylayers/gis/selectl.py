@@ -59,7 +59,7 @@ class SelectL(object):
         self.nedge_sel = 0
         self.indp = 0
         self.state = 'Init'
-        self.nsel = 0 
+        self.nsel = 0
         ax.axis(self.L.display['box'])
         plt.title(self.state)
         self.update_state()
@@ -84,12 +84,12 @@ class SelectL(object):
             'f'  :' toggle points nodes display',
             'g'  :' toggle segments nodes display',
             '='  :' increment layer ',
-            ','  : 'this help',         
+            ','  : 'this help',
             'delete' :'delete selected',
             '$'  :' decrement layer '}
 
     def show(self,fig,ax,clear=False, dnodes=True, dedges=True,  font_size=14, title=''):
-        """ show layout 
+        """ show layout
 
         Parameters
         ----------
@@ -117,22 +117,22 @@ class SelectL(object):
         Parameters
         ----------
 
-        event 
-        verbose 
+        event
+        verbose
 
         """
 
         fig = plt.gcf()
         ax  = plt.gca()
-        # selected 
+        # selected
         self.nsel = 0
         self.ptsel = np.array([])
         self.evt = event.key
-        
+
         if verbose:
             try:
                 print "Evenement :", self.evt,self.ddoc[self.evt]
-            except:    
+            except:
                 print self.evt+ 'N/A'
         self.new_state()
 
@@ -608,8 +608,9 @@ class SelectL(object):
         # r : Refresh
         #
         if self.evt == 'r':
-            plt.axis('tight')
-            fig,iax = self.show(fig,ax,clear=True)
+            #plt.axis('tight')
+            plt.axis(self.L.display['box'])
+            fig,ax = self.show(fig,ax,clear=True)
             self.state = 'Init'
             self.update_state()
             return

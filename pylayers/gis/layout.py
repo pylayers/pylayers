@@ -417,6 +417,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         _filename : string
             layout file name
         _filematini :
@@ -439,28 +440,34 @@ class Layout(object):
         self.Np = 0
         self.Ns = 0
         self.Nss = 0
+
         #
         # Initializing graphs
         #
+
         self.Gs = nx.Graph()
         self.Gr = nx.Graph()
         self.Gc = nx.Graph()
         self.Gt = nx.Graph()
         self.Gm = nx.Graph()
+
         self.Gs.pos = {}
         self.tahe = np.zeros(([2, 0]), dtype=int)
-        self.lbltg=[]
+        self.lbltg = []
 
         #
         # related file names
         #
+
         self.filename = _filename
         self.fileslabini = _fileslabini
         self.filematini = _filematini
         self.filefur = _filefur
+
         #
         # setting display option
         #
+
         self.display = {}
         self.display['title'] = ''
         self.display['ticksoff'] = True
@@ -485,13 +492,17 @@ class Layout(object):
         self.display['overlay'] = False
         self.display['inverse'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
-        self.display['fileoverlay'] = "TA-Office.png"
+        self.display['fileoverlay'] = ""
         self.display['layerset'] = self.sl.keys()
+        self.display['box'] = (-50,50,-50,50)
         self.name = {}
+
         for k in self.sl.keys():
             self.name[k] = []
+
         self.load(_filename)
         self.boundary()
+
         # If a the layout has already been built then load the built structure
         try:
             self.dumpr()
@@ -511,11 +522,12 @@ class Layout(object):
         st = st + "Number of sub segments  : "+str(self.Nss)+"\n"
         st = st + "Number of cycles  : "+ str(len(self.Gt.node))+"\n"
         st = st + "Number of rooms  : "+ str(len(self.Gr.node))+"\n"
-        for k in self.degree:
-            if  (k < 2) or (k>3):
-                st = st + 'degree '+str(k)+' : '+str(self.degree[k])+"\n"
-            else:
-                st = st + 'degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
+        if hasattr(self,'degree'):
+            for k in self.degree:
+                if  (k < 2) or (k>3):
+                    st = st + 'degree '+str(k)+' : '+str(self.degree[k])+"\n"
+                else:
+                    st = st + 'degree '+str(k)+' : '+str(len(self.degree[k]))+"\n"
         st = st + "\n"
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
@@ -542,8 +554,8 @@ class Layout(object):
         if hasattr(self,'degree'):
             st = st + "degree : degree of nodes " +"\n"
 
-
         return(st)
+
     def ls(self, typ='ini'):
         """ list the available file in dirstruc
 
@@ -1060,11 +1072,14 @@ class Layout(object):
         config.set("info",'Npoints',self.Np)
         config.set("info",'Nsegments',self.Ns)
         config.set("info",'Nsubsegments',self.Nss)
+
         for k in self.display:
             config.set("display",k,self.display[k])
+
         for n in self.Gs.pos:
             if n <0:
                 config.set("points",str(n),self.Gs.pos[n])
+
         for n in self.Gs.pos:
             if n >0:
                 d = self.Gs.node[n]
@@ -1178,7 +1193,9 @@ class Layout(object):
             name = d['name']
             nta = d['connect'][0]
             nhe = d['connect'][1]
-            self.Gs.pos[eval(ns)]=tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
+            x,y = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
+            # round to mm
+            self.Gs.pos[eval(ns)] = (round(1000*x)/1000.,round(1000*y)/1000.)
             self.Gs.node[eval(ns)] = d
             self.Gs.add_edge(nta,eval(ns))
             self.Gs.add_edge(eval(ns),nhe)
@@ -1277,25 +1294,29 @@ class Layout(object):
             if os.path.exists(filename):
                 self.loadosm(_filename)
             else:
-                raise NameError(filename+ ' non existing file')
+                self.filename = _filename
+                print "new file",self.filename
         elif ext=='.str':
             filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
             if os.path.exists(filename):
                 self.loadstr(_filename,self.filematini,self.fileslabini)
             else:
-                raise NameError(filename+ ' non existing file')
+                self.filename = _filename
+                print "new file",self.filename
         elif ext=='.str2':
             filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
             if os.path.exists(filename):
                 self.loadstr2(_filename,self.filematini,self.fileslabini)
             else:
-                raise NameError(filename+ ' non existing file')
+                self.filename = _filename
+                print "new file",self.filename
         elif ext=='.ini':
             filename = pyu.getlong(_filename,pstruc['DIRINI'])
             if os.path.exists(filename):
                 self.loadini(_filename)
             else:
-                raise NameError(filename+ ' non existing file')
+                self.filename = _filename
+                print "new file",self.filename
         else:
             raise NameError('layout filename extension not recognized')
 
@@ -1999,7 +2020,7 @@ class Layout(object):
                         dico[name].append((k,j))
                     else:
                         dico[name] = [(k,j)]
-          
+
         self.dsseg = dico
         self.listtransition = listtransition
         return(dico)
@@ -2688,7 +2709,7 @@ class Layout(object):
                 print '0 : exit'
                 for e,(k,v) in enumerate(zip(de1k,de1v)):
                     print str(e+1)+ ' '+k+': '+  str(v)+'\n'
-                val = input('Your choice :')   
+                val = input('Your choice :')
                 if val<>'0':
                     pass
 
@@ -3861,13 +3882,13 @@ class Layout(object):
 
         poly2 = self.Gt.node[c2]['polyg']
         p2t = poly2.centroid.xy
-       
+
         p1 = np.array([p1t[0][0],p1t[1][0]])
         p2 = np.array([p2t[0][0],p2t[1][0]])
 
         line = sh.LineString((p1,p2))
 
-       
+
         # els = self.seginframe(p1,p2)
         # new implementation of seginframe is faster
         els = self.seginframe2(p1,p2)
@@ -3876,7 +3897,7 @@ class Layout(object):
         lc = []
         ls=[]
         I = np.array([]).reshape(2,0)
-       
+
         for seg in elg:
             ta, he = self.Gs.neighbors(seg)
             pa = np.array(self.Gs.pos[ta])
@@ -3906,7 +3927,7 @@ class Layout(object):
             else :
                 assert NameError('Bad transisiton in Layout.cycleinline')
         return lc
-               
+
 
 
 
@@ -4052,7 +4073,7 @@ class Layout(object):
             self.saveini(fileini)
             print "structure saved in ", filename
             print "structure saved in ", fileini
-        else:   
+        else:
             racine, ext = os.path.splitext(filename)
             if ext == '.str2':
                 self.savestr2(filename)
@@ -6599,12 +6620,14 @@ class Layout(object):
                     tomerge.insert(0,ncy)
                 else:
                     neigh = nx.neighbors(self.Gr,ncy) # all neighbors of 5
-                    self.Gr.node[root]['cycle']+=self.Gr.node[ncy]['cycle'] # here the merging
                     self.Gr.node[root]['polyg']+=self.Gr.node[ncy]['polyg'] # here the merging
+                    self.Gr.node[root]['cycle']+=self.Gr.node[ncy]['cycle'] # here the merging
                     merged.append(ncy)
+
                     for k in neigh:
                         if k<> root:
                             self.Gr.add_edge(root,k)
+
             # remove merged cycles
             for cy in merged:
                 self.Gr.remove_node(cy)

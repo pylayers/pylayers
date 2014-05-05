@@ -448,10 +448,29 @@ class Polygon(shg.Polygon):
             self.vnodes = np.kron(v, u)
 
     def __add__(self,p):
+        """
+
+        Parameters
+        ----------
+
+        p : Polygon
+
+        Returns
+        -------
+
+        pm : merged polygon or unchanged polygon
+
+        """
         pnew = self.union(p)
         p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
         p2 = Polygon(p1)
         return(p2)
+        #if isinstance(pnew,sh.polygon.Polygon):
+        #    p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
+        #    p2 = Polygon(p1)
+        #    return(p2)
+        #else:
+        #    return(self)
 
     def __repr__(self):
         st = ''
@@ -551,7 +570,7 @@ class Polygon(shg.Polygon):
 
         ax.fill(x, y,
                 color = kwargs['color'],
-                alpha=kwargs['alpha'],
+                alpha = kwargs['alpha'],
                 ec = kwargs['edgecolor'])
 
         if kwargs['show']:
