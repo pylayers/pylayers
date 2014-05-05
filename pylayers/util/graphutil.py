@@ -1,16 +1,34 @@
+#-*- coding:Utf-8 -*-
+"""
+.. currentmodule:: pylayers.util.graphutil
+
+This class handle the description of an Indoor layout
+
+Utility functions
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    draw
+    edgetype
+    find_all_paths
+
+"""
 import numpy as np
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import networkx as nx
 import doctest
 import pdb
 
 def draw(G,**kwargs):
     """ draw a networkx graph
-    G : Graph with pos (geometric graph)
 
-    
+
     Parameters
     ----------
+
+    G : Graph with pos (geometric graph)
     show : False
     fig : []
     ax : []
@@ -18,17 +36,22 @@ def draw(G,**kwargs):
     'edges':True,
     'airwalls':False,
     'labels':True,
-    'linewidth': 2,
+    'width': 2,
     'node_color':'w',
     'edge_color':'k',
     'node_size': 200,
-    'linewidth': 2,
     'font_size': 30,
     'alphan': 0.8,
     'alphae': 1.0,
     'nodelist': [],
     'edgelist': [],
     'figsize': (8,8)
+
+    See Also
+    --------
+
+    pylayers.gis.layout.showG
+
     """
 
     defaults = {'show': False,
@@ -38,11 +61,11 @@ def draw(G,**kwargs):
                 'edges':True,
                 'airwalls':False,
                 'labels':True,
-                'linewidth': 2,
+                'width': 2,
                 'node_color':'w',
                 'edge_color':'k',
                 'node_size': 200,
-                'linewidth': 2,
+                'width': 2,
                 'font_size': 30,
                 'alphan': 0.8,
                 'alphae': 1.0,
@@ -85,10 +108,10 @@ def draw(G,**kwargs):
         edgelist =  G.edges()
     else:
         edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
-
     if not kwargs['airwalls']:
         try:
-            pno = filter(lambda x : G.nodes()[x]>0,nodelist)
+            #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
+            pno = filter(lambda x : x>0,nodelist)
             # node == air
             na = filter(lambda x : G.node[x]['name']=='AIR',pno)
             # edge == air
@@ -108,18 +131,18 @@ def draw(G,**kwargs):
                                nodelist = nodelist,
                                node_color = kwargs['node_color'],
                                node_size  = kwargs['node_size'],
-                               alpha = kwargs['alphan'])
+                               alpha = kwargs['alphan'],ax=ax)
     if kwargs['labels']:
         nx.draw_networkx_labels(G, G.pos,
                                 labels={n:n for n in nodelist},
-                                font_size=kwargs['font_size'])
+                                font_size=kwargs['font_size'],ax=ax)
 
     if kwargs['edges']:
         nx.draw_networkx_edges(G, G.pos,
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],
-                               linewidth = kwargs['linewidth'],
-                               alpha = kwargs['alphae'])
+                               width = kwargs['width'],
+                               alpha = kwargs['alphae'],ax=ax)
     if kwargs['show']:
         plt.show()
 
@@ -158,6 +181,15 @@ def edgetype(G):
 
 
 def find_all_paths(graph, start, end):
+    """
+    Parameters
+    ----------
+
+    graph :
+    start:
+    end :
+
+    """
     path  = []
     paths = []
     queue = [(start, end, path)]
@@ -178,7 +210,7 @@ if __name__=="__main__":
     doctest.testmod()
 #    points  = shg.MultiPoint([(0, 0),(0, 1),(2.5,1),(2.5,2),(2.8,2),(2.8,1.1),(3.2, 1.1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
 #    polyg   = Polygon(points)
-#    Gv      = polyg.buildGv() 
+#    Gv      = polyg.buildGv()
 #    plt.title('Testing buildGv : wrong design ')
 #    #plt.show()
 #    A=edgetype(Gv)

@@ -1,12 +1,16 @@
 from pylayers.gis.layout import Layout
 import networkx as nx
-import matplotlib.pyplot as plt 
-import doctest 
+import matplotlib.pyplot as plt
 
 #doctest.testmod(layout)
 #L = Layout('TA-Office.ini')
-#L = Layout('WHERE.ini')
-L= Layout('11Dbibli.ini')
+L = Layout('WHERE1.ini')
+#f = plt.figure(figsize=(20,10))
+#plt.axis('off')
+#f,a = L.showG('s',nodes=False,fig=f)
+#plt.show()
+#f,a = L.showG('r',edge_color='b',linewidth=4,fig=f)
+#L= Layout('11Dbibli.ini')
 #L.show()
 #L = Layout('PTIN.ini')
 #L = Layout('DLR.ini')

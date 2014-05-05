@@ -412,13 +412,21 @@ class Bsignal(object):
 
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
-            >>> e = EnImpulse()
+            >>> e = EnImpulse(fe=100)
             >>> fig,ax = e.plot(typ=['v'])
+            >>> plt.title('original waveform')
             >>> e.save('impulse.mat')
             >>> del e
             >>> h = TUsignal()
             >>> h.load('impulse.mat')
             >>> fig,ax = h.plot(typ=['v'])
+            >>> plt.title('retrieved waveform')
+
+        See Also
+        --------
+
+        Bsignal.load
+
         """
 
         d = {}
@@ -434,10 +442,16 @@ class Bsignal(object):
 
         filename : string
 
+
+        See Also
+        --------
+
+        Bsignal.save
+
         """
         d = ios.loadmat(filename)
-        self.x = d['x'][:, 0]
-        self.y = d['y'][:, 0]
+        self.x = d['x'][0,:]
+        self.y = d['y']
 
     def setx(self, x):
         r""" setx : set x vector
@@ -627,6 +641,8 @@ class Bsignal(object):
             'auto' (default) ,'equal','scalar'
         dB : boolean
             False
+        function : string
+            {'imshow'|'pcolormesh'}
 
         Examples
         --------
@@ -641,6 +657,7 @@ class Bsignal(object):
         defaults = {'interpolation':'none',
                     'cmap':plt.cm.BrBG,
                     'aspect':'auto',
+                    'fontsize':20,
                     'typ':'l20',
                     'function':'imshow'}
 
@@ -679,13 +696,22 @@ class Bsignal(object):
                            aspect = kwargs['aspect'],
                            extent = (xn[0],xn[-1],0,yn.shape[0]),
                            interpolation=kwargs['interpolation'],
-                           cmap=kwargs['cmap'])
+                           cmap=kwargs['cmap'],
+                           )
+            ll = ax.get_xticklabels()+ax.get_yticklabels()
+            for l in ll:
+                l.set_fontsize(kwargs['fontsize'])
+
 
             if kwargs['function'] =='pcolormesh':
                 im = ax.pcolormesh(xn,np.arange(yn.shape[0]),yn)
 
             cb = fig.colorbar(im)
-            cb.set_label(ylabels)
+            cb.set_label(ylabels,size=kwargs['fontsize'])
+
+            for t in cb.ax.get_yticklabels():
+                t.set_fontsize(kwargs['fontsize'])
+
             plt.axis('auto')
             fig.tight_layout()
 
@@ -4364,12 +4390,16 @@ class FUDAsignal(FUDsignal):
     def cut(self,threshold=0.99):
         """ cut the signal at an Energy threshold level
 
+        Parameters
+        ----------
+
         threshold : float
             default 0.99
+
         """
         self.sort(typ='energy')
         E = self.eprfl()
-        cumE = np.cumsum(E)/sum(E)
+        cuE = np.cumsum(E)/sum(E)
         v = np.where(cumE<threshold)[0]
         self.taud = self.taud[v]
         self.taue = self.taue[v]

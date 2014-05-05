@@ -14,7 +14,7 @@ DLink Class
 
 
 DLink simulation
----------------
+----------------
 
 .. autosummary::
     :toctree: generated/
@@ -24,7 +24,7 @@ DLink simulation
 
 
 DLink init
----------
+----------
 
 .. autosummary::
     :toctree: generated/
@@ -104,7 +104,7 @@ class Link(object):
 
 
     def __add__(self,l):
-        """ add ak tauk of 2 Links
+        """ merge ak tauk of 2 Links
         """
         L=Link()
         tk = np.hstack((self.H.tk,l.H.tk))
@@ -124,7 +124,7 @@ class SLink(Link):
 
 
     def onbody(self, B, dida, didb, a, b):
-        """ Statisitcal evaluation of a on-body link
+        """ Statistical evaluation of a on-body link
 
         Parameters
         ----------
@@ -136,9 +136,9 @@ class SLink(Link):
         didb: int
             device b id number on body
         a : nd array
-            postision of device a
+            position of device a
         b : nd array
-            postision of device b
+            position of device b
 
         Returns
         -------
@@ -180,12 +180,10 @@ class SLink(Link):
 class DLink(Link):
 
     def __init__(self, **kwargs):
-        """ Deterministic Link evaluation
+        """ deterministic link evaluation
 
         Parameters
         ----------
-
-        Basic
 
         L : Layout
             Layout to be used
@@ -202,11 +200,11 @@ class DLink(Link):
         Tb : np.ndarray (3,3)
             Rotation matrice of Antenna of device dev_b relative to global Layout scene
         fGHz : np.ndarray (Nptf,)
-            frequency range of Nptf poitns used for evaluation of channel in GHz
-        wav : Waform
+            frequency range of Nptf points used for evaluation of channel
+        wav : Waveform
             Waveform to be applied on the channel
         save_idx : int
-            number to differenciate the h5 file generated
+            number to identify the h5 file generated
 
         Advanced (change only if you really know what you do !)
 
@@ -220,13 +218,13 @@ class DLink(Link):
         Notes
         -----
 
-        All simulation are stored into a unique file in your <PyProject>/output directory
+        All simulations are stored into a unique file in your <PyProject>/output directory
         using the following convention:
 
         Links_<save_idx>_<LayoutFilename>.h5
 
         where
-            <save_idx> is a integer number to be able to discriminate different links simulations
+            <save_idx> is an integer number to distinguish different links simulations
         and <LayoutFilename> is the Layout used for the link simulation.
 
 
@@ -367,7 +365,7 @@ class DLink(Link):
         ##############
         #### init save
         ###############
-        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5' 
+        self.filename = 'Links_' + str(self.save_idx) + '_' + self._Lname + '.h5'
         filenameh5 = pyu.getlong(self.filename,pstruc['DIRLNK'])
         # check if save file alreasdy exists
         if not os.path.exists(filenameh5) or force:
@@ -394,12 +392,24 @@ class DLink(Link):
 
         ###########
         # init pos & cycles
+        #
+        # If a and b are not specified
+        #  they are chosen as center of gravity of cycle 0
+        #
         ###########
+        if len(self.a)==0:
+            self.ca = 0
+            self.a = self.L.cy2pt(self.ca)
+        else:
+            self.a = kwargs['a']
+            self.ca = self.L.pt2cy(self.a)
 
-        self.ca = 0
-        self.cb = 1
-        self.a = self.L.cy2pt(self.ca)
-        self.b = self.L.cy2pt(self.cb)
+        if len(self.b)==0:
+            self.cb = 0
+            self.b = self.L.cy2pt(self.cb)
+        else:
+            self.b = kwargs['b']
+            self.cb = self.L.pt2cy(self.b)
 
 
         ###########
@@ -410,10 +420,10 @@ class DLink(Link):
         self.fstep = self.fGHz[1]-self.fGHz[0]
 
 
-        self.Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        self.Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
         self.R = Rays(self.a,self.b)
-        self.C=Ctilde()
-        self.H=Tchannel()
+        self.C = Ctilde()
+        self.H = Tchannel()
 
 
 
@@ -989,18 +999,16 @@ class DLink(Link):
     def eval(self,**kwargs):
         """ Evaluate the link
 
-
         Parameters
         ----------
 
-        force_save : boolean
-            Force the computation (even if obj already exists)
-            AND save (replace previous computations)
-        si_algo : str ('old'|'new')
+        force : boolean
+            Force the computation (even if obj already exists) AND save (replace previous computations)
+        si.algo : str ('old'|'new')
             signature.run algo type
-        ra_ceil_height_meter : int
-            rays.to3D ceil height in mteres
-        ra_number_mirror_cf : int
+        ra.ceil_height_meter : int
+            rays.to3D ceil height in meters
+        ra.number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
 
 
@@ -1012,6 +1020,8 @@ class DLink(Link):
         tk : ndarray
             tau_k
 
+        Notes
+        -----
 
         update self.ak and self.tk
 
@@ -1021,8 +1031,8 @@ class DLink(Link):
             tau_k
 
 
-        Example
-        -------
+        Examples
+        --------
 
         .. plot::
             :include-source:
@@ -1056,7 +1066,7 @@ class DLink(Link):
         ############
         # Signatures
         ############
-        Si=Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
 
         if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
@@ -1123,12 +1133,141 @@ class DLink(Link):
             # Ctilde antenna
             Cl=C.locbas(Tt=self.Ta, Tr=self.Tb)
             #T channel
-            H=C.prop2tran(a=self.Aa,b=self.Ab)
+            H = C.prop2tran(a=self.Aa,b=self.Ab,Friis=True)
             self.save(H,'H',self.dexist['H']['grpname'],force = kwargs['force'])
 
         self.H = H
 
         return self.H.ak, self.H.tk
+
+    def show(self,**kwargs):
+        """ show the link
+
+        Parameters
+        ----------
+
+        s   : int
+        ca  : string
+            color a
+        cb  : string
+            color b
+        alpha : int
+        figsize : tuple
+            (20,10)
+        fontsize : int
+            20
+        rays : boolean
+            False
+        cmap : colormap
+        labels : boolean
+            enabling edge label (useful for signature identification)
+        pol : string
+            'tt','pp','tp','pt','co','cross',tot'
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.link import *
+        >>> L=Link()
+
+        """
+
+        defaults ={'s':80,
+                   'ca':'b',
+                   'cb':'r',
+                   'alpha':1,
+                   'i':-1,
+                   'figsize':(20,10),
+                   'fontsize':20,
+                   'rays':False,
+                   'cmap':plt.cm.jet,
+                   'pol':'tot',
+                   'col':'k',
+                   'width':1,
+                   'alpha':1,
+                   'col':'k',
+                   'dB':False,
+                   'labels':False,
+                   'dyn':70}
+
+        for key in defaults:
+            if key not in kwargs:
+                kwargs[key]=defaults[key]
+
+        #
+        # Layout
+        #
+        fig,ax = self.L.showG('s',nodes=False,figsize=kwargs['figsize'],labels=kwargs['labels'])
+        plt.axis('off')
+        #
+        # Point A
+        #
+        ax.scatter(self.a[0],
+                   self.a[1], c=kwargs['ca'], s=kwargs['s'],
+                   alpha=kwargs['alpha'])
+        ax.text(self.a[0]+0.1,self.a[1]+0.1,'A',fontsize=kwargs['fontsize'])
+        #
+        # Point B
+        #
+        ax.scatter(self.b[0],
+                   self.b[1], c=kwargs['cb'], s=kwargs['s'],
+                   alpha=kwargs['alpha'])
+        ax.text(self.b[0]-0.1,self.b[1]+0.1,'B',fontsize=kwargs['fontsize'])
+        #
+        # Rays
+        #
+        if kwargs['rays']:
+            ECtt,ECpp,ECtp,ECpt = self.C.energy()
+            if kwargs['pol']=='tt':
+                val = ECtt
+            if kwargs['pol']=='pp':
+                val = ECpp
+            if kwargs['pol']=='tp':
+                val = ECtp
+            if kwargs['pol']=='pt':
+                val = ECpt
+            if kwargs['pol']=='tot':
+                val = ECtt+ECpp+ECpt+ECtp
+            if kwargs['pol']=='co':
+                val = ECtt+ECpp
+            if kwargs['pol']=='cross':
+                val = ECtp+ECpt
+
+            clm = kwargs['cmap']
+            #
+            # Select group of interactions
+            #
+            if kwargs['i']==-1:
+                li  = self.R.keys()
+            else:
+                li = kwargs['i']
+
+            for i  in li:
+                lr = self.R[i]['rayidx']
+                for r in range(len(lr)):
+                    ir = lr[r]
+                    if kwargs['dB']:
+                        RayEnergy=max((20*np.log10(val[ir]/val.max())+kwargs['dyn']),0)/kwargs['dyn']
+                    else:
+                        RayEnergy=val[ir]/val.max()
+                    if kwargs['col']=='cmap':
+                        col = clm(RayEnergy)
+                        width = RayEnergy
+                        alpha = RayEnergy
+                    else:
+                        col = kwargs['col']
+                        width = kwargs['width']
+                        alpha = kwargs['alpha']
+
+                    fig,ax = self.R.show(i=i,r=r,
+                                   colray=col,
+                                   widthray=width,
+                                   alpharay=alpha,
+                                   fig=fig,ax=ax,
+                                   layout=False,
+                                   points=False)
+
+        return fig,ax
 
     def _show3(self,rays=True, lay= True, ant= True, newfig= False, **kwargs):
         """ display the simulation scene using Mayavi

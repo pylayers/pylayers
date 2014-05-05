@@ -68,6 +68,7 @@ import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
 from pylayers.antprop.raysc import GrRay3D
 from pylayers.util.project import *
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 try:
     import h5py
 except:
@@ -79,10 +80,10 @@ class Ctilde(object):
     Attributes
     ----------
 
-    Ctt : FUsignal
-    Ctp : FUsignal
-    Cpt : FUsignal
-    Cpp : FUsignal
+    Ctt : bsignal.FUsignal
+    Ctp : bsignal.FUsignal
+    Cpt : bsignal.FUsignal
+    Cpp : bsignal.FUsignal
 
     tauk : ndarray delays
     tang : ndarray angles of departure
@@ -131,13 +132,13 @@ class Ctilde(object):
             s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
             s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
             s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
-        s = s + '\n methods :'+'\n---------\n'
-        s = s + 'prop2tran(a=theta,b=phi)\n'
-        s = s + 'energy()\n'
-        s = s + 'doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
-        s = s + 'mobility(v,dt)\n'
-        s = s + 'show(mode=linear)\n'
-        s = s + 'sort()\n'
+        s = s + 'Methods'+'\n---------\n'
+        s = s + ' prop2tran(a=theta,b=phi,Friis=False)\n'
+        s = s + ' energy()\n'
+        s = s + ' doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
+        s = s + ' mobility(v,dt)\n'
+        s = s + ' show(mode=linear)\n'
+        s = s + ' sort()\n'
 
         return(s)
 
@@ -179,7 +180,7 @@ class Ctilde(object):
         if self.islocal:
             self.locbas(b2g=True)
 
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filename,'w')
@@ -205,7 +206,7 @@ class Ctilde(object):
             f.close()
             raise NameError('Channel.Ctilde: issue when writting h5py file')
 
-    
+
 
 
     def loadh5(self,Lfilename,idx,output=True):
@@ -329,7 +330,7 @@ class Ctilde(object):
             file name of h5py file Link format
         grpname  : int
             groupname in filenameh5
-        
+
 
         """
 
@@ -542,10 +543,10 @@ class Ctilde(object):
         Parameters
         ----------
 
-        d: 'doa' | 'dod'        
+        d: 'doa' | 'dod'
             display direction of departure | arrival
         fig : plt.figure
-        ax : plt.axis    
+        ax : plt.axis
         phi: tuple (-180, 180)
             phi angle
         normalize: bool
@@ -587,8 +588,10 @@ class Ctilde(object):
 
 
         if d =='dod':
+            tit = 'DOD : A'
             di = getattr(self, 'tang')
         elif d == 'doa':
+            tit = 'DOA : B'
             di = getattr(self, 'rang')
         else :
             raise AttributeError('d attribute can only be doa or dod')
@@ -606,11 +609,12 @@ class Ctilde(object):
         normalize = kwargs.pop('normalize')
         mode = kwargs.pop('mode')
         title = kwargs.pop('title')
+
         if fig == []:
             fig = plt.figure()
 
 
-        Ett, Epp, Etp, Ept = self.energy(mode=mode)
+        Ett, Epp, Etp, Ept = self.energy(mode=mode,Friis=True)
         Etot = Ett+Epp+Etp+Ept + 1e-15
 
         if normalize:
@@ -620,7 +624,7 @@ class Ctilde(object):
         #
         #
         # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-        # WARNING polar plot require radian angles 
+        # WARNING polar plot require radian angles
         if polar :
             al = 1.
             alb = 180. / np.pi
@@ -639,7 +643,7 @@ class Ctilde(object):
                 the[0] = the[0]*np.pi/180
                 the[1] = the[1]*np.pi/180
         else :
-            al = 180. / np.pi
+            al  = 180. / np.pi
             alb = 180. / np.pi
 
         col = 10 * np.log10(Etot)
@@ -649,27 +653,37 @@ class Ctilde(object):
             print "len(di):", len(dir)
         if ax == []:
             ax = fig.add_subplot(111, polar=polar)
-      
+
         if reverse :
             scat = ax.scatter(di[:, 1] * al, di[:, 0] * alb, **kwargs)
             ax.axis((phi[0], phi[1], the[0], the[1]))
             ax.set_xlabel('$\phi(^{\circ})$', fontsize=fontsize)
             ax.set_ylabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
-            
+
         else:
             scat = ax.scatter(di[:, 0] * al, di[:, 1] * alb, **kwargs)
             ax.axis((the[0], the[1], phi[0], phi[1]))
             ax.set_xlabel("$\\theta_t(^{\circ})$", fontsize=fontsize)
             ax.set_ylabel('$\phi(^{\circ})$', fontsize=fontsize)
-            
+
         if title:
-            ax.set_title(d, fontsize=fontsize+2)
+            ax.set_title(tit, fontsize=fontsize+2)
+
+        ll = ax.get_xticklabels()+ax.get_yticklabels()
+        for l in ll:
+            l.set_fontsize(fontsize)
+
         if colorbar:
-            b=fig.colorbar(scat)
+            #divider = make_axes_locatable(ax)
+            #cax = divider.append_axes("right",size="5%",pad=0.05)
+            clb = plt.colorbar(scat,ax=ax)
             if normalize:
-                b.set_label('dB')
+                clb.set_label('dB',size=fontsize)
             else:
-                b.set_label('Path Loss (dB)')
+                clb.set_label('Path Loss (dB)',size=fontsize)
+
+            for t in clb.ax.get_yticklabels():
+                t.set_fontsize(fontsize)
 
         return (fig, ax)
 
@@ -679,30 +693,41 @@ class Ctilde(object):
         Parameters
         ----------
 
-                
-        phi: tuple (-180, 180)
+        phi : tuple (-180, 180)
             phi angle
-        normalize: bool
+        normalize : bool
             energy normalized
         reverse : bool
-            inverse theta and phi represenation
+            inverse theta and phi representation
         polar : bool
             polar representation
-        cmap: matplotlib.cmap
-        mode: 'center' | 'mean' | 'in'
-            see bsignal.energy
+        cmap : matplotlib.cmap
+        mode : string
+            'center' | 'mean' | 'in'
         s : float
             scatter dot size
-        fontsize: float
-        edgecolors: bool
-        colorbar bool
+        fontsize : float
+        edgecolors : bool
+        colorbar : bool
+        xa :
+        xb :
 
         Summary
         --------
 
         scatter plot of the DoA-DoD channel structure
-        the energy is colorcoded over all couples of DoA-DoD
+        the energy is color coded over all couples of DoA-DoD
 
+        Examples
+        --------
+
+        >>> from pylayers.antprop.channel import *
+
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.energy
 
         """
         defaults = {
@@ -715,7 +740,10 @@ class Ctilde(object):
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
-                    'mode':'mean'
+                    'mode':'mean',
+                    'colorbar':False,
+                    'xa':0,
+                    'xb':1
                     }
 
 
@@ -723,15 +751,28 @@ class Ctilde(object):
             if key not in kwargs:
                 kwargs[key] = value
 
-        fig = plt.figure()
+        xa = kwargs.pop('xa')
+        xb = kwargs.pop('xb')
+
+        if 'fig' not in kwargs:
+            fig = plt.gcf()
+            kwargs['fig']=fig
+        else:
+            fig = kwargs['fig']
+
+
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
-        kwargs['colorbar']=False
-        fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
-        kwargs['colorbar']=True
-        fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
-        return fig,ax
+        if xa<xb:
+            fig,ax1 = self.plotd(d='dod',ax=ax1,**kwargs)
+            fig,ax2 = self.plotd(d='doa',ax=ax2,**kwargs)
+        else:
+            fig,ax1 = self.plotd(d='doa',ax=ax1,**kwargs)
+            fig,ax2 = self.plotd(d='dod',ax=ax2,**kwargs)
+
+        return fig,[ax1,ax2]
+        #return fig,ax1
 
 
     # def doadod(self, **kwargs):
@@ -1099,11 +1140,13 @@ class Ctilde(object):
         ----------
 
         typ   : 'm', 'l20' , 'r'
+        cmap  : colormap
 
         """
 
         defaults = {'typ': 'm',
-                   'cmap': plt.cm.hot}
+                   'cmap': plt.cm.hot,
+                    'fontsize':14}
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -1116,23 +1159,23 @@ class Ctilde(object):
 
         ax1 = fig.add_subplot(221)
         fig, ax1 = self.Ctt.imshow(fig=fig,ax=ax1,**kwargs)
-        ax1.set_xlabel('f (GHz)')
-        ax1.set_title(u'$C_{\\theta\\theta}$')
+        ax1.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax1.set_title(u'$C_{\\theta\\theta}$',fontsize=kwargs['fontsize'])
 
         ax2 = fig.add_subplot(222)
         fig, ax2 = self.Ctp.imshow(fig=fig,ax=ax2,**kwargs)
-        ax2.set_xlabel('f (GHz)')
-        ax2.set_title(u'$C_{\\theta\phi}$')
+        ax2.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax2.set_title(u'$C_{\\theta\phi}$',fontsize=kwargs['fontsize'])
 
         ax3 = fig.add_subplot(223)
         fig, ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
-        ax3.set_xlabel('f (GHz)')
-        ax3.set_title(u'$C_{\phi\\theta}$')
+        ax3.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax3.set_title(u'$C_{\phi\\theta}$',fontsize=kwargs['fontsize'])
 
         ax4 = fig.add_subplot(224)
         fig, ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
-        ax4.set_xlabel('f (GHz)')
-        ax4.set_title(u'$C_{\phi\phi}$')
+        ax4.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
+        ax4.set_title(u'$C_{\phi\phi}$',fontsize=kwargs['fontsize'])
 
         return fig, (ax1, ax2, ax3, ax4)
 
@@ -1148,6 +1191,16 @@ class Ctilde(object):
 
     def energy(self,mode='mean',Friis=True,sumray=False):
         """ Calculates energy on each channel
+
+        Parameters
+        ----------
+        mode : string
+            'mean'
+        Friis: boolean
+            True
+        sumray: boolean
+            False
+
 
         Returns
         -------
@@ -1186,6 +1239,29 @@ class Ctilde(object):
 
         return ECtt, ECpp, ECtp, ECpt
 
+    def cut(self,threshold=0.99):
+        """
+        Parameters
+        ----------
+
+        threshold : float
+            default 0.99
+
+        """
+        Ett, Epp, Etp, Ept = self.energy()
+        Etot = Ett+Epp+Etp+Ept
+        u = np.argsort(Etot)
+        cumE = np.cumsum(Etot)/sum(Etot)
+        v = np.where(cumE<threshold)[0]
+
+        self.tauk = self.tauk[v]
+        self.tang = self.tang[v,:]
+        self.rang = self.rang[v,:]
+        self.Ctt.y = self.Ctt.y[v,:]
+        self.Cpp.y = self.Cpp.y[v,:]
+        self.Ctp.y = self.Ctp.y[v,:]
+        self.Cpt.y = self.Cpt.y[v,:]
+
     def sort(self,typ='tauk'):
         """ sort Ctilde with respect to typ (default tauk)
 
@@ -1193,13 +1269,13 @@ class Ctilde(object):
         ----------
 
         typ  : string
-            which parameter to sort '
-                tauk : (default)
-                att  : theta Tx
-                atp  : phi Tx
-                art  : theta Rx
-                arp  : phi Rx
-                energy
+            sort w.r.t
+                'tauk'   : delay (default)
+                'att'    : theta Tx
+                'atp'    : phi Tx
+                'art'    : theta Rx
+                'arp'    : phi Rx
+                'energy' : energy
 
         """
         if typ == 'tauk':
@@ -1226,8 +1302,8 @@ class Ctilde(object):
         self.Ctp.y = self.Ctp.y[u,:]
         self.Cpt.y = self.Cpt.y[u,:]
 
-    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[]):
-        """ transform propagation channel into transmission channel
+    def prop2tran(self,a='theta',b='theta',Ta=[],Tb=[],Friis=True):
+        r""" transform propagation channel into transmission channel
 
         Parameters
         ----------
@@ -1239,6 +1315,11 @@ class Ctilde(object):
 
             0 : theta
             1 : phi
+
+        Ta : []
+        Tb : []
+        Friis : boolean
+            if True scale with :math:`-j\frac{\lambda}{f}`
 
         Returns
         -------
@@ -1313,7 +1394,9 @@ class Ctilde(object):
 
         H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
 
-        H.applyFriis()
+        if Friis:
+            H.applyFriis()
+
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
                                                              / len(H.y))
         H.tk = H.taud
@@ -1913,11 +1996,14 @@ class Tchannel(bs.FUDAsignal):
         if title:
             ax.set_title(d, fontsize=fontsize+2)
         if colorbar:
-            b=fig.colorbar(scat)
+            b = plt.colorbar(scat,cax=ax)
             if normalize:
                 b.set_label('dB')
             else:
                 b.set_label('Path Loss (dB)')
+            
+            for t in b.ax.get_yticklabels():
+                t.set_fontsize(fontsize)
 
         return (fig, ax)
 
@@ -2118,23 +2204,27 @@ class Tchannel(bs.FUDAsignal):
                     'fontsize':12,
                     'edgecolors':'none',
                     'polar':False,
-                    'mode':'mean'
+                    'mode':'mean',
+                    'xa':0,
+                    'xb':0
                     }
 
 
+        fig = plt.figure()
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
-        fig = plt.figure()
         ax1  = fig.add_subplot(121,polar=kwargs['polar'])
         ax2  = fig.add_subplot(122,polar=kwargs['polar'])
 
 
-        kwargs['colorbar']=False
-        fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
-        kwargs['colorbar']=True
-        fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
+        if kwargs['xa']<kwargs['xb']:
+            fig,ax = self.plotd(d='dod',fig=fig,ax=ax1,**kwargs)
+            fig,ax = self.plotd(d='doa',fig=fig,ax=ax2,**kwargs)
+        else:
+            fig,ax = self.plotd(d='doa',fig=fig,ax=ax1,**kwargs)
+            fig,ax = self.plotd(d='dod',fig=fig,ax=ax2,**kwargs)
         return fig,ax
 
     def energy(self,mode='mean',Friis=True,sumray=False):

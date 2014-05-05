@@ -3,7 +3,7 @@
 #
 """
 
-    This module run the electromagnetic simulation with an old 
+    This module run the electromagnetic simulation with an old
     version of the Ray Tracing tool
 
     Deprecated

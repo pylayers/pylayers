@@ -74,10 +74,12 @@ class Waveform(dict):
         self.eval()
 
     def eval(self):
-        """ evaluate waveform
+        u""" evaluate waveform
 
-        The lambda/4*pi factor which is necessary to get the proper budget
-        link ( from the Friis formula) is introduced in this function.  """
+        The :math:`\lambda/4*\pi` factor which is necessary to get the proper budget
+        link ( from the Friis formula) is introduced in this function.
+
+        """
 
         if self['typ']  == 'generic':
             [st,sf]=self.ip_generic()
@@ -109,7 +111,7 @@ class Waveform(dict):
         >>> from pylayers.signal.waveform import *
         >>> w = Waveform(typ='generic',bandGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
         >>> w.show()
-        >>> plt.show()         
+        >>> plt.show()
 
 
         """

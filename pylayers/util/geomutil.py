@@ -941,11 +941,11 @@ class Polygon(shg.Polygon):
             ndnd, nded, eded = gru.edgetype(Gv)
 
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
-                                   edge_color='blue', linewidth=2)
+                                   edge_color='blue', width=2)
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
-                                   edge_color='red', linewidth=2)
+                                   edge_color='red', width=2)
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
-                                   edge_color='green', linewidth=2)
+                                   edge_color='green', width=2)
 
             #label = {}
             #for (u,v) in Gv.edges():
@@ -1028,13 +1028,13 @@ class Polygon(shg.Polygon):
 
         if kwargs['eded']:
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
-                                   edge_color='blue', linewidth=2)
+                                   edge_color='blue', width=2)
         if kwargs['ndnd']:
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
-                                   edge_color='red', linewidth=2)
+                                   edge_color='red', width=2)
         if kwargs['nded']:
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
-                                   edge_color='green', linewidth=2)
+                                   edge_color='green', width=2)
 
         return(fig, ax)
 
