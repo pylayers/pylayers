@@ -411,7 +411,7 @@ class Polygon(shg.Polygon):
 
         if type(p) == shg.polygon.Polygon:
             self.Np = np.shape(p.exterior.xy)[1] - 1
-            p = np.vstack((p.exterior.xy[0],p.exterior.xy[1]))
+            p = np.vstack((p.exterior.xy[0][0:-1],p.exterior.xy[1][0:-1]))
             #shg.Polygon.__init__(self, pt)
             #
 
@@ -711,6 +711,7 @@ class Polygon(shg.Polygon):
         Gv = nx.Graph()
         Gv.pos = {}
 
+        #pdb.set_trace()
         lring = self.exterior
         #
         # Calculate interior normals
@@ -720,6 +721,7 @@ class Polygon(shg.Polygon):
         #
         # determine convex points
         #
+        #pdb.set_trace()
         tcc, n = self.ptconvex()
         # Np = self.Np
         Np = np.shape(self.exterior.xy)[1] -1
@@ -1141,6 +1143,7 @@ class Polygon(shg.Polygon):
         Np = len(x) - 1
         Nseg = Np
         p = np.array([x[0:-1], y[0:-1]])
+
         n = Lr2n(p)
 
         tcc = np.zeros(Np)
@@ -1998,6 +2001,7 @@ def Lr2n(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]]), closed=True):
     #
     n = n.T
     modn = np.sqrt(np.sum(n * n, 0))
+    assert(modn.all()>0)
     nn = n / modn
     #
     # enforce inwards normal whatever the linear ring orientation

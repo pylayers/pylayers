@@ -762,8 +762,12 @@ class Layout(object):
 
         # nodes include points and segments
 
+        #segment index
         useg  = filter(lambda x : x>0,nodes)
+
+        #points index
         upnt  = filter(lambda x : x<0,nodes)
+
         self.upnt = np.array((upnt))
         utmp = np.array(zip(-self.upnt,np.arange(len(self.upnt))))
         mutmp = max(utmp[:,0])
@@ -4581,7 +4585,7 @@ class Layout(object):
 
         return fig,ax
 
-    def build(self, graph='tcvirw'):
+    def build(self, graph='tcvirw',verbose=False):
         """ build graphs
 
         Parameters
@@ -4600,27 +4604,41 @@ class Layout(object):
 
 
         if 't' in graph:
+            if verbose:
+                print "Gt"
             self.buildGt()
+
             self.lbltg.extend('t')
+
         if 'c' in graph:
+            if verbose:
+                print "Gc"
             self.buildGc()
             self.lbltg.extend('c')
         if 'r' in graph:
+            if verbose:
+                print "Gr"
             self.buildGr()
             self.lbltg.extend('r')
         #if 'c' in graph:
         #    self.buildGc()
         if 'v' in graph:
+            if verbose:
+                print "Gv"
             self.buildGv()
             self.lbltg.extend('v')
         if 'i' in graph:
+            if verbose:
+                print "Gi"
             # why is there 2 calls to buildGi and buildGi2 ?
             self.buildGi()
             self.outputGi()
-            #self.buildGi2()
+            self.buildGi2()
             self.lbltg.extend('i')
 
         if 'w' in graph and len(self.Gr.nodes())>1:
+            if verbose:
+                print "Gw"
             self.buildGw()
             self.lbltg.extend('w')
 
@@ -5333,7 +5351,7 @@ class Layout(object):
         #
         self.dGv = {}  # dict of Gv graph
         for icycle in self.Gt.node:
-            #print icycle
+
             udeg2 = []
             udeg1 = []
             cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt
@@ -6599,6 +6617,7 @@ class Layout(object):
                     self.Gc.node[root]['cycle']+=self.Gc.node[ncy]['cycle'] # here the merging
                     merged.append(ncy)
 
+                    #print self.Gc.node[root]['polyg'].exterior.xy
                     for k in neigh:
                         if k<> root:
                             self.Gc.add_edge(root,k)
