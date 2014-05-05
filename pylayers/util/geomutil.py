@@ -406,10 +406,14 @@ class Polygon(shg.Polygon):
 
         """
 
+        if type(p) == sh.multipolygon.MultiPolygon:
+            raise AttributeError('MultiPolygon are not allowed')
+
         if type(p) == shg.polygon.Polygon:
             self.Np = np.shape(p.exterior.xy)[1] - 1
             p = np.vstack((p.exterior.xy[0],p.exterior.xy[1]))
-            shg.Polygon.__init__(self, p)
+            #shg.Polygon.__init__(self, pt)
+            #
 
         if type(p) == shg.multipoint.MultiPoint:
             self.Np = np.shape(p)[0]
@@ -462,14 +466,16 @@ class Polygon(shg.Polygon):
 
         """
         pnew = self.union(p)
-        p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
-        p2 = Polygon(p1)
+        p2 = Polygon(pnew)
         return(p2)
+        #p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
+        #p2 = Polygon(p1)
+        #return(p2)
         #if isinstance(pnew,sh.polygon.Polygon):
         #    p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
-        #    p2 = Polygon(p1)
         #    return(p2)
         #else:
+        #    pdb.set_trace()
         #    return(self)
 
     def __repr__(self):

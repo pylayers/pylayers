@@ -4581,7 +4581,7 @@ class Layout(object):
 
         return fig,ax
 
-    def build(self, graph='trwcvi'):
+    def build(self, graph='tcvirw'):
         """ build graphs
 
         Parameters
@@ -4589,11 +4589,11 @@ class Layout(object):
 
         graph : string composed of
             't' : Gt
-            'r' : Gr
-            'w" : Gw
-            's' : Gs
+            'c' : Gc
             'v' : Gv
             'i' : Gi
+            'r' : Gr
+            'w" : Gw
 
         """
         # list of built graphs
@@ -4602,13 +4602,12 @@ class Layout(object):
         if 't' in graph:
             self.buildGt()
             self.lbltg.extend('t')
+        if 'c' in graph:
+            self.buildGc()
+            self.lbltg.extend('c')
         if 'r' in graph:
             self.buildGr()
             self.lbltg.extend('r')
-        if 'w' in graph and len(self.Gr.nodes())>1:
-            pass
-            #self.buildGw()
-            #self.lbltg.extend('w')
         #if 'c' in graph:
         #    self.buildGc()
         if 'v' in graph:
@@ -4620,6 +4619,10 @@ class Layout(object):
             self.outputGi()
             #self.buildGi2()
             self.lbltg.extend('i')
+
+        if 'w' in graph and len(self.Gr.nodes())>1:
+            self.buildGw()
+            self.lbltg.extend('w')
 
         # dictionnary of cycles which have an air wall
         # self.build()
@@ -4651,6 +4654,7 @@ class Layout(object):
         -----
 
         't' : Gt
+        'c' : Gc
         'r' : Gr
         's' : Gs
         'v' : Gv
@@ -4697,7 +4701,7 @@ class Layout(object):
         specified by the $BASENAME environment variable
 
         """
-        graphs=['s','t','w','r','v','i']
+        graphs=['s','t','c','v','i','r','w']
         for g in graphs:
             try:
                 if g in ['v','i']:
@@ -4741,48 +4745,6 @@ class Layout(object):
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         setattr(self,'di', read_gpickle(basename+'/struc/gpickle/di_'+self.filename+'.gpickle'))
         setattr(self,'dca', read_gpickle(basename+'/struc/gpickle/dca_'+self.filename+'.gpickle'))
-
-    def buildGc(self):
-        """ build the connectivity graph
-
-        nd_nd  : node to node only convex to convex visibility is taken into account
-        nd_ed  : node to edge
-        ed_ed  : edge to edge
-
-        .. todo: To be Continued
-        Faire ce travail piece par piece
-        Ce code implemnte une condition necessaire mais non suffisante
-
-        Il existe des points de degre <=2 qui ne sont pas diffractant
-        si en zone concave
-
-                __________
-                |
-                |
-                |
-                |
-        Return
-        ------
-        ncoin , ndiff
-
-        """
-        #
-        # First step
-        #
-        #for nr in self.Gr.node()
-        ncoin = np.array([])
-        ndiff = np.array([])
-        # first step
-        # find all node (<0) with  degree < 3
-        #
-        for n in self.Gs.nodes():
-            deg = self.Gs.degree(n)
-            if deg > 2:
-                ncoin = np.hstack((ncoin, n)).astype('int')
-            else:
-                if n < 0:
-                    ndiff = np.hstack((ndiff, n)).astype('int')
-        return ncoin, ndiff
 
     def buildGt(self):
         """ Built topological graph Gt
@@ -6548,8 +6510,8 @@ class Layout(object):
         # list of cycles which are already involved in rooms
         alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
 
-    def buildGr(self):
-        """ build the graph of rooms Gr
+    def buildGc(self):
+        """ build the graph of cycles
 
         Returns
         -------
@@ -6567,7 +6529,7 @@ class Layout(object):
 
         """
         #
-        # Create a graph of adjascent rooms
+        # Create a graph of adjascent cycles
         #
         Ga = nx.Graph()
         Ga.pos ={}
@@ -6588,9 +6550,88 @@ class Layout(object):
                             Ga.pos[cy]=self.Gt.pos[cy]
                         Ga.add_edge(k,cy)
 
-        # connected list of connected components of Gt
-        connected = nx.connected_components(Ga)
-        self.Gr = copy.deepcopy(self.Gt)
+        self.Gc = copy.deepcopy(self.Gt)
+
+        # list of connected subgraphs of Gt
+        lGa = nx.connected_component_subgraphs(Ga)
+        connected = []
+        for Ga in lGa:
+            # root node of subgraph
+            r = Ga.nodes()[0]
+            cnctd = [r]
+            # depth first search successors tree rooted on r
+            dn = nx.dfs_successors(Ga,r)
+            Nlevel = len(dn)
+            #
+            # Probably it exists a simpler networkx manner to obtain
+            # the sequence of connected nodes
+            #
+            for i in range(Nlevel):
+                succ = dn.pop(r)
+                cnctd = cnctd + succ
+                for k in dn:
+                    if k in succ:
+                        r = k
+                        break
+            print cnctd
+            connected.append(cnctd)
+        #
+        # Merge all air-connected cycles
+        #  for all conected components
+        #  example licy = [[22,78,5],[3,4]] 2 cycles are connected
+        for licy in connected:
+            merged = []         # merged cycle is void
+            root = licy[0]      # pick the first cycle as root
+            tomerge = licy[-1:0:-1]  # pick the inverse remaining part as tomerge list
+            #for cy in tomerge: #
+            while tomerge<>[]:
+                ncy = tomerge.pop()
+                print "ncy = ",ncy
+                # testing cycle contiguity before merging
+                croot = self.Gc.node[root]['cycle']
+                cy = self.Gc.node[ncy]['cycle']
+                flip,path = croot.intersect(cy)
+                if len(path) < 1:
+                    print licy
+                    tomerge.insert(0,ncy)
+                else:
+                    neigh = nx.neighbors(self.Gc,ncy) # all neighbors of 5
+                    self.Gc.node[root]['polyg']+=self.Gc.node[ncy]['polyg'] # here the merging
+                    self.Gc.node[root]['cycle']+=self.Gc.node[ncy]['cycle'] # here the merging
+                    merged.append(ncy)
+
+                    for k in neigh:
+                        if k<> root:
+                            self.Gc.add_edge(root,k)
+
+            # remove merged cycles
+            for cy in merged:
+                self.Gc.remove_node(cy)
+            # update pos of root cycle with new center of gravity
+            self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
+
+        return(Ga)
+
+
+    def buildGr(self):
+        """ build the graph of rooms Gr
+
+        Returns
+        -------
+
+        Ga : graph of adjascent rooms
+
+        Notes
+        -----
+
+        adjascent rooms are connected
+        Gr is at first a deep copy of Gt
+
+        The difficulty here is to take into account the AIR transition
+        segments
+
+        """
+        self.Gr = copy.deepcopy(self.Gc)
         #
         #  Connected components might not be all contiguous
         #  this a problem because the concatenation of cycles
@@ -6598,42 +6639,6 @@ class Layout(object):
         #
         for n in self.Gr.nodes():
             self.Gr.node[n]['transition'] = []
-
-        #
-        # Merge all air-connected cycles
-        # Pseudo code
-        #  for all conected components
-        #  licy = [22,78,5] 3 cycles are connected
-        for licy in connected:
-            merged = []        # merged cycle is void
-            root = licy[0]     # pick the first cycle as root 22
-            tomerge = licy[1:] # 78,5
-            #for cy in tomerge: # 78,5
-            while tomerge<>[]:
-                ncy = tomerge.pop()
-                # testing cycle contiguity before merging
-                croot = self.Gr.node[root]['cycle']
-                cy = self.Gr.node[ncy]['cycle']
-                flip,path = croot.intersect(cy)
-                if len(path) < 1:
-                    print licy
-                    tomerge.insert(0,ncy)
-                else:
-                    neigh = nx.neighbors(self.Gr,ncy) # all neighbors of 5
-                    self.Gr.node[root]['polyg']+=self.Gr.node[ncy]['polyg'] # here the merging
-                    self.Gr.node[root]['cycle']+=self.Gr.node[ncy]['cycle'] # here the merging
-                    merged.append(ncy)
-
-                    for k in neigh:
-                        if k<> root:
-                            self.Gr.add_edge(root,k)
-
-            # remove merged cycles
-            for cy in merged:
-                self.Gr.remove_node(cy)
-            # update pos of root cycle with new center of gravity
-            self.Gr.pos[root]=tuple(self.Gr.node[root]['cycle'].g)
-
 
         ltrans = self.listtransition
         ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
@@ -6664,8 +6669,6 @@ class Layout(object):
 
             if not keep:
                 self.Gr.remove_edge(*e)
-
-        return(Ga)
 
 
     def buildGr3(self):

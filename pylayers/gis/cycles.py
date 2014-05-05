@@ -312,6 +312,7 @@ class Cycle(object):
 
     def __add__(self,cy):
         """ addition of 2 disjoint cycles is not a cycle
+
         Parameters
         ----------
 
@@ -321,7 +322,7 @@ class Cycle(object):
         -------
 
         newcy or None
-       
+
         """
         flip,path = self.intersect(cy)
         if len(path)>0:
