@@ -6573,7 +6573,6 @@ class Layout(object):
                     if k in succ:
                         r = k
                         break
-            print cnctd
             connected.append(cnctd)
         #
         # Merge all air-connected cycles
@@ -6586,7 +6585,7 @@ class Layout(object):
             #for cy in tomerge: #
             while tomerge<>[]:
                 ncy = tomerge.pop()
-                print "ncy = ",ncy
+                #print "ncy = ",ncy
                 # testing cycle contiguity before merging
                 croot = self.Gc.node[root]['cycle']
                 cy = self.Gc.node[ncy]['cycle']
