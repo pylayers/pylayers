@@ -209,6 +209,7 @@ Testing Functions
     :toctree: generated/
 
     Layout.isseg
+    Layout.numseg
     Layout.ispoint
     Layout.onseg
 
@@ -5361,27 +5362,9 @@ class Layout(object):
             # seek node of degree 2
             #
             # udeg2 is the index of the deg 2 point in the sequence of points
-
-            # for ik, inode in enumerate(vnodes):
-            #     deg = self.Gs.degree(inode)
-            #     if vnodes[0] < 0:
-            #         index = ik / 2
-            #     else:
-            #         index = (ik - 1) / 2
-            #     if inode < 0:
-            #         if deg == 2:
-            #             udeg2.append(index)
-            #         if deg == 1:
-            #             udeg1.append(index)    # warning not used
-            pts = filter(lambda x:  x<0,vnodes)
+            pts   = filter(lambda x:  x<0,vnodes)
             udeg2 = filter(lambda x : x in pts , self.degree[2])
-            # awpts = self.
-
-
-
-            # udeg1 = self.degree[1]
-            # udeg2 = self.degree[2]
-            #print udeg2
+            # print udeg2
             Gv = polyg.buildGv(show=show,udeg1=udeg1,udeg2=udeg2)
             #if icycle == 78:
             #    pdb.set_trace()
@@ -5390,6 +5373,12 @@ class Layout(object):
             #
             self.Gv  = nx.compose(self.Gv, Gv)
             self.dGv[icycle] = Gv
+
+        #pdb.set_trace()
+        for icycle in self.Gc.node:
+            polyg = self.Gc.node[icycle]['polyg']  # a shapely polygon
+            Gv = polyg.buildGv(show=show,eded=False)
+            #self.Gv  = nx.compose(self.Gv, Gv)
 
     def buildGi2(self):
         """ build dictionnary of graph of interactions
@@ -7045,13 +7034,43 @@ class Layout(object):
         fos.write("}\n")
         fos.close()
 
+    def numseg(self,ta,he):
+        """ get segment number from 2 points index
+
+        Parameters
+        ----------
+
+        ta  : int <0
+        he  : int <0
+
+        Returns
+        -------
+
+        nseg : > 0 
+        if 0 not a segment 
+
+        """
+        nta = np.array(nx.neighbors(self.Gs,ta))
+        nhe = np.array(nx.neighbors(self.Gs,he))
+        nseg = np.intersect1d(nta,nhe)
+        if len(nseg>0):
+            return(nseg[0])
+        else:
+            return(0)
+
     def isseg(self,ta,he):
         """ test if ta<->he is a segment
 
         Parameters
         ----------
 
-        tahe
+        ta  : int <0
+        he  : int <0
+
+        Returns
+        -------
+
+        boolean
 
         """
         # transpose point numbering
@@ -7069,22 +7088,34 @@ class Layout(object):
 
 
 
-    def ispoint(self, pt, tol=0.45):
-        """
-        ispoint(pt,tol) : verify if pt is a point of Layout
+    def ispoint(self, pt, tol=0.05):
+        """ verify if pt is a point of Layout
 
-        if True the point number (numbered from 1) is return
-        else -1 is return
+        Parameters
+        ----------
+
+        pt  : point (2,1)
+        tol : float
+            default (0.05 meters)
+
+        if True the point number (<0) is returned
+        else 0 is return
+
+        See Also
+        --------
+
+        pylayers.util.geomutil.Polygon.setvnodes
 
         """
-        #print "ispoint : pt ", pt
+        # print "ispoint : pt ", pt
         pts = np.array(self.Gs.pos.values()).T
-        ke = np.array(self.Gs.pos.keys())
+        ke  = np.array(self.Gs.pos.keys())
         u = pts - pt.reshape(2, 1)
         v = np.sqrt(np.sum(u * u, axis=0))
         nz = (v > tol)
         b = nz.prod()
         if b == 1:
+            # if all layout points are different from pt
             return(0)
         else:
             nup = np.nonzero(nz == False)

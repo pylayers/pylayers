@@ -466,8 +466,34 @@ class Polygon(shg.Polygon):
 
         """
         pnew = self.union(p)
+        # v0   = self.vnodes
+        #v1   = p.vnodes
+        #nseg0 = filter(lambda x:x>0,v0)
+        #nseg1 = filter(lambda x:x>0,v1)
+
+        #commseg = np.intersect1d(nseg0,nseg1)[0]
+
+        #is0 = np.where(nseg0==commseg)[0][0]
+        #is1 = np.where(nseg1==commseg)[0][0]
+
+        #rs0 = np.roll(v0,2*is0-1)[1:]
+        #rs1 = np.roll(v1,2*is1-1)[1:]
+        #if rs1[0]==rs0[0]:
+        #    rs1=rs1[::-1]
+
+        #print rs0
+        #print rs1
+        #assert(rs0[0]==rs1[-1])
+        #assert(rs0[-1]==rs1[0])
+        #vnodes = np.hstack((rs0,rs1[1:-1]))
+        #self.vnodes = vnodes
+        #p2 = Polygon(pnew,vnodes=vnodes)
         p2 = Polygon(pnew)
+        #
+        # Not finished
+        #
         return(p2)
+
         #p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
         #p2 = Polygon(p1)
         #return(p2)
@@ -484,7 +510,35 @@ class Polygon(shg.Polygon):
         sh = np.shape(p)
         for k in range(sh[1]):
             st = st + '('+str(p[0,k])+','+str(p[1,k])+')\n'
+
+        # vnodes to link with external nodes numerotation
+        st = st + '\nvnodes : ('
+        for k in range(len(self.vnodes)):
+            st = st + str(self.vnodes[k])+' '
+        st = st+')\n'
+
         return(st)
+
+    def setvnodes(self,L):
+        """ update vnodes member from Layout
+
+        Parameters
+        ----------
+
+        L : pylayers.layout.Layout
+
+        See Also
+        --------
+
+        pylayers.layout.Layout.ispoint
+
+        """
+        x,y = self.exterior.xy
+        npts = map(lambda x :
+                   L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
+        seg = zip(npts,np.roll(npts,-1))
+        nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
+        return(npts,nseg)
 
     def ndarray(self):
         """ get a ndarray from a Polygon
@@ -504,6 +558,7 @@ class Polygon(shg.Polygon):
         x, y = lring.xy
         p = np.array([x[0:-1], y[0:-1]])
         return(p)
+
 
     def signedarea(self):
         """ get the signed area of the polygon
@@ -572,12 +627,15 @@ class Polygon(shg.Polygon):
         else:
             ax = kwargs['ax']
 
-        x, y = self.exterior.xy
+        x, y  = self.exterior.xy
+        numpt = filter(lambda x: x <0,self.vnodes)
 
         ax.fill(x, y,
                 color = kwargs['color'],
                 alpha = kwargs['alpha'],
                 ec = kwargs['edgecolor'])
+        for k in range(len(numpt)):
+            ax.text(x[k]+0.1,y[k]+0.1,numpt[k])
 
         if kwargs['show']:
             plt.show()
@@ -678,7 +736,8 @@ class Polygon(shg.Polygon):
                     'fig': [],
                     'ax': [],
                     'udeg1': np.array([]),
-                    'udeg2': np.array([])
+                    'udeg2': np.array([]),
+                    'eded':True
                     }
 
 ##       initialize function attributes
@@ -828,7 +887,7 @@ class Polygon(shg.Polygon):
         #
         #  1) Calculate node-node visibility
         #
-        # The following exploits definition of convexity.
+        # The algorithm exploits definition of convexity.
         #
         # Between all combinations of diffracting points
         # create a segment and check whether it is fully included in the
@@ -845,6 +904,7 @@ class Polygon(shg.Polygon):
         #
         #  2) Calculate edge-edge and node-edge visibility
         #
+
         for nk in range(Np):   # loop on range of number of points
             ptk = p[:, nk]     # tail point
             phk = p[:, (nk + 1) % Np] # head point (%Np to get 0 as last point)
@@ -925,7 +985,8 @@ class Polygon(shg.Polygon):
                                 #    ((nseg[nk]==7) & (nseg[ns]==10))):
                                 #    pdb.set_trace()
                                 if nseg[nk] != nseg[ns]:
-                                    Gv.add_edge(nseg[nk], nseg[ns], weight=1)
+                                    if kwargs['eded']:
+                                        Gv.add_edge(nseg[nk], nseg[ns], weight=1)
                                     #else:
                                     #    print nseg[nk],nseg[ns]
                                     #    print pts,phs

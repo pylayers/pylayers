@@ -137,8 +137,18 @@ class SelectL(object):
         self.new_state()
 
     def OnClick(self, event):
-        """
-            OnClick(event)
+        """ handle OnClick event
+
+        Parameters
+        ----------
+
+        event :
+
+        See Also
+        --------
+
+        pylayers.gis.layout.Layout.ispoint
+
         """
         fig = plt.gcf()
         ax  = plt.gca()
