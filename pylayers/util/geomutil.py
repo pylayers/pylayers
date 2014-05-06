@@ -538,7 +538,9 @@ class Polygon(shg.Polygon):
                    L.ispoint(np.array(x),tol=0.01),zip(x[0:-1],y[0:-1]))
         seg = zip(npts,np.roll(npts,-1))
         nseg = map(lambda x : L.numseg(x[0],x[1]),seg)
-        return(npts,nseg)
+        vnodes = np.kron(npts,np.array([1,0]))+np.kron(nseg,np.array([0,1]))
+        self.vnodes = vnodes
+        #return(npts,nseg)
 
     def ndarray(self):
         """ get a ndarray from a Polygon

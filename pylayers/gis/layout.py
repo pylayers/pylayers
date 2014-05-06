@@ -5377,8 +5377,9 @@ class Layout(object):
         #pdb.set_trace()
         for icycle in self.Gc.node:
             polyg = self.Gc.node[icycle]['polyg']  # a shapely polygon
+            polyg.setvnodes(self)
             Gv = polyg.buildGv(show=show,eded=False)
-            #self.Gv  = nx.compose(self.Gv, Gv)
+            self.Gv  = nx.compose(self.Gv, Gv)
 
     def buildGi2(self):
         """ build dictionnary of graph of interactions
