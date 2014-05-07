@@ -5647,15 +5647,17 @@ class Layout(object):
                                         if ((node1 in self.Gi.node.keys())
                                          & (node2 in self.Gi.node.keys())):
                                             self.Gi.add_edge(node1, node2)
-                            else:
-                                node1 = str(n)
-                                node2 = str(nb)
-                                if ((node1 in self.Gi.node.keys())
-                                 &  (node2 in self.Gi.node.keys())):
-                                    self.Gi.add_edge(node1, node2)
+            else:
+                neigh = self.Gv.neighbors(n)
+                node1 = str(n)
+                for nb in neigh:
+                    node2 = str(nb)
+                    if ((node1 in self.Gi.node.keys())
+                     &  (node2 in self.Gi.node.keys())):
+                        self.Gi.add_edge(node1, node2)
 #                                else:
 #                                    print node1, node2
-                                    #pdb.set_trace()
+                    #pdb.set_trace()
 
         self.di={} # dictionnary which link nodes of Gi to node of Gs and interaction type
         # 2 lists
@@ -6052,14 +6054,27 @@ class Layout(object):
 
             G = self.Gv
             G.pos={}
+            # nodes of Gv are nodes of Gs
             G.pos.update(self.Gs.pos)
 
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='m'
 
-            fig,ax = gru.draw(G,**kwargs)
-            kwargs['fig']=fig
-            kwargs['ax']=ax
+            edges = G.edges()
+            eded  = filter(lambda x: (edges[x][0]>0) & (edges[x][1]>0),range(len(edges)))
+            ndnd  = filter(lambda x: (edges[x][0]<0) & (edges[x][1]<0),range(len(edges)))
+            nded  = filter(lambda x: (((edges[x][0]<0) & (edges[x][1]>0)) |
+                                     ((edges[x][0]>0) & (edges[x][1]<0))),range(len(edges)))
+            kwargs['edgelist']=eded
+            kwargs['edge_color']='blue'
+            kwargs['node_size'] = 200
+            kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+            kwargs['edgelist']= ndnd
+            kwargs['edge_color']='red'
+            kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+            kwargs['edgelist']= nded
+            kwargs['edge_color']='green'
+            kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
         #
         # c : connectivity graph (Friedman) deprecated
         #
