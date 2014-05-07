@@ -34,7 +34,7 @@ class DF(object):
     filter : flilter a signal
 
     """
-    def __init__(self,b=array([1]),a=array([1,-0.5])):
+    def __init__(self,b=array([1]),a=array([1])):
         self.b = b
         self.a = a
 
@@ -118,6 +118,8 @@ class DF(object):
         show()
 
     def ir(self,N):
+        """ show impulse response
+        """
         ip    = zeros(N)
         ip[0] = 1
         rip   = self.filter(ip)
