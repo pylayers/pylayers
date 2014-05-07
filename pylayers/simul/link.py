@@ -1062,17 +1062,20 @@ class DLink(Link):
 
         self.checkh5()
 
+        if 'cutoff' not in kwargs:
+            kwargs['cutoff']=self.cutoff
+
 
         ############
         # Signatures
         ############
-        Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
         if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
-            Si.run5(cutoff=self.cutoff,algo=kwargs['si_algo'])
+            Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'])
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 

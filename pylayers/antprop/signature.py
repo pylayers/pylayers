@@ -1656,7 +1656,7 @@ class Signatures(dict):
                         self[len(path)] = sigarr
 
 
-    def run5(self,cutoff=2,algo='old',bt=False,progress=False):
+    def run5(self,cutoff=2,algo='old',bt=False,progress=False,diffraction=True):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1717,10 +1717,9 @@ class Signatures(dict):
         Gi = self.L.Gi
         Gi.pos = self.L.Gi.pos
         #
-        # TODO : This has to be changed for handling diffraction
-        #
         # remove diffractions from Gi
-        Gi = gidl(Gi)
+        if not diffraction:
+            Gi = gidl(Gi)
 
         #initilaize dout dictionnary
         dout={}
