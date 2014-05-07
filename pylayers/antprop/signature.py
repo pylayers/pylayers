@@ -184,7 +184,7 @@ def frontline(L,nc,v):
 
 
 def edgeout2(L,g):
-    """ filter authorized Gi edges output 
+    """ filter authorized Gi edges output
 
     Parameters
     ----------
@@ -192,13 +192,13 @@ def edgeout2(L,g):
     L : Layout
     g : Digraph Gi
 
-    Notes 
+    Notes
     -----
 
     Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
     This function checks that this sequence is feasible
     , whatever the type of nstr0 and nstr1.
-    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
+    The feasible outputs from nstr0 to nstr1 are stored in an output field of
     edge (nstr0,nstr1)
 
 
@@ -220,10 +220,10 @@ def edgeout2(L,g):
             # Transmission
             if len(i1)>2:
                 typ=2
-            # Reflexion    
+            # Reflexion
             else :
                 typ=1
-        # Diffraction        
+        # Diffraction
         except:
             nstr1 = i1
             typ = 3
@@ -944,6 +944,7 @@ class Signatures(dict):
 
             children = stack[-1]
             # next child
+
             child = next(children, None)
             # update number of useful segments
             # if there is airwall in visited
@@ -980,6 +981,7 @@ class Signatures(dict):
                     #stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
                     # check if child (current segment) is an airwall
+                    # warning not efficient if many airwalls
                     if self.L.di[child][0] in self.L.name['AIR']:
                         lawp.append(1)
                     else:
@@ -1721,7 +1723,7 @@ class Signatures(dict):
         if not diffraction:
             Gi = gidl(Gi)
 
-        #initilaize dout dictionnary
+        # initilaize dout dictionnary
         dout={}
 
         # progresss stuff...
