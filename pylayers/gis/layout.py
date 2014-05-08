@@ -2403,13 +2403,14 @@ class Layout(object):
             pt=self.Gs.pos[k]
             self.Gs.pos[k]=(pt[0]+vec[0],pt[1]+vec[1])
 
-    def rotate(self,angle):
+    def rotate(self,angle=90):
         """ rotate layout
 
         Parameters
         ----------
 
-        angle (deg)
+        angle : float
+            (degrees)
 
         """
         a = angle*np.pi/180
@@ -2454,7 +2455,7 @@ class Layout(object):
                     tvn = np.hstack((tvn, vn))
                 except:
                     tvn = vn
-            # remove multiple values       
+            # remove multiple values
             utvn = np.unique(tvn)
             # destroy nodes which are not involved with neighbors
             udel = vnodes[~np.in1d(vnodes, utvn)]
@@ -2617,7 +2618,7 @@ class Layout(object):
 
 
     def chgmss(self,ns,ss_name=[],ss_z=[]):
-        """ change a specific multi subseggments properties
+        """ change multi subseggments properties
 
         Parameters
         ----------
@@ -5587,7 +5588,7 @@ class Layout(object):
         for sn in self.Gi.node:
             n = eval(sn)
             node1 = str(n)
-            print "---->",node1
+            #print "---->",node1
             if isinstance(n, tuple):  # reflection ou transmission
                 if len(n)==2: #  Reflection
                     ns = n[0]  # segment
@@ -5602,7 +5603,7 @@ class Layout(object):
                                 node2 = str((nb, nc))  # R ( nc <-> nb )
                                 if ((node1 in self.Gi.node.keys())
                                  &  (node2 in self.Gi.node.keys())):
-                                    self.Gi.add_edge(node1, node2)
+                                    self.Gi.add_edge(node1, node2)     # R(n,nc)-> R(nb,nc)
                                     print "      ---->",node2
                                 # retrieve the cycles of the segment
                                 # if segment has 2 cycles, transmission is also
@@ -5616,7 +5617,7 @@ class Layout(object):
                                     if ((node1 in self.Gi.node.keys())
                                       & (node2 in self.Gi.node.keys())):
                                         self.Gi.add_edge(node1, node2)
-                                        print "      ---->",node2
+    #                                print "      ---->",node2
     #                                else:
     #                                    print node1, node2
                                         #pdb_set_trace()
@@ -5627,7 +5628,7 @@ class Layout(object):
                              & (node2 in self.Gi.node.keys())):
                                 self.Gi.add_edge(node1, node2)   #  (n,nc) -> D
                                 self.Gi.add_edge(node2, node1)   #  D --> (n,nc)
-                                print "      <---->",node2
+#                                print "      <---->",node2
                                 # diffraction is a reciprocal interaction
 #                            else:
 #                                print node1, node2
@@ -5649,7 +5650,7 @@ class Layout(object):
                                 if ((node1 in self.Gi.node.keys())
                                  &  (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2) # (n,cy0,cy1) -> (nb,cy1)
-                                    print "      ---->",node2
+                                    #print "      ---->",node2
                                 cy = set(self.Gs.node[nb]['ncycles'])
                                 if len(cy) == 2: # R-T
                                     #node1 = str(n)
@@ -5659,14 +5660,14 @@ class Layout(object):
                                         if ((node1 in self.Gi.node.keys())
                                          & (node2 in self.Gi.node.keys())):
                                             self.Gi.add_edge(node1, node2)# (n,cy0,cy1) -> (nb,cy1,nc1)
-                                            print "      ---->",node2
+                                            #print "      ---->",node2
                         else:       # nb <0 D diffraction
                             #node1 = str(n)  #
                             node2 = str(nb) #
                             if ((node1 in self.Gi.node.keys())
                               & (node2 in self.Gi.node.keys())):
                                 self.Gi.padd_edge(node1, node2)  # (n,cy0,cy1) -> D(nb)
-                                print "      ---->",node2
+                                #print "      ---->",node2
             else:
                 # n is a Gi interaction <0
                 # n is also a node ov Gv
@@ -5680,7 +5681,7 @@ class Layout(object):
                          &  (node2 in self.Gi.node.keys())):
                             self.Gi.add_edge(node1, node2) # D(n) -> D(nb)
                             self.Gi.add_edge(node2, node1) # D(nb) -> D(n)
-                            print "      <---->",node2
+                            #print "      <---->",node2
 #                                    print node1, node2
                     #pdb.set_trace()
 
@@ -5902,6 +5903,9 @@ class Layout(object):
 
     def show(self,**kwargs):
         """
+
+        See also
+
         """
         defaults = {'show': True,
                     'fig': [],
@@ -5947,7 +5951,7 @@ class Layout(object):
         #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')
 
     def showG(self, graph='r', **kwargs):
-        """ show graphs
+        """ show the different graphs
 
         Parameters
         ----------
@@ -6025,7 +6029,8 @@ class Layout(object):
                     'figsize': (5,5),
                     'mode':'nocycle',
                     'alphacy':0.8,
-                    'colorcy':'#abcdef'
+                    'colorcy':'#abcdef',
+                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD']
                     }
 
         for key, value in defaults.items():
@@ -6074,6 +6079,9 @@ class Layout(object):
 
         #
         # v : visibility graph
+        # In blue : segment segment
+        # In red  : point point (Diffraction)
+        # In green : point segment
         #
         if 'v' in graph:
 
@@ -6086,22 +6094,23 @@ class Layout(object):
                 kwargs['edge_color'] ='m'
 
             edges = G.edges()
-            eded  = filter(lambda x: (edges[x][0]>0) & (edges[x][1]>0),range(len(edges)))
-            ndnd  = filter(lambda x: (edges[x][0]<0) & (edges[x][1]<0),range(len(edges)))
+            rle = range(len(edges))
+            eded  = filter(lambda x: (edges[x][0]>0) & (edges[x][1]>0),rle)
+            ndnd  = filter(lambda x: (edges[x][0]<0) & (edges[x][1]<0),rle)
             nded  = filter(lambda x: (((edges[x][0]<0) & (edges[x][1]>0)) |
-                                     ((edges[x][0]>0) & (edges[x][1]<0))),range(len(edges)))
-            kwargs['edgelist']=eded
+                                     ((edges[x][0]>0) & (edges[x][1]<0))),rle)
+            kwargs['edgelist'] = eded
             kwargs['edge_color']='blue'
             kwargs['node_size'] = 200
             kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
-            kwargs['edgelist']= ndnd
-            kwargs['edge_color']='red'
+            kwargs['edgelist'] = ndnd
+            kwargs['edge_color'] ='red'
             kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
-            kwargs['edgelist']= nded
+            kwargs['edgelist'] = nded
             kwargs['edge_color']='green'
             kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
         #
-        # c : connectivity graph (Friedman) deprecated
+        # c : connectivity graph (pulsray deprecated)
         #
         if 'c' in graph:
 
@@ -6123,7 +6132,57 @@ class Layout(object):
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='k'
 
-            fig,ax = gru.draw(G,**kwargs)
+            #
+            # Parsing the type of interactions
+            #
+
+            edges = G.edges()
+
+
+            edges = map(lambda x: eval(str(x)),edges)
+            edges = map(lambda x: (eval(x[0]),eval(x[1])),edges)
+
+            rle = range(len(edges))
+
+            tuptup  = filter(lambda x: (((type(edges[x][0]))==tuple) &
+                                        ((type(edges[x][1]))==tuple)),rle)
+            tupint = filter(lambda x: (((type(edges[x][0]))==tuple) &
+                                       ((type(edges[x][1]))==int)),rle)
+            inttup = filter(lambda x: (((type(edges[x][0]))==int) &
+                                       ((type(edges[x][1]))==tuple)),rle)
+            DD     = filter(lambda x: (((type(edges[x][0]))==int) &
+                                        ((type(edges[x][1]))==int)),rle)
+
+            RR = filter(lambda x: ((len(edges[x][0])==2) &
+                                   (len(edges[x][1])==2)),tuptup)
+
+            TT = filter(lambda x: ((len(edges[x][0])==3) &
+                                   (len(edges[x][1])==3)),tuptup)
+
+            RT = filter(lambda x: ((len(edges[x][0])==2) &
+                                   (len(edges[x][1])==3)),tuptup)
+
+            TR = filter(lambda x: ((len(edges[x][0])==3) &
+                                   (len(edges[x][1])==2)),tuptup)
+
+            RD = filter(lambda x:  len(edges[x][0]) ==2, tupint)
+
+            TD = filter(lambda x:  len(edges[x][0]) ==3, tupint)
+
+            DR = filter(lambda x:  len(edges[x][1]) ==2, inttup)
+
+            DT = filter(lambda x:  len(edges[x][1]) ==3, inttup)
+            tabcol = ['b','g','r','m','c','orange','purple','maroon'][::-1]
+            li = []
+            for inter in kwargs['linter']:
+                if len(eval(inter))>0:
+                    li.append(inter)
+                    kwargs['edgelist'] = eval(inter)
+                    kwargs['edge_color'] = tabcol.pop()
+                    kwargs['node_size'] = 200
+                    kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+            legtxt = ['Gs'] + li
+            ax.legend(legtxt)
             kwargs['fig']=fig
             kwargs['ax']=ax
         #
@@ -6468,10 +6527,11 @@ class Layout(object):
             raise NameError(str(pt)+" is not in any room")
 
     def seg2ro(self, seg):
-        """ point to room
+        """ return room number of a point 
 
         Parameters
         ----------
+
         seg : int
 
         Returns
@@ -6480,7 +6540,7 @@ class Layout(object):
 
         Notes
         -----
-            If a room contains point pt this function returns the room number
+        If a room contains point pt this function returns the room number
 
         """
 
@@ -6497,10 +6557,12 @@ class Layout(object):
 
         Parameters
         ----------
+
         room : int
 
         Returns
         -------
+
         seg : list
 
         """
@@ -6543,7 +6605,10 @@ class Layout(object):
 
 
     def builGr2(self,v):
-        """
+        """ alternative buildGr method (deprecated)
+        parameters
+        ----------
+        v
         """
         # 1 : Cycles which are connected with an airwall are merged
         # 2 : The remaining cycles which contains at least one common door are
@@ -7212,9 +7277,12 @@ class Layout(object):
 
         Parameters
         ----------
-        e
+
+        e : int
+            segment number
         subseg : boolean
             default False
+
         """
         P1 = np.array(np.zeros(3), dtype=np.float64)
         P2 = np.array(np.zeros(3), dtype=np.float64)
@@ -7223,6 +7291,7 @@ class Layout(object):
         nebr = self.Gs.neighbors(e)
         n1 = nebr[0]
         n2 = nebr[1]
+
         P1[0:2] = np.array(self.Gs.pos[n1])
         P1[2] = self.Gs.node[e]['z'][0]
 
@@ -7236,7 +7305,7 @@ class Layout(object):
         P4[2] = self.Gs.node[e]['z'][1]
 
         cold = pyu.coldict()
-       
+
         if subseg:
             nsseg = len(self.Gs.node[e]['ss_name'])
         else:
@@ -7268,7 +7337,7 @@ class Layout(object):
             fos.write("%6.3f %6.3f %6.3f \n" % (P2[0], P2[1], P2[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P3[0], P3[1], P3[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P4[0], P4[1], P4[2]))
-        
+
         if subseg:
             for k,name in enumerate(self.Gs.node[e]['ss_name']):
                 colname = sl[name]['color']

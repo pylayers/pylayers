@@ -57,6 +57,7 @@ def draw(G,**kwargs):
     defaults = {'show': False,
                 'fig': [],
                 'ax': [],
+                'arrows':False,
                 'nodes':True,
                 'edges':True,
                 'airwalls':False,
@@ -76,12 +77,15 @@ def draw(G,**kwargs):
     #
     # update default values
     #
+
     for key, value in defaults.items():
         if key not in kwargs:
             kwargs[key] = value
+
     #
     # getting fig and ax
     #
+
     if kwargs['fig'] == []:
         fig = plt.figure(figsize=kwargs['figsize'])
         fig.set_frameon(True)
@@ -101,8 +105,6 @@ def draw(G,**kwargs):
         nodelist =  G.nodes()
     else:
         nodelist=kwargs['nodelist']
-
-
 
     if kwargs['edgelist']==[]:
         edgelist =  G.edges()
@@ -126,8 +128,6 @@ def draw(G,**kwargs):
         except:
             pass
 
-
-
     if kwargs['nodes']:
         nx.draw_networkx_nodes(G, G.pos,
                                nodelist = nodelist,
@@ -144,6 +144,7 @@ def draw(G,**kwargs):
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],
                                width = kwargs['width'],
+                               arrows= kwargs['arrows'],
                                alpha = kwargs['alphae'],ax=ax)
     if kwargs['show']:
         plt.show()
