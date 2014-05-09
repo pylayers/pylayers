@@ -103,8 +103,8 @@ Layout transformation
     Layout.cycleinline
     Layout.seginline
 
-Layout visibility  
-------------------
+Layout visibility
+-----------------
 
 .. autosummary::
     :toctree: generated/
@@ -731,13 +731,40 @@ class Layout(object):
 
         return np.setdiff1d(iseg, u)
 
-    def help(self):
+    def help(self,letter,mod='meth'):
         """ help
 
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
         """
-        print "L=Layout('DLR.ini')"
-        print "showGs(clear=True)"
-        print "showGs(edlist=L.subseg()['WOOD'],dthin=False,dlabels=True)"
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+
 
 
     def g2npy(self):
@@ -951,7 +978,7 @@ class Layout(object):
                 nta = tahe[0]
                 nhe = tahe[1]
                 d  = ways.way[nseg].tags
-               
+
                 # old format conversion
                 if d.has_key('zmin'):
                     d['z']=(d['zmin'],d['zmax'])
@@ -2234,6 +2261,29 @@ class Layout(object):
             self.display['layers'].append(name)
         return(num)
 
+    def wedge(self,lpnt):
+        """ calculate wedge angle of a point
+
+        Parameters
+        ----------
+
+        lpnt : list of int
+           list of point
+
+
+        """
+
+        aseg = map(lambda x : filter(lambda y : y not in
+                                     self.name['AIR'],
+                                     nx.neighbors(self.Gs,x)),
+                                     lpnt)
+
+        pts = map(lambda x : self.seg2pts([x[0],x[1]]),aseg)
+        #map(lambda x: pt ,pts)
+
+        return(pts)
+
+
     def add_furniture(self, name='R1_C', matname='PARTITION', origin=(0.,0.),
                       zmin=0., height=0., width=0., length=0., angle=0.):
         """  add piece of furniture
@@ -2845,20 +2895,25 @@ class Layout(object):
         return(edgelist)
 
     def diag(self, p1, p2, l, al1, al2, quadsel=0):
-        """
+        """ return edge list from a diagonal zone
 
-        diag (p1,p2,l,al1,al2,quadsel)
+        Parameters
+        -----------
 
-        p1  :
-        p2  :
-        al1
-        al2
-
+        p1  : np.array
+        p2  : np.array
+        tol :
+        al1 :
+        al2 :
         quadsel : 0   all quadrant
               2 1
               3 4
 
-        WARNING : Not Tested
+        Returns
+        -------
+
+        edgelist
+
         """
         x = self.pt[0, :]
         y = self.pt[1, :]
@@ -2879,9 +2934,11 @@ class Layout(object):
 
         x_u0 = x[u0]
         y_u0 = y[u0]
+
         #
         # Permutation points
         #
+
         if (p1[0] > p2[0]):
             pt = p2
             p2 = p1
@@ -2894,8 +2951,9 @@ class Layout(object):
         Dy = p2[1] - p1[1]
 
         L = np.sqrt(Dx ** 2 + Dy ** 2)
+
         #
-        # Parametre de la droite p1 p2 (cas general)
+        # p1 p2
         #
         if ((abs(Dx) > finfo(float).eps) & (abs(Dy) > finfo(float).eps)):
             a = Dy / Dx
@@ -2903,7 +2961,7 @@ class Layout(object):
             b1 = p1[1] + p1[0] / a
             b2 = p2[1] + p2[0] / a
 
-            delta_b = l * L / abs(Dx)
+            delta_b = tol * L / abs(Dx)
             delta_b1 = al1 * L * L / abs(Dy)
             delta_b2 = al2 * L * L / abs(Dy)
 
@@ -2929,10 +2987,10 @@ class Layout(object):
 # p1 p2 vertical
 #
         if (abs(Dx) <= finfo(float).eps):
-            u1 = np.nonzero(x < p1[0] + l / 2.)[0]
+            u1 = np.nonzero(x < p1[0] + tol / 2.)[0]
             x_u1 = x[u1]
             y_u1 = y[u1]
-            u2 = np.nonzero(x_u1 > p1[0] - l / 2.)[0]
+            u2 = np.nonzero(x_u1 > p1[0] - tol / 2.)[0]
             y_u2 = y[u2]
             if (p1[1] > p2[1]):
                 u3 = np.nonzero(y_u2 < p1[1] + al1 * L)[0]
@@ -2946,9 +3004,9 @@ class Layout(object):
 # p1 p2 horizontal
 #
         if (abs(Dy) <= finfo(float).eps):
-            u1 = np.nonzero(y < p1[1] + l / 2.)[0]
+            u1 = np.nonzero(y < p1[1] + tol / 2.)[0]
             y_u1 = y[u1]
-            u2 = np.nonzero(y_u1 > p1[1] - l / 2.)[0]
+            u2 = np.nonzero(y_u1 > p1[1] - tol / 2.)[0]
             x_u2 = x[u2]
             if (p1(1) > p2(1)):
                 u3 = np.nonzero(x_u2 < p1[0] + al1 * L)[0]
@@ -2958,6 +3016,7 @@ class Layout(object):
                 u3 = np.nonzero(x_u2 < p2[0] + al2 * L)[0]
                 x_u3 = x[u3]
                 u4 = np.nonzero(x > p1[0] - al1 * L)[0]
+
         nodelist = u0[u1[u2[u3[u4]]]]
         edgelist = np.arange(self.Ns)
         edgelist = self.find_edge_list(edgelist, nodelist)
@@ -2965,7 +3024,7 @@ class Layout(object):
 
     def nd2seg(self, ndlist):
         """ convert node list to edge list
-       
+
         Parameters
         ----------
 
@@ -3629,29 +3688,29 @@ class Layout(object):
 
     def seg2pts(self,aseg):
         """ convert segments array to coresponding termination points array
-       
+
         Parameters
         ----------
-       
+
         aseg : np.array (,Ns) or int for single value:w
             array of segment number (>0)
-       
+
         Returns
         -------
-       
+
         pth : np.array (4 x Ns)
             pth is a vstacking of tail point (2,Ns) and head point (2,Ns)
-           
+
         Examples
         --------
-       
+
         >>> from pylayers.gis.layout import *
         >>> import numpy as np
         >>> L = Layout('defstr.ini')
         >>> aseg = np.array([1,3,6])
         >>> L.seg2pts(aseg)
         """
-       
+
         if not isinstance(aseg,np.ndarray):
             aseg = np.array([aseg])
         assert(len(np.where(aseg<0)[0])==0)
@@ -3708,6 +3767,11 @@ class Layout(object):
         Notes
         -----
 
+        update the following members
+            `min_sx`
+            `max_sx`
+            `min_sy`
+            `max_sy`
         Used in seginframe
 
         """
@@ -3965,10 +4029,6 @@ class Layout(object):
                 liseg = np.array([[psh.x],[psh.y]])
                 I = np.hstack((I, np.vstack(([[seg]],liseg))))
         return I
-               
-
-    def checkvis(self, p, edgelist, nodelist):
-        pass
 
     def visilist(self, p):
         """ returns the list of nodes from Gc which are visible from point p
@@ -4014,7 +4074,10 @@ class Layout(object):
             AAS = self.update(AAS,)
 
     def closest_edge(self, p, AAS):
-        """
+        """ not implemented
+
+        Parameters
+        ----------
 
         This function return the closest segment from p which belong to
         the AAS (Allowed Angular Sector)
@@ -4022,6 +4085,8 @@ class Layout(object):
         [ns] = closest_edge(self,p,AAS)
 
         """
+        pass
+        # not implemented
     def visi_papb(self, pa, pb, edgelist=np.array([])):
         """
         visi_papb : determine if pa and pb are in visibility for the structure graph
@@ -4907,6 +4972,7 @@ class Layout(object):
         #
         # Construct the polygon associated to each cycle
         #
+
         for k in self.Gt.nodes():
             #vnodes = self.Gt.node[k]['vnodes']
             vnodes = self.Gt.node[k]['cycle'].cycle
@@ -4958,6 +5024,11 @@ class Layout(object):
                             ncy = list(cy.difference({k}))[0]
                             ListInteractions.append(str((inode, k, ncy)))
                             ListInteractions.append(str((inode, ncy, k)))
+                else:
+                    # to decide wether a point is a diffraction point
+                    # is hard to tell before evaluation of Gc
+                    # this information is updated in buildGc
+                    pass
             self.Gt.add_node(k, inter=ListInteractions)
 
 
@@ -5604,7 +5675,7 @@ class Layout(object):
                                 if ((node1 in self.Gi.node.keys())
                                  &  (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)     # R(n,nc)-> R(nb,nc)
-                                    print "      ---->",node2
+                                    #print "      ---->",node2
                                 # retrieve the cycles of the segment
                                 # if segment has 2 cycles, transmission is also
                                 # possible
@@ -5690,9 +5761,24 @@ class Layout(object):
         [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
         [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
+        #
+        # List of diffraction point
+        #
+        self.ldiff = filter(lambda x: eval(x)<0 ,self.Gi.nodes())
+
+        # updating the list of interaction of a given cycle
+        # TODO what is temporaily implemented below is not correct
+        # a cycle can see a diffraction point which is not in the cycle vnodes
+        # so all possible diffraction point are not connected to Tx or Rx
+        #
+        for c in self.Gt.node:
+            vn = self.Gt.node[c]['polyg'].vnodes
+            idiff = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vn))
+            self.Gt.node[c]['inter']+= idiff
+
 
     def outputGi(self):
-        """ filter authorized Gi edges output
+        """ filter output of Gi edges
 
         Parameters
         ----------
@@ -5703,7 +5789,7 @@ class Layout(object):
         -----
 
         Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
-        This function checks that this sequence is feasible
+        This function checks whethe this sequence is feasible or not
         , whatever the type of nstr0 and nstr1.
         The feasible outputs from nstr0 to nstr1 are stored in an output field of
         edge (nstr0,nstr1)
@@ -5748,10 +5834,12 @@ class Layout(object):
                 nstr1 = i1
                 typ = 3
 
-            # list of authorized outputs, initialized void
+            # list of authorized outputs. Initialized void
             output = []
-            # nstr1 : segment number of middle interaction
+
+            # nstr1 : segment number of central interaction
             if nstr1>0:
+                # central interaction is a segment
                 pseg1 = self.seg2pts(nstr1).reshape(2,2).T
                 # create a Cone object
                 cn = cone.Cone()
@@ -5765,7 +5853,7 @@ class Layout(object):
                     else:
                         # from 2 connected segments
                         cn.from2csegs(pseg0,pseg1)
-                # if starting from point
+                # if starting from a point
                 else:
                     pt = np.array(self.Gs.pos[nstr0])
                     cn.fromptseg(pt,pseg1)
@@ -5780,7 +5868,7 @@ class Layout(object):
                 # if nstr0 and nstr1 are adjescent segment remove nstr0 from
                 # potential next interaction
                 if len(np.intersect1d(self.Gs.neighbors(nstr0),self.Gs.neighbors(nstr1)))>0:
-                       isegments = np.array(filter(lambda x : x!=nstr0,isegments)) 
+                       isegments = np.array(filter(lambda x : x!=nstr0,isegments))
                 #if ((i0==(32, 75)) and (i1==(170, 75, 74))):
                 #    pdb.set_trace()
                 # there are one or more segments
@@ -5824,6 +5912,28 @@ class Layout(object):
 
                     # keep all segment above nstr1 and in Cone if T
                     # keep all segment below nstr1 and in Cone if R
+
+            else:
+                # central interaction is a point
+
+                # 1) Simple approach
+                #       output is all visible interaction
+                # 2) TO BE DONE
+                #
+                #       output of the diffraction points
+                #       exploring
+                #
+                #          + right of ISB
+                #          + right of RSB
+                #
+                #  + using the wedge cone
+                #  + using the incident cone
+                #
+                output = nx.neighbors(self.Gi,str(nstr1))
+                nout = len(output)
+                probint = np.ones(nout) # temporary
+                dintprob = {k:v for k,v in zip(output,probint)}
+
 
             self.Gi.add_edge(str(i0),str(i1),output=dintprob)
 
@@ -6406,8 +6516,7 @@ class Layout(object):
         return(walls)
 
     def ptin(self,pt=np.array((0, 0, 0))):
-        """
-        check if a point is in the Layout
+        """ check if a point is in the Layout
 
         Parameters
         ----------
@@ -6418,6 +6527,11 @@ class Layout(object):
         -------
 
         boolean : True if inside
+
+        See Also
+        --------
+
+        ispoint
 
         """
 
@@ -6663,6 +6777,7 @@ class Layout(object):
                             Ga.pos[cy]=self.Gt.pos[cy]
                         Ga.add_edge(k,cy)
 
+        # deep copy of Gt
         self.Gc = copy.deepcopy(self.Gt)
 
         # list of connected subgraphs of Gt
@@ -6676,7 +6791,7 @@ class Layout(object):
             dn = nx.dfs_successors(Ga,r)
             Nlevel = len(dn)
             #
-            # Probably it exists a simpler networkx manner to obtain
+            # Probably it exists a simpler manner to obtain
             # the sequence of connected nodes
             #
             for i in range(Nlevel):
@@ -6691,6 +6806,7 @@ class Layout(object):
         # Merge all air-connected cycles
         #  for all conected components
         #  example licy = [[22,78,5],[3,4]] 2 cycles are connected
+        #
         for licy in connected:
             merged = []         # merged cycle is void
             root = licy[0]      # pick the first cycle as root
@@ -6725,6 +6841,19 @@ class Layout(object):
 
         return(Ga)
 
+
+    def updatediff(self):
+        """
+        """
+        tldiff = []
+        for c in self.Gc.node:
+            poly = c['polyg']
+            cvx,pts = poly.ptconvex()
+            ucvx = np.where(cvx == 1)[0]
+            vnodes = poly.vnodes
+            lpnt = filter(lambda x : x <0,vnodes)
+            ldif = map(lambda x: lpnt[x],ucvx)
+            tldif.append(ldif)
 
     def buildGr(self):
         """ build the graph of rooms Gr

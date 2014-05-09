@@ -3364,6 +3364,7 @@ def valid_wedge(ps, pw, p1, p2, grazing):
 
      Parameters
      ----------
+
      ps       : source point
      pw       : np.array (Nx2) wedge apex point
      p1       : np.array (Nx2) point 1 of wedge
@@ -3387,6 +3388,7 @@ def valid_wedge(ps, pw, p1, p2, grazing):
 
     Examples
     --------
+
     >>> p1 = np.array([-2,-2]).reshape(1,2)
     >>> p2 = np.array([2,-2]).reshape(1,2)
     >>> pw = np.array([0,0]).reshape(1,2)

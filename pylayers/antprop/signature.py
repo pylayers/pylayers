@@ -1697,23 +1697,27 @@ class Signatures(dict):
         # list of interaction target
         lit = self.L.Gt.node[self.target]['inter']
 
+        pdb.set_trace()
         # source
 
         lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
         lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
+        lisD = filter(lambda l: eval(l)<0,lis) # Diffraction
 
         # target
 
         litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
         litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
+        litD = filter(lambda l: eval(l)<0,lit) # Diffraction
 
         lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
         litT = filter(lambda l: eval(l)[1]<>self.target,litT)
 
         # list of interaction visible from source
-        lis  = lisT + lisR
+        lis  = lisT + lisR + lisD
         # list of interaction visible from target
-        lit  = litT + litR
+        lit  = litT + litR + litD
+        pdb.set_trace()
 
 
         Gi = self.L.Gi
