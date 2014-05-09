@@ -3940,15 +3940,23 @@ class Layout(object):
 
 
     def cycleinline(self, c1, c2):
-        """
-        Returns the intersection between a given line and all segments
+        """ returns the intersection between a given line and all segments
+
         Parameters
         ----------
-            p1 : numpy.ndarray
-            p2 : numpy.ndarray
+
+        p1 : numpy.ndarray
+        p2 : numpy.ndarray
+
         Returns
         -------
-            I : numpy.ndarray
+
+        I : numpy.ndarray
+
+        See Also
+        --------
+
+
         """
         I = np.array([]).reshape(3,0)
 

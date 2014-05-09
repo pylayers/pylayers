@@ -984,10 +984,9 @@ class Signatures(dict):
             # next child
 
             child = next(children, None)
+
             # update number of useful segments
             # if there is airwall in visited
-            #
-
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
@@ -1365,7 +1364,7 @@ class Signatures(dict):
         Parameters
         ----------
 
-        cutoff : int 
+        cutoff : int
             limit the exploration of all_simple_path
 
         Returns
@@ -1759,7 +1758,7 @@ class Signatures(dict):
             print "---> ",s
 
             for ut,t in enumerate(lit):
-                #print "   ---> ",t
+                print "   ---> ",t
                 # progress bar
                 if progress :
 
@@ -1777,6 +1776,7 @@ class Signatures(dict):
                 if ((type(eval(s))==tuple) & (s != t)):
                     if algo=='new':
                         dout = self.procone2(self.L,Gi,dout=dout,source=s,target=t,cutoff=cutoff)
+                        print dout
                     else :
                         dout = self.propaths2(Gi,di=self.L.di,dout=dout,source=s,target=t,cutoff=cutoff,bt=bt)
                 else:
@@ -1787,7 +1787,6 @@ class Signatures(dict):
                         dout[1]=[]
                         dout[1].append(self.L.di[s])
 
-        pdb.set_trace()
         for k in dout.keys():
             adout = np.array((dout[k]))
             shad = np.shape(adout)
@@ -2707,13 +2706,19 @@ class Signatures(dict):
             ptx = np.array(self.L.Gt.pos[ptx])
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
+
         rays = Rays(ptx,prx)
+
         #
         # detect LOS situation
         #
+
         lc  = self.L.cycleinline(self.source,self.target)
-        # if source  and target in the same cycle
+
+        # if source and target in the same cycle
         # and ptx != prx
+        #
+        # Not the correct condition
         dtxrx = np.sum(ptx-prx)
         if ((len(lc) == 1) & (dtxrx!=0)):
             rays.los=True

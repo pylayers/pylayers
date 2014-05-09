@@ -7,9 +7,14 @@ L.build()
 #Si.run5(cutoff=4)
 #Si.show(L,ctx=0,crx=1)
 Lk = DLink(L=L,cutoff=2,force=True)
-Lk.a[0]=Lk.a[0]-4
-Lk.b[1]=Lk.b[1]+60
-Lk.eval(force=True)
+pta = Lk.a
+ptb = Lk.b
+pta[0] = pta[0]-4
+ptb[1] = ptb[1]+60
+ptb[0] = ptb[0]-22
+Lk.a = pta
+Lk.b = ptb
+Lk.eval(si_algo='old',force=True)
 # list of points
 #lpnt = np.array(filter(lambda x : x <0,L.Gs.node))
 # degree of points

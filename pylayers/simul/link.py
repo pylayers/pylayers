@@ -1084,7 +1084,7 @@ class DLink(Link):
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
-                   'si_algo':'old',
+                   'si_algo':'new',
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':False,
