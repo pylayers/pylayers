@@ -299,7 +299,7 @@ class DLink(Link):
         --------
 
         >>> from pylayers.simul.link import *
-        >>> L=DLink(verbose=False)
+        >>> L = DLink(verbose=False)
         >>> aktk = L.eval()
 
 
@@ -560,6 +560,39 @@ class DLink(Link):
 
 
 
+    def help(self,letter='az',mod='meth'):
+        """ help
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
+        """
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
     def reset_config(self):
         """ reset configuration when new layout loaded
         """
@@ -1092,7 +1125,7 @@ class DLink(Link):
             self.load(R,self.dexist['ray']['grpname'])
 
         else :
-            # perform computation...
+            # perform computation ...
             r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=kwargs['ra_ceil_height_meter'], N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
@@ -1117,7 +1150,7 @@ class DLink(Link):
         else :
             R.fillinter(self.L)
             # Ctilde...
-            C=R.eval(self.fGHz)
+            C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 

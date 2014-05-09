@@ -1,12 +1,15 @@
 from pylayers.gis.layout  import *
 from pylayers.simul.link  import *
+from pylayers.antprop.signature import *
 L = Layout('scattering.ini')
 L.build()
-Lk = DLink(L=L,cutoff=3,force=True)
+#Si = Signatures(L,0,1)
+#Si.run5(cutoff=4)
+#Si.show(L,ctx=0,crx=1)
+Lk = DLink(L=L,cutoff=2,force=True)
 Lk.a[0]=Lk.a[0]-4
 Lk.b[1]=Lk.b[1]+60
 Lk.eval(force=True)
-
 # list of points
 #lpnt = np.array(filter(lambda x : x <0,L.Gs.node))
 # degree of points

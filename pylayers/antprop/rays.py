@@ -173,17 +173,62 @@ class Rays(dict):
         return(s)
 
 
-    def saveh5(self,idx=0):
-        """ save rays 
-            pyh5 format
+    def help(self,letter='az',mod='meth'):
+        """ help
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
         """
 
-        filename = self.filename+'_'+str(idx) 
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+
+
+    def saveh5(self,idx=0):
+        """ save rays in hdf5 format
+
+        Parameters
+        ----------
+
+        idx : int
+
+        See Also
+        --------
+
+        loadh5
+
+        """
+
+        filename = self.filename+'_'+str(idx)
         filenameh5=pyu.getlong(filename+'.h5',pstruc['DIRR3D'])
-        
-        
-        
-        # try/except to avoid loosing the h5 file if 
+
+
+
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filenameh5,'w')
@@ -1135,13 +1180,13 @@ class Rays(dict):
         #
 
         # nsegment x 3
-        norm = np.array(nx.get_node_attributes( L.Gs, 'norm').values())
+        norm = np.array(nx.get_node_attributes(L.Gs,'norm').values())
 
         # nsegment x k
-        key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
+        key = np.array(nx.get_node_attributes(L.Gs,'norm').keys())
 
         # maximum number for refering to segment
-        # not to be confused with a number of segment
+        # not to be confused with a segment number
 
         nsmax = max(L.Gs.node.keys())
 
@@ -1172,10 +1217,11 @@ class Rays(dict):
 
                 # structure number (segment or point)
                 # nstr : i x r
-                nstr = self[k]['sig'][0, 1:-1, :]     
+                nstr = self[k]['sig'][0, 1:-1, :]
 
                 # ityp : i x r
-                ityp = self[k]['sig'][1, 1:-1, :]     
+                ityp = self[k]['sig'][1, 1:-1, :]
+
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment
                 # print nstr
@@ -1219,14 +1265,16 @@ class Rays(dict):
                 #
 
                 # norm : 3 x i x r
-                # TODO 
-                # For the diffraction the norm should be replaced by the unit
-                # vector along the wedge.
-                # udiff not handled yet
+                #
+                # norm name is improper norm is in fact the vector associated to the
+                # interaction
+                # For the diffraction case the normal is replaced by the unit
+                # vector along the wedge directed upward.
                 #
                 self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
+                self[k]['norm'][2, udiff[0], udiff[1]] = np.ones(len(udiff[0]))
 
                 normcheck = np.sum(self[k]['norm']*self[k]['norm'],axis=0)
                 assert normcheck.all()>0.99,pdb.set_trace()
@@ -1458,13 +1506,16 @@ class Rays(dict):
                 self[k]['si'] = np.vstack((si,0.))
                 self[k]['vsi'] = (self[0]['pt'][:,1]-self[0]['pt'][:,0])/si
                 self[k]['dis'] = np.array((si))
-                vsi=self[k]['vsi']
+
+                vsi = self[k]['vsi']
                 thd = np.arccos(vsi[2])
                 phd = np.arctan2(vsi[1], vsi[0])
+
                 self[k]['aod'] = np.vstack((thd, phd))
                 self[k]['Bo0'] = np.array(())
                 self[k]['scpr'] = np.array(())
                 self[k]['theta'] = np.zeros((1,1))
+
                 #
                 # The following derivation of the doa is the actual chosen angle convention
                 # Those angles are relative to natural spherical coordinates system in the gcs of the scene.
@@ -1481,7 +1532,7 @@ class Rays(dict):
                 self[k]['nbrays'] = 1
                 self[k]['rayidx'] = ze
                 self.raypt = 1
-                self.ray2nbi=ze
+                self.ray2nbi = ze
 
             self.isbased=True
 

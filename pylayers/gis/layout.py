@@ -117,6 +117,11 @@ Layout visibility
     Layout.angleonlinkold
     Layout.layeronlink
 
+Layout interactions
+-------------------
+
+    Layout.intcy
+
 SubSegment Functions
 --------------------
 
@@ -731,7 +736,7 @@ class Layout(object):
 
         return np.setdiff1d(iseg, u)
 
-    def help(self,letter,mod='meth'):
+    def help(self,letter='az',mod='meth'):
         """ help
 
         Parameters
@@ -4746,22 +4751,26 @@ class Layout(object):
         'i' : Gi
 
         """
+        # create layout directory
+        path = basename+'/struc/gpickle/'+self.filename
+        if not os.path.isdir(path):
+           os.mkdir(path)
         for g in self.lbltg:
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
                     gname2 ='dG'+g
-                    write_gpickle(getattr(self,gname1),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
-                    write_gpickle(getattr(self,gname2),basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle')
+                    write_gpickle(getattr(self,gname1),path+'/G'+g+'.gpickle')
+                    write_gpickle(getattr(self,gname2),path+'/dG'+g+'.gpickle')
                 else:
                     gname='G'+g
-                    write_gpickle(getattr(self,gname),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
+                    write_gpickle(getattr(self,gname),path+'/G'+g+'.gpickle')
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
         if 'i' in self.lbltg:
-            write_gpickle(getattr(self,'di'),basename+'/struc/gpickle/di_'+self.filename+'.gpickle')
-        write_gpickle(getattr(self,'dca'),basename+'/struc/gpickle/dca_'+self.filename+'.gpickle')
+            write_gpickle(getattr(self,'di'),path+'/di.gpickle')
+        write_gpickle(getattr(self,'dca'),path+'/dca.gpickle')
 
 
         root,ext = os.path.splitext(self.filename)
@@ -4792,14 +4801,11 @@ class Layout(object):
                 if g in ['v','i']:
                     gname1 ='G'+g
                     gname2 ='dG'+g
-                    setattr(self, gname1,
-                            read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
-                    setattr(self, gname2,
-                            read_gpickle(basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle'))
+                    setattr(self, gname1,read_gpickle(path+'/G'+g+'.gpickle'))
+                    setattr(self, gname2,read_gpickle(path+'/dG'+g+'.gpickle'))
                 else:
                     gname='G'+g
-                    setattr(self, gname,
-                            read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
+                    setattr(self, gname,read_gpickle(path+'/G'+g+'.gpickle'))
                 self.lbltg.extend(g)
             except:
                 pass
@@ -4828,8 +4834,8 @@ class Layout(object):
                             logging.warning('dumpr : a segment cannot relate more than 2 cycles')
 
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
-        setattr(self,'di', read_gpickle(basename+'/struc/gpickle/di_'+self.filename+'.gpickle'))
-        setattr(self,'dca', read_gpickle(basename+'/struc/gpickle/dca_'+self.filename+'.gpickle'))
+        setattr(self,'di', read_gpickle(path+'/di.gpickle'))
+        setattr(self,'dca', read_gpickle(path+'/dca.gpickle'))
 
     def buildGt(self):
         """ Built topological graph Gt
@@ -5937,6 +5943,44 @@ class Layout(object):
 
             self.Gi.add_edge(str(i0),str(i1),output=dintprob)
 
+    def intcy(self,ncy,typ='source'):
+        """ return the list of interactions seen from a cycle
+
+        Parameters
+        ----------
+
+        ncy : cycle number
+        typ : string
+            if 'source' connect source cycle
+            if 'target' connect target cycle
+
+        """
+
+        # list of intercations
+        lint = self.Gi.node
+        # list of tuple interactions (R|T)
+
+        linttup = filter(lambda x: type(eval(x))==tuple,lint)
+        lR = filter(lambda x: len(eval(x))==2,linttup)
+        lT = filter(lambda x: len(eval(x))==3,linttup)
+
+        # visible R|T source cycle is ncy
+
+        lR = filter(lambda x : eval(x)[1]==ncy,lR)
+
+        if typ=='source':
+            lT = filter(lambda x: eval(x)[1]==ncy,lT)
+        if typ=='target':
+            lT = filter(lambda x: eval(x)[2]==ncy,lT)
+
+        # finding diffraction
+        # which is the cycle of Gc ?
+        gccy = self.Gt.node[ncy]['merged']
+        # sequence of nodes of merged cycle
+        vnodes = self.Gc.node[gccy]['polyg'].vnodes
+        lD = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vnodes))
+
+        return lR,lT,lD
 
 #    def showGraph(self,**kwargs):
 #        """
@@ -6833,6 +6877,11 @@ class Layout(object):
                         if k<> root:
                             self.Gc.add_edge(root,k)
 
+            # keep track of merged convex cycles
+            self.Gc.node[root]['merged'] = merged
+            for cy in merged:
+                self.Gt.node[cy]['merged']=root
+            self.Gt.node[root]['merged'] = root
             # remove merged cycles
             for cy in merged:
                 self.Gc.remove_node(cy)
