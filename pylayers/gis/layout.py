@@ -539,6 +539,8 @@ class Layout(object):
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
         st = st + "\nUseful dictionnaries"+"\n----------------\n"
+        if hasattr(self,'dca'):
+            st = st + "dca {cycle : []} cycle with an airwall" +"\n"
         if hasattr(self,'di'):
             st = st + "di {interaction : [nstr,typi]}" +"\n"
         if hasattr(self,'sl'):
@@ -784,7 +786,7 @@ class Layout(object):
         self.pt (2xNp)
         self.tahe (2xNs)
         self.tgs
-        self.dca
+        self.dca  : dictionnary of cycle with an airwall
         self.lsss : list of subsegments
 
         assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]
@@ -4764,9 +4766,9 @@ class Layout(object):
                     except:
                         self.dca[cy[0]]=[cy[1]]
                     try:
-                        self.dca[cy[1]]=[cy[0]]
-                    except:
                         self.dca[cy[1]].append(cy[0])
+                    except:
+                        self.dca[cy[1]]=[cy[0]]
 
         f=os.path.splitext(self.filename)
         if f[1] =='.ini':

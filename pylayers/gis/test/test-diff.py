@@ -11,7 +11,7 @@ pta = Lk.a
 ptb = Lk.b
 pta[0] = pta[0]-4
 ptb[1] = ptb[1]+60
-ptb[0] = ptb[0]-22
+ptb[0] = ptb[0]-12
 Lk.a = pta
 Lk.b = ptb
 Lk.eval(si_algo='old',force=True)

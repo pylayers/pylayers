@@ -2722,21 +2722,22 @@ class Signatures(dict):
         dtxrx = np.sum(ptx-prx)
         if ((len(lc) == 1) & (dtxrx!=0)):
             rays.los=True
-#        # if source  and target separated by air walls
-#        else :
-#            for ic in xrange(len(lc)-1) :
-#                # if lc[i] connected to a air wall
-#                if lc[ic] in self.L.dca.keys():
-#                    # if lc[i] and lc[i+1] are connected by a airwall
-#                    if lc[ic+1] in self.L.dca[lc[ic]]:
-#                        los = True
-#                    else :
-#                        los = False
-#                        break
-#                else :
-#                    los = False
-#                    break
+        # if source  and target separated by air walls
+        else :
+            for ic in xrange(len(lc)-1) :
+                # if lc[i] connected to a air wall
+                if lc[ic] in self.L.dca.keys():
+                    # if lc[i] and lc[i+1] are connected by a airwall
+                    if lc[ic+1] in self.L.dca[lc[ic]]:
+                        los = True
+                    else :
+                        los = False
+                        break
+                else :
+                    los = False
+                    break
 
+        pdb.set_trace()
 #        rays[0]['pt']
         for k in self:
             # get signature block with k interactions
