@@ -384,7 +384,7 @@ class Polygon(shg.Polygon):
         get the signed area of the polygon
 
     """
-    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[]):
+    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[],delta=0):
         """
 
         Parameters
@@ -414,6 +414,13 @@ class Polygon(shg.Polygon):
             p = np.vstack((p.exterior.xy[0][0:-1],p.exterior.xy[1][0:-1]))
             #shg.Polygon.__init__(self, pt)
             #
+
+        if type(p) == tuple:
+            xmin = p[0]-delta
+            xmax = p[1]+delta
+            ymin = p[2]-delta
+            ymax = p[3]+delta
+            p = [[xmin,xmin,xmax,xmax],[ymin,ymax,ymax,ymin]]
 
         if type(p) == shg.multipoint.MultiPoint:
             self.Np = np.shape(p)[0]

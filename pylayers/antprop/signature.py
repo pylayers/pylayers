@@ -2713,12 +2713,12 @@ class Signatures(dict):
         # detect LOS situation
         #
 
+        # cycle on a line between 2 cycles
         lc  = self.L.cycleinline(self.source,self.target)
 
         # if source and target in the same cycle
         # and ptx != prx
         #
-        # Not the correct condition
         dtxrx = np.sum(ptx-prx)
         if ((len(lc) == 1) & (dtxrx!=0)):
             rays.los=True

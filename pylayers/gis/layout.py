@@ -79,7 +79,7 @@ Layout editing
     Layout.add_window
     Layout.add_door
 
-Layout transformation 
+Layout transformation
 ---------------------
 
 .. autosummary::
@@ -418,7 +418,7 @@ class Layout(object):
     .. autosummary::
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',force=False):
         """
 
         Parameters
@@ -510,10 +510,11 @@ class Layout(object):
         self.boundary()
 
         # If a the layout has already been built then load the built structure
-        try:
-            self.dumpr()
-        except:
-            pass
+        if not force:
+            try:
+                self.dumpr()
+            except:
+                pass
 
     def __repr__(self):
         st = '\n'
@@ -667,11 +668,11 @@ class Layout(object):
             num = filter(lambda x : degpnt[x]==deg,range(len(degpnt))) # position of degree 1 point
             npt = map(lambda x : upnt[x],num)  # number of degree 1 points
             self.deg[deg] = npt
-       
+
 
 
         for s in useg:
-            n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors   
+            n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
             p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
             p2 = np.array(self.Gs.pos[n2])           #     s
             #
@@ -736,6 +737,7 @@ class Layout(object):
 
         return np.setdiff1d(iseg, u)
 
+
     def help(self,letter='az',mod='meth'):
         """ help
 
@@ -769,7 +771,6 @@ class Layout(object):
                                     print s+': '+ doc[0]
                                 except:
                                     pass
-
 
 
     def g2npy(self):
@@ -824,7 +825,7 @@ class Layout(object):
         lairwall = self.name['AIR']
 
         #
-        # function to count airwall connected to a point
+        #  function to count airwall connected to a point
         #  probably this is not the faster solution
         #
 
@@ -994,7 +995,7 @@ class Layout(object):
                     d['ss_name']=[d['ss_name']]
                     del(d['ss_zmin'])
                     del(d['ss_zmax'])
-                #/old format conversion                 
+                #/old format conversion
                 for key in d:
                     try:
                         d[key]=eval(d[key])
@@ -1027,7 +1028,7 @@ class Layout(object):
                     self.name[name].append(ns)
                 else:
                     self.name[name] = [ns]
-                   
+
                 _ns+=1
 
         self.Np = _np
@@ -1250,8 +1251,7 @@ class Layout(object):
             self.fileslabini=config.get('files','slab')
             self.filefur=config.get('files','furniture')
 
-
-        # convert graph Gs to numpy arrays for speed up post processing
+        # convert graph Gs to numpy arrays for faster post processing
         self.g2npy()
 
 
@@ -2311,7 +2311,7 @@ class Layout(object):
             default = 0
 
         """
-       
+
         # compute the four points
         p0 = origin
         u = np.array([np.cos(angle * np.pi / 180),
@@ -2445,6 +2445,23 @@ class Layout(object):
         self.g2npy()
 
 
+    def mask(self):
+        """
+        """
+        p = self.Gt.node[0]['polyg']
+        ps = sh.Polygon(p.exterior)
+        for k in self.Gt.node:
+            if (k!=0):
+                p = self.Gt.node[k]['polyg']
+                ps = ps.union(sh.Polygon(p.exterior))
+        mask = geu.Polygon(ps)
+        mask.setvnodes(self)
+        return(mask)
+
+    def scale(self,alpha):
+        """
+        """
+        pass
     def translate(self,vec):
         """ translate layout
 
@@ -3791,15 +3808,13 @@ class Layout(object):
         self.min_sy = np.array(map(lambda x : min(pt[1,x[0]],pt[1,x[1]]), th))
 
     def seginframe2(self, p1, p2):
-        """ return the seg list of a given zone defined by two points
+        """ returns the seg list of a given zone defined by two points
 
             Parameters
             ----------
 
-            p1
-                array (2 x N)
-            p2
-                array (2 x N)
+            p1 array (2 x N)
+            p2 array (2 x N)
 
             Returns
             -------
@@ -3830,10 +3845,10 @@ class Layout(object):
         if (len(sh1)<2) & (len(sh2)>1):
             p1 = np.outer(p1,np.ones(sh2[1]))
 
-        if (len(sh2)<2) & (len(sh1)>1):   
+        if (len(sh2)<2) & (len(sh1)>1):
             p2 = np.outer(p2,np.ones(sh1[1]))
 
-        if (len(sh2)<2) & (len(sh1)<2):   
+        if (len(sh2)<2) & (len(sh1)<2):
             p1 = np.outer(p1,np.ones(1))
             p2 = np.outer(p2,np.ones(1))
 
@@ -3845,7 +3860,7 @@ class Layout(object):
         # min_sy < max_y
 
 
-            # N x 1
+        # N x 1
 
         max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
         min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
@@ -3854,8 +3869,10 @@ class Layout(object):
 
         seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
                                          (self.min_sx < x[1]) &
-                                         (self.max_sy > x[2]) & 
-                                         (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
+                                         (self.max_sy > x[2]) &
+                                         (self.min_sy < x[3]) )[0],
+                                         zip(min_x,max_x,min_y,max_y))
+
         # np.array stacking
         # -1 acts as a deliminiter (not a segment number)
 
@@ -3905,7 +3922,7 @@ class Layout(object):
 
         Dx = max_x - min_x
         Dy = max_y - min_y
-       
+
         if Dx < 0.5:
             max_x=max_x+0.5
             min_x=min_x-0.5
@@ -3945,8 +3962,10 @@ class Layout(object):
         Parameters
         ----------
 
-        p1 : numpy.ndarray
-        p2 : numpy.ndarray
+        c1 : int
+            point
+        c2 : int
+            point
 
         Returns
         -------
@@ -3956,30 +3975,41 @@ class Layout(object):
         See Also
         --------
 
+        pylayers.antprop.signature.Signatures.rays
+        pylayers.gis.layout.Layout.seginframe2
+
+        Notes
+        -----
+
+        This function is used to detect LOS conditions
 
         """
+
         I = np.array([]).reshape(3,0)
 
+        # polygon cycle 1
         poly1 = self.Gt.node[c1]['polyg']
         p1t = poly1.centroid.xy
 
+        # polygon cycle 2
         poly2 = self.Gt.node[c2]['polyg']
         p2t = poly2.centroid.xy
 
+        # centroid of cycle 1 and 2
         p1 = np.array([p1t[0][0],p1t[1][0]])
         p2 = np.array([p2t[0][0],p2t[1][0]])
 
         line = sh.LineString((p1,p2))
 
-
         # els = self.seginframe(p1,p2)
         # new implementation of seginframe is faster
         els = self.seginframe2(p1,p2)
+
         elg = self.tsg[els]
 
         lc = []
-        ls=[]
-        I = np.array([]).reshape(2,0)
+        ls = []
+        I  = np.array([]).reshape(2,0)
 
         for seg in elg:
             ta, he = self.Gs.neighbors(seg)
@@ -4713,7 +4743,7 @@ class Layout(object):
             # why is there 2 calls to buildGi and buildGi2 ?
             self.buildGi()
             self.outputGi()
-            self.buildGi2()
+            #self.buildGi2()
             self.lbltg.extend('i')
 
         if 'w' in graph and len(self.Gr.nodes())>1:
@@ -4728,7 +4758,7 @@ class Layout(object):
         for seg,d in self.Gs.node.items():
             if seg >0 :
                 if d['name'] == 'AIR':
-                    cy=d['ncycles']
+                    cy = d['ncycles']
                     try:
                         self.dca[cy[0]].append(cy[1])
                     except:
@@ -4769,7 +4799,7 @@ class Layout(object):
                     gname1 ='G'+g
                     gname2 ='dG'+g
                     write_gpickle(getattr(self,gname1),path+'/G'+g+'.gpickle')
-                    write_gpickle(getattr(self,gname2),path+'/dG'+g+'.gpickle')
+                    #write_gpickle(getattr(self,gname2),path+'/dG'+g+'.gpickle')
                 else:
                     gname='G'+g
                     write_gpickle(getattr(self,gname),path+'/G'+g+'.gpickle')
@@ -4804,13 +4834,14 @@ class Layout(object):
 
         """
         graphs=['s','t','c','v','i','r','w']
+        path = basename+'/struc/gpickle/'+self.filename
         for g in graphs:
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
                     gname2 ='dG'+g
                     setattr(self, gname1,read_gpickle(path+'/G'+g+'.gpickle'))
-                    setattr(self, gname2,read_gpickle(path+'/dG'+g+'.gpickle'))
+                    #setattr(self, gname2,read_gpickle(path+'/dG'+g+'.gpickle'))
                 else:
                     gname='G'+g
                     setattr(self, gname,read_gpickle(path+'/G'+g+'.gpickle'))
@@ -4840,7 +4871,12 @@ class Layout(object):
                         if len(self.Gs.node[inode]['ncycles'])>2:
                             print n,self.Gs.node[inode]['ncycles']
                             logging.warning('dumpr : a segment cannot relate more than 2 cycles')
-
+        # if ncycles is a list with only one element the other cycle is the
+        # outside region (cycle -1)
+        for k in self.Gs.node:
+            if k>0:
+                if len(self.Gs.node[k]['ncycles'])==1:
+                    self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         setattr(self,'di', read_gpickle(path+'/di.gpickle'))
         setattr(self,'dca', read_gpickle(path+'/dca.gpickle'))
@@ -4871,7 +4907,8 @@ class Layout(object):
 
         See Also
         --------
-            nx.algorithms.cycles.cycle_basis
+
+        nx.algorithms.cycles.cycle_basis
 
         """
         #
@@ -4963,6 +5000,12 @@ class Layout(object):
                             print n,self.Gs.node[n]['ncycles']
                             logging.warning('A segment cannot relate more than 2 cycles')
 
+        # if ncycles is a list with only one element the other cycle is the
+        # outside region (cycle -1)
+        for k in self.Gs.node:
+            if k>0:
+                if len(self.Gs.node[k]['ncycles'])==1:
+                    self.Gs.node[k]['ncycles'].append(-1)
         #
         #  Seek for Cycle inter connectivity
         #
@@ -5045,7 +5088,14 @@ class Layout(object):
                     pass
             self.Gt.add_node(k, inter=ListInteractions)
 
-
+        # adding outdoor polygon
+        p1 = geu.Polygon(self.ax,delta=5)
+        ma = self.mask()
+        p2 = p1.difference(ma)
+        p3 = geu.Polygon(p2)
+        p3.vnodes = ma.vnodes
+        self.Gt.add_node(-1,polyg=p3)
+        self.Gt.pos[-1]=(self.ax[0],self.ax[2])
 
     def buildGw(self):
         """ build Graph of waypaths
@@ -5441,9 +5491,10 @@ class Layout(object):
 
             udeg2 = []
             udeg1 = []
-            cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt
+            #cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt
             polyg = self.Gt.node[icycle]['polyg']  # a shapely polygon
-            vnodes = cycle.cycle
+            #vnodes = cycle.cycle
+            vnodes = polyg.vnodes
             #
             # seek node of degree 2
             #
@@ -5460,12 +5511,12 @@ class Layout(object):
             self.Gv  = nx.compose(self.Gv, Gv)
             self.dGv[icycle] = Gv
 
-        #pdb.set_trace()
         for icycle in self.Gc.node:
-            polyg = self.Gc.node[icycle]['polyg']  # a shapely polygon
-            polyg.setvnodes(self)
-            Gv = polyg.buildGv(show=show,eded=False)
-            self.Gv  = nx.compose(self.Gv, Gv)
+            if icycle!=-1:
+                polyg = self.Gc.node[icycle]['polyg']  # a shapely polygon
+                polyg.setvnodes(self)
+                Gv = polyg.buildGv(show=show,eded=False)
+                self.Gv  = nx.compose(self.Gv, Gv)
 
     def buildGi2(self):
         """ build dictionnary of graph of interactions
@@ -5628,92 +5679,93 @@ class Layout(object):
                 cy = self.Gs.node[n]['ncycles']
                 name = self.Gs.node[n]['name']
                 # 2 cycles
-                if len(cy) == 2:
+                #if len(cy) == 2: #deprecated
 
-                    cy0 = cy[0]
-                    cy1 = cy[1]
+                cy0 = cy[0]
+                cy1 = cy[1]
 
-                    nei = self.Gs.neighbors(n)  # get neigbor
-                    np1 = nei[0]
-                    np2 = nei[1]
+                nei = self.Gs.neighbors(n)  # get neighbor
+                np1 = nei[0]
+                np2 = nei[1]
 
-                    p1 = np.array(self.Gs.pos[np1])
-                    p2 = np.array(self.Gs.pos[np2])
-                    l = p1 - p2
-                    nl = np.dot(l, l)
-                    ln = l / nl
+                p1 = np.array(self.Gs.pos[np1])
+                p2 = np.array(self.Gs.pos[np2])
+                l = p1 - p2
+                nl = np.dot(l, l)
+                ln = l / nl
 
-                    delta = nl / 10
+                delta = nl / 10
+                # On AIR or ABSORBENT there is no reflection
+                # except if n is a subsegment
+                if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
+                    self.Gi.add_node(str((n,cy0)))
+                    self.Gi.add_node(str((n,cy1)))
+                    self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
+                    self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+
+                # Through METAL or ABSORBENT there is no transmission
+                # except if n is a subsegment
+                if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
+                    self.Gi.add_node(str((n,cy0,cy1)))
+                    self.Gi.add_node(str((n,cy1,cy0)))
+                    self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
+                    self.Gi.pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
+
+                #if len(cy) == 1: # segment which is not a separation between rooms
                     # On AIR or ABSORBENT there is no reflection
                     # except if n is a subsegment
-                    if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
-                        self.Gi.add_node(str((n,cy0)))
-                        self.Gi.add_node(str((n,cy1)))
-                        self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
-                        self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
-
-                    # Through METAL or ABSORBENT there is no transmission
-                    # except if n is a subsegment
-                    if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
-                        self.Gi.add_node(str((n,cy0,cy1)))
-                        self.Gi.add_node(str((n,cy1,cy0)))
-                        self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
-                        self.Gi.pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
-
-                if len(cy) == 1: # segment which is not a separation between rooms
-                    # On AIR or ABSORBENT there is no reflection
-                    # except if n is a subsegment
-                    if (name<>'AIR') & (name<>'ABSORBENT')  or (n in self.lsss):
-                        self.Gi.add_node(str((n, cy[0])))
-                        self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
+                    # this is deprecated since the introduction of cycle -1
+                    # (outdoor)
+                #   if (name<>'AIR') & (name<>'ABSORBENT')  or (n in self.lsss):
+                #        self.Gi.add_node(str((n, cy[0])))
+                #        self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
 
         #
-        # Loop over interactions list
+        # Establishing link between interactions
         #
         for sn in self.Gi.node:
             n = eval(sn)
             node1 = str(n)
             #print "---->",node1
-            if isinstance(n, tuple):  # reflection ou transmission
-                if len(n)==2: #  Reflection
+            if isinstance(n, tuple):  # (R|T)
+                if len(n)==2: #  (R) (segment,cycle)
                     ns = n[0]  # segment
                     nc = n[1]  # cycle
                     #vnodes = self.Gt.node[nc]['vnodes']
-                    vnodes = self.Gt.node[nc]['cycle'].cycle
-                    neigh = self.Gv.neighbors(ns)  # find neighbors
+                    #vnodes = self.Gt.node[nc]['cycle'].cycle
+                    vnodes = self.Gt.node[nc]['polyg'].vnodes
+                    neigh = self.Gv.neighbors(ns)  # find neighbors of segment ns
                     for nb in neigh:
-                        if nb > 0:             # segment
-                            if nb in vnodes:   # if segment in reflection cycle 
+                        if nb > 0:             # segment (R|T)
+                            if nb in vnodes:   # if segment in reflection cycle
                                 #node1 = str(n)
                                 node2 = str((nb, nc))  # R ( nc <-> nb )
                                 if ((node1 in self.Gi.node.keys())
                                  &  (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)     # R(n,nc)-> R(nb,nc)
-                                    #print "      ---->",node2
+                                #print "      ---->",node2
                                 # retrieve the cycles of the segment
                                 # if segment has 2 cycles, transmission is also
                                 # possible
                                 cy = set(self.Gs.node[nb]['ncycles'])
-                                if len(cy) == 2: # R-T
-                                    node1 = str(n)
-                                    nc1   = list(cy.difference({nc}))[0]
-                                    node2 = str((nb,nc,nc1))  # T (nc -> nb -> nc1)
+                                #if len(cy) == 2: # R-T
+                                node1 = str(n)
+                                # the other cycle
+                                nc1 = list(cy.difference({nc}))[0]
+                                node2 = str((nb,nc,nc1))  # T (nc -> nb -> nc1)
 
-                                    if ((node1 in self.Gi.node.keys())
-                                      & (node2 in self.Gi.node.keys())):
-                                        self.Gi.add_edge(node1, node2)
-    #                                print "      ---->",node2
-    #                                else:
-    #                                    print node1, node2
-                                        #pdb_set_trace()
-                        else:       # nb <0  diffraction
+                                if ((node1 in self.Gi.node.keys())
+                                  & (node2 in self.Gi.node.keys())):
+                                    self.Gi.add_edge(node1, node2)
+                        else:   # nb <0  diffraction
                             #node1 = str(n)  #
                             node2 = str(nb) #
-                            if ((node1 in self.Gi.node.keys())
-                             & (node2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(node1, node2)   #  (n,nc) -> D
-                                self.Gi.add_edge(node2, node1)   #  D --> (n,nc)
-#                                print "      <---->",node2
+                            if (nc!=-1):  # nc is not the external cycle
+                                if ((node1 in self.Gi.node.keys())
+                                 & (node2 in self.Gi.node.keys())):
+                                    self.Gi.add_edge(node1, node2)   #  (n,nc) -> D
+                                    self.Gi.add_edge(node2, node1)   #  D --> (n,nc)
+    #                                print "      <---->",node2
                                 # diffraction is a reciprocal interaction
 #                            else:
 #                                print node1, node2
@@ -5724,8 +5776,10 @@ class Layout(object):
                     cy1 = n[2]
                     #vnodes0 = self.Gt.node[cy0]['vnodes']
                     #vnodes1 = self.Gt.node[cy1]['vnodes']
-                    vnodes0 = self.Gt.node[cy0]['cycle'].cycle
-                    vnodes1 = self.Gt.node[cy1]['cycle'].cycle
+                    #vnodes0 = self.Gt.node[cy0]['cycle'].cycle
+                    #vnodes1 = self.Gt.node[cy1]['cycle'].cycle
+                    vnodes0 = self.Gt.node[cy0]['polyg'].vnodes
+                    vnodes1 = self.Gt.node[cy1]['polyg'].vnodes
                     neigh = self.Gv.neighbors(ns)  # find neighbors
                     for nb in neigh:
                         if nb > 0:
@@ -5749,10 +5803,11 @@ class Layout(object):
                         else:       # nb <0 D diffraction
                             #node1 = str(n)  #
                             node2 = str(nb) #
-                            if ((node1 in self.Gi.node.keys())
-                              & (node2 in self.Gi.node.keys())):
-                                self.Gi.padd_edge(node1, node2)  # (n,cy0,cy1) -> D(nb)
-                                #print "      ---->",node2
+                            if cy1!=-1:
+                                if ((node1 in self.Gi.node.keys())
+                                  & (node2 in self.Gi.node.keys())):
+                                    self.Gi.add_edge(node1, node2)  # (n,cy0,cy1) -> D(nb)
+                                    #print "      ---->",node2
             else:
                 # n is a Gi interaction <0
                 # n is also a node ov Gv
@@ -5786,9 +5841,10 @@ class Layout(object):
         # so all possible diffraction point are not connected to Tx or Rx
         #
         for c in self.Gt.node:
-            vn = self.Gt.node[c]['polyg'].vnodes
-            idiff = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vn))
-            self.Gt.node[c]['inter']+= idiff
+            if c != -1:
+                vn = self.Gt.node[c]['polyg'].vnodes
+                idiff = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vn))
+                self.Gt.node[c]['inter']+= idiff
 
 
     def outputGi(self):
@@ -6946,12 +7002,13 @@ class Layout(object):
 
         keys = self.Gr.node.keys()
         for cy in keys:
-            lseg = self.Gr.node[cy]['cycle'].cycle
-            hasdoor = filter(lambda n : n in ldoors,lseg)
-            if len(hasdoor)>0:
-                pass
-            else:
-                self.Gr.remove_node(cy)
+            if cy!=-1:
+                lseg = self.Gr.node[cy]['cycle'].cycle
+                hasdoor = filter(lambda n : n in ldoors,lseg)
+                if len(hasdoor)>0:
+                    pass
+                else:
+                    self.Gr.remove_node(cy)
 
         # Destroy edges which do not share a door
         for e in self.Gr.edges():
@@ -7952,9 +8009,11 @@ class Layout(object):
 
         Parameters
         ----------
-        iTx  : Transmitter room
-        iRx  :
-               Transmitter room
+
+        cy1  : int
+            source cycle
+        cy2  : int
+            target cycle
 
         Returns
         -------
