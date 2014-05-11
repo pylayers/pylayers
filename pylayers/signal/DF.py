@@ -118,18 +118,33 @@ class DF(object):
             return(MF)
 
     def filter(self,x):
+        """ filter x
+
+        Parameters
+        ----------
+
+        x : np.array
+            input signal
+
+        Returns
+        -------
+
+        y : np.array
+            output signal
+
+        """
+
         y  = si.lfilter(self.b,self.a,x)
         return(y)
 
     def order(self):
-        """
-        Returns filter order
+        """ Returns filter order
         """
         return self.order
 
     def freqz(self):
-        """
-        freqz : display filter transfer function
+        """ freqz : display filter transfer function
+
         """
         (w,h)    = si.freqz(self.b,self.a)
         self.w   = w
@@ -214,14 +229,16 @@ class DF(object):
         plt.axis('equal')
         plt.show()
 
-    def ir(self,N):
+    def ir(self,N,show=False):
         """ show impulse response
         """
         ip    = np.zeros(N)
         ip[0] = 1
-        rip   = self.filter(ip)
-        plt.stem(np.arange(N),rip)
-        plt.show()
+        ir    = self.filter(ip)
+        if show:
+            plt.stem(np.arange(N),rip)
+            plt.show()
+        return(ir)
 
 
 if __name__ == "__main__":
