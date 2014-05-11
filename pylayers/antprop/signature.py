@@ -997,7 +997,7 @@ class Signatures(dict):
                 except:
                     pass
 
-            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
+            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     path = visited + [target]
@@ -1738,6 +1738,7 @@ class Signatures(dict):
         lis  = lisT + lisR + lisD
 
         # list of interactions visible from target
+        pdb.set_trace()
         litT,litR,litD = self.L.intcy(self.target,typ='target')
         lit  = litT + litR + litD
 
@@ -1759,10 +1760,10 @@ class Signatures(dict):
         #for interaction source  in list of source interactions
         for us,s in enumerate(lis):
             #for target interaction in list of target interactions
-            #print "---> ",s
+            print "---> ",s
 
             for ut,t in enumerate(lit):
-                #print "   ---> ",t
+                print "   ---> ",t
                 # progress bar
                 if progress :
 

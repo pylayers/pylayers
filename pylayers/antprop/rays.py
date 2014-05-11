@@ -716,7 +716,7 @@ class Rays(dict):
                 np.ones((1, 1, len(pts[0, 0, :])))
             r = self.pRx[0:2].reshape((2, 1, 1)) * \
                 np.ones((1, 1, len(pts[0, 0, :])))
-            # append t and r to interaction points in 2D 
+            # append t and r to interaction points in 2D
             pts1 = np.hstack((t, np.hstack((pts, r))))
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             # array of all ray segments distances
@@ -759,7 +759,7 @@ class Rays(dict):
             Nrayk = np.shape(self[k]['alpha'])[1]
 
             # get  2D horizontal parameterization
-            a1 = self[k]['alpha']         
+            a1 = self[k]['alpha']
 
             #if (k==1):
             #    pdb.set_trace()

@@ -4935,18 +4935,14 @@ class Layout(object):
             Gt.add_node(k,cycle=cy)
             Gt.pos[k] = tuple(cy.g)
             #LC.append(cy)
+
         Gt.inclusion(full=True)
-        #c23 = Gt.node[23]['cycle']
-        #c25 = Gt.node[25]['cycle']
-        #cc  = c26+c24
-        #b1 = c23.inclusion(c25)
-        #pdb.set_trace()
-        #if b1:
-        #punctual,cysmall = c23.split(c25)
         Gt = Gt.decompose()
+
         #
         # check algorithm output
         #
+
         Gt.inclusion()
         if len(Gt.edges())>0:
             logging.warning("first decompose run failed")
@@ -4957,9 +4953,11 @@ class Layout(object):
         #
         # transform DiGraph into Graph
         #
+
         self.Gt = nx.Graph(Gt)
         self.Gt.pos = {}
         self.Gt.pos.update(Gt.pos)
+
         #cys = cys.decompose()
         #cys.inclusion()
         #cys.simplify2()
@@ -5002,20 +5000,21 @@ class Layout(object):
                             print n,self.Gs.node[n]['ncycles']
                             logging.warning('A segment cannot relate more than 2 cycles')
 
-        # if ncycles is a list with only one element the other cycle is the
+        # if ncycles is a list with only one element then the adjascent cycle is the
         # outside region (cycle -1)
+
         for k in self.Gs.node:
             if k>0:
                 if len(self.Gs.node[k]['ncycles'])==1:
                     self.Gs.node[k]['ncycles'].append(-1)
         #
-        #  Seek for Cycle inter connectivity
+        #  Seek for Cycle connection
         #
         for k in combinations(range(Ncycles), 2):
-            #vnodes0 = np.array(self.Gt.node[k[0]]['vnodes'])
-            #vnodes1 = np.array(self.Gt.node[k[1]]['vnodes'])
+
             vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
             vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+
             #
             # Connect Cycles if they share nodes (segment ? )
             #
@@ -5039,14 +5038,51 @@ class Layout(object):
             npoints = vnodes[u_neg]
             coords = []
             #
-            # Loop over points
+            # Loop over points for appending coordinates
             #
             for ind in npoints:
                 coords.append(self.Gs.pos[ind])
             polk = geu.Polygon(sh.MultiPoint(tuple(coords)), vnodes)
 
             self.Gt.add_node(k, polyg=polk)
+            #
+            # By default a cycle is indoor
+            # unless it is separted from cycle -1 by airwall
+            #
+            self.Gt.add_node(k, indoor=True)
+
         #
+        # adding cycle -1 outdoor polygon
+        #
+        # The shapely polygon has an interior
+
+        p1 = geu.Polygon(self.ax,delta=5)
+        ma = self.mask()
+        p2 = p1.difference(ma)
+        p3 = geu.Polygon(p2)
+        p3.vnodes = ma.vnodes
+        self.Gt.add_node(-1,polyg=p3)
+        self.Gt.add_node(-1, indoor = False)
+        self.Gt.pos[-1]=(self.ax[0],self.ax[2])
+
+        # all segments of the building boundary
+        nseg = filter(lambda x : x >0 , p3.vnodes)
+        nsegair = filter(lambda x : x in self.name['AIR'],nseg)
+        nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
+
+        # adjascent cycles
+        adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=-1,
+                                      self.Gs.node[x]['ncycles'])[0],nsegair)))
+        for cy in adjcyair:
+            self.Gt.add_edge(-1,cy)
+
+        adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=-1,
+                                      self.Gs.node[x]['ncycles'])[0],nsegwall)))
+
+        for cy in adjcyair:
+            self.Gt.add_edge(-1,cy)
+            self.Gt.node[cy]['indoor']=False
+
         # Construct the list of interactions associated to each cycle
         #
         # Interaction labeling convention
@@ -5061,7 +5097,7 @@ class Layout(object):
         #
         for k in self.Gt.nodes():
             #vnodes = self.Gt.node[k]['vnodes']
-            vnodes = self.Gt.node[k]['cycle'].cycle
+            vnodes = self.Gt.node[k]['polyg'].vnodes
             ListInteractions = []
             for inode in vnodes:
                 if inode > 0:   # segments
@@ -5083,21 +5119,12 @@ class Layout(object):
                             ncy = list(cy.difference({k}))[0]
                             ListInteractions.append(str((inode, k, ncy)))
                             ListInteractions.append(str((inode, ncy, k)))
-                else:
-                    # to decide wether a point is a diffraction point
-                    # is hard to tell before evaluation of Gc
-                    # this information is updated in buildGc
+                else:  # points
                     pass
+            # add list of interactions of a cycle
             self.Gt.add_node(k, inter=ListInteractions)
+            self.Gt.add_node(k, merged = k)
 
-        # adding outdoor polygon
-        p1 = geu.Polygon(self.ax,delta=5)
-        ma = self.mask()
-        p2 = p1.difference(ma)
-        p3 = geu.Polygon(p2)
-        p3.vnodes = ma.vnodes
-        self.Gt.add_node(-1,polyg=p3)
-        self.Gt.pos[-1]=(self.ax[0],self.ax[2])
 
     def buildGw(self):
         """ build Graph of waypaths
@@ -5838,15 +5865,11 @@ class Layout(object):
         self.ldiff = filter(lambda x: eval(x)<0 ,self.Gi.nodes())
 
         # updating the list of interaction of a given cycle
-        # TODO what is temporaily implemented below is not correct
-        # a cycle can see a diffraction point which is not in the cycle vnodes
-        # so all possible diffraction point are not connected to Tx or Rx
-        #
         for c in self.Gt.node:
-            if c != -1:
-                vn = self.Gt.node[c]['polyg'].vnodes
-                idiff = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vn))
-                self.Gt.node[c]['inter']+= idiff
+            #if c != -1:
+            vn = self.Gt.node[c]['polyg'].vnodes
+            idiff = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vn))
+            self.Gt.node[c]['inter']+= idiff
 
 
     def outputGi(self):
