@@ -1738,7 +1738,6 @@ class Signatures(dict):
         lis  = lisT + lisR + lisD
 
         # list of interactions visible from target
-        pdb.set_trace()
         litT,litR,litD = self.L.intcy(self.target,typ='target')
         lit  = litT + litR + litD
 
@@ -1749,8 +1748,8 @@ class Signatures(dict):
         if not diffraction:
             Gi = gidl(Gi)
 
-        # initilaize dout dictionnary
-        dout={}
+        # initialize dout dictionnary
+        dout = {}
 
         # progresss stuff...
         lmax = len(lis)*len(lit)

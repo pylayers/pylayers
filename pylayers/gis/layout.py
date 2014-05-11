@@ -2448,12 +2448,13 @@ class Layout(object):
 
 
     def mask(self):
+        """  returns the convex hull polygon of the building
         """
-        """
-        p = self.Gt.node[0]['polyg']
+
+        p  = self.Gt.node[0]['polyg']
         ps = sh.Polygon(p.exterior)
         for k in self.Gt.node:
-            if (k!=0):
+            if (k!=0) & (k!=-1):
                 p = self.Gt.node[k]['polyg']
                 ps = ps.union(sh.Polygon(p.exterior))
         mask = geu.Polygon(ps)
@@ -6062,12 +6063,27 @@ class Layout(object):
         if typ=='target':
             lT = filter(lambda x: eval(x)[2]==ncy,lT)
 
-        # finding diffraction
-        # which is the cycle of Gc ?
+        # Finding the diffraction points
+        # Diffraction points are different from indoor cycle and outdoor
+        # cycles
         gccy = self.Gt.node[ncy]['merged']
-        # sequence of nodes of merged cycle
+        # sequence of nodes of merged cycles
         vnodes = self.Gc.node[gccy]['polyg'].vnodes
-        lD = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vnodes))
+        vpoints = filter(lambda x: x<0,vnodes)
+        indoor = self.Gc.node[gccy]['indoor']
+        # indoor
+        # the negative test not in self.ldiff can find wrong diffractions
+        # TEMPORARY - BUG - TODO - FIX IT
+        # need to create
+        #  ldiffin  : list of indoor diffraction points
+        #  ldiffout : list of outdoor diffraction points
+        #       merge all polygons of the building convex hull
+        if indoor:
+            lD = map(lambda x: str(x),filter(lambda x : str(x) in
+                                             self.ldiff,vpoints))
+        else:
+            lD = map(lambda x: str(x),filter(lambda x : str(x) not in
+                                             self.ldiff,vpoints))
 
         return lR,lT,lD
 
