@@ -694,7 +694,7 @@ class Rays(dict):
 
         tx = self.pTx
         rx = self.pRx
-        
+
         #
         # Phase 1 : calculate Tx images height and parameterization in the
         # vertical plane
@@ -705,7 +705,7 @@ class Rays(dict):
         #
         # Phase 2 : calculate 2D parameterization in the horizontal plane
         #
-       
+
         # for all group of interactions
         for i in self:
 
@@ -764,7 +764,7 @@ class Rays(dict):
             #if (k==1):
             #    pdb.set_trace()
             # get  2D signature
-            sig = self[k]['sig']           
+            sig = self[k]['sig']
             #print "signatures 2D ",sig
             #print "----"
             sigsave = copy.copy(sig)
@@ -824,8 +824,8 @@ class Rays(dict):
                         u = np.mod(range(Nint), 2)
                     else:
                         u = 1 - np.mod(range(Nint), 2)
-                    #   
-                    u = u + 4   
+                    #
+                    u = u + 4
                     #
                     # At that point we introduce the signature of the new
                     # introced points on the ceil and/or floor.
@@ -836,26 +836,26 @@ class Rays(dict):
                     #
                     esigs = np.zeros((1, Nint, Nrayk), dtype=int)
                     esigi = u.reshape(1, Nint, 1)* np.ones((1, 1, Nrayk), dtype=int)
-                    # esig : extension of the signature              
+                    # esig : extension of the signature
                     esig = np.vstack((esigs, esigi))
                     # sige : signature extended  ( 2 x (Nint+k+2) x Nrayk )
                     sige = np.hstack((sig, esig))
-                   
+
                     #
                     # 2 x (Nint+k+2) x Nrayk
                     #
-                    # Now comes the time to sort extended sequence of points
+                    # sort extended sequence of points
                     # and extended sequence of signatures with the sorting
-                    # index ks obtained from argsort of merge parametization 
+                    # index ks obtained from argsort of merge parametization
                     #
                     # sequence of extended sorted points
                     #
-                    ptees = ptee[:, ks, range(Nrayk)]    
-                    siges = sige[:, ks, range(Nrayk)]  
+                    ptees = ptee[:, ks, range(Nrayk)]
+                    siges = sige[:, ks, range(Nrayk)]
                     # extended and sorted signature
                     iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
                     iint_c, iray_c = np.where(siges[ 1, :] == 5)  # ceil interaction
-                    #print siges    
+                    #print siges
                     #
                     # find the list of the previous and next point around the
                     # new ceil or floor point. The case of successive ceil or
@@ -1087,7 +1087,7 @@ class Rays(dict):
         #   pt =  [tx,rx]
         #   sig = [0,0]
         #
-        
+
         if (self.los) & (np.sum(tx-rx,axis=0)<>0):
             r3d[0] = {}
             r3d[0]['sig'] = np.zeros((2,2,1))
