@@ -1741,6 +1741,9 @@ class Signatures(dict):
         litT,litR,litD = self.L.intcy(self.target,typ='target')
         lit  = litT + litR + litD
 
+        import ipdb
+        ipdb.set_trace()
+
         Gi = self.L.Gi
         Gi.pos = self.L.Gi.pos
         #

@@ -4984,30 +4984,8 @@ class Layout(object):
         #  Update graph Gs with cycle information
         #
 
-        #  initialize a void list 'ncycles' for each segment of Gs
-        #
-        for k in self.Gs.node:
-            if k>0:
-                self.Gs.node[k]['ncycles']=[]
+        #moved
 
-        for k in range(Ncycles):
-            #vnodes = np.array(self.Gt.node[k]['vnodes'])
-            vnodes = np.array(self.Gt.node[k]['cycle'].cycle)
-            for n in vnodes:
-                if n>0:
-                    if k not in self.Gs.node[n]['ncycles']:
-                        self.Gs.node[n]['ncycles'].append(k)
-                        if len(self.Gs.node[n]['ncycles'])>2:
-                            print n,self.Gs.node[n]['ncycles']
-                            logging.warning('A segment cannot relate more than 2 cycles')
-
-        # if ncycles is a list with only one element then the adjascent cycle is the
-        # outside region (cycle -1)
-
-        for k in self.Gs.node:
-            if k>0:
-                if len(self.Gs.node[k]['ncycles'])==1:
-                    self.Gs.node[k]['ncycles'].append(-1)
         #
         #  Seek for Cycle connection
         #
@@ -5021,10 +4999,7 @@ class Layout(object):
             #
             intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-            #if len(intersection_vnodes) != 0:
             if len(intersection_vnodes) > 1:
-                #print intersection_vnodes,len(intersection_vnodes)
-                #print k[0],k[1]
                 segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                 self.Gt.add_edge(k[0], k[1],segment= segment)
 
@@ -5050,8 +5025,8 @@ class Layout(object):
             # By default a cycle is indoor
             # unless it is separted from cycle -1 by airwall
             #
-            self.Gt.add_node(k, indoor=True)
-
+            #self.Gt.add_node(k, indoor=True)
+        #mapping={k:v for (k,v) in zip(self.Gt.node.keys(),self.Gt.node.keys())}
         #
         # adding cycle -1 outdoor polygon
         #
@@ -5072,17 +5047,52 @@ class Layout(object):
         nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
 
         # adjascent cycles
+        #
+
         adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=-1,
                                       self.Gs.node[x]['ncycles'])[0],nsegair)))
-        for cy in adjcyair:
-            self.Gt.add_edge(-1,cy)
-
         adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=-1,
                                       self.Gs.node[x]['ncycles'])[0],nsegwall)))
 
+        mapping={}
         for cy in adjcyair:
             self.Gt.add_edge(-1,cy)
-            self.Gt.node[cy]['indoor']=False
+            #self.Gt.node[cy]['indoor']=False
+            mapping[cy] = -cy
+
+        #mapping[-1]=-1
+        # relabel nodes
+        pos = self.Gt.pos
+        self.Gt = nx.relabel_nodes(self.Gt,mapping,copy=False)
+        for k in mapping.keys():
+            self.Gt.pos[mapping[k]]=self.Gt.pos[k]
+            del self.Gt.pos[k]
+
+
+        #  initialize a void list 'ncycles' for each segment of Gs
+        #
+        for k in self.Gs.node:
+            if k>0:
+                self.Gs.node[k]['ncycles']=[]
+
+        for k in self.Gt.node.keys():
+            #vnodes = np.array(self.Gt.node[k]['vnodes'])
+            vnodes = self.Gt.node[k]['polyg'].vnodes
+            for n in vnodes:
+                if n>0:
+                    if k not in self.Gs.node[n]['ncycles']:
+                        self.Gs.node[n]['ncycles'].append(k)
+                        if len(self.Gs.node[n]['ncycles'])>2:
+                            print n,self.Gs.node[n]['ncycles']
+                            logging.warning('A segment cannot relate more than 2 cycles')
+
+        # if ncycles is a list with only one element then the adjascent cycle is the
+        # outside region (cycle -1)
+
+        for k in self.Gs.node:
+            if k>0:
+                if len(self.Gs.node[k]['ncycles'])==1:
+                    self.Gs.node[k]['ncycles'].append(-1)
 
         # Construct the list of interactions associated to each cycle
         #
@@ -5790,7 +5800,7 @@ class Layout(object):
                         else:   # nb <0  diffraction
                             #node1 = str(n)  #
                             node2 = str(nb) #
-                            if (nc!=-1):  # nc is not the external cycle
+                            if (nc>0):  # nc is not an external cycle NOT GOOD
                                 if ((node1 in self.Gi.node.keys())
                                  & (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)   #  (n,nc) -> D
@@ -6070,7 +6080,7 @@ class Layout(object):
         # sequence of nodes of merged cycles
         vnodes = self.Gc.node[gccy]['polyg'].vnodes
         vpoints = filter(lambda x: x<0,vnodes)
-        indoor = self.Gc.node[gccy]['indoor']
+        #indoor = self.Gc.node[gccy]['indoor']
         # indoor
         # the negative test not in self.ldiff can find wrong diffractions
         # TEMPORARY - BUG - TODO - FIX IT
@@ -6078,7 +6088,7 @@ class Layout(object):
         #  ldiffin  : list of indoor diffraction points
         #  ldiffout : list of outdoor diffraction points
         #       merge all polygons of the building convex hull
-        if indoor:
+        if gccy >=0:
             lD = map(lambda x: str(x),filter(lambda x : str(x) in
                                              self.ldiff,vpoints))
         else:
