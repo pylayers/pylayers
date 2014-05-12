@@ -120,7 +120,7 @@ Layout visibility
 Layout interactions
 -------------------
 
-    Layout.intcy
+    Layout.intercy
 
 SubSegment Functions
 --------------------
@@ -2450,8 +2450,7 @@ class Layout(object):
     def mask(self):
         """  returns the convex hull polygon of the building
         """
-
-        p  = self.Gt.node[0]['polyg']
+        p  = self.Gt.node[1]['polyg']
         ps = sh.Polygon(p.exterior)
         for k in self.Gt.node:
             if (k!=0) & (k!=-1):
@@ -4930,11 +4929,11 @@ class Layout(object):
         for k,lnode in enumerate(C):
             G = nx.subgraph(self.Gs,lnode)
             G.pos = {}
-            G.pos.update({k: self.Gs.pos[k] for k in lnode})
+            G.pos.update({l: self.Gs.pos[l] for l in lnode})
             #Cy = cy.Cycle(self.Gs, c)
             cy  = cycl.Cycle(G)
-            Gt.add_node(k,cycle=cy)
-            Gt.pos[k] = tuple(cy.g)
+            Gt.add_node(k+1,cycle=cy)
+            Gt.pos[k+1] = tuple(cy.g)
             #LC.append(cy)
 
         Gt.inclusion(full=True)
@@ -4968,28 +4967,59 @@ class Layout(object):
         #self.Gt = cys.Gt
         #pdb.set_trace()
 
-        N = len(self.Gt.nodes())
-        for k in self.Gt.nodes():
+        for k in combinations(self.Gt.nodes(), 2):
+            n0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+            n1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+            nkinl = np.intersect1d(n0,n1)
+            if len(nkinl!=0):
+                self.Gt.add_edge(k[0],k[1])
+
+        #N = len(self.Gt.nodes())
+        #for k in self.Gt.nodes():
             #nk = np.array(self.Gt.node[k]['vnodes'])
-            nk = np.array(self.Gt.node[k]['cycle'].cycle)
-            for l in np.arange(k+1,N):
+        #    nk = np.array(self.Gt.node[k]['cycle'].cycle)
+        #    for l in np.arange(k+1,N):
                 #nl = np.array(self.Gt.node[l]['vnodes'])
-                nl = np.array(self.Gt.node[l]['cycle'].cycle)
-                nkinl = np.intersect1d(nk,nl)
-                if len(nkinl!=0):
-                    self.Gt.add_edge(k,l)
+        #        nl = np.array(self.Gt.node[l]['cycle'].cycle)
+        #        nkinl = np.intersect1d(nk,nl)
+        #        if len(nkinl!=0):
+        #            self.Gt.add_edge(k,l)
         Ncycles = len(self.Gt.nodes())
 
         #
         #  Update graph Gs with cycle information
         #
+        #  initialize a void list 'ncycles' for each segment of Gs
+        #
+        for k in self.Gs.node:
+            if k>0:
+                self.Gs.node[k]['ncycles']=[]
 
-        #moved
+        for k in self.Gt.node.keys():
+            #vnodes = np.array(self.Gt.node[k]['vnodes'])
+            vnodes = np.array(self.Gt.node[k]['cycle'].cycle)
+            #vnodes = self.Gt.node[k]['polyg'].vnodes
+            for n in vnodes:
+                if n>0:
+                    if k not in self.Gs.node[n]['ncycles']:
+                        self.Gs.node[n]['ncycles'].append(k)
+                        if len(self.Gs.node[n]['ncycles'])>2:
+                            print n,self.Gs.node[n]['ncycles']
+                            logging.warning('A segment cannot relate more than 2 cycles')
+
+        # if ncycles is a list with only one element then the adjascent cycle is the
+        # outside region (cycle 0)
+
+        for k in self.Gs.node:
+            if k>0: #segment
+                if len(self.Gs.node[k]['ncycles'])==1:
+                    self.Gs.node[k]['ncycles'].append(0)
 
         #
         #  Seek for Cycle connection
         #
-        for k in combinations(range(Ncycles), 2):
+        for k in combinations(self.Gt.nodes(), 2):
+        #for k in combinations(range(Ncycles), 2):
 
             vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
             vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
@@ -5023,12 +5053,12 @@ class Layout(object):
             self.Gt.add_node(k, polyg=polk)
             #
             # By default a cycle is indoor
-            # unless it is separted from cycle -1 by airwall
+            # unless it is separated from a negative cycle by an airwall
             #
             #self.Gt.add_node(k, indoor=True)
         #mapping={k:v for (k,v) in zip(self.Gt.node.keys(),self.Gt.node.keys())}
         #
-        # adding cycle -1 outdoor polygon
+        # adding cycle 0 outside polygon
         #
         # The shapely polygon has an interior
 
@@ -5037,9 +5067,9 @@ class Layout(object):
         p2 = p1.difference(ma)
         p3 = geu.Polygon(p2)
         p3.vnodes = ma.vnodes
-        self.Gt.add_node(-1,polyg=p3)
-        self.Gt.add_node(-1, indoor = False)
-        self.Gt.pos[-1]=(self.ax[0],self.ax[2])
+        self.Gt.add_node(0,polyg=p3)
+        self.Gt.add_node(0, indoor = False)
+        self.Gt.pos[0]=(self.ax[0],self.ax[2])
 
         # all segments of the building boundary
         nseg = filter(lambda x : x >0 , p3.vnodes)
@@ -5049,16 +5079,20 @@ class Layout(object):
         # adjascent cycles
         #
 
-        adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=-1,
+        adjcyair = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
                                       self.Gs.node[x]['ncycles'])[0],nsegair)))
-        adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=-1,
+        adjcwall = np.unique(np.array(map(lambda x : filter(lambda y: y!=0,
                                       self.Gs.node[x]['ncycles'])[0],nsegwall)))
 
         mapping={}
         for cy in adjcyair:
-            self.Gt.add_edge(-1,cy)
             #self.Gt.node[cy]['indoor']=False
-            mapping[cy] = -cy
+            if cy>0:
+                mapping[cy] = -cy
+                self.Gt.add_edge(0,-cy)
+
+        for cy in adjcwall:
+            self.Gt.add_edge(0,cy)
 
         #mapping[-1]=-1
         # relabel nodes
@@ -5067,32 +5101,6 @@ class Layout(object):
         for k in mapping.keys():
             self.Gt.pos[mapping[k]]=self.Gt.pos[k]
             del self.Gt.pos[k]
-
-
-        #  initialize a void list 'ncycles' for each segment of Gs
-        #
-        for k in self.Gs.node:
-            if k>0:
-                self.Gs.node[k]['ncycles']=[]
-
-        for k in self.Gt.node.keys():
-            #vnodes = np.array(self.Gt.node[k]['vnodes'])
-            vnodes = self.Gt.node[k]['polyg'].vnodes
-            for n in vnodes:
-                if n>0:
-                    if k not in self.Gs.node[n]['ncycles']:
-                        self.Gs.node[n]['ncycles'].append(k)
-                        if len(self.Gs.node[n]['ncycles'])>2:
-                            print n,self.Gs.node[n]['ncycles']
-                            logging.warning('A segment cannot relate more than 2 cycles')
-
-        # if ncycles is a list with only one element then the adjascent cycle is the
-        # outside region (cycle -1)
-
-        for k in self.Gs.node:
-            if k>0:
-                if len(self.Gs.node[k]['ncycles'])==1:
-                    self.Gs.node[k]['ncycles'].append(-1)
 
         # Construct the list of interactions associated to each cycle
         #
@@ -5552,7 +5560,7 @@ class Layout(object):
             self.dGv[icycle] = Gv
 
         for icycle in self.Gc.node:
-            if icycle!=-1:
+            if icycle!=0:
                 polyg = self.Gc.node[icycle]['polyg']  # a shapely polygon
                 polyg.setvnodes(self)
                 Gv = polyg.buildGv(show=show,eded=False)
@@ -6043,7 +6051,7 @@ class Layout(object):
 
             self.Gi.add_edge(str(i0),str(i1),output=dintprob)
 
-    def intcy(self,ncy,typ='source'):
+    def intercy(self,ncy,typ='source'):
         """ return the list of interactions seen from a cycle
 
         Parameters
@@ -7053,7 +7061,7 @@ class Layout(object):
 
         keys = self.Gr.node.keys()
         for cy in keys:
-            if cy!=-1:
+            if cy!=0:
                 lseg = self.Gr.node[cy]['cycle'].cycle
                 hasdoor = filter(lambda n : n in ldoors,lseg)
                 if len(hasdoor)>0:
