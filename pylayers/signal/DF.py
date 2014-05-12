@@ -107,6 +107,18 @@ class DF(object):
         return(F)
 
 
+
+    def flipc(self):
+        """
+
+        z -> 1/z
+
+        """
+        F = DF()
+        F.a = self.a[::-1]
+        F.b = self.b[::-1]
+        return(F)
+
     def match(self):
         """ return a match filter
         """
@@ -117,7 +129,7 @@ class DF(object):
             MF.a = self.a
             return(MF)
 
-    def filter(self,x):
+    def filter(self,x,causal=True):
         """ filter x
 
         Parameters
@@ -134,8 +146,41 @@ class DF(object):
 
         """
 
+        if not causal:
+            x = x[::-1]
         y  = si.lfilter(self.b,self.a,x)
+        if not causal:
+            y = y[::-1]
         return(y)
+
+    def factorize(self):
+        """ factorize the filter into a minimal phase and maximal phase
+
+        Returns
+        -------
+
+        (Fmin,Fmax) : tuple of filter
+            Fmin : minimal phase filter
+            Fmax : maximal phase filter
+        """
+
+        if self.fir:
+            # selectionne les zeros interne et externe
+            internal = np.where(abs(self.z)<=1)[0]
+            external = np.where(abs(self.z)>1)[0]
+            zi = self.z[internal]
+            ze = self.z[external]
+
+            pi = np.poly1d(zi,r=True)
+            pe = np.poly1d(ze,r=True)
+
+            bi = pi.c
+            be = pe.c
+
+            F1 = DF(b=bi)
+            F2 = DF(b=be)
+
+            return(F1,F2)
 
     def order(self):
         """ Returns filter order
@@ -229,32 +274,45 @@ class DF(object):
         plt.axis('equal')
         plt.show()
 
-    def ir(self,N,show=False):
-        """ show impulse response
+    def ir(self,N=100,show=False):
+        """ returns impulse response
+
+        Returns
+        -------
+
+        ir : np.array
+            impulse response
+
         """
         ip    = np.zeros(N)
         ip[0] = 1
         ir    = self.filter(ip)
         if show:
-            plt.stem(np.arange(N),rip)
+            plt.stem(np.arange(N),ir)
             plt.show()
         return(ir)
 
 
 if __name__ == "__main__":
-    fe  = 10
-    fN  = fe/2.0
-    wt  = 0.01
-    ws = np.array([3.168,3.696])/fN
-    wp = [ws[0]+wt,ws[1]-wt]
-    flt = DF()
-    gpass = 0.5
-    gstop = 40
-    flt.ellip_bp(wp,ws,gpass,gstop)
-    flt.zplane()
-    flt.freqz()
-    x = np.random.randn(1000)
-    y = flt.filter(x)
-    fo = DF()
-    y2 = fo.filter(x)
+#    fe  = 10
+#    fN  = fe/2.0
+#    wt  = 0.01
+#    ws = np.array([3.168,3.696])/fN
+#    wp = [ws[0]+wt,ws[1]-wt]
+#    flt = DF()
+#    gpass = 0.5
+#    gstop = 40
+#    flt.ellip_bp(wp,ws,gpass,gstop)
+#    flt.zplane()
+#    flt.freqz()
+#    x = np.random.randn(1000)
+#    y = flt.filter(x)
+#    fo = DF()
+#    y2 = fo.filter(x)
+#
+    f1 = DF()
+    f1.b=np.array([1,0])
+    f1.a=np.array([1,-0.77])
+
+    ir1 = f1.ir(N=100,show=True)
 
