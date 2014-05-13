@@ -4767,8 +4767,8 @@ class Layout(object):
         if 'c' in graph:
             if verbose:
                 print "Gc"
-            #self.buildGc()
-            #self.lbltg.extend('c')
+            self.buildGc()
+            self.lbltg.extend('c')
         if 'r' in graph:
             if verbose:
                 print "Gr"
@@ -6285,7 +6285,7 @@ class Layout(object):
         #print "Gi Nedges :",Nedges
         for k,e in enumerate(self.Gi.edges()):
             #if (k%100)==0:
-            #    print "edge :  ",k
+            #print "edge :  ",k
             # extract  both termination interactions nodes
 
             i0 = e[0]
@@ -6363,8 +6363,8 @@ class Layout(object):
                     isegkeep = isegments[prob>0]
                     # dict   {numint : proba}
                     dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
-                    outseg = filter(lambda x : x[0] in isegkeep, i2)
-                    probint = map(lambda x: dsegprob[x[0]],outseg)
+                    output = filter(lambda x : x[0] in isegkeep, i2)
+                    probint = map(lambda x: dsegprob[x[0]],output)
                     # dict interaction : proba
                     dintprob = {k:v for k,v in zip(output,probint)}
 
@@ -6408,22 +6408,21 @@ class Layout(object):
 
         """
 
-        # list of intercations
+        # list of interactions
         lint = self.Gi.node
-        # list of tuple interactions (R|T)
 
-        linttup = filter(lambda x: type(eval(x))==tuple,lint)
-        lR = filter(lambda x: len(eval(x))==2,linttup)
-        lT = filter(lambda x: len(eval(x))==3,linttup)
+        # list of tuple interactions (R|T)
+        lD = filter(lambda x: len(x)==1,lint)
+        lR = filter(lambda x: len(x)==2,lint)
+        lT = filter(lambda x: len(x)==3,lint)
 
         # visible R|T source cycle is ncy
 
-        lR = filter(lambda x : eval(x)[1]==ncy,lR)
-
+        lR = filter(lambda x : x[1]==ncy,lR)
         if typ=='source':
-            lT = filter(lambda x: eval(x)[1]==ncy,lT)
+            lT = filter(lambda x: x[1]==ncy,lT)
         if typ=='target':
-            lT = filter(lambda x: eval(x)[2]==ncy,lT)
+            lT = filter(lambda x: x[2]==ncy,lT)
 
         # Finding the diffraction points
         # Diffraction points are different from indoor cycle and outdoor
@@ -6432,20 +6431,11 @@ class Layout(object):
         # sequence of nodes of merged cycles
         vnodes = self.Gc.node[gccy]['polyg'].vnodes
         vpoints = filter(lambda x: x<0,vnodes)
-        #indoor = self.Gc.node[gccy]['indoor']
-        # indoor
-        # the negative test not in self.ldiff can find wrong diffractions
-        # TEMPORARY - BUG - TODO - FIX IT
-        # need to create
-        #  ldiffin  : list of indoor diffraction points
-        #  ldiffout : list of outdoor diffraction points
-        #       merge all polygons of the building convex hull
-        if gccy >=0:
-            lD = map(lambda x: str(x),filter(lambda x : str(x) in
-                                             self.ldiff,vpoints))
+        indoor = self.Gc.node[gccy]['indoor']
+        if indoor:
+            lD = filter(lambda x : x in self.ldiffin,vpoints)
         else:
-            lD = map(lambda x: str(x),filter(lambda x : str(x) not in
-                                             self.ldiff,vpoints))
+            lD = filter(lambda x : x in self.ldiffout,vpoints)
 
         return lR,lT,lD
 
@@ -7079,9 +7069,10 @@ class Layout(object):
         ptsh = sh.Point(pt[0], pt[1])
         cycle_exists = False
         for ncy in self.Gt.node.keys():
-            if self.Gt.node[ncy]['polyg'].contains(ptsh):
-                cycle_exists = True
-                return(ncy)
+            if ncy>0:
+                if self.Gt.node[ncy]['polyg'].contains(ptsh):
+                    cycle_exists = True
+                    return(ncy)
         if not cycle_exists:
             raise NameError(str(pt)+" is not in any cycle")
 
@@ -7290,7 +7281,6 @@ class Layout(object):
         lGa = nx.connected_component_subgraphs(Ga)
         connected = []
 
-        pdb.set_trace()
         for Ga in lGa:
             # root node of subgraph
             r = Ga.nodes()[0]
@@ -7311,7 +7301,6 @@ class Layout(object):
                         r = k
                         break
             connected.append(cnctd)
-        pdb.set_trace()
         #
         # Merge all air-connected cycles
         #  for all conected components

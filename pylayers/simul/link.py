@@ -399,14 +399,14 @@ class DLink(Link):
         #
         ###########
         if len(self.a)==0:
-            self.ca = 0
+            self.ca = 1
             self.a = self.L.cy2pt(self.ca)
         else:
             self.a = kwargs['a']
             self.ca = self.L.pt2cy(self.a)
 
         if len(self.b)==0:
-            self.cb = 0
+            self.cb = 1
             self.b = self.L.cy2pt(self.cb)
         else:
             self.b = kwargs['b']
