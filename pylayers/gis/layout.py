@@ -5124,6 +5124,7 @@ class Layout(object):
         # ldiffout : list of outdoor diffraction points (belong to layout boundary)
         #
 
+        
         self.ldiffin  = filter(lambda x : x not in p3.vnodes,self.ldiff)
         self.ldiffout = filter(lambda x : x in p3.vnodes,self.ldiff)
 
@@ -5377,6 +5378,14 @@ class Layout(object):
         nsegair = filter(lambda x : x in self.name['AIR'],nseg)
         # wall segments of the building boundary
         nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
+
+        #
+        # ldiffin  : list of indoor diffraction points
+        # ldiffout : list of outdoor diffraction points (belong to layout boundary)
+        #
+
+        self.ldiffin  = filter(lambda x : x not in boundary.vnodes,self.ldiff)
+        self.ldiffout = filter(lambda x : x in boundary.vnodes,self.ldiff)
 
         #
         # boundary adjascent cycles
@@ -6241,11 +6250,6 @@ class Layout(object):
         #[self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
         #[self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
-        #
-        # List of diffraction points
-        #
-        self.ldiffin  = filter(lambda x: x<0 ,self.Gi.nodes())
-        self.ldiffout = filter(lambda x: x<0 ,self.Gi.nodes())
 
         # updating the list of interaction of a given cycle
         for c in self.Gt.node:
@@ -6427,15 +6431,18 @@ class Layout(object):
         # Finding the diffraction points
         # Diffraction points are different from indoor cycle and outdoor
         # cycles
+        pdb.set_trace()
         gccy = self.Gt.node[ncy]['merged']
         # sequence of nodes of merged cycles
         vnodes = self.Gc.node[gccy]['polyg'].vnodes
         vpoints = filter(lambda x: x<0,vnodes)
         indoor = self.Gc.node[gccy]['indoor']
         if indoor:
-            lD = filter(lambda x : x in self.ldiffin,vpoints)
+            lD = map(lambda y : (y,),filter(lambda x : x in
+                                            self.ldiffin,vpoints))
         else:
-            lD = filter(lambda x : x in self.ldiffout,vpoints)
+            lD = map(lambda y : (y,),filter(lambda x : x in
+                                            self.ldiffout,vpoints))
 
         return lR,lT,lD
 

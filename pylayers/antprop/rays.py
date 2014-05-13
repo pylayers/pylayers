@@ -572,7 +572,6 @@ class Rays(dict):
         else:
             lgrint = [kwargs['i']]
 
-
         for i in lgrint:
             if kwargs['r']==-1:
                 lray = range(len(self[i]['pt'][0, 0, :]))
