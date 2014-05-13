@@ -1740,6 +1740,9 @@ class Signatures(dict):
         # list of interactions visible from target
         litT,litR,litD = self.L.intcy(self.target,typ='target')
         lit  = litT + litR + litD
+        print "lis :",lis
+        print "lit :",lit
+
 
         Gi = self.L.Gi
         Gi.pos = self.L.Gi.pos
@@ -1759,10 +1762,10 @@ class Signatures(dict):
         #for interaction source  in list of source interactions
         for us,s in enumerate(lis):
             #for target interaction in list of target interactions
-            print "---> ",s
+            #print "---> ",s
 
             for ut,t in enumerate(lit):
-                print "   ---> ",t
+                #print "   ---> ",t
                 # progress bar
                 if progress :
 
@@ -1776,14 +1779,18 @@ class Signatures(dict):
                         tic = toc
 
                 # if source and target interaction are different
-                #if ((type(s)==tuple)&(s != t)):
-                if ((type(eval(s))==tuple) & (s != t)):
+                # and R | T
+                #if ((type(eval(s))==tuple) & (s != t)):
+                if (s != t):
                     if algo=='new':
                         dout = self.procone2(self.L,Gi,dout=dout,source=s,target=t,cutoff=cutoff)
                         #print dout
                     else :
                         dout = self.propaths2(Gi,di=self.L.di,dout=dout,source=s,target=t,cutoff=cutoff,bt=bt)
                 else:
+                    print "----"
+                    print s
+                    print t
                     try:
                         if self.L.di[s] not in dout[1]:
                             dout[1].append(self.L.di[s])
