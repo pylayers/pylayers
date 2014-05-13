@@ -762,6 +762,7 @@ class Polygon(shg.Polygon):
         Gv = nx.Graph()
         Gv.pos = {}
         if kwargs['open']:
+            pass
         else:
             pass
 
@@ -796,34 +797,10 @@ class Polygon(shg.Polygon):
             Gv.add_edge(nk[0],nk[1],weight=0)
 
         #
-        #
-        # Create middle point on lring
-        #
-        # Warning lring recopy the node at the end of the sequence
-        #
-        # A problem arises from the fact that a vnodes sequence
-        # do not necessarily starts with a point (negative node)
-        #
-        #
-        tpm = []
-        for ik, k in enumerate(lring.coords):
-            pt = np.array(k)
-            try:
-                pm = (pt + pm1) / 2.
-                if self.vnodes[0] < 0:
-                    Gv.pos[nseg[ik - 1]] = (pm[0], pm[1])
-                else:
-                    Gv.pos[nseg[ik % Np]] = (pm[0], pm[1])
-                tpm.append(pm)
-                pm1 = pt
-            except:
-                pm1 = pt
-        #
         # Update position of points in Gv
         #
-        for nk in range(Np):
-            #nnode = -(nk+1)
-            Gv.pos[npt[nk]] = (p[0, nk], p[1, nk])
+        for nk in Gv.node:
+            Gv.pos[nk] = (p[0, nk], p[1, nk])
 
         xr, yr = lring.xy
 
@@ -3781,9 +3758,16 @@ def sector(p1, p2, pt):
     pt : np.array
         point
 
+    Returns
+    -------
+
+    alpha, beta : np.array
+        degree
+
     Notes
     -----
-         Useful for AAS calculation
+
+    Useful for AAS calculation
 
 
     """
@@ -3792,10 +3776,11 @@ def sector(p1, p2, pt):
     alpha = np.arctan2(u[1], u[0])
     beta = np.arctan2(v[1], v[0])
     sector = min(abs(alpha - beta), 2 * np.pi - abs(alpha - beta))
-    if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
-        return(np.array([alpha, beta]) * 180 / pi)
-    else:
-        return(np.array([beta, alpha]) * 180 / pi)
+    return sector*180/np.pi
+    #if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) < 1e-3):
+    #    return(np.array([alpha, beta]) * 180 / np.pi)
+    #else:
+    #    return(np.array([beta, alpha]) * 180 / np.pi)
 
 
 def dist(x,y,ax):

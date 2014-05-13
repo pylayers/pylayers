@@ -858,7 +858,8 @@ class Layout(object):
             npt = np.array(map(lambda x : upnt[x],num))  # number of degree 1 points
             self.degree[deg] = npt
 
-        #
+
+                #
         # convert geometric information in numpy array
         #
 
@@ -946,8 +947,19 @@ class Layout(object):
                         self.sla[index] = slabname
                         self.isss.append(index)
                         index = index+1
-            # calculate extremum of segments
-            self.extrseg()
+
+        # calculate extremum of segments
+        #
+        # Calculate the wedge angle of degree 2 points
+        #
+        wedgea = self.wedge(self.degree[2])
+
+        # wedge < 179 (not flat)
+        idiff = filter(lambda x: wedgea[x]<179,range(len(self.degree[2])))
+        self.ldiff = map(lambda x : self.degree[2][x],idiff)
+
+
+        self.extrseg()
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
@@ -2275,7 +2287,7 @@ class Layout(object):
         ----------
 
         lpnt : list of int
-           list of point
+           list of point number
 
 
         """
@@ -2285,10 +2297,40 @@ class Layout(object):
                                      nx.neighbors(self.Gs,x)),
                                      lpnt)
 
-        pts = map(lambda x : self.seg2pts([x[0],x[1]]),aseg)
+        pts = np.array(map(lambda x : self.seg2pts([x[0],x[1]]).reshape(4,2),aseg))
         #map(lambda x: pt ,pts)
+        N = np.shape(pts)[0]
+        sector = []
+        for k in range(N):
+            pt1 = pts[k,0:2,0]
+            ph1 = pts[k,2:4,0]
+            pt2 = pts[k,0:2,1]
+            ph2 = pts[k,2:4,1]
+            if (pt1==pt2).all():
+                pa = ph1
+                pb = ph2
+                pt = pt1
+                ang = geu.sector(pa,pb,pt)
+            if (pt1==ph2).all():
+                pa = ph1
+                pb = pt2
+                pt = pt1
+                ang = geu.sector(pa,pb,pt)
+            if (ph1==pt2).all():
+                pa = pt1
+                pb = ph2
+                pt = ph1
+                ang = geu.sector(pa,pb,pt)
+            if (ph1==ph2).all():
+                pa = pt1
+                pb = pt2
+                pt = ph1
+                ang = geu.sector(pa,pb,pt)
 
-        return(pts)
+            sector.append(ang)
+
+
+        return(sector)
 
 
     def add_furniture(self, name='R1_C', matname='PARTITION', origin=(0.,0.),
@@ -3711,7 +3753,7 @@ class Layout(object):
         return(seglist)
 
     def seg2pts(self,aseg):
-        """ convert segments array to coresponding termination points array
+        """ convert segments array to corresponding termination points array
 
         Parameters
         ----------
@@ -4725,8 +4767,8 @@ class Layout(object):
         if 'c' in graph:
             if verbose:
                 print "Gc"
-            self.buildGc()
-            self.lbltg.extend('c')
+            #self.buildGc()
+            #self.lbltg.extend('c')
         if 'r' in graph:
             if verbose:
                 print "Gr"
@@ -4808,8 +4850,8 @@ class Layout(object):
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
-        if 'i' in self.lbltg:
-            write_gpickle(getattr(self,'di'),path+'/di.gpickle')
+        #if 'i' in self.lbltg:
+        #    write_gpickle(getattr(self,'di'),path+'/di.gpickle')
         write_gpickle(getattr(self,'dca'),path+'/dca.gpickle')
 
 
@@ -4880,7 +4922,7 @@ class Layout(object):
                 if len(self.Gs.node[k]['ncycles'])==1:
                     self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
-        setattr(self,'di', read_gpickle(path+'/di.gpickle'))
+        #setattr(self,'di', read_gpickle(path+'/di.gpickle'))
         setattr(self,'dca', read_gpickle(path+'/dca.gpickle'))
 
     def buildGtold(self):
@@ -5072,9 +5114,20 @@ class Layout(object):
         self.Gt.pos[0]=(self.ax[0],self.ax[2])
 
         # all segments of the building boundary
+
         nseg = filter(lambda x : x >0 , p3.vnodes)
         nsegair = filter(lambda x : x in self.name['AIR'],nseg)
         nsegwall = filter(lambda x : x not in self.name['AIR'],nseg)
+
+        #
+        # ldiffin  : list of indoor diffraction points
+        # ldiffout : list of outdoor diffraction points (belong to layout boundary)
+        #
+
+        self.ldiffin  = filter(lambda x : x not in p3.vnodes,self.ldiff)
+        self.ldiffout = filter(lambda x : x in p3.vnodes,self.ldiff)
+
+        pdb.set_trace()
 
         # adjascent cycles
         #
@@ -5694,63 +5747,6 @@ class Layout(object):
     #             self.Gw.add_edges_from(combinations(d, 2))
 
 
-
-
-
-#    def buildGv(self, show=False):
-#        """ build global visibility graph
-
-#        Parameters
-#        ----------
-#        display : boolean
-#            default False
-
-#        Examples
-#        --------
-
-#        >>> from pylayers.gis.layout import *
-#        >>> L = Layout()
-#        >>> load('example.str')
-#        >>> buildGt()
-#        >>> buildGr()
-#        >>> buildGv()
-
-#        """
-
-#        self.Gv = nx.Graph()
-#        #
-#        # loop over rooms
-#        #
-#        self.dGv = {}  # dict of Gv graph
-#        for nr in self.Gr.node:
-#            udeg2 = []
-#            udeg1 = []
-#            icycle = self.Gr.node[nr]['cycle']  # id of cycle
-#            room = self.Gt.node[icycle]      # cycle of the room
-#            polyg = room['polyg']             # pol
-#            vnodes = room['vnodes']
-#            #
-#            # seek node of degree 2
-#            #
-#            # udeg2 is the index of the deg 2 point in the sequence of points
-#            for ik, inode in enumerate(vnodes):
-#                deg = self.Gs.degree(inode)
-#                if vnodes[0] < 0:
-#                    index = ik / 2
-#                else:
-#                    index = (ik - 1) / 2
-#                if inode < 0:
-#                    if deg == 2:
-#                        udeg2.append(index)
-#                    if deg == 1:
-#                        udeg1.append(index)    # warning not used
-#            Gv = polyg.buildGv(show=show, udeg2=udeg2)
-#            #
-#            # Graph Gv aggregation
-#            #
-#            self.Gv  = nx.compose(self.Gv, Gv)
-#            self.dGv[nr] = Gv
-
     def buildGv(self, show=False):
         """ build global visibility graph
 
@@ -5780,36 +5776,57 @@ class Layout(object):
         # loop over cycles
         #
         self.dGv = {}  # dict of Gv graph
+
         for icycle in self.Gt.node:
             if icycle >0:
-                udeg2 = []
-                udeg1 = []
-                polyg = self.Gt.node[icycle]['polyg']  # a shapely polygon
+                indoor = self.Gt.node[icycle]['indoor']
+                isopen = self.Gt.node[icycle]['isopen']
+
+                polyg = self.Gt.node[icycle]['polyg']
                 vnodes = polyg.vnodes
+
+                npt  = filter(lambda x : x<0,vnodes)
+                nseg = filter(lambda x : x>0,vnodes)
+
+                airwalls = filter(lambda x : x in self.name['AIR'],nseg)
+                ndiff = filter(lambda x : x in self.ldiff,npt)
                 #
-                # seek node of degree 2
+                # Create a graph
                 #
-                # udeg2 is the index of the deg 2 point in the sequence of points
-                pts   = filter(lambda x:  x<0,vnodes)
-                udeg2 = filter(lambda x : x in pts , self.degree[2])
-                # print udeg2
-                Gv = polyg.buildGv(show=show,udeg1=udeg1,udeg2=udeg2)
-                #if icycle == 78:
-                #    pdb.set_trace()
+                Gv = nx.Graph()
+                #
+                # in convex case all segments see all segments
+                #
+                for nk in combinations(nseg, 2):
+                    Gv.add_edge(nk[0],nk[1])
+
+                if isopen:
+                    ndiffvalid = filter(lambda x :
+                                        filter(lambda y : y in airwalls
+                                                          ,nx.neighbors(self.Gs,x)),ndiff)
+                    # non adjascent segments see valid diffraction point
+                    for idiff in ndiffvalid:
+                        segvalid = filter(lambda x : x not in
+                                          nx.neighbors(self.Gs,idiff),nseg)
+                        for ns in segvalid:
+                            Gv.add_edge(idiff,ns)
+                else:
+                    pass
+                    # outdoor case not implemented
+
                 #
                 # Graph Gv aggregation
                 #
                 self.Gv  = nx.compose(self.Gv, Gv)
                 self.dGv[icycle] = Gv
 
-        pdb.set_trace()
-        for icycle in self.Gc.node:
-            if icycle >0:
-                polyg = self.Gc.node[icycle]['polyg']  # a shapely polygon
-                indoor = self.Gc.node[icycle]['indoor']  # a shapely polygon
-                polyg.setvnodes(self)
-                Gv = polyg.buildGv(show=show,eded=False,indoor=indoor)
-                self.Gv  = nx.compose(self.Gv, Gv)
+        #for icycle in self.Gc.node:
+        #    if icycle >0:
+        #        polyg = self.Gc.node[icycle]['polyg']  # a shapely polygon
+        #        indoor = self.Gc.node[icycle]['indoor']  # a shapely polygon
+        #        polyg.setvnodes(self)
+        #        Gv = polyg.buildGv(show=show,eded=False,indoor=indoor)
+        #        self.Gv  = nx.compose(self.Gv, Gv)
 
     def buildGi2(self):
         """ build dictionnary of graph of interactions
@@ -6155,9 +6172,10 @@ class Layout(object):
                             nc1 = list(cy.difference({nc}))[0]
                             ni2 = (nb,nc,nc1)  # T (nc -> nb -> nc1)
 
-                            if ((node1 in self.Gi.node.keys())
-                              & (node2 in self.Gi.node.keys())):
+                            if ((ni1 in self.Gi.node.keys())
+                              & (ni2 in self.Gi.node.keys())):
                                 self.Gi.add_edge(ni1, ni2)
+
                     else:   # nb <0  Diffraction
                         ni2 = (nb,) #
                         if (nc>0):  # nc is not an external cycle NOT GOOD
@@ -6226,12 +6244,11 @@ class Layout(object):
         #
         # List of diffraction points
         #
-        self.ldiffin  = filter(lambda x: eval(x)<0 ,self.Gi.nodes())
-        self.ldiffout = filter(lambda x: eval(x)<0 ,self.Gi.nodes())
+        self.ldiffin  = filter(lambda x: x<0 ,self.Gi.nodes())
+        self.ldiffout = filter(lambda x: x<0 ,self.Gi.nodes())
 
         # updating the list of interaction of a given cycle
         for c in self.Gt.node:
-            #if c != -1:
             vn = self.Gt.node[c]['polyg'].vnodes
             idiff = map(lambda x: str(x),filter(lambda x : str(x) in self.ldiff,vn))
             self.Gt.node[c]['inter']+= idiff
@@ -6270,29 +6287,12 @@ class Layout(object):
             #if (k%100)==0:
             #    print "edge :  ",k
             # extract  both termination interactions nodes
-            i0 = eval(e[0])
-            i1 = eval(e[1])
 
-            #if ((i0==(3, 0, 1)) & (i1==(5, 1))):
-            #    pdb.set_trace()
+            i0 = e[0]
+            i1 = e[1]
 
-            try:
-                nstr0 = i0[0]
-            except:
-                nstr0 = i0
-
-            try:
-                nstr1 = i1[0]
-                # Transmission
-                if len(i1)>2:
-                    typ=2
-                # Reflexion
-                else :
-                    typ=1
-            # Diffraction
-            except:
-                nstr1 = i1
-                typ = 3
+            nstr0 = i0[0]
+            nstr1 = i1[0]
 
             # list of authorized outputs. Initialized void
             output = []
@@ -6319,25 +6319,22 @@ class Layout(object):
                     cn.fromptseg(pt,pseg1)
 
                 # list all potential successors of interaction i1
-                i2 = nx.neighbors(self.Gi,str(i1))
-                ipoints = filter(lambda x: eval(x)<0 ,i2)
+                i2 = nx.neighbors(self.Gi,i1)
+                ipoints = filter(lambda x: len(x)==1,i2)
                 # filter tuple (R | T)
-                istup = filter(lambda x : type(eval(x))==tuple,i2)
+                #istup = filter(lambda x : type(eval(x))==tuple,i2)
                 # map first argument segment number
-                isegments = np.unique(map(lambda x : eval(x)[0],istup))
+                #isegments = np.unique(map(lambda x : eval(x)[0],istup))
+                isegments = np.unique(filter(lambda y: y>0,map(lambda x: x[0],i2)))
                 # if nstr0 and nstr1 are adjescent segment remove nstr0 from
                 # potential next interaction
                 if len(np.intersect1d(self.Gs.neighbors(nstr0),self.Gs.neighbors(nstr1)))>0:
                        isegments = np.array(filter(lambda x : x!=nstr0,isegments))
-                #if ((i0==(32, 75)) and (i1==(170, 75, 74))):
-                #    pdb.set_trace()
                 # there are one or more segments
                 if len(isegments)>0:
                     points = self.seg2pts(isegments)
                     pta = points[0:2,:]
                     phe = points[2:,:]
-                    #print points
-                    #print segments
                     #cn.show()
 
                     # i1 : interaction T
@@ -6361,12 +6358,13 @@ class Layout(object):
                         #if ~bs.any():
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                         #    plt.show()
-                        #    pdb.set_trace()
+                        #    pdb.set_trace())
+                    # keep segment with prob above a threshold
                     isegkeep = isegments[prob>0]
-                    # dict num segment : proba
+                    # dict   {numint : proba}
                     dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
-                    output = filter(lambda x : eval(x)[0] in isegkeep, istup)
-                    probint = map(lambda x: dsegprob[eval(x)[0]],output)
+                    outseg = filter(lambda x : x[0] in isegkeep, i2)
+                    probint = map(lambda x: dsegprob[x[0]],outseg)
                     # dict interaction : proba
                     dintprob = {k:v for k,v in zip(output,probint)}
 
@@ -6389,13 +6387,13 @@ class Layout(object):
                 #  + using the wedge cone
                 #  + using the incident cone
                 #
-                output = nx.neighbors(self.Gi,str(nstr1))
+                output = nx.neighbors(self.Gi,(nstr1,))
                 nout = len(output)
                 probint = np.ones(nout) # temporary
                 dintprob = {k:v for k,v in zip(output,probint)}
 
 
-            self.Gi.add_edge(str(i0),str(i1),output=dintprob)
+            self.Gi.add_edge(i0,i1,output=dintprob)
 
     def intercy(self,ncy,typ='source'):
         """ return the list of interactions seen from a cycle
@@ -6761,40 +6759,35 @@ class Layout(object):
 
             edges = G.edges()
 
-
-            edges = map(lambda x: eval(str(x)),edges)
-            edges = map(lambda x: (eval(x[0]),eval(x[1])),edges)
-
             rle = range(len(edges))
 
-            tuptup  = filter(lambda x: (((type(edges[x][0]))==tuple) &
-                                        ((type(edges[x][1]))==tuple)),rle)
-            tupint = filter(lambda x: (((type(edges[x][0]))==tuple) &
-                                       ((type(edges[x][1]))==int)),rle)
-            inttup = filter(lambda x: (((type(edges[x][0]))==int) &
-                                       ((type(edges[x][1]))==tuple)),rle)
-            DD     = filter(lambda x: (((type(edges[x][0]))==int) &
-                                        ((type(edges[x][1]))==int)),rle)
+            DD = filter(lambda x:  ((len(edges[x][0])==1) &
+                                    (len(edges[x][1])==1)),rle)
 
             RR = filter(lambda x: ((len(edges[x][0])==2) &
-                                   (len(edges[x][1])==2)),tuptup)
+                                   (len(edges[x][1])==2)),rle)
 
             TT = filter(lambda x: ((len(edges[x][0])==3) &
-                                   (len(edges[x][1])==3)),tuptup)
+                                   (len(edges[x][1])==3)),rle)
 
             RT = filter(lambda x: ((len(edges[x][0])==2) &
-                                   (len(edges[x][1])==3)),tuptup)
+                                   (len(edges[x][1])==3)),rle)
 
             TR = filter(lambda x: ((len(edges[x][0])==3) &
-                                   (len(edges[x][1])==2)),tuptup)
+                                   (len(edges[x][1])==2)),rle)
 
-            RD = filter(lambda x:  len(edges[x][0]) ==2, tupint)
+            RD = filter(lambda x:  ((len(edges[x][0])==2) &
+                                    (len(edges[x][1])==1)),rle)
 
-            TD = filter(lambda x:  len(edges[x][0]) ==3, tupint)
+            TD = filter(lambda x:  ((len(edges[x][0]) ==3) &
+                                    (len(edges[x][1]) ==1)),rle)
 
-            DR = filter(lambda x:  len(edges[x][1]) ==2, inttup)
+            DR = filter(lambda x:  ((len(edges[x][0]) ==1) &
+                                    (len(edges[x][1])==2)),rle )
 
-            DT = filter(lambda x:  len(edges[x][1]) ==3, inttup)
+            DT = filter(lambda x:  ((len(edges[x][0]) ==1) &
+                                    (len(edges[x][1]) ==3)),rle )
+
             tabcol = ['b','g','r','m','c','orange','purple','maroon'][::-1]
             li = []
             for inter in kwargs['linter']:
@@ -7296,9 +7289,12 @@ class Layout(object):
         # list of connected subgraphs of Gt
         lGa = nx.connected_component_subgraphs(Ga)
         connected = []
+
+        pdb.set_trace()
         for Ga in lGa:
             # root node of subgraph
             r = Ga.nodes()[0]
+            print r
             cnctd = [r]
             # depth first search successors tree rooted on r
             dn = nx.dfs_successors(Ga,r)
@@ -7315,14 +7311,16 @@ class Layout(object):
                         r = k
                         break
             connected.append(cnctd)
+        pdb.set_trace()
         #
         # Merge all air-connected cycles
         #  for all conected components
         #  example licy = [[22,78,5],[3,4]] 2 cycles are connected
         #
+
         for licy in connected:
-            merged = []         # merged cycle is void
             root = licy[0]      # pick the first cycle as root
+            merged = [root]     # merged cycle is void
             tomerge = licy[-1:0:-1]  # pick the inverse remaining part as tomerge list
             #for cy in tomerge: #
             while tomerge<>[]:
@@ -7355,7 +7353,8 @@ class Layout(object):
             self.Gt.node[root]['merged'] = root
             # remove merged cycles
             for cy in merged:
-                self.Gc.remove_node(cy)
+                if cy != root:
+                    self.Gc.remove_node(cy)
             # update pos of root cycle with new center of gravity
             self.Gc.pos[root]=tuple(self.Gc.node[root]['cycle'].g)
 
