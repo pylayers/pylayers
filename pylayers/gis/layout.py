@@ -5237,16 +5237,6 @@ class Layout(object):
                 self.Gt.add_edge(k[0], k[1],segment= segment)
 
 
-
-        #for k in combinations(self.Gt.nodes(), 2):
-        #    n0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
-        #    n1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
-        #    nkinl = np.intersect1d(n0,n1)
-        #    if len(nkinl!=0):
-        #        self.Gt.add_edge(k[0],k[1])
-
-        #Ncycles = len(self.Gt.nodes())
-
         #
         #   6 - Update graph Gs segment with their 2 cycles  information
         #
@@ -5303,6 +5293,7 @@ class Layout(object):
             # An outdoor cycle has no ceil reflection
 
             self.Gt.add_node(k, indoor=True)
+            self.Gt.add_node(k, isopen=False)
         #
         #    9 - add cycle 0 outside polygon
         #
@@ -5344,7 +5335,8 @@ class Layout(object):
                                       self.Gs.node[x]['ncycles'])[0],nsegwall)))
 
         for cy in adjcyair:
-            self.Gt.node[cy]['indoor']=False
+            self.Gt.node[cy]['indoor'] = False
+            self.Gt.node[cy]['isopen'] = True
             self.Gt.add_edge(0,cy)
 
         for cy in adjcwall:
@@ -7358,6 +7350,8 @@ class Layout(object):
             self.Gc.node[root]['merged'] = merged
             for cy in merged:
                 self.Gt.node[cy]['merged'] = root
+                # a merged cycle is open
+                self.Gt.node[cy]['isopen'] = True
             self.Gt.node[root]['merged'] = root
             # remove merged cycles
             for cy in merged:
