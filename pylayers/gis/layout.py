@@ -4642,7 +4642,7 @@ class Layout(object):
                     gname1 ='G'+g
                     gname2 ='dG'+g
                     write_gpickle(getattr(self,gname1),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
-                    write_gpickle(getattr(self,gname2),basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle')
+                    # write_gpickle(getattr(self,gname2),basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle')
                 else:
                     gname='G'+g
                     write_gpickle(getattr(self,gname),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
@@ -4684,8 +4684,8 @@ class Layout(object):
                     gname2 ='dG'+g
                     setattr(self, gname1,
                             read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
-                    setattr(self, gname2,
-                            read_gpickle(basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle'))
+                    # setattr(self, gname2,
+                            # read_gpickle(basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle'))
                 else:
                     gname='G'+g
                     setattr(self, gname,
