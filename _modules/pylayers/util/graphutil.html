@@ -115,11 +115,10 @@
 <span class="sd">    &#39;edges&#39;:True,</span>
 <span class="sd">    &#39;airwalls&#39;:False,</span>
 <span class="sd">    &#39;labels&#39;:True,</span>
-<span class="sd">    &#39;linewidth&#39;: 2,</span>
+<span class="sd">    &#39;width&#39;: 2,</span>
 <span class="sd">    &#39;node_color&#39;:&#39;w&#39;,</span>
 <span class="sd">    &#39;edge_color&#39;:&#39;k&#39;,</span>
 <span class="sd">    &#39;node_size&#39;: 200,</span>
-<span class="sd">    &#39;linewidth&#39;: 2,</span>
 <span class="sd">    &#39;font_size&#39;: 30,</span>
 <span class="sd">    &#39;alphan&#39;: 0.8,</span>
 <span class="sd">    &#39;alphae&#39;: 1.0,</span>
@@ -137,15 +136,16 @@
     <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                 <span class="s">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
                 <span class="s">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s">&#39;arrows&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                 <span class="s">&#39;nodes&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                 <span class="s">&#39;edges&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
                 <span class="s">&#39;airwalls&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                 <span class="s">&#39;labels&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                <span class="s">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="s">&#39;node_color&#39;</span><span class="p">:</span><span class="s">&#39;w&#39;</span><span class="p">,</span>
                 <span class="s">&#39;edge_color&#39;</span><span class="p">:</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
                 <span class="s">&#39;node_size&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
-                <span class="s">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s">&#39;width&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="s">&#39;font_size&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
                 <span class="s">&#39;alphan&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
                 <span class="s">&#39;alphae&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -156,12 +156,15 @@
     <span class="c">#</span>
     <span class="c"># update default values</span>
     <span class="c">#</span>
+
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
     <span class="c">#</span>
     <span class="c"># getting fig and ax</span>
     <span class="c">#</span>
+
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;figsize&#39;</span><span class="p">])</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">set_frameon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
@@ -182,16 +185,16 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">nodelist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodelist&#39;</span><span class="p">]</span>
 
-
-
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
         <span class="n">edgelist</span> <span class="o">=</span>  <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">edgelist</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="n">x</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">])</span> <span class="c"># for nx an edge list is a list of tuple</span>
 
+    <span class="c"># remove airwalls</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;airwalls&#39;</span><span class="p">]:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">pno</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()[</span><span class="n">x</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">nodelist</span><span class="p">)</span>
+            <span class="c">#pno = filter(lambda x : G.nodes()[x]&gt;0,nodelist)</span>
+            <span class="n">pno</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">nodelist</span><span class="p">)</span>
             <span class="c"># node == air</span>
             <span class="n">na</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">G</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="n">pno</span><span class="p">)</span>
             <span class="c"># edge == air</span>
@@ -204,25 +207,24 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 
-
-
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]:</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
                                <span class="n">nodelist</span> <span class="o">=</span> <span class="n">nodelist</span><span class="p">,</span>
                                <span class="n">node_color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_color&#39;</span><span class="p">],</span>
                                <span class="n">node_size</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">],</span>
-                               <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphan&#39;</span><span class="p">])</span>
+                               <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphan&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">]:</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
                                 <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="n">n</span><span class="p">:</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">},</span>
-                                <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;font_size&#39;</span><span class="p">])</span>
+                                <span class="n">font_size</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;font_size&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]:</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
                                <span class="n">edgelist</span> <span class="o">=</span> <span class="n">edgelist</span><span class="p">,</span>
                                <span class="n">edge_color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">],</span>
-                               <span class="n">linewidth</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">],</span>
-                               <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphae&#39;</span><span class="p">])</span>
+                               <span class="n">width</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">],</span>
+                               <span class="n">arrows</span><span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;arrows&#39;</span><span class="p">],</span>
+                               <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alphae&#39;</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -261,6 +263,15 @@
 
 </div>
 <div class="viewcode-block" id="find_all_paths"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.graphutil.find_all_paths.html#pylayers.util.graphutil.find_all_paths">[docs]</a><span class="k">def</span> <span class="nf">find_all_paths</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    graph :</span>
+<span class="sd">    start:</span>
+<span class="sd">    end :</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">path</span>  <span class="o">=</span> <span class="p">[]</span>
     <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">queue</span> <span class="o">=</span> <span class="p">[(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">path</span><span class="p">)]</span>
@@ -312,7 +323,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

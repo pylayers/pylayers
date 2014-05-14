@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
     <link rel="next" title="pylayers.gis.layout.Layout.outputGi" href="pylayers.gis.layout.Layout.outputGi.html" />
-    <link rel="prev" title="pylayers.gis.layout.Layout.buildGi2" href="pylayers.gis.layout.Layout.buildGi2.html" /> 
+    <link rel="prev" title="pylayers.gis.layout.Layout.buildGv" href="pylayers.gis.layout.Layout.buildGv.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -50,7 +50,7 @@
           <a href="pylayers.gis.layout.Layout.outputGi.html" title="pylayers.gis.layout.Layout.outputGi"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.layout.Layout.buildGi2.html" title="pylayers.gis.layout.Layout.buildGi2"
+          <a href="pylayers.gis.layout.Layout.buildGv.html" title="pylayers.gis.layout.Layout.buildGv"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -65,8 +65,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.gis.layout.Layout.buildGi2.html"
-                        title="previous chapter">pylayers.gis.layout.Layout.buildGi2</a></p>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.buildGv.html"
+                        title="previous chapter">pylayers.gis.layout.Layout.buildGv</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pylayers.gis.layout.Layout.outputGi.html"
                         title="next chapter">pylayers.gis.layout.Layout.outputGi</a></p>
@@ -103,11 +103,12 @@
 <tt class="descclassname">Layout.</tt><tt class="descname">buildGi</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.buildGi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGi" title="Permalink to this definition">¶</a></dt>
 <dd><p>build graph of interactions</p>
 <p class="rubric">Notes</p>
-<dl class="docutils">
-<dt>For each node &gt; of graph Gs creates</dt>
-<dd>4 different nodes associated to the same segment
-R+  R- T+ T-</dd>
-</dl>
+<p>For each node &gt; of graph Gs creates
+4 different nodes associated to the same segment</p>
+<p>(ns,cy0) R -&gt; cy0
+(ns,cy1) R -&gt; cy1
+(ns,cy0,cy1) T 0-&gt;1
+(ns,cy1,cy0) T 1-&gt;0</p>
 </dd></dl>
 
 </div>
@@ -131,7 +132,7 @@ R+  R- T+ T-</dd>
           <a href="pylayers.gis.layout.Layout.outputGi.html" title="pylayers.gis.layout.Layout.outputGi"
              >next</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.layout.Layout.buildGi2.html" title="pylayers.gis.layout.Layout.buildGi2"
+          <a href="pylayers.gis.layout.Layout.buildGv.html" title="pylayers.gis.layout.Layout.buildGv"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -145,7 +146,7 @@ R+  R- T+ T-</dd>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

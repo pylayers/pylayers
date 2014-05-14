@@ -463,7 +463,8 @@
 <span class="sd">        get the signed area of the polygon</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Polygon.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__init__.html#pylayers.util.geomutil.Polygon.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">vnodes</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="Polygon.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__init__.html#pylayers.util.geomutil.Polygon.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span>
+                 <span class="n">vnodes</span><span class="o">=</span><span class="p">[],</span><span class="n">delta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -485,10 +486,21 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">sh</span><span class="o">.</span><span class="n">multipolygon</span><span class="o">.</span><span class="n">MultiPolygon</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;MultiPolygon are not allowed&#39;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">shg</span><span class="o">.</span><span class="n">polygon</span><span class="o">.</span><span class="n">Polygon</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="n">shg</span><span class="o">.</span><span class="n">Polygon</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">p</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="c">#shg.Polygon.__init__(self, pt)</span>
+            <span class="c">#</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">delta</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">delta</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">delta</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">delta</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">[[</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span><span class="n">xmax</span><span class="p">],[</span><span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span><span class="p">,</span><span class="n">ymax</span><span class="p">,</span><span class="n">ymin</span><span class="p">]]</span>
 
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">shg</span><span class="o">.</span><span class="n">multipoint</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -527,10 +539,57 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Polygon.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__add__.html#pylayers.util.geomutil.Polygon.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        p : Polygon</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        pm : merged polygon or unchanged polygon</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pnew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-        <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pnew</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pnew</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="n">p2</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+        <span class="c"># v0   = self.vnodes</span>
+        <span class="c">#v1   = p.vnodes</span>
+        <span class="c">#nseg0 = filter(lambda x:x&gt;0,v0)</span>
+        <span class="c">#nseg1 = filter(lambda x:x&gt;0,v1)</span>
+
+        <span class="c">#commseg = np.intersect1d(nseg0,nseg1)[0]</span>
+
+        <span class="c">#is0 = np.where(nseg0==commseg)[0][0]</span>
+        <span class="c">#is1 = np.where(nseg1==commseg)[0][0]</span>
+
+        <span class="c">#rs0 = np.roll(v0,2*is0-1)[1:]</span>
+        <span class="c">#rs1 = np.roll(v1,2*is1-1)[1:]</span>
+        <span class="c">#if rs1[0]==rs0[0]:</span>
+        <span class="c">#    rs1=rs1[::-1]</span>
+
+        <span class="c">#print rs0</span>
+        <span class="c">#print rs1</span>
+        <span class="c">#assert(rs0[0]==rs1[-1])</span>
+        <span class="c">#assert(rs0[-1]==rs1[0])</span>
+        <span class="c">#vnodes = np.hstack((rs0,rs1[1:-1]))</span>
+        <span class="c">#self.vnodes = vnodes</span>
+        <span class="c">#p2 = Polygon(pnew,vnodes=vnodes)</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">pnew</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># Not finished</span>
+        <span class="c">#</span>
         <span class="k">return</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+
+        <span class="c">#p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))</span>
+        <span class="c">#p2 = Polygon(p1)</span>
+        <span class="c">#return(p2)</span>
+        <span class="c">#if isinstance(pnew,sh.polygon.Polygon):</span>
+        <span class="c">#    p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))</span>
+        <span class="c">#    return(p2)</span>
+        <span class="c">#else:</span>
+        <span class="c">#    pdb.set_trace()</span>
+        <span class="c">#    return(self)</span>
 </div>
 <div class="viewcode-block" id="Polygon.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__repr__.html#pylayers.util.geomutil.Polygon.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
@@ -538,8 +597,50 @@
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;(&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;)</span><span class="se">\n</span><span class="s">&#39;</span>
+
+        <span class="c"># vnodes to link with external nodes numerotation</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">vnodes : (&#39;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)):</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;)</span><span class="se">\n</span><span class="s">&#39;</span>
+
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+
 </div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span>
+
+    <span class="nd">@xy.setter</span>
+    <span class="k">def</span> <span class="nf">xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xy</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span> <span class="o">=</span> <span class="n">xy</span>
+
+    <span class="nd">@xy.getter</span>
+    <span class="k">def</span> <span class="nf">xy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span>
+
+    <span class="k">def</span> <span class="nf">setvnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update vnodes member from Layout</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        L : pylayers.layout.Layout</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.layout.Layout.ispoint</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span>
+                   <span class="n">L</span><span class="o">.</span><span class="n">ispoint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">tol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">nseg</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">L</span><span class="o">.</span><span class="n">numseg</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">seg</span><span class="p">)</span>
+        <span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">nseg</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">=</span> <span class="n">vnodes</span>
+
 <div class="viewcode-block" id="Polygon.ndarray"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.ndarray.html#pylayers.util.geomutil.Polygon.ndarray">[docs]</a>    <span class="k">def</span> <span class="nf">ndarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get a ndarray from a Polygon</span>
 
@@ -558,6 +659,7 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lring</span><span class="o">.</span><span class="n">xy</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
         <span class="k">return</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
 </div>
 <div class="viewcode-block" id="Polygon.signedarea"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.signedarea.html#pylayers.util.geomutil.Polygon.signedarea">[docs]</a>    <span class="k">def</span> <span class="nf">signedarea</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get the signed area of the polygon</span>
@@ -565,7 +667,78 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ndarray</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">::],</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]))</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">::],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]))</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]))</span> <span class="o">/</span> <span class="mf">2.</span>
+
+
 </div>
+    <span class="k">def</span> <span class="nf">coorddeter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; determine polygon coordinates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="k">def</span> <span class="nf">isconvex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Determine if a polygon is convex</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tol : tolerence on aligned point</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">         True if convex</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        the algorithm tests all triplet of point and L.determine </span>
+<span class="sd">        if the third point is left to the 2 first.</span>
+<span class="sd">        a tolerance can be introduce in cases where the polygon is </span>
+<span class="sd">        almost convex.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coorddeter</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">isleft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">isleft</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">coorddeter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; determine polygon coordinates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="k">def</span> <span class="nf">isconvex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Determine if a polygon is convex</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tol : tolerence on aligned point</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">         True if convex</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        the algorithm tests all triplet of point and L.determine </span>
+<span class="sd">        if the third point is left to the 2 first.</span>
+<span class="sd">        a tolerance can be introduce in cases where the polygon is </span>
+<span class="sd">        almost convex.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coorddeter</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">isleft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">isleft</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="Polygon.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.plot.html#pylayers.util.geomutil.Polygon.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot function</span>
 
@@ -626,12 +799,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
 
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span>
+        <span class="n">numpt</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
                 <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">],</span>
-                <span class="n">alpha</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">],</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">],</span>
                 <span class="n">ec</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgecolor&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">numpt</span><span class="p">)):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="mf">0.1</span><span class="p">,</span><span class="n">numpt</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -675,9 +851,10 @@
         <span class="n">ls</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">asLineString</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
         <span class="n">poly2</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">poly2</span><span class="p">)</span>
+
 </div>
-<div class="viewcode-block" id="Polygon.buildGv"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.buildGv.html#pylayers.util.geomutil.Polygon.buildGv">[docs]</a>    <span class="k">def</span> <span class="nf">buildGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Create  visibility graph for a polygon</span>
+    <span class="k">def</span> <span class="nf">buildGvc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create visibility graph for a convex polygon</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -686,10 +863,12 @@
 <span class="sd">            default : False</span>
 <span class="sd">        fig       : matplotlib.figure.pyplot</span>
 <span class="sd">        ax        : axes</span>
-<span class="sd">        udeg1     : np.array indexes of points of degree 1</span>
-<span class="sd">            default = []</span>
 <span class="sd">        udeg2     : np.array indexes of points of degree 2</span>
 <span class="sd">            default = []</span>
+<span class="sd">        eded   : boolean</span>
+<span class="sd">            default True</span>
+<span class="sd">        indoor : boolean</span>
+<span class="sd">            default True</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -724,15 +903,14 @@
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        pylayers.gis.layout</span>
+<span class="sd">        pylayers.gis.layout.Layout.buildGv</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                    <span class="s">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
-                    <span class="s">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
-                    <span class="s">&#39;udeg1&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
-                    <span class="s">&#39;udeg2&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;udeg2&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+                    <span class="s">&#39;eded&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;open&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;indoor&#39;</span><span class="p">:</span><span class="bp">True</span>
                     <span class="p">}</span>
 
 <span class="c">##       initialize function attributes</span>
@@ -744,26 +922,12 @@
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="c">#self.args=args</span>
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
-                <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">set_frameon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
-                <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
-
-        <span class="n">udeg1</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;udeg1&#39;</span><span class="p">]</span>
-        <span class="n">udeg2</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;udeg2&#39;</span><span class="p">]</span>
-
-        <span class="n">GRAY</span> <span class="o">=</span> <span class="s">&#39;#999999&#39;</span>
         <span class="n">Gv</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
         <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;open&#39;</span><span class="p">]:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
 
         <span class="n">lring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span>
         <span class="c">#</span>
@@ -774,6 +938,7 @@
         <span class="c">#</span>
         <span class="c"># determine convex points</span>
         <span class="c">#</span>
+        <span class="c">#pdb.set_trace()</span>
         <span class="n">tcc</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptconvex</span><span class="p">()</span>
         <span class="c"># Np = self.Np</span>
         <span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span><span class="mi">1</span>
@@ -784,58 +949,27 @@
         <span class="c">#</span>
         <span class="c"># vnodes do not necessarily start with a point</span>
         <span class="c">#</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ipt</span>  <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
-            <span class="n">iseg</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ipt</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="n">iseg</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
 
-        <span class="n">npt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">ipt</span><span class="p">]</span>
-        <span class="n">nseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">iseg</span><span class="p">]</span>
-        <span class="c">#print &quot;npt : &quot;,npt</span>
-        <span class="c">#print &quot;nseg : &quot;,nseg</span>
+        <span class="n">npt</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
+        <span class="n">nseg</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
 
-        <span class="k">assert</span>  <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">npt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong with points&quot;</span>
-        <span class="k">assert</span>  <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">nseg</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong with segments&quot;</span>
         <span class="c">#</span>
+        <span class="c"># in convex case all segments see all segments</span>
         <span class="c">#</span>
-        <span class="c"># Create middle point on lring</span>
-        <span class="c">#</span>
-        <span class="c"># Warning lring recopy the node at the end of the sequence</span>
-        <span class="c">#</span>
-        <span class="c"># A problem arises from the fact that a vnodes sequence</span>
-        <span class="c"># do no necessarily starts with a point (negative node)</span>
-        <span class="c">#</span>
-        <span class="c">#</span>
-        <span class="n">tpm</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">ik</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lring</span><span class="o">.</span><span class="n">coords</span><span class="p">):</span>
-            <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">pm</span> <span class="o">=</span> <span class="p">(</span><span class="n">pt</span> <span class="o">+</span> <span class="n">pm1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nseg</span><span class="p">[</span><span class="n">ik</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nseg</span><span class="p">[</span><span class="n">ik</span> <span class="o">%</span> <span class="n">Np</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">tpm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span>
-                <span class="n">pm1</span> <span class="o">=</span> <span class="n">pt</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="n">pm1</span> <span class="o">=</span> <span class="n">pt</span>
+        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">nseg</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">nk</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nk</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">weight</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
         <span class="c">#</span>
         <span class="c"># Update position of points in Gv</span>
         <span class="c">#</span>
-        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
-            <span class="c">#nnode = -(nk+1)</span>
-            <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">[</span><span class="n">nk</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">nk</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">nk</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">Gv</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+            <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nk</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">nk</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">nk</span><span class="p">])</span>
 
         <span class="n">xr</span><span class="p">,</span> <span class="n">yr</span> <span class="o">=</span> <span class="n">lring</span><span class="o">.</span><span class="n">xy</span>
 
         <span class="c">#</span>
-        <span class="c"># Degree 1 points : (should not exist anymore)</span>
-        <span class="c">#</span>
         <span class="c"># Determine diffraction points</span>
         <span class="c">#</span>
-        <span class="c"># udeg1 :</span>
         <span class="c"># deg2 : if null:</span>
         <span class="c">#           the point is kept</span>
         <span class="c">#        if convex:</span>
@@ -843,44 +977,16 @@
         <span class="c">#        else:</span>
         <span class="c">#           the point is not kept</span>
         <span class="c">#</span>
-        <span class="n">uconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># convex point position</span>
+        <span class="k">if</span> <span class="n">indoor</span><span class="p">:</span>
+            <span class="n">uconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># convex point position</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">uconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># convex point position</span>
         <span class="n">uzero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>   <span class="c"># planar point (joining two parallel segment)</span>
         <span class="n">udiffdoor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">uzero</span><span class="p">,</span> <span class="n">udeg2</span><span class="p">)</span>  <span class="c"># degree 2 paralell points are often doors and windows</span>
         <span class="n">udiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">uconvex</span><span class="p">,</span> <span class="n">udiffdoor</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="c"># diffracting point</span>
-        <span class="c">#print &quot;vnodes&quot;,self.vnodes</span>
-        <span class="c">#print &quot;tcc : &quot;,tcc</span>
-        <span class="c">#print &quot;uzero : &quot;,uzero</span>
-        <span class="c">#print &quot;udiffdoor : &quot;,udiffdoor</span>
-        <span class="c">#print &quot;udiff&quot;,udiff</span>
-        <span class="c">#print &quot;udeg2&quot;,udeg2</span>
-        <span class="c">#print &quot;npt&quot;,npt</span>
-        <span class="c">#if udiff!=[]:</span>
-        <span class="c">#    print &quot;diff : &quot;,npt[udiff]</span>
-        <span class="c">#if udeg2!=[]:</span>
-        <span class="c">#    print &quot;deg2 : &quot;,npt[udeg2]</span>
-        <span class="c">#if uzero!=[]:</span>
-        <span class="c">#    print &quot;zero :&quot;,npt[uzero]</span>
         <span class="c">#</span>
-        <span class="c"># if show == True display points and polygon</span>
+        <span class="c"># 1) Calculate node-node visibility</span>
         <span class="c">#</span>
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
-            <span class="n">points1</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">(</span><span class="n">lring</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points1</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">udiffdoor</span><span class="p">:</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRAY</span><span class="p">)</span>
-
-            <span class="n">patch</span> <span class="o">=</span> <span class="n">PolygonPatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;#6699cc&#39;</span><span class="p">,</span>
-                                 <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
-        <span class="c">#pdb.set_trace()</span>
-        <span class="c">#</span>
-        <span class="c">#  1) Calculate node-node visibility</span>
-        <span class="c">#</span>
-        <span class="c"># The following exploits definition of convexity.</span>
         <span class="c">#</span>
         <span class="c"># Between all combinations of diffracting points</span>
         <span class="c"># create a segment and check whether it is fully included in the</span>
@@ -897,6 +1003,7 @@
         <span class="c">#</span>
         <span class="c">#  2) Calculate edge-edge and node-edge visibility</span>
         <span class="c">#</span>
+
         <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>   <span class="c"># loop on range of number of points</span>
             <span class="n">ptk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">nk</span><span class="p">]</span>     <span class="c"># tail point</span>
             <span class="n">phk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">]</span> <span class="c"># head point (%Np to get 0 as last point)</span>
@@ -977,7 +1084,8 @@
                                 <span class="c">#    ((nseg[nk]==7) &amp; (nseg[ns]==10))):</span>
                                 <span class="c">#    pdb.set_trace()</span>
                                 <span class="k">if</span> <span class="n">nseg</span><span class="p">[</span><span class="n">nk</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nseg</span><span class="p">[</span><span class="n">ns</span><span class="p">]:</span>
-                                    <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">nseg</span><span class="p">[</span><span class="n">nk</span><span class="p">],</span> <span class="n">nseg</span><span class="p">[</span><span class="n">ns</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;eded&#39;</span><span class="p">]:</span>
+                                        <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">nseg</span><span class="p">[</span><span class="n">nk</span><span class="p">],</span> <span class="n">nseg</span><span class="p">[</span><span class="n">ns</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                                     <span class="c">#else:</span>
                                     <span class="c">#    print nseg[nk],nseg[ns]</span>
                                     <span class="c">#    print pts,phs</span>
@@ -1020,11 +1128,11 @@
             <span class="n">ndnd</span><span class="p">,</span> <span class="n">nded</span><span class="p">,</span> <span class="n">eded</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">edgetype</span><span class="p">(</span><span class="n">Gv</span><span class="p">)</span>
 
             <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">eded</span><span class="p">,</span>
-                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">ndnd</span><span class="p">,</span>
-                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">nded</span><span class="p">,</span>
-                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
             <span class="c">#label = {}</span>
             <span class="c">#for (u,v) in Gv.edges():</span>
@@ -1034,7 +1142,370 @@
             <span class="c">#edge_label=nx.draw_networkx_edge_labels(Gv,Gv.pos,edge_labels=label)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">Gv</span><span class="p">)</span>
-</div>
+<div class="viewcode-block" id="Polygon.buildGv"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.buildGv.html#pylayers.util.geomutil.Polygon.buildGv">[docs]</a>    <span class="k">def</span> <span class="nf">buildGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create  visibility graph for a polygon</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        display   : boolean</span>
+<span class="sd">            default : False</span>
+<span class="sd">        fig       : matplotlib.figure.pyplot</span>
+<span class="sd">        ax        : axes</span>
+<span class="sd">        udeg2     : np.array indexes of points of degree 2</span>
+<span class="sd">            default = []</span>
+<span class="sd">        eded   : boolean</span>
+<span class="sd">            default True</span>
+<span class="sd">        indoor : boolean</span>
+<span class="sd">            default True</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
+<span class="sd">            &gt;&gt;&gt; import shapely.geometry as shg</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">            &gt;&gt;&gt; points  = shg.MultiPoint([(0, 0), (0, 1), (2.5,1), (2.5, 2), \</span>
+<span class="sd">                                          (2.8,2), (2.8, 1.1), (3.2, 1.1), \</span>
+<span class="sd">                                          (3.2, 0.7), (0.4, 0.7), (0.4, 0)])</span>
+<span class="sd">            &gt;&gt;&gt; polyg   = Polygon(points)</span>
+<span class="sd">            &gt;&gt;&gt; Gv      = polyg.buildGv(show=True)</span>
+<span class="sd">            &gt;&gt;&gt; plt.axis(&#39;off&#39;)</span>
+<span class="sd">            (-0.5, 4.0, -0.5, 2.5)</span>
+<span class="sd">            &gt;&gt;&gt; title = plt.title(&#39;Testing buildGv&#39;)</span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        Segment k and (k+1)%N share segment (k+1)%N</span>
+<span class="sd">        The degree of a point is dependent from other polygons around</span>
+
+<span class="sd">        Topological error can be raised if the point coordinates accuracy</span>
+<span class="sd">        is not limited.</span>
+
+<span class="sd">        Nodes of polygon are numbered in the global graph in vnodes member.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout.Layout.buildGv</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s">&#39;fig&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s">&#39;ax&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s">&#39;udeg2&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+                    <span class="s">&#39;eded&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;indoor&#39;</span><span class="p">:</span><span class="bp">True</span>
+                    <span class="p">}</span>
+
+<span class="c">##       initialize function attributes</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="c">#self.args=args</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">set_frameon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+
+        <span class="n">udeg2</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;udeg2&#39;</span><span class="p">]</span>
+
+        <span class="n">GRAY</span> <span class="o">=</span> <span class="s">&#39;#999999&#39;</span>
+        <span class="n">Gv</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c">#pdb.set_trace()</span>
+        <span class="n">lring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span>
+        <span class="c">#</span>
+        <span class="c"># Calculate interior normals</span>
+        <span class="c">#</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">lring</span><span class="o">.</span><span class="n">xy</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="c">#</span>
+        <span class="c"># determine convex points</span>
+        <span class="c">#</span>
+        <span class="c">#pdb.set_trace()</span>
+        <span class="n">tcc</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptconvex</span><span class="p">()</span>
+        <span class="c"># Np = self.Np</span>
+        <span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="c">#</span>
+        <span class="c"># retrieve</span>
+        <span class="c">#  npt points label sequence</span>
+        <span class="c">#  nseg segments label sequence</span>
+        <span class="c">#</span>
+        <span class="c"># vnodes do not necessarily start with a point</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ipt</span>  <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
+            <span class="n">iseg</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ipt</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">iseg</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
+
+        <span class="n">npt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">ipt</span><span class="p">]</span>
+        <span class="n">nseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">iseg</span><span class="p">]</span>
+        <span class="c">#print &quot;npt : &quot;,npt</span>
+        <span class="c">#print &quot;nseg : &quot;,nseg</span>
+
+        <span class="k">assert</span>  <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">npt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong with points&quot;</span>
+        <span class="k">assert</span>  <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">nseg</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong with segments&quot;</span>
+        <span class="c">#</span>
+        <span class="c">#</span>
+        <span class="c"># Create middle point on lring</span>
+        <span class="c">#</span>
+        <span class="c"># Warning lring recopy the node at the end of the sequence</span>
+        <span class="c">#</span>
+        <span class="c"># A problem arises from the fact that a vnodes sequence</span>
+        <span class="c"># do no necessarily starts with a point (negative node)</span>
+        <span class="c">#</span>
+        <span class="c">#</span>
+        <span class="n">tpm</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ik</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lring</span><span class="o">.</span><span class="n">coords</span><span class="p">):</span>
+            <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pm</span> <span class="o">=</span> <span class="p">(</span><span class="n">pt</span> <span class="o">+</span> <span class="n">pm1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nseg</span><span class="p">[</span><span class="n">ik</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">nseg</span><span class="p">[</span><span class="n">ik</span> <span class="o">%</span> <span class="n">Np</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pm</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pm</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">tpm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span>
+                <span class="n">pm1</span> <span class="o">=</span> <span class="n">pt</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">pm1</span> <span class="o">=</span> <span class="n">pt</span>
+        <span class="c">#</span>
+        <span class="c"># Update position of points in Gv</span>
+        <span class="c">#</span>
+        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
+            <span class="c">#nnode = -(nk+1)</span>
+            <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">npt</span><span class="p">[</span><span class="n">nk</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">nk</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">nk</span><span class="p">])</span>
+
+        <span class="n">xr</span><span class="p">,</span> <span class="n">yr</span> <span class="o">=</span> <span class="n">lring</span><span class="o">.</span><span class="n">xy</span>
+
+        <span class="c">#</span>
+        <span class="c"># Determine diffraction points</span>
+        <span class="c">#</span>
+        <span class="c"># deg2 : if null:</span>
+        <span class="c">#           the point is kept</span>
+        <span class="c">#        if convex:</span>
+        <span class="c">#           the point is kept</span>
+        <span class="c">#        else:</span>
+        <span class="c">#           the point is not kept</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="n">indoor</span><span class="p">:</span>
+            <span class="n">uconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># convex point position</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">uconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># convex point position</span>
+        <span class="n">uzero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>   <span class="c"># planar point (joining two parallel segment)</span>
+        <span class="n">udiffdoor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">uzero</span><span class="p">,</span> <span class="n">udeg2</span><span class="p">)</span>  <span class="c"># degree 2 paralell points are often doors and windows</span>
+        <span class="n">udiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">uconvex</span><span class="p">,</span> <span class="n">udiffdoor</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="c"># diffracting point</span>
+        <span class="c">#print &quot;vnodes&quot;,self.vnodes</span>
+        <span class="c">#print &quot;tcc : &quot;,tcc</span>
+        <span class="c">#print &quot;uzero : &quot;,uzero</span>
+        <span class="c">#print &quot;udiffdoor : &quot;,udiffdoor</span>
+        <span class="c">#print &quot;udiff&quot;,udiff</span>
+        <span class="c">#print &quot;udeg2&quot;,udeg2</span>
+        <span class="c">#print &quot;npt&quot;,npt</span>
+        <span class="c">#if udiff!=[]:</span>
+        <span class="c">#    print &quot;diff : &quot;,npt[udiff]</span>
+        <span class="c">#if udeg2!=[]:</span>
+        <span class="c">#    print &quot;deg2 : &quot;,npt[udeg2]</span>
+        <span class="c">#if uzero!=[]:</span>
+        <span class="c">#    print &quot;zero :&quot;,npt[uzero]</span>
+        <span class="c">#</span>
+        <span class="c"># if show == True display points and polygon</span>
+        <span class="c">#</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
+            <span class="n">points1</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">(</span><span class="n">lring</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">udiffdoor</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">GRAY</span><span class="p">)</span>
+
+            <span class="n">patch</span> <span class="o">=</span> <span class="n">PolygonPatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;#6699cc&#39;</span><span class="p">,</span>
+                                 <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+        <span class="c">#pdb.set_trace()</span>
+        <span class="c">#</span>
+        <span class="c">#  1) Calculate node-node visibility</span>
+        <span class="c">#</span>
+        <span class="c"># The algorithm exploits definition of convexity.</span>
+        <span class="c">#</span>
+        <span class="c"># Between all combinations of diffracting points</span>
+        <span class="c"># create a segment and check whether it is fully included in the</span>
+        <span class="c"># polygon.</span>
+        <span class="c"># If verified then there is a visibility between the 2 points.</span>
+        <span class="c">#</span>
+        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">udiff</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">nk</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">nk</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">seg</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">seg</span><span class="p">):</span>
+                <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">npt</span><span class="p">[</span><span class="n">nk</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">npt</span><span class="p">[</span><span class="n">nk</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c">#</span>
+        <span class="c">#  2) Calculate edge-edge and node-edge visibility</span>
+        <span class="c">#</span>
+
+        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>   <span class="c"># loop on range of number of points</span>
+            <span class="n">ptk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">nk</span><span class="p">]</span>     <span class="c"># tail point</span>
+            <span class="n">phk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">]</span> <span class="c"># head point (%Np to get 0 as last point)</span>
+
+            <span class="c"># lnk : unitary vector on segment nk</span>
+            <span class="n">lk</span> <span class="o">=</span> <span class="n">phk</span> <span class="o">-</span> <span class="n">ptk</span>
+            <span class="n">nlk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lk</span><span class="p">,</span> <span class="n">lk</span><span class="p">))</span>
+            <span class="n">lnk</span> <span class="o">=</span> <span class="n">lk</span> <span class="o">/</span> <span class="n">nlk</span>
+
+            <span class="c"># the epsilon is (1/1000) of the segment length</span>
+            <span class="n">epsilonk</span> <span class="o">=</span> <span class="n">nlk</span> <span class="o">/</span> <span class="mf">1000.</span>  <span class="c"># this can be dangerous (epsilon can be large)</span>
+
+            <span class="c"># x--o----------------------o--x</span>
+            <span class="c">#    +eps                  -eps</span>
+            <span class="n">pcornert</span> <span class="o">=</span> <span class="n">ptk</span> <span class="o">+</span> <span class="n">lnk</span> <span class="o">*</span> <span class="n">epsilonk</span>  <span class="c"># + n[:,nk]*epsilon</span>
+            <span class="n">pcornerh</span> <span class="o">=</span> <span class="n">phk</span> <span class="o">-</span> <span class="n">lnk</span> <span class="o">*</span> <span class="n">epsilonk</span>  <span class="c"># + n[:,nk]*epsilon</span>
+
+        <span class="c">#</span>
+        <span class="c"># in any case no ray towark nk</span>
+        <span class="c"># if nk is convex no ray toward (nk-1)%Np</span>
+        <span class="c">#</span>
+        <span class="c"># start from the two extremity of the segment</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pcorner</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">pcornert</span><span class="p">,</span> <span class="n">pcornerh</span><span class="p">]):</span>
+                <span class="c">#</span>
+                <span class="c">#  if tail point</span>
+                <span class="c">#           remove nk segment</span>
+                <span class="c">#  and if the point is convex</span>
+                <span class="c">#          remove previous segment</span>
+                <span class="c">#</span>
+                <span class="c">#  si point head</span>
+                <span class="c">#</span>
+                <span class="n">listpoint</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
+                <span class="n">listpoint</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">nk</span><span class="p">)</span>   <span class="c"># remove current point</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># first iteration pcornert</span>
+                    <span class="k">if</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span>  <span class="c"># == 1</span>
+                        <span class="n">listpoint</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">nk</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c"># second iteration pcornerh</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span> <span class="c"># ==1</span>
+                        <span class="n">listpoint</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">listpoint</span><span class="p">:</span>
+                    <span class="n">pts</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">ns</span><span class="p">]</span>
+                    <span class="n">phs</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">(</span><span class="n">ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">]</span>
+                    <span class="c"># Add B.Uguen 2/01/2014 no possible visibility relation between aligned segments</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">isaligned</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span><span class="n">phs</span><span class="p">,</span><span class="n">ptk</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">isaligned</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span><span class="n">phs</span><span class="p">,</span><span class="n">phk</span><span class="p">))):</span>
+                        <span class="n">ls</span> <span class="o">=</span> <span class="n">phs</span> <span class="o">-</span> <span class="n">pts</span>
+                        <span class="n">nls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">ls</span><span class="p">))</span>
+                        <span class="n">lns</span> <span class="o">=</span> <span class="n">ls</span> <span class="o">/</span> <span class="n">nls</span>
+                        <span class="n">epsilons</span> <span class="o">=</span> <span class="n">nls</span> <span class="o">/</span> <span class="mf">1000.</span>
+                        <span class="n">pte</span> <span class="o">=</span> <span class="n">pts</span> <span class="o">+</span> <span class="n">lns</span> <span class="o">*</span> <span class="n">epsilons</span>  <span class="c"># + n[:,ns]*epsilon</span>
+                        <span class="n">phe</span> <span class="o">=</span> <span class="n">phs</span> <span class="o">-</span> <span class="n">lns</span> <span class="o">*</span> <span class="n">epsilons</span>  <span class="c"># + n[:,ns]*epsilon</span>
+                        <span class="n">tbr</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">bitreverse</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">/</span> <span class="mf">16.</span>
+                        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">tbr</span><span class="p">:</span>
+                            <span class="n">pa</span> <span class="o">=</span> <span class="n">pte</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">phe</span> <span class="o">-</span> <span class="n">pte</span><span class="p">)</span>
+                            <span class="n">seg</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">((</span><span class="n">pcorner</span><span class="p">,</span> <span class="n">pa</span><span class="p">))</span>
+                            <span class="c">#print &quot;seg: &quot;,seg.xy</span>
+                            <span class="c">#if npt[nk] == -3:</span>
+                            <span class="c">#    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=0.2,color=&#39;k&#39;)</span>
+                            <span class="c">#    plt.draw()</span>
+                            <span class="c"># topological error can be raised here</span>
+                            <span class="n">seg2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span>
+                            <span class="c">#if self.contains(seg):</span>
+                            <span class="k">if</span> <span class="n">seg2</span><span class="o">.</span><span class="n">almost_equals</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">decimal</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+                                <span class="c">#print alpha,nk,ns</span>
+                                <span class="c">#plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=2,color=&#39;r&#39;)</span>
+                                <span class="c">#Gv.add_edge(-(uconvex[nk]+1),ns+1,weight=10)</span>
+                                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">udiff</span><span class="p">:</span>
+                                        <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">npt</span><span class="p">[</span><span class="n">nk</span><span class="p">],</span> <span class="n">nseg</span><span class="p">[</span><span class="n">ns</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                        <span class="c">#plt.plot(np.array([Gv.pos[npt[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[nk]][1],Gv.pos[nseg[ns]][1]]),&#39;r&#39;)</span>
+                                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span> <span class="ow">in</span> <span class="n">udiff</span><span class="p">:</span>
+                                        <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">npt</span><span class="p">[(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">],</span> <span class="n">nseg</span><span class="p">[</span><span class="n">ns</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                        <span class="c">#plt.plot(np.array([Gv.pos[npt[(nk+1)%Np]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[(nk+1)%Np]][1],Gv.pos[nseg[ns]][1]]),&#39;g&#39;)</span>
+                                    <span class="c">#plt.draw()</span>
+                                <span class="c">#if i==1:</span>
+                                <span class="c">#if (((nseg[nk]==10) &amp; (nseg[ns]==7)) or</span>
+                                <span class="c">#    ((nseg[nk]==7) &amp; (nseg[ns]==10))):</span>
+                                <span class="c">#    pdb.set_trace()</span>
+                                <span class="k">if</span> <span class="n">nseg</span><span class="p">[</span><span class="n">nk</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nseg</span><span class="p">[</span><span class="n">ns</span><span class="p">]:</span>
+                                    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;eded&#39;</span><span class="p">]:</span>
+                                        <span class="n">Gv</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">nseg</span><span class="p">[</span><span class="n">nk</span><span class="p">],</span> <span class="n">nseg</span><span class="p">[</span><span class="n">ns</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                    <span class="c">#else:</span>
+                                    <span class="c">#    print nseg[nk],nseg[ns]</span>
+                                    <span class="c">#    print pts,phs</span>
+                                    <span class="c">#    print ptk,phk</span>
+                                    <span class="c">#if (((nseg[nk]==10) &amp; (nseg[ns]==7)) or</span>
+                                    <span class="c">#    ((nseg[nk]==7) &amp; (nseg[ns]==10))):</span>
+                                    <span class="c">#    plt.plot(np.array([Gv.pos[nseg[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[nseg[nk]][1],Gv.pos[nseg[ns]][1]]),&#39;b&#39;)</span>
+                                    <span class="c">#    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),&#39;b&#39;)</span>
+                                    <span class="c">#    print &quot;seg: &quot;,seg.xy</span>
+                                    <span class="c">#    print &quot;seg2: &quot;,seg2.xy</span>
+                                    <span class="c">#    print nseg[nk],nseg[ns]</span>
+                                    <span class="c">#    print pcorner , ptk</span>
+                                    <span class="c">#    print  alpha , pa ,pte</span>
+                                    <span class="c">#    plt.draw()</span>
+                                    <span class="c">#    raw_input()</span>
+                                <span class="k">break</span>
+                    <span class="c">#else:</span>
+                        <span class="c">#print p</span>
+                        <span class="c">#print ns</span>
+                        <span class="c">#print nk</span>
+                        <span class="c">#print &#39;nsegnk : &#39;,nseg[nk]</span>
+                        <span class="c">#print &#39;nsegns&#39;, nseg[ns]</span>
+                        <span class="c">#print &#39;ptk : &#39;,ptk</span>
+                        <span class="c">#print &#39;phk : &#39;,phk</span>
+                        <span class="c">#print &#39;pts : &#39;,pts</span>
+                        <span class="c">#print &#39;phs : &#39;,phs</span>
+                        <span class="c">#print &quot;aligne :&quot;,nseg[nk],nseg[ns]</span>
+                        <span class="c">#pdb.set_trace()</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Gv</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+            <span class="n">uneg</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">nodes</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="n">upos</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">nodes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">upos</span><span class="p">,</span>
+                                   <span class="n">node_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">uneg</span><span class="p">,</span>
+                                   <span class="n">node_color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+
+            <span class="n">ndnd</span><span class="p">,</span> <span class="n">nded</span><span class="p">,</span> <span class="n">eded</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">edgetype</span><span class="p">(</span><span class="n">Gv</span><span class="p">)</span>
+
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">eded</span><span class="p">,</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">ndnd</span><span class="p">,</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">nded</span><span class="p">,</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c">#label = {}</span>
+            <span class="c">#for (u,v) in Gv.edges():</span>
+            <span class="c">#    d = Gv.get_edge_data(u,v)</span>
+            <span class="c">#    label[(u,v)]=d[&#39;weight&#39;]</span>
+
+            <span class="c">#edge_label=nx.draw_networkx_edge_labels(Gv,Gv.pos,edge_labels=label)</span>
+
+        <span class="k">return</span><span class="p">(</span><span class="n">Gv</span><span class="p">)</span></div>
 <div class="viewcode-block" id="Polygon.showGv"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.showGv.html#pylayers.util.geomutil.Polygon.showGv">[docs]</a>    <span class="k">def</span> <span class="nf">showGv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show graph Gv</span>
 
@@ -1107,13 +1578,13 @@
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;eded&#39;</span><span class="p">]:</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">eded</span><span class="p">,</span>
-                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ndnd&#39;</span><span class="p">]:</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">ndnd</span><span class="p">,</span>
-                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nded&#39;</span><span class="p">]:</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">Gv</span><span class="p">,</span> <span class="n">Gv</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">edgelist</span><span class="o">=</span><span class="n">nded</span><span class="p">,</span>
-                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                                   <span class="n">edge_color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
 </div>
@@ -1195,6 +1666,7 @@
         <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">Nseg</span> <span class="o">=</span> <span class="n">Np</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
         <span class="n">n</span> <span class="o">=</span> <span class="n">Lr2n</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 
         <span class="n">tcc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
@@ -2052,6 +2524,7 @@
     <span class="c">#</span>
     <span class="n">n</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">T</span>
     <span class="n">modn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">modn</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">nn</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="n">modn</span>
     <span class="c">#</span>
     <span class="c"># enforce inwards normal whatever the linear ring orientation</span>
@@ -2590,7 +3063,7 @@
     <span class="c">#print val</span>
     <span class="k">return</span> <span class="n">cond</span>
 </div>
-<div class="viewcode-block" id="isleft"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.isleft.html#pylayers.util.geomutil.isleft">[docs]</a><span class="k">def</span> <span class="nf">isleft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
+<div class="viewcode-block" id="isleft"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.isleft.html#pylayers.util.geomutil.isleft">[docs]</a><span class="k">def</span> <span class="nf">isleft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Test point c is at left of the vector a--&gt;b</span>
 
 
@@ -2635,7 +3108,7 @@
 <span class="sd">    pylayers.antprop.signature</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span> <span class="o">-</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span><span class="o">&gt;</span><span class="mi">0</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span> <span class="o">-</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span><span class="o">&gt;</span><span class="n">tol</span>
 </div>
 <div class="viewcode-block" id="isleftorequal"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.isleftorequal.html#pylayers.util.geomutil.isleftorequal">[docs]</a><span class="k">def</span> <span class="nf">isleftorequal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span> <span class="o">-</span> <span class="p">((</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span><span class="o">&gt;=</span><span class="mi">0</span>
@@ -3352,6 +3825,7 @@
 
 <span class="sd">     Parameters</span>
 <span class="sd">     ----------</span>
+
 <span class="sd">     ps       : source point</span>
 <span class="sd">     pw       : np.array (Nx2) wedge apex point</span>
 <span class="sd">     p1       : np.array (Nx2) point 1 of wedge</span>
@@ -3375,6 +3849,7 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+
 <span class="sd">    &gt;&gt;&gt; p1 = np.array([-2,-2]).reshape(1,2)</span>
 <span class="sd">    &gt;&gt;&gt; p2 = np.array([2,-2]).reshape(1,2)</span>
 <span class="sd">    &gt;&gt;&gt; pw = np.array([0,0]).reshape(1,2)</span>
@@ -3446,9 +3921,16 @@
 <span class="sd">    pt : np.array</span>
 <span class="sd">        point</span>
 
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    alpha, beta : np.array</span>
+<span class="sd">        degree</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">         Useful for AAS calculation</span>
+
+<span class="sd">    Useful for AAS calculation</span>
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3457,10 +3939,11 @@
     <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">sector</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">beta</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">sector</span> <span class="o">-</span> <span class="n">sp</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">):</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">])</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">pi</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sector</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="c">#if (abs(alpha + sector - sp.mod(beta, 2 * np.pi)) &lt; 1e-3):</span>
+    <span class="c">#    return(np.array([alpha, beta]) * 180 / np.pi)</span>
+    <span class="c">#else:</span>
+    <span class="c">#    return(np.array([beta, alpha]) * 180 / np.pi)</span>
 
 </div>
 <div class="viewcode-block" id="dist"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.dist.html#pylayers.util.geomutil.dist">[docs]</a><span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="p">):</span>
@@ -3732,7 +4215,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

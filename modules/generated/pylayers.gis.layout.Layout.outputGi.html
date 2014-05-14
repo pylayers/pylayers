@@ -101,7 +101,7 @@
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.outputGi">
 <tt class="descclassname">Layout.</tt><tt class="descname">outputGi</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.outputGi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.outputGi" title="Permalink to this definition">¶</a></dt>
-<dd><p>filter authorized Gi edges output</p>
+<dd><p>filter output of Gi edges</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -110,9 +110,13 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.from2seg</span></tt>, <a class="reference internal" href="pylayers.util.cone.Cone.belong_seg.html#pylayers.util.cone.Cone.belong_seg" title="pylayers.util.cone.Cone.belong_seg"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.util.cone.Cone.belong_seg</span></tt></a></p>
+</div>
 <p class="rubric">Notes</p>
 <p>Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
-This function checks that this sequence is feasible
+This function checks whethe this sequence is feasible or not
 , whatever the type of nstr0 and nstr1.
 The feasible outputs from nstr0 to nstr1 are stored in an output field of
 edge (nstr0,nstr1)</p>
@@ -153,7 +157,7 @@ edge (nstr0,nstr1)</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

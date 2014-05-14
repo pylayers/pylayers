@@ -100,7 +100,7 @@
 <h1>pylayers.antprop.signature.Signatures.run5<a class="headerlink" href="#pylayers-antprop-signature-signatures-run5" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.run5">
-<tt class="descclassname">Signatures.</tt><tt class="descname">run5</tt><big>(</big><em>cutoff=2</em>, <em>algo='old'</em>, <em>bt=False</em>, <em>progress=False</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/signature.html#Signatures.run5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run5" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Signatures.</tt><tt class="descname">run5</tt><big>(</big><em>cutoff=2</em>, <em>algo='old'</em>, <em>bt=False</em>, <em>progress=False</em>, <em>diffraction=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/signature.html#Signatures.run5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run5" title="Permalink to this definition">¶</a></dt>
 <dd><p>get signatures (in one list of arrays) between tx and rx</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -110,9 +110,14 @@
 <blockquote>
 <div><p>limit the exploration of all_simple_path</p>
 </div></blockquote>
+<p><strong>algo: string</strong> :</p>
+<blockquote>
+<div><p>&#8216;old&#8217; : call propaths2
+&#8216;new&#8217; : call procone2</p>
+</div></blockquote>
 <p><strong>bt</strong> : bool</p>
 <blockquote>
-<div><p>backtrace (allow visit already visited nodes in simple path algorithm)</p>
+<div><p>backtrace (allow to visit already visited nodes in simple path algorithm)</p>
 </div></blockquote>
 <p><strong>progress</strong> : bool</p>
 <blockquote>
@@ -125,6 +130,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.link.Dlink.eval</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature.Signatures.propath2</span></tt>, <a class="reference internal" href="pylayers.antprop.signature.Signatures.procone2.html#pylayers.antprop.signature.Signatures.procone2" title="pylayers.antprop.signature.Signatures.procone2"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature.Signatures.procone2</span></tt></a></p>
+</div>
 </dd></dl>
 
 </div>
@@ -162,7 +171,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

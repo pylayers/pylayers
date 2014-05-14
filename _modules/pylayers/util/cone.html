@@ -207,11 +207,11 @@
 
         <span class="n">dtaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ptama</span><span class="o">*</span><span class="n">w</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">dhew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">phema</span><span class="o">*</span><span class="n">w</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        
+
         <span class="n">blta</span> <span class="o">=</span> <span class="p">(</span><span class="n">dtaw</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">blhe</span> <span class="o">=</span> <span class="p">(</span><span class="n">dhew</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
         <span class="c">#if &#39;seg1&#39; in self.__dict__:</span>
-        <span class="c">#    pa =  self.seg1[:,0].reshape(2,1)  </span>
+        <span class="c">#    pa =  self.seg1[:,0].reshape(2,1)</span>
         <span class="c">#    pb = (self.seg1[:,0]+w).reshape(2,1)</span>
         <span class="c">#else:</span>
         <span class="c">#    pa = self.apex.reshape(2,1)</span>
@@ -219,8 +219,8 @@
         <span class="c">#blta = geu.isleft(pa,pb,pta)</span>
         <span class="c">#blhe = geu.isleft(pa,pb,phe)</span>
         <span class="c"># segment candidate for being above segment 1 (,Nseg)</span>
-        <span class="n">boup</span> <span class="o">=</span> <span class="n">blta</span> <span class="o">&amp;</span> <span class="n">blhe</span>  
-        <span class="c"># type of segment </span>
+        <span class="n">boup</span> <span class="o">=</span> <span class="n">blta</span> <span class="o">&amp;</span> <span class="n">blhe</span>
+        <span class="c"># type of segment</span>
         <span class="k">if</span> <span class="n">prob</span><span class="p">:</span>
             <span class="n">proba</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pta</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span> <span class="p">:</span>
@@ -435,23 +435,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">apex</span> <span class="o">=</span> <span class="n">pt</span> 
         <span class="n">a</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">v0</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">pt</span> 
-        <span class="n">v1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">pt</span> 
+        <span class="n">v0</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">pt</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">pt</span>
         <span class="n">v0n</span> <span class="o">=</span> <span class="n">v0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span><span class="n">v0</span><span class="p">))</span>
         <span class="n">v1n</span> <span class="o">=</span> <span class="n">v1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v1</span><span class="p">))</span>
-        
+
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">v0n</span><span class="p">,</span><span class="n">v1n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">v0n</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v1n</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span> <span class="o">=</span> <span class="n">seg</span>
-        <span class="k">else</span><span class="p">:</span>  
+        <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">v1n</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v0n</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>      
+            <span class="bp">self</span><span class="o">.</span><span class="n">seg1</span> <span class="o">=</span> <span class="n">seg</span><span class="p">[:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cross</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
-       
+
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cross</span> <span class="o">&lt;</span> <span class="mf">1e-15</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">degenerated</span><span class="o">=</span><span class="bp">True</span>
@@ -464,15 +464,21 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        seg0 : 2 x 2  (Ndim x Npoints)</span>
-<span class="sd">        seg1 : 2 x 2 </span>
+<span class="sd">        seg1 : 2 x 2</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
 <span class="sd">        The only way for the cone to be degenerated is when the two segments are on the same line.</span>
 
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
 
-<span class="sd">        &quot;&quot;&quot;</span> 
+<span class="sd">        pylayers.gis.layout.Layout.buildGi</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># bv : (4,1)</span>
 
 
@@ -739,7 +745,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

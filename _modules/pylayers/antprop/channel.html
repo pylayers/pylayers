@@ -147,6 +147,7 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.raysc</span> <span class="kn">import</span> <span class="n">GrRay3D</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="k">except</span><span class="p">:</span>
@@ -158,10 +159,10 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    Ctt : FUsignal</span>
-<span class="sd">    Ctp : FUsignal</span>
-<span class="sd">    Cpt : FUsignal</span>
-<span class="sd">    Cpp : FUsignal</span>
+<span class="sd">    Ctt : bsignal.FUsignal</span>
+<span class="sd">    Ctp : bsignal.FUsignal</span>
+<span class="sd">    Cpt : bsignal.FUsignal</span>
+<span class="sd">    Cpp : bsignal.FUsignal</span>
 
 <span class="sd">    tauk : ndarray delays</span>
 <span class="sd">    tang : ndarray angles of departure</span>
@@ -258,7 +259,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">islocal</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">b2g</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-        <span class="c"># try/except to avoid loosing the h5 file if </span>
+        <span class="c"># try/except to avoid loosing the h5 file if</span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
@@ -284,7 +285,7 @@
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Channel.Ctilde: issue when writting h5py file&#39;</span><span class="p">)</span>
 
-    
+
 
 </div>
 <div class="viewcode-block" id="Ctilde.loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.loadh5.html#pylayers.antprop.channel.Ctilde.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
@@ -408,7 +409,7 @@
 <span class="sd">            file name of h5py file Link format</span>
 <span class="sd">        grpname  : int</span>
 <span class="sd">            groupname in filenameh5</span>
-<span class="sd">        </span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -621,10 +622,10 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        d: &#39;doa&#39; | &#39;dod&#39;        </span>
+<span class="sd">        d: &#39;doa&#39; | &#39;dod&#39;</span>
 <span class="sd">            display direction of departure | arrival</span>
 <span class="sd">        fig : plt.figure</span>
-<span class="sd">        ax : plt.axis    </span>
+<span class="sd">        ax : plt.axis</span>
 <span class="sd">        phi: tuple (-180, 180)</span>
 <span class="sd">            phi angle</span>
 <span class="sd">        normalize: bool</span>
@@ -666,8 +667,10 @@
 
 
         <span class="k">if</span> <span class="n">d</span> <span class="o">==</span><span class="s">&#39;dod&#39;</span><span class="p">:</span>
+            <span class="n">tit</span> <span class="o">=</span> <span class="s">&#39;DOD : A&#39;</span>
             <span class="n">di</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;tang&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">d</span> <span class="o">==</span> <span class="s">&#39;doa&#39;</span><span class="p">:</span>
+            <span class="n">tit</span> <span class="o">=</span> <span class="s">&#39;DOA : B&#39;</span>
             <span class="n">di</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;rang&#39;</span><span class="p">)</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;d attribute can only be doa or dod&#39;</span><span class="p">)</span>
@@ -685,11 +688,12 @@
         <span class="n">normalize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;normalize&#39;</span><span class="p">)</span>
         <span class="n">mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
         <span class="n">title</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 
 
-        <span class="n">Ett</span><span class="p">,</span> <span class="n">Epp</span><span class="p">,</span> <span class="n">Etp</span><span class="p">,</span> <span class="n">Ept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+        <span class="n">Ett</span><span class="p">,</span> <span class="n">Epp</span><span class="p">,</span> <span class="n">Etp</span><span class="p">,</span> <span class="n">Ept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">Etot</span> <span class="o">=</span> <span class="n">Ett</span><span class="o">+</span><span class="n">Epp</span><span class="o">+</span><span class="n">Etp</span><span class="o">+</span><span class="n">Ept</span> <span class="o">+</span> <span class="mf">1e-15</span>
 
         <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
@@ -699,7 +703,7 @@
         <span class="c">#</span>
         <span class="c">#</span>
         <span class="c"># col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)</span>
-        <span class="c"># WARNING polar plot require radian angles </span>
+        <span class="c"># WARNING polar plot require radian angles</span>
         <span class="k">if</span> <span class="n">polar</span> <span class="p">:</span>
             <span class="n">al</span> <span class="o">=</span> <span class="mf">1.</span>
             <span class="n">alb</span> <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
@@ -718,7 +722,7 @@
                 <span class="n">the</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">the</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
                 <span class="n">the</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">the</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
         <span class="k">else</span> <span class="p">:</span>
-            <span class="n">al</span> <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="n">al</span>  <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
             <span class="n">alb</span> <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 
         <span class="n">col</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span>
@@ -742,13 +746,23 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\phi(^{\circ})$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">tit</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">ll</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()</span><span class="o">+</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">ll</span><span class="p">:</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">colorbar</span><span class="p">:</span>
-            <span class="n">b</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">)</span>
+            <span class="c">#divider = make_axes_locatable(ax)</span>
+            <span class="c">#cax = divider.append_axes(&quot;right&quot;,size=&quot;5%&quot;,pad=0.05)</span>
+            <span class="n">clb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-                <span class="n">b</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">)</span>
+                <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">b</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Path Loss (dB)&#39;</span><span class="p">)</span>
+                <span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Path Loss (dB)&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">clb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">():</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
 </div>
@@ -774,6 +788,8 @@
 <span class="sd">        fontsize : float</span>
 <span class="sd">        edgecolors : bool</span>
 <span class="sd">        colorbar : bool</span>
+<span class="sd">        xa :</span>
+<span class="sd">        xb :</span>
 
 <span class="sd">        Summary</span>
 <span class="sd">        --------</span>
@@ -803,13 +819,19 @@
                     <span class="s">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span>
                     <span class="s">&#39;edgecolors&#39;</span><span class="p">:</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
                     <span class="s">&#39;polar&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                    <span class="s">&#39;mode&#39;</span><span class="p">:</span><span class="s">&#39;mean&#39;</span>
+                    <span class="s">&#39;mode&#39;</span><span class="p">:</span><span class="s">&#39;mean&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;colorbar&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
+                    <span class="s">&#39;xa&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;xb&#39;</span><span class="p">:</span><span class="mi">1</span>
                     <span class="p">}</span>
 
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="n">xa</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;xa&#39;</span><span class="p">)</span>
+        <span class="n">xb</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;xb&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
@@ -821,11 +843,15 @@
         <span class="n">ax1</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">])</span>
         <span class="n">ax2</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">])</span>
 
-        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;dod&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;doa&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
+        <span class="k">if</span> <span class="n">xa</span><span class="o">&lt;</span><span class="n">xb</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;dod&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;doa&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;doa&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;dod&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,[</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">]</span>
+        <span class="c">#return fig,ax1</span>
 
 
     <span class="c"># def doadod(self, **kwargs):</span>
@@ -1193,11 +1219,13 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        typ   : &#39;m&#39;, &#39;l20&#39; , &#39;r&#39;</span>
+<span class="sd">        cmap  : colormap</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;typ&#39;</span><span class="p">:</span> <span class="s">&#39;m&#39;</span><span class="p">,</span>
-                   <span class="s">&#39;cmap&#39;</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">}</span>
+                   <span class="s">&#39;cmap&#39;</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot</span><span class="p">,</span>
+                    <span class="s">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">14</span><span class="p">}</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -1210,23 +1238,23 @@
 
         <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{</span><span class="se">\\</span><span class="s">theta</span><span class="se">\\</span><span class="s">theta}$&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{</span><span class="se">\\</span><span class="s">theta</span><span class="se">\\</span><span class="s">theta}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
         <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{</span><span class="se">\\</span><span class="s">theta\phi}$&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{</span><span class="se">\\</span><span class="s">theta\phi}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
         <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
-        <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{\phi</span><span class="se">\\</span><span class="s">theta}$&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{\phi</span><span class="se">\\</span><span class="s">theta}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
         <span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
-        <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{\phi\phi}$&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{\phi\phi}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">,</span> <span class="n">ax4</span><span class="p">)</span>
 </div>
@@ -1242,6 +1270,16 @@
 </div>
 <div class="viewcode-block" id="Ctilde.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.energy.html#pylayers.antprop.channel.Ctilde.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">sumray</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Calculates energy on each channel</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : string</span>
+<span class="sd">            &#39;mean&#39;</span>
+<span class="sd">        Friis: boolean</span>
+<span class="sd">            True</span>
+<span class="sd">        sumray: boolean</span>
+<span class="sd">            False</span>
+
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1280,6 +1318,29 @@
 
         <span class="k">return</span> <span class="n">ECtt</span><span class="p">,</span> <span class="n">ECpp</span><span class="p">,</span> <span class="n">ECtp</span><span class="p">,</span> <span class="n">ECpt</span>
 </div>
+    <span class="k">def</span> <span class="nf">cut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        threshold : float</span>
+<span class="sd">            default 0.99</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Ett</span><span class="p">,</span> <span class="n">Epp</span><span class="p">,</span> <span class="n">Etp</span><span class="p">,</span> <span class="n">Ept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+        <span class="n">Etot</span> <span class="o">=</span> <span class="n">Ett</span><span class="o">+</span><span class="n">Epp</span><span class="o">+</span><span class="n">Etp</span><span class="o">+</span><span class="n">Ept</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span>
+        <span class="n">cumE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cumE</span><span class="o">&lt;</span><span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">[</span><span class="n">v</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[</span><span class="n">v</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">v</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">v</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">v</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">v</span><span class="p">,:]</span>
+
 <div class="viewcode-block" id="Ctilde.sort"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.sort.html#pylayers.antprop.channel.Ctilde.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;tauk&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sort Ctilde with respect to typ (default tauk)</span>
 
@@ -1287,13 +1348,13 @@
 <span class="sd">        ----------</span>
 
 <span class="sd">        typ  : string</span>
-<span class="sd">            which parameter to sort &#39;</span>
-<span class="sd">                tauk : (default)</span>
-<span class="sd">                att  : theta Tx</span>
-<span class="sd">                atp  : phi Tx</span>
-<span class="sd">                art  : theta Rx</span>
-<span class="sd">                arp  : phi Rx</span>
-<span class="sd">                energy</span>
+<span class="sd">            sort w.r.t</span>
+<span class="sd">                &#39;tauk&#39;   : delay (default)</span>
+<span class="sd">                &#39;att&#39;    : theta Tx</span>
+<span class="sd">                &#39;atp&#39;    : phi Tx</span>
+<span class="sd">                &#39;art&#39;    : theta Rx</span>
+<span class="sd">                &#39;arp&#39;    : phi Rx</span>
+<span class="sd">                &#39;energy&#39; : energy</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;tauk&#39;</span><span class="p">:</span>
@@ -1328,8 +1389,10 @@
 
 <span class="sd">        a : string or antenna array</span>
 <span class="sd">            polarization antenna a ( &#39;theta&#39; | &#39;phi&#39; | &#39;ant&#39; )</span>
+<span class="sd">            default (theta)</span>
 <span class="sd">        b : string or antenna array</span>
 <span class="sd">            polarization antenna b ( &#39;theta&#39; | &#39;phi&#39; | &#39;ant&#39; )</span>
+<span class="sd">            default (theta)</span>
 
 <span class="sd">            0 : theta</span>
 <span class="sd">            1 : phi</span>
@@ -2014,11 +2077,14 @@
         <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">colorbar</span><span class="p">:</span>
-            <span class="n">b</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scat</span><span class="p">,</span><span class="n">cax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
                 <span class="n">b</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">b</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Path Loss (dB)&#39;</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">get_yticklabels</span><span class="p">():</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
 
@@ -2219,23 +2285,27 @@
                     <span class="s">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span>
                     <span class="s">&#39;edgecolors&#39;</span><span class="p">:</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
                     <span class="s">&#39;polar&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
-                    <span class="s">&#39;mode&#39;</span><span class="p">:</span><span class="s">&#39;mean&#39;</span>
+                    <span class="s">&#39;mode&#39;</span><span class="p">:</span><span class="s">&#39;mean&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;xa&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;xb&#39;</span><span class="p">:</span><span class="mi">0</span>
                     <span class="p">}</span>
 
 
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">ax1</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">])</span>
         <span class="n">ax2</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">])</span>
 
 
-        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;dod&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;colorbar&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
-        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;doa&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;xa&#39;</span><span class="p">]</span><span class="o">&lt;</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;xb&#39;</span><span class="p">]:</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;dod&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;doa&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;doa&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;dod&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
 <div class="viewcode-block" id="Tchannel.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.energy.html#pylayers.antprop.channel.Tchannel.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">sumray</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -2603,7 +2673,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

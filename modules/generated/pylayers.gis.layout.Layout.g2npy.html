@@ -103,11 +103,11 @@
 <tt class="descclassname">Layout.</tt><tt class="descname">g2npy</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.g2npy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.g2npy" title="Permalink to this definition">¶</a></dt>
 <dd><p>from graphs to numpy arrays conversion</p>
 <p class="rubric">Notes</p>
-<p>This function updates from Gs:</p>
+<p>This function updates the following arrays:</p>
 <p>self.pt (2xNp)
 self.tahe (2xNs)
 self.tgs
-self.dca
+self.dca  : dictionnary of cycle with an airwall
 self.lsss : list of subsegments</p>
 <p>assert self.pt[self.iupnt[-1]] == self.pt[:,self.iupnt[-1]]</p>
 </dd></dl>
@@ -147,7 +147,7 @@ self.lsss : list of subsegments</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

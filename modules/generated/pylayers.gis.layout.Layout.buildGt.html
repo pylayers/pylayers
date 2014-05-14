@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="pylayers.gis.layout" href="../pylayers.gis.layout.html" />
     <link rel="next" title="pylayers.gis.layout.Layout.buildGw" href="pylayers.gis.layout.Layout.buildGw.html" />
-    <link rel="prev" title="pylayers.gis.layout.Layout.buildGc" href="pylayers.gis.layout.Layout.buildGc.html" /> 
+    <link rel="prev" title="pylayers.gis.layout.Layout.build" href="pylayers.gis.layout.Layout.build.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -50,7 +50,7 @@
           <a href="pylayers.gis.layout.Layout.buildGw.html" title="pylayers.gis.layout.Layout.buildGw"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.layout.Layout.buildGc.html" title="pylayers.gis.layout.Layout.buildGc"
+          <a href="pylayers.gis.layout.Layout.build.html" title="pylayers.gis.layout.Layout.build"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -65,8 +65,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pylayers.gis.layout.Layout.buildGc.html"
-                        title="previous chapter">pylayers.gis.layout.Layout.buildGc</a></p>
+  <p class="topless"><a href="pylayers.gis.layout.Layout.build.html"
+                        title="previous chapter">pylayers.gis.layout.Layout.build</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pylayers.gis.layout.Layout.buildGw.html"
                         title="next chapter">pylayers.gis.layout.Layout.buildGw</a></p>
@@ -102,11 +102,15 @@
 <dt id="pylayers.gis.layout.Layout.buildGt">
 <tt class="descclassname">Layout.</tt><tt class="descname">buildGt</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/layout.html#Layout.buildGt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Built topological graph Gt</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">nx.algorithms.cycles.cycle_basis</span></tt></p>
+</div>
 <p class="rubric">Notes</p>
 <ol class="arabic simple">
 <li>Exploit <cite>cycle_basis</cite> function of NetworkX to get a cycle
 decomposition of the graph</li>
-<li>Each discovered cycle in the graph Gs is transform in a Cycles.Cycles object
+<li>Each discovered cycle in the graph Gs is transformed in a Cycles.Cycles object
 LC (List of Cycles) contains the list of all these Cycle objects</li>
 </ol>
 <p>Algorithm to create the Gt graph.
@@ -153,7 +157,7 @@ Each simple cycle of Gs is a node of Gt</p>
           <a href="pylayers.gis.layout.Layout.buildGw.html" title="pylayers.gis.layout.Layout.buildGw"
              >next</a> |</li>
         <li class="right" >
-          <a href="pylayers.gis.layout.Layout.buildGc.html" title="pylayers.gis.layout.Layout.buildGc"
+          <a href="pylayers.gis.layout.Layout.build.html" title="pylayers.gis.layout.Layout.build"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -167,7 +171,7 @@ Each simple cycle of Gs is a node of Gt</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

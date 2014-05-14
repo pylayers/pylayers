@@ -102,11 +102,21 @@
 <dt id="pylayers.signal.DF.DF.remez">
 <tt class="descclassname">DF.</tt><tt class="descname">remez</tt><big>(</big><em>numtaps=401</em>, <em>bands=(0</em>, <em>0.1</em>, <em>0.11</em>, <em>0.2</em>, <em>0.21</em>, <em>0.5)</em>, <em>desired=(0.0001</em>, <em>1</em>, <em>0.0001)</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/signal/DF.html#DF.remez"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.DF.DF.remez" title="Permalink to this definition">¶</a></dt>
 <dd><p>FIR design Remez algorithm</p>
-<blockquote>
-<div><p>flt.remez(numtaps=401,bands=(0,0.1,0.11,0.2,0.21,0.5),desired=(0.0001,1,0.0001)):</p>
-<p>numtaps = 401</p>
-</div></blockquote>
-<p>bands   = (0,0.1,0.11,0.2,0.21,0.5)
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>numtaps</strong> : int</p>
+<p><strong>bands</strong> : tuple of N floats</p>
+<p class="last"><strong>desired</strong> : tuple of N/2 floats</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>flt.remez(numtaps=401,bands=(0,0.1,0.11,0.2,0.21,0.5),desired=(0.0001,1,0.0001)):</p>
+<p>numtaps = 401
+bands   = (0,0.1,0.11,0.2,0.21,0.5)
 desired = (0.0001,1,0.0001))</p>
 <p>flt.remez( numtaps , bands , desired)</p>
 </dd></dl>
@@ -146,7 +156,7 @@ desired = (0.0001,1,0.0001))</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on avril 26, 2014.
+      Last updated on mai 15, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
