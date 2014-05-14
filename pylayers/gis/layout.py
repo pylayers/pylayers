@@ -5819,19 +5819,20 @@ class Layout(object):
                             cyo1 = filter(lambda x : x!=cy,cyo1)[0]
                             # R , Tin , Tout
                             if cyo1>0:
-                                if [(nstr,cy)] in self.Gi.nodes():
+                                if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy),(nstr,cyo1,cy),(nstr,cy,cyo1)]
                                 else:# no reflection on airwall
                                     li1 = [(nstr,cyo1,cy),(nstr,cy,cyo1)]
                             else:
-                                if [(nstr,cy)] in self.Gi.nodes():
+                                if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy)]
                         else:
                             # D
                             li1 =[(nstr,)]
                         # list of cycle entities in visibility of nstr
-                        lneighcy = filter(lambda x: x in
-                                       vnodes,nx.neighbors(self.Gv,nstr))
+                        lneighb  = nx.neighbors(self.Gv,nstr)
+                        lneighcy = filter(lambda x: x in vnodes,lneighb)
+
                         for nstrb in lneighcy:
                             if nstrb in self.Gv.nodes():
                                 if nstrb>0:
@@ -5849,6 +5850,7 @@ class Layout(object):
                                     li2 = [(nstrb,)]
                                 for i1 in li1:
                                     for i2 in li2:
+                                        if (len(i1)==2 & len(i2)==2):
                                         self.Gi.add_edge(i1,i2)
                                         self.Gi.add_edge(i2,i1)
 
