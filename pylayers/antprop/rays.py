@@ -1245,8 +1245,8 @@ class Rays(dict):
                 #pdb.set_trace()
                 nray = np.shape(nstr)[1]
 
-                uwall = np.where((ityp == 1) | (ityp == 2))
-                udiff = np.where((ityp == 3))
+                uwall = np.where((ityp == 2) | (ityp == 3))
+                udiff = np.where((ityp == 1))
                 ufloor= np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
@@ -1714,9 +1714,9 @@ class Rays(dict):
                 # seek for interactions position
                 ################################
 
-                uR = np.where((itypf == 1))[0]
-                uT = np.where((itypf == 2))[0]
-                uD = np.where((itypf == 3))[0]
+                uD = np.where((itypf == 1))[0]
+                uR = np.where((itypf == 2))[0]
+                uT = np.where((itypf == 3))[0]
                 uRf = np.where((itypf == 4))[0]
                 uRc = np.where((itypf == 5))[0]
 

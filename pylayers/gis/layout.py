@@ -5551,12 +5551,10 @@ class Layout(object):
                         # pntvalid : not excluded points
                         pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
                         for ns in segvalid:
-                            print "    ",idiff,ns
                             Gv.add_edge(idiff,ns)
 
                         for np in pntvalid:
                             Gv.add_edge(idiff,np)
-                            print "    ",idiff,np
                 else:
                     pass
                     # outdoor case not implemented
@@ -5576,27 +5574,30 @@ class Layout(object):
         -----
 
         For each node > of graph Gs creates
-            4 different nodes associated to the same segment
-            R+  R- T+ T-
+        4 different nodes associated to the same segment
+
+        (ns,cy0) R -> cy0
+        (ns,cy1) R -> cy1
+        (ns,cy0,cy1) T 0->1
+        (ns,cy1,cy0) T 1->0
 
         """
         self.Gi = nx.DiGraph()
         self.Gi.pos = {}
         #
-        # Create nodes
-        # Nodes of Gv are the diffraction points
+        # Create nodes of Gi and their positions
+        #
+        # (D,)
+        # (R,cy0)
+        # (T,cy0,cy1)
         #
         for n in self.Gv.node:
             if n < 0: # D
-                #self.Gi.add_node(str(n))
-                #self.Gi.pos[str(n)] = self.Gs.pos[n]
                 self.Gi.add_node((n,))
                 self.Gi.pos[(n,)] = self.Gs.pos[n]
             if n > 0: # R | T
                 cy = self.Gs.node[n]['ncycles']
                 name = self.Gs.node[n]['name']
-                # 2 cycles
-                #if len(cy) == 2: #deprecated
 
                 cy0 = cy[0]
                 cy1 = cy[1]
@@ -5628,15 +5629,6 @@ class Layout(object):
                     self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
                     self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
-                #if len(cy) == 1: # segment which is not a separation between rooms
-                    # On AIR or ABSORBENT there is no reflection
-                    # except if n is a subsegment
-                    # this is deprecated since the introduction of cycle -1
-                    # (outdoor)
-                #   if (name<>'AIR') & (name<>'ABSORBENT')  or (n in self.lsss):
-                #        self.Gi.add_node(str((n, cy[0])))
-                #        self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
-
         #
         # Establishing link between interactions
         #
@@ -5655,10 +5647,8 @@ class Layout(object):
                             if ((ni1 in self.Gi.node.keys())
                              &  (ni2 in self.Gi.node.keys())):
                                 self.Gi.add_edge(ni1, ni2)     # R(n,nc)-> R(nb,nc)
-                            #print "      ---->",ni2
+                            # print "      ---->",ni2
                             # retrieve the cycles of the segment
-                            # if segment has 2 cycles, transmission is also
-                            # possible
                             cy = set(self.Gs.node[nb]['ncycles'])
                             # the other cycle
                             nc1 = list(cy.difference({nc}))[0]
@@ -5718,7 +5708,8 @@ class Layout(object):
                 # n is also a node ov Gv
                 #node1 = str(n) # Diffraction point
                 # all neighbors of D
-                neigh = self.Gv.neighbors(n)
+                npt = ni1[0]
+                neigh = self.Gv.neighbors(npt)
                 for nb in neigh:
                     if nb<0: # D <-> D
                         ni2 = (nb,)
