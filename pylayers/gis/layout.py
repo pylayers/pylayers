@@ -5567,174 +5567,6 @@ class Layout(object):
                 self.dGv[icycle] = Gv
 
 
-    def buildGiold(self):
-        """ build graph of interactions
-
-        Notes
-        -----
-
-        For each node > of graph Gs creates
-        4 different nodes associated to the same segment
-
-        (ns,cy0) R -> cy0
-        (ns,cy1) R -> cy1
-        (ns,cy0,cy1) T 0->1
-        (ns,cy1,cy0) T 1->0
-
-        """
-        self.Gi = nx.DiGraph()
-        self.Gi.pos = {}
-        #
-        # 1 ) Create nodes of Gi and their positions
-        #
-        # (D,)
-        # (R,cy0)
-        # (T,cy0,cy1)
-        #
-        for n in self.Gv.node:
-            if n < 0: # D
-                self.Gi.add_node((n,))
-                self.Gi.pos[(n,)] = self.Gs.pos[n]
-            if n > 0: # R | T
-                cy = self.Gs.node[n]['ncycles']
-                name = self.Gs.node[n]['name']
-
-                cy0 = cy[0]
-                cy1 = cy[1]
-
-                nei = self.Gs.neighbors(n)  # get neighbor
-                np1 = nei[0]
-                np2 = nei[1]
-
-                p1 = np.array(self.Gs.pos[np1])
-                p2 = np.array(self.Gs.pos[np2])
-                l = p1 - p2
-                nl = np.dot(l, l)
-                ln = l / nl
-
-                delta = nl / 10
-                # On AIR or ABSORBENT there is no reflection
-                # except if n is a subsegment
-                if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
-                    self.Gi.add_node((n,cy0))
-                    self.Gi.add_node((n,cy1))
-                    self.Gi.pos[(n, cy0)] = tuple(self.Gs.pos[n] + ln * delta)
-                    self.Gi.pos[(n, cy1)] = tuple(self.Gs.pos[n] - ln * delta)
-
-                # Through METAL or ABSORBENT there is no transmission
-                # except if n is a subsegment
-                if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
-                    self.Gi.add_node((n,cy0,cy1))
-                    self.Gi.add_node((n,cy1,cy0))
-                    self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
-                    self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
-
-        #
-        # 2) Establishing link between interactions
-        #
-        for ni1 in self.Gi.node:
-            if len(ni1)==2: #  (R) (segment,cycle)
-                ns = ni1[0]  # ns segment
-                nc = ni1[1]  # nc output cycle of reflexion
-
-                vnodes = self.Gt.node[nc]['polyg'].vnodes
-                neigh = self.Gv.neighbors(ns)  # find neighbors of segment ns
-
-                for nb in neigh:
-                    if nb > 0:             # segment (R|T)
-                        if nb in vnodes:   # if segment in reflection cycle
-                            ni2 = (nb, nc)  # R ( nc <-> nb )
-                            if ((ni1 in self.Gi.node.keys())
-                             &  (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)     # R(n,nc)-> R(nb,nc)
-                            # print "      ---->",ni2
-                            # retrieve the cycles of the segment
-                            cy = set(self.Gs.node[nb]['ncycles'])
-                            # the other cycle
-                            nc1 = list(cy.difference({nc}))[0]
-                            ni2 = (nb,nc,nc1)  # T (nc -> nb -> nc1)
-
-                            if ((ni1 in self.Gi.node.keys())
-                              & (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)
-
-                    else:   # nb <0  Diffraction
-                        ni2 = (nb,) #
-                        if (nc>0):  # nc is not an external cycle NOT GOOD
-                            if ((ni1 in self.Gi.node.keys())
-                             & (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)   #  (ns,nc) -> D
-                                self.Gi.add_edge(ni2, ni1)   #  D --> (ns,nc)
-#                                print "      <---->",node2
-                            # diffraction is a reciprocal interaction
-#                            else:
-#                                print node1, node2
-                            #pdb_set_trace()
-            if len(ni1)==3: #transmission
-                ns  = ni1[0]  # segment
-                cy0 = ni1[1]
-                cy1 = ni1[2]
-                vnodes0 = self.Gt.node[cy0]['polyg'].vnodes
-                vnodes1 = self.Gt.node[cy1]['polyg'].vnodes
-                neigh = self.Gv.neighbors(ns)  # find neighbors
-                for nb in neigh:
-                    if nb > 0:
-                        if nb in vnodes1:    # If neighbors in cycle 1
-                            ni2 = (nb, cy1)
-                            if ((ni1 in self.Gi.node.keys())
-                             &  (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2) # (n,cy0,cy1) -> (nb,cy1)
-                                #print "      ---->",node2
-                            cy = set(self.Gs.node[nb]['ncycles'])
-                            if len(cy) == 2: # R-T
-                                #node1 = str(n)
-                                nc1   = list(cy.difference({cy1}))[0]
-                                if nc1<> cy0:
-                                    ni2 = (nb,cy1,nc1)
-                                    if ((ni1 in self.Gi.node.keys())
-                                     & (ni2 in self.Gi.node.keys())):
-                                        self.Gi.add_edge(ni1, ni2)# (n,cy0,cy1) -> (nb,cy1,nc1)
-                                        #print "      ---->",node2
-                    else:       # nb <0 D diffraction
-                        #node1 = str(n)  #
-                        ni2 = (nb,) #
-                        if cy1!=0:
-                            if ((ni1 in self.Gi.node.keys())
-                              & (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)  # (n,cy0,cy1) -> D(nb)
-                                self.Gi.add_edge(ni2, ni1)  # D(nb) --> (n,cy0,cy1)
-                                #print "      ---->",node2
-            if len(ni1)==1:
-                # n is a Gi interaction <0
-                # n is also a node ov Gv
-                #node1 = str(n) # Diffraction point
-                # all neighbors of D
-                npt = ni1[0]
-                neigh = self.Gv.neighbors(npt)
-                for nb in neigh:
-                    if nb<0: # D <-> D
-                        ni2 = (nb,)
-                        if ((ni1 in self.Gi.node.keys())
-                         &  (ni2 in self.Gi.node.keys())):
-                            self.Gi.add_edge(ni1, ni2) # D(n) -> D(nb)
-                            self.Gi.add_edge(ni2, ni1) # D(nb) -> D(n)
-        self.di={} # dictionnary which link nodes of Gi to node of Gs and interaction type
-        # 2 lists
-        #[self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
-        #[self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
-        #[self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
-        #[self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
-
-
-        # updating the list of interaction of a given cycle
-        for c in self.Gt.node:
-            vnodes = self.Gt.node[c]['polyg'].vnodes
-            indoor = self.Gt.node[c]['indoor']
-            idiff = map(lambda x: x,filter(lambda x : x in
-                                                self.ldiff,vnodes))
-            for k in idiff:
-                self.Gt.node[c]['inter']+= [(k,)]
-
     def buildGi(self):
         """ build graph of interactions
 
@@ -5853,41 +5685,42 @@ class Layout(object):
                                     #print li1
                                     for i2 in li2:
                                         #print li2
-                                        if ((len(i1)==2) & (len(i2)==2)):
-                                            #print "RR"
-                                            self.Gi.add_edge(i1,i2)
-                                            self.Gi.add_edge(i2,i1)
-                                        if ((len(i1)==2) & (len(i2)==3)):
-                                            #print "RT"
-                                            if i1[1]==i2[1]:
+                                        if (i1[0]!=i2[0]):
+                                            if ((len(i1)==2) & (len(i2)==2)):
+                                                #print "RR"
                                                 self.Gi.add_edge(i1,i2)
-                                        if ((len(i1)==3) & (len(i2)==2)):
-                                            #print "TR"
-                                            if i1[2]==i2[1]:
-                                                self.Gi.add_edge(i1,i2)
-                                        if ((len(i1)==3) & (len(i2)==3)):
-                                            #print "TT"
-                                            if i1[2]==i2[1]:
-                                                self.Gi.add_edge(i1,i2)
-                                            if i2[1]==i1[2]:
                                                 self.Gi.add_edge(i2,i1)
-                                        if ((len(i1)==1) & (len(i2)==3)):
-                                            #print "DT"
-                                            if  i2[1]==cy:
+                                            if ((len(i1)==2) & (len(i2)==3)):
+                                                #print "RT"
+                                                if i1[1]==i2[1]:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==3) & (len(i2)==2)):
+                                                #print "TR"
+                                                if i1[2]==i2[1]:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==3) & (len(i2)==3)):
+                                                #print "TT"
+                                                if i1[2]==i2[1]:
+                                                    self.Gi.add_edge(i1,i2)
+                                                if i2[1]==i1[2]:
+                                                    self.Gi.add_edge(i2,i1)
+                                            if ((len(i1)==1) & (len(i2)==3)):
+                                                #print "DT"
+                                                if  i2[1]==cy:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==3) & (len(i2)==1)):
+                                                #print "TD"
+                                                if  i1[2]==cy:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==1) & (len(i2)==2)):
+                                                #print "DR"
                                                 self.Gi.add_edge(i1,i2)
-                                        if ((len(i1)==3) & (len(i2)==1)):
-                                            #print "TD"
-                                            if  i1[2]==cy:
+                                            if ((len(i1)==2) & (len(i2)==1)):
+                                                #print "RD"
                                                 self.Gi.add_edge(i1,i2)
-                                        if ((len(i1)==1) & (len(i2)==2)):
-                                            #print "DR"
-                                            self.Gi.add_edge(i1,i2)
-                                        if ((len(i1)==2) & (len(i2)==1)):
-                                            #print "RD"
-                                            self.Gi.add_edge(i1,i2)
-                                        if ((len(i1)==1) & (len(i2)==1)):
-                                            #print "DD"
-                                            self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==1) & (len(i2)==1)):
+                                                #print "DD"
+                                                self.Gi.add_edge(i1,i2)
 
 
 

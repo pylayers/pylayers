@@ -1121,7 +1121,10 @@ class Rays(dict):
             rlength = np.sum(lsi,axis=0)
             if (lsi.any()==0):
                 pdb.set_trace()
-            assert(lsi.all()>0)
+            if not (lsi.all()>0):
+                pdb.set_trace()
+            #assert(lsi.all()>0)
+
             if (len(np.where(lsi==0.))==0) :
                 pdb.set_trace()
 
