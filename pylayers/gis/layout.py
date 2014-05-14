@@ -6865,7 +6865,7 @@ class Layout(object):
         segments
 
         """
-        self.Gr = copy.deepcopy(self.Gc)
+        self.Gr = copy.deepcopy(self.Gt)
         #
         #  Connected components might not be all contiguous
         #  this a problem because the concatenation of cycles
