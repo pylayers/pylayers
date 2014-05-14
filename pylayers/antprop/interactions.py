@@ -105,9 +105,9 @@ class Inter(object):
 
         typ : int
             type of interaction
-            1 : R
-            2 : T
-            3 : D
+            1 : D
+            2 : R
+            3 : T
             0 : Tx or Rx
            -1 : B
 
@@ -161,7 +161,7 @@ class Inter(object):
     def create_dusl(self,a):
         """ create dictionnary of used slab.
 
-        Parameters 
+        Parameters
         ----------
 
         a : np.array of strings which contains ordered interactions
@@ -175,23 +175,23 @@ class Inter(object):
 
 
     def sinsout(self):
-        """ calculate sin sout of the interaction 
+        """ calculate sin sout of the interaction
 
         Notes
         -----
 
-        if typ 
+        if typ
 
-            1 : Reflexion 
-            2 : Transmission 
-            3 : Diffraction
-            
+            1 : Diffraction
+            2 : Reflection
+            3 : Transmission
+
             si : self.data[:,1]
             so : self.data[:,2]
-        
-        if typ = 0 
-            
-        if typ = -1    
+
+        if typ = 0
+
+        if typ = -1
         """
 
         if self.typ in [1, 2, 3]:
@@ -205,7 +205,7 @@ class Inter(object):
     def stack(self, data=np.array(()), idx=0, isdata=True):
         """ stack data and the associated idx
 
-        Parameters 
+        Parameters
         ----------
 
         data : np.array()
@@ -280,7 +280,7 @@ class Interactions(Inter,dict):
         addi(self,i): add a single interaction
         eval(self) : evaluate all the interactions added thanks to self.add or self.addi
                      and create the self.I which gather all thoses interactions
-        
+
         5 following types of interactions
 
         B : local basis transformation matrix (unitary)
@@ -346,17 +346,17 @@ class Interactions(Inter,dict):
             self['L'] = i.idx
             self.typ[i.idx] = 'L'
         if i.typ == 1:
-            self.R = i
-            self['R'] = i.idx
-            self.typ[i.idx] = 'R'
-        if i.typ == 2:
-            self.T = i
-            self['T'] = i.idx
-            self.typ[i.idx] = 'T'
-        if i.typ == 3:
             self.D = i
             self['D'] = i.idx
             self.typ[i.idx] = 'D'
+        if i.typ == 2:
+            self.R = i
+            self['R'] = i.idx
+            self.typ[i.idx] = 'R'
+        if i.typ == 3:
+            self.T = i
+            self['T'] = i.idx
+            self.typ[i.idx] = 'T'
 
     def eval(self,fGHz=np.array([2.4])):
         ''' evaluate all the interactions
@@ -379,7 +379,7 @@ class Interactions(Inter,dict):
         self.alpha :
             alpha as described into Legendre Thesis
         self.gamma :
-            !! gamma**2 !!! (squared included) as described 
+            !! gamma**2 !!! (squared included) as described
 
         '''
 
@@ -467,15 +467,15 @@ class IntB(Inter):
         Methods
         -------
 
-        eval : evaluation of B interaction 
+        eval : evaluation of B interaction
 
-        Notes 
+        Notes
         -----
 
         The interaction object is np.array with shape (nf,ninter 2, 2)
 
     """
-    def __init__(self, data=np.array(()), idx=[]): 
+    def __init__(self, data=np.array(()), idx=[]):
         Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def __repr__(self):
@@ -488,14 +488,14 @@ class IntB(Inter):
         Parameters
         ----------
 
-        fGHz : np.array() 
+        fGHz : np.array()
             freqeuncy range
 
 
         Returns
         -------
 
-        self.data 
+        self.data
 
         Examples
         --------
@@ -607,7 +607,7 @@ class IntR(Inter):
 #        self.theta = data[0]
 #        self.si = data[1]
 #        self.sr = data[2]
-        Inter.__init__(self, data=data, idx=idx, typ=1)
+        Inter.__init__(self, data=data, idx=idx, typ=2)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index of self.idx
@@ -739,7 +739,7 @@ class IntT(Inter):
 
     def __init__(self, data=np.array(()), idx=[]):
 
-        Inter.__init__(self, data=data, idx=idx, typ=2)
+        Inter.__init__(self, data=data, idx=idx, typ=3)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
@@ -867,7 +867,7 @@ class IntD(Inter):
 #        self.beta = data1[4]
 #        self.N = data1[5]
 #        self.typed = data2[0]
-        Inter.__init__(self, data=data, idx=idx, typ=3)
+        Inter.__init__(self, data=data, idx=idx, typ=1)
 
     def __repr__(self):
         return '%s :  %s  %s ' % (
