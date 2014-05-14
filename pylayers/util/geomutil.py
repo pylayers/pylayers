@@ -527,6 +527,19 @@ class Polygon(shg.Polygon):
 
         return(st)
 
+
+    @property
+    def xy(self):
+        return self._xy
+
+    @xy.setter
+    def xy(self,xy):
+        self._xy = xy
+
+    @xy.getter
+    def xy(self):
+        return self._xy
+
     def setvnodes(self,L):
         """ update vnodes member from Layout
 
@@ -575,6 +588,77 @@ class Polygon(shg.Polygon):
         """
         p = self.ndarray()
         return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
+
+
+
+    def coorddeter(self):
+        """ determine polygon coordinates
+        """
+
+        self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
+
+    def isconvex(self,tol = 1e-2):
+        """ Determine if a polygon is convex
+        
+        Parameters
+        ----------
+        tol : tolerence on aligned point
+        
+        Returns
+        -------
+         True if convex
+        
+        Notes
+        -----
+
+        the algorithm tests all triplet of point and L.determine 
+        if the third point is left to the 2 first.
+        a tolerance can be introduce in cases where the polygon is 
+        almost convex.
+
+        """
+        self.coorddeter()
+        p = self.xy[:,:-1]
+        a = p
+        b = np.roll(p,1,axis=1)
+        c = np.roll(p,2,axis=1)
+        return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
+                (np.sum(isleft(c,b,a,tol=tol)) == 0)
+
+    def coorddeter(self):
+        """ determine polygon coordinates
+        """
+
+        self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
+
+    def isconvex(self,tol = 1e-2):
+        """ Determine if a polygon is convex
+        
+        Parameters
+        ----------
+        tol : tolerence on aligned point
+        
+        Returns
+        -------
+         True if convex
+        
+        Notes
+        -----
+
+        the algorithm tests all triplet of point and L.determine 
+        if the third point is left to the 2 first.
+        a tolerance can be introduce in cases where the polygon is 
+        almost convex.
+
+        """
+        self.coorddeter()
+        p = self.xy[:,:-1]
+        a = p
+        b = np.roll(p,1,axis=1)
+        c = np.roll(p,2,axis=1)
+        return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
+                (np.sum(isleft(c,b,a,tol=tol)) == 0)
+
 
     def plot(self,**kwargs):
         """ plot function
@@ -2900,7 +2984,7 @@ def isaligned(a,b,c):
     #print val
     return cond
 
-def isleft(a,b,c):
+def isleft(a,b,c,tol=0.):
     """ Test point c is at left of the vector a-->b
 
 
@@ -2945,7 +3029,7 @@ def isleft(a,b,c):
     pylayers.antprop.signature
 
     """
-    return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>0
+    return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>tol
 
 def isleftorequal(a,b,c):
     return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>=0
