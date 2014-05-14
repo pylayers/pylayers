@@ -5567,7 +5567,7 @@ class Layout(object):
                 self.dGv[icycle] = Gv
 
 
-    def buildGi(self):
+    def buildGiold(self):
         """ build graph of interactions
 
         Notes
@@ -5585,7 +5585,7 @@ class Layout(object):
         self.Gi = nx.DiGraph()
         self.Gi.pos = {}
         #
-        # Create nodes of Gi and their positions
+        # 1 ) Create nodes of Gi and their positions
         #
         # (D,)
         # (R,cy0)
@@ -5630,7 +5630,7 @@ class Layout(object):
                     self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
         #
-        # Establishing link between interactions
+        # 2) Establishing link between interactions
         #
         for ni1 in self.Gi.node:
             if len(ni1)==2: #  (R) (segment,cycle)
@@ -5724,6 +5724,133 @@ class Layout(object):
         #[self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
         #[self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
         #[self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
+
+
+        # updating the list of interaction of a given cycle
+        for c in self.Gt.node:
+            vnodes = self.Gt.node[c]['polyg'].vnodes
+            indoor = self.Gt.node[c]['indoor']
+            idiff = map(lambda x: x,filter(lambda x : x in
+                                                self.ldiff,vnodes))
+            for k in idiff:
+                self.Gt.node[c]['inter']+= [(k,)]
+
+    def buildGi(self):
+        """ build graph of interactions
+
+        Notes
+        -----
+
+        For each node > of graph Gs creates
+        4 different nodes associated to the same segment
+
+        (ns,cy0) R -> cy0
+        (ns,cy1) R -> cy1
+        (ns,cy0,cy1) T 0->1
+        (ns,cy1,cy0) T 1->0
+
+        """
+        self.Gi = nx.DiGraph()
+        self.Gi.pos = {}
+        #
+        # 1 ) Create nodes of Gi and their positions
+        #
+        # (D,)
+        # (R,cy0)
+        # (T,cy0,cy1)
+        #
+        for n in self.Gv.node:
+            if n < 0: # D
+                self.Gi.add_node((n,))
+                self.Gi.pos[(n,)] = self.Gs.pos[n]
+            if n > 0: # R | T
+                cy = self.Gs.node[n]['ncycles']
+                name = self.Gs.node[n]['name']
+
+                cy0 = cy[0]
+                cy1 = cy[1]
+
+                nei = self.Gs.neighbors(n)  # get neighbor
+                np1 = nei[0]
+                np2 = nei[1]
+
+                p1 = np.array(self.Gs.pos[np1])
+                p2 = np.array(self.Gs.pos[np2])
+                l = p1 - p2
+                nl = np.dot(l, l)
+                ln = l / nl
+
+                delta = nl / 10
+                # On AIR or ABSORBENT there is no reflection
+                # except if n is a subsegment
+                if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
+                    self.Gi.add_node((n,cy0))
+                    self.Gi.add_node((n,cy1))
+                    self.Gi.pos[(n, cy0)] = tuple(self.Gs.pos[n] + ln * delta)
+                    self.Gi.pos[(n, cy1)] = tuple(self.Gs.pos[n] - ln * delta)
+
+                # Through METAL or ABSORBENT there is no transmission
+                # except if n is a subsegment
+                if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
+                    self.Gi.add_node((n,cy0,cy1))
+                    self.Gi.add_node((n,cy1,cy0))
+                    self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
+                    self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
+
+        #import ipdb
+        #ipdb.set_trace()
+        #
+        # 2) Establishing link between interactions
+        #
+        for cy in self.Gt.node:
+            if cy >0:
+                vnodes = self.Gt.node[cy]['polyg'].vnodes
+                indoor = self.Gt.node[cy]['indoor']
+                if indoor:
+                    npt  = filter(lambda x : x in self.ldiffin,vnodes)
+                else:
+                    npt  = filter(lambda x : x in self.ldiffout,vnodes)
+                nseg = filter(lambda x : x>0,vnodes)
+                vnodes = nseg+npt
+                for nstr in vnodes:
+                    if nstr in self.Gv.nodes():
+                        if nstr>0:
+                            cyo1 = self.Gs.node[nstr]['ncycles']
+                            cyo1 = filter(lambda x : x!=cy,cyo1)[0]
+                            # R , Tin , Tout
+                            if cyo1>0:
+                                if [(nstr,cy)] in self.Gi.nodes():
+                                    li1 = [(nstr,cy),(nstr,cyo1,cy),(nstr,cy,cyo1)]
+                                else:# no reflection on airwall
+                                    li1 = [(nstr,cyo1,cy),(nstr,cy,cyo1)]
+                            else:
+                                if [(nstr,cy)] in self.Gi.nodes():
+                                    li1 = [(nstr,cy)]
+                        else:
+                            # D
+                            li1 =[(nstr,)]
+                        # list of cycle entities in visibility of nstr
+                        lneighcy = filter(lambda x: x in
+                                       vnodes,nx.neighbors(self.Gv,nstr))
+                        for nstrb in lneighcy:
+                            if nstrb in self.Gv.nodes():
+                                if nstrb>0:
+                                    cyo2 = self.Gs.node[nstrb]['ncycles']
+                                    cyo2 = filter(lambda x : x!=cy,cyo2)[0]
+                                    if cyo2>0:
+                                        if (nstrb,cy) in self.Gi.nodes():
+                                            li2 = [(nstrb,cy),(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
+                                        else: #no reflection on airwall
+                                            li2 = [(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
+                                    else:
+                                        if (nstrb,cy) in self.Gi.nodes():
+                                            li2 = [(nstrb,cy)]
+                                else:
+                                    li2 = [(nstrb,)]
+                                for i1 in li1:
+                                    for i2 in li2:
+                                        self.Gi.add_edge(i1,i2)
+                                        self.Gi.add_edge(i2,i1)
 
 
         # updating the list of interaction of a given cycle
