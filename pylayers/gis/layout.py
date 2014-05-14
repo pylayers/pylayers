@@ -5702,6 +5702,7 @@ class Layout(object):
                             if ((ni1 in self.Gi.node.keys())
                               & (ni2 in self.Gi.node.keys())):
                                 self.Gi.add_edge(ni1, ni2)  # (n,cy0,cy1) -> D(nb)
+                                self.Gi.add_edge(ni2, ni1)  # D(nb) --> (n,cy0,cy1)
                                 #print "      ---->",node2
             if len(ni1)==1:
                 # n is a Gi interaction <0
