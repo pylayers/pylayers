@@ -5820,9 +5820,9 @@ class Layout(object):
                             # R , Tin , Tout
                             if cyo1>0:
                                 if (nstr,cy) in self.Gi.nodes():
-                                    li1 = [(nstr,cy),(nstr,cyo1,cy),(nstr,cy,cyo1)]
+                                    li1 = [(nstr,cy),(nstr,cy,cyo1),(nstr,cyo1,cy)]
                                 else:# no reflection on airwall
-                                    li1 = [(nstr,cyo1,cy),(nstr,cy,cyo1)]
+                                    li1 = [(nstr,cyo1,cy)]
                             else:
                                 if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy)]
@@ -5848,11 +5848,48 @@ class Layout(object):
                                             li2 = [(nstrb,cy)]
                                 else:
                                     li2 = [(nstrb,)]
+
                                 for i1 in li1:
+                                    #print li1
                                     for i2 in li2:
-                                        if (len(i1)==2 & len(i2)==2):
-                                        self.Gi.add_edge(i1,i2)
-                                        self.Gi.add_edge(i2,i1)
+                                        #print li2
+                                        if ((len(i1)==2) & (len(i2)==2)):
+                                            #print "RR"
+                                            self.Gi.add_edge(i1,i2)
+                                            self.Gi.add_edge(i2,i1)
+                                        if ((len(i1)==2) & (len(i2)==3)):
+                                            #print "RT"
+                                            if i1[1]==i2[1]:
+                                                self.Gi.add_edge(i1,i2)
+                                        if ((len(i1)==3) & (len(i2)==2)):
+                                            #print "TR"
+                                            if i1[2]==i2[1]:
+                                                self.Gi.add_edge(i1,i2)
+                                        if ((len(i1)==3) & (len(i2)==3)):
+                                            #print "TT"
+                                            if i1[2]==i2[1]:
+                                                self.Gi.add_edge(i1,i2)
+                                            if i2[1]==i1[2]:
+                                                self.Gi.add_edge(i2,i1)
+                                        if ((len(i1)==1) & (len(i2)==3)):
+                                            #print "DT"
+                                            if  i2[1]==cy:
+                                                self.Gi.add_edge(i1,i2)
+                                        if ((len(i1)==3) & (len(i2)==1)):
+                                            #print "TD"
+                                            if  i1[2]==cy:
+                                                self.Gi.add_edge(i1,i2)
+                                        if ((len(i1)==1) & (len(i2)==2)):
+                                            #print "DR"
+                                            self.Gi.add_edge(i1,i2)
+                                        if ((len(i1)==2) & (len(i2)==1)):
+                                            #print "RD"
+                                            self.Gi.add_edge(i1,i2)
+                                        if ((len(i1)==1) & (len(i2)==1)):
+                                            #print "DD"
+                                            self.Gi.add_edge(i1,i2)
+
+
 
 
         # updating the list of interaction of a given cycle
