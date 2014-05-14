@@ -2261,13 +2261,17 @@ class Rays(dict):
             if rlist == []:
                 r = range(np.shape(self[i]['pt'])[2])
             else :
-                r = np.array((rlist)) 
+                r = np.array((rlist))
+
             # number of rays
             nbr = len(r) 
             # current number of interactions
             cnbi = i + 2
             pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
-            lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+            # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+            lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
+            import ipdb
+            ipdb.set_trace()
             mesh = tvtk.PolyData(points=pt.T, polys=lines)
             mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
                                                  color=(0, 0, 0), )
