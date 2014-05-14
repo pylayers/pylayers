@@ -156,8 +156,6 @@ for n in L.Gt.nodes():
                             cpolys.append(pold)
                             p = pold
                 if (ip2 >= len(polys)):# and (conv):
-                    import ipdb
-                    ipdb.set_trace()
                     if conv :
                         cpolys.append(p)
                     else:
