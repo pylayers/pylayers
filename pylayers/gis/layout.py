@@ -4767,8 +4767,8 @@ class Layout(object):
         if 'c' in graph:
             if verbose:
                 print "Gc"
-            self.buildGc()
-            self.lbltg.extend('c')
+            #self.buildGc()
+            #self.lbltg.extend('c')
         if 'r' in graph:
             if verbose:
                 print "Gr"
@@ -5349,7 +5349,7 @@ class Layout(object):
             self.Gt.add_node(k, indoor=True)
             self.Gt.add_node(k, isopen=False)
         #
-        #    9 - add cycle 0 outside polygon
+        #    10 - add cycle 0 outside polygon
         #
         #   This shapely polygon has an interior ( TODO add hole vizualization
         #   in Polygon object)
@@ -5357,6 +5357,7 @@ class Layout(object):
         #    The cycle 0 is not indoor
         #
 
+        # build a poygon including all the layout + 5 meters
         p1 = geu.Polygon(self.ax,delta=5)
         self.ma = self.mask()
         p2 = p1.difference(self.ma)
@@ -5368,7 +5369,7 @@ class Layout(object):
 
 
         #
-        #   10 - Connect outside cycle 0 to each cycle connected to the layout
+        #   11 - Connect outside cycle 0 to each cycle connected to the layout
         #   boundary
         #
 
@@ -5804,7 +5805,11 @@ class Layout(object):
                 #
                 Gv = nx.Graph()
                 #
-                # in convex case all segments see all segments
+                # in convex case :
+                #    i)  all segments see all segments
+                #    ii) all non adjascent valid diffraction points see each other
+                #    iii) all valid diffraction points see non adjascent
+                #    segments
                 #
                 for nk in combinations(nseg, 2):
                     Gv.add_edge(nk[0],nk[1])
@@ -5812,13 +5817,26 @@ class Layout(object):
                 if isopen:
                     ndiffvalid = filter(lambda x :
                                         filter(lambda y : y in airwalls
-                                                          ,nx.neighbors(self.Gs,x)),ndiff)
+                                             ,nx.neighbors(self.Gs,x)),ndiff)
                     # non adjascent segments see valid diffraction point
                     for idiff in ndiffvalid:
+                        # segvalid : not adjascent segment
                         segvalid = filter(lambda x : x not in
                                           nx.neighbors(self.Gs,idiff),nseg)
+                        # idiff segment neighbors
+                        nsneigh = nx.neighbors(self.Gs,idiff)
+                        # nbidiff valid
+                        nsneigh =  filter(lambda x : x not in airwalls,nsneigh)
+                        # excluded diffraction points
+                        iptexcluded = reduce(lambda u,v:u+v,map(lambda x :
+                                           nx.neighbors(self.Gs,x),nsneigh))
+                        # pntvalid : not excluded points 
+                        pntvalid = filter(lambda x : x not in iptexcluded,ndiff)
                         for ns in segvalid:
                             Gv.add_edge(idiff,ns)
+
+                        for np in pntvalid:
+                            Gv.add_edge(idiff,np)
                 else:
                     pass
                     # outdoor case not implemented
@@ -6020,10 +6038,6 @@ class Layout(object):
                 # On AIR or ABSORBENT there is no reflection
                 # except if n is a subsegment
                 if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
-                    #self.Gi.add_node(str((n,cy0)))
-                    #self.Gi.add_node(str((n,cy1)))
-                    #self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
-                    #self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
                     self.Gi.add_node((n,cy0))
                     self.Gi.add_node((n,cy1))
                     self.Gi.pos[(n, cy0)] = tuple(self.Gs.pos[n] + ln * delta)
@@ -6032,10 +6046,6 @@ class Layout(object):
                 # Through METAL or ABSORBENT there is no transmission
                 # except if n is a subsegment
                 if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
-                    #self.Gi.add_node(str((n,cy0,cy1)))
-                    #self.Gi.add_node(str((n,cy1,cy0)))
-                    #self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
-                    #self.Gi.pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
                     self.Gi.add_node((n,cy0,cy1))
                     self.Gi.add_node((n,cy1,cy0))
                     self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
@@ -6053,110 +6063,6 @@ class Layout(object):
         #
         # Establishing link between interactions
         #
-#
-#        for sn in self.Gi.node:
-#            n = eval(sn)
-#            node1 = str(n)
-#            
-#            #print "---->",node1
-#            if isinstance(n, tuple):  # (R|T)
-#                if len(n)==2: #  (R) (segment,cycle)
-#                    ns = n[0]  # segment
-#                    nc = n[1]  # cycle
-#                    #vnodes = self.Gt.node[nc]['vnodes']
-#                    #vnodes = self.Gt.node[nc]['cycle'].cycle
-#                    vnodes = self.Gt.node[nc]['polyg'].vnodes
-#                    neigh = self.Gv.neighbors(ns)  # find neighbors of segment ns
-#                    for nb in neigh:
-#                        if nb > 0:             # segment (R|T)
-#                            if nb in vnodes:   # if segment in reflection cycle
-#                                #node1 = str(n)
-#                                node2 = str((nb, nc))  # R ( nc <-> nb )
-#                                if ((node1 in self.Gi.node.keys())
-#                                 &  (node2 in self.Gi.node.keys())):
-#                                    self.Gi.add_edge(node1, node2)     # R(n,nc)-> R(nb,nc)
-#                                #print "      ---->",node2
-#                                # retrieve the cycles of the segment
-#                                # if segment has 2 cycles, transmission is also
-#                                # possible
-#                                cy = set(self.Gs.node[nb]['ncycles'])
-#                                #if len(cy) == 2: # R-T
-#                                node1 = str(n)
-#                                # the other cycle
-#                                nc1 = list(cy.difference({nc}))[0]
-#                                node2 = str((nb,nc,nc1))  # T (nc -> nb -> nc1)
-#
-#                                if ((node1 in self.Gi.node.keys())
-#                                  & (node2 in self.Gi.node.keys())):
-#                                    self.Gi.add_edge(node1, node2)
-#                        else:   # nb <0  diffraction
-#                            #node1 = str(n)  #
-#                            node2 = str(nb) #
-#                            if (nc>0):  # nc is not an external cycle NOT GOOD
-#                                if ((node1 in self.Gi.node.keys())
-#                                 & (node2 in self.Gi.node.keys())):
-#                                    self.Gi.add_edge(node1, node2)   #  (n,nc) -> D
-#                                    self.Gi.add_edge(node2, node1)   #  D --> (n,nc)
-#    #                                print "      <---->",node2
-#                                # diffraction is a reciprocal interaction
-##                            else:
-##                                print node1, node2
-#                                #pdb_set_trace()
-#                if len(n)==3: #transmission
-#                    ns  = n[0]  # segment
-#                    cy0 = n[1]
-#                    cy1 = n[2]
-#                    #vnodes0 = self.Gt.node[cy0]['vnodes']
-#                    #vnodes1 = self.Gt.node[cy1]['vnodes']
-#                    #vnodes0 = self.Gt.node[cy0]['cycle'].cycle
-#                    #vnodes1 = self.Gt.node[cy1]['cycle'].cycle
-#                    vnodes0 = self.Gt.node[cy0]['polyg'].vnodes
-#                    vnodes1 = self.Gt.node[cy1]['polyg'].vnodes
-#                    neigh = self.Gv.neighbors(ns)  # find neighbors
-#                    for nb in neigh:
-#                        if nb > 0:
-#                            if nb in vnodes1:    # If neighbors in cycle 1
-#                                node1 = str(n)
-#                                node2 = str((nb, cy1))
-#                                if ((node1 in self.Gi.node.keys())
-#                                 &  (node2 in self.Gi.node.keys())):
-#                                    self.Gi.add_edge(node1, node2) # (n,cy0,cy1) -> (nb,cy1)
-#                                    #print "      ---->",node2
-#                                cy = set(self.Gs.node[nb]['ncycles'])
-#                                if len(cy) == 2: # R-T
-#                                    #node1 = str(n)
-#                                    nc1   = list(cy.difference({cy1}))[0]
-#                                    if nc1<> cy0:
-#                                        node2 = str((nb,cy1,nc1))
-#                                        if ((node1 in self.Gi.node.keys())
-#                                         & (node2 in self.Gi.node.keys())):
-#                                            self.Gi.add_edge(node1, node2)# (n,cy0,cy1) -> (nb,cy1,nc1)
-#                                            #print "      ---->",node2
-#                        else:       # nb <0 D diffraction
-#                            #node1 = str(n)  #
-#                            node2 = str(nb) #
-#                            if cy1!=-1:
-#                                if ((node1 in self.Gi.node.keys())
-#                                  & (node2 in self.Gi.node.keys())):
-#                                    self.Gi.add_edge(node1, node2)  # (n,cy0,cy1) -> D(nb)
-#                                    #print "      ---->",node2
-#            else:
-#                # n is a Gi interaction <0
-#                # n is also a node ov Gv
-#                #node1 = str(n) # Diffraction point
-#                # all neighbors of D
-#                neigh = self.Gv.neighbors(n)
-#                for nb in neigh:
-#                    if nb<0: # D <-> D
-#                        node2 = str(nb)
-#                        if ((node1 in self.Gi.node.keys())
-#                         &  (node2 in self.Gi.node.keys())):
-#                            self.Gi.add_edge(node1, node2) # D(n) -> D(nb)
-#                            self.Gi.add_edge(node2, node1) # D(nb) -> D(n)
-#                            #print "      <---->",node2
-##                                    print node1, node2
-#                    #pdb.set_trace()
-#
         for ni1 in self.Gi.node:
             if len(ni1)==2: #  (R) (segment,cycle)
                 ns = ni1[0]  # ns segment
@@ -6431,12 +6337,14 @@ class Layout(object):
         # Finding the diffraction points
         # Diffraction points are different from indoor cycle and outdoor
         # cycles
-        pdb.set_trace()
-        gccy = self.Gt.node[ncy]['merged']
+        #gccy = self.Gt.node[ncy]['merged']
         # sequence of nodes of merged cycles
-        vnodes = self.Gc.node[gccy]['polyg'].vnodes
+        #
+        # TODO check wedge validity
+        #
+        vnodes = self.Gt.node[ncy]['polyg'].vnodes
         vpoints = filter(lambda x: x<0,vnodes)
-        indoor = self.Gc.node[gccy]['indoor']
+        indoor = self.Gt.node[ncy]['indoor']
         if indoor:
             lD = map(lambda y : (y,),filter(lambda x : x in
                                             self.ldiffin,vpoints))

@@ -2713,14 +2713,12 @@ class Signatures(dict):
         los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
 
         # convex cycle of each point
-        cycptx = self.L.pt2cy(ptx)
-        cycprx = self.L.pt2cy(prx)
+        cyptx = self.L.pt2cy(ptx)
+        cyprx = self.L.pt2cy(prx)
 
         # merged cycle of each point
-        cyptx = self.L.Gt.node[cycptx]['merged']
-        polyctx = self.L.Gc.node[cyptx]['polyg']
-        cyprx = self.L.Gt.node[cycprx]['merged']
-        polycrx = self.L.Gc.node[cyptx]['polyg']
+        polyctx = self.L.Gt.node[cyptx]['polyg']
+        polycrx = self.L.Gt.node[cyprx]['polyg']
 
         dtxrx = np.sum((ptx-prx)*(ptx-prx))
         if dtxrx>1e-15:
