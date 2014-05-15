@@ -5585,7 +5585,7 @@ class Layout(object):
         self.Gi = nx.DiGraph()
         self.Gi.pos = {}
         #
-        # Create nodes of Gi and their positions
+        # 1 ) Create nodes of Gi and their positions
         #
         # (D,)
         # (R,cy0)
@@ -5629,100 +5629,100 @@ class Layout(object):
                     self.Gi.pos[(n, cy0, cy1)] = tuple(self.Gs.pos[n]+ln*delta/2.)
                     self.Gi.pos[(n, cy1, cy0)] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
+        #import ipdb
+        #ipdb.set_trace()
         #
-        # Establishing link between interactions
+        # 2) Establishing link between interactions
         #
-        for ni1 in self.Gi.node:
-            if len(ni1)==2: #  (R) (segment,cycle)
-                ns = ni1[0]  # ns segment
-                nc = ni1[1]  # nc output cycle of reflexion
+        for cy in self.Gt.node:
+            if cy >0:
+                vnodes = self.Gt.node[cy]['polyg'].vnodes
+                indoor = self.Gt.node[cy]['indoor']
+                if indoor:
+                    npt  = filter(lambda x : x in self.ldiffin,vnodes)
+                else:
+                    npt  = filter(lambda x : x in self.ldiffout,vnodes)
+                nseg = filter(lambda x : x>0,vnodes)
+                vnodes = nseg+npt
+                for nstr in vnodes:
+                    if nstr in self.Gv.nodes():
+                        if nstr>0:
+                            cyo1 = self.Gs.node[nstr]['ncycles']
+                            cyo1 = filter(lambda x : x!=cy,cyo1)[0]
+                            # R , Tin , Tout
+                            if cyo1>0:
+                                if (nstr,cy) in self.Gi.nodes():
+                                    li1 = [(nstr,cy),(nstr,cy,cyo1),(nstr,cyo1,cy)]
+                                else:# no reflection on airwall
+                                    li1 = [(nstr,cyo1,cy)]
+                            else:
+                                if (nstr,cy) in self.Gi.nodes():
+                                    li1 = [(nstr,cy)]
+                        else:
+                            # D
+                            li1 =[(nstr,)]
+                        # list of cycle entities in visibility of nstr
+                        lneighb  = nx.neighbors(self.Gv,nstr)
+                        lneighcy = filter(lambda x: x in vnodes,lneighb)
 
-                vnodes = self.Gt.node[nc]['polyg'].vnodes
-                neigh = self.Gv.neighbors(ns)  # find neighbors of segment ns
+                        for nstrb in lneighcy:
+                            if nstrb in self.Gv.nodes():
+                                if nstrb>0:
+                                    cyo2 = self.Gs.node[nstrb]['ncycles']
+                                    cyo2 = filter(lambda x : x!=cy,cyo2)[0]
+                                    if cyo2>0:
+                                        if (nstrb,cy) in self.Gi.nodes():
+                                            li2 = [(nstrb,cy),(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
+                                        else: #no reflection on airwall
+                                            li2 = [(nstrb,cy,cyo2),(nstrb,cyo2,cy)]
+                                    else:
+                                        if (nstrb,cy) in self.Gi.nodes():
+                                            li2 = [(nstrb,cy)]
+                                else:
+                                    li2 = [(nstrb,)]
 
-                for nb in neigh:
-                    if nb > 0:             # segment (R|T)
-                        if nb in vnodes:   # if segment in reflection cycle
-                            ni2 = (nb, nc)  # R ( nc <-> nb )
-                            if ((ni1 in self.Gi.node.keys())
-                             &  (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)     # R(n,nc)-> R(nb,nc)
-                            # print "      ---->",ni2
-                            # retrieve the cycles of the segment
-                            cy = set(self.Gs.node[nb]['ncycles'])
-                            # the other cycle
-                            nc1 = list(cy.difference({nc}))[0]
-                            ni2 = (nb,nc,nc1)  # T (nc -> nb -> nc1)
+                                for i1 in li1:
+                                    #print li1
+                                    for i2 in li2:
+                                        #print li2
+                                        if (i1[0]!=i2[0]):
+                                            if ((len(i1)==2) & (len(i2)==2)):
+                                                #print "RR"
+                                                self.Gi.add_edge(i1,i2)
+                                                self.Gi.add_edge(i2,i1)
+                                            if ((len(i1)==2) & (len(i2)==3)):
+                                                #print "RT"
+                                                if i1[1]==i2[1]:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==3) & (len(i2)==2)):
+                                                #print "TR"
+                                                if i1[2]==i2[1]:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==3) & (len(i2)==3)):
+                                                #print "TT"
+                                                if i1[2]==i2[1]:
+                                                    self.Gi.add_edge(i1,i2)
+                                                if i2[1]==i1[2]:
+                                                    self.Gi.add_edge(i2,i1)
+                                            if ((len(i1)==1) & (len(i2)==3)):
+                                                #print "DT"
+                                                if  i2[1]==cy:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==3) & (len(i2)==1)):
+                                                #print "TD"
+                                                if  i1[2]==cy:
+                                                    self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==1) & (len(i2)==2)):
+                                                #print "DR"
+                                                self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==2) & (len(i2)==1)):
+                                                #print "RD"
+                                                self.Gi.add_edge(i1,i2)
+                                            if ((len(i1)==1) & (len(i2)==1)):
+                                                #print "DD"
+                                                self.Gi.add_edge(i1,i2)
 
-                            if ((ni1 in self.Gi.node.keys())
-                              & (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)
 
-                    else:   # nb <0  Diffraction
-                        ni2 = (nb,) #
-                        if (nc>0):  # nc is not an external cycle NOT GOOD
-                            if ((ni1 in self.Gi.node.keys())
-                             & (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)   #  (ns,nc) -> D
-                                self.Gi.add_edge(ni2, ni1)   #  D --> (ns,nc)
-#                                print "      <---->",node2
-                            # diffraction is a reciprocal interaction
-#                            else:
-#                                print node1, node2
-                            #pdb_set_trace()
-            if len(ni1)==3: #transmission
-                ns  = ni1[0]  # segment
-                cy0 = ni1[1]
-                cy1 = ni1[2]
-                vnodes0 = self.Gt.node[cy0]['polyg'].vnodes
-                vnodes1 = self.Gt.node[cy1]['polyg'].vnodes
-                neigh = self.Gv.neighbors(ns)  # find neighbors
-                for nb in neigh:
-                    if nb > 0:
-                        if nb in vnodes1:    # If neighbors in cycle 1
-                            ni2 = (nb, cy1)
-                            if ((ni1 in self.Gi.node.keys())
-                             &  (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2) # (n,cy0,cy1) -> (nb,cy1)
-                                #print "      ---->",node2
-                            cy = set(self.Gs.node[nb]['ncycles'])
-                            if len(cy) == 2: # R-T
-                                #node1 = str(n)
-                                nc1   = list(cy.difference({cy1}))[0]
-                                if nc1<> cy0:
-                                    ni2 = (nb,cy1,nc1)
-                                    if ((ni1 in self.Gi.node.keys())
-                                     & (ni2 in self.Gi.node.keys())):
-                                        self.Gi.add_edge(ni1, ni2)# (n,cy0,cy1) -> (nb,cy1,nc1)
-                                        #print "      ---->",node2
-                    else:       # nb <0 D diffraction
-                        #node1 = str(n)  #
-                        ni2 = (nb,) #
-                        if cy1!=0:
-                            if ((ni1 in self.Gi.node.keys())
-                              & (ni2 in self.Gi.node.keys())):
-                                self.Gi.add_edge(ni1, ni2)  # (n,cy0,cy1) -> D(nb)
-                                #print "      ---->",node2
-            if len(ni1)==1:
-                # n is a Gi interaction <0
-                # n is also a node ov Gv
-                #node1 = str(n) # Diffraction point
-                # all neighbors of D
-                npt = ni1[0]
-                neigh = self.Gv.neighbors(npt)
-                for nb in neigh:
-                    if nb<0: # D <-> D
-                        ni2 = (nb,)
-                        if ((ni1 in self.Gi.node.keys())
-                         &  (ni2 in self.Gi.node.keys())):
-                            self.Gi.add_edge(ni1, ni2) # D(n) -> D(nb)
-                            self.Gi.add_edge(ni2, ni1) # D(nb) -> D(n)
-        self.di={} # dictionnary which link nodes of Gi to node of Gs and interaction type
-        # 2 lists
-        #[self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
-        #[self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
-        #[self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
-        #[self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
 
         # updating the list of interaction of a given cycle
@@ -6865,7 +6865,7 @@ class Layout(object):
         segments
 
         """
-        self.Gr = copy.deepcopy(self.Gc)
+        self.Gr = copy.deepcopy(self.Gt)
         #
         #  Connected components might not be all contiguous
         #  this a problem because the concatenation of cycles
