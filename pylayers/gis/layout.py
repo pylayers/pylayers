@@ -4947,6 +4947,8 @@ class Layout(object):
         # 1 - cycle_basis : get a cycle decomposition basis of Gs
         #
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
+        if C==[]:
+            C = [self.Gs]
 
         #
         # 2 - append each cycle in a list of Cycle.
