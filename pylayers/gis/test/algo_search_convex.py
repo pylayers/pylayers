@@ -119,13 +119,16 @@ for n in L.Gt.nodes():
                 for t in tri:
                     ts = geu.Polygon(pucs[t])
                     #check if inside the original polygon
-                    U = L.Gt.node[n]['polyg'].contains(ts)
+
+                    # U = L.Gt.node[n]['polyg'].contains(ts)
+                    U = L.Gt.node[n]['polyg'].intersection(ts)
+                    ats = ts.area
                     # fig,ax=ts.plot(fig=fig,ax=ax)
-                    if U:
+                    if U.area > (1*ats/100):
                         #pkt.append(pucs[t])
                         kt.append(t) 
                         polys.append(ts)
-  
+
                     # # ptt = puc[tt]
             # try:
             #     plt.triplot(pucs[:,0],pucs[:,1], np.array(kt))
@@ -144,24 +147,35 @@ for n in L.Gt.nodes():
                     conv=False
                     inter = p.intersection(p2)
                     # if 2 triangles have a common segment
+                    pold = p
                     if isinstance(inter,sh.LineString):
-                        pold = p
+                        
                         p = p + p2
                         if p.isconvex():
                             polys.pop(ip2)
                             polys.insert(0,p)
                             conv=True
                             break
-                        else:
+                        elif len(cpolys) != 0:
+                            if pold != cpolys[-1]:
+                                cpolys.append(pold)
+                                p = pold
+                        else : 
                             cpolys.append(pold)
                             p = pold
-                if (ip2 >= len(polys)):# and (conv):
-                    if conv :
-                        cpolys.append(p)
-                    else:
-                        cpolys.append(pold)
 
-            polyplot(cpolys)
+                # if (ip2 >= len(polys)):# and (conv):
+                if conv :
+                    cpolys.append(p)
+                else:
+                    cpolys.append(pold)
+                if len(polys) == 0:
+                    cpolys.append(p)
+                # polyplot(polys)
+                # import ipdb
+                # ipdb.set_trace()
+
+polyplot(cpolys)
 
 
 
