@@ -7,9 +7,9 @@ L.dumpw()
 #Si = Signatures(L,0,1)
 #Si.run5(cutoff=4)
 #Si.show(L,ctx=0,crx=1)
-Lk = DLink(L=L,cutoff=3,force=True)
+Lk = DLink(L=L,cutoff=4,force=True)
 pta = np.array([-20,-20,1.2])
-ptb = np.array([-30,0,1.2])
+ptb = np.array([0,20,1.2])
 Lk.a = pta
 Lk.b = ptb
 Lk.eval(si_algo='old',force=True)
