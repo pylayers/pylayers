@@ -48,7 +48,7 @@ from pylayers.gis.layout import *
 from itertools import combinations
 from scipy.spatial import Delaunay
 import shapely.geometry as sh
-L = Layout('TA-Office.ini')
+L = Layout('TA-Office_2.ini')
 #L.dumpr()
 L.build('t')
 fig,ax=L.showG('s',labels=True)
@@ -95,6 +95,11 @@ def polyplot(poly):
 
 for n in L.Gt.nodes():
     if n > 0:
+
+        ####
+        #### 1 Determine if pt convex in cycle
+        ####
+        
         no = L.Gt.node[n]['cycle'].cycle
         tcc, nn = L.Gt.node[n]['polyg'].ptconvex()
         # diffracting points 
@@ -110,10 +115,13 @@ for n in L.Gt.nodes():
             pucs = array(map(lambda x: L.Gs.pos[x], ucs))
             pucs = np.vstack((pucs,pucs[-1]))
 
+            ####
+            #### 2 perform a Delaunay Partioning 
+            ####
+
             if len(ucs) >2:
                 trid=Delaunay(pucs)
                 tri =trid.simplices
-                utri = ucs[tri]
                 # filter tri in the cycle
                 kt = []
                 pkt = []
@@ -122,21 +130,23 @@ for n in L.Gt.nodes():
                     ts = geu.Polygon(pucs[t])
                     #check if inside the original polygon
                     # U = L.Gt.node[n]['polyg'].contains(ts)
-
                     U = L.Gt.node[n]['polyg'].intersection(ts)
                     ats = ts.area
-                    # fig,ax=ts.plot(fig=fig,ax=ax)
                     if U.area > (1*ats/100):
                         #pkt.append(pucs[t])
                         kt.append(t) 
                         polys.append(ts)
             # polyplot(polys)
 
-            kt = array(kt)
-            npttri = np.arange(0,np.max(kt))
-            # search for each triangle, which is connecte
-            conecttri = [np.where(kt == i) for i in npttri]
+            # kt = array(kt)
+            # npttri = np.arange(0,np.max(kt))
+            # # search for each triangle, which is connected
+            # conecttri = [np.where(kt == i) for i in npttri]
 
+            ####
+            #### 3. merge delaunay triangulation in order to obtain
+            ###    the larger convex polygons partioning 
+            ####
             cpolys = []
             nbpolys = len(polys)
             while polys !=[]:
@@ -168,11 +178,15 @@ for n in L.Gt.nodes():
                         cpolys.append(pold)
                 if len(polys) == 0:
                     cpolys.append(p)
-                # polyplot(polys)
-                # import ipdb
-                # ipdb.set_trace()
+            ####
+            #### 4. ensure the correct vnode numerotaion of the polygons
+            ncpol = []
+            for p in cpolys:
+                ptmp = geu.Polygon(L.Gt.node[n]['polyg'].intersection(p))
+                ptmp.setvnodes(L)
+                ncpol.append(ptmp)
 
-polyplot(cpolys)
+polyplot(ncpol)
 
 
 
