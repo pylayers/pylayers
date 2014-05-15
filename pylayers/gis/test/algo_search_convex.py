@@ -90,7 +90,7 @@ def polyplot(poly):
     fig,ax=L.showG('s')
     color=['r','b','g']*10
     for ip, p in enumerate(poly):
-        fig,ax = p.plot(fig=fig,ax=ax,color=color[ip],alpha =1)
+        fig,ax = p.plot(fig=fig,ax=ax,color=color[ip],alpha =0.5)
 
 
 for n in L.Gt.nodes():
@@ -105,6 +105,7 @@ for n in L.Gt.nodes():
             # get points ID in the cycle
             uus = filter(lambda x: x<0,no)
             # get point convex ID
+            uc = np.array(uus)[utconvex]
             ucs = np.array(uus)[utsconvex]
             pucs = array(map(lambda x: L.Gs.pos[x], ucs))
             pucs = np.vstack((pucs,pucs[-1]))
@@ -112,6 +113,7 @@ for n in L.Gt.nodes():
             if len(ucs) >2:
                 trid=Delaunay(pucs)
                 tri =trid.simplices
+                utri = ucs[tri]
                 # filter tri in the cycle
                 kt = []
                 pkt = []
@@ -119,8 +121,8 @@ for n in L.Gt.nodes():
                 for t in tri:
                     ts = geu.Polygon(pucs[t])
                     #check if inside the original polygon
-
                     # U = L.Gt.node[n]['polyg'].contains(ts)
+
                     U = L.Gt.node[n]['polyg'].intersection(ts)
                     ats = ts.area
                     # fig,ax=ts.plot(fig=fig,ax=ax)
@@ -128,12 +130,8 @@ for n in L.Gt.nodes():
                         #pkt.append(pucs[t])
                         kt.append(t) 
                         polys.append(ts)
+            # polyplot(polys)
 
-                    # # ptt = puc[tt]
-            # try:
-            #     plt.triplot(pucs[:,0],pucs[:,1], np.array(kt))
-            # except: 
-            #     pass
             kt = array(kt)
             npttri = np.arange(0,np.max(kt))
             # search for each triangle, which is connecte
@@ -142,6 +140,8 @@ for n in L.Gt.nodes():
             cpolys = []
             nbpolys = len(polys)
             while polys !=[]:
+                # import ipdb
+                # ipdb.set_trace()
                 p = polys.pop(0)
                 for ip2,p2 in enumerate(polys):
                     conv=False
@@ -149,26 +149,23 @@ for n in L.Gt.nodes():
                     # if 2 triangles have a common segment
                     pold = p
                     if isinstance(inter,sh.LineString):
-                        
                         p = p + p2
                         if p.isconvex():
                             polys.pop(ip2)
                             polys.insert(0,p)
                             conv=True
                             break
-                        elif len(cpolys) != 0:
-                            if pold != cpolys[-1]:
-                                cpolys.append(pold)
-                                p = pold
-                        else : 
-                            cpolys.append(pold)
+                        else:
+                            # if pold not in cpolys:
+                            #     cpolys.append(pold)
                             p = pold
-
                 # if (ip2 >= len(polys)):# and (conv):
-                if conv :
-                    cpolys.append(p)
-                else:
-                    cpolys.append(pold)
+                # if conv :
+                #     if p not in cpolys:
+                #         cpolys.append(p)
+                if not conv:#else:
+                    if pold not in cpolys:
+                        cpolys.append(pold)
                 if len(polys) == 0:
                     cpolys.append(p)
                 # polyplot(polys)
@@ -177,6 +174,114 @@ for n in L.Gt.nodes():
 
 polyplot(cpolys)
 
+
+
+
+# for n in L.Gt.nodes():
+#     if n > 0:
+#         no = L.Gt.node[n]['cycle'].cycle
+#         tcc, nn = L.Gt.node[n]['polyg'].ptconvex()
+#         # diffracting points 
+#         utconvex = np.nonzero(tcc == 1)[0]
+#         # all possible diffracting point (in and out of cycle)
+#         utsconvex = np.nonzero(abs(tcc) == 1)[0]
+#         if len(utconvex) != 0:
+#             # get points ID in the cycle
+#             uus = filter(lambda x: x<0,no)
+#             # get point convex ID
+#             uc = np.array(uus)[utconvex]
+#             ucs = np.array(uus)[utsconvex]
+#             pucs = array(map(lambda x: L.Gs.pos[x], ucs))
+#             pucs = np.vstack((pucs,pucs[-1]))
+
+#             if len(ucs) >2:
+#                 trid=Delaunay(pucs)
+#                 tri =trid.simplices
+#                 utri = ucs[tri]
+#                 # filter tri in the cycle
+#                 kt = []
+#                 pkt = []
+#                 polys = []
+#                 for t in tri:
+#                     ts = geu.Polygon(pucs[t])
+#                     #check if inside the original polygon
+#                     # U = L.Gt.node[n]['polyg'].contains(ts)
+
+#                     U = L.Gt.node[n]['polyg'].intersection(ts)
+#                     ats = ts.area
+#                     # fig,ax=ts.plot(fig=fig,ax=ax)
+#                     if U.area > (1*ats/100):
+#                         #pkt.append(pucs[t])
+#                         kt.append(t) 
+#                         polys.append(ts)
+#             polyplot(polys)
+  
+#                     # # ptt = puc[tt]
+#             # try:
+#             #     plt.triplot(pucs[:,0],pucs[:,1], np.array(kt))
+#             # except: 
+#             #     pass
+#             kt = array(kt)
+#             npttri = np.arange(0,np.max(kt))
+#             # search for each triangle, which is connecte
+#             conecttri = [np.where(kt == i) for i in npttri]
+
+#             cpolys = []
+#             nbpolys = len(polys)
+#             while polys !=[]:
+#                 p = polys.pop(0)
+#                 for ip2,p2 in enumerate(polys):
+#                     conv=False
+#                     inter = p.intersection(p2)
+#                     # if 2 triangles have a common segment
+#                     pold = p
+#                     if isinstance(inter,sh.LineString):
+                        
+#                         p = p + p2
+#                         if p.isconvex():
+#                             polys.pop(ip2)
+#                             polys.insert(0,p)
+#                             conv=True
+#                             break
+#                         elif len(cpolys) != 0:
+#                             if pold != cpolys[-1]:
+#                                 cpolys.append(pold)
+#                                 p = pold
+#                         else : 
+#                             cpolys.append(pold)
+#                             p = pold
+
+#                 # if (ip2 >= len(polys)):# and (conv):
+#                 if conv :
+#                     cpolys.append(p)
+#                 else:
+#                     cpolys.append(pold)
+#                 if len(polys) == 0:
+#                     cpolys.append(p)
+#                 # polyplot(polys)
+#                 # import ipdb
+#                 # ipdb.set_trace()
+
+# polyplot(cpolys)
+
+
+
+
+
+
+
+
+
+
+###################################################
+#################################################
+####################################################
+###################################################
+#################################################
+####################################################
+###################################################
+#################################################
+####################################################
 
 
             # for n in range(nbpolys):
