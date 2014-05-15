@@ -122,10 +122,12 @@ for n in L.Gt.nodes():
             if len(ucs) >2:
                 trid=Delaunay(pucs)
                 tri =trid.simplices
+                aucs = np.arange(len(ucs))
                 # filter tri in the cycle
                 kt = []
                 pkt = []
                 polys = []
+                naw = []
                 for t in tri:
                     ts = geu.Polygon(pucs[t])
                     #check if inside the original polygon
@@ -134,6 +136,19 @@ for n in L.Gt.nodes():
                     ats = ts.area
                     if U.area > (1*ats/100):
                         #pkt.append(pucs[t])
+                        #if 2 convex nodes are directly following in the list 
+                        # of all convex nodes (ucs) they are already connected
+                        # otherwise, an airwall has to be create.
+                        # 
+                        ucs[t]
+                        daucs = np.diff(aucs[t])
+                        # search where an airwall is required
+                        # ncp : not connected points
+                        ncp = np.where(daucs != 1)[0]
+                        for i in ncp:
+                            # keep trace of created airwalls, because some 
+                            # of them will be destroyed in step 3
+                            naw.append(L.add_segment(ucs[t][i],ucs[t][i+1],name='AIR'))
                         kt.append(t) 
                         polys.append(ts)
             # polyplot(polys)
@@ -180,11 +195,17 @@ for n in L.Gt.nodes():
                     cpolys.append(p)
             ####
             #### 4. ensure the correct vnode numerotaion of the polygons
+            #### and remove unecessary airwalls
             ncpol = []
+            vnodes=[]
             for p in cpolys:
                 ptmp = geu.Polygon(L.Gt.node[n]['polyg'].intersection(p))
                 ptmp.setvnodes(L)
                 ncpol.append(ptmp)
+                vnodes.extend(ptmp.vnodes)
+            # air wall to be deleted
+            daw = filter(lambda x: x not in vnodes,naw)
+            [L.del_segment(d) for d in daw]
 
 polyplot(ncpol)
 
