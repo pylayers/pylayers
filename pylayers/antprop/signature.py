@@ -842,7 +842,7 @@ class Signatures(dict):
         target : tuple
             interaction (node of Gi)
         cutoff : int
-        bt : bool 
+        bt : bool
             allow backtrace (visite nodes already visited)
 
         Notes
@@ -850,7 +850,7 @@ class Signatures(dict):
 
         adapted from all_simple_path of networkx
 
-        1- Determine all nodes connected to Gi 
+        1- Determine all nodes connected to Gi
 
         """
         #print "source :",source
@@ -2728,24 +2728,6 @@ class Signatures(dict):
                 else:
                     rays.los = False
 
-        #if ((len(lc) == 1) & (dtxrx!=0)):
-        #    rays.los=True
-        # if source and target are separated by air walls
-        #else :
-        #    for ic in xrange(len(lc)-1) :
-                # if lc[i] connected to a air wall
-#                if lc[ic] in self.L.dca.keys():
-#                    # if lc[i] and lc[i+1] are connected by a airwall
-#                    if lc[ic+1] in self.L.dca[lc[ic]]:
-#                        rays.los = True
-#                    else :
-#                        ray.los = False
-#                        break
-#                else :
-#                    rays.los = False
-#                    break
-
-        #
         # k : Loop on interaction group
         #   l : loop on signature
         # --->
@@ -2761,23 +2743,30 @@ class Signatures(dict):
                 nse = sig[0,-1]
                 validtx = True
                 validrx = True
+
                 if (ns0<0):
                     pD = self.L.Gs.pos[ns0]
                     TxD = shg.LineString(((ptx[0], ptx[1]), (pD[0], pD[1])))
                     seg = polyctx.intersection(TxD)
                     validtx = seg.almost_equals(TxD,decimal=4)
+                    if not validtx:
+                        print ns0
 
                 if (nse<0):
                     pD = self.L.Gs.pos[nse]
                     DRx = shg.LineString(((pD[0], pD[1]), (prx[0], prx[1])))
                     validrx = polyctx.contains(DRx)
+                    if not validrx:
+                        print nse
 
                 if validtx & validrx:
                     #    print sig
                     #    print pD
-                    # create signature
-                    s   = Signature(sig)
+                    s  = Signature(sig)
+                    #
+                    # Transform signature into a ray
                     # --> sig2ray
+
                     isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
 
                     if isray:
@@ -2829,31 +2818,22 @@ class Signature(object):
                 l = eval(l)
             except:
                 pass
-            if type(l)==tuple:
-                if len(l)==2:
-                    return(1)
-                if len(l)==3:
-                    return(2)
-            else:
-                return(3)
+            return(len(l))
 
         def seginter(l):
             try:
                 l = eval(l)
             except:
                 pass
-            if type(l)==tuple:
-                return l[0]
-            else:
-                return(l)
+            return l[0]
 
         if type(sig)==np.ndarray:
             self.seq = sig[0, :]
             self.typ = sig[1, :]
 
         if type(sig)==list:
-            self.seq = map(seginter,sig) 
-            self.typ = map(typinter,sig) 
+            self.seq = map(seginter,sig)
+            self.typ = map(typinter,sig)
 
     def __repr__(self):
         #s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
@@ -3277,7 +3257,9 @@ class Signature(object):
         pages={2307-2311},}
 
         """
-
+        #import ipdb
+        #pdb.set_trace()
+        #import pdb
         pa = self.pa
         pb = self.pb
         typ = self.typ
@@ -3294,10 +3276,10 @@ class Signature(object):
         epsilon = 1e-2
         # while (((beta <= 1) & (beta >= 0)) & (k < N)):
         while (((beta <= 1-epsilon) & (beta >= epsilon)) & (k < N)):
-            if int(typ[k]) != 1: # not a diffraction
-                # Formula (30) of paper Eucap 2012
-                l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0
-                                ))
+            #if int(typ[k]) != 1: # not a diffraction (surprisingly it works)
+            if int(typ[N-(k+1)]) != 1: # not a diffraction
+                # Formula (25) of paper Eucap 2013
+                l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0))
                 l1 = np.hstack((I2, z0,
                                 pa[:, N - (k + 1)].reshape(2, 1) -
                                 pb[:, N - (k + 1)].reshape(2, 1)
@@ -3316,8 +3298,11 @@ class Signature(object):
                 Y = np.hstack((Y, pkm1))
             else:
                 alpha = 0.5 # dummy necessary for the test below
-                Y = np.hstack((Y, pa[:, k].reshape((2, 1))))
-                pkm1 = pa[:, k].reshape((2, 1))
+                # fixing #210
+                #Y = np.hstack((Y, pa[:, k].reshape((2, 1))))
+                #pkm1 = pa[:, k].reshape((2, 1))
+                Y = np.hstack((Y, pa[:, N-(k+1)].reshape((2, 1))))
+                pkm1 = pa[:, N-(k+1)].reshape((2, 1))
             k = k + 1
         if ((k == N) & ((beta > 0) & (beta < 1)) & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
