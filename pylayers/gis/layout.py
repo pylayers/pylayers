@@ -4758,6 +4758,12 @@ class Layout(object):
             self.buildGt()
 
             self.lbltg.extend('t')
+        
+        if 'c' in graph:
+            if verbose:
+                print "Gc"
+            self.buildGt()
+
 
         if 'r' in graph:
             if verbose:
@@ -6766,11 +6772,9 @@ class Layout(object):
         # list of connected subgraphs of Gt
         lGa = nx.connected_component_subgraphs(Ga)
         connected = []
-
         for Ga in lGa:
             # root node of subgraph
             r = Ga.nodes()[0]
-            print r
             cnctd = [r]
             # depth first search successors tree rooted on r
             dn = nx.dfs_successors(Ga,r)
@@ -6779,13 +6783,27 @@ class Layout(object):
             # Probably it exists a simpler manner to obtain
             # the sequence of connected nodes
             #
-            for i in range(Nlevel):
-                succ = dn.pop(r)
-                cnctd = cnctd + succ
-                for k in dn:
-                    if k in succ:
-                        r = k
+            succ =[] 
+            while dn.keys()<>[]:
+                succ = succ+ dn.pop(r)
+                n = succ.pop()
+                if n in dn.keys():
+                    r = n
+                    cnctd.append(r)
+                else:
+                    cnctd.append(n)
+                    try: 
+                        r = succ.pop()
+                        cnctd.append(r)
+                    except:
                         break
+            #for i in range(Nlevel):
+            #    succ = dn.pop(r)
+            #    cnctd = cnctd + succ
+            #    for k in dn:
+            #        if k in succ:
+            #            r = k
+            #            break
             connected.append(cnctd)
         #
         # Merge all air-connected cycles
@@ -6867,7 +6885,7 @@ class Layout(object):
         segments
 
         """
-        self.Gr = copy.deepcopy(self.Gt)
+        self.Gr = copy.deepcopy(self.Gc)
         del(self.Gr.node[0])
         #
         #  Connected components might not be all contiguous
