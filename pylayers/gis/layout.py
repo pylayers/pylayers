@@ -4901,7 +4901,7 @@ class Layout(object):
                     if k not in self.Gs.node[inode]['ncycles']:
                         self.Gs.node[inode]['ncycles'].append(k)
                         if len(self.Gs.node[inode]['ncycles'])>2:
-                            print n,self.Gs.node[inode]['ncycles']
+                            print inode,self.Gs.node[inode]['ncycles']
                             logging.warning('dumpr : a segment cannot relate more than 2 cycles')
         # if ncycles is a list with only one element the other cycle is the
         # outside region (cycle -1)
@@ -6127,7 +6127,8 @@ class Layout(object):
                     'mode':'nocycle',
                     'alphacy':0.8,
                     'colorcy':'#abcdef',
-                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD']
+                    'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'axis':False
                     }
 
         for key, value in defaults.items():
@@ -6271,12 +6272,9 @@ class Layout(object):
                     li.append(inter)
                     kwargs['edgelist'] = eval(inter)
                     kwargs['edge_color'] = tabcol.pop()
-                    kwargs['node_size'] = 200
                     kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
             legtxt = ['Gs'] + li
-            ax.legend(legtxt)
-            kwargs['fig']=fig
-            kwargs['ax']=ax
+            #plt.legend(legtxt)
         #
         # w :  waypoint graph
         #
@@ -6293,7 +6291,7 @@ class Layout(object):
             kwargs['fig']=fig
             kwargs['ax']=ax
 
-        args = {'fig':fig,'ax':ax,'show':False}
+        #args = {'fig':kwargs['fig'],'ax':kwargs['ax'],'show':False}
 
         if len(kwargs['edgelist'])==0:
             if kwargs['mode']=='cycle':
@@ -6307,7 +6305,9 @@ class Layout(object):
                     args['fig']=fig
                     args['ax']=ax
 
-        ax.axis('scaled')
+        kwargs['ax'].axis('scaled')
+        if not kwargs['axis']:
+            kwargs['ax'].axis('off')
 
         #
         # Display doors and windows subsegments with a slight offset
@@ -6323,14 +6323,14 @@ class Layout(object):
                 y = np.array([self.Gs.pos[np1][1], self.Gs.pos[np2][1]])
                 xoff = (1+ns[1])*0.05*norm[0]
                 yoff = (1+ns[1])*0.05*norm[1]
-                ax.plot(x+xoff, y+yoff, linewidth=2, color=color)
+                kwargs['ax'].plot(x+xoff, y+yoff, linewidth=2, color=color)
 
 
 
         if kwargs['show']:
             plt.show()
 
-        return fig,ax
+        return kwargs['fig'],kwargs['ax']
 
     def showGv(self, **kwargs):
         """ show graph Gv (visibility)
@@ -6868,6 +6868,7 @@ class Layout(object):
 
         """
         self.Gr = copy.deepcopy(self.Gt)
+        del(self.Gr.node[0])
         #
         #  Connected components might not be all contiguous
         #  this a problem because the concatenation of cycles
@@ -6893,16 +6894,17 @@ class Layout(object):
 
         # Destroy edges which do not share a door
         for e in self.Gr.edges():
-            cy1 = self.Gr.node[e[0]]['cycle']
-            cy2 = self.Gr.node[e[1]]['cycle']
-            f,b = cy1.intersect(cy2)
             keep = False
-            for s in b:
-                if s>0:
-                    if self.Gs.node[s]['transition']:
-                        keep = True
-                        self.Gr.node[e[0]]['transition'].append(s)
-                        self.Gr.node[e[1]]['transition'].append(s)
+            if (e[0]!=0) & (e[1]!=0):
+                cy1 = self.Gr.node[e[0]]['cycle']
+                cy2 = self.Gr.node[e[1]]['cycle']
+                f,b = cy1.intersect(cy2)
+                for s in b:
+                    if s>0:
+                        if self.Gs.node[s]['transition']:
+                            keep = True
+                            self.Gr.node[e[0]]['transition'].append(s)
+                            self.Gr.node[e[1]]['transition'].append(s)
 
             if not keep:
                 self.Gr.remove_edge(*e)
