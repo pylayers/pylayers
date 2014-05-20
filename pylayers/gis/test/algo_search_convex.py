@@ -48,7 +48,7 @@ from pylayers.gis.layout import *
 from itertools import combinations
 from scipy.spatial import Delaunay
 import shapely.geometry as sh
-L = Layout('TA-Office_2.ini')
+L = Layout('TA-Office.ini')
 #L.dumpr()
 L.build('t')
 fig,ax=L.showG('s',labels=True)
@@ -203,7 +203,8 @@ for n in L.Gt.nodes():
                 ptmp.setvnodes(L)
                 ncpol.append(ptmp)
                 vnodes.extend(ptmp.vnodes)
-            # air wall to be deleted
+            # air walls to be deleted (because origin Delaunay triangle
+            # has been merged )
             daw = filter(lambda x: x not in vnodes,naw)
             [L.del_segment(d) for d in daw]
 
