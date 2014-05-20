@@ -44,15 +44,6 @@
 
 
 
-from pylayers.gis.layout import *
-from itertools import combinations
-from scipy.spatial import Delaunay
-import shapely.geometry as sh
-L = Layout('TA-Office.ini')
-#L.dumpr()
-L.build('t')
-fig,ax=L.showG('s',labels=True)
-
 # for n in L.Gt.nodes():
 #     if n > 0:
 #         no = L.Gt.node[n]['cycle'].cycle
@@ -85,6 +76,15 @@ fig,ax=L.showG('s',labels=True)
 #                 plt.triplot(pucs[:,0],pucs[:,1], np.array(kt))
 #             except: 
 #                 pass
+
+from pylayers.gis.layout import *
+from itertools import combinations
+from scipy.spatial import Delaunay
+import shapely.geometry as sh
+L = Layout('scattering2.ini')
+#L.dumpr()
+L.build('t')
+fig,ax=L.showG('s',labels=True)
         
 def polyplot(poly):
     fig,ax=L.showG('s')
@@ -94,6 +94,7 @@ def polyplot(poly):
 
 
 for n in L.Gt.nodes():
+    # if indoor cycles
     if n > 0:
 
         ####
@@ -207,6 +208,11 @@ for n in L.Gt.nodes():
             # has been merged )
             daw = filter(lambda x: x not in vnodes,naw)
             [L.del_segment(d) for d in daw]
+    # manage outdoor cycle
+    else : 
+        import ipdb
+        ipdb.set_trace()
+
 
 polyplot(ncpol)
 
