@@ -4585,9 +4585,8 @@ class Layout(object):
             self.buildGr()
             self.lbltg.extend('r')
         if 'w' in graph and len(self.Gr.nodes())>1:
-            pass
-            #self.buildGw()
-            #self.lbltg.extend('w')
+            self.buildGw()
+            self.lbltg.extend('w')
         #if 'c' in graph:
         #    self.buildGc()
         if 'v' in graph:
