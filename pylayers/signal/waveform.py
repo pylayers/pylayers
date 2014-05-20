@@ -43,7 +43,7 @@ class Waveform(dict):
         Parameters
         ----------
 
-        'typ' : string 
+        'typ' : string
             'generic',
          'bandGHz': float
             0.499
@@ -51,13 +51,13 @@ class Waveform(dict):
             4.493
          'fsGHz': float
             100,
-         'threshdB': 
+         'threshdB':
               3,
          'twns': float
             30
 
         typ  :  'generic','W1compensate','W1offset'
-           
+
         """
         defaults = {'typ':'generic',
                 'bandGHz': 0.499,
@@ -65,7 +65,7 @@ class Waveform(dict):
                 'feGHz': 100,
                 'threshdB': 3,
                 'twns': 30}
-        
+
         for key, value in defaults.items():
             if key not in kwargs:
                 self[key] = value
@@ -74,10 +74,11 @@ class Waveform(dict):
         self.eval()
 
     def eval(self):
-        """ evaluate waveform
+        u""" evaluate waveform
 
-            The lambda/4*pi factor which is necessary to get the proper budget 
-            link ( from the Friis formula) is introduced in this function.
+        The :math:`\lambda/4*\pi` factor which is necessary to get the proper budget
+        link ( from the Friis formula) is introduced in this function.
+
         """
 
         if self['typ']  == 'generic':
@@ -110,7 +111,7 @@ class Waveform(dict):
         >>> from pylayers.signal.waveform import *
         >>> w = Waveform(typ='generic',bandGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
         >>> w.show()
-        >>> plt.show()         
+        >>> plt.show()
 
 
         """
@@ -127,7 +128,7 @@ class Waveform(dict):
         ----------
 
         Tpns : float
-        
+
         """
         plt.subplot(211)
         self.st.plot()
@@ -140,7 +141,7 @@ class Waveform(dict):
         """    Create an Energy normalized Gaussian impulse (Usignal)
 
         ip_generic(self,parameters)
-        
+
 
         """
         Tw     = self['twns']
@@ -173,7 +174,7 @@ class Waveform(dict):
 
         """
 
-        M = mesuwb.UWBMesure(1,h=1)
+        M = mesuwb.UWBMeasure(1,h=1)
         w = bs.TUsignal()
 
         ts = M.RAW_DATA.timetx[0]
@@ -222,7 +223,7 @@ class Waveform(dict):
         >>> wav.show()
 
         """
-        M = mesuwb.UWBMesure(1,1)
+        M = mesuwb.UWBMeasure(1,1)
         w = bs.TUsignal()
 
         ts = M.RAW_DATA.timetx[0]

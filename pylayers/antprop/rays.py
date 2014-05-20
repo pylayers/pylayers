@@ -104,7 +104,7 @@ class Rays(dict):
     the height from floor to ceil, and the number N of
     multiple reflections to take into account.
 
-    Once the 3d rays have been calculated, the 
+    Once the 3d rays have been calculated, the
     the local basis are evaluated along those rays. This is
     done through the **locbas** method
 
@@ -120,12 +120,12 @@ class Rays(dict):
         self.pRx = pRx
         self.nray = 0
         self.raypt = 0
-        self.los=False
-        self.is3D=False
-        self.isbased=False
+        self.los = False
+        self.is3D = False
+        self.isbased = False
         self.filled = False
         self.evaluated = False
-       
+
     def __len__(self):
         Nray = 0
         for k in self.keys():
@@ -202,28 +202,31 @@ class Rays(dict):
                         pass
                     elif kk == 'nbrays':
                         f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
-                    else:    
+                    else:
                         f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
             f.close()
         except:
             f.close()
             raise NameError('Rays: issue when writting h5py file')
-        
-        
+
+
 
     def loadh5(self,filename=[],idx=0):
-        """ save rays 
-            pyh5 format
-        """ 
+        """ load rays hdf5 format
+
+        Parameters
+        ----------
+
+        """
         if filename == []:
-            filenameh5 = self.filename+'_'+str(idx)+'.h5' 
+            filenameh5 = self.filename+'_'+str(idx)+'.h5'
         else :
             filenameh5 = filename
 
         filename=pyu.getlong(filenameh5,pstruc['DIRR3D'])
 
-        
-        # try/except to avoid loosing the h5 file if 
+
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filename,'r')
@@ -240,10 +243,10 @@ class Rays(dict):
 
             f.close()
             raise NameError('Rays: issue when reading h5py file')
-            
+
         # fill if save was filled
 
-        # temporary solution in order to avoir 
+        # temporary solution in order to avoir
         # creating save for Interactions classes
         if self.filled:
             Lname = self.filename.split('_')[0] + '.ini'
@@ -261,9 +264,9 @@ class Rays(dict):
 
         filenameh5 : string
             filename of the h5py file (from Links Class)
-        grpname : string 
+        grpname : string
             groupname of the h5py file (from Links Class)
-        
+
         See Also
         --------
 
@@ -272,12 +275,12 @@ class Rays(dict):
         """
 
         filenameh5=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
-            
+
             fh5=h5py.File(filenameh5,'a')
-            if not grpname in fh5['ray'].keys(): 
+            if not grpname in fh5['ray'].keys():
                 fh5['ray'].create_group(grpname)
             else :
                 print 'ray/'+grpname +'already exists in '+filenameh5
@@ -297,7 +300,7 @@ class Rays(dict):
                         pass
                     elif kk == 'nbrays':
                         f[str(k)].create_dataset(kk,shape=(1,),data=np.array([self[k][kk]]))
-                    else:    
+                    else:
                         f[str(k)].create_dataset(kk,shape=np.shape(self[k][kk]),data=self[k][kk])
             fh5.close()
         except:
@@ -312,9 +315,9 @@ class Rays(dict):
 
         filenameh5 : string
             filename of the h5py file (from Links Class)
-        grpname : string 
+        grpname : string
             groupname of the h5py file (from Links Class)
-        
+
 
         See Also
         --------
@@ -322,10 +325,10 @@ class Rays(dict):
         pylayers.simul.links
 
         """
-                
+
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             fh5=h5py.File(filename,'r')
@@ -343,10 +346,10 @@ class Rays(dict):
 
             fh5.close()
             raise NameError('Rays: issue when reading h5py file')
-            
+
         # fill if save was filled
 
-        # temporary solution in order to avoir 
+        # temporary solution in order to avoid
         # creating save for Interactions classes
 
         if self.filled:
@@ -354,7 +357,7 @@ class Rays(dict):
             self.fillinter(L)
 
         if self.evaluated:
-            return self.eval(self.fGHz) 
+            return self.eval(self.fGHz)
 
 
     def reciprocal(self):
@@ -366,6 +369,7 @@ class Rays(dict):
         r = Rays(self.pRx,self.pTx)
         r.is3D = self.is3D
         r.nray = self.nray
+        r.origin_sig_name = self.origin_sig_name
         r.nb_origin_sig = self.nb_origin_sig
 
         for k in self:
@@ -452,31 +456,49 @@ class Rays(dict):
         r[ni]['nrays']=1
         return(r)
 
-    def show(self,L,**kwargs):
+    def show(self,**kwargs):
         """  plot 2D rays within the simulated environment
 
         Parameters
         ----------
 
-        L : Layout
         i : list or -1 (default = all groups)
             list of interaction group numbers
         r : list or -1 (default = all rays)
             list of indices of ray in interaction group
-        graph : type of graph to be displayed
-
+        graph : string t
+            type of graph to be displayed
+            's','r','t',..
+        fig : figure
+        ax  : axis
+        L   : Layout
+        alpharay : float
+            1
+        widthray : float
+            0.1
+        colray : string
+            'black'
+        ms : int
+            marker size :  5
+        layout : boolean
+            True
+        points : boolean
+            True
 
         """
         defaults = {'i':-1,
                    'r':-1,
                    'fig':[],
                    'ax':[],
+                    'L':[],
                    'graph':'s',
                     'color':'black',
                     'alpharay':1,
                     'widthray':0.1,
                     'colray':'black',
-                    'ms':5
+                    'ms':5,
+                    'layout':True,
+                    'points':True
                    }
         for key, value in defaults.items():
             if key not in kwargs:
@@ -484,19 +506,27 @@ class Rays(dict):
 
         #if kwargs['fig'] ==[]:
         #    fig = plt.figure()
-        #if kwargs['ax'] ==[]:   
+        #if kwargs['ax'] ==[]:
         #    ax = fig.add_subplot(111)
-
-        fig,ax = L.showG(**kwargs)
-        ax.plot(self.pTx[0], self.pTx[1], 'or',ms=kwargs['ms'])
-        ax.plot(self.pRx[0], self.pRx[1], 'og',ms=kwargs['ms'])
+        if kwargs['layout'] ==True:
+            fig,ax = kwargs['L'].showG(**kwargs)
+        else:
+            fig = kwargs['fig']
+            ax = kwargs['ax']
+        #
+        # display Tx and Rx
+        #
+        if kwargs['points'] ==True:
+            ax.plot(self.pTx[0], self.pTx[1], 'or',ms=kwargs['ms'])
+            ax.plot(self.pRx[0], self.pRx[1], 'og',ms=kwargs['ms'])
         # i=-1 all rays
         # else block of interactions i
+
         if kwargs['i']==-1:
             lgrint = self.keys()
         else:
             lgrint = [kwargs['i']]
-           
+
 
         for i in lgrint:
             if kwargs['r']==-1:
@@ -515,7 +545,7 @@ class Rays(dict):
                 ax.axis('off')
                 if self.filled :
                     ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
-        return(fig,ax)      
+        return(fig,ax)
 
     def mirror(self, H=3, N=1):
         """ mirror
@@ -1012,13 +1042,14 @@ class Rays(dict):
         #   pt =  [tx,rx]
         #   sig = [0,0]
         #
-        if self.los :
-            r3d[0]={}
-            r3d[0]['sig']=np.zeros((2,2,1))
-            r3d[0]['sig2d']=np.zeros((2,2,1))
-            r3d[0]['pt']=np.zeros((3,2,1))
-            r3d[0]['pt'][:,0,:]=tx[:,np.newaxis]
-            r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
+        
+        if (self.los) & (np.sum(tx-rx,axis=0)<>0):
+            r3d[0] = {}
+            r3d[0]['sig'] = np.zeros((2,2,1))
+            r3d[0]['sig2d'] = np.zeros((2,2,1))
+            r3d[0]['pt'] = np.zeros((3,2,1))
+            r3d[0]['pt'][:,0,:] = tx[:,np.newaxis]
+            r3d[0]['pt'][:,1,:] = rx[:,np.newaxis]
 
         # r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint)
         # count total number of ray
@@ -1298,16 +1329,24 @@ class Rays(dict):
                 # nw : i x r
                 #
                 #
-                # to do fic the colinear bug
+                # to do fix the colinear bug
                 #
                 nw = np.sqrt(np.sum(w*w, axis=0))
                 if (nw.any()==0):
                     u = np.where(nw==0)
-                    uv = np.array(filter(lambda x : abs(vn[2,u])>0.99,u))
-                    uh = np.setdiff1d(u,uv)
-                    w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
-                    w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
-                    pdb.set_trace()
+                    # uv = np.array(filter(lambda x : abs(vn[2,x])>0.99,u))
+                    # # reshape information for the filter
+                    uu = np.array([u[0],u[1]]).T
+                    uv = np.array(filter(lambda x : abs(vn[2,x[:,0],x[:,1]])>0.99,[uu]))
+                    uh = np.setdiff1d(uu,uv)
+                    try:
+                        w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
+                    except:
+                        pass
+                    try:
+                        w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
+                    except:
+                        pass
                 #assert(nw.all()>0), pdb.set_trace()
                 wn = w/nw
                 # Handling channel reciprocity s_in --> -s_in
@@ -1402,7 +1441,7 @@ class Rays(dict):
 
                 ray2nbi = np.ones((nbray))
 
-               
+
                 try:
                     self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
                 except:
@@ -1454,11 +1493,16 @@ class Rays(dict):
 
         L      : Layout
         append : Boolean
-            if   True append new rays to existing structure
-            else True append new rays to existing structure
+            If True append new rays to existing structure
+
+
+        Returns
+        -------
+
+        Update self.I , self.B , self.I0
 
         """
-      
+
         # reinitilized ray pointer if not in append mode
         if not append:
             self.raypt = 0
@@ -1605,7 +1649,7 @@ class Rays(dict):
                 # first unitary matrix (2x2xr)
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1:
-                # dimension i and r are merged   
+                # dimension i and r are merged
                 b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
 
                 ## find used slab
@@ -1721,7 +1765,7 @@ class Rays(dict):
         fGHz : array
             frequency in GHz array
         ib : list of intercation block
-           
+
         """
 
         #print 'Rays evaluation'
@@ -1752,7 +1796,7 @@ class Rays(dict):
 
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
-        # loop on interaction blocks   
+        # loop on interaction blocks
         if ib==[]:
             ib=self.keys()
 

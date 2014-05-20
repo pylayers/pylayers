@@ -461,6 +461,19 @@ class Polygon(shg.Polygon):
             st = st + '('+str(p[0,k])+','+str(p[1,k])+')\n'
         return(st)
 
+
+    @property
+    def xy(self):
+        return self._xy
+
+    @xy.setter
+    def xy(self,xy):
+        self._xy = xy
+
+    @xy.getter
+    def xy(self):
+        return self._xy
+
     def ndarray(self):
         """ get a ndarray from a Polygon
 
@@ -551,13 +564,48 @@ class Polygon(shg.Polygon):
 
         ax.fill(x, y,
                 color = kwargs['color'],
-                alpha=kwargs['alpha'],
+                alpha=kwargs['alpha'], 
                 ec = kwargs['edgecolor'])
 
         if kwargs['show']:
             plt.show()
 
         return fig,ax
+
+    def coorddeter(self):
+        """ determine polygon coordinates
+        """
+
+        self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
+
+    def isconvex(self,tol = 1e-2):
+        """ Determine if a polygon is convex
+        
+        Parameters
+        ----------
+        tol : tolerence on aligned point
+        
+        Returns
+        -------
+         True if convex
+        
+        Notes
+        -----
+
+        the algorithm tests all triplet of point and L.determine 
+        if the third point is left to the 2 first.
+        a tolerance can be introduce in cases where the polygon is 
+        almost convex.
+
+        """
+        self.coorddeter()
+        p = self.xy[:,:-1]
+        a = p
+        b = np.roll(p,1,axis=1)
+        c = np.roll(p,2,axis=1)
+        return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
+                (np.sum(isleft(c,b,a,tol=tol)) == 0)
+
 
     def simplify(self):
         """ Simplify polygon - suppress adjacent colinear segments
@@ -941,11 +989,11 @@ class Polygon(shg.Polygon):
             ndnd, nded, eded = gru.edgetype(Gv)
 
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
-                                   edge_color='blue', linewidth=2)
+                                   edge_color='blue', width=2)
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
-                                   edge_color='red', linewidth=2)
+                                   edge_color='red', width=2)
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
-                                   edge_color='green', linewidth=2)
+                                   edge_color='green', width=2)
 
             #label = {}
             #for (u,v) in Gv.edges():
@@ -1028,13 +1076,13 @@ class Polygon(shg.Polygon):
 
         if kwargs['eded']:
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=eded,
-                                   edge_color='blue', linewidth=2)
+                                   edge_color='blue', width=2)
         if kwargs['ndnd']:
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=ndnd,
-                                   edge_color='red', linewidth=2)
+                                   edge_color='red', width=2)
         if kwargs['nded']:
             nx.draw_networkx_edges(Gv, Gv.pos, edgelist=nded,
-                                   edge_color='green', linewidth=2)
+                                   edge_color='green', width=2)
 
         return(fig, ax)
 
@@ -2511,7 +2559,7 @@ def isaligned(a,b,c):
     #print val
     return cond
 
-def isleft(a,b,c):
+def isleft(a,b,c,tol=0):
     """ Test point c is at left of the vector a-->b
 
 
@@ -2521,7 +2569,7 @@ def isleft(a,b,c):
     a : np.array (2xN)
     b : np.array (2xN)
     c : np.array (2xN)
-
+    tol : tolerance
     Returns
     -------
 
@@ -2556,7 +2604,7 @@ def isleft(a,b,c):
     pylayers.antprop.signature
 
     """
-    return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>0
+    return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>tol
 
 def isleftorequal(a,b,c):
     return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>=0

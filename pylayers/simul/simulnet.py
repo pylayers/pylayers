@@ -132,6 +132,7 @@ class Simul(SimulationRT): # Sympy 2
             self.verbose = False
         self.roomlist=[]
 
+        self.finish = False
         self.create()
 
     def __repr__(self):
@@ -323,7 +324,7 @@ class Simul(SimulationRT): # Sympy 2
             self.activate(self.save,self.save.run(),0.0)
 
     def create_show(self):
-        """ 
+        """
         """
 
         plt.ion()
@@ -370,21 +371,24 @@ class Simul(SimulationRT): # Sympy 2
     def runsimul(self):
         """ Run simulation
         """
-
-        seed(self.seed)
-        self.simulate(until=float(self.sim_opt['duration']),
-                      real_time=True,
-                      rel_speed=float(self.sim_opt['speedratio']))
-        self.the_world._boids={}
-
-
-        if str2bool(self.save_opt['savep']):
-            print 'Processing save results, please wait'
-            self.save.mat_export()
+        if not self.finish :
+            seed(self.seed)
+            self.simulate(until=float(self.sim_opt['duration']),
+                          real_time=True,
+                          rel_speed=float(self.sim_opt['speedratio']))
+            self.the_world._boids={}
 
 
-        if str2bool(self.save_opt['savepd']):
-            self.savepandas()
+            if str2bool(self.save_opt['savep']):
+                print 'Processing save results, please wait'
+                self.save.mat_export()
+
+
+            if str2bool(self.save_opt['savepd']):
+                self.savepandas()
+            self.finish = True
+        else :
+            raise NameError('Reinstantiate a new simul object to run again')
 
 if __name__ == '__main__':
 

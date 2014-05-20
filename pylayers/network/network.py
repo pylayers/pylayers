@@ -468,7 +468,7 @@ class Network(nx.MultiDiGraph):
         # self.add_nodes_from([(d.ID, ldic[ud]) for ud,d in enumerate(dev)])
         self.add_nodes_from([(d.ID, d.__dict__) for d in dev])
 
-        # create personnal netwrk
+        # create personnal network
         for ud, d in enumerate(dev):
             self.node[d.ID]['PN']= Network(owner=d.ID, PN=True)
             self.node[d.ID]['PN'].add_nodes_from([(d.ID,d.__dict__)])
@@ -1069,6 +1069,11 @@ class Network(nx.MultiDiGraph):
         T    : np.array  ( or a list of )
             node orientation (Nn x 3 x 3)
 
+        Todo
+        ----
+
+        update the orientation of the antenna in the ACS (for now only DCS is updated)
+
         """
 
         if (isinstance(T,np.ndarray)) or (isinstance(n,list) and isinstance(T,list) ):
@@ -1099,6 +1104,11 @@ class Network(nx.MultiDiGraph):
             node ID
         p    : np.array  ( or a list of )
             node position 
+
+        Todo
+        ----
+
+        update the position of the antenna in the ACS (for now only DCS is updated)
 
         """
 
@@ -1161,7 +1171,7 @@ class Network(nx.MultiDiGraph):
         Parameters
         ----------
 
-        wstd : specify a wstd to display node position. If None, all wstd are displayed    
+        wstd : specify a wstd to display node position. If None, all wstd are return
 
         Returns 
         -------

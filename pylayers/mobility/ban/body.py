@@ -147,10 +147,10 @@ class Body(object):
         if 'tmocap' in dir(self):
             st = st + 'Mocap Duration : ' + str(self.Tmocap)+'\n'
         if 'vmocap' in dir(self):
-            st = st + 'Mocap Speed : ' + str(self.vmocap)+'\n'
+            st = st + 'Mocap Speed : ' + "%2.3f" % self.vmocap+' m/s \n'
 
         st = st + '\n'
-        
+
         return(st)
 
 
@@ -731,9 +731,13 @@ class Body(object):
 
         Parameters
         ----------
-        iframe :
-        widthfactor :
-        topos : boolean
+
+
+        iframe : int
+            frame index (default 0 )
+        widthfactor : float
+            cylinder scaling factor (default 1.0)
+
         pattern : boolean
         ccs : boolean
         k : frame index
@@ -741,7 +745,6 @@ class Body(object):
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
-                    'topos':False,
                     'pattern':False,
                     'lccs':[],
                     'ccs':False,
@@ -773,7 +776,7 @@ class Body(object):
         kta = self.sl[:,0].astype(int)
         khe = self.sl[:,1].astype(int)
         cylrad = self.sl[:,2]
-        if kwargs['topos']:
+        if 'topos' in dir(self):
             pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
             phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         else:
@@ -894,7 +897,7 @@ class Body(object):
             kta = self.sl[k,0]
             khe = self.sl[k,1]
             cylrad = self.sl[k,2]
-            if kwargs['topos']:
+            if 'topos' in dir(self):
                 pta =  np.array([self.topos[ax1, kta], self.topos[ax2, kta]])[:,np.newaxis]
                 phe =  np.array([self.topos[ax1, khe], self.topos[ax2, khe]])[:,np.newaxis]
             else:
@@ -1177,6 +1180,7 @@ class Body(object):
         1st vector
         2nd
         """
+
 
         nc = self.ncyl
         #

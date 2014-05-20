@@ -412,13 +412,21 @@ class Bsignal(object):
 
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
-            >>> e = EnImpulse()
+            >>> e = EnImpulse(fe=100)
             >>> fig,ax = e.plot(typ=['v'])
+            >>> plt.title('original waveform')
             >>> e.save('impulse.mat')
             >>> del e
             >>> h = TUsignal()
             >>> h.load('impulse.mat')
             >>> fig,ax = h.plot(typ=['v'])
+            >>> plt.title('retrieved waveform')
+
+        See Also
+        --------
+
+        Bsignal.load
+
         """
 
         d = {}
@@ -434,10 +442,16 @@ class Bsignal(object):
 
         filename : string
 
+
+        See Also
+        --------
+
+        Bsignal.save
+
         """
         d = ios.loadmat(filename)
-        self.x = d['x'][:, 0]
-        self.y = d['y'][:, 0]
+        self.x = d['x'][0,:]
+        self.y = d['y']
 
     def setx(self, x):
         r""" setx : set x vector
@@ -627,6 +641,8 @@ class Bsignal(object):
             'auto' (default) ,'equal','scalar'
         dB : boolean
             False
+        function : string
+            {'imshow'|'pcolormesh'}
 
         Examples
         --------
@@ -641,6 +657,7 @@ class Bsignal(object):
         defaults = {'interpolation':'none',
                     'cmap':plt.cm.BrBG,
                     'aspect':'auto',
+                    'fontsize':20,
                     'typ':'l20',
                     'function':'imshow'}
 
@@ -679,13 +696,22 @@ class Bsignal(object):
                            aspect = kwargs['aspect'],
                            extent = (xn[0],xn[-1],0,yn.shape[0]),
                            interpolation=kwargs['interpolation'],
-                           cmap=kwargs['cmap'])
+                           cmap=kwargs['cmap'],
+                           )
+            ll = ax.get_xticklabels()+ax.get_yticklabels()
+            for l in ll:
+                l.set_fontsize(kwargs['fontsize'])
+
 
             if kwargs['function'] =='pcolormesh':
                 im = ax.pcolormesh(xn,np.arange(yn.shape[0]),yn)
 
             cb = fig.colorbar(im)
-            cb.set_label(ylabels)
+            cb.set_label(ylabels,size=kwargs['fontsize'])
+
+            for t in cb.ax.get_yticklabels():
+                t.set_fontsize(kwargs['fontsize'])
+
             plt.axis('auto')
             fig.tight_layout()
 
@@ -1239,10 +1265,10 @@ class Usignal(Bsignal):
     def eprfl(self,axis=1):
         """ Energy profile
         """
-        eprfl = np.real(np.sum(self.y * np.conj(self.y),axis=axis))
+        eprfl = np.real(np.sum(self.y * np.conj(self.y),axis=axis))*self.dx()
         return eprfl
 
-    def energy(self):
+    def energy(self,axis=0):
         """ calculate the energy of an Usignal
 
         Returns
@@ -1625,7 +1651,7 @@ class TUsignal(TBsignal, Usignal):
         Returns
         -------
 
-        FHsignal : Frequency signal with hermitian symmetry
+        FHsignal : Frequency signal with enforced Hermitian symetry
 
         """
         Np = len(self.x)
@@ -1671,6 +1697,16 @@ class TUsignal(TBsignal, Usignal):
     def ftshift(self):
         """ return the associated FUsignal
 
+        Returns
+        -------
+
+        H : FUsignal
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.TUsignal.fftsh
+        pylayers.signal.waveform.ip_generic
 
         """
         A  = self.fftsh()
@@ -1746,8 +1782,10 @@ class TUsignal(TBsignal, Usignal):
 
     def esd(self, mode='bilateral'):
         """  Calculate the energy spectral density of the U signal
+
         Parameters
         ----------
+
         mode : string
             'unilateral' | 'bilateral'
 
@@ -3152,7 +3190,7 @@ class FBsignal(Bsignal):
 
 class FUsignal(FBsignal, Usignal):
     """
-    FUsignal : Uniform signal in Frequency domain
+    FUsignal : Uniform signal in Frequency Domain
 
     Attributes
     ----------
@@ -3291,7 +3329,7 @@ class FUsignal(FBsignal, Usignal):
 
         """
         if not self.isFriis:
-            factor = 0.3/(4*np.pi*self.x)
+            factor = -1j*0.3/(4*np.pi*self.x)
             self.y = self.y*factor[np.newaxis,:]
             self.isFriis = True
 
@@ -3577,8 +3615,8 @@ class FUsignal(FBsignal, Usignal):
         V = FHsignal(fp, Up)
         return V
 
-    def symHz(self, Nz):
-        """ Force Hermitian symmetry with zero padding
+    def symHz(self,Nz,scale='extract'):
+        r""" Force Hermitian symmetry with zero padding
 
         Parameters
         ----------
@@ -3594,6 +3632,12 @@ class FUsignal(FBsignal, Usignal):
         --------
 
         The signal is rescaled in order to conserve energy
+
+        Let denotes the FUsignal as :math:`mathcal{X}_d`
+        The Fourier matrix is :math:`\left[ \matrix{\mathbb{1}\\
+                                                    \mathbb{W}_d\\
+                                                    \mathbb{W}_u}\right]`
+
 
         See Also
         --------
@@ -3617,7 +3661,7 @@ class FUsignal(FBsignal, Usignal):
         """
         f = self.x
         df = self.dx()
-        U = self.y
+        U = self.y[:]
         N = len(f)
         Nl = np.int(np.ceil(f[0] / df))
 
@@ -3627,10 +3671,13 @@ class FUsignal(FBsignal, Usignal):
         #
         nline = np.shape(U)[0]
         if ndim > 1:
-            zl = np.zeros([nline, Nl])
+            zl   = np.zeros([nline, Nl])
+            zlm1 = np.zeros([nline, Nl-1])
         else:
             zl = np.zeros(Nl)
+            zlm1 = np.zeros(Nl-1)
 
+        #pdb.set_trace()
         if  Nz > 0:
             if ndim > 1:
                 zh = np.zeros([nline, Nz])
@@ -3646,15 +3693,30 @@ class FUsignal(FBsignal, Usignal):
         # fl [ 0 , (Nl-1) *df ]
         # fh [ f[-1]+df , f[-1] + Nz *df ]
         #
-        fl = np.linspace(0, (Nl - 1) * df, Nl)
+        fl = np.linspace(0, (Nl-1) * df, Nl)
         fh = np.linspace(f[-1] + df, f[-1] + Nz * df, Nz)
         fz = np.concatenate((f, fh), 0)
-        Up = np.concatenate((zl, UZ, UZF, zl), 1)
-        fp = np.concatenate((fl, fz, fz + fz[-1], fl + 2 * fz[-1]), 0)
+        #Up = np.concatenate((zl, UZ, UZF, zl), 1)
+        #fp = np.concatenate((fl, fz, fz + fz[-1], fl + 2 * fz[-1]), 0)
+        Up = np.concatenate((zl, UZ, UZF,zlm1), 1)
+        fp = np.concatenate((fl, fz, fz + fz[-1], fl[0:-1] + 2 * fz[-1]), 0)
 
         Nfp = len(fp)
-        scale = ((Nfp - 1) / (1.0 * N)) / 2.0
+        #if scale == 'extract':
+        #    scale = ((Nfp - 1) / (1.0 * N)) / 2.0
+        #if scale == 'cir':
+        #    scale = ((Nfp - 1) / (1.0 * N)) 
+        if scale=='extract':
+            scale = ((Nfp-1)/(4*N))
+            #scale = Nfp/(N+1)
+        if scale=='cir':
+            Df = df*Nfp
+            #scale = ((Nfp-1)/(2*N))/Df
+            scale = ((Nfp-1)/(2*N))/Df
 
+        #self.hermitian=True
+        #self.x = fp
+        #self.y = Up*scale
         V = FHsignal(fp, Up * scale)
 
         return V
@@ -3730,16 +3792,18 @@ class FUsignal(FBsignal, Usignal):
         Notes
         -----
 
+        .. math::
+            x = \textrm{linspace}(0,\frac{1}{\delta f},N)
 
         .. math::
-            x = \trextrm{linspace}(0,\frac{1}{\delta f},N)
+            y = [0,\mathbb{X}_u^T]
 
         """
         if Npt == -1:
             Npt = len(self.x)
 
         Y = self.y
-        y = ifft(Y, Npt)
+        y = fft.ifft(Y, Npt)
         df = self.dx()
         x = np.linspace(0, 1 / df, Npt)
         tc = TUsignal(x, y)
@@ -3778,15 +3842,13 @@ class FUsignal(FBsignal, Usignal):
 
         FHsignal.ifft, FUsignal.symH, FUsignal.symHz
 
-
-
-
         """
         # enforce Hermitian Symetry
         if (Nz == -1):
             UH = self.symH(1)
         else:
-            UH = self.symHz(Nz)
+            #UH = self.symHz(Nz,scale='cir')
+            UH = self.symHz(Nz,scale='extract')
         # Back in time
         # UH is an FHsignal
         # uh is a TUsignal
@@ -3805,7 +3867,8 @@ class FUsignal(FBsignal, Usignal):
         if (Nz == -1):
             UH = self.symH(1)
         else:
-            UH = self.symHz(Nz)
+            #UH = self.symHz(Nz,scale='cir')
+            UH = self.symHz(Nz,scale='extract')
 
         uh = UH.ifft(ffts=0)
         #uh.y=fliplr(fftshift(fliplr(uh.y)))
@@ -3960,7 +4023,6 @@ class FUDsignal(FUsignal):
         super(FUDsignal,self).__init__(x,y)
         self.taud = taud
         self.taue = np.zeros(len(taud))
-        self.tau  = taud
 
     def __repr__(self):
         s = FUsignal.__repr__(self)
@@ -4017,7 +4079,37 @@ class FUDsignal(FUsignal):
         self.y = self.y * E
         self.taue = -slope / (2 * np.pi)
         # update total delay
-        self.tau = self.tau+self.taue
+        #self.tau = self.tau+self.taue
+
+    def ifft(self):
+        """ inverse Fourier Transform
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.link import *
+        >>> L = DLink(verbose=False)
+        >>> aktk = L.eval()
+        >>> L.H.cut()
+        >>> T1 = L.H.totime()
+        >>> f,a = T1.plot(typ='v')
+        >>> L.H.minphas()
+        >>> T2 = L.H.totime()
+        >>> f,a = T2.plot(typ='v')
+
+        See Also
+        --------
+
+        FUsignal.ift
+
+
+        """
+        y = fft.ifft(self.y)
+        T = 1/(self.x[1]-self.x[0])
+        x = np.linspace(0,T,len(self.x))
+        h = TUDsignal(x,y,self.taud,self.taue)
+        return(h)
+
 
     def totime(self, Nz=1, ffts=0):
         """ transform to TUDsignal
@@ -4052,8 +4144,9 @@ class FUDsignal(FUsignal):
         """
         Nray = len(self.taud)
         s = self.ift(Nz, ffts)
-        h = TUDsignal(s.x, s.y, self.taud,self.taue)
+        h = TUDsignal(s.x, fft.fftshift(s.y), self.taud,self.taue)
         return(h)
+
 
     def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
         """ time pasting
@@ -4086,7 +4179,7 @@ class FUDsignal(FUsignal):
 
 
         """
-        tau = self.tau
+        tau = self.taud+self.taue
         Nray = len(tau)
         s = self.ift(Nz, ffts)
         x = s.x
@@ -4115,14 +4208,21 @@ class FUDsignal(FUsignal):
         ffts : fftshift indicator
             0  no fftshift
             1  apply fftshift
+
         Returns
         -------
 
         r : TUsignal
 
 
+        See Also
+        --------
+
+        pylayers.signal.bsignal.
+
+
         """
-        tau = self.taud
+        tau = self.taud+self.taue
         self.s = self.ift(Nz, ffts)
         x = self.s.x
         r = TUsignal(x, np.zeros(len(x)))
@@ -4141,6 +4241,7 @@ class FUDsignal(FUsignal):
 
         Parameters
         ----------
+
         Nz  : number of zeros for zero padding
         k   : starting index
         ffts = 0  no fftshift
@@ -4150,7 +4251,7 @@ class FUDsignal(FUsignal):
         -------
         r : TUsignal
         """
-        tau = self.taud
+        tau = self.taud + self.taue
         s = self.ift(Nz, ffts)
         x = s.x
         r = TUsignal(x, np.zeros(len(x)))
@@ -4195,11 +4296,11 @@ class FUDsignal(FUsignal):
             ax  = fig.add_subplot(111, projection = '3d')
 
         for k,f in enumerate(self.x):
-            for i,j in zip(self.taud,abs(self.y[:,k])):
+            for i,j in zip(self.taud+self.taue,abs(self.y[:,k])):
                 ax.plot([i,i],[f,f],[0,j],color= 'k')
 
         ax.set_xlabel('Delay (ns)')
-        ax.set_xlim3d(0,max(self.taud))
+        ax.set_xlim3d(0,max(self.taud+self.taue))
 
         ax.set_ylabel('Frequency (fGHz)')
         ax.set_ylim3d(self.x[0],self.x[-1])
@@ -4234,7 +4335,7 @@ class FUDsignal(FUsignal):
         """
         fmin = self.x[0]
         fmax = self.x[-1]
-        tau = self.taud
+        tau = self.taud+self.taue
 
         f = np.arange(fmin, fmax, df)
 
@@ -4277,13 +4378,14 @@ class FUDAsignal(FUDsignal):
                  y = np.array([]),
                  taud = np.array([]),
                  dod = np.array([]),
-                 doa = np.array([]),
-                 domain='frequency'):
+
+                 doa = np.array([])
+                 ):
+
         super(FUDAsignal,self).__init__(x, y, taud)
         # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod
         self.doa  = doa
-        self.domain = domain
 
     def __repr__(self):
         s = FUDsignal.__repr__(self)
@@ -4292,16 +4394,20 @@ class FUDAsignal(FUDsignal):
     def cut(self,threshold=0.99):
         """ cut the signal at an Energy threshold level
 
+        Parameters
+        ----------
+
         threshold : float
             default 0.99
+
         """
         self.sort(typ='energy')
         E = self.eprfl()
-        cumE = np.cumsum(E)/sum(E)
+        cuE = np.cumsum(E)/sum(E)
         v = np.where(cumE<threshold)[0]
         self.taud = self.taud[v]
         self.taue = self.taue[v]
-        self.tau = self.tau[v]
+        #self.tau = self.tau[v]
         self.doa = self.doa[v]
         self.dod = self.dod[v]
         self.y = self.y[v,:]
@@ -4320,13 +4426,14 @@ class FUDAsignal(FUDsignal):
         """
 
         if typ == 'tau':
-            u = np.argsort(self.taud)
+            u = np.argsort(self.taud+self.taue)
 
         if typ == 'energy':
             E = self.eprfl()
             u = np.argsort(E)[::-1]
 
         self.taud = self.taud[u]
+        self.taue = self.taue[u]
         self.doa = self.doa[u]
         self.dod = self.dod[u]
         self.y = self.y[u,:]
@@ -4480,7 +4587,8 @@ class FUDAsignal(FUDsignal):
         # r x f x s x m x tap
         l  = np.arange(Ntap)[np.newaxis,np.newaxis,np.newaxis,np.newaxis,:]
         # l : r x f x s x m x tap
-        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
+        tau = self.taud[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]+ \
+              self.taue[:,np.newaxis,np.newaxis,np.newaxis,np.newaxis]
 
         ba  = betaa*Va*m/(0.3*WMHz*1e6)
         bb  = betab*Vb*m/(0.3*WMHz*1e6)

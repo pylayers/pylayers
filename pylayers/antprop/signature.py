@@ -265,7 +265,7 @@ def edgeout2(L,g):
                     #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                     #if ~bs.any():
                     #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
-                if len(i1)==2:    
+                if len(i1)==2:
                     Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
                     Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
                     bs = cn.belong_seg(Mpta,Mphe)
@@ -278,11 +278,11 @@ def edgeout2(L,g):
                     #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                     #    plt.show()
                     #    pdb.set_trace()
-                
-                isegkeep = isegments[bs]     
+
+                isegkeep = isegments[bs]
                 output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
-                # keep all segment above nstr1 and in Cone if T 
-                # keep all segment below nstr1 and in Cone if R 
+                # keep all segment above nstr1 and in Cone if T
+                # keep all segment below nstr1 and in Cone if R
 
         g.add_edge(str(i0),str(i1),output=output)
 
@@ -559,14 +559,14 @@ class Signatures(dict):
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         # if grpname == '':
-        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff) 
+        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff)
         try:
             # file management
             fh5=h5py.File(filename,'a')
-            if not grpname in fh5['sig'].keys(): 
+            if not grpname in fh5['sig'].keys():
                 fh5['sig'].create_group(grpname)
             else :
-                raise NameError('sig/'+grpname +'already exists in '+filenameh5)    
+                raise NameError('sig/'+grpname +'already exists in '+filenameh5)
             f=fh5['sig/'+grpname]
 
             # write data
@@ -651,13 +651,13 @@ class Signatures(dict):
         try:
             handle=open(filename, 'rb')
             sitmp = pickle.load(handle)
-        except: 
+        except:
             raise NameError(filename +' does not exist')
 
 
-        # to load a dictionary, use update 
+        # to load a dictionary, use update
         self.update(sitmp)
-        
+
 
         _fileL=pyu.getshort(filename).split('_')[0]+'.ini'
         self.L=layout.Layout(_fileL)
@@ -668,7 +668,20 @@ class Signatures(dict):
             self.L.dumpw()
 
     def sp(self,G, source, target, cutoff=None):
-        """ 
+        """
+
+        Parameters
+        ----------
+
+        G :
+        source :
+        target :
+        cutoff :
+
+        See Also
+        --------
+
+        pylayers.antprop.signature.run3
 
         """
         if cutoff < 1:
@@ -707,21 +720,21 @@ class Signatures(dict):
 
         Parameters
         ----------
-        
+
         L : Layout
         G : networkx Graph Gi
-        source : tuple 
-            interaction (node of Gi) 
-        target : tuple 
-            interaction (node of Gi) 
+        source : tuple
+            interaction (node of Gi)
+        target : tuple
+            interaction (node of Gi)
         cutoff : int
 
         Notes
         -----
 
-        adapted from all_simple_path of networkx 
+        adapted from all_simple_path of networkx
 
-        1- Determine all nodes connected to Gi 
+        1- Determine all nodes connected to Gi
 
         """
         #print "source :",source
@@ -891,24 +904,24 @@ class Signatures(dict):
         ----------
 
         G : networkx Graph Gi
-        di : dictionnary that map tuple to signature 
+        di : dictionnary that map tuple to signature
             see Layout.di
         dout : dictionnary
             ouput dictionnary
-        source : tuple 
-            interaction (node of Gi) 
-        target : tuple 
-            interaction (node of Gi) 
+        source : tuple
+            interaction (node of Gi)
+        target : tuple
+            interaction (node of Gi)
         cutoff : int
-        bt : bool 
+        bt : bool
             allow backtrace (visite nodes already visited)
 
         Notes
         -----
 
-        adapted from all_simple_path of networkx 
+        adapted from all_simple_path of networkx
 
-        1- Determine all nodes connected to Gi 
+        1- Determine all nodes connected to Gi
 
         """
         #print "source :",source
@@ -925,7 +938,7 @@ class Signatures(dict):
 
         # while the list of iterators is not void
         # import ipdb
-        # ipdb.set_trace()    
+        # ipdb.set_trace()
         while stack: #
             # children is the last iterator of stack
 
@@ -934,8 +947,8 @@ class Signatures(dict):
             child = next(children, None)
             # update number of useful segments
             # if there is airwall in visited
-            # 
-            
+            #
+
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
@@ -949,10 +962,10 @@ class Signatures(dict):
                     #print visited + [target]
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([di[p] for p in path])   
+                        dout[len(path)].append([di[p] for p in path])
                     except:
                         dout[len(path)]=[]
-                        dout[len(path)].append([di[p] for p in path])   
+                        dout[len(path)].append([di[p] for p in path])
                     #yield visited + [target] # output signature
 
                 elif (child not in visited) or (bt): # else visit other node
@@ -978,10 +991,11 @@ class Signatures(dict):
                 if child == target or target in children:
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([di[p] for p in path])   
+                        dout[len(path)].append([di[p] for p in path])
                     except:
+                        #print "non existing : ",len(path)
                         dout[len(path)]=[]
-                        dout[len(path)].append([di[p] for p in path])   
+                        dout[len(path)].append([di[p] for p in path])
                     #print visited + [target]
                     #yield visited + [target]
 
@@ -1000,23 +1014,23 @@ class Signatures(dict):
 
         Parameters
         ----------
-        
+
         L : Layout
         G : networkx Graph Gi
         dout : dictionnary
             ouput dictionnary
-        source : tuple 
-            interaction (node of Gi) 
-        target : tuple 
-            interaction (node of Gi) 
+        source : tuple
+            interaction (node of Gi)
+        target : tuple
+            interaction (node of Gi)
         cutoff : int
 
         Notes
         -----
 
-        adapted from all_simple_path of networkx 
+        adapted from all_simple_path of networkx
 
-        1- Determine all nodes connected to Gi 
+        1- Determine all nodes connected to Gi
 
         """
         #print "source :",source
@@ -1041,18 +1055,18 @@ class Signatures(dict):
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list length is less than cutoff 
-                if child == target:  # if child is the target point - YIELD A SIGNATURE 
+            elif len(visited) < cutoff: # if visited list length is less than cutoff
+                if child == target:  # if child is the target point - YIELD A SIGNATURE
                     #print visited + [target]
                     #yield visited + [target] # output signature
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([L.di[p] for p in path])   
+                        dout[len(path)].append([L.di[p] for p in path])
                     except:
                         dout[len(path)]=[]
-                        dout[len(path)].append([L.di[p] for p in path])   
-                else:    
-                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
+                        dout[len(path)].append([L.di[p] for p in path])
+                else:
+                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD
                     # getting signature until last point
                     diff  = np.where(np.array(visited)<0)[0]
                     if len(diff)==0:
@@ -1073,7 +1087,7 @@ class Signatures(dict):
                         cn.from2segs(segchild,segvm1)
                         typ,proba = cn.belong_seg(ta[:,:-2],he[:,:-2],proba=False)
 
-                        if (typ==0).any(): 
+                        if (typ==0).any():
                         # child no valid (do nothing)
                             visited.pop()
                         else:
@@ -1089,10 +1103,10 @@ class Signatures(dict):
                     #yield visited + [target]
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([L.di[p] for p in path])   
+                        dout[len(path)].append([L.di[p] for p in path])
                     except:
                         dout[len(path)]=[]
-                        dout[len(path)].append([L.di[p] for p in path])   
+                        dout[len(path)].append([L.di[p] for p in path])
                 stack.pop()
                 visited.pop()
         return dout
@@ -1265,8 +1279,34 @@ class Signatures(dict):
                     out.pop()
         return d
 
+    def exist(self,seq):
+        """ verify if seq exists in  signatures
+
+        Parameters
+        ----------
+
+        seq : list or np.array()
+
+        Returns
+        -------
+
+        boolean
+
+        """
+        if type(seq)==list:
+            seq = np.array(seq)
+
+        N = len(seq)
+        sig = self[N]
+        lf = filter(lambda x : (x==seq).all(),sig)
+        if len(lf)>0:
+            return True,lf
+        else:
+            return False
+
+
     def run(self,cutoff=1,dcut=2):
-        """ run signature calculation 
+        """ run signature calculation
         """
 
         lcil=self.L.cycleinline(self.source,self.target)
@@ -1624,8 +1664,11 @@ class Signatures(dict):
 
         cutoff : int
             limit the exploration of all_simple_path
+        algo: string
+            'old' : call propaths2
+            'new' : call procone2
         bt : bool
-            backtrace (allow visit already visited nodes in simple path algorithm)
+            backtrace (allow to visit already visited nodes in simple path algorithm)
         progress : bool
             display the time passed in the loop
 
@@ -1634,6 +1677,13 @@ class Signatures(dict):
         -------
 
         sigslist :  numpy.ndarray
+
+        See Also
+        --------
+
+        pylayers.simul.link.Dlink.eval
+        pylayers.antprop.signature.Signatures.propath2
+        pylayers.antprop.signature.Signatures.procone2
 
         """
 
@@ -1668,22 +1718,21 @@ class Signatures(dict):
         Gi.pos = self.L.Gi.pos
         #
         # TODO : This has to be changed for handling diffraction
-        # 
+        #
         # remove diffractions from Gi
         Gi = gidl(Gi)
 
         #initilaize dout dictionnary
         dout={}
 
-
         # progresss stuff...
         lmax = len(lis)*len(lit)
         pe = 0
         tic = time.time()
         tic0 = tic
-        #for interaction source  in list of source interaction
+        #for interaction source  in list of source interactions
         for us,s in enumerate(lis):
-            #for target interaction in list of target interaction
+            #for target interaction in list of target interactions
 
             for ut,t in enumerate(lit):
 
@@ -1702,6 +1751,8 @@ class Signatures(dict):
                         dout= self.procone2(self.L,Gi,dout=dout, source=s,target=t,cutoff=cutoff)
                     else :
                         dout = self.propaths2(Gi,di=self.L.di,dout=dout,source=s,target=t,cutoff=cutoff,bt=bt)
+                        #if ((s=='(3, 0, 1)') & (t =='(2, 1, 0)')):
+                        #    pdb.set_trace()
                 else:
                     try:
                         dout[1].append(self.L.di[s])
@@ -1719,7 +1770,7 @@ class Signatures(dict):
             # rehape (rays * 2 , interaction)
             # the 2 dimension comes from the signature definition :
             # 1st row = segment index
-            # 2nd row = tyep of interaction
+            # 2nd row = type of interaction
             self[k] = adout.swapaxes(1,2).reshape(shad[0]*shad[2],shad[1])
 
 
@@ -2114,22 +2165,20 @@ class Signatures(dict):
         # litR  = filter(lambda l: len(eval(l))==2,lit)
         # litT  = filter(lambda l: len(eval(l))==3,lit)
         # litTi = filter(lambda l: eval(l)[2]==ct,litT)
-        # lit = litR + litTi
-        
+        # lit = litR + litT
 
         self.ds={}
 
         for icy in range(len(lcil)-1):
-            
 
             io = dfl[lcil[icy]]
             io_ = dfl[lcil[icy+1]]
             print io
             print io_
             if icy == 0:
-                [self.ds.update({k:[[k]]}) for k in io]        
+                [self.ds.update({k:[[k]]}) for k in io]
 
-            # remove keys which are not in front line     
+            # remove keys which are not in front line
             # kds = self.ds.keys()
             # for k in kds :
             #     if k not in io:
@@ -2140,7 +2189,7 @@ class Signatures(dict):
                 for i in io:
                     self.sp(self.L.Gi,i,j,cutoff=2)
             # [self.ds.pop(k) for k in io]
-                    
+
                     # ds[j]
                     # if len(a) == 1:
                     #     if len(ds[j]) <> 0:
@@ -2629,7 +2678,9 @@ class Signatures(dict):
         #
         lc  = self.L.cycleinline(self.source,self.target)
         # if source  and target in the same cycle
-        if len(lc) == 1:
+        # and ptx != prx
+        dtxrx = np.sum(ptx-prx)
+        if ((len(lc) == 1) & (dtxrx!=0)):
             rays.los=True
 #        # if source  and target separated by air walls
 #        else :

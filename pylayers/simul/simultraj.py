@@ -241,6 +241,9 @@ class Simul(object):
             tau_k
 
         """
+
+        # todo in network : 
+        # take into consideration the postion and rotation of antenna and not device
         self.DL.a = self.N.node[na]['p']
         self.DL.Ta = self.N.node[na]['T']
         self.DL.b = self.N.node[nb]['p']
@@ -513,6 +516,8 @@ class Simul(object):
         """
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
         self.data = pd.read_hdf(filenameh5,'df')
+        self.data.index.name='t'
+
 
     def update_pos(self, t):
         ''' update positions of devices and bodies for a given time index
@@ -536,11 +541,11 @@ class Simul(object):
                 nodeid.extend([n + '_' + name for n in dev])
                 pos.extend([person.dcs[d][:, 0] for d in dev])
                 orient.extend([person.acs[d] for d in dev])
+            # TODO !!!!!!!!!!!!!!!!!!!!
             # in a future version , the network update must also update
             # antenna positon in the device coordinate system
             self.N.update_pos(nodeid, pos, now=t)
             self.N.update_orient(nodeid, orient, now=t)
-        # TODO : to be moved on the network edges
         self.N.update_dis()
 
     def _show3(self, **kwargs):
