@@ -1723,8 +1723,8 @@ class Signatures(dict):
         # list of interactions visible from target
         litT,litR,litD = self.L.intercy(self.target,typ='target')
         lit  = litT + litR + litD
-        print "lis :",lis
-        print "lit :",lit
+        print "source,lis :",self.source,lis
+        print "target,lit :",self.target,lit
 
 
         Gi = self.L.Gi

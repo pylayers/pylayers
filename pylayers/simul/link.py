@@ -382,13 +382,13 @@ class DLink(Link):
 
 
 
-        #try:
-        #    self.L.dumpr()
-        #except:
-        #    print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
-        #    self.L.build()
-        #    self.L.dumpw()
-        self.L.build()
+        try:
+            self.L.dumpr()
+        except:
+            print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
+            self.L.build()
+            self.L.dumpw()
+        #self.L.build()
 
 
         ###########
@@ -1085,7 +1085,7 @@ class DLink(Link):
         """
 
         defaults={ 'output':['sig','ray','Ct','H'],
-                   'si_algo':'new',
+                   'si_algo':'old',
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':False,

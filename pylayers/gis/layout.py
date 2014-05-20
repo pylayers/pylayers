@@ -650,15 +650,37 @@ class Layout(object):
         """
         consistent = True
         nodes = self.Gs.nodes()
+
+        #
+        # points
+        # segments
+        # degree of segments
         useg  = filter(lambda x : x>0,nodes)
         upnt  = filter(lambda x : x<0,nodes)
         degseg  = map(lambda x : nx.degree(self.Gs,x),useg)
 
-        assert(np.all(array(degseg)==2)) # all segments have degree 2
+        #
+        # 1)   all segments have degree 2
+        #
+        assert(np.all(array(degseg)==2))
 
-        # should be done else-where
+        #
+        # degree of points
+        # maximum degree of points
+        #
         degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
+        degmin = min(degpnt)
         degmax = max(degpnt)
+
+        #
+        #  No isolated points (degree 0)
+        #  No points of degree 1
+        #
+        if (degmin<=1):
+            deg0 = filter(lambda x: x==0,degpnt)
+            deg1 = filter(lambda x: x==1,degpnt)
+            print "degree 0 ",deg0
+            print "degree 1 ",deg1
 
         self.deg={}
         for deg in range(degmax+1):
@@ -667,15 +689,15 @@ class Layout(object):
             self.deg[deg] = npt
 
 
+        #
+        # check if there is no point between segments
+        # non superposition rule
+        #
 
         for s in useg:
             n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
             p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
             p2 = np.array(self.Gs.pos[n2])           #     s
-            #
-            # check if there is no points between segments
-            # non superposition rule
-            #
             for n in upnt:
                 if (n < 0) & (n1 != n) & (n2 != n):
                     p = np.array(self.Gs.pos[n])
@@ -4788,8 +4810,9 @@ class Layout(object):
         if 'w' in graph and len(self.Gr.nodes())>1:
             if verbose:
                 print "Gw"
-            self.buildGw()
-            self.lbltg.extend('w')
+            #self.buildGw()
+            #self.lbltg.extend('w')
+            pass
 
         # dictionnary of cycles which have an air wall
         # self.build()
@@ -8243,6 +8266,7 @@ class Layout(object):
             ymax = 10.
 
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
+        self.display['box']=self.ax
 
 
     def get_paths(self,nd_in, nd_fin):

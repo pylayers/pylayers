@@ -167,20 +167,22 @@ class Cone(object):
             proba[bfull] = 1
         typ[bfull] = 1
 
-        #he.v
+        #(he-apex).v
         btalhein  = (btaol & ~bheol & ~bheor)&boup
         if prob:
             v2  = phe[:,btalhein]-self.apex.reshape(2,1)
             vn2 = v2/np.sqrt(np.sum(v2*v2,axis=0))
+            assert(abs(self.dot)<=1)
             pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
             proba[btalhein] = pr2
         typ[btalhein] = 2
 
-        #ta.v
+        #(tai-apex).v
         bheltain  = (bheol & ~btaol & ~btaor)&boup
         if prob:
             v3  = pta[:,bheltain]-self.apex.reshape(2,1)
             vn3 = v3/np.sqrt(np.sum(v3*v3,axis=0))
+            assert(abs(self.dot)<=1)
             pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
             proba[bheltain] = pr3
         typ[bheltain] = 3
