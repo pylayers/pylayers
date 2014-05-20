@@ -44,15 +44,6 @@
 
 
 
-from pylayers.gis.layout import *
-from itertools import combinations
-from scipy.spatial import Delaunay
-import shapely.geometry as sh
-L = Layout('TA-Office.ini')
-#L.dumpr()
-L.build('t')
-fig,ax=L.showG('s',labels=True)
-
 # for n in L.Gt.nodes():
 #     if n > 0:
 #         no = L.Gt.node[n]['cycle'].cycle
@@ -85,6 +76,15 @@ fig,ax=L.showG('s',labels=True)
 #                 plt.triplot(pucs[:,0],pucs[:,1], np.array(kt))
 #             except: 
 #                 pass
+
+from pylayers.gis.layout import *
+from itertools import combinations
+from scipy.spatial import Delaunay
+import shapely.geometry as sh
+L = Layout('TA-Office.ini',force=True)
+#L.dumpr()
+L.build('t')
+fig,ax=L.showG('s',labels=True)
         
 def polyplot(poly):
     fig,ax=L.showG('s')
@@ -94,119 +94,123 @@ def polyplot(poly):
 
 
 for n in L.Gt.nodes():
+    # if indoor cycles
     if n > 0:
 
         ####
         #### 1 Determine if pt convex in cycle
         ####
-        
-        no = L.Gt.node[n]['cycle'].cycle
-        tcc, nn = L.Gt.node[n]['polyg'].ptconvex()
-        # diffracting points 
-        utconvex = np.nonzero(tcc == 1)[0]
-        # all possible diffracting point (in and out of cycle)
-        utsconvex = np.nonzero(abs(tcc) == 1)[0]
-        if len(utconvex) != 0:
-            # get points ID in the cycle
-            uus = filter(lambda x: x<0,no)
-            # get point convex ID
-            uc = np.array(uus)[utconvex]
-            ucs = np.array(uus)[utsconvex]
-            pucs = array(map(lambda x: L.Gs.pos[x], ucs))
-            pucs = np.vstack((pucs,pucs[-1]))
+        if L.Gt.node[n]['indoor']:
+            no = L.Gt.node[n]['cycle'].cycle
+            tcc, nn = L.Gt.node[n]['polyg'].ptconvex()
+            # diffracting points 
+            utconvex = np.nonzero(tcc == 1)[0]
+            # all possible diffracting point (in and out of cycle)
+            utsconvex = np.nonzero(abs(tcc) == 1)[0]
+            if len(utconvex) != 0:
+                # get points ID in the cycle
+                uus = filter(lambda x: x<0,no)
+                # get point convex ID
+                uc = np.array(uus)[utconvex]
+                ucs = np.array(uus)[utsconvex]
+                pucs = array(map(lambda x: L.Gs.pos[x], ucs))
+                pucs = np.vstack((pucs,pucs[-1]))
 
-            ####
-            #### 2 perform a Delaunay Partioning 
-            ####
+                ####
+                #### 2 perform a Delaunay Partioning 
+                ####
 
-            if len(ucs) >2:
-                trid=Delaunay(pucs)
-                tri =trid.simplices
-                aucs = np.arange(len(ucs))
-                # filter tri in the cycle
-                kt = []
-                pkt = []
-                polys = []
-                naw = []
-                for t in tri:
-                    ts = geu.Polygon(pucs[t])
-                    #check if inside the original polygon
-                    # U = L.Gt.node[n]['polyg'].contains(ts)
-                    U = L.Gt.node[n]['polyg'].intersection(ts)
-                    ats = ts.area
-                    if U.area > (1*ats/100):
-                        #pkt.append(pucs[t])
-                        #if 2 convex nodes are directly following in the list 
-                        # of all convex nodes (ucs) they are already connected
-                        # otherwise, an airwall has to be create.
-                        # 
-                        ucs[t]
-                        daucs = np.diff(aucs[t])
-                        # search where an airwall is required
-                        # ncp : not connected points
-                        ncp = np.where(daucs != 1)[0]
-                        for i in ncp:
-                            # keep trace of created airwalls, because some 
-                            # of them will be destroyed in step 3
-                            naw.append(L.add_segment(ucs[t][i],ucs[t][i+1],name='AIR'))
-                        kt.append(t) 
-                        polys.append(ts)
-            # polyplot(polys)
+                if len(ucs) >2:
+                    trid=Delaunay(pucs)
+                    tri =trid.simplices
+                    aucs = np.arange(len(ucs))
+                    # filter tri in the cycle
+                    kt = []
+                    pkt = []
+                    polys = []
+                    naw = []
+                    for t in tri:
+                        ts = geu.Polygon(pucs[t])
+                        #check if inside the original polygon
+                        # U = L.Gt.node[n]['polyg'].contains(ts)
+                        U = L.Gt.node[n]['polyg'].intersection(ts)
+                        ats = ts.area
+                        if U.area > (1*ats/100):
+                            #pkt.append(pucs[t])
+                            #if 2 convex nodes are directly following in the list 
+                            # of all convex nodes (ucs) they are already connected
+                            # otherwise, an airwall has to be create.
+                            # 
+                            # ucs[t]
+                            daucs = np.diff(aucs[t])
+                            # search where an airwall is required
+                            # ncp : not connected points
+                            ncp = np.where(daucs != 1)[0]
+                            for i in ncp:
+                                # keep trace of created airwalls, because some 
+                                # of them will be destroyed in step 3
+                                naw.append(L.add_segment(ucs[t][i],ucs[t][i+1],name='AIR'))
+                            kt.append(t) 
+                            polys.append(ts)
+                # polyplot(polys)
 
-            # kt = array(kt)
-            # npttri = np.arange(0,np.max(kt))
-            # # search for each triangle, which is connected
-            # conecttri = [np.where(kt == i) for i in npttri]
+                # kt = array(kt)
+                # npttri = np.arange(0,np.max(kt))
+                # # search for each triangle, which is connected
+                # conecttri = [np.where(kt == i) for i in npttri]
 
-            ####
-            #### 3. merge delaunay triangulation in order to obtain
-            ###    the larger convex polygons partioning 
-            ####
-            cpolys = []
-            nbpolys = len(polys)
-            while polys !=[]:
-                # import ipdb
-                # ipdb.set_trace()
-                p = polys.pop(0)
-                for ip2,p2 in enumerate(polys):
-                    conv=False
-                    inter = p.intersection(p2)
-                    # if 2 triangles have a common segment
-                    pold = p
-                    if isinstance(inter,sh.LineString):
-                        p = p + p2
-                        if p.isconvex():
-                            polys.pop(ip2)
-                            polys.insert(0,p)
-                            conv=True
-                            break
-                        else:
-                            # if pold not in cpolys:
-                            #     cpolys.append(pold)
-                            p = pold
-                # if (ip2 >= len(polys)):# and (conv):
-                # if conv :
-                #     if p not in cpolys:
-                #         cpolys.append(p)
-                if not conv:#else:
-                    if pold not in cpolys:
-                        cpolys.append(pold)
-                if len(polys) == 0:
-                    cpolys.append(p)
-            ####
-            #### 4. ensure the correct vnode numerotaion of the polygons
-            #### and remove unecessary airwalls
-            ncpol = []
-            vnodes=[]
-            for p in cpolys:
-                ptmp = geu.Polygon(L.Gt.node[n]['polyg'].intersection(p))
-                ptmp.setvnodes(L)
-                ncpol.append(ptmp)
-                vnodes.extend(ptmp.vnodes)
-            # air walls to be deleted (because origin Delaunay triangle
-            # has been merged )
-            daw = filter(lambda x: x not in vnodes,naw)
-            [L.del_segment(d) for d in daw]
+                ####
+                #### 3. merge delaunay triangulation in order to obtain
+                ###    the larger convex polygons partioning 
+                ####
+                cpolys = []
+                nbpolys = len(polys)
+                while polys !=[]:
+                    # import ipdb
+                    # ipdb.set_trace()
+                    p = polys.pop(0)
+                    for ip2,p2 in enumerate(polys):
+                        conv=False
+                        inter = p.intersection(p2)
+                        # if 2 triangles have a common segment
+                        pold = p
+                        if isinstance(inter,sh.LineString):
+                            p = p + p2
+                            if p.isconvex():
+                                polys.pop(ip2)
+                                polys.insert(0,p)
+                                conv=True
+                                break
+                            else:
+                                # if pold not in cpolys:
+                                #     cpolys.append(pold)
+                                p = pold
+                    # if (ip2 >= len(polys)):# and (conv):
+                    # if conv :
+                    #     if p not in cpolys:
+                    #         cpolys.append(p)
+                    if not conv:#else:
+                        if pold not in cpolys:
+                            cpolys.append(pold)
+                    if len(polys) == 0:
+                        cpolys.append(p)
+                ####
+                #### 4. ensure the correct vnode numerotaion of the polygons
+                #### and remove unecessary airwalls
+                ncpol = []
+                vnodes=[]
+                for p in cpolys:
+                    ptmp = geu.Polygon(L.Gt.node[n]['polyg'].intersection(p))
+                    ptmp.setvnodes(L)
+                    ncpol.append(ptmp)
+                    vnodes.extend(ptmp.vnodes)
+                # air walls to be deleted (because origin Delaunay triangle
+                # has been merged )
+                daw = filter(lambda x: x not in vnodes,naw)
+                [L.del_segment(d) for d in daw]
+        # manage outdoor cycle
+
+
 
 polyplot(ncpol)
 
