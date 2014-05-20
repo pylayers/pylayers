@@ -4758,7 +4758,7 @@ class Layout(object):
             self.buildGt()
 
             self.lbltg.extend('t')
-        
+
         if 'c' in graph:
             if verbose:
                 print "Gc"
@@ -5331,7 +5331,7 @@ class Layout(object):
                         pcid = pcid +1
 
 
-
+        #pdb.set_trace()
         for n in self.Gr.nodes():
 
             nr = nx.get_node_attributes(self.Gw,'room').items()
