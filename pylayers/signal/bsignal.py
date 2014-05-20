@@ -4277,7 +4277,7 @@ class FUDAsignal(FUDsignal):
                  y = np.array([]),
                  taud = np.array([]),
                  dod = np.array([]),
-                 doa = np.array([])
+                 doa = np.array([]),
                  domain='frequency'):
         super(FUDAsignal,self).__init__(x, y, taud)
         # FUDsignal.__init__(self, x, y,taud)

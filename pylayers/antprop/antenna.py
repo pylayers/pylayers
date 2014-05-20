@@ -2355,9 +2355,15 @@ class Antenna(object):
         else:
             print 'create ', filesh2, ' file'
             coeff = {}
-            coeff['fmin'] = self.fa[0]
-            coeff['fmax'] = self.fa[-1]
-
+            if type(self.fa) == float:
+                fmin = self.fa
+                fmax = self.fa
+            else:
+                fmin = self.fa[0]
+                fmax = self.fa[-1]
+            coeff['fmin'] = fmin
+            coeff['fmax'] = fmax
+            
 
             coeff['Cx.ind'] = self.S.Cx.ind2
             coeff['Cy.ind'] = self.S.Cy.ind2
@@ -2392,8 +2398,14 @@ class Antenna(object):
             print 'create ', filesh3, ' file'
 
             coeff = {}
-            coeff['fmin'] = self.fa[0]
-            coeff['fmax'] = self.fa[-1]
+            if type(self.fa) == float:
+                fmin = self.fa
+                fmax = self.fa
+            else:
+                fmin = self.fa[0]
+                fmax = self.fa[-1]
+            coeff['fmin'] = fmin
+            coeff['fmax'] = fmax
             coeff['Cx.ind'] = self.S.Cx.ind3
             coeff['Cy.ind'] = self.S.Cy.ind3
             coeff['Cz.ind'] = self.S.Cz.ind3

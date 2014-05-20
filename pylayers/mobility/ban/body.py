@@ -286,7 +286,7 @@ class Body(object):
         ks = int(np.floor(sk/smax)) # number of sequences
         df = sk - ks*smax # covered distance into the sequence
         kf = np.where(self.smocap>=df)[0][0]
-
+        alpha = (smax-df)/smax
         #tf = self.Tmocap/(1.0*self.nframes) # frame body time sampling period
         #timetraj = traj.time()
         #tt = timetraj[1]-timetraj[0]        # trajectory time sampling period
@@ -322,9 +322,9 @@ class Body(object):
         # vt = traj[kt+1,1:] - traj[kt,1:]
         # vt = traj[kt+1,1:] - traj[kt,1:]
 
-        return(kf,kt,vsn,wsn,vtn,wtn)
+        return(kf,kt,vsn,wsn,vtn,wtn,alpha)
 
-    def settopos(self,traj,t=0,cs=False):
+    def settopos(self,traj,t=0,cs=False,treadmill = False, p0 = np.array([0,0])):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -388,13 +388,15 @@ class Body(object):
         # kt : trajectory integer index  
         # kf : frame integer index  
         
-        kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
+        kf,kt,vsn,wsn,vtn,wtn, alpha = self.posvel(traj,t)
 
         psa = np.array([0,0])
         psb = psa + vsn
         psc = psa + wsn
-
-        pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
+        if treadmill:
+            pta = p0
+        else:
+            pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
 
@@ -414,7 +416,8 @@ class Body(object):
         #
         # TOPOS = A d + B     d == BODY at kf frame
         #
-        self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        #self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        self.topos = (np.dot(A,alpha*self.d[:,:,kf]+(1-alpha)*self.d[:,:,kf])+B)
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
 
@@ -998,7 +1001,7 @@ class Body(object):
                     'velocity':False,
                     'filestruc':'DLR.off',
                     'fileant':'defant.vsh3',
-                    'k':50 }
+                    'k':0 }
 
         for key, value in defaults.items():
             if key not in kwargs:

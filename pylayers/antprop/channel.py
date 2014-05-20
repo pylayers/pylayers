@@ -1311,12 +1311,10 @@ class Ctilde(object):
         t2 = self.Cpt * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
-        H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)
-        
+        H = Tchannel(alpha.x, alpha.y, self.tauk, self.tang, self.rang)        
         H.applyFriis()
-
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
-                                                             / len(H.y))
+                                                             / np.sqrt(len(H.x)))
 
         H.tk = H.taud
         return(H)

@@ -397,7 +397,7 @@ class DLink(Link):
         ###########
 
         self.ca = 0
-        self.cb = 1
+        self.cb = 0
         self.a = self.L.cy2pt(self.ca)
         self.b = self.L.cy2pt(self.cb)
 

@@ -412,7 +412,7 @@ class Simul(object):
                 for na, nb, typ in llink[w]:
                     
                     if self.todo[typ]:
-                        print 'na = ', na, 'nb = ', nb, 'typ = ', typ
+                        
                         if self.verbose:
                             print '-'*30
                             print 'time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(lt)
@@ -421,8 +421,8 @@ class Simul(object):
                         eng = 0
                         self.evaldeter(na, nb, w)
                         if typ == 'OB':
-                            self.evalstat(na, nb)
-                            eng = self.SL.eng
+                            #~ self.evalstat(na, nb)
+                            #~ eng = self.SL.eng
                             L = self.DL #+ self.SL
                             self._ak = L.H.ak
                             self._tk = L.H.tk
@@ -529,7 +529,8 @@ class Simul(object):
             pos = []
             orient = []
             for up, person in enumerate(self.dpersons.values()):   
-                person.settopos(self._traj[up], t=t, cs=True)
+                #person.settopos(self._traj[up], t=t, cs=True)
+                person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,4.5]))
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])
