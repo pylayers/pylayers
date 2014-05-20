@@ -4762,8 +4762,9 @@ class Layout(object):
         if 'c' in graph:
             if verbose:
                 print "Gc"
-            self.buildGt()
+            self.buildGc()
 
+            self.lbltg.extend('c')
 
         if 'r' in graph:
             if verbose:
@@ -4835,7 +4836,7 @@ class Layout(object):
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
-                    gname2 ='dG'+g
+                    # gname2 ='dG'+g
                     write_gpickle(getattr(self,gname1),path+'/G'+g+'.gpickle')
                     #write_gpickle(getattr(self,gname2),path+'/dG'+g+'.gpickle')
                 else:
@@ -4877,7 +4878,7 @@ class Layout(object):
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
-                    gname2 ='dG'+g
+                    # gname2 ='dG'+g
                     setattr(self, gname1,read_gpickle(path+'/G'+g+'.gpickle'))
                     #setattr(self, gname2,read_gpickle(path+'/dG'+g+'.gpickle'))
                 else:
@@ -4897,18 +4898,19 @@ class Layout(object):
                 self.Gs.node[k]['ncycles']=[]
 
         for k in self.Gt.node:
-            vnodes = self.Gt.node[k]['cycle'].cycle
-            if vnodes[0]<0:
-                self.Gt.node[k]['polyg'].vnodes = vnodes
-            else:
-                self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
-            for inode in vnodes:
-                if inode > 0:   # segments
-                    if k not in self.Gs.node[inode]['ncycles']:
-                        self.Gs.node[inode]['ncycles'].append(k)
-                        if len(self.Gs.node[inode]['ncycles'])>2:
-                            print inode,self.Gs.node[inode]['ncycles']
-                            logging.warning('dumpr : a segment cannot relate more than 2 cycles')
+            if k != 0:
+                vnodes = self.Gt.node[k]['cycle'].cycle
+                if vnodes[0]<0:
+                    self.Gt.node[k]['polyg'].vnodes = vnodes
+                else:
+                    self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
+                for inode in vnodes:
+                    if inode > 0:   # segments
+                        if k not in self.Gs.node[inode]['ncycles']:
+                            self.Gs.node[inode]['ncycles'].append(k)
+                            if len(self.Gs.node[inode]['ncycles'])>2:
+                                print inode,self.Gs.node[inode]['ncycles']
+                                logging.warning('dumpr : a segment cannot relate more than 2 cycles')
         # if ncycles is a list with only one element the other cycle is the
         # outside region (cycle -1)
         for k in self.Gs.node:
@@ -6886,7 +6888,10 @@ class Layout(object):
 
         """
         self.Gr = copy.deepcopy(self.Gc)
-        del(self.Gr.node[0])
+        try:
+            del(self.Gr.node[0])
+        except:
+            pass
         #
         #  Connected components might not be all contiguous
         #  this a problem because the concatenation of cycles
