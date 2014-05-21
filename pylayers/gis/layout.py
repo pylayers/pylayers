@@ -6171,6 +6171,7 @@ class Layout(object):
                     'subseg': False,
                     'slab': False,
                     'labels': False,
+                    'full': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
                     'width': 2,
@@ -6207,20 +6208,23 @@ class Layout(object):
             # not efficient
             G = self.Gs
 
-            edgelistbkup = kwargs['edgelist']
-            widthbkup = kwargs['width']
-            edgecolbkup = kwargs['edge_color']
 
 
-            lss = filter(lambda x: self.Gs.node[x].has_key('ss_name'),self.Gs.nodes())
+            #lss = filter(lambda x: self.Gs.node[x].has_key('ss_name'),self.Gs.nodes())
             #lss = filter(lambda x: len(self.Gs.node[x]['ss_name'])>0,lss)
 
-            for lmat in self.name:
-                lseg = self.name[lmat]
-                lsegf = filter(lambda x: x not in self.lsss,lseg)
-                #lsegf = filter(lambda x: x not in lss,lsegf)
-                if lsegf<>[]:
-                    kwargs['edgelist']=lsegf
+            # keep track of segments already printed
+            if kwargs['full']:
+
+                edgelistbkup = kwargs['edgelist']
+                widthbkup = kwargs['width']
+                edgecolbkup = kwargs['edge_color']
+
+                for lmat in self.name:
+                    lseg = self.name[lmat]
+                    lsegf = filter(lambda x: x < self.Ns,lseg)
+                    lsegf = filter(lambda x: x not in self.listtransition,lsegf)
+                    kwargs['edgelist'] = lsegf
                     if kwargs['slab']:
                         kwargs['edge_color']=cold[self.sl[lmat]['color']]
                         kwargs['width']=self.sl[lmat]['linewidth']
@@ -6231,9 +6235,11 @@ class Layout(object):
                     kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
 
-            kwargs['edgelist'] = edgelistbkup
-            kwargs['width'] = widthbkup
-            kwargs['edge_color'] = edgecolbkup
+                kwargs['edgelist'] = edgelistbkup
+                kwargs['width'] = widthbkup
+                kwargs['edge_color'] = edgecolbkup
+            else:
+                kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
 
             if kwargs['subseg']:
