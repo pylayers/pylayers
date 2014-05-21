@@ -1,5 +1,5 @@
 #-*- coding:Utf-8 -*-
-"""
+r"""
 
 Class Cone
 ==========
@@ -12,7 +12,7 @@ The cone region is defined by the convex angular sector from right vector (u) to
 rotating folllowing the trigonometric convention.
 The modulus of the cross product between u and v is positive.
 
-:math:`u \times v = \\alpha z with \\alpha > 0`
+:math:`u \times v = \alpha z with \alpha > 0`
 
 .. autosummary::
     :toctree:
@@ -169,50 +169,63 @@ class Cone(object):
 
         #(he-apex).v
         btalhein  = (btaol & ~bheol & ~bheor)&boup
-        if prob:
+        if (prob and not (btalhein==False).all()):
             v2  = phe[:,btalhein]-self.apex.reshape(2,1)
             vn2 = v2/np.sqrt(np.sum(v2*v2,axis=0))
-            assert(abs(self.dot)<=1)
-            pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
+            vvn2 = np.dot(self.v,vn2)
+            vvn2 = np.minimum(vvn2,np.ones(len(vvn2)))
+            vvn2 = np.maximum(vvn2,-np.ones(len(vvn2)))
+            pr2 = np.arccos(vvn2)/np.arccos(self.dot)
             proba[btalhein] = pr2
         typ[btalhein] = 2
 
         #(tai-apex).v
         bheltain  = (bheol & ~btaol & ~btaor)&boup
-        if prob:
+        if (prob and not (bheltain==False).all()):
             v3  = pta[:,bheltain]-self.apex.reshape(2,1)
             vn3 = v3/np.sqrt(np.sum(v3*v3,axis=0))
-            assert(abs(self.dot)<=1)
-            pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
+            vvn3 = np.dot(self.v,vn3)
+            vvn3 = np.minimum(vvn3,np.ones(len(vvn3)))
+            vvn3 = np.maximum(vvn3,-np.ones(len(vvn3)))
+            pr3 = np.arccos(vvn3)/np.arccos(self.dot)
             proba[bheltain] = pr3
         typ[bheltain] = 3
 
         #ta.u
         bhertain  = (bheor & ~btaol & ~btaor)&boup
-        if prob:
+        if (prob and not(bhertain==False).all()):
             v4  = pta[:,bhertain]-self.apex.reshape(2,1)
             vn4 = v4/np.sqrt(np.sum(v4*v4,axis=0))
-            pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
+            vvn4 = np.dot(self.v,vn4)
+            vvn4 = np.minimum(vvn4,np.ones(len(vvn4)))
+            vvn4 = np.maximum(vvn4,-np.ones(len(vvn4)))
+            pr4 = np.arccos(vvn4)/np.arccos(self.dot)
             proba[bhertain] = pr4
         typ[bhertain] = 4
 
         #he.u
         btarhein  = (btaor & ~bheol & ~bheor)&boup
-        if prob:
+        if (prob and not(btarhein==False).all()):
             v5  = phe[:,btarhein]-self.apex.reshape(2,1)
             vn5 = v5/np.sqrt(np.sum(v5*v5,axis=0))
-            pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
+            vvn5 = np.dot(self.v,vn5)
+            vvn5 = np.minimum(vvn5,np.ones(len(vvn5)))
+            vvn5 = np.maximum(vvn5,-np.ones(len(vvn5)))
+            pr5 = np.arccos(vvn5)/np.arccos(self.dot)
             proba[btarhein] = pr5
         typ[btarhein] = 5
 
         #ta.he
         btainhein  = (~btaol & ~btaor & ~bheol & ~bheor)&boup
-        if prob:
+        if (prob and not (btainhein==0).all()):
             va  = pta[:,btainhein]-self.apex.reshape(2,1)
             vb  = phe[:,btainhein]-self.apex.reshape(2,1)
             vna = va/np.sqrt(np.sum(va*va,axis=0))
             vnb = vb/np.sqrt(np.sum(vb*vb,axis=0))
-            pr6 = np.arccos(np.sum(vna*vnb,axis=0))/np.arccos(self.dot)
+            vnab = np.sum(vna*vnb,axis=0)
+            vnab = np.minimum(vnab,np.ones(len(vnab)))
+            vnab = np.maximum(vnab,-np.ones(len(vnab)))
+            pr6 = np.arccos(vnab)/np.arccos(self.dot)
             proba[btainhein] = pr6
         typ[btainhein] = 6
 

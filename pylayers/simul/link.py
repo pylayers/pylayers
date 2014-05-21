@@ -1086,6 +1086,7 @@ class DLink(Link):
 
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',
+                   'diffraction':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':False,
@@ -1109,7 +1110,7 @@ class DLink(Link):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
-            Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'])
+            Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 

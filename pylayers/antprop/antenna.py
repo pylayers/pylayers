@@ -296,6 +296,41 @@ class Antenna(object):
             else:
                 raise NameError('antenna typ is not known')
 
+
+    def help(self,letter='az',mod='meth'):
+        """ help
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
+        """
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+
     def __repr__(self):
 
         rtd = 180./np.pi

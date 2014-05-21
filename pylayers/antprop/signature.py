@@ -122,15 +122,14 @@ def gidl(g):
    Returns
    -------
 
-   gr 
+   gr
 
    """
 
     edlist=[]
     pos={}
     for n in g.nodes():
-        en = eval(n)
-        if type(en) == tuple :
+        if len(n)>1:
             edlist.append(n)
     gr=g.subgraph(edlist)
     dpos = {k:g.pos[k] for k in edlist}
@@ -1718,13 +1717,20 @@ class Signatures(dict):
 
         # list of interactions visible from source
         lisT,lisR,lisD = self.L.intercy(self.source,typ='source')
-        lis  = lisT + lisR + lisD
+        if diffraction:
+            lis  = lisT + lisR + lisD
+        else:
+            lis  = lisT + lisR 
 
         # list of interactions visible from target
         litT,litR,litD = self.L.intercy(self.target,typ='target')
-        lit  = litT + litR + litD
-        print "source,lis :",self.source,lis
-        print "target,lit :",self.target,lit
+
+        if diffraction:
+           lit  = litT + litR + litD
+        else:
+           lit  = litT + litR
+        #print "source,lis :",self.source,lis
+        #print "target,lit :",self.target,lit
 
 
         Gi = self.L.Gi
