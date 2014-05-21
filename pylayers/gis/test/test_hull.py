@@ -3,7 +3,7 @@ from scipy.spatial import Delaunay
 
 from pylayers.gis.layout import *
 import shapely.geometry as sh
-L = Layout('test.ini',force=True)
+L = Layout('WHERE1.ini',force=True)
 #L.dumpr()
 L.build('t')
 
@@ -21,40 +21,59 @@ P = ch.difference(L.ma)
 polys = []
 if isinstance(P,sh.MultiPolygon):
     for p in P:
-    
-        polys.append(geu.Polygon(p))
-        polys[-1].setvnodes(L)
+        if p.area > 5e-2:
+            polys.append(geu.Polygon(p))
+            polys[-1].setvnodes(L)
 
 
 ncy = max(L.Gt.nodes())+1
+a=[348,247,246,250,9,3,340]
 for p in polys:
     uaw = np.where(p.vnodes == 0)
     for aw in uaw :
+        print p.vnodes[aw-1][0], p.vnodes[aw+1][0]
         awid = L.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
         p.vnodes[aw] = awid
-        G = nx.subgraph(L.Gs,p.vnodes)
-        G.pos = {}
-        G.pos.update({l: L.Gs.pos[l] for l in p.vnodes})
-        cy  = cycl.Cycle(G)
-        L.Gt.add_node(ncy,cycle=cy)
-        L.Gt.pos[ncy] = tuple(cy.g)
-        L.Gt.node[ncy]['polyg'] = p
-        L.Gt.node[ncy]['isopen'] = True
-        L.Gt.node[ncy]['indoor'] = False
-        for k in L.Gt.nodes():
-            if (k != ncy) and (k != 0):
-                print k
-                vnodes0 = np.array(L.Gt.node[ncy]['cycle'].cycle)
-                vnodes1 = np.array(L.Gt.node[k]['cycle'].cycle)
-                #
-                # Connect Cycles if they share at least one segments
-                #
-                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+        # G = nx.subgraph(L.Gs,p.vnodes)
+        # G.pos = {}
+        # G.pos.update({l: L.Gs.pos[l] for l in p.vnodes})
+        # cy  = cycl.Cycle(G)
+        # L.Gt.add_node(ncy,cycle=cy)
+        # L.Gt.pos[ncy] = tuple(cy.g)
+        # L.Gt.node[ncy]['polyg'] = p
+        # L.Gt.node[ncy]['isopen'] = True
+        # L.Gt.node[ncy]['indoor'] = False
+        # import ipdb
+        # ipdb.set_trace()
+        # for k in L.Gt.nodes():
+        #     if (k != ncy) and (k != 0):
+        #         print k
+        #         vnodes0 = np.array(L.Gt.node[ncy]['cycle'].cycle)
+        #         vnodes1 = np.array(L.Gt.node[k]['cycle'].cycle)
+        #         #
+        #         # Connect Cycles if they share at least one segments
+        #         #
+        #         intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                if len(intersection_vnodes) > 1:
-                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                    L.Gt.add_edge(ncy, k,segment= segment)
+        #         if len(intersection_vnodes) > 1:
+        #             segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+        #             L.Gt.add_edge(ncy, k,segment= segment)
 
+        # for v in filter(lambda x: x>0,p.vnodes):
+        #     # add new ncycle to Gs for the new airwall
+        #     # that new airwall always separate the new created cycle
+        #     # and the outdoor cycle
+        #     if v == awid :
+        #         L.Gs.node[awid]['ncycles']=[ncy,0]
+        #     # other wise update the cycles seen by semengts
+        #     else :
+        #         cy = L.Gs.node[v]['ncycles'].pop()
+        #         # if the pop cycle is the outdoor cycle, replace it with the new cycle
+        #         if cy == 0:
+        #             L.Gs.node[v]['ncycles'].append(ncy)
+        #         # else replace old value with [pos cycle , new cycle]
+        #         else:
+        #             L.Gs.node[v]['ncycles']=[cy,ncy]
         ncy=ncy+1
 # tcc, nn = L.ma.ptconvex()
 # utconvex = np.nonzero(tcc == -1)[0]

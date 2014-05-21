@@ -4921,6 +4921,57 @@ class Layout(object):
         #setattr(self,'di', read_gpickle(path+'/di.gpickle'))
         setattr(self,'dca', read_gpickle(path+'/dca.gpickle'))
 
+    def hull(self):
+        """ Makes Layout mask convex 
+
+        Notes
+        -----
+
+        Add air walls around th layout in order the Layout be convex
+        """
+
+        ch = self.ma.convex_hull
+        P = ch.difference(self.ma)
+        polys = []
+        if isinstance(P,sh.MultiPolygon):
+            for p in P:
+                if p.area > 5e-2:
+                    polys.append(geu.Polygon(p))
+                    polys[-1].setvnodes(self)
+
+
+        ncy = max(self.Gt.nodes())+1
+        for p in polys:
+            uaw = np.where(p.vnodes == 0)
+            for aw in uaw :
+                awid = self.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
+                p.vnodes[aw] = awid
+                G = nx.subgraph(self.Gs,p.vnodes)
+                G.pos = {}
+                G.pos.update({l: self.Gs.pos[l] for l in p.vnodes})
+                cy  = cycl.Cycle(G)
+                self.Gt.add_node(ncy,cycle=cy)
+                self.Gt.pos[ncy] = tuple(cy.g)
+                self.Gt.node[ncy]['polyg'] = p
+                self.Gt.node[ncy]['isopen'] = True
+                self.Gt.node[ncy]['indoor'] = False
+                for k in self.Gt.nodes():
+                    if (k != ncy) and (k != 0):
+                        print k
+                        vnodes0 = np.array(self.Gt.node[ncy]['cycle'].cycle)
+                        vnodes1 = np.array(self.Gt.node[k]['cycle'].cycle)
+                        #
+                        # Connect Cycles if they share at least one segments
+                        #
+                        intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+
+                        if len(intersection_vnodes) > 1:
+                            segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                            self.Gt.add_edge(ncy, k,segment= segment)
+                ncy=ncy+1
+
+
+
     def buildGt(self):
         """ Built topological graph Gt
 
@@ -5174,6 +5225,7 @@ class Layout(object):
                     pass
             # add list of interactions of a cycle
             self.Gt.add_node(k, inter=ListInteractions)
+
 
 
     def buildGw(self):
