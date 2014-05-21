@@ -677,8 +677,8 @@ class Layout(object):
         #  No points of degree 1
         #
         if (degmin<=1):
-            deg0 = filter(lambda x: x==0,degpnt)
-            deg1 = filter(lambda x: x==1,degpnt)
+            deg0 = filter(lambda x: nx.degree(self.Gs,x)==0,upnt)
+            deg1 = filter(lambda x: nx.degree(self.Gs,x)==1,upnt)
             print "degree 0 ",deg0
             print "degree 1 ",deg1
 
@@ -690,9 +690,32 @@ class Layout(object):
 
 
         #
-        # check if there is no point between segments
-        # non superposition rule
+        # check if there is duplicate points or segments 
         #
+        # TODO argsort x coordinate 
+        #
+
+
+        ke = self.Gs.pos.keys()
+        x = np.array(map(lambda x : x[0], self.Gs.pos.values()))
+        y = np.array(map(lambda x : x[1], self.Gs.pos.values()))
+        p = np.vstack((x,y))
+        d1  = p-np.roll(p,1,axis=1)
+
+        sd1= np.sum(d1,axis=0)
+        if not sd1.all()<>0:
+           lu = np.where(sd1==0)[0]
+        
+           for u in lu:
+               if ke[u]>0:
+                   self.del_segment(ke[u])
+               if ke[u]<0:
+                   self.del_point(ke[u])
+
+           nodes = self.Gs.nodes()
+           useg  = filter(lambda x : x>0,nodes)
+           upnt  = filter(lambda x : x<0,nodes)
+
 
         for s in useg:
             n1, n2 = np.array(self.Gs.neighbors(s))  # node s neighbors
@@ -2441,7 +2464,7 @@ class Layout(object):
             node list
 
         """
-       
+
         # test if array
         if (type(lp) == np.ndarray):
             ln = list(ln)
@@ -2507,7 +2530,7 @@ class Layout(object):
 
 
     def mask(self):
-        """  returns the convex hull polygon of the building
+        """  returns the polygonal mask of the building
         """
         p  = self.Gt.node[1]['polyg']
         ps = sh.Polygon(p.exterior)
@@ -6145,6 +6168,8 @@ class Layout(object):
                     'nodes': False,
                     'edges': True,
                     'airwalls': False,
+                    'subseg': False,
+                    'slab': False,
                     'labels': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
@@ -6169,11 +6194,80 @@ class Layout(object):
         # overriding first argument graph
         if 'graph' in kwargs:
             graph = kwargs['graph']
+
+        # get color dictionnary from pyutil
+
+        cold = pyu.coldict()
+
+        #
+        # s : structure graph
+        #
+        if 's' in graph:
+
+            # not efficient
+            G = self.Gs
+
+            edgelistbkup = kwargs['edgelist']
+            widthbkup = kwargs['width']
+            edgecolbkup = kwargs['edge_color']
+
+
+            lss = filter(lambda x: self.Gs.node[x].has_key('ss_name'),self.Gs.nodes())
+            #lss = filter(lambda x: len(self.Gs.node[x]['ss_name'])>0,lss)
+
+            for lmat in self.name:
+                lseg = self.name[lmat]
+                lsegf = filter(lambda x: x not in self.lsss,lseg)
+                #lsegf = filter(lambda x: x not in lss,lsegf)
+                if lsegf<>[]:
+                    kwargs['edgelist']=lsegf
+                    if kwargs['slab']:
+                        kwargs['edge_color']=cold[self.sl[lmat]['color']]
+                        kwargs['width']=self.sl[lmat]['linewidth']
+                    else:
+                        kwargs['edge_color']='k'
+                        kwargs['width']=1
+
+                    kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+
+
+            kwargs['edgelist'] = edgelistbkup
+            kwargs['width'] = widthbkup
+            kwargs['edge_color'] = edgecolbkup
+
+
+            if kwargs['subseg']:
+                #
+                # Display doors and windows subsegments with a slight offset
+                #
+                cold = pyu.coldict()
+                d = self.subseg()
+                for ss in d.keys():
+                    color = cold[self.sl[ss]['color']]
+                    for ns in d[ss]:
+                        norm = self.Gs.node[ns[0]]['norm']
+                        np1, np2 = self.Gs.neighbors(ns[0])
+                        x = np.array([self.Gs.pos[np1][0], self.Gs.pos[np2][0]])
+                        y = np.array([self.Gs.pos[np1][1], self.Gs.pos[np2][1]])
+                        xoff = (1+ns[1])*0.05*norm[0]
+                        yoff = (1+ns[1])*0.05*norm[1]
+                        kwargs['ax'].plot(x+xoff, y+yoff, linewidth=2, color=color)
+
+
         #
         # t : graph of cycles
         #
         if 't' in graph:
             G = self.Gt
+
+            # filter out the 0 cycle 
+            nodes = G.nodes()
+            edges = G.edges()
+            nodf = filter(lambda x : x<>0,nodes)
+            edf  = filter(lambda x: ((edges[x][0]<>0) &
+                                     (edges[x][1]<>0)),np.arange(len(edges)))
+            kwargs['nodelist']=nodf
+            kwargs['edgelist']=edf
 
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='r'
@@ -6193,21 +6287,7 @@ class Layout(object):
             fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
-        #
-        # s : structure graph
-        #
-        if 's' in graph:
-
-            G = self.Gs
-
-            if kwargs['edge_color']=='':
-                kwargs['edge_color'] ='g'
-
-            fig,ax = gru.draw(G,**kwargs)
-            kwargs['fig']=fig
-            kwargs['ax']=ax
-
-        #
+                #
         # v : visibility graph
         # In blue : segment segment
         # In red  : point point (Diffraction)
@@ -6340,22 +6420,6 @@ class Layout(object):
         kwargs['ax'].axis('scaled')
         if not kwargs['axis']:
             kwargs['ax'].axis('off')
-
-        #
-        # Display doors and windows subsegments with a slight offset
-        #
-        cold = pyu.coldict()
-        d = self.subseg()
-        for ss in d.keys():
-            color = cold[self.sl[ss]['color']]
-            for ns in d[ss]:
-                norm = self.Gs.node[ns[0]]['norm']
-                np1, np2 = self.Gs.neighbors(ns[0])
-                x = np.array([self.Gs.pos[np1][0], self.Gs.pos[np2][0]])
-                y = np.array([self.Gs.pos[np1][1], self.Gs.pos[np2][1]])
-                xoff = (1+ns[1])*0.05*norm[0]
-                yoff = (1+ns[1])*0.05*norm[1]
-                kwargs['ax'].plot(x+xoff, y+yoff, linewidth=2, color=color)
 
 
 
