@@ -93,7 +93,7 @@ def draw(G,**kwargs):
         fig = kwargs['fig']
 
     if kwargs['ax'] == []:
-        ax = fig.gca()
+        ax = fig.add_subplot(111,axisbg='white')
     else:
         ax = kwargs['ax']
 
