@@ -110,7 +110,9 @@ def draw(G,**kwargs):
         edgelist =  G.edges()
     else:
         edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
-
+        #edgelist = map(lambda x : tuple(G[x]),kwargs['edgelist']) # for nx an edge list is a list of tuple
+        # import ipdb
+        # ipdb.set_trace()
     # remove airwalls
     if not kwargs['airwalls']:
         try:

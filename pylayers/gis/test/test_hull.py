@@ -3,7 +3,7 @@ from scipy.spatial import Delaunay
 
 from pylayers.gis.layout import *
 import shapely.geometry as sh
-L = Layout('WHERE1.ini',force=True)
+L = Layout('WHERE2_2.ini',force=True)
 #L.dumpr()
 L.build('t')
 
@@ -27,7 +27,6 @@ if isinstance(P,sh.MultiPolygon):
 
 
 ncy = max(L.Gt.nodes())+1
-a=[348,247,246,250,9,3,340]
 for p in polys:
     uaw = np.where(p.vnodes == 0)
     for aw in uaw :

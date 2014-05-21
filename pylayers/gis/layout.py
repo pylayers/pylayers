@@ -6219,11 +6219,11 @@ class Layout(object):
                     'ax': [],
                     'nodes': False,
                     'edges': True,
+                    'sllist':[],
                     'airwalls': False,
                     'subseg': False,
                     'slab': False,
                     'labels': False,
-                    'full': False,
                     'alphan': 1.0,
                     'alphae': 1.0,
                     'width': 2,
@@ -6261,22 +6261,26 @@ class Layout(object):
             G = self.Gs
 
 
-
-            #lss = filter(lambda x: self.Gs.node[x].has_key('ss_name'),self.Gs.nodes())
-            #lss = filter(lambda x: len(self.Gs.node[x]['ss_name'])>0,lss)
+            # lss = filter(lambda x: self.Gs.node[x].has_key('ss_name'),self.Gs.nodes())
+            # lss = filter(lambda x: len(self.Gs.node[x]['ss_name'])>0,lss)
 
             # keep track of segments already printed
-            if kwargs['full']:
 
-                edgelistbkup = kwargs['edgelist']
-                widthbkup = kwargs['width']
-                edgecolbkup = kwargs['edge_color']
+            nodelistbkup = kwargs['nodelist']
+            edgelistbkup = kwargs['edgelist']
+            widthbkup = kwargs['width']
+            nodecolbkup = kwargs['edge_color']
 
-                for lmat in self.name:
-                    lseg = self.name[lmat]
-                    lsegf = filter(lambda x: x < self.Ns,lseg)
-                    lsegf = filter(lambda x: x not in self.listtransition,lsegf)
-                    kwargs['edgelist'] = lsegf
+            try :
+                sllist = [kwargs['sllist'].pop()]
+            except:
+                sllist = self.name.keys()
+
+            for lmat in sllist:
+                lseg = self.name[lmat]
+                if lseg != []:
+                    lseg2 = [np.where(np.array(self.Gs.edges()) == i)[0] for i in lseg]
+                    kwargs['edgelist'] = reduce(lambda x,y:list(x)+list(y),lseg2)
                     if kwargs['slab']:
                         kwargs['edge_color']=cold[self.sl[lmat]['color']]
                         kwargs['width']=self.sl[lmat]['linewidth']
@@ -6287,11 +6291,10 @@ class Layout(object):
                     kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
 
-                kwargs['edgelist'] = edgelistbkup
-                kwargs['width'] = widthbkup
-                kwargs['edge_color'] = edgecolbkup
-            else:
-                kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+            kwargs['nodelist'] = nodelistbkup
+            kwargs['width'] = widthbkup
+            kwargs['edge_color'] = nodecolbkup
+            kwargs['edgelist'] = edgelistbkup
 
 
             if kwargs['subseg']:
@@ -6315,6 +6318,7 @@ class Layout(object):
         #
         # t : graph of cycles
         #
+
         if 't' in graph:
             G = self.Gt
 
@@ -6322,8 +6326,9 @@ class Layout(object):
             nodes = G.nodes()
             edges = G.edges()
             nodf = filter(lambda x : x<>0,nodes)
-            edf  = filter(lambda x: ((edges[x][0]<>0) &
-                                     (edges[x][1]<>0)),np.arange(len(edges)))
+            edf  = filter(lambda x: ((edges[x][0]<>0) & (edges[x][1]<>0)),np.arange(len(edges)))
+            import ipdb
+            ipdb.set_trace()
             kwargs['nodelist']=nodf
             kwargs['edgelist']=edf
 
