@@ -5767,6 +5767,9 @@ class Layout(object):
                             else:
                                 if (nstr,cy) in self.Gi.nodes():
                                     li1 = [(nstr,cy)]
+                                # else:
+                                #     import ipdb
+                                #     ipdb.set_trace()
                         else:
                             # D
                             li1 =[(nstr,)]
@@ -6327,8 +6330,6 @@ class Layout(object):
             edges = G.edges()
             nodf = filter(lambda x : x<>0,nodes)
             edf  = filter(lambda x: ((edges[x][0]<>0) & (edges[x][1]<>0)),np.arange(len(edges)))
-            import ipdb
-            ipdb.set_trace()
             kwargs['nodelist']=nodf
             kwargs['edgelist']=edf
 
