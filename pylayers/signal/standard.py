@@ -275,13 +275,13 @@ class Wstandard(dict):
 
     def ls(self):
         """ list all available standards
-        
+
         Examples
         --------
-        
+
         .. plot::
             :include-source:
-        
+
             >>> from pylayers.signal.standard import *
             >>> W =Wstandard('ieee80211ah')
             >>> W.ls()
@@ -294,10 +294,10 @@ class Wstandard(dict):
 
     def power(self, band, info ='max', unit='mw'):
         """ Return inunition for a given channel
-        
+
         Parameters
         ----------
-        
+
         band : int /float/string 
             'bandnb' : band number 
             'fghz' : frequency 

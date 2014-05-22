@@ -97,6 +97,50 @@ class Trajectories(list):
         self.name.pop(idx)
         self.typ.pop(idx)
         self.ID.pop(idx)
+        
+        
+    def saveh5(self, L=Layout(), filename = ''):
+        
+        layfile = L.filename.split('.')[0]
+        if filename == '':
+            store = pd.HDFStore('/private/staff/i/bi/mmhedhbi/Bureau/P1/netsave/traj_'+layfile+'.h5','w') 
+        else :
+            store = pd.HDFStore('/private/staff/i/bi/mmhedhbi/Bureau/P1/netsave/traj_'+filename+'.h5','w')   
+        
+        for traj in self:
+            
+            t = traj.time()*1e9
+            td = pd.to_datetime(t)
+            
+            if traj.typ != 'ap':
+                data  = pd.DataFrame(
+                    {'t': td, 'x': traj.x.values, 'y': traj.y.values,
+                                           'vx': traj.vx.values, 'vy': traj.vy.values,
+                                           'ax': traj.ax.values, 'ay': traj.ay.values,
+                     }, columns=['t', 'x', 'y',  'vx', 'vy', 'ax', 'ay'], index=td )
+            else:
+                data  = pd.DataFrame(
+                    {'t': td, 'x': traj.x.values, 'y': traj.y.values,'z': traj.z.values, 
+                                'vx': traj.vx.values, 'vy': traj.vy.values,
+                                 'ax': traj.ax.values, 'ay': traj.ay.values},
+                        columns=['t', 'x', 'y',  'z', 'vx', 'vy', 'ax', 'ay' ], index=td )
+            
+                
+            store.put(str(traj.ID),data) 
+
+           
+
+            store.get_storer(str(traj.ID)).attrs.typ = traj.typ
+            store.get_storer(str(traj.ID)).attrs.name = traj.name
+            store.get_storer(str(traj.ID)).attrs.ID = str(traj.ID)
+            store.get_storer(str(traj.ID)).attrs.layout = L.filename
+            #saving metadata
+
+        store.close()
+                
+            
+        
+           
 
     def loadh5(self, _filename='simulnet_TA-Office.h5',append =False):
 
@@ -136,7 +180,9 @@ class Trajectories(list):
         if not append:
             [self.pop(0) for i in range(len(self))]
         for k in fil.keys():
+           
             df = fil[k]
+            
             df = df.set_index('t')
             ID = fil.get_storer(k).attrs.ID
             name = fil.get_storer(k).attrs.name
@@ -372,6 +418,7 @@ class Trajectory(pd.DataFrame):
         """
 
         if len(self.values) != 0:
+            
             self.tmin = self.index.min().value*1e-9
             self.tmax = self.index.max().value*1e-9
             try:
@@ -438,7 +485,7 @@ class Trajectory(pd.DataFrame):
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-
+        
         t = kwargs['t']
         if len(t) < 2:
             raise AttributeError('Trajectory.generate requieres at least 3 time stamps')
@@ -494,7 +541,7 @@ class Trajectory(pd.DataFrame):
             resampled trajectory
 
         """
-
+       
         t = self.time()
         x = self.space()[:, 0]
         y = self.space()[:, 1]
@@ -524,7 +571,9 @@ class Trajectory(pd.DataFrame):
                    pt=np.vstack((xnew,ynew,np.random.randn(len(tnew)),)).T,
                    unit='s',
                    sf=sf)
+        
         T.update()
+       
         return T
 
 
@@ -572,6 +621,7 @@ class Trajectory(pd.DataFrame):
 
         """
         t = self.time()
+       
         u = np.where((t >= tk-self.ts/2.) & (t <= tk+self.ts/2.))[0][0]
 
         return(self['s'][u])

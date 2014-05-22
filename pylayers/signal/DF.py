@@ -50,16 +50,16 @@ class DF(object):
         """
         freqz : display filter transfer function
         """
-        (w,h)    = freqz(self.b,self.a)
+        (w,h)    = freqz(self.b,self.a, whole = True)
         self.w   = w
         self.h   = h
         subplot(211)
-        plot(w/pi,20*log10(abs(h)+1e-15))
+        plot(w/(2*pi),20*log10(abs(h)+1e-15))
         ylabel('dB')
         title('Modulus')
         grid()
         subplot(212)
-        plot(w/pi,angle(h)*180./pi)
+        plot(w/(2*pi),angle(h)*180./pi)
         ylabel('deg')
         xlabel('Relative frequency')
         title('Phase')

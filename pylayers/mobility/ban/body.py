@@ -56,11 +56,11 @@ import pdb as pdb
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 import pylayers.util.geomutil as geu
-import pylayers.mobility.ban.DeuxSeg as seg
+import pylayers.mobility.body.DeuxSeg as seg
 import doctest
 import itertools as itt
 try:
-    from mayavi import mlab
+    from mayavi import mlab 
     from tvtk.tools import visual
 
 except:
@@ -213,12 +213,8 @@ class Body(object):
             self.sl[i,:] = np.array([t,h,r])
 
         self.ncyl = len(di['cylinder'].values())
-
-
-
-        self.idcyl={}
-        [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
-        # update devices dict
+        
+        # update devices dict 
         self.dev={}
         for dev in di['device'].keys():
             self.dev[dev]=di['device'][dev]
@@ -290,7 +286,7 @@ class Body(object):
         ks = int(np.floor(sk/smax)) # number of sequences
         df = sk - ks*smax # covered distance into the sequence
         kf = np.where(self.smocap>=df)[0][0]
-
+        alpha = (smax-df)/smax
         #tf = self.Tmocap/(1.0*self.nframes) # frame body time sampling period
         #timetraj = traj.time()
         #tt = timetraj[1]-timetraj[0]        # trajectory time sampling period
@@ -318,7 +314,7 @@ class Body(object):
         #
         # vt : speed vector along trajectory
         #
-
+        
         vt = np.array([traj['vx'][kt],traj['vy'][kt]])
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
@@ -326,9 +322,9 @@ class Body(object):
         # vt = traj[kt+1,1:] - traj[kt,1:]
         # vt = traj[kt+1,1:] - traj[kt,1:]
 
-        return(kf,kt,vsn,wsn,vtn,wtn)
+        return(kf,kt,vsn,wsn,vtn,wtn,alpha)
 
-    def settopos(self,traj,t=0,cs=False):
+    def settopos(self,traj,t=0,cs=False,treadmill = False, p0 = np.array([0,0])):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -354,7 +350,7 @@ class Body(object):
 
             >>> import numpy as np
             >>> import pylayers.mobility.trajectory as tr
-            >>> import pylayers.mobility.ban.body as body
+            >>> import pylayers.mobility.body.body as body
             >>> import matplotlib.pyplot as plt
             >>> time = np.arange(0,10,0.1)
             >>> v = 4000/3600.
@@ -391,14 +387,16 @@ class Body(object):
         #
         # kt : trajectory integer index  
         # kf : frame integer index  
-
-        kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
+        
+        kf,kt,vsn,wsn,vtn,wtn, alpha = self.posvel(traj,t)
 
         psa = np.array([0,0])
         psb = psa + vsn
         psc = psa + wsn
-
-        pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
+        if treadmill:
+            pta = p0
+        else:
+            pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
 
@@ -418,7 +416,8 @@ class Body(object):
         #
         # TOPOS = A d + B     d == BODY at kf frame
         #
-        self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        #self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        self.topos = (np.dot(A,alpha*self.d[:,:,kf]+(1-alpha)*self.d[:,:,kf])+B)
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
 
@@ -464,7 +463,7 @@ class Body(object):
 
             >>> import numpy as np
             >>> import pylayers.mobility.trajectory as tr
-            >>> import pylayers.mobility.ban.body as body
+            >>> import pylayers.mobility.body.body as body
             >>> import matplotlib.pyplot as plt
             >>> time = np.arange(0,10,0.1)
             >>> v = 4000/3600.
@@ -624,7 +623,7 @@ class Body(object):
             self.centered = False
             self.center()
 
-
+        
 
     def movie(self,**kwargs):
         """ creates a geomview movie
@@ -733,39 +732,27 @@ class Body(object):
         Parameters
         ----------
 
+
         iframe : int
             frame index (default 0 )
         widthfactor : float
             cylinder scaling factor (default 1.0)
+
         pattern : boolean
-            show pattern if True
         ccs : boolean
-            show ccs if True
-        k : frequency index
-            select frequency index for displaying antenna pattern
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.mobility.trajectory import *
-            >>> from pylayers.mobility.ban.body import *
-            >>> b = Body()
-            >>> traj = Trajectory()
-            >>> traj.generate()
-            >>> b.settopos(traj,t=3,cs=True)
-            #>>> b._show3(topos=True,pattern=True)
+        k : frame index
 
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
                     'pattern':False,
+                    'lccs':[],
                     'ccs':False,
+
                     'dcs':False,
                     'color':'white',
                     'k':0}
+
 
         for k in defaults:
             if k not in kwargs:
@@ -776,12 +763,10 @@ class Body(object):
             if k not in defaults:
                 args[k] = kwargs[k]
 
-        f = mlab.gcf()
-        #visual.set_viewer(f)
-        #f.scene.background=(1,1,1)
+        visual.set_viewer(mlab.gcf())
 
-        
         fId = kwargs['iframe']
+
 
 
         cold = pyu.coldict()
@@ -818,26 +803,21 @@ class Body(object):
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
                               scale_factor=0.2)
 
-        # for k in range(self.ncyl):
-
-        #     kta = int(self.sl[k,0])
-        #     khe = int(self.sl[k,1])
-        #     cylrad = self.sl[k,2]
-        #     if kwargs['topos']:
-        #         pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
-        #         phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
-        #     else:
-        #         pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
-        #         phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
 
 
-            # cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
-            # mlab.pipeline.surface(cyl.polydata,color=body_color)
-            # f.children[-1].name=self.name +' ' +self.idcyl[k]            
+            ax = phe-pta
+            cc = (pta+phe)/2.
+            l = np.sqrt(np.sum(ax**2))
+            cyl = visual.Cylinder(pos=(pta[0],pta[1],pta[2]),
+                       axis=(ax[0],ax[1],ax[2]), radius=cylrad*kwargs['widthfactor'],length=l)
 
-            # 
+            if kwargs['ccs']: 
+                if k in kwargs['lccs']:
+                    pt = pta+cylrad*kwargs['widthfactor']*self.ccs[k,:,0]
+                    pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
+                    mlab.quiver3d(pte[0],pte[1],pte[2],self.ccs[k,0],self.ccs[k,1],self.ccs[k,2],scale_factor=0.2)
+        
 
-            #     
         if kwargs['dcs']:
             for key in self.dcs.keys():               
                 U = self.dcs[key]               
@@ -867,8 +847,6 @@ class Body(object):
                            title=False,
                            colorbar=False)
 
-        fig = mlab.gcf()
-        mlab.savefig('Body.png',figure=fig)
 
 
     def show(self,**kwargs):
@@ -1141,6 +1119,7 @@ class Body(object):
                 _filepatt = kwargs['tag']+'patt-'+key
                 geo = geu.Geomoff(_filepatt)
                 V = Ant.SqG[kwargs['k'],:,:]
+                
                 #T = U[:,1:]
                 #Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
@@ -1282,14 +1261,13 @@ class Body(object):
         """
 
         intersect = np.zeros((self.ncyl,1))
-        mu = np.zeros((self.ncyl,1))
-        lmd = 0.075
+        
         for k in range (self.ncyl):
             if k not in cyl:
 
                 if topos  == True:
-                    kta  = self.sl[k,0]
-                    khe  = self.sl[k,1]
+                    kta  = int(self.sl[k,0])
+                    khe  = int(self.sl[k,1])
                     C = self.topos[:,kta]
                     D = self.topos[:,khe]
                 else:
@@ -1310,18 +1288,63 @@ class Body(object):
                 dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
 
                 if dmin  < self.sl[k,2]:
-                    intersect[k]=1
-
-
-                if 0 < alpha < 1 and 0 < beta < 1 :
-                    #print 'dmin = ', dmin  
-                    #print 'r = ', self.sl[k,2]  
-                    dAB = np.sqrt(sum((A-B)**2))
-                    if alpha <> 0:
-                        mu[k] =(dmin-self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))
-
+                    intersect[k]=1                   
+                 
         return intersect
+        
+    def intersectBody2(self,A,B, topos = True, frameId = 0):
+        """
 
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+        Returns
+        -------
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
+
+        intersect = 0
+
+        for k in [10]:        
+
+            if topos  == True:
+                kta  = int(self.sl[k,0])
+                khe  = int(self.sl[k,1])
+                C = self.topos[:,kta]
+                D = self.topos[:,khe]
+            else:
+                kta  = self.sl[k,0]
+                khe  = self.sl[k,1]
+                C = self.d[:,kta,frameId]
+                D = self.d[:,khe,frameId]
+
+            alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+            if alpha < 0:
+                alpha = 0
+            if alpha > 1 :
+                alpha  = 1
+            if beta < 0:
+                beta = 0
+            if beta > 1:
+                beta = 1
+            dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+
+            if dmin  < self.sl[k,2]:
+                intersect=1         
+             
+        return intersect
+        
+ 
     def intersectBody3(self,A,B, topos = True, frameId = 0):
         """
 
@@ -1333,6 +1356,7 @@ class Body(object):
         topos
         frameId
         cyl
+
 
         Returns
         -------
@@ -1380,16 +1404,20 @@ class Body(object):
 
 
 
+
             if dmin < self.sl[k,2]:
                 
+
                 """
                 in this case intersection is True
                 """
                 #pdb.set_trace()                                                            
                 dAB = np.sqrt(sum((A-B)**2))
                 #nu1 =(self.sl[k,2]-dmin)*np.sqrt((2/lmd)*dAB*abs(alpha)*abs(1-alpha)))
+
                 nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
                 nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
+
               
                 if -0.7 < nu1 : 
                 
@@ -1407,6 +1435,7 @@ class Body(object):
                 loss_lin  =1.0/10**(loss_dB/10.0)
               
         return loss_lin#, loss_dB, loss1_dB, loss2_dB 
+
 
     def body_link(self, topos = True,frameId = 0):
         """
@@ -1556,6 +1585,7 @@ def rotation(cycle, alpha=np.pi/2):
     cycle_rot = translate(cycle_rot, cycle[:, 0, 0])
 
     return cycle_rot
+
 
 def Global_Trajectory(cycle, traj):
     """

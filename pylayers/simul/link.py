@@ -404,6 +404,7 @@ class DLink(Link):
             self.a = kwargs['a']
             self.ca = self.L.pt2cy(self.a)
 
+
         if len(self.b)==0:
             self.cb = 0
             self.b = self.L.cy2pt(self.cb)

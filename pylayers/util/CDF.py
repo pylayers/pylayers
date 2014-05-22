@@ -69,7 +69,7 @@ class CDF(object):
         """
         show()
         """
-        f = plt.figure()
+        f = plt.figure(figsize=(10,7))
 #               plt.matplotlib.rc('font', **{'family': 'serif',
 #                                            'serif': ['Computer Modern Roman']})
 
@@ -105,16 +105,18 @@ class CDF(object):
 #                       leg.append(legend)
             cdf = self.cdf[k]
             c.append(ax.plot(bound, cdf, marker=marker, markevery=markerfrequency, ms=markersize, mfc=markercolor, ls=linestyle, c=color, linewidth=linewidth, label=legend))
-        plt.xlabel(self.ld[0]['xlabel'])
-        plt.ylabel(self.ld[0]['ylabel'])
+        plt.xlabel(self.ld[0]['xlabel'], fontsize =18)
+        plt.ylabel(self.ld[0]['ylabel'], fontsize =18)
         #plt.legend((c),(leg),loc=0,scatterpoints=1,numpoints=1.)
         ax.legend(loc='best', scatterpoints=1, numpoints=1.)
         plt.grid()
+        plt.xticks(fontsize=20)
+        plt.yticks(fontsize=20)
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-        plt.savefig(self.filename + '.pdf', format='pdf',
-                    bbox_inches='tight', pad_inches=0)
-        plt.savefig(self.filename + '.eps', format='eps',
-                    bbox_inches='tight', pad_inches=0)
+        #plt.savefig(self.filename + '.pdf', format='pdf',
+        #            bbox_inches='tight', pad_inches=0)
+        #plt.savefig(self.filename + '.eps', format='eps',
+        #            bbox_inches='tight', pad_inches=0)
 
 
 if __name__ == "__main__":

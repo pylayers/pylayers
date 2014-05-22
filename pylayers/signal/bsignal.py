@@ -1597,7 +1597,9 @@ class TUsignal(TBsignal, Usignal):
         print 'xmax :', self.x.max()
         print 'ymin :', self.y.min()
         print 'ymax :', self.y.max()
-
+        
+       
+        
     def fft(self, shift=False):
         """  forward fast Fourier transform
 
@@ -4376,8 +4378,10 @@ class FUDAsignal(FUDsignal):
                  y = np.array([]),
                  taud = np.array([]),
                  dod = np.array([]),
+
                  doa = np.array([])
                  ):
+
         super(FUDAsignal,self).__init__(x, y, taud)
         # FUDsignal.__init__(self, x, y,taud)
         self.dod  = dod

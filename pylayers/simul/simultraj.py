@@ -150,6 +150,7 @@ class Simul(object):
         # get the layout
         self.L = Layout(traj.Lfilename)
         # resample trajectory
+
         for ut, t in enumerate(traj):
             if t.typ == 'ag':
                 person = Body(t.name + '.ini')
@@ -183,6 +184,7 @@ class Simul(object):
         --------
 
         pylayers.network.network
+
 
         """
 
@@ -278,6 +280,7 @@ class Simul(object):
             tau_k
         eng : float
             engagement
+
         """
 
 
@@ -374,7 +377,7 @@ class Simul(object):
                 lt = np.array([kwargs['t']])
         else :
             lt = kwargs['t']
-
+        
         if len(lt) == 0:
             lt = self.time
         # check time attribute
@@ -390,24 +393,29 @@ class Simul(object):
             self._traj = self.traj.resample(sf=sf, tstart=lt[0])
 
         else:
-            self._traj = self.traj.resample(sf=1.0, tstart=lt[0])
-            self._traj.time()
 
+            self._traj = self.traj.resample(sf=1.0, tstart=lt[0])
+
+            self._traj.time()
+        
         self.time = self._traj.t
         self._time = pd.to_datetime(self.time,unit='s')
 
         #
         # Code
         #
-
+       
         init = True
         for ut, t in enumerate(lt):
-            self.ctime = t
+            self.ctime = t            
             self.update_pos(t)
-            print self.N.__repr__()
-            for w in wstd:
+            #print self.N.__repr__()
+            print 'ut = ', ut, 't = ', t
+            for w in wstd:                
                 for na, nb, typ in llink[w]:
+                    
                     if self.todo[typ]:
+                        
                         if self.verbose:
                             print '-'*30
                             print 'time:', t, '/',  lt[-1] ,' time idx:', ut, '/',len(lt)
@@ -416,9 +424,9 @@ class Simul(object):
                         eng = 0
                         self.evaldeter(na, nb, w)
                         if typ == 'OB':
-                            self.evalstat(na, nb)
-                            eng = self.SL.eng
-                            L = self.DL + self.SL
+                            #~ self.evalstat(na, nb)
+                            #~ eng = self.SL.eng
+                            L = self.DL #+ self.SL
                             self._ak = L.H.ak
                             self._tk = L.H.tk
                         else :
@@ -454,17 +462,17 @@ class Simul(object):
                                               'fbminghz', 'fbmaxghz', 'fstep', 'aktk_id',
                                               'sig_id', 'ray_id', 'Ct_id', 'H_id'
                                               ],index=[self._time[ut]])
-                        if not self.check_exist(df):
-                            self.data = self.data.append(df)
-                            # self._index = self._index + 1
-                            # save csv
-                            self.tocsv(ut, na, nb, w,init=init)
-                            init=False
+                        #if not self.check_exist(df):
+                        self.data = self.data.append(df)
+                        # self._index = self._index + 1
+                        # save csv
+                        self.tocsv(ut, na, nb, w,init=init)
+                        init=False
 
-                            # save pandas self.data
-                            self.savepd()
-                            # save ak tauk
-                            self._saveh5(ut, na, nb, w)
+                        # save pandas self.data
+                        #self.savepd()
+                        # save ak tauk
+                        self._saveh5(ut, na, nb, w)
 
 
     def check_exist(self, df):
@@ -525,8 +533,9 @@ class Simul(object):
             nodeid = []
             pos = []
             orient = []
-            for up, person in enumerate(self.dpersons.values()):
-                person.settopos(self._traj[up], t=t, cs=True)
+            for up, person in enumerate(self.dpersons.values()):   
+                #person.settopos(self._traj[up], t=t, cs=True)
+                person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,4.5]))
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])
@@ -560,6 +569,7 @@ class Simul(object):
         'rays': bool
             show rays
         """
+
 
         defaults = {'t': 0,
                     'link': [],
@@ -686,6 +696,7 @@ class Simul(object):
 
         pylayers.simul.links
 
+
         """
 
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
@@ -737,6 +748,7 @@ class Simul(object):
             alpha_k
         """
 
+
         filenameh5 = pyu.getlong(self.filename, pstruc['DIRLNK'])
         # try/except to avoid loosing the h5 file if
         # read/write error
@@ -783,3 +795,4 @@ class Simul(object):
 if (__name__ == "__main__"):
     #plt.ion()
     doctest.testmod()
+

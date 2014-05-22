@@ -344,6 +344,7 @@ class SSHCoeff(object):
         Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
         Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
 
+
         E = Ex + Ey + Ez
 
         ind = np.nonzero(E > (E.max() * threshold))[0]

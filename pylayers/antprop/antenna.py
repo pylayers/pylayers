@@ -1173,10 +1173,9 @@ class Antenna(object):
         t2 = np.arange(GmindB + 5, kwargs['GmaxdB'] + 5, 5)
 
 
-
-
         col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
         cpt = 0
+       
 
         fstep = self.fa[1]-self.fa[0]
         #dtheta = self.theta[1,0]-self.theta[0,0]
@@ -1185,12 +1184,20 @@ class Antenna(object):
         dphi = self.phi[1]-self.phi[0]
 
         for f in kwargs['fGHz']:
+            if 'col' in kwargs:
+                colr  = kwargs['col']
+            else:           
+                colr = col[cpt]
+                
             ik = np.where(abs(self.fa-f)<fstep)[0][0]
-            chaine = 'f = %3.2f GHz' %(self.fa[ik])
+            if 'lab' in kwargs:
+                chaine  = kwargs['lab']
+            else:
+                chaine = 'f = %3.2f GHz' %(self.fa[ik])
             # all theta
             if 'phd' in kwargs:
                 itheta = np.arange(self.Nt)
-                #iphi1 = np.where(abs(self.phi[0,:]-kwargs['phd']*dtr)<dtheta)[0][0]
+                #iphi1 = np.where(abs(self.phi[0,:]-kwargs[+'phd']*dtr)<dtheta)[0][0]
                 iphi1 = np.where(abs(self.phi-kwargs['phd']*dtr)<dphi)[0][0]
                 Np = self.Np
 
@@ -1245,7 +1252,7 @@ class Antenna(object):
                 a2 = [0, 30, 60, 90, 120 , 150 , 180 , 210, 240 , 300 , 330]
                 rline2, rtext2 = plt.thetagrids(a1, a2)
 
-            ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
+            ax.plot(angle, r, color=colr, lw=2, label=chaine)
             rline1, rtext1 = plt.rgrids(t1, t2)
             cpt = cpt + 1
         if kwargs['legend']:
@@ -1276,6 +1283,7 @@ class Antenna(object):
                      'colorbar':True,
                      'ilog':False,
                      'name':[]
+                     
                      }
 
 
@@ -1289,6 +1297,7 @@ class Antenna(object):
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
         po = kwargs['po']
+       
         # T is an unitary matrix
         T  = kwargs['T']
 
@@ -1631,6 +1640,7 @@ class Antenna(object):
         Notes
         -----
 
+
          This function applies an electrical delay math::`\exp{+2 j \pi f \tau)`
          on the phase of diagram math::``F_{\theta}`` and math::`F_{\phi}`
 
@@ -1936,8 +1946,8 @@ class Antenna(object):
             Nf = len(self.fa)
             Fth = Fth.reshape(Nf, Nt, Np)
             Fph = Fph.reshape(Nf, Nt, Np)
-
         return Fth, Fph
+
 
     def Fsynth2(self, theta, phi,pattern=False, typ = 'vsh'):
         """  pattern synthesis from shape 2 vsh coeff
@@ -2134,6 +2144,7 @@ class Antenna(object):
 
             lmax = self.S.Cx.lmax
             Y ,indx = SSHFunc2(lmax, theta,phi)
+
             #k = self.S.Cx.k2[:,0]
             # same k for x y and z
             k = self.S.Cx.k2
@@ -2147,6 +2158,7 @@ class Antenna(object):
 
 
             else:
+                
 
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
@@ -2343,9 +2355,15 @@ class Antenna(object):
         else:
             print 'create ', filesh2, ' file'
             coeff = {}
-            coeff['fmin'] = self.fa[0]
-            coeff['fmax'] = self.fa[-1]
-
+            if type(self.fa) == float:
+                fmin = self.fa
+                fmax = self.fa
+            else:
+                fmin = self.fa[0]
+                fmax = self.fa[-1]
+            coeff['fmin'] = fmin
+            coeff['fmax'] = fmax
+            
 
             coeff['Cx.ind'] = self.S.Cx.ind2
             coeff['Cy.ind'] = self.S.Cy.ind2
@@ -2380,8 +2398,14 @@ class Antenna(object):
             print 'create ', filesh3, ' file'
 
             coeff = {}
-            coeff['fmin'] = self.fa[0]
-            coeff['fmax'] = self.fa[-1]
+            if type(self.fa) == float:
+                fmin = self.fa
+                fmax = self.fa
+            else:
+                fmin = self.fa[0]
+                fmax = self.fa[-1]
+            coeff['fmin'] = fmin
+            coeff['fmax'] = fmax
             coeff['Cx.ind'] = self.S.Cx.ind3
             coeff['Cy.ind'] = self.S.Cy.ind3
             coeff['Cz.ind'] = self.S.Cz.ind3

@@ -2587,7 +2587,7 @@ class Layout(object):
         pt = self.Gs.pos[np]
         data = multenterbox(message, title, (('x','y')),
                             ((str(pt[0]),str(pt[1]))))
-        self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1]))
+        self.Gs.pos[np]= tuple((eval(data[0]),eval(data[1])))
 
 
     def chgmss(self,ns,ss_name=[],ss_z=[]):
