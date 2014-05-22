@@ -282,7 +282,7 @@ class Antenna(object):
                 self.typ = typ
                 self.p0 = kwargs['p0']
                 kwargs['t0'] = 5*np.pi/6.
-                self.t0 =  kwargs['t0']# 
+                self.t0 =  kwargs['t0']#
                 self.GdB = 5. # gain
                 self.G  = pow(10.,self.GdB/10.) # gain
                 self.sqG = np.sqrt(self.G)
@@ -295,6 +295,41 @@ class Antenna(object):
                 self.evaluated = False
             else:
                 raise NameError('antenna typ is not known')
+
+
+    def help(self,letter='az',mod='meth'):
+        """ help
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
+        """
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
 
     def __repr__(self):
 
@@ -321,14 +356,21 @@ class Antenna(object):
             st = st + "Ntheta : %d" % (self.Nt) + "\n"
             st = st + "Nphi : %d" % (self.Np) + "\n"
             u = np.where(self.SqG==self.SqG.max())
-            S = self.SqG[u]
+            if len(u[0]>1):
+                S = self.SqG[(u[0][0],u[1][0],u[2][0])]
+                uf = u[0][0]
+                ut = u[1][0]
+                up = u[2][0]
+            else:
+                S = self.SqG[u]
+                uf = u[0]
+                ut = u[1]
+                up = u[2]
             GdB = 20*np.log10(S)
             st = st + "GmaxDB : %4.2f dB \n" % (GdB)
-            st = st + "   f = %4.2f GHz \n" % (self.fa[u[0]])
-            #st = st + "   theta = %4.2f (degrees) \n" % (self.theta[u[1],0]*rtd)
-            #st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[0,u[2]]*rtd)
-            st = st + "   theta = %4.2f (degrees) \n" % (self.theta[u[1]]*rtd)
-            st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[u[2]]*rtd)
+            st = st + "   f = %4.2f GHz \n" % (self.fa[uf])
+            st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
+            st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[up]*rtd)
         else:
             st = st + 'Not evaluated\n'
 
