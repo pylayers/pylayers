@@ -132,7 +132,7 @@ class Ctilde(object):
             s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
             s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
             s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
-        return(str)
+        return(s)
 
     def help(self,letter='az',mod='meth'):
         """ help
@@ -1186,22 +1186,22 @@ class Ctilde(object):
         if 'fig' not in kwargs:
             kwargs['fig'] = plt.figure()
 
-        ax1 = fig.add_subplot(221)
+        ax1 = kwargs['fig'].add_subplot(221)
         fig, ax1 = self.Ctt.imshow(ax=ax1,**kwargs)
         ax1.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax1.set_title(u'$C_{\\theta\\theta}$',fontsize=kwargs['fontsize'])
 
-        ax2 = fig.add_subplot(222)
+        ax2 = kwargs['fig'].add_subplot(222)
         fig, ax2 = self.Ctp.imshow(ax=ax2,**kwargs)
         ax2.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax2.set_title(u'$C_{\\theta\phi}$',fontsize=kwargs['fontsize'])
 
-        ax3 = fig.add_subplot(223)
+        ax3 = kwargs['fig'].add_subplot(223)
         fig, ax3 = self.Cpt.imshow(ax=ax3,**kwargs)
         ax3.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax3.set_title(u'$C_{\phi\\theta}$',fontsize=kwargs['fontsize'])
 
-        ax4 = fig.add_subplot(224)
+        ax4 = kwargs['fig'].add_subplot(224)
         fig, ax4 = self.Cpp.imshow(ax=ax4,**kwargs)
         ax4.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax4.set_title(u'$C_{\phi\phi}$',fontsize=kwargs['fontsize'])
