@@ -1704,10 +1704,10 @@ class Antenna(object):
             >>> tau = A.getdelay()
             >>> A.elec_delay(tau)
 
-        
+
 
         """
-        
+
         self.tau = self.tau+tau
         if self.evaluated:
             Ftheta = self.Ftheta
