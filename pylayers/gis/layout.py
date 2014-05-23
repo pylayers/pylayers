@@ -780,7 +780,6 @@ class Layout(object):
         return np.setdiff1d(iseg, u)
 
 
-
     def help(self,letter='az',mod='meth'):
         """ help
 
@@ -814,6 +813,7 @@ class Layout(object):
                                     print s+': '+ doc[0]
                                 except:
                                     pass
+
 
     def g2npy(self):
         """ from graphs to numpy arrays conversion
@@ -4833,8 +4833,8 @@ class Layout(object):
         if 'w' in graph and len(self.Gr.nodes())>1:
             if verbose:
                 print "Gw"
-            #self.buildGw()
-            #self.lbltg.extend('w')
+            self.buildGw()
+            self.lbltg.extend('w')
             pass
 
         # dictionnary of cycles which have an air wall
@@ -4891,8 +4891,9 @@ class Layout(object):
             except:
                 raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
-        #if 'i' in self.lbltg:
-        #    write_gpickle(getattr(self,'di'),path+'/di.gpickle')
+        if 't' in self.lbltg:
+            write_gpickle(getattr(self,'ldiffin'),path+'/ldiffin.gpickle')
+            write_gpickle(getattr(self,'ldiffout'),path+'/ldiffout.gpickle')
         write_gpickle(getattr(self,'dca'),path+'/dca.gpickle')
 
 
@@ -4964,7 +4965,9 @@ class Layout(object):
                 if len(self.Gs.node[k]['ncycles'])==1:
                     self.Gs.node[k]['ncycles'].append(-1)
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
-        #setattr(self,'di', read_gpickle(path+'/di.gpickle'))
+        if 't' in graphs :
+            setattr(self,'ldiffin', read_gpickle(path+'/ldiffin.gpickle'))
+            setattr(self,'ldiffout', read_gpickle(path+'/ldiffout.gpickle'))
         setattr(self,'dca', read_gpickle(path+'/dca.gpickle'))
 
     def hull(self):
@@ -5081,7 +5084,7 @@ class Layout(object):
 
         Gt.inclusion()
         if len(Gt.edges())>0:
-            logging.warning("first decompose run failed")
+            #logging.warning("first decompose run failed")
             Gt = Gt.decompose()
             Gt.inclusion()
             if len(Gt.edges())>0:
@@ -5296,6 +5299,7 @@ class Layout(object):
 
         d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
         d_id_index = d_id + 1
+
         for e in self.Gr.edges_iter(): # iterator on Gr edges
 
             self.Gw.add_node(e[0],{'room':e[0],'door':False})
@@ -5395,38 +5399,38 @@ class Layout(object):
         #     self.Gw.pos.update(self.Gr.pos)
 ####################
         # ADD CONVEX POINTS
-        d_id = max(self.Gw.nodes())+1
-        pcid = d_id
-        tmp = []
-        for n in self.Gr.nodes():
-            # get segment number of the room
-            tcc, nn = self.Gr.node[n]['polyg'].ptconvex()
-            uconvex = np.nonzero(tcc == 1)[0]
+        # d_id = max(self.Gw.nodes())+1
+        # pcid = d_id
+        # tmp = []
+        # for n in self.Gr.nodes():
+        #     # get segment number of the room
+        #     tcc, nn = self.Gr.node[n]['polyg'].ptconvex()
+        #     uconvex = np.nonzero(tcc == 1)[0]
 
-            if len(uconvex) != 0 :
-                lr = self.Gr.node[n]['polyg'].exterior
-                x,y = lr.xy
-                p = [np.array((x[i],y[i])) for i in uconvex]
-                ln = self.Gr.node[n]['cycle'].cycle
-                lp = filter(lambda x: x< 0, ln)
-                pc = [lp[i] for i in uconvex]
-                for uu,uc in enumerate(uconvex):
-                    # convex point position take into account wall width
-                    npc = nx.neighbors(self.Gs,pc[uu])
-                    # only corner are considered (point with 3 neighbors are not)
-                    if len(npc) <=2:
-                        nname = [self.Gs.node[nd]['name'] for nd in npc]
-                        npos = [self.Gs.pos[nd] for nd in npc]
-                        nv = [p[uu]- i for i in npos]
-                        nvn = sum(nv)/abs(sum(nv))
-                        nsl = [self.sl[name] for name in nname]
-                        thick = sum([sum(sl['lthick']) for sl in nsl])
-                        # vector to add to the convex point position
-                        v = nvn*thick
-                        pid = uc+pcid
-                        self.Gw.add_node(pid,{'diff':True,'room':n,'door':False})
-                        self.Gw.pos.update({pid:p[uu]+v[:2]})
-                        pcid = pcid +1
+        #     if len(uconvex) != 0 :
+        #         lr = self.Gr.node[n]['polyg'].exterior
+        #         x,y = lr.xy
+        #         p = [np.array((x[i],y[i])) for i in uconvex]
+        #         ln = self.Gr.node[n]['cycle'].cycle
+        #         lp = filter(lambda x: x< 0, ln)
+        #         pc = [lp[i] for i in uconvex]
+        #         for uu,uc in enumerate(uconvex):
+        #             # convex point position take into account wall width
+        #             npc = nx.neighbors(self.Gs,pc[uu])
+        #             # only corner are considered (point with 3 neighbors are not)
+        #             if len(npc) <=2:
+        #                 nname = [self.Gs.node[nd]['name'] for nd in npc]
+        #                 npos = [self.Gs.pos[nd] for nd in npc]
+        #                 nv = [p[uu]- i for i in npos]
+        #                 nvn = sum(nv)/abs(sum(nv))
+        #                 nsl = [self.sl[name] for name in nname]
+        #                 thick = sum([sum(sl['lthick']) for sl in nsl])
+        #                 # vector to add to the convex point position
+        #                 v = nvn*thick
+        #                 pid = uc+pcid
+        #                 self.Gw.add_node(pid,{'diff':True,'room':n,'door':False})
+        #                 self.Gw.pos.update({pid:p[uu]+v[:2]})
+        #                 pcid = pcid +1
 
 
         #pdb.set_trace()
@@ -5438,27 +5442,11 @@ class Layout(object):
             for nw in combinations(f,2):
                 pf = map(lambda x: self.Gw.pos[x],nw)
                 pf =  np.array((pf))
-                if self.seginline(pf[0],pf[1]).shape[1] <= 1:
-                    d = np.sqrt(np.sum((pf[0]-pf[1])**2))
-                    self.Gw.add_edges_from([(nw[0],nw[1])],weight=d)
+                # if self.seginline(pf[0],pf[1]).shape[1] <= 1:
+                d = np.sqrt(np.sum((pf[0]-pf[1])**2))
+                self.Gw.add_edges_from([(nw[0],nw[1])],weight=d)
 
-            # kudr = [kdr[u] for u in udr]
-            # cdr = combinations(dr.keys()[udr],2)
-            # for
-            # import ipdb
-            # ipdb.set_trace()
 
-        # for n in self.Gr.nodes_iter():
-        #     d = self.Gw.neighbors(n)   # neighbors of room n in Gw
-        #     if len(d) > 1:
-        #         self.Gw.add_edges_from(combinations(d, 2))
-
-        # udn = nx.get_node_attributes(self.Gw,'diff').keys()
-        # import ipdb
-        # ipdb.set_trace()
-        # for u in udn:
-        #     [self.Gw[u].update({i:{'weigth':0.01}})for i in self.Gw.edge[u].keys()]
- 
     # def buildGw(self):
     #     """ build Graph of waypaths
 
@@ -7063,6 +7051,7 @@ class Layout(object):
                     pass
                 else:
                     self.Gr.remove_node(cy)
+                    self.Gr.pos.pop(cy)
 
         # Destroy edges which do not share a door
         for e in self.Gr.edges():
