@@ -1,4 +1,22 @@
 #-*- coding:Utf-8 -*-
+"""
+
+.. currentmodule:: pylayers.gis.ezone
+
+This class handles the description of an earth zone
+
+.. autosummary::
+    :toctree: generated
+
+Class Ezone
+===========
+
+
+
+
+
+
+"""
 import h5py
 import numpy as np
 import pandas as pd
@@ -12,40 +30,31 @@ from scipy.interpolate import interp2d
 #from imposm.parser import OSMParser
 #from geomutil import *
 #from pylayers.util.project import *
-import pyutil as pyu
+import pylayers.util.pyutil as pyu
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-"""
 
-Ezone class
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-"""
-
-def maxloc(a):
-    """
-    Determine local maximum
+def maxloc(f,threshold=-0.7):
+    """ determine local maximum
 
     Parameters
     ----------
 
-    a
+    f : np.array
+
+    Returns
+    -------
+
+    g :
 
     """
-    a_decr = np.roll(a,1,axis=1)
-    a_decl = np.roll(a,-1,axis=1)
-    ind = np.where((a>a_decr)&(a>a_decl)&(a>-0.7))
-    #pdb.set_trace()
-    #ai = a[ind]
-    #i_max = np.where(ai==max(ai))[0]
-    #ai_max = ai[i_max]
-    b = np.zeros(np.shape(a))
+    f_decr = np.roll(f,1,axis=1)
+    f_decl = np.roll(f,-1,axis=1)
+    ind = np.where((f>f_decr)&(f>f_decl)&(f>threshold))
+    g = np.zeros(np.shape(f))
     #
-    b[ind] = a[ind]
-    return(b)
+    g[ind] = f[ind]
+    return(g)
 
 def decsrtm(_filehgt='N48W002.HGT'):
     """
