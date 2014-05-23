@@ -1303,25 +1303,25 @@ class Slab(dict, Interface):
         self.mat = mat
         self['evaluated'] = False
 
-    def __repr__(self):
-        if self['evaluated']:
-            st = 'fGHz : '+str(self.fGHz[0,:]) +':'+str(self.fGHz[-1,:]) +':'+str(len(self.fGHz[:,0]))+"\n"
-            st = st+ 'theta : '+str(self.theta[:,0])+':'+str(self.theta[:,-1])+':'+str(len(self.theta[0,:]))+"\n"
-            st = st + '| '
-        else:
-            st = '| '
-        for k in range(len(self['lmatname'])):
-            st = st + self['lmatname'][k]+' | '
-        st = st+'\n|'
+#    def __repr__(self):
+#        if self['evaluated']:
+#            st = 'fGHz : '+str(self.fGHz[0,:]) +':'+str(self.fGHz[-1,:]) +':'+str(len(self.fGHz[:,0]))+"\n"
+#            st = st+ 'theta : '+str(self.theta[:,0])+':'+str(self.theta[:,-1])+':'+str(len(self.theta[0,:]))+"\n"
+#            st = st + '| '
+#        else:
+#            st = '| '
+#        for k in range(len(self['lmatname'])):
+#            st = st + self['lmatname'][k]+' | '
+#        st = st+'\n|'
+#
+#        for k in range(len(self['lmatname'])):
+#            ntick = int(np.ceil(self['lthick'][k]/0.01))
+#            for l in range(ntick):
+#                st = st+'-'
+#            st = st +'|'
+#        st = st+'\n'
+#        return(st)
 
-        for k in range(len(self['lmatname'])):
-            ntick = int(np.ceil(self['lthick'][k]/0.01))
-            for l in range(ntick):
-                st = st+'-'
-            st = st +'|'
-        st = st+'\n'
-        return(st)
-                
     def info(self):
         """ Display Slab Info
 

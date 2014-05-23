@@ -34,7 +34,7 @@ Internal configuration
     Simul._saveh5
     Simul._loadh5
 
-    
+
 """
 import doctest
 import numpy as np

@@ -921,6 +921,7 @@ class Fdd(object):
 
         """
 
+
         f = self.freq
         if (typ == 'moddB'):
             v1 = 20 * np.log10(abs(self.ch1))
@@ -996,11 +997,16 @@ class Tdd(object):
             #self.ch4  = bs.TUsignal(t,d.CH4[0])
             #self.tx   = bs.TUsignal(t,d.TX)
             #self.tx   = bs.TUsignal(t,d.TX[0])
+            #####
+            ##### Definitely not obvious , but 
+            ##### this order is the corect one regarding
+            ##### to the measurements !!
+            #####
             t = d[0][0] * 1e9
-            self.ch1 = bs.TUsignal(t, d[1][0])
-            self.ch2 = bs.TUsignal(t, d[2][0])
-            self.ch3 = bs.TUsignal(t, d[3][0])
-            self.ch4 = bs.TUsignal(t, d[4][0])
+            self.ch3 = bs.TUsignal(t, d[1][0])
+            self.ch4 = bs.TUsignal(t, d[2][0])
+            self.ch1 = bs.TUsignal(t, d[3][0])
+            self.ch2 = bs.TUsignal(t, d[4][0])
             #self.tx   = bs.TUsignal(t,d.TX)
             self.tx = bs.TUsignal(t, d[5][0])
         else:
@@ -1609,7 +1615,7 @@ class UWBMeasure(object):
 
     """
 
-    def __init__(self, nTx, h=1, display=False):
+    def __init__(self, nTx=1, h=1, display=False):
         """
 
         Parameters
@@ -1631,11 +1637,33 @@ class UWBMeasure(object):
             >>> M1.show()
 
         """
+        self.validindex = [1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,
+        23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,
+        43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,
+        62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,
+        81,82,83,84,85,89,90,91,92,93,94,95,96,97,98,99,100,101,103,
+        104,105,106,107,108,109,110,111,113,114,116,117,119,120,122,
+        123,124,125,126,127,128,129,133,134,136,137,138,139,140,141,
+        142,143,144,145,146,147,162,163,164,165,166,167,168,169,170,
+        171,172,173,174,175,176,177,179,180,181,182,183,184,185,186,
+        188,189,199,200,201,202,203,204,205,206,207,208,209,210,211,
+        212,213,214,215,216,217,218,219,220,221,222,223,227,228,229,
+        230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,
+        245,246,247,248,249,250,251,252,253,258,259,266,267,268,269,
+        270,271,272,273,274,275,276,277,278,279,297,298,299,300,301,
+        302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,
+        317,318,319,320,321,322,323,324,325,326,327,328,329,330,332,
+        333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,
+        348,349,350,351,352,353,354,355,356,360,361,362,363,364,365,
+        366,367,368,369,370,371,372,373,374,375]
+
         # Raw data matlab file reading
         Tx, Rx = ptw1()
         visi = visibility()
+        if not os.path.exists(mesdir):
+            raise AttributeError('Incorrect Measure directory set in $MESDIR')
         filename = mesname(nTx, mesdir, h)
-        if os.path.exists(filename):
+        if os.path.exists(filename) :
             b = io.loadmat(filename)
             # Conversion
             self.CAL_DATA = CAL_DATA(b['CAL_DATA'][0][0])
@@ -1706,7 +1734,7 @@ class UWBMeasure(object):
             self.type = [type1, type2, type3, type4]
             self.valid = True
         else:
-            #print "point Non Valide"
+            raise AttributeError("non valid Rx point ")
             self.valid = False
 
 #    def __del__(self):
@@ -1716,6 +1744,12 @@ class UWBMeasure(object):
 #            del self.F3
 #            del self.F4
 #            print "Detruit: ",self.Tx_position
+
+
+
+
+         
+
 
     def info(self):
         print "Date_Time :", self.Date_Time

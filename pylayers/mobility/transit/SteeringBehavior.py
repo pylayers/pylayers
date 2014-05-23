@@ -290,10 +290,9 @@ class Containment:
        # speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
         if front_intersect:
             if front_direction == 'left':
-                acceleration = -boid.localx.scale(speed) 
-
-            else:
                 acceleration = boid.localx.scale(speed) 
+            else:
+                acceleration = -boid.localx.scale(speed) 
         elif left_intersect:
             acceleration = boid.localx.scale(speed)
         elif right_intersect:
