@@ -196,8 +196,8 @@ class Antenna(object):
                     number of theta (default 181)
         nph       : integer
                     number of phi (default 90)
-
-
+        source    : string
+                source of data { 'satimo' | 'cst' | 'hfss' }
         Notes
         -----
 
@@ -216,6 +216,7 @@ class Antenna(object):
 
         defaults = { 'directory': 'ant',
                     'nf':104,
+                    'source':'satimo',
                     'ntheta':90,
                     'nphi':181,
                     'p0':0,
@@ -230,6 +231,7 @@ class Antenna(object):
         self.Nf = kwargs['nf']
         self.Nt = kwargs['ntheta']
         self.Np = kwargs['nphi']
+        self.source = kwargs['source']
 
         if isinstance(typ,str):
             AntennaName,Extension = os.path.splitext(typ)
@@ -366,7 +368,11 @@ class Antenna(object):
                 uf = u[0]
                 ut = u[1]
                 up = u[2]
-            GdB = 20*np.log10(S)
+            if self.source=='satimo':
+                GdB = 20*np.log10(S)
+            # see WHERE1 D4.1 sec 3.1.1.2.2
+            if self.source=='cst':
+                GdB = 20*np.log10(S/np.sqrt(30))
             st = st + "GmaxDB : %4.2f dB \n" % (GdB)
             st = st + "   f = %4.2f GHz \n" % (self.fa[uf])
             st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
@@ -1251,15 +1257,25 @@ class Antenna(object):
                 #u3 = np.nonzero((self.theta[:,0] <= np.pi) & ( self.theta[:,0]
                 #                                              > np.pi / 2))[0]
                 u3 = np.nonzero((self.theta <= np.pi) & ( self.theta > np.pi / 2))[0]
-                r1 = -GmindB + 20 * np.log10(  self.SqG[ik, u1, iphi1]+1e-12)
+                if self.source=='satimo':
+                    r1 = -GmindB + 20 * np.log10(  self.SqG[ik, u1, iphi1]+1e-12)
+                if self.source=='cst':
+                    r1 = -GmindB + 20 * np.log10(  self.SqG[ik, u1, iphi1]/np.sqrt(30)+1e-12)
+
                 #r1  = self.SqG[k,u1[0],iphi1]
                 negr1 = np.nonzero(r1 < 0)
                 r1[negr1[0]] = 0
-                r2 = -GmindB + 20 * np.log10( self.SqG[ik, u2, iphi2]+1e-12)
+                if self.source=='satimo':
+                    r2 = -GmindB + 20 * np.log10( self.SqG[ik, u2, iphi2]+1e-12)
+                if self.source=='cst':
+                    r2 = -GmindB + 20 * np.log10(  self.SqG[ik, u2, iphi2]/np.sqrt(30)+1e-12)
                 #r2  = self.SqG[k,u2,iphi2]
                 negr2 = np.nonzero(r2 < 0)
                 r2[negr2[0]] = 0
-                r3 = -GmindB + 20 * np.log10( self.SqG[ik, u3, iphi1]+1e-12)
+                if self.source=='satimo':
+                    r3 = -GmindB + 20 * np.log10( self.SqG[ik, u3, iphi1]+1e-12)
+                if self.source=='cst':
+                    r3 = -GmindB + 20 * np.log10(  self.SqG[ik, u3, iphi1]/np.sqrt(30)+1e-12)
                 #r3  = self.SqG[k,u3[0],iphi1]
                 negr3 = np.nonzero(r3 < 0)
                 r3[negr3[0]] = 0
@@ -2065,7 +2081,7 @@ class Antenna(object):
         return Fth, Fph
 
 
-    def Fsynth3(self, theta = [], phi=[], pattern=True):
+    def Fsynth3(self, theta = [], phi=[], pattern=True,typ='sh3'):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
@@ -2078,6 +2094,7 @@ class Antenna(object):
 
         pattern : boolean
             if True theta and phi are reorganized for building the pattern
+        typ  : 'vsh3' | 'sh3' | 'hfss'
 
         Returns
         -------
@@ -2109,6 +2126,10 @@ class Antenna(object):
         """
 
         typ = self.typ#self._filename.split('.')[1]
+        if typ=='satimo':
+            coeff=1.
+        if typ=='cst':
+            coeff=1./sqrt(30)
 
         assert typ in ['sh3','vsh3'], "Error wrong file type"
 
