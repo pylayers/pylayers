@@ -190,23 +190,71 @@ def lmreshape(coeff,L= 20):
 
 
 
-def sshModel(c,d, L = 20, ifreq = 46, alpha =0):
+def sshModel(c,dmm, L = 20, ifreq = 46):
+    """ modify the free space pattern of a body mounted antenna
+
+    Parameters
+    ----------
+    c : SHCoeff
+        Free space coefficient of the antenna
+    dmm : float 
+        distance in millimeters between antenna and dielectric cylinder
+    L : 
+    ifreq : frequency index
+    model : dict 
+        dictionnary with model parameters a,b,a',b',a",b"
+
+    Notes 
+    -----
+    
+    This model is presented in "Modelling of UWB Antenna Perturbed by Human Phantom in Spherical Harmonics Space"
+    
+    EUCAP 2014 
+    
+    See Also
+    --------
+    
+    pylayers.antprop.spharm
+    
     """
-    sshModel
-
-    """
-
-
+    defaults = { L : 20 ,
+                 ifreq: 46, 
+                 model : { a : 0.002,
+                           b : 0.55,
+                           ap : -0.002,
+                           bp : 1.55,
+                           app : -0.006,
+                           bpp : 1.22
+                         }
+                }
+    
+    for k in defaults.keys():
+        if k not in kwargs:
+            kwargs[k]=defaults[k]
+    
+    mdl = kwargs['model']
+    L = kwargs['L']
+    ifreq =kwargs['ifreq']
+            
     Lc = (1+L)**2
     sh = np.shape(c)
     cm = np.zeros(shape = sh , dtype = complex)
     m0 =  modeMax(c, ifreq= ifreq, L= 20)
     im0 = m0*(2*L+3-m0)/2
-    M = m0 + int(0.06*d) + 4
-    a0 = 0.002*d+0.55
-    am = -0.002*d + 1.55
-    alpha = -0.006*d+1.22
-
+    
+    # m0 corresponds to Mfs
+    # M corresponds to Mp
+    # alpha corresponds to phim 
+    
+    # formula (10) [mhed14]
+    M = m0 + int(0.06*dmm) + 4
+    #a0 = 0.002*dmm+0.55
+    a0 = mdl['a']*dmm+mdl['b']
+    #am = -0.002*dmm + 1.55
+    am = mdl['ap']*dmm + mdl['bp']
+    #alpha = -0.006*dmm+1.22
+    alpha = mdl['app']*dmm+mdl['bpp']
+    
     for m in range(0,m0):
 
         im = m*(2*L+3-m)/2
