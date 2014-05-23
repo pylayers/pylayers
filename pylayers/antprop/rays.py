@@ -173,17 +173,62 @@ class Rays(dict):
         return(s)
 
 
-    def saveh5(self,idx=0):
-        """ save rays 
-            pyh5 format
+    def help(self,letter='az',mod='meth'):
+        """ help
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
         """
 
-        filename = self.filename+'_'+str(idx) 
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+
+
+    def saveh5(self,idx=0):
+        """ save rays in hdf5 format
+
+        Parameters
+        ----------
+
+        idx : int
+
+        See Also
+        --------
+
+        loadh5
+
+        """
+
+        filename = self.filename+'_'+str(idx)
         filenameh5=pyu.getlong(filename+'.h5',pstruc['DIRR3D'])
-        
-        
-        
-        # try/except to avoid loosing the h5 file if 
+
+
+
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f=h5py.File(filenameh5,'w')
@@ -527,7 +572,6 @@ class Rays(dict):
         else:
             lgrint = [kwargs['i']]
 
-
         for i in lgrint:
             if kwargs['r']==-1:
                 lray = range(len(self[i]['pt'][0, 0, :]))
@@ -649,7 +693,7 @@ class Rays(dict):
 
         tx = self.pTx
         rx = self.pRx
-        
+
         #
         # Phase 1 : calculate Tx images height and parameterization in the
         # vertical plane
@@ -660,7 +704,7 @@ class Rays(dict):
         #
         # Phase 2 : calculate 2D parameterization in the horizontal plane
         #
-       
+
         # for all group of interactions
         for i in self:
 
@@ -671,7 +715,7 @@ class Rays(dict):
                 np.ones((1, 1, len(pts[0, 0, :])))
             r = self.pRx[0:2].reshape((2, 1, 1)) * \
                 np.ones((1, 1, len(pts[0, 0, :])))
-            # append t and r to interaction points in 2D 
+            # append t and r to interaction points in 2D
             pts1 = np.hstack((t, np.hstack((pts, r))))
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             # array of all ray segments distances
@@ -714,12 +758,12 @@ class Rays(dict):
             Nrayk = np.shape(self[k]['alpha'])[1]
 
             # get  2D horizontal parameterization
-            a1 = self[k]['alpha']         
+            a1 = self[k]['alpha']
 
             #if (k==1):
             #    pdb.set_trace()
             # get  2D signature
-            sig = self[k]['sig']           
+            sig = self[k]['sig']
             #print "signatures 2D ",sig
             #print "----"
             sigsave = copy.copy(sig)
@@ -779,8 +823,8 @@ class Rays(dict):
                         u = np.mod(range(Nint), 2)
                     else:
                         u = 1 - np.mod(range(Nint), 2)
-                    #   
-                    u = u + 4   
+                    #
+                    u = u + 4
                     #
                     # At that point we introduce the signature of the new
                     # introced points on the ceil and/or floor.
@@ -791,26 +835,26 @@ class Rays(dict):
                     #
                     esigs = np.zeros((1, Nint, Nrayk), dtype=int)
                     esigi = u.reshape(1, Nint, 1)* np.ones((1, 1, Nrayk), dtype=int)
-                    # esig : extension of the signature              
+                    # esig : extension of the signature
                     esig = np.vstack((esigs, esigi))
                     # sige : signature extended  ( 2 x (Nint+k+2) x Nrayk )
                     sige = np.hstack((sig, esig))
-                   
+
                     #
                     # 2 x (Nint+k+2) x Nrayk
                     #
-                    # Now comes the time to sort extended sequence of points
+                    # sort extended sequence of points
                     # and extended sequence of signatures with the sorting
-                    # index ks obtained from argsort of merge parametization 
+                    # index ks obtained from argsort of merge parametization
                     #
                     # sequence of extended sorted points
                     #
-                    ptees = ptee[:, ks, range(Nrayk)]    
-                    siges = sige[:, ks, range(Nrayk)]  
+                    ptees = ptee[:, ks, range(Nrayk)]
+                    siges = sige[:, ks, range(Nrayk)]
                     # extended and sorted signature
                     iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
                     iint_c, iray_c = np.where(siges[ 1, :] == 5)  # ceil interaction
-                    #print siges    
+                    #print siges
                     #
                     # find the list of the previous and next point around the
                     # new ceil or floor point. The case of successive ceil or
@@ -1042,7 +1086,7 @@ class Rays(dict):
         #   pt =  [tx,rx]
         #   sig = [0,0]
         #
-        
+
         if (self.los) & (np.sum(tx-rx,axis=0)<>0):
             r3d[0] = {}
             r3d[0]['sig'] = np.zeros((2,2,1))
@@ -1077,7 +1121,10 @@ class Rays(dict):
             rlength = np.sum(lsi,axis=0)
             if (lsi.any()==0):
                 pdb.set_trace()
-            assert(lsi.all()>0)
+            if not (lsi.all()>0):
+                pdb.set_trace()
+            #assert(lsi.all()>0)
+
             if (len(np.where(lsi==0.))==0) :
                 pdb.set_trace()
 
@@ -1135,13 +1182,13 @@ class Rays(dict):
         #
 
         # nsegment x 3
-        norm = np.array(nx.get_node_attributes( L.Gs, 'norm').values())
+        norm = np.array(nx.get_node_attributes(L.Gs,'norm').values())
 
         # nsegment x k
-        key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
+        key = np.array(nx.get_node_attributes(L.Gs,'norm').keys())
 
         # maximum number for refering to segment
-        # not to be confused with a number of segment
+        # not to be confused with a segment number
 
         nsmax = max(L.Gs.node.keys())
 
@@ -1172,10 +1219,11 @@ class Rays(dict):
 
                 # structure number (segment or point)
                 # nstr : i x r
-                nstr = self[k]['sig'][0, 1:-1, :]     
+                nstr = self[k]['sig'][0, 1:-1, :]
 
                 # ityp : i x r
-                ityp = self[k]['sig'][1, 1:-1, :]     
+                ityp = self[k]['sig'][1, 1:-1, :]
+
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment
                 # print nstr
@@ -1200,8 +1248,8 @@ class Rays(dict):
                 #pdb.set_trace()
                 nray = np.shape(nstr)[1]
 
-                uwall = np.where((ityp == 1) | (ityp == 2))
-                udiff = np.where((ityp == 3))
+                uwall = np.where((ityp == 2) | (ityp == 3))
+                udiff = np.where((ityp == 1))
                 ufloor= np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
@@ -1219,14 +1267,16 @@ class Rays(dict):
                 #
 
                 # norm : 3 x i x r
-                # TODO 
-                # For the diffraction the norm should be replaced by the unit
-                # vector along the wedge.
-                # udiff not handled yet
+                #
+                # norm name is improper norm is in fact the vector associated to the
+                # interaction
+                # For the diffraction case the normal is replaced by the unit
+                # vector along the wedge directed upward.
                 #
                 self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
+                self[k]['norm'][2, udiff[0], udiff[1]] = np.ones(len(udiff[0]))
 
                 normcheck = np.sum(self[k]['norm']*self[k]['norm'],axis=0)
                 assert normcheck.all()>0.99,pdb.set_trace()
@@ -1458,13 +1508,16 @@ class Rays(dict):
                 self[k]['si'] = np.vstack((si,0.))
                 self[k]['vsi'] = (self[0]['pt'][:,1]-self[0]['pt'][:,0])/si
                 self[k]['dis'] = np.array((si))
-                vsi=self[k]['vsi']
+
+                vsi = self[k]['vsi']
                 thd = np.arccos(vsi[2])
                 phd = np.arctan2(vsi[1], vsi[0])
+
                 self[k]['aod'] = np.vstack((thd, phd))
                 self[k]['Bo0'] = np.array(())
                 self[k]['scpr'] = np.array(())
                 self[k]['theta'] = np.zeros((1,1))
+
                 #
                 # The following derivation of the doa is the actual chosen angle convention
                 # Those angles are relative to natural spherical coordinates system in the gcs of the scene.
@@ -1481,7 +1534,7 @@ class Rays(dict):
                 self[k]['nbrays'] = 1
                 self[k]['rayidx'] = ze
                 self.raypt = 1
-                self.ray2nbi=ze
+                self.ray2nbi = ze
 
             self.isbased=True
 
@@ -1664,9 +1717,9 @@ class Rays(dict):
                 # seek for interactions position
                 ################################
 
-                uR = np.where((itypf == 1))[0]
-                uT = np.where((itypf == 2))[0]
-                uD = np.where((itypf == 3))[0]
+                uD = np.where((itypf == 1))[0]
+                uR = np.where((itypf == 2))[0]
+                uT = np.where((itypf == 3))[0]
                 uRf = np.where((itypf == 4))[0]
                 uRc = np.where((itypf == 5))[0]
 
@@ -2211,13 +2264,17 @@ class Rays(dict):
             if rlist == []:
                 r = range(np.shape(self[i]['pt'])[2])
             else :
-                r = np.array((rlist)) 
+                r = np.array((rlist))
+
             # number of rays
             nbr = len(r) 
             # current number of interactions
             cnbi = i + 2
             pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
-            lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+            # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
+            lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
+            import ipdb
+            ipdb.set_trace()
             mesh = tvtk.PolyData(points=pt.T, polys=lines)
             mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
                                                  color=(0, 0, 0), )

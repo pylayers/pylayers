@@ -479,11 +479,11 @@ def randcol(Nc):
     return(col)
 
 
-def coldict(): 
-    """ Color dictionary 
-    html color 
+def coldict():
+    """ Color dictionary
+    html color
 
-    Notes 
+    Notes
     -----
 
     'Link on html color<http://html-color-codes.blogspot.com/>'_

@@ -71,22 +71,23 @@ import numpy as np
 #import scipy as sp
 import scipy.linalg as la
 import pdb
+import h5py
+import copy
+import time
+import pickle
+import logging
 import networkx as nx
+import shapely.geometry as shg
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import pylayers.gis.layout as layout
 import pylayers.util.geomutil as geu
 import pylayers.util.cone as cone
 #import pylayers.util.graphutil as gph
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
-import matplotlib.pyplot as plt
-from pylayers.util.project import *
-from mpl_toolkits.mplot3d import Axes3D
 from pylayers.antprop.rays import Rays
-import h5py
-import copy
-import pickle
-import logging
-import time
+from pylayers.util.project import *
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
@@ -121,15 +122,14 @@ def gidl(g):
    Returns
    -------
 
-   gr 
+   gr
 
    """
 
     edlist=[]
     pos={}
     for n in g.nodes():
-        en = eval(n)
-        if type(en) == tuple :
+        if len(n)>1:
             edlist.append(n)
     gr=g.subgraph(edlist)
     dpos = {k:g.pos[k] for k in edlist}
@@ -184,7 +184,7 @@ def frontline(L,nc,v):
 
 
 def edgeout2(L,g):
-    """ filter authorized Gi edges output 
+    """ filter authorized Gi edges output
 
     Parameters
     ----------
@@ -192,13 +192,13 @@ def edgeout2(L,g):
     L : Layout
     g : Digraph Gi
 
-    Notes 
+    Notes
     -----
 
     Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
     This function checks that this sequence is feasible
     , whatever the type of nstr0 and nstr1.
-    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
+    The feasible outputs from nstr0 to nstr1 are stored in an output field of
     edge (nstr0,nstr1)
 
 
@@ -207,26 +207,11 @@ def edgeout2(L,g):
     # loop over all edges of Gi
     for e in g.edges():
         # extract  both termination interactions nodes
-        i0 = eval(e[0])
-        i1 = eval(e[1])
-        try:
-            nstr0 = i0[0]
-        except:
-            nstr0 = i0
+        i0 = e[0]
+        i1 = e[1]
 
-
-        try:
-            nstr1 = i1[0]
-            # Transmission
-            if len(i1)>2:
-                typ=2
-            # Reflexion    
-            else :
-                typ=1
-        # Diffraction        
-        except:
-            nstr1 = i1
-            typ = 3
+        nstr0 = i0[0]
+        nstr1 = i1[0]
 
         # list of authorized outputs, initialized void
         output = []
@@ -241,23 +226,23 @@ def edgeout2(L,g):
                     # not connected
                     cn.from2segs(pseg0,pseg1)
                 else:
-                    # connected 
+                    # connected
                     cn.from2csegs(pseg0,pseg1)
             else:
                 pt = np.array(L.Gs.pos[nstr0])
                 cn.fromptseg(pt,pseg1)
-        
+
             # list all potential successor of interaction i1
-            i2 = nx.neighbors(g,str(i1))
-            ipoints = filter(lambda x: eval(x)<0 ,i2)
-            istup = filter(lambda x : type(eval(x))==tuple,i2)
-            isegments = np.unique(map(lambda x : eval(x)[0],istup))
+            i2 = nx.neighbors(g,i1)
+            ipoints = filter(lambda x: x[0]<0 ,i2)
+            #istup = filter(lambda x : type(eval(x))==tuple,i2)
+            isegments = np.unique(map(lambda x : x[0]>0,i2))
             if len(isegments)>0:
                 points = L.seg2pts(isegments)
                 pta = points[0:2,:]
                 phe = points[2:,:]
                 #print points
-                #print segments 
+                #print segments
                 #cn.show()
                 if len(i1)==3:
                     bs = cn.belong_seg(pta,phe)
@@ -280,11 +265,11 @@ def edgeout2(L,g):
                     #    pdb.set_trace()
 
                 isegkeep = isegments[bs]
-                output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
+                output = filter(lambda x : x[0] in isegkeep ,i2)
                 # keep all segment above nstr1 and in Cone if T
                 # keep all segment below nstr1 and in Cone if R
 
-        g.add_edge(str(i0),str(i1),output=output)
+        g.add_edge(i0,i1,output=output)
 
     return(g)
 def edgeout(L,g):
@@ -382,16 +367,16 @@ def edgeout(L,g):
     return(g)
 
 class Signatures(dict):
-    """ gathers all signatures from a layout given tx and rx
+    """ set of Signature given 2 Gt cycle (convex) index
 
     Attributes
     ----------
 
     L : gis.Layout
-    pTx : numpy.ndarray
-        position of Tx
-    pRx : numpy.ndarray
-        position of Rx
+    source : int
+        source convex cycle
+    target : int
+        target convex cycle
 
     """
 
@@ -402,10 +387,12 @@ class Signatures(dict):
         ----------
 
         L : Layout
-        source : int 
-            cycle number 
-        target : int 
+        source : int
+            cycle number
+        target : int
             cycle index
+        cutoff : int
+            limiting depth level in graph exploration (default 3)
 
         """
         self.L = L
@@ -455,6 +442,42 @@ class Signatures(dict):
             self.nsig += size
             self.nint += size*k
 
+
+    def help(self,letter='az',mod='meth'):
+        """ help function
+
+        List all available methods or members of the class
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
+        """
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
     def info(self):
         """
         """
@@ -500,13 +523,14 @@ class Signatures(dict):
                 # s = s + '   '+ str(a[i,1,:]) + '\n'
 
     def saveh5(self):
-        """ Save signatures
-            h5py format
+        """ save signatures in hdf5 format
+
         """
 
         filename=pyu.getlong(self.filename+'.h5',pstruc['DIRSIG'])
         f=h5py.File(filename,'w')
-        # try/except to avoid loosing the h5 file if 
+
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             f.attrs['L']=self.L.filename
@@ -521,8 +545,8 @@ class Signatures(dict):
             raise NameError('Signature: issue when writting h5py file')
 
     def loadh5(self,filename=[]):
-        """ Load signatures
-            h5py format
+        """ load signatures hdf5 format
+
         """
         if filename == []:
             _filename = self.filename
@@ -590,9 +614,9 @@ class Signatures(dict):
 
         filenameh5 : string
             filename of the h5py file (from Links Class)
-        grpname : string 
+        grpname : string
             groupname of the h5py file (from Links Class)
-        
+
 
         See Also
         --------
@@ -600,15 +624,15 @@ class Signatures(dict):
         pylayers.simul.links
 
         """
-        
+
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         # if grpname =='':
-        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff) 
-    
-        # try/except to avoid loosing the h5 file if 
+        #     grpname = str(self.source) +'_'+str(self.target) +'_'+ str(self.cutoff)
+
+        # try/except to avoid loosing the h5 file if
         # read/write error
-        try:    
+        try:
             fh5=h5py.File(filename,'r')
             f=fh5['sig/'+grpname]
             for k in f.keys():
@@ -673,10 +697,10 @@ class Signatures(dict):
         Parameters
         ----------
 
-        G :
-        source :
-        target :
-        cutoff :
+        G : Graph
+        source : tuple or int
+        target : tuple or int
+        cutoff : int
 
         See Also
         --------
@@ -817,7 +841,7 @@ class Signatures(dict):
         target : tuple
             interaction (node of Gi)
         cutoff : int
-        bt : bool 
+        bt : bool
             allow backtrace (visite nodes already visited)
 
         Notes
@@ -825,7 +849,7 @@ class Signatures(dict):
 
         adapted from all_simple_path of networkx
 
-        1- Determine all nodes connected to Gi 
+        1- Determine all nodes connected to Gi
 
         """
         #print "source :",source
@@ -878,7 +902,7 @@ class Signatures(dict):
                     #stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
                     # check if child (current segment) is an airwall
-                    if self.L.di[child][0] in self.L.name['AIR']:
+                    if child[0] in self.L.name['AIR']:
                         lawp.append(1)
                     else:
                         lawp.append(0)
@@ -897,15 +921,13 @@ class Signatures(dict):
                 except:
                     pass
 
-    def propaths2(self,G, di,  source, target,dout={}, cutoff=1,bt=False):
+    def propaths2(self,G, source, target,dout={}, cutoff=1,bt=False):
         """ seek all simple_path from source to target
 
         Parameters
         ----------
 
         G : networkx Graph Gi
-        di : dictionnary that map tuple to signature
-            see Layout.di
         dout : dictionnary
             ouput dictionnary
         source : tuple
@@ -944,11 +966,11 @@ class Signatures(dict):
 
             children = stack[-1]
             # next child
+
             child = next(children, None)
+
             # update number of useful segments
             # if there is airwall in visited
-            #
-
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
@@ -957,15 +979,15 @@ class Signatures(dict):
                 except:
                     pass
 
-            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
+            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                     except:
                         dout[len(path)]=[]
-                        dout[len(path)].append([di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                     #yield visited + [target] # output signature
 
                 elif (child not in visited) or (bt): # else visit other node
@@ -980,7 +1002,8 @@ class Signatures(dict):
                     #stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
                     # check if child (current segment) is an airwall
-                    if self.L.di[child][0] in self.L.name['AIR']:
+                    # warning not efficient if many airwalls
+                    if child[0] in self.L.name['AIR']:
                         lawp.append(1)
                     else:
                         lawp.append(0)
@@ -991,11 +1014,11 @@ class Signatures(dict):
                 if child == target or target in children:
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                     except:
                         #print "non existing : ",len(path)
                         dout[len(path)]=[]
-                        dout[len(path)].append([di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                     #print visited + [target]
                     #yield visited + [target]
 
@@ -1009,7 +1032,7 @@ class Signatures(dict):
 
 
 
-    def procone2(self,L, G, source, target,dout={}, cutoff=1):
+    def procone2(self,G, source, target,dout={}, cutoff=1):
         """ seek all simple_path from source to target looking backward
 
         Parameters
@@ -1061,10 +1084,10 @@ class Signatures(dict):
                     #yield visited + [target] # output signature
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([L.di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                     except:
                         dout[len(path)]=[]
-                        dout[len(path)].append([L.di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                 else:
                 #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD
                     # getting signature until last point
@@ -1103,10 +1126,10 @@ class Signatures(dict):
                     #yield visited + [target]
                     path = visited + [target]
                     try:
-                        dout[len(path)].append([L.di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                     except:
                         dout[len(path)]=[]
-                        dout[len(path)].append([L.di[p] for p in path])
+                        dout[len(path)].append([[p[0],len(p)] for p in path])
                 stack.pop()
                 visited.pop()
         return dout
@@ -1325,7 +1348,7 @@ class Signatures(dict):
         Parameters
         ----------
 
-        cutoff : int 
+        cutoff : int
             limit the exploration of all_simple_path
 
         Returns
@@ -1351,7 +1374,7 @@ class Signatures(dict):
         #if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
         #    raise AttributeError('Tx or Rx is not in Gr')
 
-        # list of interaction in roomTx 
+        # list of interaction in roomTx
         # list of interaction in roomRx
         #ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         #ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
@@ -1360,7 +1383,7 @@ class Signatures(dict):
         metasig = metasig + nx.neighbors(self.L.Gt,self.target)
         metasig = list(np.unique(np.array(metasig)))
         metasig = metasig + [self.source] + [self.target]
-        
+
         #print "metasig",metasig
 
         # add cycles separated by air walls
@@ -1489,6 +1512,8 @@ class Signatures(dict):
 
         cutoff : int
             limit the exploration of all_simple_path
+        algo : string
+            'old' | 'new'
         bt : bool
             backtrace (allow visit already visited nodes in simple path algorithm)
         progress : bool
@@ -1656,7 +1681,7 @@ class Signatures(dict):
                         self[len(path)] = sigarr
 
 
-    def run5(self,cutoff=2,algo='old',bt=False,progress=False):
+    def run5(self,cutoff=2,algo='old',bt=False,progress=False,diffraction=True):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1690,40 +1715,33 @@ class Signatures(dict):
         self.cutoff   = cutoff
         self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
-        # list of interaction source
-        lis = self.L.Gt.node[self.source]['inter']
-        # list of interaction target
-        lit = self.L.Gt.node[self.target]['inter']
+        # list of interactions visible from source
+        lisT,lisR,lisD = self.L.intercy(self.source,typ='source')
+        if diffraction:
+            lis  = lisT + lisR + lisD
+        else:
+            lis  = lisT + lisR 
 
-        # source
+        # list of interactions visible from target
+        litT,litR,litD = self.L.intercy(self.target,typ='target')
 
-        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
-        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
-
-        # target
-
-        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
-        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
-
-        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
-        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
-
-        # list of interaction visible from source
-        lis  = lisT + lisR
-        # list of interaction visible from target
-        lit  = litT + litR
+        if diffraction:
+           lit  = litT + litR + litD
+        else:
+           lit  = litT + litR
+        #print "source,lis :",self.source,lis
+        #print "target,lit :",self.target,lit
 
 
         Gi = self.L.Gi
         Gi.pos = self.L.Gi.pos
         #
-        # TODO : This has to be changed for handling diffraction
-        #
         # remove diffractions from Gi
-        Gi = gidl(Gi)
+        if not diffraction:
+            Gi = gidl(Gi)
 
-        #initilaize dout dictionnary
-        dout={}
+        # initialize dout dictionnary
+        dout = {}
 
         # progresss stuff...
         lmax = len(lis)*len(lit)
@@ -1733,9 +1751,11 @@ class Signatures(dict):
         #for interaction source  in list of source interactions
         for us,s in enumerate(lis):
             #for target interaction in list of target interactions
+            #print "---> ",s
 
             for ut,t in enumerate(lit):
-
+                #print "   ---> ",t
+                # progress bar
                 if progress :
 
                     ratio = np.round((((us)*len(lit)+ut)/(1.*lmax))*10 )
@@ -1746,22 +1766,25 @@ class Signatures(dict):
                         print '%',
                         print '%6.3f %6.3f' % (toc-tic, toc-tic0)
                         tic = toc
+
+                # if source and target interaction are different
+                # and R | T
+                #if ((type(eval(s))==tuple) & (s != t)):
                 if (s != t):
                     if algo=='new':
-                        dout= self.procone2(self.L,Gi,dout=dout, source=s,target=t,cutoff=cutoff)
+                        dout = self.procone2(self.L,Gi,dout=dout,source=s,target=t,cutoff=cutoff)
                     else :
-                        dout = self.propaths2(Gi,di=self.L.di,dout=dout,source=s,target=t,cutoff=cutoff,bt=bt)
-                        #if ((s=='(3, 0, 1)') & (t =='(2, 1, 0)')):
-                        #    pdb.set_trace()
+                        dout = self.propaths2(Gi,source=s,target=t,dout=dout,cutoff=cutoff,bt=bt)
                 else:
                     try:
-                        dout[1].append(self.L.di[s])
+                        if [s[0],len(s)] not in dout[1]:
+                            dout[1].append([s[0],len(s)])
                     except:
                         dout[1]=[]
-                        dout[1].append(self.L.di[s])
+                        dout[1].append([s[0],len(s)])
 
         for k in dout.keys():
-            adout=np.array((dout[k]))
+            adout = np.array((dout[k]))
             shad = np.shape(adout)
             # manage the case of signatures with only 1 interaction
             if k == 1:
@@ -2418,7 +2441,10 @@ class Signatures(dict):
             the interaction block
         s : int
             the signature number in the block
-        
+        fig :
+        ax  :
+        figsize :
+
         """
         if fig == []:
             fig= plt.figure()
@@ -2426,9 +2452,9 @@ class Signatures(dict):
         elif ax ==[]:
             ax = fig.add_subplot(111)
 
-        
+
         pta,phe = self.unfold(L,i=i,s=s)
-        
+
         # create a global array or tahe segments
 
         seg = np.vstack((pta,phe))
@@ -2438,11 +2464,11 @@ class Signatures(dict):
             pseg0 = seg[:,s-1].reshape(2,2).T
             pseg1 = seg[:,s].reshape(2,2).T
             #
-            # create the cone seg0 seg1 
+            # create the cone seg0 seg1
             #
             cn = cone.Cone()
             cn.from2segs(pseg0,pseg1)
-            fig,ax = cn.show(fig = fig, ax = ax, figsize = figsize)
+            fig,ax = cn.show(fig = fig,ax = ax,figsize = figsize)
 
         return (fig,ax)
 
@@ -2450,7 +2476,7 @@ class Signatures(dict):
     def unfold(self,L,i=0,s=0):
         """ unfold a given signature
 
-            return 2 np.ndarray of pta and phe "aligned" (reflexion interaction are mirrored) 
+            return 2 np.ndarray of pta and phe "aligned" (reflexion interaction are mirrored)
 
         Parameters
         ----------
@@ -2460,14 +2486,19 @@ class Signatures(dict):
             the interaction block
         s : int
             the signature number in the block
-        
+
+        Returns
+        -------
+
+        pta,phe
+
         See Also
         --------
 
         Signature.unfold
 
         """
-        
+
         si = Signature(self[i][(2*s):(2*s)+2])
         si.ev(L)
         pta,phe = si.unfold()
@@ -2483,9 +2514,9 @@ class Signatures(dict):
 
         L : Layout
         i : list or -1 (default = all groups)
-            list of interaction group numbers 
-        s : list or -1 (default = all sig) 
-            list of indices of signature in interaction group 
+            list of interaction group numbers
+        s : list or -1 (default = all sig)
+            list of indices of signature in interaction group
         ctx : cycle of tx (optional)
         crx : cycle of rx (optional)
         graph : type of graph to be displayed
@@ -2505,39 +2536,40 @@ class Signatures(dict):
                     'ctx':-1,
                     'crx':-1
                    }
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
-        #if kwargs['fig'] ==[]:
-        #    fig = plt.figure()
-        #if kwargs['ax'] ==[]:    
-        #    ax = fig.add_subplot(111)
-
+        # display layout
         fig,ax = L.showG(**kwargs)
+
+
         if kwargs['ctx']!=-1:
-            T=self.L.Gt.node[kwargs['ctx']]['polyg']
-            T.coul='r'
-            T.plot(fig=kwargs['fig'],ax=kwargs['ax'],color='r')
+            Tpoly = self.L.Gt.node[kwargs['ctx']]['polyg']
+            Tpoly.coul='r'
+            Tpoly.plot(fig=fig,ax=ax,color='r')
+
         if kwargs['crx']!=-1:
-            R=self.L.Gt.node[kwargs['crx']]['polyg']
-            R.plot(fig=kwargs['fig'],ax=kwargs['ax'],color='g')
+            Rpoly = self.L.Gt.node[kwargs['crx']]['polyg']
+            Rpoly.plot(fig=fig,ax=ax,color='g')
+
         # i=-1 all rays
         # else block of interactions i
         if kwargs['i']==-1:
             lgrint = self.keys()
         else:
             lgrint = [kwargs['i']]
-            
+
 
         for i in lgrint:
             if kwargs['s']==-1:
                 lsig = range(len(self[i])/2)
             else:
                 lsig = [kwargs['s']]
-            for j in lsig: 
-                sig=map(lambda x: self.L.Gs.pos[x],self[i][2*j])
-                siga=np.array(sig)
+            for j in lsig:
+                sig = map(lambda x: self.L.Gs.pos[x],self[i][2*j])
+                siga = np.array(sig)
                 # sig = np.hstack((self.pTx[0:2].reshape((2, 1)),
                 #                  np.hstack((self[i]['pt'][0:2, :, j],
                 #                  self.pRx[0:2].reshape((2, 1))))
@@ -2545,7 +2577,7 @@ class Signatures(dict):
                 ax.plot(siga[:,0], siga[:,1],
                         alpha=kwargs['alphasig'],color=kwargs['colsig'],linewidth=kwargs['widthsig'])
                 ax.axis('off')
-        return(fig,ax)  
+        return(fig,ax)
 
     def showi(self,uni=0,us=0):
         """ interactive show
@@ -2554,25 +2586,23 @@ class Signatures(dict):
 
         Parameters
         ----------
-            uni : index of interaction dictionnary keys
-            us : signature index
+
+        uni : index of interaction dictionnary keys
+        us : signature index
 
         """
         plt.ion()
-        fig=plt.figure()
-        ax=fig.add_subplot(111)
-#        fig,ax=self.L.showG(fig=fig,ax=ax,graph='s')
-#        plt.draw()
+        fig = plt.figure()
 
         nit = self.keys()
         ni = nit[uni]
         ust = len(self[ni])/2
 
-        poly1 = self.L.Gt.node[self.source]['polyg']
-        cp1 = poly1.centroid.xy
+        polyS = self.L.Gt.node[self.source]['polyg']
+        cp1 = polyS.centroid.xy
 
-        poly2 = self.L.Gt.node[self.target]['polyg']
-        cp2 = poly2.centroid.xy
+        polyT = self.L.Gt.node[self.target]['polyg']
+        cp2 = polyT.centroid.xy
 
         ptx = np.array([cp1[0][0],cp1[1][0]])
         prx = np.array([cp2[0][0],cp2[1][0]])
@@ -2581,7 +2611,7 @@ class Signatures(dict):
 
         while st != 'q':
             inter=[]
-            ax=fig.add_subplot(111)
+            ax = fig.add_subplot(111)
             fig,ax=self.L.showG(fig=fig,ax=ax,graph='s')
             title = '# interaction :', ni, 'signature #',us,'/',ust
             ax.set_title(title)
@@ -2607,6 +2637,8 @@ class Signatures(dict):
                         inter.append('R')
                     if ii == 2:
                         inter.append('T')
+                    if ii == 3:
+                        inter.append('D')
             except:
                 print "signature index out of bounds of signature"
 
@@ -2630,8 +2662,6 @@ class Signatures(dict):
                         uni=0
                         ni=nit[uni]
                         us = 0
-
-
             else:
                 print 'press n for next signature'
 
@@ -2672,54 +2702,92 @@ class Signatures(dict):
             ptx = np.array(self.L.Gt.pos[ptx])
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
+
         rays = Rays(ptx,prx)
+
         #
         # detect LOS situation
         #
-        lc  = self.L.cycleinline(self.source,self.target)
-        # if source  and target in the same cycle
-        # and ptx != prx
-        dtxrx = np.sum(ptx-prx)
-        if ((len(lc) == 1) & (dtxrx!=0)):
-            rays.los=True
-#        # if source  and target separated by air walls
-#        else :
-#            for ic in xrange(len(lc)-1) :
-#                # if lc[i] connected to a air wall
-#                if lc[ic] in self.L.dca.keys():
-#                    # if lc[i] and lc[i+1] are connected by a airwall
-#                    if lc[ic+1] in self.L.dca[lc[ic]]:
-#                        los = True
-#                    else :
-#                        los = False
-#                        break
-#                else :
-#                    los = False
-#                    break
+        #
+        # cycle on a line between 2 cycles
+        # lc  = self.L.cycleinline(self.source,self.target)
 
-#        rays[0]['pt']
+        #
+        # if source and target in the same merged cycle
+        # and ptx != prx
+        #
+        los = shg.LineString(((ptx[0], ptx[1]), (prx[0], prx[1])))
+
+        # convex cycle of each point
+        cyptx = self.L.pt2cy(ptx)
+        cyprx = self.L.pt2cy(prx)
+
+        # merged cycle of each point
+        polyctx = self.L.Gt.node[cyptx]['polyg']
+        polycrx = self.L.Gt.node[cyprx]['polyg']
+
+        dtxrx = np.sum((ptx-prx)*(ptx-prx))
+        if dtxrx>1e-15:
+            if cyptx==cyprx:
+                if polyctx.contains(los):
+                    rays.los = True
+                else:
+                    rays.los = False
+
+        # k : Loop on interaction group
+        #   l : loop on signature
+        # --->
+        #  this part should be a generator
+        #
         for k in self:
             # get signature block with k interactions
             tsig = self[k]
             shsig = np.shape(tsig)
             for l in range(shsig[0]/2):
                 sig = tsig[2*l:2*l+2,:]
-                s   = Signature(sig)
-                isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
-                if isray:
-                    Yi = np.fliplr(Yi)
-                    nint = len(sig[0, :])
-                    if nint in rays.keys():
-                        Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, nint))))
-                        Yi3d = Yi3d.reshape(3, nint, 1)
-                        rays[nint]['pt'] = np.dstack(( rays[nint]['pt'], Yi3d))
-                        rays[nint]['sig'] = np.dstack(( rays[nint]['sig'], sig.reshape(2, nint, 1)))
-                    else:
-                        rays[nint] = {'pt': np.zeros((3, nint, 1)),
-                                      'sig': np.zeros((2, nint,
-                                                            1),dtype=int)}
-                        rays[nint]['pt'][0:2, :, 0] = Yi[:, 1:-1]
-                        rays[nint]['sig'][:, :, 0] = sig
+                ns0 = sig[0,0]
+                nse = sig[0,-1]
+                validtx = True
+                validrx = True
+
+                if (ns0<0):
+                    pD = self.L.Gs.pos[ns0]
+                    TxD = shg.LineString(((ptx[0], ptx[1]), (pD[0], pD[1])))
+                    seg = polyctx.intersection(TxD)
+                    validtx = seg.almost_equals(TxD,decimal=4)
+                    if not validtx:
+                        print ns0
+
+                if (nse<0):
+                    pD = self.L.Gs.pos[nse]
+                    DRx = shg.LineString(((pD[0], pD[1]), (prx[0], prx[1])))
+                    validrx = polyctx.contains(DRx)
+                    if not validrx:
+                        print nse
+
+                if validtx & validrx:
+                    #    print sig
+                    #    print pD
+                    s  = Signature(sig)
+                    #
+                    # Transform signature into a ray
+                    # --> sig2ray
+
+                    isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
+
+                    if isray:
+                        Yi = np.fliplr(Yi)
+                        if k in rays.keys():
+                            Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, k))))
+                            Yi3d = Yi3d.reshape(3, k, 1)
+                            rays[k]['pt'] = np.dstack(( rays[k]['pt'], Yi3d))
+                            rays[k]['sig'] = np.dstack(( rays[k]['sig'],
+                                                        sig.reshape(2, k, 1)))
+                        else:
+                            rays[k] = {'pt': np.zeros((3, k, 1)),
+                                       'sig': np.zeros((2, k, 1),dtype=int)}
+                            rays[k]['pt'][0:2, :, 0] = Yi[:, 1:-1]
+                            rays[k]['sig'][:, :, 0] = sig
 
         rays.nb_origin_sig = len(self)
         rays.origin_sig_name = self.filename
@@ -2756,31 +2824,22 @@ class Signature(object):
                 l = eval(l)
             except:
                 pass
-            if type(l)==tuple:
-                if len(l)==2:
-                    return(1)
-                if len(l)==3:
-                    return(2)
-            else:
-                return(3)
-        
+            return(len(l))
+
         def seginter(l):
             try:
                 l = eval(l)
             except:
                 pass
-            if type(l)==tuple:
-                return l[0]
-            else:
-                return(l)
+            return l[0]
 
         if type(sig)==np.ndarray:
             self.seq = sig[0, :]
             self.typ = sig[1, :]
 
-        if type(sig)==list:    
-            self.seq = map(seginter,sig) 
-            self.typ = map(typinter,sig) 
+        if type(sig)==list:
+            self.seq = map(seginter,sig)
+            self.typ = map(typinter,sig)
 
     def __repr__(self):
         #s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
@@ -2902,21 +2961,26 @@ class Signature(object):
         -----
 
         This function converts the sequence of interactions into numpy arrays
-        which contains coordinates of segments extremities involved in the 
-        signature. At that level the coordinates of extremities (tx and rx) is 
-        not known yet.
-        
-        members data 
+        which contains coordinates of segments extremities involved in the
+        signature.
 
-        pa  tail of segment  (2xN) 
-        pb  head of segment  (2xN)  
-        pc  the center of segment (2xN) 
+        At that stage coordinates of extremities (tx and rx) is
+        not known yet
 
-        norm normal to the segment if segment 
+        members data
+
+        pa  tail of segment  (2xN)
+        pb  head of segment  (2xN)
+        pc  the center of segment (2xN)
+
+        norm normal to the segment if segment
         in case the interaction is a point the normal is undefined and then
-        set to 0. 
+        set to 0.
 
         """
+
+        # TODO : use map and filter instead of for loop
+
         N = len(self.seq)
         self.pa = np.empty((2, N))  # tail
         self.pb = np.empty((2, N))  # head
@@ -2940,14 +3004,21 @@ class Signature(object):
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
+
     def unfold(self):
         """ unfold a given signature
 
-            return 2 np.ndarray of pta and phe "aligned" 
-            reflexion interactions are mirrored
+        returns 2 np.ndarray of pta and phe "aligned"
+        reflexion interactions are mirrored
+
+        Returns
+        -------
+
+        pta : np.array
+        phe : np.array
 
         """
-        
+
         lensi = len(self.seq)
         pta = np.empty((2,lensi))
         phe = np.empty((2,lensi))
@@ -2961,8 +3032,8 @@ class Signature(object):
 
             pam = self.pa[:,i].reshape(2,1)
             pbm = self.pb[:,i].reshape(2,1)
-                
-            if self.typ[i] == 1: # R
+
+            if self.typ[i] == 2: # R
                 for m in mirror:
                     pam = geu.mirror(pam,pta[:,m],phe[:,m])
                     pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
@@ -2970,17 +3041,21 @@ class Signature(object):
                 phe[:,i] = pbm.reshape(2)
                 mirror.append(i)
 
-            elif self.typ[i] == 2 : # T
+            elif self.typ[i] == 3 : # T
                 for m in mirror:
                     pam = geu.mirror(pam,pta[:,m],phe[:,m])
                     pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
                 pta[:,i] = pam.reshape(2)
                 phe[:,i] = pbm.reshape(2)
 
+            elif self.typ[i] == 1 : # D
+                pass
+                # TODO not implemented yet
+
         return pta,phe
 
     def evtx(self, L, tx, rx):
-        """ evtx ( deprecated ) 
+        """ evtx ( deprecated )
 
         Parameters
         ----------
@@ -3082,38 +3157,38 @@ class Signature(object):
         A = np.eye(N * 2)
 
         # detect diffraction
-        usig = np.nonzero(typ[1:] == 3)[0]
+        usig = np.nonzero(typ[1:] == 1)[0]
         if len(usig) > 0:
             blocks[usig, :, :] = np.zeros((2, 2))
         # detect transmission
-        tsig = np.nonzero(typ[1:] == 2)[0]
+        tsig = np.nonzero(typ[1:] == 3)[0]
         if len(tsig) > 0:
             #blocks[tsig, :, :] = np.zeros((2, 2))
             blocks[tsig, :, :] = -np.eye(2)
         # detect reflexion
-        rsig = np.nonzero(typ[1:] == 1)[0]
+        rsig = np.nonzero(typ[1:] == 2)[0]
         if len(rsig) > 0:
             blocks[rsig, :, :] = S[rsig + 1, :, :]
 
         A = pyu.fill_block_diag(A, blocks, 2, -1)
 
         y = np.zeros(2 * N)
-        if typ[0] == 1:
+        if typ[0] == 2:
             vc0 = np.array([c[0], d[0]])
             v0 = np.dot(-S[0, :, :], tx) + vc0
-        if typ[0] == 2:
-            v0 = tx
         if typ[0] == 3:
+            v0 = tx
+        if typ[0] == 1:
             v0 = pa[:, 0]
 
         y[0:2] = v0
         for i in range(len(typ[1:])):
-            if typ[i + 1] == 1:
-                y[2 * (i + 1):2 * (i + 1) + 2] = np.array([c[i + 1], d[i + 1]])
             if typ[i + 1] == 2:
+                y[2 * (i + 1):2 * (i + 1) + 2] = np.array([c[i + 1], d[i + 1]])
+            if typ[i + 1] == 3:
                 #y[2 * (i + 1):2 * (i + 1) + 2] = y[2*i:2*i+2]
                 y[2 * (i + 1):2 * (i + 1) + 2] = np.array([0,0]) 
-            if typ[i + 1] == 3:
+            if typ[i + 1] == 1:
                 y[2 * (i + 1):2 * (i + 1) + 2] = pa[:, i + 1]
 
         x = la.solve(A, y)
@@ -3123,18 +3198,15 @@ class Signature(object):
 
     def backtrace(self, tx, rx, M):
         """ backtrace given image, tx, and rx
-        
-        this function
-        traces the 2D ray.
 
         Parameters
         ----------
 
         tx :  ndarray (2x1)
               transmitter
-        rx :  ndarray (2x1) 
+        rx :  ndarray (2x1)
               receiver
-        M  :  ndarray (2xN) 
+        M  :  ndarray (2xN)
               N image points obtained using self.image method
 
         Returns
@@ -3180,18 +3252,20 @@ class Signature(object):
         Notes
         -----
 
-        For mathematical details see : 
+        For mathematical details see :
 
-        @INPROCEEDINGS{6546704, 
-        author={Laaraiedh, Mohamed and Amiot, Nicolas and Uguen, Bernard}, 
-        booktitle={Antennas and Propagation (EuCAP), 2013 7th European Conference on}, 
+        @INPROCEEDINGS{6546704,
+        author={Laaraiedh, Mohamed and Amiot, Nicolas and Uguen, Bernard},
+        booktitle={Antennas and Propagation (EuCAP), 2013 7th European Conference on},
         title={Efficient ray tracing tool for UWB propagation and
-               localization modeling}, 
-        year={2013}, 
+               localization modeling},
+        year={2013},
         pages={2307-2311},}
 
         """
-
+        #import ipdb
+        #pdb.set_trace()
+        #import pdb
         pa = self.pa
         pb = self.pb
         typ = self.typ
@@ -3202,16 +3276,16 @@ class Signature(object):
 
         pkm1 = rx.reshape(2, 1)
         Y = pkm1
-        k = 0     # intercation counter
-        beta = .5 # to enter into the loop
-        isvalid = True # signature is valid by default 
+        k = 0          # interaction counter
+        beta = .5      # to enter into the loop
+        isvalid = True # signature is asumed being valid by default
         epsilon = 1e-2
         # while (((beta <= 1) & (beta >= 0)) & (k < N)):
         while (((beta <= 1-epsilon) & (beta >= epsilon)) & (k < N)):
-            if int(typ[k]) != 3: # not a diffraction 
-                # Formula (30) of paper Eucap 2012
-                l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0
-                                ))
+            #if int(typ[k]) != 1: # not a diffraction (surprisingly it works)
+            if int(typ[N-(k+1)]) != 1: # not a diffraction
+                # Formula (25) of paper Eucap 2013
+                l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0))
                 l1 = np.hstack((I2, z0,
                                 pa[:, N - (k + 1)].reshape(2, 1) -
                                 pb[:, N - (k + 1)].reshape(2, 1)
@@ -3229,15 +3303,19 @@ class Signature(object):
                 beta = gk[1]
                 Y = np.hstack((Y, pkm1))
             else:
-                Y = np.hstack((Y, pa[:, k].reshape((2, 1))))
-                pkm1 = pa[:, k].reshape((2, 1))
+                alpha = 0.5 # dummy necessary for the test below
+                # fixing #210
+                #Y = np.hstack((Y, pa[:, k].reshape((2, 1))))
+                #pkm1 = pa[:, k].reshape((2, 1))
+                Y = np.hstack((Y, pa[:, N-(k+1)].reshape((2, 1))))
+                pkm1 = pa[:, N-(k+1)].reshape((2, 1))
             k = k + 1
         if ((k == N) & ((beta > 0) & (beta < 1)) & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
             return isvalid,Y
         else:
-            isvalid = False 
-            return isvalid,(k,alpha,beta) 
+            isvalid = False
+            return isvalid,(k,alpha,beta)
 
 
     def sig2beam(self, L, p, mode='incremental'):
@@ -3247,13 +3325,13 @@ class Signature(object):
             L.Gr
         except:
             L.build()
-        
+
         # ev transforms a sequence of segment into numpy arrays (points)
         # necessary for image calculation
         self.ev(L)
         # calculates images from pTx
         M = self.image(pTx)
-        
+
 
     def sig2ray(self, L, pTx, pRx, mode='incremental'):
         """ convert a signature to a 2D ray
@@ -3273,30 +3351,30 @@ class Signature(object):
 
         Y : ndarray (2x(N+2))
 
-        See Also 
+        See Also
         --------
 
         Signature.image
         Signature.backtrace
-            
+
         """
-        try:
-            L.Gr
-        except:
-            L.build()
-        
+        #try:
+        #    L.Gr
+        #except:
+        #    L.build()
+
         # ev transforms a sequence of segment into numpy arrays (points)
         # necessary for image calculation
         self.ev(L)
         # calculates images from pTx
         M = self.image(pTx)
-        
+
         #print self
         #if np.array_equal(self.seq,np.array([5,7,4])):
         #    pdb.set_trace()
         isvalid,Y = self.backtrace(pTx, pRx, M)
         #print isvalid,Y
-        # 
+        #
         # If incremental mode this function returns an alternative signature
         # in case the signature do not yield a valid ray.
         #
@@ -3314,8 +3392,7 @@ class Signature(object):
             else:
                 isray=False
                 return isray,None
-            
- 
+
 # def get_sigslist(self, tx, rx):
 #        """
 #        get signatures (in one list of arrays) between tx and rx

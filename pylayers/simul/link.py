@@ -299,7 +299,7 @@ class DLink(Link):
         --------
 
         >>> from pylayers.simul.link import *
-        >>> L=DLink(verbose=False)
+        >>> L = DLink(verbose=False)
         >>> aktk = L.eval()
 
 
@@ -388,6 +388,7 @@ class DLink(Link):
             print('This is the first time the Layout is used. Graphs have to be built. Please Wait')
             self.L.build()
             self.L.dumpw()
+        #self.L.build()
 
 
         ###########
@@ -398,14 +399,14 @@ class DLink(Link):
         #
         ###########
         if len(self.a)==0:
-            self.ca = 0
+            self.ca = 1
             self.a = self.L.cy2pt(self.ca)
         else:
             self.a = kwargs['a']
             self.ca = self.L.pt2cy(self.a)
 
         if len(self.b)==0:
-            self.cb = 0
+            self.cb = 1
             self.b = self.L.cy2pt(self.cb)
         else:
             self.b = kwargs['b']
@@ -560,6 +561,39 @@ class DLink(Link):
 
 
 
+    def help(self,letter='az',mod='meth'):
+        """ help
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
+        """
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
     def reset_config(self):
         """ reset configuration when new layout loaded
         """
@@ -1052,6 +1086,7 @@ class DLink(Link):
 
         defaults={ 'output':['sig','ray','Ct','H'],
                    'si_algo':'old',
+                   'diffraction':False,
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':False,
@@ -1062,17 +1097,20 @@ class DLink(Link):
 
         self.checkh5()
 
+        if 'cutoff' not in kwargs:
+            kwargs['cutoff']=self.cutoff
+
 
         ############
         # Signatures
         ############
-        Si = Signatures(self.L,self.ca,self.cb,cutoff=self.cutoff)
+        Si = Signatures(self.L,self.ca,self.cb,cutoff=kwargs['cutoff'])
 
         if self.dexist['sig']['exist'] and not kwargs['force']:
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
-            Si.run5(cutoff=self.cutoff,algo=kwargs['si_algo'])
+            Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
@@ -1089,7 +1127,7 @@ class DLink(Link):
             self.load(R,self.dexist['ray']['grpname'])
 
         else :
-            # perform computation...
+            # perform computation ...
             r2d = Si.rays(self.a,self.b)
             R = r2d.to3D(self.L,H=kwargs['ra_ceil_height_meter'], N=kwargs['ra_number_mirror_cf'])
             R.locbas(self.L)
@@ -1114,7 +1152,7 @@ class DLink(Link):
         else :
             R.fillinter(self.L)
             # Ctilde...
-            C=R.eval(self.fGHz)
+            C = R.eval(self.fGHz)
             # ...save Ct
             self.save(C,'Ct',self.dexist['Ct']['grpname'],force = kwargs['force'])
 

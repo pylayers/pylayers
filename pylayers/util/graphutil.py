@@ -57,6 +57,7 @@ def draw(G,**kwargs):
     defaults = {'show': False,
                 'fig': [],
                 'ax': [],
+                'arrows':False,
                 'nodes':True,
                 'edges':True,
                 'airwalls':False,
@@ -76,12 +77,15 @@ def draw(G,**kwargs):
     #
     # update default values
     #
+
     for key, value in defaults.items():
         if key not in kwargs:
             kwargs[key] = value
+
     #
     # getting fig and ax
     #
+
     if kwargs['fig'] == []:
         fig = plt.figure(figsize=kwargs['figsize'])
         fig.set_frameon(True)
@@ -89,7 +93,7 @@ def draw(G,**kwargs):
         fig = kwargs['fig']
 
     if kwargs['ax'] == []:
-        ax = fig.gca()
+        ax = fig.add_subplot(111,axisbg='white')
     else:
         ax = kwargs['ax']
 
@@ -102,12 +106,14 @@ def draw(G,**kwargs):
     else:
         nodelist=kwargs['nodelist']
 
-
-
     if kwargs['edgelist']==[]:
         edgelist =  G.edges()
     else:
         edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
+        #edgelist = map(lambda x : tuple(G[x]),kwargs['edgelist']) # for nx an edge list is a list of tuple
+        # import ipdb
+        # ipdb.set_trace()
+    # remove airwalls
     if not kwargs['airwalls']:
         try:
             #pno = filter(lambda x : G.nodes()[x]>0,nodelist)
@@ -123,8 +129,6 @@ def draw(G,**kwargs):
             edgelist = filter(lambda x: x not in ea, edgelist)
         except:
             pass
-
-
 
     if kwargs['nodes']:
         nx.draw_networkx_nodes(G, G.pos,
@@ -142,6 +146,7 @@ def draw(G,**kwargs):
                                edgelist = edgelist,
                                edge_color = kwargs['edge_color'],
                                width = kwargs['width'],
+                               arrows= kwargs['arrows'],
                                alpha = kwargs['alphae'],ax=ax)
     if kwargs['show']:
         plt.show()
