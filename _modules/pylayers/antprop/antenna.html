@@ -275,8 +275,8 @@
 <span class="sd">                    number of theta (default 181)</span>
 <span class="sd">        nph       : integer</span>
 <span class="sd">                    number of phi (default 90)</span>
-
-
+<span class="sd">        source    : string</span>
+<span class="sd">                source of data { &#39;satimo&#39; | &#39;cst&#39; | &#39;hfss&#39; }</span>
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
@@ -295,6 +295,7 @@
 
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;directory&#39;</span><span class="p">:</span> <span class="s">&#39;ant&#39;</span><span class="p">,</span>
                     <span class="s">&#39;nf&#39;</span><span class="p">:</span><span class="mi">104</span><span class="p">,</span>
+                    <span class="s">&#39;source&#39;</span><span class="p">:</span><span class="s">&#39;satimo&#39;</span><span class="p">,</span>
                     <span class="s">&#39;ntheta&#39;</span><span class="p">:</span><span class="mi">90</span><span class="p">,</span>
                     <span class="s">&#39;nphi&#39;</span><span class="p">:</span><span class="mi">181</span><span class="p">,</span>
                     <span class="s">&#39;p0&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
@@ -309,6 +310,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nf&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Nt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ntheta&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nphi&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
             <span class="n">AntennaName</span><span class="p">,</span><span class="n">Extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">typ</span><span class="p">)</span>
@@ -361,7 +363,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">p0</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;p0&#39;</span><span class="p">]</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span>  <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t0&#39;</span><span class="p">]</span><span class="c"># </span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span>  <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;t0&#39;</span><span class="p">]</span><span class="c">#</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">GdB</span> <span class="o">=</span> <span class="mf">5.</span> <span class="c"># gain</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">G</span>  <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">GdB</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span> <span class="c"># gain</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sqG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
@@ -374,7 +376,42 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;antenna typ is not known&#39;</span><span class="p">)</span>
+
 </div>
+    <span class="k">def</span> <span class="nf">help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">letter</span><span class="o">=</span><span class="s">&#39;az&#39;</span><span class="p">,</span><span class="n">mod</span><span class="o">=</span><span class="s">&#39;meth&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; help</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        txt : string</span>
+<span class="sd">            &#39;members&#39; | &#39;methods&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">lmeth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">mod</span><span class="o">==</span><span class="s">&#39;memb&#39;</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">mod</span><span class="o">==</span><span class="s">&#39;meth&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lmeth</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s">&#39;_&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">letter</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">letter</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">doc</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;self.&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s">&#39;.__doc__&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                                    <span class="k">print</span> <span class="n">s</span><span class="o">+</span><span class="s">&#39;: &#39;</span><span class="o">+</span> <span class="n">doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="k">pass</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">letter</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">doc</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;self.&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s">&#39;.__doc__&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                                    <span class="k">print</span> <span class="n">s</span><span class="o">+</span><span class="s">&#39;: &#39;</span><span class="o">+</span> <span class="n">doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="k">pass</span>
+
 <div class="viewcode-block" id="Antenna.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.__repr__.html#pylayers.antprop.antenna.Antenna.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="n">rtd</span> <span class="o">=</span> <span class="mf">180.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
@@ -400,14 +437,25 @@
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Ntheta : </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Nphi : </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-            <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
-            <span class="n">GdB</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])]</span>
+                <span class="n">uf</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ut</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">up</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+                <span class="n">uf</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ut</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">up</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;satimo&#39;</span><span class="p">:</span>
+                <span class="n">GdB</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+            <span class="c"># see WHERE1 D4.1 sec 3.1.1.2.2</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;cst&#39;</span><span class="p">:</span>
+                <span class="n">GdB</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">S</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;GmaxDB : </span><span class="si">%4.2f</span><span class="s"> dB </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">GdB</span><span class="p">)</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   f = </span><span class="si">%4.2f</span><span class="s"> GHz </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-            <span class="c">#st = st + &quot;   theta = %4.2f (degrees) \n&quot; % (self.theta[u[1],0]*rtd)</span>
-            <span class="c">#st = st + &quot;   phi = %4.2f  (degrees) \n&quot; % (self.phi[0,u[2]]*rtd)</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   theta = </span><span class="si">%4.2f</span><span class="s"> (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   phi = </span><span class="si">%4.2f</span><span class="s">  (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   f = </span><span class="si">%4.2f</span><span class="s"> GHz </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">uf</span><span class="p">])</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   theta = </span><span class="si">%4.2f</span><span class="s"> (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="n">ut</span><span class="p">]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;   phi = </span><span class="si">%4.2f</span><span class="s">  (degrees) </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">up</span><span class="p">]</span><span class="o">*</span><span class="n">rtd</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;Not evaluated</span><span class="se">\n</span><span class="s">&#39;</span>
 
@@ -1288,15 +1336,25 @@
                 <span class="c">#u3 = np.nonzero((self.theta[:,0] &lt;= np.pi) &amp; ( self.theta[:,0]</span>
                 <span class="c">#                                              &gt; np.pi / 2))[0]</span>
                 <span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">iphi1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;satimo&#39;</span><span class="p">:</span>
+                    <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">iphi1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;cst&#39;</span><span class="p">:</span>
+                    <span class="n">r1</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">iphi1</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+
                 <span class="c">#r1  = self.SqG[k,u1[0],iphi1]</span>
                 <span class="n">negr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">r1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="n">r1</span><span class="p">[</span><span class="n">negr1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">r2</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">iphi2</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;satimo&#39;</span><span class="p">:</span>
+                    <span class="n">r2</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">iphi2</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;cst&#39;</span><span class="p">:</span>
+                    <span class="n">r2</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">iphi2</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
                 <span class="c">#r2  = self.SqG[k,u2,iphi2]</span>
                 <span class="n">negr2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">r2</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="n">r2</span><span class="p">[</span><span class="n">negr2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">r3</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u3</span><span class="p">,</span> <span class="n">iphi1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;satimo&#39;</span><span class="p">:</span>
+                    <span class="n">r3</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u3</span><span class="p">,</span> <span class="n">iphi1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">==</span><span class="s">&#39;cst&#39;</span><span class="p">:</span>
+                    <span class="n">r3</span> <span class="o">=</span> <span class="o">-</span><span class="n">GmindB</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>  <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="n">u3</span><span class="p">,</span> <span class="n">iphi1</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">+</span><span class="mf">1e-12</span><span class="p">)</span>
                 <span class="c">#r3  = self.SqG[k,u3[0],iphi1]</span>
                 <span class="n">negr3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">r3</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="n">r3</span><span class="p">[</span><span class="n">negr3</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1332,7 +1390,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
     <span class="nd">@mlab.show</span>
-<div class="viewcode-block" id="Antenna._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna._show3.html#pylayers.antprop.antenna.Antenna._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 mayavi</span>
 
 <span class="sd">        fGHz : float</span>
@@ -1431,7 +1489,7 @@
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]:</span>
             <span class="n">mlab</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39; @ &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; GHz&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
-</div>
+
 <div class="viewcode-block" id="Antenna.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.show3.html#pylayers.antprop.antenna.Antenna.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="p">[],</span><span class="n">T</span><span class="o">=</span><span class="p">[],</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 geomview</span>
 
@@ -1725,10 +1783,10 @@
 <span class="sd">            &gt;&gt;&gt; tau = A.getdelay()</span>
 <span class="sd">            &gt;&gt;&gt; A.elec_delay(tau)</span>
 
-<span class="sd">        </span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="o">+</span><span class="n">tau</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
             <span class="n">Ftheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span>
@@ -2102,7 +2160,7 @@
         <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
 
 </div>
-<div class="viewcode-block" id="Antenna.Fsynth3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.Fsynth3.html#pylayers.antprop.antenna.Antenna.Fsynth3">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.Fsynth3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.antenna.Antenna.Fsynth3.html#pylayers.antprop.antenna.Antenna.Fsynth3">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;sh3&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; synthesis of a complex antenna pattern from VSH coefficients (shape 3)</span>
 
 <span class="sd">        Ndir is the number of directions</span>
@@ -2115,6 +2173,7 @@
 
 <span class="sd">        pattern : boolean</span>
 <span class="sd">            if True theta and phi are reorganized for building the pattern</span>
+<span class="sd">        typ  : &#39;vsh3&#39; | &#39;sh3&#39; | &#39;hfss&#39;</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -2146,6 +2205,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">typ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="c">#self._filename.split(&#39;.&#39;)[1]</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;satimo&#39;</span><span class="p">:</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;cst&#39;</span><span class="p">:</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">typ</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;sh3&#39;</span><span class="p">,</span><span class="s">&#39;vsh3&#39;</span><span class="p">],</span> <span class="s">&quot;Error wrong file type&quot;</span>
 
@@ -3368,7 +3431,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 15, 2014.
+      Last updated on mai 23, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

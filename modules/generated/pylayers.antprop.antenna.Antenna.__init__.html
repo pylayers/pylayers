@@ -123,22 +123,28 @@ the file is seek in the $PyProject/ant directory</p>
 <div><p>number of theta (default 181)</p>
 </div></blockquote>
 <p><strong>nph</strong> : integer</p>
-<blockquote class="last">
+<blockquote>
 <div><p>number of phi (default 90)</p>
+</div></blockquote>
+<p><strong>source</strong> : string</p>
+<blockquote>
+<div><p>source of data { &#8216;satimo&#8217; | &#8216;cst&#8217; | &#8216;hfss&#8217; }</p>
+</div></blockquote>
+<p><strong>Notes</strong> :</p>
+<p><strong>&#8212;&#8211;</strong> :</p>
+<p><strong>There are various supported data formats for storing antenna patterns</strong> :</p>
+<p><strong>&#8216;mat&#8217;: Matlab File</strong> :</p>
+<p><strong>&#8216;vsh2&#8217;: un thresholdes vector spherical coefficients</strong> :</p>
+<p><strong>&#8216;vsh3&#8217;: thresholded vector spherical cpoefficients</strong> :</p>
+<p><strong>&#8216;trx&#8217;</strong> : Satimo NFC raw data</p>
+<p><strong>&#8216;trx1&#8217;</strong> : Satimo NFC raw data  (deprecated)</p>
+<blockquote class="last">
+<div><p>A = Antenna(&#8216;my_antenna.mat&#8217;)</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>There are various supported data formats for storing antenna patterns</p>
-<p>&#8216;mat&#8217;: Matlab File
-&#8216;vsh2&#8217;: un thresholdes vector spherical coefficients
-&#8216;vsh3&#8217;: thresholded vector spherical cpoefficients
-&#8216;trx&#8217; : Satimo NFC raw data
-&#8216;trx1&#8217; : Satimo NFC raw data  (deprecated)</p>
-<blockquote>
-<div>A = Antenna(&#8216;my_antenna.mat&#8217;)</div></blockquote>
 </dd></dl>
 
 </div>
@@ -176,7 +182,7 @@ the file is seek in the $PyProject/ant directory</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 12, 2014.
+      Last updated on mai 23, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

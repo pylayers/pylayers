@@ -1381,26 +1381,26 @@
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
-</div>
-<div class="viewcode-block" id="Slab.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.__repr__.html#pylayers.antprop.slab.Slab.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;fGHz : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span> <span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span> <span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;theta : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;| &#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;| &#39;</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">])):</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="s">&#39; | &#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">|&#39;</span>
 
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">])):</span>
-            <span class="n">ntick</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;lthick&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="mf">0.01</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntick</span><span class="p">):</span>
-                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;-&#39;</span>
-            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span><span class="s">&#39;|&#39;</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-                </div>
+<span class="c">#    def __repr__(self):</span>
+<span class="c">#        if self[&#39;evaluated&#39;]:</span>
+<span class="c">#            st = &#39;fGHz : &#39;+str(self.fGHz[0,:]) +&#39;:&#39;+str(self.fGHz[-1,:]) +&#39;:&#39;+str(len(self.fGHz[:,0]))+&quot;\n&quot;</span>
+<span class="c">#            st = st+ &#39;theta : &#39;+str(self.theta[:,0])+&#39;:&#39;+str(self.theta[:,-1])+&#39;:&#39;+str(len(self.theta[0,:]))+&quot;\n&quot;</span>
+<span class="c">#            st = st + &#39;| &#39;</span>
+<span class="c">#        else:</span>
+<span class="c">#            st = &#39;| &#39;</span>
+<span class="c">#        for k in range(len(self[&#39;lmatname&#39;])):</span>
+<span class="c">#            st = st + self[&#39;lmatname&#39;][k]+&#39; | &#39;</span>
+<span class="c">#        st = st+&#39;\n|&#39;</span>
+<span class="c">#</span>
+<span class="c">#        for k in range(len(self[&#39;lmatname&#39;])):</span>
+<span class="c">#            ntick = int(np.ceil(self[&#39;lthick&#39;][k]/0.01))</span>
+<span class="c">#            for l in range(ntick):</span>
+<span class="c">#                st = st+&#39;-&#39;</span>
+<span class="c">#            st = st +&#39;|&#39;</span>
+<span class="c">#        st = st+&#39;\n&#39;</span>
+<span class="c">#        return(st)</span>
+</div>
 <div class="viewcode-block" id="Slab.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.info.html#pylayers.antprop.slab.Slab.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display Slab Info</span>
 
@@ -2440,7 +2440,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 15, 2014.
+      Last updated on mai 23, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
