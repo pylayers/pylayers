@@ -50,6 +50,7 @@ import copy
 import time
 import doctest
 from matplotlib.widgets import Slider, CheckButtons
+import matplotlib.animation as animation
 
 
 
@@ -200,6 +201,77 @@ class Trajectories(list):
 
         ut = np.where(np.array(self.typ) == 'ag')[0][0]
         self.t = self[ut].time()
+
+    def replay(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[], speed=1, **kwargs):
+        """
+            replay a trajectory
+
+        Parameters
+        ----------
+
+        fig
+        ax
+        Nlabels : int
+            default 5
+        typ : string
+            'plot'|'scatter'
+        L : pylayers.gis.layout.Layout
+            Layout for body to be displayed in
+        speed : float
+            speed ratio
+
+        """
+
+        # plt.ion()
+        if fig==[]:
+            fig = plt.gcf()
+        if ax == []:
+            ax = plt.gca()
+
+        limkwargs = copy.copy(kwargs)
+        if 'c' in kwargs:
+            limkwargs.pop('c')
+        if 'color'in kwargs:
+            limkwargs.pop('c')
+        limkwargs['marker'] = '*'
+        limkwargs['s'] = 20
+
+        if ('m' or 'marker') not in kwargs:
+            kwargs['marker'] = 'o'
+        if ('c' or 'color') not in kwargs:
+            kwargs['color'] = 'b'
+
+        if L != []:
+            if isinstance(L,Layout):
+                fig, ax = L.showG('s',fig=fig, ax=ax, **kwargs)
+
+        time=self[0].time()
+        
+        labels = np.linspace(0, len(self), Nlabels, endpoint=True).tolist()
+
+        line, = ax.plot([], [], 'ob', lw=2)
+        time_template = 'time = %.1fs'
+        time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+
+        def init():
+            line.set_data([],[])
+            time_text.set_text('')
+            return line, time_text
+
+        def animate(it):
+            X=[]
+            Y=[]
+            for t in self:
+                if t.typ == 'ag':
+                    X.append(t['x'].values[it])
+                    Y.append(t['y'].values[it])
+            line.set_data(X,Y)
+            time_text.set_text(time_template%(time[it]))
+            return line, time_text
+
+        ani = animation.FuncAnimation(fig, animate, np.arange(1, len(time)),
+            interval=25, blit=True, init_func=init)
+        plt.show()
 
 
     def ishow(self):
@@ -375,7 +447,7 @@ class Trajectory(pd.DataFrame):
             self.tmin = self.index.min().value*1e-9
             self.tmax = self.index.max().value*1e-9
             try:
-                self.ts = (self.index[1].value*1e-9)-(self.index[0].value*1e-9)
+                self.ts = (self.index[-1].value*1e-9)-(self.index[-2].value*1e-9)
             except:
                 self.ts = np.nan
 
@@ -697,7 +769,7 @@ class Trajectory(pd.DataFrame):
 
         """
 
-        plt.ion()
+        # plt.ion()
         if fig==[]:
             fig = plt.gcf()
         if ax == []:
@@ -718,22 +790,41 @@ class Trajectory(pd.DataFrame):
 
         if L != []:
             if isinstance(L,Layout):
-                fig, ax = L.showGs(fig=fig, ax=ax, **kwargs)
+                fig, ax = L.showG('s',fig=fig, ax=ax, **kwargs)
 
         labels = np.linspace(0, len(self), Nlabels, endpoint=True).tolist()
 
-        for ik, k in enumerate(self.index):
-            time.sleep(1/(1.*speed))
-            ax.scatter(self['x'][ik],self['y'][ik],**kwargs)
-            plt.title(str(self.index[ik].time())[:11].ljust(12), loc='left')
+        line, = ax.plot([], [], 'ob', lw=2)
+        time_template = 'time = %.1fs'
+        time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
 
-            if ik > labels[0]:
-                ax.text(self['x'][ik], self['y'][ik], str(self.index[ik].strftime("%M:%S")))
-                ax.scatter(self['x'][ik], self['y'][ik], **limkwargs)
-                labels.pop(0)
-            plt.draw()
+        def init():
+            line.set_data([],[])
+            time_text.set_text('')
+            return line, time_text
 
-        plt.ioff()
+        def animate(it):
+            thisx = [-100,self['x'].values[it]]
+            thisy = [-100,self['y'].values[it]]
+            line.set_data(thisx, thisy)
+            time_text.set_text(time_template%(self.time()[it]))
+            return line, time_text
+
+        ani = animation.FuncAnimation(fig, animate, np.arange(1, len(self.time())),
+            interval=25, blit=True, init_func=init)
+        plt.show()
+        # for ik, k in enumerate(self.index):
+        #     time.sleep(1/(1.*speed))
+        #     ax.scatter(,**kwargs)
+        #     plt.title(str(self.index[ik].time())[:11].ljust(12), loc='left')
+
+        #     if ik > labels[0]:
+        #         ax.text(self['x'].values[ik], self['y'].values[ik], str(self.index[ik].strftime("%M:%S")))
+        #         ax.scatter(self['x'].values[ik], self['y'].values[ik], **limkwargs)
+        #         labels.pop(0)
+        #     plt.draw()
+
+        # plt.ioff()
         # for k in :
         #     k = int(k)
         #     ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%M:%S")))
