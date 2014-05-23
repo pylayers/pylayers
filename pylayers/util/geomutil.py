@@ -540,6 +540,7 @@ class Polygon(shg.Polygon):
     def xy(self):
         return self._xy
 
+
     def setvnodes(self,L):
         """ update vnodes member from Layout
 
@@ -734,6 +735,41 @@ class Polygon(shg.Polygon):
             plt.show()
 
         return fig,ax
+
+    def coorddeter(self):
+        """ determine polygon coordinates
+        """
+
+        self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
+
+    def isconvex(self,tol = 1e-2):
+        """ Determine if a polygon is convex
+
+        Parameters
+        ----------
+        tol : tolerence on aligned point
+
+        Returns
+        -------
+         True if convex
+
+        Notes
+        -----
+
+        the algorithm tests all triplet of point and L.determine
+        if the third point is left to the 2 first.
+        a tolerance can be introduce in cases where the polygon is
+        almost convex.
+
+        """
+        self.coorddeter()
+        p = self.xy[:,:-1]
+        a = p
+        b = np.roll(p,1,axis=1)
+        c = np.roll(p,2,axis=1)
+        return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
+                (np.sum(isleft(c,b,a,tol=tol)) == 0)
+
 
     def simplify(self):
         """ Simplify polygon - suppress adjacent colinear segments
@@ -2994,7 +3030,7 @@ def isleft(a,b,c,tol=0.):
     a : np.array (2xN)
     b : np.array (2xN)
     c : np.array (2xN)
-
+    tol : tolerance
     Returns
     -------
 

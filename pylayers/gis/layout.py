@@ -4817,6 +4817,11 @@ class Layout(object):
             self.buildGr()
             self.lbltg.extend('r')
 
+        if 'w' in graph and len(self.Gr.nodes())>1:
+            self.buildGw()
+            self.lbltg.extend('w')
+        #if 'c' in graph:
+        #    self.buildGc()
         if 'v' in graph:
             if verbose:
                 print "Gv"
@@ -4882,9 +4887,7 @@ class Layout(object):
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
-                    # gname2 ='dG'+g
-                    write_gpickle(getattr(self,gname1),path+'/G'+g+'.gpickle')
-                    #write_gpickle(getattr(self,gname2),path+'/dG'+g+'.gpickle')
+                    write_gpickle(getattr(self,gname1),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
                 else:
                     gname='G'+g
                     write_gpickle(getattr(self,gname),path+'/G'+g+'.gpickle')
@@ -4925,9 +4928,7 @@ class Layout(object):
             try:
                 if g in ['v','i']:
                     gname1 ='G'+g
-                    # gname2 ='dG'+g
-                    setattr(self, gname1,read_gpickle(path+'/G'+g+'.gpickle'))
-                    #setattr(self, gname2,read_gpickle(path+'/dG'+g+'.gpickle'))
+                    setattr(self, gname1, read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
                 else:
                     gname='G'+g
                     setattr(self, gname,read_gpickle(path+'/G'+g+'.gpickle'))
@@ -5442,11 +5443,27 @@ class Layout(object):
             for nw in combinations(f,2):
                 pf = map(lambda x: self.Gw.pos[x],nw)
                 pf =  np.array((pf))
-                # if self.seginline(pf[0],pf[1]).shape[1] <= 1:
-                d = np.sqrt(np.sum((pf[0]-pf[1])**2))
-                self.Gw.add_edges_from([(nw[0],nw[1])],weight=d)
+                if self.seginline(pf[0],pf[1]).shape[1] <= 1:
+                    d = np.sqrt(np.sum((pf[0]-pf[1])**2))
+                    self.Gw.add_edges_from([(nw[0],nw[1])],weight=d)
 
 
+            # kudr = [kdr[u] for u in udr]
+            # cdr = combinations(dr.keys()[udr],2)
+            # for
+            # import ipdb
+            # ipdb.set_trace()
+
+        # for n in self.Gr.nodes_iter():
+        #     d = self.Gw.neighbors(n)   # neighbors of room n in Gw
+        #     if len(d) > 1:
+        #         self.Gw.add_edges_from(combinations(d, 2))
+
+        # udn = nx.get_node_attributes(self.Gw,'diff').keys()
+        # import ipdb
+        # ipdb.set_trace()
+        # for u in udn:
+        #     [self.Gw[u].update({i:{'weigth':0.01}})for i in self.Gw.edge[u].keys()]
     # def buildGw(self):
     #     """ build Graph of waypaths
 
@@ -5460,8 +5477,6 @@ class Layout(object):
 
     #     for all edges of Gr (adjascent room)
     #         if room1 and room2 have a common transition
-           
-
     #     """
 
     #     self.Gw = nx.Graph()
