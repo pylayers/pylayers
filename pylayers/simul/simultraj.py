@@ -60,7 +60,6 @@ import pandas as pd
 import csv
 
 class Simul(object):
-
     """
     Link oriented simulation
 
@@ -73,6 +72,15 @@ class Simul(object):
     """
 
     def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False):
+        """
+        Parameters
+        ----------
+
+        _filetraj : string
+            h5 trajectory
+        verbose : boolean
+
+        """
 
         self.filetraj = _filetraj
 
