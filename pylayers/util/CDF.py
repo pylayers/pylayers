@@ -65,33 +65,24 @@ class CDF(object):
 
             self.cdf.append(cdf)
 
-    def show(self):
+    def show(self,**kwargs):
+        """ show cdf
         """
-        show()
-        """
-        f = plt.figure()
-#               plt.matplotlib.rc('font', **{'family': 'serif',
-#                                            'serif': ['Computer Modern Roman']})
+        if 'fig' not in kwargs:
+            f = plt.figure(**kwargs)
+        else:
+            f = kwargs['fig']
 
-#               coloumn_width_cm = 20.  # Get this from LaTeX using \showthe\columnwidth
-#               golden_mean = (np.sqrt(5)-1.0)/2.0         # Aesthetic ratio
-#               fig_width = coloumn_width_cm*0.393700787  # width in inches
-#               fig_height = fig_width*golden_mean      # height in inches
-#               fig_size =  [fig_width,fig_height]
-#               params = {'backend': 'ps',
-#                 'axes.labelsize': 15,
-#                 'text.fontsize': 15,
-#                 'legend.fontsize': 15,
-#                 'xtick.labelsize': 12,
-#                 'ytick.labelsize': 12,
-#                 'text.usetex': True,
-#                 'figure.figsize': fig_size}
-#               plt.rcParams.update(params)
+        if 'ax' not in kwargs:
+            ax = f.add_subplot(111)
+        else:
+            ax == kwargs['ax']
 
         leg = []
         c = []
-        ax = f.add_subplot(111)
+
         for k in range(len(self.ld)):
+
             d = self.ld[k]
             bound = d['bound']
             marker = d['marker']
@@ -104,10 +95,12 @@ class CDF(object):
             legend = d['legend']
 #                       leg.append(legend)
             cdf = self.cdf[k]
-            c.append(ax.plot(bound, cdf, marker=marker, markevery=markerfrequency, ms=markersize, mfc=markercolor, ls=linestyle, c=color, linewidth=linewidth, label=legend))
-        plt.xlabel(self.ld[0]['xlabel'])
+            c.append(ax.plot(bound, cdf, marker=marker,
+              markevery=markerfrequency, ms=markersize, mfc=markercolor,
+                             ls=linestyle, c=color, linewidth=linewidth,
+                             label=legend)) plt.xlabel(self.ld[0]['xlabel'])
+
         plt.ylabel(self.ld[0]['ylabel'])
-        #plt.legend((c),(leg),loc=0,scatterpoints=1,numpoints=1.)
         ax.legend(loc='best', scatterpoints=1, numpoints=1.)
         plt.grid()
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
