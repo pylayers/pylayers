@@ -373,7 +373,7 @@ class Antenna(object):
             # see WHERE1 D4.1 sec 3.1.1.2.2
             if self.source=='cst':
                 GdB = 20*np.log10(S/np.sqrt(30))
-            st = st + "GmaxDB : %4.2f dB \n" % (GdB)
+            st = st + "GmaxdB : %4.2f dB \n" % (GdB)
             st = st + "   f = %4.2f GHz \n" % (self.fa[uf])
             st = st + "   theta = %4.2f (degrees) \n" % (self.theta[ut]*rtd)
             st = st + "   phi = %4.2f  (degrees) \n" % (self.phi[up]*rtd)
