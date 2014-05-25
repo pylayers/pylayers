@@ -202,7 +202,7 @@ class Trajectories(list):
         ut = np.where(np.array(self.typ) == 'ag')[0][0]
         self.t = self[ut].time()
 
-    def replay(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[], speed=1, **kwargs):
+    def replay(self, fig=[], ax=[], **kwargs):
         """
             replay a trajectory
 
@@ -211,12 +211,7 @@ class Trajectories(list):
 
         fig
         ax
-        Nlabels : int
-            default 5
-        typ : string
-            'plot'|'scatter'
-        L : pylayers.gis.layout.Layout
-            Layout for body to be displayed in
+
         speed : float
             speed ratio
 
@@ -241,13 +236,11 @@ class Trajectories(list):
         if ('c' or 'color') not in kwargs:
             kwargs['color'] = 'b'
 
-        if L != []:
-            if isinstance(L,Layout):
-                fig, ax = L.showG('s',fig=fig, ax=ax, **kwargs)
+        L=Layout(self.Lfilename)
+        fig, ax = L.showG('s',fig=fig, ax=ax, **kwargs)
 
         time=self[0].time()
         
-        labels = np.linspace(0, len(self), Nlabels, endpoint=True).tolist()
 
         line, = ax.plot([], [], 'ob', lw=2)
         time_template = 'time = %.1fs'
@@ -272,6 +265,7 @@ class Trajectories(list):
         ani = animation.FuncAnimation(fig, animate, np.arange(1, len(time)),
             interval=25, blit=True, init_func=init)
         plt.show()
+       
 
 
     def ishow(self):
