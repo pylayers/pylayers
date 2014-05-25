@@ -316,7 +316,7 @@ class SSHCoeff(object):
 
         Cx : SCoeff
         Cy : SCoeff
-        Cz : SCoeff 
+        Cz : SCoeff
 
         """
 
@@ -425,7 +425,7 @@ class SCoeff(object):
                     #~ 'data' : [],
                     #~ 'ind' : [],
                     #~ 'k'   : [] }
-#~ 
+#~
         #~ for key, value in defaults.items():
             #~ if key not in kwargs:
                 #~ kwargs[key] = value
@@ -458,8 +458,6 @@ class SCoeff(object):
             sh3 = np.shape(self.s3)
             if sh3[0] != 0:
                 st = st + "Ncoeff s3 : " + str(len(self.ind3))+ "\n"
-
-
 
         return(st)
 
@@ -635,7 +633,7 @@ class SCoeff(object):
         The shape of s2 is (Lmax+1)*(Lmax+2)/2
 
         k2  : is the list of conserved indices in shape 3
-        ind3 : np.array (K3, 2) are the conserved (l,m) indices 
+        ind3 : np.array (K3, 2) are the conserved (l,m) indices
 
         ind3 and k2 have one common dimension
 
