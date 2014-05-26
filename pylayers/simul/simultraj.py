@@ -535,7 +535,7 @@ class Simul(object):
             orient = []
             for up, person in enumerate(self.dpersons.values()):   
                 #person.settopos(self._traj[up], t=t, cs=True)
-                person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,4.5]))
+                person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,2.5]))
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])

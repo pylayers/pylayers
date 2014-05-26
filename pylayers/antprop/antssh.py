@@ -226,8 +226,7 @@ def ssh(A,L= 20,dsf=1):
 
     ndab = nth
     
-    
-    pdb.set_trace()
+
     Etheta  =  A.Ftheta[:,::dsf,::dsf]
     Ephi    =  A.Fphi [:,::dsf,::dsf]
 
@@ -266,7 +265,7 @@ def ssh(A,L= 20,dsf=1):
     A.S = SSHCoeff(Cx,Cy,Cz)
 
 
-    return A, Y, Ypinv
+    return A
 
 
 if (__name__=="__main__"):
