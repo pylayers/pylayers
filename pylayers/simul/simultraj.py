@@ -155,8 +155,10 @@ class Simul(object):
         # get the trajectory
         traj = tr.Trajectories()
         traj.loadh5(self.filetraj)
+
         # get the layout
         self.L = Layout(traj.Lfilename)
+
         # resample trajectory
         for ut, t in enumerate(traj):
             if t.typ == 'ag':
