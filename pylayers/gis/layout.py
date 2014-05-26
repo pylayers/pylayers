@@ -5443,9 +5443,9 @@ class Layout(object):
             for nw in combinations(f,2):
                 pf = map(lambda x: self.Gw.pos[x],nw)
                 pf =  np.array((pf))
-                if self.seginline(pf[0],pf[1]).shape[1] <= 1:
-                    d = np.sqrt(np.sum((pf[0]-pf[1])**2))
-                    self.Gw.add_edges_from([(nw[0],nw[1])],weight=d)
+                #if self.seginline(pf[0],pf[1]).shape[1] <= 1:
+                d = np.sqrt(np.sum((pf[0]-pf[1])**2))
+                self.Gw.add_edges_from([(nw[0],nw[1])],weight=d)
 
 
             # kudr = [kdr[u] for u in udr]

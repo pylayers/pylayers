@@ -132,13 +132,41 @@ class Ctilde(object):
             s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
             s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
             s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
-        s = s + 'Methods'+'\n---------\n'
-        s = s + ' prop2tran(a=theta,b=phi,Friis=False)\n'
-        s = s + ' energy()\n'
-        s = s + ' doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
-        s = s + ' mobility(v,dt)\n'
-        s = s + ' show(mode=linear)\n'
-        s = s + ' sort()\n'
+        return(s)
+
+    def help(self,letter='az',mod='meth'):
+        """ help
+
+        Parameters
+        ----------
+
+        txt : string
+            'members' | 'methods'
+        """
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if mod=='memb':
+            print np.sort(self.__dict__.keys())
+        if mod=='meth':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
 
         return(s)
 
@@ -1141,6 +1169,9 @@ class Ctilde(object):
 
         typ   : 'm', 'l20' , 'r'
         cmap  : colormap
+            default hot
+        fontsize : int
+            default 14
 
         """
 
@@ -1153,27 +1184,25 @@ class Ctilde(object):
                 kwargs[key] = value
 
         if 'fig' not in kwargs:
-            fig = plt.figure()
-        else:
-            fig = kwargs['fig']
+            kwargs['fig'] = plt.figure()
 
-        ax1 = fig.add_subplot(221)
-        fig, ax1 = self.Ctt.imshow(fig=fig,ax=ax1,**kwargs)
+        ax1 = kwargs['fig'].add_subplot(221)
+        fig, ax1 = self.Ctt.imshow(ax=ax1,**kwargs)
         ax1.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax1.set_title(u'$C_{\\theta\\theta}$',fontsize=kwargs['fontsize'])
 
-        ax2 = fig.add_subplot(222)
-        fig, ax2 = self.Ctp.imshow(fig=fig,ax=ax2,**kwargs)
+        ax2 = kwargs['fig'].add_subplot(222)
+        fig, ax2 = self.Ctp.imshow(ax=ax2,**kwargs)
         ax2.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax2.set_title(u'$C_{\\theta\phi}$',fontsize=kwargs['fontsize'])
 
-        ax3 = fig.add_subplot(223)
-        fig, ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
+        ax3 = kwargs['fig'].add_subplot(223)
+        fig, ax3 = self.Cpt.imshow(ax=ax3,**kwargs)
         ax3.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax3.set_title(u'$C_{\phi\\theta}$',fontsize=kwargs['fontsize'])
 
-        ax4 = fig.add_subplot(224)
-        fig, ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
+        ax4 = kwargs['fig'].add_subplot(224)
+        fig, ax4 = self.Cpp.imshow(ax=ax4,**kwargs)
         ax4.set_xlabel('f (GHz)',fontsize=kwargs['fontsize'])
         ax4.set_title(u'$C_{\phi\phi}$',fontsize=kwargs['fontsize'])
 

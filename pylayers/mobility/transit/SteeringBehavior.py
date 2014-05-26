@@ -282,7 +282,7 @@ class Containment:
     
 #    print speed
 #    # parabolic speed 
-        d_no_influ = 0.3 # m
+        d_no_influ = 1.0#0.3 # m
         repuls     = boid.velocity.length() #/ boid.max_speed
 #        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
 #        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
