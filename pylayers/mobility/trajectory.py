@@ -99,6 +99,9 @@ class Trajectories(list):
         self.typ.pop(idx)
         self.ID.pop(idx)
 
+
+
+
     def loadh5(self, _filename='simulnet_TA-Office.h5',append =False):
 
 

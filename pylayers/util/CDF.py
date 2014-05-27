@@ -98,7 +98,7 @@ class CDF(object):
             c.append(ax.plot(bound, cdf, marker=marker,
               markevery=markerfrequency, ms=markersize, mfc=markercolor,
                              ls=linestyle, c=color, linewidth=linewidth,
-                             label=legend)) plt.xlabel(self.ld[0]['xlabel'])
+                             label=legend)) 
 
         plt.ylabel(self.ld[0]['ylabel'])
         ax.legend(loc='best', scatterpoints=1, numpoints=1.)

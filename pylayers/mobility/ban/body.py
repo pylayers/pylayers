@@ -225,7 +225,7 @@ class Body(object):
 
         return(di)
 
-    def center(self):
+    def center(self,force=False):
         """ centering the body
 
         Returns
@@ -250,7 +250,7 @@ class Body(object):
         """
         # self.d : 3 x 16 x Nf
         # self.pg : 3 x Nf
-        if not self.centered:
+        if not self.centered or force:
             self.pg = np.sum(self.d,axis=1)/self.npoints
             self.pg[2,:] = 0
             self.d = self.d - self.pg[:,np.newaxis,:]
@@ -328,7 +328,7 @@ class Body(object):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj,t=0,cs=False):
+    def settopos(self,traj,t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -397,8 +397,10 @@ class Body(object):
         psa = np.array([0,0])
         psb = psa + vsn
         psc = psa + wsn
-
-        pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
+        if treadmill:
+            pta=p0
+        else:
+            pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
 

@@ -413,8 +413,10 @@ class vec3:
         >>> print a.normalize()
         (0.4719, 0.2360, -0.8495)
         """
-
-        nlen = 1.0/math.sqrt(self*self)
+        try:
+            nlen = 1.0/math.sqrt(self*self)
+        except:
+            nlen=1.
         return vec3(self.x*nlen, self.y*nlen, self.z*nlen)
 
     def angle(self, other):
