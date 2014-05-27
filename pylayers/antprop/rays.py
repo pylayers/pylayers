@@ -612,7 +612,7 @@ class Rays(dict):
 
         Examples
         --------
-       
+
         >>> ptx = np.array([1,1,1.5])
         >>> prx = np.array([2,2,1.2])
         >>> r = Rays(ptx,prx)
@@ -657,6 +657,7 @@ class Rays(dict):
                 kp = int(np.floor(zp/H))
             thrp = np.arange(kp*H, bup, pas)
             d[zp] = abs(thrp-zp)/abs(hr-zp)
+
             # print "zp",zp
             # print "kp",kp
             # print "thrp",thrp

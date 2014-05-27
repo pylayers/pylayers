@@ -780,6 +780,7 @@ class Layout(object):
         return np.setdiff1d(iseg, u)
 
 
+
     def help(self,letter='az',mod='meth'):
         """ help
 
@@ -813,7 +814,6 @@ class Layout(object):
                                     print s+': '+ doc[0]
                                 except:
                                     pass
-
 
     def g2npy(self):
         """ from graphs to numpy arrays conversion

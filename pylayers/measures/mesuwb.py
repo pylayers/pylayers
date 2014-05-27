@@ -766,7 +766,7 @@ def trait(filename, itx=np.array([]), dico={}, h=1):
 
     return(F)
 
-class RAW_DATA(object):
+class RAW_DATA(PyLayers):
     """
 
     Members
@@ -798,7 +798,7 @@ class RAW_DATA(object):
         self.timetx = d[5]
         self.tx = d[6]
 
-class CAL_DATA(object):
+class CAL_DATA(PyLayers):
     """
     CAL_DATA
 
@@ -846,7 +846,7 @@ class CAL_DATA(object):
         s1 = self.ch1
         s2 = self.ch2
 
-class Fdd(object):
+class Fdd(PyLayers):
     """ Frequency Domain Deconv Data
 
     Attributes
@@ -957,7 +957,7 @@ class Fdd(object):
         plt.title('CH4')
         plt.show()
 
-class Tdd(object):
+class Tdd(PyLayers):
     """
     Time Domain Deconv Data
 
@@ -1580,7 +1580,7 @@ class FP(object):
 #\bigskip
 
 
-class UWBMeasure(object):
+class UWBMeasure(PyLayers):
     """ UWBMeasure class
 
     Attributes
@@ -1637,6 +1637,8 @@ class UWBMeasure(object):
             >>> M1.show()
 
         """
+        super(UWBMeasure,self).__init__()
+
         self.validindex = [1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,
         23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,
         43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,

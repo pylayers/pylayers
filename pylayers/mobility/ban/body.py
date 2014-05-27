@@ -265,7 +265,8 @@ class Body(object):
             self.centered = True
 
     def posvel(self,traj,t):
-        """
+        r""" calculate position and velocity
+
         traj : Tajectory DataFrame
             nx3
         t : float
@@ -281,14 +282,46 @@ class Body(object):
         vtn : normalized speed vector along motion trajectory (target)
         wtn : planar vector orthogonal to wtn
 
+        Notes
+        -----
+
+        This funtion takes as argument a trajectory which is a panda dataframe
+        and a time value in the time scale of the trajectory.
+
+        t value should of course be in the interval between trajecroty
+        extremal times tmin and tmax.
+
+        smax is the maximum distance covered in the whole motion capture
+        sequence.
+
+        sk is the distance covered from the begining of the trajectory until
+        the trajectory time t.
+
+        The ratio between those 2 distance is  rounded to the nearest integer.
+
+        :math:`\delta = s_k -\lceil \frac{s_k}{s_{max}} s_{max}`
+
+        k_f is the index of the topos motion capture into the MOCAP 
+
+
+         _____________________________________________________
+        |__________|__________|____________|___________|_____
+                                     kf=2
+        tmin                                                   tmax
+        0         smax               sk
+
         """
         # t should be in the trajectory time range
         assert ((t>=traj.tmin) & (t<=traj.tmax)),'posvel: t not in trajectory time range'
 
         sk = traj.distance(t) # covered distance along trajectory at time t
         smax = self.smocap[-1]
-        ks = int(np.floor(sk/smax)) # number of sequences
-        df = sk - ks*smax # covered distance into the sequence
+
+
+        ks = int(np.floor(sk/smax)) # number of full MOCAP sequences of frames
+
+        df = sk - ks*smax  # covered distance into the sequence
+
         kf = np.where(self.smocap>=df)[0][0]
 
         #tf = self.Tmocap/(1.0*self.nframes) # frame body time sampling period
@@ -372,6 +405,8 @@ class Body(object):
         -----
 
         topos is the current spatial global position of a body configuration.
+        this method takes as argument a trajectory and a time value t in the
+        trajectory time-scale.
 
 
         See Also
@@ -382,15 +417,14 @@ class Body(object):
         """
 
         #
-        #
         # psa : origin source
         # psb = psa+vsn : a point in the direction of pedestrian motion
         #
         # pta : target translation
         # ptb = pta+vtn : a point in the direction of trajectory
         #
-        # kt : trajectory integer index  
-        # kf : frame integer index  
+        # kt : trajectory integer index
+        # kf : frame integer index
 
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
 
