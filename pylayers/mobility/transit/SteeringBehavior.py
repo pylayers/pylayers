@@ -256,28 +256,35 @@ class Containment:
         position = boid.position
         boid.intersection = None
         checked = []
+        df = 2.0
+        dl = 2.0
+        dr = 2.0
         for wall in walls:
             if wall in checked: continue
             checked.append(wall)
             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, front_test,method = 'gauss')
-#        if intersect:
-#        pdb.set_trace()
-            if intersect and distance_along_check < front_distance:
-                front_intersect = True
-                front_distance = distance_along_check
-                front_direction = direction
+            if df > distance_along_check:
+                df = distance_along_check
+                if intersect and distance_along_check < front_distance:
+                    front_intersect = True
+                    front_distance = distance_along_check
+                    front_direction = direction
             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, left_test,method = 'direct')
-            if not front_intersect and intersect and distance_along_check < left_distance:
-                left_intersect = True
-                left_distance = distance_along_check
-                left_direction = direction
+            if dl > distance_along_check:
+                dl = distance_along_check
+                if not front_intersect and intersect and distance_along_check < left_distance:
+                    left_intersect = True
+                    left_distance = distance_along_check
+                    left_direction = direction
             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, right_test,method = 'direct')
-            if not front_intersect and intersect and distance_along_check < right_distance:
-                right_intersect = True
-                right_distance = distance_along_check
-                right_direction = direction
-            if front_intersect or left_intersect or right_intersect :
-                break
+            if dr > distance_along_check:
+                dr = distance_along_check
+                if not front_intersect and intersect and distance_along_check < right_distance:
+                    right_intersect = True
+                    right_distance = distance_along_check
+                    right_direction = direction
+            # if front_intersect or left_intersect or right_intersect :
+            #     break
     
     
 #    print speed
@@ -286,14 +293,16 @@ class Containment:
         repuls     = boid.velocity.length() #/ boid.max_speed
 #        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
 #        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
-        speed = max (boid.max_speed, 3.0/max(0.0001,(1.*repuls)))
-        #speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
+        speed = max (boid.max_speed, d_no_influ/max(0.0001,(1.*repuls)))
+        speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
         acceleration = vec3()
         if front_intersect:
             if front_direction == 'left':
-                acceleration += boid.localx.scale(speed) 
+                acceleration += boid.localx.scale(speed)
+                acceleration += -boid.localy.scale(speed) 
             else:
-                acceleration += -boid.localx.scale(speed) 
+                acceleration += -boid.localx.scale(speed)
+                acceleration += -boid.localy.scale(speed) 
         if left_intersect:
             acceleration += -boid.localx.scale(speed)
         if right_intersect:
