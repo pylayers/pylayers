@@ -262,8 +262,8 @@ class Containment:
         boid.intersection = None
         checked = []
         df = FCHK+0.5
-        dl = SCHK+0.5
-        dr = SCHK+0.5
+        dl = SCHK
+        dr = SCHK
         for wall in walls:
             if wall in checked: continue
             checked.append(wall)
@@ -300,37 +300,23 @@ class Containment:
 #        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
         speed = max (boid.max_speed, d_no_influ/max(0.0001,(1.*repuls)))
         speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
-        sf = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*df)))
-        sl = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dl)))
-        sr = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dr)))
+        # sf = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*df)))
+        # sl = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dl)))
+        # sr = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dr)))
         acceleration = vec3()
         if front_intersect:
             if front_direction == 'left':
-                acceleration += -boid.localx.scale(sl)
+                acceleration = boid.localx.scale(speed) 
             else:
-                acceleration += -boid.localx.scale(sr)
-        if left_intersect:
-            acceleration += -boid.localx.scale(sl)
-        if right_intersect:
-            acceleration += -boid.localx.scale(sr)
-        # else:
-        #     acceleration = vec3()
+                acceleration = -boid.localx.scale(speed) 
+        elif left_intersect:
+            acceleration = boid.localx.scale(speed)
+        elif right_intersect:
+            acceleration = -boid.localx.scale(speed)
+        else:
+            acceleration = vec3()
 
         return acceleration
-
-        # if front_intersect:
-        #     if front_direction == 'left':
-        #         acceleration = boid.localx.scale(speed) 
-        #     else:
-        #         acceleration = -boid.localx.scale(speed) 
-        # elif left_intersect:
-        #     acceleration = boid.localx.scale(speed)
-        # elif right_intersect:
-        #     acceleration = -boid.localx.scale(speed)
-        # else:
-        #     acceleration = vec3()
-
-        # return acceleration
 
 
 #    def test_intersection(self, boid, wall, position, vector):
