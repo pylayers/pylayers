@@ -2082,7 +2082,7 @@ class Antenna(object):
 
 
     def Fsynth3(self, theta = [], phi=[], pattern=True,typ='sh3'):
-        """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
+        r""" synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
 
@@ -2122,6 +2122,9 @@ class Antenna(object):
 
         All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
         once the V,W function
+
+        If the data comes from a cst file like the antenna used in WHERE1 D4.1
+        the pattern is multiplied by $\frac{4\pi}{120\pi}=\frac{1}{\sqrt{30}$
 
         """
 

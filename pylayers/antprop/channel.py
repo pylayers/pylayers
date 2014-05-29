@@ -559,7 +559,7 @@ class Ctilde(object):
 
         return(tauk_ch)
 
-    def PLoss(sef,f):
+    def PLoss(self,f):
         """
         """
         pass

@@ -1345,8 +1345,10 @@ class TFP(object):
 
     def append(self, FP):
         """
+
         Parameters
         ----------
+
         FP 
         """
         tx = FP.metadata['Tx'].reshape(3, 1)
@@ -1392,11 +1394,8 @@ class TFP(object):
         #self .chan_param['toa_th_tmt']=hstack((self.chan_param['toa_th_tmt'],FP.chan_param['toa_th_tmt']))
 
 class FP(object):
-    """
-    Fingerprint
+    """ Fingerprint
 
-    F = FP(M,Rxid, alpha = 0.1,Tint=0.225,sym=0.25,nint=7,thlos=0.05,
-        thnlos=0.65,thcum=0.15)
     Rxid : 1 | 2 | 3 | 4
     alpha : pdf percentile to suppress below and above (used in tau_rms and tau_moy)
     Tint : Integration time for Emax (ns)
@@ -2098,23 +2097,38 @@ class UWBMeasure(PyLayers):
         emax = np.array([Emax1, Emax2, Emax3, Emax4])
         return emax
 
-    def Etot(self):
-        """
-            Etot
+    def Etot(self,toffns=0.7,tdns=75,dB=True):
+        """ Calculate total energy for the 4 channels
 
-            Calculate total energy for the 4 channels
-        """
-        de0 = self.de[0] + 0.7
-        de1 = self.de[1] + 0.7
-        de2 = self.de[2] + 0.7
-        de3 = self.de[3] + 0.7
-        Etot1 = self.tdd.ch1.Etot(de0, de0 + 75)
-        Etot2 = self.tdd.ch2.Etot(de1, de1 + 75)
-        Etot3 = self.tdd.ch3.Etot(de2, de2 + 75)
-        Etot4 = self.tdd.ch4.Etot(de3, de3 + 75)
+        Parameters
+        ----------
 
-        etot = np.array([10 * log10(Etot1), 10 * log10(Etot2), 10 *
-                         log10(Etot3), 10 * log10(Etot4)])
+        toffns : float
+            time offset for selecting time window
+
+        tdns : float
+            time duration of the window
+
+        Notes
+        -----
+
+        This function gets the total energy of the channel
+
+        from [tau_0 + tofffset , tau_0 + toffset +tduration ]
+
+        """
+        de0 = self.de[0] + toffns
+        de1 = self.de[1] + toffns
+        de2 = self.de[2] + toffns
+        de3 = self.de[3] + toffns
+        Etot1 = self.tdd.ch1.Etot(de0, de0 + tdns)
+        Etot2 = self.tdd.ch2.Etot(de1, de1 + tdns)
+        Etot3 = self.tdd.ch3.Etot(de2, de2 + tdns)
+        Etot4 = self.tdd.ch4.Etot(de3, de3 + tdns)
+
+        etot = np.array([Etot1, Etot2, Etot3, Etot4])
+        if dB==True:
+            etot = 10*np.log10(etot),
 
         return etot
 

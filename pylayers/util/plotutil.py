@@ -118,7 +118,7 @@ def mulcplot(x,y,**kwargs):
 
     y : ndarray  (M,N)
 
-    typ : string
+    typ : list of string
             'm'   : modulus
             'v'   : value
             'l10' : dB (10 log10)
@@ -146,6 +146,7 @@ def mulcplot(x,y,**kwargs):
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
     takes the priority over the passed values nlin and ncol
 
+    notice thet typ is la list of string and not a string
 
     Examples
     --------
@@ -163,9 +164,9 @@ def mulcplot(x,y,**kwargs):
         >>> y = np.vstack((z1,z2,z3,z4))
         >>> plu.mulcplot(x,y)
         >>> plt.show()
-        >>> plu.mulcplot(x,y,typ='v',)
+        >>> plu.mulcplot(x,y,typ=['v'],)
         >>> plt.show()
-        >>> plu.mulcplot(x,y,typ='r',ncol=2,nlin=2,color='k',linewidth=2)
+        >>> plu.mulcplot(x,y,typ=['r'],ncol=2,nlin=2,color='k',linewidth=2)
         >>> plt.show()
 
 
@@ -353,7 +354,6 @@ def mulcplot(x,y,**kwargs):
             else:
                 k = l*ncol+c
                 if types[k%ntypes]=='v':
-                    #ax[l,c].plot(x[k%nfigx,:],y[k%nfigy,:],label=labels[k%nlabels],**args)
                     ax[l,c].plot(x,y[k%nfigy,:],label=labels[k%nlabels],**args)
                 if types[k%ntypes]=='r':
                     ax[l,c].plot(x,np.angle(y[k%nfigy,:]),label=labels[k%nlabels],**args)
