@@ -77,6 +77,10 @@ from pylayers.mobility.transit.vec3 import vec3
 from random import uniform,gauss,randint
 import pdb
 
+# max front distance to consider 
+FCHK = 2.0
+# max side distance to consider 
+SCHK = 2.
 
 class Seek:
     """ class Seek
@@ -241,6 +245,7 @@ class Containment:
 
 
     """
+
     def calculate(self, boid):
         the_world = boid.world
         walls = the_world.obstacles(boid)
@@ -248,17 +253,17 @@ class Containment:
         front_intersect = left_intersect = right_intersect = False
         front_distance = left_distance = right_distance = 30000
         speed = boid.velocity.length()
-        front_check = 0.1 + speed * 0.5
-        side_check = 0.1 + speed * 0.5
+        front_check = FCHK + speed * 0.5
+        side_check = SCHK + speed * 0.5
         front_test = boid.localy.scale(front_check)
         left_test = (boid.localy - boid.localx).scale(side_check)
         right_test = (boid.localy + boid.localx).scale(side_check)
         position = boid.position
         boid.intersection = None
         checked = []
-        df = 2.0
-        dl = 2.0
-        dr = 2.0
+        df = FCHK+0.5
+        dl = SCHK+0.5
+        dr = SCHK+0.5
         for wall in walls:
             if wall in checked: continue
             checked.append(wall)
@@ -295,18 +300,19 @@ class Containment:
 #        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
         speed = max (boid.max_speed, d_no_influ/max(0.0001,(1.*repuls)))
         speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
+        sf = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*df)))
+        sl = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dl)))
+        sr = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dr)))
         acceleration = vec3()
         if front_intersect:
             if front_direction == 'left':
-                acceleration += boid.localx.scale(speed)
-                acceleration += -boid.localy.scale(speed) 
+                acceleration += -boid.localx.scale(sl)
             else:
-                acceleration += -boid.localx.scale(speed)
-                acceleration += -boid.localy.scale(speed) 
+                acceleration += -boid.localx.scale(sr)
         if left_intersect:
-            acceleration += -boid.localx.scale(speed)
+            acceleration += -boid.localx.scale(sl)
         if right_intersect:
-            acceleration += boid.localx.scale(speed)
+            acceleration += -boid.localx.scale(sr)
         # else:
         #     acceleration = vec3()
 
