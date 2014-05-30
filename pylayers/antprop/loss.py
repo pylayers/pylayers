@@ -1229,6 +1229,8 @@ def Loss_2obstacle(x1,y1,x2,y2,Obstacle1,Obstacle2):
     return(Ltotal)
 
 def showfurniture(ax):
+    """ 
+    """
     #R1_A.show(fig,ax)
     #R1_B1.show(fig,ax)
     #R1_B2.show(fig,ax)
@@ -1288,18 +1290,18 @@ def showfurniture(ax):
 
 
 def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size=25,colbar=True,xticks=False):
-    """
-    visuPt  : Visualization of values a given points
+    """ visuPt  : Visualization of values a given points
 
     Parameters
     ----------
-    S       : Simul 
+
+    S       : Simul
     nu      : useful Points
     nd      : Points deleted
     Pts     : Points coordinates
     Value
     """
-  
+
     vx  = Pts[nu,0]
     vy  = Pts[nu,1]
     vxd = Pts[nd,0]

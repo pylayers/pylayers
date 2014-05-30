@@ -749,9 +749,9 @@ class Coverage(PyLayers):
                 kwargs[k]=defaults[k]
 
         if 'fig' in kwargs:
-            fig,ax=self.L.showGs(fig=kwargs['fig'])
+            fig,ax=self.L.showG('s',fig=kwargs['fig'])
         else:
-            fig,ax=self.L.showGs()
+            fig,ax=self.L.showG('s')
 
         # plot the grid
         if kwargs['grid']:
