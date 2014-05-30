@@ -100,8 +100,27 @@
 <h1>pylayers.measures.mesuwb.UWBMeasure.Etot<a class="headerlink" href="#pylayers-measures-mesuwb-uwbmeasure-etot" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pylayers.measures.mesuwb.UWBMeasure.Etot">
-<tt class="descclassname">UWBMeasure.</tt><tt class="descname">Etot</tt><big>(</big><big>)</big><a class="reference internal" href="../../_modules/pylayers/measures/mesuwb.html#UWBMeasure.Etot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.Etot" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">UWBMeasure.</tt><tt class="descname">Etot</tt><big>(</big><em>toffns=0.7</em>, <em>tdns=75</em>, <em>dB=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/measures/mesuwb.html#UWBMeasure.Etot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.measures.mesuwb.UWBMeasure.Etot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate total energy for the 4 channels</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>toffns</strong> : float</p>
+<blockquote>
+<div><p>time offset for selecting time window</p>
+</div></blockquote>
+<p><strong>tdns</strong> : float</p>
+<blockquote class="last">
+<div><p>time duration of the window</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function gets the total energy of the channel</p>
+<p>from [tau_0 + tofffset , tau_0 + toffset +tduration ]</p>
 </dd></dl>
 
 </div>
@@ -139,7 +158,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 23, 2014.
+      Last updated on mai 30, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

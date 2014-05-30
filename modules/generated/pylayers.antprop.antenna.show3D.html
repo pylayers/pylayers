@@ -137,18 +137,8 @@ len(phi) must be equal with shape(F)[2]</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ifreq</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span>     <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span>  <span class="o">=</span> <span class="mi">30</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Np</span>  <span class="o">=</span> <span class="mi">60</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">phi</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Fth3</span><span class="p">,</span><span class="n">Fph3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">FTh3</span> <span class="o">=</span> <span class="n">Fth3</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">FPh3</span> <span class="o">=</span> <span class="n">Fph3</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">show3D</span><span class="p">(</span><span class="n">FTh3</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">ifreq</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;show3D example&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Fsynth</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-show3D-1.py">Source code</a>)</p>
@@ -189,7 +179,7 @@ len(phi) must be equal with shape(F)[2]</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 23, 2014.
+      Last updated on mai 30, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

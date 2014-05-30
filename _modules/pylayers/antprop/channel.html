@@ -153,7 +153,7 @@
 <span class="k">except</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">&#39;h5py is not installed: Ctilde(object cannot be saved)&#39;</span>
 
-<span class="k">class</span> <span class="nc">Ctilde</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Ctilde</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; container for the 4 components of the polarimetric ray channel</span>
 
 <span class="sd">    Attributes</span>
@@ -211,14 +211,6 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fmin(GHz) : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;fmax(GHz): &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Nfreq : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;Methods&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">---------</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39; prop2tran(a=theta,b=phi,Friis=False)</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39; energy()</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39; doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39; mobility(v,dt)</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39; show(mode=linear)</span><span class="se">\n</span><span class="s">&#39;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39; sort()</span><span class="se">\n</span><span class="s">&#39;</span>
-
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Ctilde.choose"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.choose.html#pylayers.antprop.channel.Ctilde.choose">[docs]</a>    <span class="k">def</span> <span class="nf">choose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -449,7 +441,7 @@
 <div class="viewcode-block" id="Ctilde.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.load.html#pylayers.antprop.channel.Ctilde.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filefield</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load a Ctilde from a .field file</span>
 
-<span class="sd">        Load the three files .tauk .tang .rang which contain  respectively</span>
+<span class="sd">        Load the three files .tauk .tang .rang which contain respectively</span>
 <span class="sd">        delay , angle of departure , angle of arrival.</span>
 
 <span class="sd">        Parameters</span>
@@ -610,7 +602,7 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">tauk_ch</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Ctilde.PLoss"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.PLoss.html#pylayers.antprop.channel.Ctilde.PLoss">[docs]</a>    <span class="k">def</span> <span class="nf">PLoss</span><span class="p">(</span><span class="n">sef</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.PLoss"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.PLoss.html#pylayers.antprop.channel.Ctilde.PLoss">[docs]</a>    <span class="k">def</span> <span class="nf">PLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
@@ -851,131 +843,6 @@
             <span class="n">fig</span><span class="p">,</span><span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotd</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="s">&#39;dod&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,[</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">]</span>
-        <span class="c">#return fig,ax1</span>
-
-
-    <span class="c"># def doadod(self, **kwargs):</span>
-    <span class="c">#     &quot;&quot;&quot; doadod scatter plot</span>
-
-    <span class="c">#     Parameters</span>
-    <span class="c">#     -----------</span>
-
-    <span class="c">#     cmap : color map</span>
-    <span class="c">#     s    : float</span>
-    <span class="c">#         size (default 30)</span>
-    <span class="c">#     fontsize : integer</span>
-    <span class="c">#         default 12</span>
-
-    <span class="c">#     Summary</span>
-    <span class="c">#     --------</span>
-
-    <span class="c">#     scatter plot of the DoA-DoD channel structure</span>
-    <span class="c">#     the energy is colorcoded over all couples of DoA-DoD</span>
-
-    <span class="c">#     &quot;&quot;&quot;</span>
-    <span class="c">#     defaults = {&#39;cmap&#39; : plt.cm.hot_r,</span>
-    <span class="c">#                 &#39;s&#39;: 30,</span>
-    <span class="c">#                 &#39;fontsize&#39; : 12,</span>
-    <span class="c">#                 &#39;reverse&#39; :False,</span>
-    <span class="c">#                 &#39;phi&#39;:(-180,180),</span>
-    <span class="c">#                 &#39;normalize&#39;:False,</span>
-    <span class="c">#                 &#39;polar&#39;:False,</span>
-    <span class="c">#                 &#39;mode&#39;:&#39;center&#39;}</span>
-
-    <span class="c">#     for k in defaults:</span>
-    <span class="c">#         if k not in kwargs:</span>
-    <span class="c">#             kwargs[k] = defaults[k]</span>
-
-    <span class="c">#     args = {}</span>
-    <span class="c">#     for k in kwargs:</span>
-    <span class="c">#         if k not in defaults:</span>
-    <span class="c">#             args[k] = kwargs[k]</span>
-
-    <span class="c">#     the = (0,180)</span>
-    <span class="c">#     dod = self.tang</span>
-    <span class="c">#     doa = self.rang</span>
-
-    <span class="c">#     # determine Energy in each channel</span>
-
-    <span class="c">#     Ett, Epp, Etp, Ept = self.energy(mode=kwargs[&#39;mode&#39;])</span>
-    <span class="c">#     Etot = Ett+Epp+Etp+Ept + 1e-15</span>
-
-    <span class="c">#     if kwargs[&#39;normalize&#39;]:</span>
-    <span class="c">#         Emax = max(Etot)</span>
-    <span class="c">#         Etot = Etot / Emax</span>
-
-    <span class="c">#     Emax = max(10 * np.log10(Etot))</span>
-    <span class="c">#     Emin = min(10 * np.log10(Etot))</span>
-    <span class="c">#     #</span>
-    <span class="c">#     #</span>
-    <span class="c">#     #</span>
-    <span class="c">#     # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)</span>
-    <span class="c">#     # WARNING polar plot require radian angles </span>
-    <span class="c">#     if kwargs[&#39;polar&#39;] :</span>
-    <span class="c">#         al = 1.</span>
-    <span class="c">#         phi=np.array(phi)</span>
-    <span class="c">#         the=np.array(the)</span>
-    <span class="c">#         phi[0] = phi[0]*np.pi/180</span>
-    <span class="c">#         phi[1] = phi[1]*np.pi/180</span>
-    <span class="c">#         the[0] = the[0]*np.pi/180</span>
-    <span class="c">#         the[1] = the[1]*np.pi/180</span>
-    <span class="c">#     else :</span>
-    <span class="c">#         al = 180./np.pi</span>
-
-    <span class="c">#     col = 10 * np.log10(Etot)</span>
-
-    <span class="c">#     if len(col) != len(dod):</span>
-    <span class="c">#         print &quot;len(col):&quot;, len(col)</span>
-    <span class="c">#         print &quot;len(dod):&quot;, len(dod)</span>
-    <span class="c">#     plt.subplot(121, polar=kwargs[&#39;polar&#39;])</span>
-    <span class="c">#     if kwargs[&#39;reverse&#39;]:</span>
-    <span class="c">#         plt.scatter(dod[:, 1] * al, dod[:, 0] * al,</span>
-    <span class="c">#                     s=kwargs[&#39;s&#39;], c=col,</span>
-    <span class="c">#                     cmap=kwargs[&#39;cmap&#39;],</span>
-    <span class="c">#                     edgecolors=&#39;none&#39;)</span>
-    <span class="c">#         plt.axis((kwargs[&#39;phi&#39;][0], kwargs[&#39;phi&#39;][1],the[0],the[1]))</span>
-    <span class="c">#         plt.xlabel(&#39;$\phi(^{\circ})$&#39;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-    <span class="c">#         plt.ylabel(&quot;$\\theta_t(^{\circ})$&quot;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-    <span class="c">#     else:</span>
-    <span class="c">#         plt.scatter(dod[:, 0] * al, dod[:, 1] * al,</span>
-    <span class="c">#                     s=kwargs[&#39;s&#39;], c=col,</span>
-    <span class="c">#                     cmap=kwargs[&#39;cmap&#39;],</span>
-    <span class="c">#                     edgecolors=&#39;none&#39;)</span>
-    <span class="c">#         plt.axis((the[0], the[1], kwargs[&#39;phi&#39;][0], kwargs[&#39;phi&#39;][1]))</span>
-    <span class="c">#         plt.xlabel(&quot;$\\theta_t(^{\circ})$&quot;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-    <span class="c">#         plt.ylabel(&#39;$\phi(^{\circ})$&#39;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-    <span class="c">#     # ylabel(&#39;$\phi_t(^{\circ})$&#39;,fontsize=18)</span>
-    <span class="c">#     plt.title(&#39;DoD&#39;, fontsize=kwargs[&#39;fontsize&#39;]+2)</span>
-
-
-    <span class="c">#     plt.subplot(122, polar=kwargs[&#39;polar&#39;])</span>
-    <span class="c">#     if kwargs[&#39;reverse&#39;]:</span>
-    <span class="c">#         plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,</span>
-    <span class="c">#                     cmap=plt.cm.hot_r, edgecolors=&#39;none&#39;)</span>
-    <span class="c">#         plt.axis((kwargs[&#39;phi&#39;][0], kwargs[&#39;phi&#39;][1],the[0],the[1]))</span>
-    <span class="c">#         plt.xlabel(&quot;$\phi_r (^{\circ})$&quot;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-    <span class="c">#         plt.ylabel(&quot;$\\theta_r(^{\circ})$&quot;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-    <span class="c">#     else :</span>
-    <span class="c">#         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,</span>
-    <span class="c">#                     cmap=plt.cm.hot_r, edgecolors=&#39;none&#39;)</span>
-    <span class="c">#         plt.axis((the[0], the[1], kwargs[&#39;phi&#39;][0], kwargs[&#39;phi&#39;][1]))</span>
-    <span class="c">#         plt.xlabel(&quot;$\\theta_r(^{\circ})$&quot;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-    <span class="c">#         plt.ylabel(&quot;$\phi_r (^{\circ})$&quot;, fontsize=kwargs[&#39;fontsize&#39;])</span>
-
-    <span class="c">#     plt.title(&#39;DoA&#39;, fontsize=kwargs[&#39;fontsize&#39;]+2)</span>
-
-    <span class="c">#     # plt.xticks(fontsize=20)</span>
-    <span class="c">#     # plt.yticks(fontsize=20)</span>
-    <span class="c">#     b = plt.colorbar()</span>
-    <span class="c">#     if kwargs[&#39;normalize&#39;]:</span>
-    <span class="c">#         b.set_label(&#39;dB&#39;)</span>
-    <span class="c">#     else:</span>
-    <span class="c">#         b.set_label(&#39;Path Loss (dB)&#39;)</span>
-    <span class="c">#     # for t in b.ax.get_yticklabels():</span>
-    <span class="c">#     #    t.set_fontsize(20)</span>
-    <span class="c">#     plt.axis</span>
-
-
 
 </div>
 <div class="viewcode-block" id="Ctilde.locbas"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.locbas.html#pylayers.antprop.channel.Ctilde.locbas">[docs]</a>    <span class="k">def</span> <span class="nf">locbas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tt</span><span class="o">=</span><span class="p">[],</span> <span class="n">Tr</span><span class="o">=</span><span class="p">[],</span><span class="n">b2g</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -1220,6 +1087,9 @@
 
 <span class="sd">        typ   : &#39;m&#39;, &#39;l20&#39; , &#39;r&#39;</span>
 <span class="sd">        cmap  : colormap</span>
+<span class="sd">            default hot</span>
+<span class="sd">        fontsize : int</span>
+<span class="sd">            default 14</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1232,27 +1102,25 @@
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">if</span> <span class="s">&#39;fig&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 
-        <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{</span><span class="se">\\</span><span class="s">theta</span><span class="se">\\</span><span class="s">theta}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
-        <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
         <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{</span><span class="se">\\</span><span class="s">theta\phi}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
-        <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ax3</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
         <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{\phi</span><span class="se">\\</span><span class="s">theta}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
-        <span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ax4</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
         <span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">u&#39;$C_{\phi\phi}$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fontsize&#39;</span><span class="p">])</span>
 
@@ -1558,7 +1426,7 @@
 
 
 </div>
-<span class="k">class</span> <span class="nc">Tchannel</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">FUDAsignal</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Tchannel</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="n">bs</span><span class="o">.</span><span class="n">FUDAsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle the transmission channel</span>
 
 <span class="sd">    The transmission channel TChannel is obtained through combination of the propagation</span>
@@ -2568,79 +2436,6 @@
 
         <span class="n">Tk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span> <span class="n">ufreq</span><span class="p">])</span>
         <span class="k">return</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Tk</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
-
-<span class="c">#def Cg2Cl(Cg, Tt, Tr):</span>
-<span class="c">#    &quot;&quot;&quot; global reference frame to local reference frame</span>
-<span class="c">#</span>
-<span class="c">#    Parameters</span>
-<span class="c">#    ----------</span>
-<span class="c">#</span>
-<span class="c">#    Cg  : Ctilde global</span>
-<span class="c">#    Tt  : Tx rotation matrix 3x3</span>
-<span class="c">#    Tr  : Rx rotation matrix 3x3</span>
-<span class="c">#</span>
-<span class="c">#    Returns</span>
-<span class="c">#    -------</span>
-<span class="c">#</span>
-<span class="c">#    Cl : Ctilde local</span>
-<span class="c">#</span>
-<span class="c">#    Examples</span>
-<span class="c">#    --------</span>
-<span class="c">#</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#    import copy</span>
-<span class="c">#   </span>
-<span class="c">#    # don&#39;t loose the global channel</span>
-<span class="c">#    Cl = copy.deepcopy(Cg)</span>
-<span class="c">#   </span>
-<span class="c">#    # get frequency axes   </span>
-<span class="c">#    fGHz = Cl.fGHz</span>
-<span class="c">#   </span>
-<span class="c">#    # get angular axes</span>
-<span class="c">#</span>
-<span class="c">#    # Rt (2x2)</span>
-<span class="c">#    # Rr (2x2)</span>
-<span class="c">#    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)</span>
-<span class="c">#    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)</span>
-<span class="c">#</span>
-<span class="c">#    Cl.tang = tangl</span>
-<span class="c">#    Cl.rang = rangl</span>
-<span class="c">#</span>
-<span class="c">#    uf = np.ones(VCg.nfreq)</span>
-<span class="c">#    r0 = np.outer(Rr[0, 0,:], uf)</span>
-<span class="c">#    r1 = np.outer(Rr[0, 1,:], uf)</span>
-<span class="c">#</span>
-<span class="c">#    # print &quot;shape r0 = &quot;,np.shape(r0)</span>
-<span class="c">#    # print &quot;shape VCg.Ctt.y = &quot;,np.shape(VCg.Ctt.y)</span>
-<span class="c">#    # print &quot;shape r1 = &quot;,np.shape(r1)</span>
-<span class="c">#    # print &quot;shape VCg.Cpt.y = &quot;,np.shape(VCg.Cpt.y)</span>
-<span class="c">#</span>
-<span class="c">#    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y</span>
-<span class="c">#    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y</span>
-<span class="c">#</span>
-<span class="c">#    r0 = np.outer(Rr[1, 0,:], uf)</span>
-<span class="c">#    r1 = np.outer(Rr[1, 1,:], uf)</span>
-<span class="c">#</span>
-<span class="c">#    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y</span>
-<span class="c">#    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y</span>
-<span class="c">#</span>
-<span class="c">#    r0 = np.outer(Rt[0, 0,:], uf)</span>
-<span class="c">#    r1 = np.outer(Rt[1, 0,:], uf)</span>
-<span class="c">#</span>
-<span class="c">#    Cttl = t00 * r0 + t01 * r1</span>
-<span class="c">#    Cptl = t10 * r0 + t11 * r1</span>
-<span class="c">#</span>
-<span class="c">#    r0 = np.outer(Rt[0, 1,:], uf)</span>
-<span class="c">#    r1 = np.outer(Rt[1, 1,:], uf)</span>
-<span class="c">#    Ctpl = t00 * r0 + t01 * r1</span>
-<span class="c">#    Cppl = t10 * r0 + t11 * r1</span>
-<span class="c">#</span>
-<span class="c">#    Cl.Ctt = bs.FUsignal(fGHz, Cttl)</span>
-<span class="c">#    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)</span>
-<span class="c">#    Cl.Cpt = bs.FUsignal(fGHz, Cptl)</span>
-<span class="c">#    Cl.Cpp = bs.FUsignal(fGHz, Cppl)</span>
-<span class="c">#</span>
-<span class="c">#    return Cl</span>
 
 </div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>

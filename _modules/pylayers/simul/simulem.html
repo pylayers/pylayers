@@ -779,62 +779,64 @@
 
 
 </div>
-<span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Simulation Class</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
-<span class="sd">        gui()</span>
-<span class="sd">            graphical user interface</span>
-<span class="sd">        choose()</span>
-<span class="sd">            choose a simulation file in simuldir</span>
-<span class="sd">        info()</span>
-<span class="sd">            info about the simulation</span>
-<span class="sd">        showray(itx,irx,iray)</span>
-<span class="sd">            show a single ray</span>
-<span class="sd">        help()</span>
-<span class="sd">            help on using Simulation object</span>
-<span class="sd">        structure2()</span>
-<span class="sd">            get .str2 file (ASCII description structure)</span>
-<span class="sd">        freq()</span>
-<span class="sd">            return the frequency base</span>
-<span class="sd">        getlaunch(k)</span>
-<span class="sd">            return the launching tree kth Transmittter</span>
-<span class="sd">        save()</span>
-<span class="sd">            save Simulation file</span>
-<span class="sd">        layout</span>
-<span class="sd">            load a Layout file</span>
-<span class="sd">        load()</span>
-<span class="sd">            load Simulation</span>
-<span class="sd">        show3()</span>
-<span class="sd">            geomview vizualization</span>
-<span class="sd">        show3l(itx,irx)</span>
-<span class="sd">            geomview vizualization of link itx irx</span>
-<span class="sd">        show()</span>
-<span class="sd">            2D visualization of simulation with furniture</span>
-<span class="sd">        launching()</span>
-<span class="sd">            ray launching</span>
-<span class="sd">        tracing(k)</span>
-<span class="sd">            ray tracing</span>
-<span class="sd">        tratotud(k,l)</span>
-<span class="sd">            convert ray for tud</span>
-<span class="sd">        field(l)</span>
-<span class="sd">            evaluate field</span>
-<span class="sd">        run(itx,irx)</span>
-<span class="sd">            run simulation for links (itx,irx)</span>
-<span class="sd">        cir(itx,irx,store_level=0,alpha=1.0)</span>
-<span class="sd">            Channel Impulse Response calculation</span>
+
+<span class="sd">    gui()</span>
+<span class="sd">        graphical user interface</span>
+<span class="sd">    choose()</span>
+<span class="sd">        choose a simulation file in simuldir</span>
+<span class="sd">    info()</span>
+<span class="sd">        info about the simulation</span>
+<span class="sd">    showray(itx,irx,iray)</span>
+<span class="sd">        show a single ray</span>
+<span class="sd">    help()</span>
+<span class="sd">        help on using Simulation object</span>
+<span class="sd">    structure2()</span>
+<span class="sd">        get .str2 file (ASCII description structure)</span>
+<span class="sd">    freq()</span>
+<span class="sd">        return the frequency base</span>
+<span class="sd">    getlaunch(k)</span>
+<span class="sd">        return the launching tree kth Transmittter</span>
+<span class="sd">    save()</span>
+<span class="sd">        save Simulation file</span>
+<span class="sd">    layout</span>
+<span class="sd">        load a Layout file</span>
+<span class="sd">    load()</span>
+<span class="sd">        load Simulation</span>
+<span class="sd">    show3()</span>
+<span class="sd">        geomview vizualization</span>
+<span class="sd">    show3l(itx,irx)</span>
+<span class="sd">        geomview vizualization of link itx irx</span>
+<span class="sd">    show()</span>
+<span class="sd">        2D visualization of simulation with furniture</span>
+<span class="sd">    launching()</span>
+<span class="sd">        ray launching</span>
+<span class="sd">    tracing(k)</span>
+<span class="sd">        ray tracing</span>
+<span class="sd">    tratotud(k,l)</span>
+<span class="sd">        convert ray for tud</span>
+<span class="sd">    field(l)</span>
+<span class="sd">        evaluate field</span>
+<span class="sd">    run(itx,irx)</span>
+<span class="sd">        run simulation for links (itx,irx)</span>
+<span class="sd">    cir(itx,irx,store_level=0,alpha=1.0)</span>
+<span class="sd">        Channel Impulse Response calculation</span>
 
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">        fileconf</span>
-<span class="sd">        filestr</span>
-<span class="sd">        filemat</span>
-<span class="sd">        fileslab</span>
-<span class="sd">        filepalch</span>
-<span class="sd">        filepatra</span>
-<span class="sd">        filefreq</span>
+
+<span class="sd">    fileconf</span>
+<span class="sd">    filestr</span>
+<span class="sd">    filemat</span>
+<span class="sd">    fileslab</span>
+<span class="sd">    filepalch</span>
+<span class="sd">    filepatra</span>
+<span class="sd">    filefreq</span>
 
 
 <span class="sd">    filefield</span>

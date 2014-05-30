@@ -101,11 +101,12 @@
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.loadhfss">
 <tt class="descclassname">Antenna.</tt><tt class="descname">loadhfss</tt><big>(</big><em>lfa=</em>, <span class="optional">[</span><span class="optional">]</span><em>Nt=72</em>, <em>Np=37</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/antenna.html#Antenna.loadhfss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadhfss" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>load antenna from HFSS file</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lfa :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lfa</strong> : list of antenna file</p>
 <p><strong>Nt</strong> : int</p>
 <blockquote>
 <div><p>Number of angle theta</p>
@@ -118,6 +119,9 @@
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>One file per frequency point</p>
+<p>th , ph , abs_grlz,th_absdB,th_phase,ph_absdB,ph_phase_ax_ratio</p>
 </dd></dl>
 
 </div>
@@ -155,7 +159,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 23, 2014.
+      Last updated on mai 30, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">

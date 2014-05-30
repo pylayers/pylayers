@@ -138,7 +138,7 @@
 <span class="k">except</span><span class="p">:</span>
     <span class="k">print</span> <span class="s">&#39;Layout:Mayavi is not installed&#39;</span>
 
-<span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Rays</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A set af rays</span>
 
 <span class="sd">    Attributes</span>
@@ -691,7 +691,7 @@
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">       </span>
+
 <span class="sd">        &gt;&gt;&gt; ptx = np.array([1,1,1.5])</span>
 <span class="sd">        &gt;&gt;&gt; prx = np.array([2,2,1.2])</span>
 <span class="sd">        &gt;&gt;&gt; r = Rays(ptx,prx)</span>
@@ -736,6 +736,7 @@
                 <span class="n">kp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">zp</span><span class="o">/</span><span class="n">H</span><span class="p">))</span>
             <span class="n">thrp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">kp</span><span class="o">*</span><span class="n">H</span><span class="p">,</span> <span class="n">bup</span><span class="p">,</span> <span class="n">pas</span><span class="p">)</span>
             <span class="n">d</span><span class="p">[</span><span class="n">zp</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">thrp</span><span class="o">-</span><span class="n">zp</span><span class="p">)</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">hr</span><span class="o">-</span><span class="n">zp</span><span class="p">)</span>
+
             <span class="c"># print &quot;zp&quot;,zp</span>
             <span class="c"># print &quot;kp&quot;,kp</span>
             <span class="c"># print &quot;thrp&quot;,thrp</span>
@@ -2295,7 +2296,7 @@
             <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </div>
     <span class="nd">@mlab.show</span>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="p">[],</span><span class="n">ilist</span><span class="o">=</span><span class="p">[],</span><span class="n">rlist</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Rays._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.rays.Rays._show3.html#pylayers.antprop.rays.Rays._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="p">[],</span><span class="n">ilist</span><span class="o">=</span><span class="p">[],</span><span class="n">rlist</span><span class="o">=</span><span class="p">[],</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; plot 3D rays within the simulated environment</span>
 <span class="sd">            using Mayavi</span>
 
@@ -2352,13 +2353,11 @@
             <span class="n">pt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;pt&#39;</span><span class="p">][:,:,</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">cnbi</span><span class="o">*</span><span class="n">nbr</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="s">&#39;F&#39;</span><span class="p">)</span>
             <span class="c"># lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cnbi</span><span class="o">*</span><span class="n">nbr</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nbr</span><span class="p">,</span><span class="n">cnbi</span><span class="p">)</span>
-            <span class="kn">import</span> <span class="nn">ipdb</span>
-            <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
             <span class="n">mesh</span> <span class="o">=</span> <span class="n">tvtk</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">pt</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">polys</span><span class="o">=</span><span class="n">lines</span><span class="p">)</span>
             <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">mesh</span><span class="p">),</span>
                                                  <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Rays with &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;interactions&#39;</span>
-
+</div>
     <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
               <span class="n">L</span><span class="o">=</span><span class="p">[],</span>
               <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>

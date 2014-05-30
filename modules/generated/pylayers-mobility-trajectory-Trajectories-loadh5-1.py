@@ -1,3 +1,3 @@
 from pylayers.mobility.trajectory import *
-T=Trajectories()
+T = Trajectories()
 T.loadh5()

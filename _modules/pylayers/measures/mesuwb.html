@@ -845,7 +845,7 @@
 
     <span class="k">return</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
 </div>
-<span class="k">class</span> <span class="nc">RAW_DATA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">RAW_DATA</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Members</span>
@@ -877,7 +877,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">timetx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
 </div>
-<span class="k">class</span> <span class="nc">CAL_DATA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">CAL_DATA</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    CAL_DATA</span>
 
@@ -925,7 +925,7 @@
         <span class="n">s1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch1</span>
         <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch2</span>
 </div>
-<span class="k">class</span> <span class="nc">Fdd</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Fdd</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Frequency Domain Deconv Data</span>
 
 <span class="sd">    Attributes</span>
@@ -1036,7 +1036,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;CH4&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
-<span class="k">class</span> <span class="nc">Tdd</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Tdd</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Time Domain Deconv Data</span>
 
@@ -1424,8 +1424,10 @@
 </div>
 <div class="viewcode-block" id="TFP.append"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.TFP.append.html#pylayers.measures.mesuwb.TFP.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">FP</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        FP </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tx</span> <span class="o">=</span> <span class="n">FP</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s">&#39;Tx&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -1471,11 +1473,8 @@
         <span class="c">#self .chan_param[&#39;toa_th_tmt&#39;]=hstack((self.chan_param[&#39;toa_th_tmt&#39;],FP.chan_param[&#39;toa_th_tmt&#39;]))</span>
 </div>
 <span class="k">class</span> <span class="nc">FP</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fingerprint</span>
+    <span class="sd">&quot;&quot;&quot; Fingerprint</span>
 
-<span class="sd">    F = FP(M,Rxid, alpha = 0.1,Tint=0.225,sym=0.25,nint=7,thlos=0.05,</span>
-<span class="sd">        thnlos=0.65,thcum=0.15)</span>
 <span class="sd">    Rxid : 1 | 2 | 3 | 4</span>
 <span class="sd">    alpha : pdf percentile to suppress below and above (used in tau_rms and tau_moy)</span>
 <span class="sd">    Tint : Integration time for Emax (ns)</span>
@@ -1659,7 +1658,7 @@
 <span class="c">#\bigskip</span>
 
 </div>
-<span class="k">class</span> <span class="nc">UWBMeasure</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">UWBMeasure</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; UWBMeasure class</span>
 
 <span class="sd">    Attributes</span>
@@ -1716,6 +1715,8 @@
 <span class="sd">            &gt;&gt;&gt; M1.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UWBMeasure</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">validindex</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span>
         <span class="mi">23</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">37</span><span class="p">,</span><span class="mi">38</span><span class="p">,</span><span class="mi">39</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">41</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span>
         <span class="mi">43</span><span class="p">,</span><span class="mi">44</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">46</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="mi">48</span><span class="p">,</span><span class="mi">49</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">51</span><span class="p">,</span><span class="mi">52</span><span class="p">,</span><span class="mi">53</span><span class="p">,</span><span class="mi">54</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">56</span><span class="p">,</span><span class="mi">57</span><span class="p">,</span><span class="mi">58</span><span class="p">,</span><span class="mi">59</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">61</span><span class="p">,</span>
@@ -2175,23 +2176,38 @@
         <span class="n">emax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Emax1</span><span class="p">,</span> <span class="n">Emax2</span><span class="p">,</span> <span class="n">Emax3</span><span class="p">,</span> <span class="n">Emax4</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">emax</span>
 </div>
-<div class="viewcode-block" id="UWBMeasure.Etot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Etot.html#pylayers.measures.mesuwb.UWBMeasure.Etot">[docs]</a>    <span class="k">def</span> <span class="nf">Etot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Etot</span>
+<div class="viewcode-block" id="UWBMeasure.Etot"><a class="viewcode-back" href="../../../modules/generated/pylayers.measures.mesuwb.UWBMeasure.Etot.html#pylayers.measures.mesuwb.UWBMeasure.Etot">[docs]</a>    <span class="k">def</span> <span class="nf">Etot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">toffns</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">tdns</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculate total energy for the 4 channels</span>
 
-<span class="sd">            Calculate total energy for the 4 channels</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        toffns : float</span>
+<span class="sd">            time offset for selecting time window</span>
+
+<span class="sd">        tdns : float</span>
+<span class="sd">            time duration of the window</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        This function gets the total energy of the channel</span>
+
+<span class="sd">        from [tau_0 + tofffset , tau_0 + toffset +tduration ]</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">de0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.7</span>
-        <span class="n">de1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.7</span>
-        <span class="n">de2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.7</span>
-        <span class="n">de3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.7</span>
-        <span class="n">Etot1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de0</span><span class="p">,</span> <span class="n">de0</span> <span class="o">+</span> <span class="mi">75</span><span class="p">)</span>
-        <span class="n">Etot2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de1</span><span class="p">,</span> <span class="n">de1</span> <span class="o">+</span> <span class="mi">75</span><span class="p">)</span>
-        <span class="n">Etot3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de2</span><span class="p">,</span> <span class="n">de2</span> <span class="o">+</span> <span class="mi">75</span><span class="p">)</span>
-        <span class="n">Etot4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de3</span><span class="p">,</span> <span class="n">de3</span> <span class="o">+</span> <span class="mi">75</span><span class="p">)</span>
+        <span class="n">de0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">toffns</span>
+        <span class="n">de1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">toffns</span>
+        <span class="n">de2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">toffns</span>
+        <span class="n">de3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">de</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">toffns</span>
+        <span class="n">Etot1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de0</span><span class="p">,</span> <span class="n">de0</span> <span class="o">+</span> <span class="n">tdns</span><span class="p">)</span>
+        <span class="n">Etot2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de1</span><span class="p">,</span> <span class="n">de1</span> <span class="o">+</span> <span class="n">tdns</span><span class="p">)</span>
+        <span class="n">Etot3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de2</span><span class="p">,</span> <span class="n">de2</span> <span class="o">+</span> <span class="n">tdns</span><span class="p">)</span>
+        <span class="n">Etot4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdd</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">Etot</span><span class="p">(</span><span class="n">de3</span><span class="p">,</span> <span class="n">de3</span> <span class="o">+</span> <span class="n">tdns</span><span class="p">)</span>
 
-        <span class="n">etot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span> <span class="o">*</span> <span class="n">log10</span><span class="p">(</span><span class="n">Etot1</span><span class="p">),</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">log10</span><span class="p">(</span><span class="n">Etot2</span><span class="p">),</span> <span class="mi">10</span> <span class="o">*</span>
-                         <span class="n">log10</span><span class="p">(</span><span class="n">Etot3</span><span class="p">),</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">log10</span><span class="p">(</span><span class="n">Etot4</span><span class="p">)])</span>
+        <span class="n">etot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Etot1</span><span class="p">,</span> <span class="n">Etot2</span><span class="p">,</span> <span class="n">Etot3</span><span class="p">,</span> <span class="n">Etot4</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">dB</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+            <span class="n">etot</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">etot</span><span class="p">),</span>
 
         <span class="k">return</span> <span class="n">etot</span>
 </div>

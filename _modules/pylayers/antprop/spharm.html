@@ -395,7 +395,7 @@
 
 <span class="sd">        Cx : SCoeff</span>
 <span class="sd">        Cy : SCoeff</span>
-<span class="sd">        Cz : SCoeff </span>
+<span class="sd">        Cz : SCoeff</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -504,7 +504,7 @@
                     <span class="c">#~ &#39;data&#39; : [],</span>
                     <span class="c">#~ &#39;ind&#39; : [],</span>
                     <span class="c">#~ &#39;k&#39;   : [] }</span>
-<span class="c">#~ </span>
+<span class="c">#~</span>
         <span class="c">#~ for key, value in defaults.items():</span>
             <span class="c">#~ if key not in kwargs:</span>
                 <span class="c">#~ kwargs[key] = value</span>
@@ -537,8 +537,6 @@
             <span class="n">sh3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s3</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">sh3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Ncoeff s3 : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ind3</span><span class="p">))</span><span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
-
-
 
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 </div>
@@ -714,7 +712,7 @@
 <span class="sd">        The shape of s2 is (Lmax+1)*(Lmax+2)/2</span>
 
 <span class="sd">        k2  : is the list of conserved indices in shape 3</span>
-<span class="sd">        ind3 : np.array (K3, 2) are the conserved (l,m) indices </span>
+<span class="sd">        ind3 : np.array (K3, 2) are the conserved (l,m) indices</span>
 
 <span class="sd">        ind3 and k2 have one common dimension</span>
 

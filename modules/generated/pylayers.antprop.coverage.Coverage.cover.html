@@ -101,23 +101,25 @@
 <dl class="method">
 <dt id="pylayers.antprop.coverage.Coverage.cover">
 <tt class="descclassname">Coverage.</tt><tt class="descname">cover</tt><big>(</big><em>polar='o'</em>, <em>sinr=True</em>, <em>snr=True</em>, <em>best=True</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/coverage.html#Coverage.cover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.cover" title="Permalink to this definition">¶</a></dt>
-<dd><p>run the sinr coverage calculation</p>
+<dd><p>run the coverage calculation</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lay_bound</strong> : bool</p>
-<blockquote class="last">
-<div><p>If True, the coverage is performed only inside the Layout
-and clip the values of the grid chosen in coverage.ini</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>polar</strong> : string</p>
+<blockquote>
+<div><p>&#8216;o&#8217; | &#8216;p&#8217;</p>
 </div></blockquote>
+<p><strong>sinr</strong> : boolean</p>
+<p><strong>snr</strong> : boolean</p>
+<p class="last"><strong>best</strong> : boolean</p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="pylayers.antprop.multiwall.Losst.html#pylayers.antprop.multiwall.Losst" title="pylayers.antprop.multiwall.Losst"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.multiwall.Losst</span></tt></a>, <a class="reference internal" href="pylayers.antprop.multiwall.PL.html#pylayers.antprop.multiwall.PL" title="pylayers.antprop.multiwall.PL"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.multiwall.PL</span></tt></a></p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.loss.Losst</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.loss.PL</span></tt></p>
 </div>
 <p class="rubric">Notes</p>
 <p>self.fGHz is an array it means that coverage is calculated at once
@@ -184,7 +186,7 @@ approaches as full or partial Ray Tracing.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 23, 2014.
+      Last updated on mai 30, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
 <script type="text/javascript">
