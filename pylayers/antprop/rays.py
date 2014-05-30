@@ -59,7 +59,7 @@ try:
 except:
     print 'Layout:Mayavi is not installed'
 
-class Rays(dict):
+class Rays(PyLayers,dict):
     """ A set af rays
 
     Attributes

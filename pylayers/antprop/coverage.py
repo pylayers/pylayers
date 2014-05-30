@@ -19,7 +19,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.util.utilnet import str2bool
 from pylayers.gis.layout import Layout
-import pylayers.antprop.multiwall as mw
+import pylayers.antprop.loss as loss
 import pylayers.signal.standard as std
 
 import matplotlib.cm  as cm
@@ -33,7 +33,7 @@ import pdb
 import doctest
 from itertools import product
 
-class Coverage(object):
+class Coverage(PyLayers):
     """ Handle Layout Coverage
 
         Methods
@@ -288,13 +288,13 @@ class Coverage(object):
 #        See Also
 #        --------
 #
-#        pylayers.antprop.multiwall.Losst
-#        pylayers.antprop.multiwall.PL
+#        pylayers.antprop.loss.Losst
+#        pylayers.antprop.loss.PL
 #
 #        """
 #
-#        self.Lwo,self.Lwp,self.Edo,self.Edp = mw.Losst(self.L,self.fGHz,self.grid.T,self.tx)
-#        self.freespace = mw.PL(self.fGHz,self.grid,self.tx)
+#        self.Lwo,self.Lwp,self.Edo,self.Edp = loss.Losst(self.L,self.fGHz,self.grid.T,self.tx)
+#        self.freespace = loss.PL(self.fGHz,self.grid,self.tx)
 #
 #        self.prdbmo = self.ptdbm - self.freespace - self.Lwo
 #        self.prdbmp = self.ptdbm - self.freespace - self.Lwp
@@ -302,14 +302,16 @@ class Coverage(object):
 #        self.snrp = self.prdbmp - self.pndbm
 
     def cover(self,polar='o',sinr=True,snr=True,best=True):
-        """ run the sinr coverage calculation
+        """ run the coverage calculation
 
         Parameters
         ----------
 
-        lay_bound : bool
-            If True, the coverage is performed only inside the Layout
-            and clip the values of the grid chosen in coverage.ini
+        polar : string
+            'o' | 'p'
+        sinr : boolean
+        snr  : boolean
+        best : boolean
 
         Examples
         --------
@@ -346,8 +348,8 @@ class Coverage(object):
         See Also
         --------
 
-        pylayers.antprop.multiwall.Losst
-        pylayers.antprop.multiwall.PL
+        pylayers.antprop.loss.Losst
+        pylayers.antprop.loss.PL
 
         """
 
@@ -356,7 +358,7 @@ class Coverage(object):
         ng = self.ng
         nf = self.nf
 
-        Lwo,Lwp,Edo,Edp = mw.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
+        Lwo,Lwp,Edo,Edp = loss.Losst(self.L,self.fGHz,self.pa,self.pg,dB=False)
         if polar=='o':
             self.polar='o'
             self.Lw = Lwo.reshape(nf,ng,na)
@@ -366,10 +368,10 @@ class Coverage(object):
             self.Lw = Lwp.reshape(nf,ng,na)
             self.Ed = Edp.reshape(nf,ng,na)
 
-        freespace = mw.PL(self.fGHz,self.pa,self.pg,dB=False)
+        freespace = loss.PL(self.fGHz,self.pa,self.pg,dB=False)
         self.freespace = freespace.reshape(nf,ng,na)
 
-        # Warning we are assuming here all transmitter have the same
+        # Warning we are assuming here all transmitters have the same
         # transmitting power (to be modified)
         # f x g x a
 

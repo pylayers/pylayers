@@ -155,7 +155,6 @@ def SphereToCart (theta, phi, eth, eph, bfreq ):
 
     return ec
 
-
 def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
     """
     Parameters

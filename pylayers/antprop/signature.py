@@ -366,8 +366,8 @@ def edgeout(L,g):
 
     return(g)
 
-class Signatures(dict):
-    """ set of Signature given 2 Gt cycle (convex) index
+class Signatures(PyLayers,dict):
+    """ set of Signature given 2 Gt cycle (convex) indices
 
     Attributes
     ----------

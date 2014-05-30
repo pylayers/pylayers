@@ -95,7 +95,7 @@ from pylayers.util.project import *
 from pylayers.antprop.slab import *
 
 
-class Inter(object):
+class Inter(PyLayers):
     """ Interactions
 
     Meta class of interactions ( Interactions, IntB/IntL/IntT/intR/intD)
@@ -192,6 +192,7 @@ class Inter(object):
         if typ = 0
 
         if typ = -1
+
         """
 
         if self.typ in [1, 2, 3]:

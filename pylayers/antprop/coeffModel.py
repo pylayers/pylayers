@@ -1,6 +1,6 @@
 """
 
-Function SSH model
+Function Coeff model
 ===================
 
 .. autosummary::
@@ -26,7 +26,8 @@ from numpy import zeros
 
 
 def relative_error(Eth_original, Eph_original,Eth_model, Eph_model,theta, phi, dsf=1,kf=-1):
-    """ calculate relative error betwee original and model
+    """ calculate relative error between original and model
+
     Parameters
     ----------
 
@@ -91,17 +92,16 @@ def relative_error(Eth_original, Eph_original,Eth_model, Eph_model,theta, phi, d
 
     return(errelTh, errelPh, errel)
 
-
 def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = 'Gain'):
     """
     Parameters
     ----------
-    Ec 
+    Ec
     theta :
-    phi
-    th : 
+    phi :
+    th :
     typ : string
-        'Gain' 
+        'Gain'
     """
 
     pos_th = np.where(theta == th)[0][0]
@@ -113,10 +113,10 @@ def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = 'Gain'):
         V = np.abs(Ec[0,:,start:stop])
     if typ=='Ey':
         V = np.abs(Ec[1,:,start:stop])
-        
+
     if typ=='Ez':
         V = np.abs(Ec[2,:,start:stop])
-    
+
     VdB = 20*np.log10(V)
     VdBmin = -40
     VdB = VdB - VdBmin
@@ -126,27 +126,46 @@ def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = 'Gain'):
     return V
 
 def mode_energy(C,M,L =20, ifreq = 46):
-    
-    """
+    """ calculates mode energy 
+
+    Parameters
+    ----------
+
+    C :
+    M :
+    L : int
+    ifreq : int
+
     shape C = (dim = 3,Ncoef = (1+L)**2)
     """
     Em = []
     Lc = (1+L)**2
     for m in range(M+1):
         im = m*(2*L+3-m)/2
-        bind = (1+L)*(L+2)/2 + im-L-1 
+        bind = (1+L)*(L+2)/2 + im-L-1
         if ifreq > 0:
             if m == 0:
                 em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2)
             else:
                 em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2) + np.sum(np.abs(C[:,ifreq,bind:bind + L-m+1])**2)
             Et = np.sum(np.abs(C[:,ifreq,:])**2)
-       
-        Em.append(em)    
+
+        Em.append(em)
     return  np.array(Em)/Et
 
 def mode_energy2(A,m, ifreq=46, L= 20):
-    
+    """ calculates mode energy (version 2)
+
+    Parameters
+    ----------
+
+    A :
+    m :
+    ifreq
+    L  :
+
+    """
+
     cx = lmreshape(A.S.Cx.s2)
     cy = lmreshape(A.S.Cy.s2)
     cz = lmreshape(A.S.Cz.s2)
@@ -156,6 +175,16 @@ def mode_energy2(A,m, ifreq=46, L= 20):
     return em/Et
 
 def level_energy(A,l, ifreq = 46,L=20):
+    """ energy of the level
+
+    Parameters
+    ----------
+
+    A : Antenna
+    l
+    ifreq
+    L
+    """
     cx = lmreshape(A.S.Cx.s2)
     cy = lmreshape(A.S.Cy.s2)
     cz = lmreshape(A.S.Cz.s2)
@@ -188,11 +217,8 @@ def lmreshape(coeff,L= 20):
     
     return coeff_lm 
 
-
-
 def sshModel(c,d, L = 20):
-    """
-    sshModel
+    """ sshModel
 
     """
 
