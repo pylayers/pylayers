@@ -102,23 +102,28 @@
 <dt id="pylayers.antprop.loss.cost231">
 <tt class="descclassname">pylayers.antprop.loss.</tt><tt class="descname">cost231</tt><big>(</big><em>pBS</em>, <em>pMS</em>, <em>hroof</em>, <em>phir</em>, <em>wr</em>, <em>fMHz</em>, <em>wb=20</em>, <em>dB=True</em>, <em>city='medium'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/loss.html#cost231"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.loss.cost231" title="Permalink to this definition">¶</a></dt>
 <dd><p>Walfish Ikegami model (COST 231)</p>
-<p>pBS   : np.array (3xNlink)
-pMS   : np.array (3xNlink)
-hroof : np.array (1xNlink)
-phir  : np.array (1xNlink)</p>
-<blockquote>
-<div>degrees</div></blockquote>
-<p>wr    : np.array (1xNlink)
-fMHz  : np.array (1xNf)
-wb    : float</p>
-<blockquote>
-<div>average building separation</div></blockquote>
-<p>dB    : boolean</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>PathLoss  (Nlink,Nf)</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pBS</strong> : np.array (3xNlink)</p>
+<p><strong>pMS</strong> : np.array (3xNlink)</p>
+<p><strong>hroof</strong> : np.array (1xNlink)</p>
+<p><strong>phir</strong> : np.array (1xNlink)</p>
+<blockquote>
+<div><p>degrees</p>
+</div></blockquote>
+<p><strong>wr</strong> : np.array (1xNlink)</p>
+<p><strong>fMHz</strong> : np.array (1xNf)</p>
+<p><strong>wb</strong> : float</p>
+<blockquote>
+<div><p>average building separation</p>
+</div></blockquote>
+<p><strong>dB</strong> : boolean</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>PathLoss  (Nlink,Nf)</strong> :</p>
+</td>
 </tr>
 </tbody>
 </table>
