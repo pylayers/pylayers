@@ -151,25 +151,34 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.OneSlopeMdl.html#pylayers.antprop.loss.OneSlopeMdl" title="pylayers.antprop.loss.OneSlopeMdl"><tt class="xref py py-obj docutils literal"><span class="pre">OneSlopeMdl</span></tt></a>(D,&nbsp;n,&nbsp;fGHz)</td>
 <td>one slope model</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_points.html#pylayers.antprop.loss.Dgrid_points" title="pylayers.antprop.loss.Dgrid_points"><tt class="xref py py-obj docutils literal"><span class="pre">Dgrid_points</span></tt></a>(points,&nbsp;Px)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cost231.html#pylayers.antprop.loss.cost231" title="pylayers.antprop.loss.cost231"><tt class="xref py py-obj docutils literal"><span class="pre">cost231</span></tt></a>(pBS,&nbsp;pMS,&nbsp;hroof,&nbsp;phir,&nbsp;wr,&nbsp;fMHz[,&nbsp;...])</td>
+<td>Walfish Ikegami model (COST 231)  pBS   : np.array (3xNlink) pMS   : np.array (3xNlink) hroof : np.array (1xNlink) phir  : np.array (1xNlink)     degrees wr    : np.array (1xNlink) fMHz  : np.array (1xNf) wb    : float     average building separation dB    : boolean  :Returns:      <strong>PathLoss  (Nlink,Nf)</strong> :             ..</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cost259.html#pylayers.antprop.loss.cost259" title="pylayers.antprop.loss.cost259"><tt class="xref py py-obj docutils literal"><span class="pre">cost259</span></tt></a>(pMS,&nbsp;pBS,&nbsp;fMHz)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cost2100.html#pylayers.antprop.loss.cost2100" title="pylayers.antprop.loss.cost2100"><tt class="xref py py-obj docutils literal"><span class="pre">cost2100</span></tt></a>(pMS,&nbsp;pBS,&nbsp;fGHz[,&nbsp;nfloor,&nbsp;dB])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_points.html#pylayers.antprop.loss.Dgrid_points" title="pylayers.antprop.loss.Dgrid_points"><tt class="xref py py-obj docutils literal"><span class="pre">Dgrid_points</span></tt></a>(points,&nbsp;Px)</td>
 <td>distance point to grid</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_zone.html#pylayers.antprop.loss.Dgrid_zone" title="pylayers.antprop.loss.Dgrid_zone"><tt class="xref py py-obj docutils literal"><span class="pre">Dgrid_zone</span></tt></a>(zone,&nbsp;Px)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dgrid_zone.html#pylayers.antprop.loss.Dgrid_zone" title="pylayers.antprop.loss.Dgrid_zone"><tt class="xref py py-obj docutils literal"><span class="pre">Dgrid_zone</span></tt></a>(zone,&nbsp;Px)</td>
 <td>Distance point to zone  A zone is a quadrilateral zone.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.calnu.html#pylayers.antprop.loss.calnu" title="pylayers.antprop.loss.calnu"><tt class="xref py py-obj docutils literal"><span class="pre">calnu</span></tt></a>(h,&nbsp;d1,&nbsp;d2,&nbsp;fGHz)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.calnu.html#pylayers.antprop.loss.calnu" title="pylayers.antprop.loss.calnu"><tt class="xref py py-obj docutils literal"><span class="pre">calnu</span></tt></a>(h,&nbsp;d1,&nbsp;d2,&nbsp;fGHz)</td>
 <td>Calculate the diffraction Fresnel parameter   :Parameters:      <strong>h</strong> : signed height w.r.t LOS (meter)                <strong>d1</strong> : distance 1 (meter)                <strong>d2</strong> : distance 2 (meter)                <strong>fGHz</strong> : frequency GHz            ..</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Carretosegment.html#pylayers.antprop.loss.Carretosegment" title="pylayers.antprop.loss.Carretosegment"><tt class="xref py py-obj docutils literal"><span class="pre">Carretosegment</span></tt></a>(Mob)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Carretosegment.html#pylayers.antprop.loss.Carretosegment" title="pylayers.antprop.loss.Carretosegment"><tt class="xref py py-obj docutils literal"><span class="pre">Carretosegment</span></tt></a>(Mob)</td>
 <td>define 4 segment using the position of the rectangle</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Intersection.html#pylayers.antprop.loss.Intersection" title="pylayers.antprop.loss.Intersection"><tt class="xref py py-obj docutils literal"><span class="pre">Intersection</span></tt></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2,&nbsp;x3,&nbsp;y3,&nbsp;x4,&nbsp;y4)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Intersection.html#pylayers.antprop.loss.Intersection" title="pylayers.antprop.loss.Intersection"><tt class="xref py py-obj docutils literal"><span class="pre">Intersection</span></tt></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2,&nbsp;x3,&nbsp;y3,&nbsp;x4,&nbsp;y4)</td>
 <td>check intersecton  of 2 segments</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dis.html#pylayers.antprop.loss.Dis" title="pylayers.antprop.loss.Dis"><tt class="xref py py-obj docutils literal"><span class="pre">Dis</span></tt></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2,&nbsp;x3,&nbsp;y3)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Dis.html#pylayers.antprop.loss.Dis" title="pylayers.antprop.loss.Dis"><tt class="xref py py-obj docutils literal"><span class="pre">Dis</span></tt></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2,&nbsp;x3,&nbsp;y3)</td>
 <td>Distance between a point and a line</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Interline.html#pylayers.antprop.loss.Interline" title="pylayers.antprop.loss.Interline"><tt class="xref py py-obj docutils literal"><span class="pre">Interline</span></tt></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2,&nbsp;Obstacle)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.Interline.html#pylayers.antprop.loss.Interline" title="pylayers.antprop.loss.Interline"><tt class="xref py py-obj docutils literal"><span class="pre">Interline</span></tt></a>(x1,&nbsp;y1,&nbsp;x2,&nbsp;y2,&nbsp;Obstacle)</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -180,13 +189,13 @@
 </table>
 </td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.showfurniture.html#pylayers.antprop.loss.showfurniture" title="pylayers.antprop.loss.showfurniture"><tt class="xref py py-obj docutils literal"><span class="pre">showfurniture</span></tt></a>(ax)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.showfurniture.html#pylayers.antprop.loss.showfurniture" title="pylayers.antprop.loss.showfurniture"><tt class="xref py py-obj docutils literal"><span class="pre">showfurniture</span></tt></a>(ax)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.visuPts.html#pylayers.antprop.loss.visuPts" title="pylayers.antprop.loss.visuPts"><tt class="xref py py-obj docutils literal"><span class="pre">visuPts</span></tt></a>(S,&nbsp;nu,&nbsp;nd,&nbsp;Pts,&nbsp;Values[,&nbsp;fig,&nbsp;sp,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.visuPts.html#pylayers.antprop.loss.visuPts" title="pylayers.antprop.loss.visuPts"><tt class="xref py py-obj docutils literal"><span class="pre">visuPts</span></tt></a>(S,&nbsp;nu,&nbsp;nd,&nbsp;Pts,&nbsp;Values[,&nbsp;fig,&nbsp;sp,&nbsp;...])</td>
 <td>visuPt  : Visualization of values a given points</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cdf.html#pylayers.antprop.loss.cdf" title="pylayers.antprop.loss.cdf"><tt class="xref py py-obj docutils literal"><span class="pre">cdf</span></tt></a>(x[,&nbsp;colsym,&nbsp;lab,&nbsp;lw])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.antprop.loss.cdf.html#pylayers.antprop.loss.cdf" title="pylayers.antprop.loss.cdf"><tt class="xref py py-obj docutils literal"><span class="pre">cdf</span></tt></a>(x[,&nbsp;colsym,&nbsp;lab,&nbsp;lw])</td>
 <td>Plot the cumulative density function</td>
 </tr>
 </tbody>
