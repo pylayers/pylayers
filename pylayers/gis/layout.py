@@ -311,7 +311,7 @@ class Layout(PyLayers):
 
     """
     def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',force=False):
-        """
+        """ object constructor
 
         Parameters
         ----------
@@ -474,6 +474,7 @@ class Layout(PyLayers):
 
         Notes
         -----
+
         strdir is defined in the Project module
 
         Examples
@@ -526,11 +527,16 @@ class Layout(PyLayers):
         """ Check Layout consistency
 
 
+        Parameters
+        ----------
+
+        level : int
+
         Returns
         -------
 
-            consistent : Boolean
-                        True if consistent
+        consistent : Boolean
+              True if consistent
 
         See Also
         --------
@@ -539,6 +545,7 @@ class Layout(PyLayers):
 
         Notes
         -----
+
         For all segments
             get the 2 vertices
                 for all the other vertices
@@ -639,19 +646,20 @@ class Layout(PyLayers):
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
 
-         Parameters
-         ----------
-            xmin
-            xmax
-            ymin
-            ymax
+        Parameters
+        ----------
 
-         Notes
-         -----
+        xmin : float
+        xmax : float
+        ymin : float
+        ymax : float
 
-              1) Determine all segments outside the clipping zone
-              2) Union of the 4 conditions
-              3) setdiff1d between the whole array of segments and the segments outside
+        Notes
+        -----
+
+          1) Determine all segments outside the clipping zone
+          2) Union of the 4 conditions
+          3) setdiff1d between the whole array of segments and the segments outside
 
         """
         p0 = self.pt[:, self.tahe[0, :]]
@@ -677,7 +685,7 @@ class Layout(PyLayers):
         return np.setdiff1d(iseg, u)
 
     def g2npy(self):
-        """ from graphs to numpy arrays conversion
+        """ conversion from graphs to numpy arrays 
 
         Notes
         -----
@@ -1228,12 +1236,12 @@ class Layout(PyLayers):
         Notes
         -----
 
-        Available format are :
+        Available formats are :
 
-            .ini   : ini file format (natural one) DIRINI
-            .str2  : native Pyray (C implementation) DIRSTRUC
-            .str   : binary file with visibility DIRSTRUC
-            .osm   : opens street map format  DIROSM
+        +  .ini   : ini file format (natural one) DIRINI
+        +  .str2  : native Pyray (C implementation) DIRSTRUC
+        +  .str   : binary file with visibility DIRSTRUC
+        +  .osm   : opens street map format  DIROSM
 
 
         layout files are stored in the directory pstruc['DIRxxx']
@@ -1286,6 +1294,7 @@ class Layout(PyLayers):
 
         Parameters
         ----------
+
         _filename : string
         _filematini  : string
             default 'matDB.ini'
@@ -7415,12 +7424,12 @@ class Layout(PyLayers):
         return nbu
 
     def facet3D(self, e, subseg=False):
-        """ facet3D
+        """ calculate 3D facet from segment
 
         Parameters
         ----------
 
-        e : int
+        s : int
             segment number
         subseg : boolean
             default False
@@ -7430,30 +7439,30 @@ class Layout(PyLayers):
         P2 = np.array(np.zeros(3), dtype=np.float64)
         P3 = np.array(np.zeros(3), dtype=np.float64)
         P4 = np.array(np.zeros(3), dtype=np.float64)
-        nebr = self.Gs.neighbors(e)
+        nebr = self.Gs.neighbors(s)
         n1 = nebr[0]
         n2 = nebr[1]
 
         P1[0:2] = np.array(self.Gs.pos[n1])
-        P1[2] = self.Gs.node[e]['z'][0]
+        P1[2] = self.Gs.node[s]['z'][0]
 
         P2[0:2] = np.array(self.Gs.pos[n2])
-        P2[2] = self.Gs.node[e]['z'][0]
+        P2[2] = self.Gs.node[s]['z'][0]
 
         P3[0:2] = np.array(self.Gs.pos[n2])
-        P3[2] = self.Gs.node[e]['z'][1]
+        P3[2] = self.Gs.node[s]['z'][1]
 
         P4[0:2] = np.array(self.Gs.pos[n1])
-        P4[2] = self.Gs.node[e]['z'][1]
+        P4[2] = self.Gs.node[s]['z'][1]
 
         cold = pyu.coldict()
 
         if subseg:
-            nsseg = len(self.Gs.node[e]['ss_name'])
+            nsseg = len(self.Gs.node[s]['ss_name'])
         else:
             nsseg = 0
 
-        filename = 'fa' + str(e) + '.off'
+        filename = 'fa' + str(s) + '.off'
         filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("OFF\n")
@@ -7461,34 +7470,34 @@ class Layout(PyLayers):
         fos.write("0.000 0.000 0.000\n")
         if subseg:
             try:
-                for k,name in enumerate(self.Gs.node[e]['ss_name']):
-                    P1[2] = self.Gs.node[e]['ss_z'][k][0]
-                    P2[2] = self.Gs.node[e]['ss_z'][k][0]
-                    P3[2] = self.Gs.node[e]['ss_z'][k][1]
-                    P4[2] = self.Gs.node[e]['ss_z'][k][1]
+                for k,name in enumerate(self.Gs.node[s]['ss_name']):
+                    P1[2] = self.Gs.node[s]['ss_z'][k][0]
+                    P2[2] = self.Gs.node[s]['ss_z'][k][0]
+                    P3[2] = self.Gs.node[s]['ss_z'][k][1]
+                    P4[2] = self.Gs.node[s]['ss_z'][k][1]
                     fos.write("%6.3f %6.3f %6.3f \n" % (P1[0], P1[1], P1[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P2[0], P2[1], P2[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P3[0], P3[1], P3[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P4[0], P4[1], P4[2]))
             except:
-                print 'no subsegment on ', e
+                print 'no subsegment on ', s
                 return('void')
         else:
-            name = self.Gs.node[e]['name']
+            name = self.Gs.node[s]['name']
             fos.write("%6.3f %6.3f %6.3f \n" % (P1[0], P1[1], P1[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P2[0], P2[1], P2[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P3[0], P3[1], P3[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P4[0], P4[1], P4[2]))
 
         if subseg:
-            for k,name in enumerate(self.Gs.node[e]['ss_name']):
+            for k,name in enumerate(self.Gs.node[s]['ss_name']):
                 colname = sl[name]['color']
                 colhex = cold[colname]
                 col = pyu.rgb(colhex) / 255.
                 fos.write("4 %i %i %i %i %6.3f %6.3f %6.3f 0.4\n" % (1+4*k, 2+4*k,
                 3+4*k, 4+4*k, col[0], col[1], col[2]))
         else:
-            name = self.Gs.node[e]['name']
+            name = self.Gs.node[s]['name']
             colname = sl[name]['color']
             colhex = cold[colname]
             col = pyu.rgb(colhex) / 255.

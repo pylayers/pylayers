@@ -1360,7 +1360,7 @@ class Ctilde(PyLayers):
 
 
 
-class Tchannel(PyLayers,bs.FUDAsignal):
+class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel
 
     The transmission channel TChannel is obtained through combination of the propagation

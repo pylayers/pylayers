@@ -606,7 +606,7 @@ class Cycle(object):
 
 
     def split(self,cyin):
-        """ split
+        """ split cycle
 
           Parameters
           ----------
@@ -752,10 +752,10 @@ class Cycle(object):
 
 
     def show(self,**kwargs):
-        """
-        show cycle
+        """ show cycle
 
-        Acceleration can be obtained if the polygon is calculated once
+        acceleration can be obtained if the polygon is calculated once
+
         """
         #nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)
         npoints = filter(lambda x : x <0 ,self.cycle)

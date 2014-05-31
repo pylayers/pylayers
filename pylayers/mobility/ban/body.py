@@ -67,7 +67,7 @@ except:
     print 'mayavi not installed'
 
 
-class Body(object):
+class Body(PyLayers):
     """ Class to manage a Body model
 
     Members
@@ -99,7 +99,8 @@ class Body(object):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
-        """
+        """ object constructor
+
         Parameters
         ----------
 
@@ -719,6 +720,7 @@ class Body(object):
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
+
         Parameters
         ----------
 
@@ -726,6 +728,7 @@ class Body(object):
         topos : boolean
         fig :
         ax :
+        col : string
 
         Returns
         -------
@@ -816,7 +819,7 @@ class Body(object):
         #visual.set_viewer(f)
         #f.scene.background=(1,1,1)
 
-        
+
         fId = kwargs['iframe']
 
 
@@ -1297,7 +1300,7 @@ class Body(object):
 
 
     def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):
-        """
+        """ intersect Body
 
         Parameters
         ----------
@@ -1359,7 +1362,7 @@ class Body(object):
         return intersect
 
     def intersectBody3(self,A,B, topos = True, frameId = 0):
-        """
+        """ intersect body new version
 
         Parameters
         ----------
@@ -1409,7 +1412,7 @@ class Body(object):
             #~ if dmin  < self.sl[k,2]:
                 #~ intersect=1
             lmd = 0.06 
-               
+
             #~ if 0 < alpha < 1 and 0 < beta < 1 :
             loss1_dB = 0
             loss2_dB = 0 
@@ -1417,35 +1420,35 @@ class Body(object):
 
 
             if dmin < self.sl[k,2]:
-                
+
                 """
                 in this case intersection is True
                 """
-                #pdb.set_trace()                                                            
+                #pdb.set_trace()
                 dAB = np.sqrt(sum((A-B)**2))
                 #nu1 =(self.sl[k,2]-dmin)*np.sqrt((2/lmd)*dAB*abs(alpha)*abs(1-alpha)))
                 nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
                 nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
-              
-                if -0.7 < nu1 : 
-                
+
+                if -0.7 < nu1 :
+
                     loss1_dB = 6.9 + 20*np.log10(np.sqrt((nu1-0.1)**2+1)+nu1-0.1)
                 else :
-                    loss1_dB = 0.0 
-                
-                if -0.7 < nu2 : 
+                    loss1_dB = 0.0
+
+                if -0.7 < nu2 :
                     loss2_dB = 6.9 + 20*np.log10(np.sqrt((nu2-0.1)**2+1)+nu2-0.1)
                 else :
-                    loss2_dB = 0.0 
-                    
+                    loss2_dB = 0.0
+
                 loss_dB  =10*np.log10(10**(loss1_dB/10.0)+10**(loss2_dB/10.0))
-                
+
                 loss_lin  =1.0/10**(loss_dB/10.0)
-              
-        return loss_lin#, loss_dB, loss1_dB, loss2_dB 
+
+        return loss_lin#, loss_dB, loss1_dB, loss2_dB
 
     def body_link(self, topos = True,frameId = 0):
-        """
+        """ body link
 
         Parameters
         ----------
@@ -1481,7 +1484,7 @@ class Body(object):
 
 
     def cylinder_basis_k(self, frameId):
-        """
+        """ cylinder basis k
 
         Parameters
         ----------
@@ -1503,7 +1506,7 @@ class Body(object):
             self.basisk[i, 6:] = wk
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
-        """
+        """ cylinder antenna
 
         Parameters
         ----------
@@ -1594,7 +1597,8 @@ def rotation(cycle, alpha=np.pi/2):
     return cycle_rot
 
 def Global_Trajectory(cycle, traj):
-    """
+    """ global trajectory
+
     Parameters
     ----------
 
@@ -1648,7 +1652,7 @@ def Global_Trajectory(cycle, traj):
     return data
 
 def ChangeBasis(u0, v0, w0, v1):
-    """
+    """ change basis
 
     Parameters
     ----------
@@ -1672,8 +1676,14 @@ def ChangeBasis(u0, v0, w0, v1):
     return u1, v1, w1
 
 def dist(A, B):
-    """
-    evaluate the distance between two points A and B
+    """ evaluate the distance between two points A and B
+
+    Parameters
+    ----------
+
+    A : 2D point
+    B : 2D point
+
     """
 
     d = np.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2)

@@ -70,7 +70,7 @@ class Coverage(PyLayers):
 
 
     def __init__(self,_fileini='coverage.ini'):
-        """
+        """ object constructor
 
         Parameters
         ----------
@@ -196,8 +196,6 @@ class Coverage(PyLayers):
 
 
     def __repr__(self):
-        """ representation
-        """
         st=''
         st = st+ 'Layout file : '+self.L.filename + '\n\n'
         st = st + '-----list of Access Points ------'+'\n'

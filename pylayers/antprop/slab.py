@@ -198,8 +198,8 @@ class Interface(PyLayers):
 
         .. math::
 
-            R = \matrix(R_o & 0\\0 & R_p)
-            T = \matrix(T_o & 0\\0 & T_p)
+            R = \begin{matrix}(R_o & 0\\0 & R_p)\end{matrix}
+            T = \begin{matrix}(T_o & 0\\0 & T_p)\end{matrix}
 
         R : np.array (f , th , 2, 2)
         T : np.array (f , th , 2, 2)
