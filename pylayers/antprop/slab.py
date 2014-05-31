@@ -151,15 +151,15 @@ class Interface(PyLayers):
 
     """
     def __init__(self, fGHz=np.array([2.4]), theta=np.array([[0.0 + 0 * 1j]]), name=''):
-        """
+        """ class constructor
 
         Parameters
         ----------
-
         fGHz : np.array
             frequency in GHz (default 2.4)
         theta : np.array
         angle taken from surface normal expressed in radians
+
         """
         #
         # reshape theta if necessary
@@ -185,15 +185,21 @@ class Interface(PyLayers):
         self.name = name
 
     def RT(self, metalic=False, RT='RT'):
-        """ evaluate Reflection and Transmission matrix
+        r""" evaluate Reflection and Transmission matrix
 
-        .. math::
-
-        R = \\matrix(R_o & 0\\\\0 & R_p)
-        T = \\matrix(T_o & 0\\\\0 & T_p)
+        Parameters
+        ----------
+        metalic : boolean
+        RT : string
+            choose R or T
 
         Notes
         -----
+
+        .. math::
+
+            R = \matrix(R_o & 0\\0 & R_p)
+            T = \matrix(T_o & 0\\0 & T_p)
 
         R : np.array (f , th , 2, 2)
         T : np.array (f , th , 2, 2)
@@ -285,17 +291,15 @@ class Interface(PyLayers):
 
         Parameters
         ----------
-
         fGHz : np.array
 
         Returns
         -------
-
         col : string
             hexadecimal color
 
 
-        See Also 
+        See Also
         ---------
 
         pylayers.gis.layout.showGs
@@ -333,7 +337,7 @@ class Interface(PyLayers):
 
 
     def loss0(self, fGHz, display=False):
-        """ Evaluate Loss at normal incidence theta=0
+        """ evaluate Loss at normal incidence theta=0
 
         Parameters
         ----------
@@ -367,7 +371,7 @@ class Interface(PyLayers):
         return(Lo, Lp)
 
     def losst(self, fGHz, display=False,dB=True):
-        """ Evaluate Loss
+        """ evaluate Loss
 
         Parameters
         ----------
@@ -462,19 +466,19 @@ class Interface(PyLayers):
 
         #fGHz = self.fGHz[k]
         rtd = 180 / np.pi
-        
+
         # filtering kwargs argument for mulplot function
         args ={}
         for k in kwargs:
             if k not in defaults.keys():
                 args[k]=kwargs[k]
-        
+
         if 'labels' not in kwargs.keys():
             args['labels'] = [self.name]
-            
+
         args['titles'] = []
         args['typ'] = kwargs['typ']
-        
+
         # Reflexion
         if 'R' in kwargs['coeff']:
             if 'o' in kwargs['polar']:
@@ -529,7 +533,7 @@ class Interface(PyLayers):
                         y = np.vstack((y,Tp))
                     except:
                         y = To
-        
+
         # setting the x axis
         if var=='f': # wrt frequency
             if len(self.fGHz)==1:
@@ -563,7 +567,7 @@ class Interface(PyLayers):
 
 
 class MatInterface(Interface):
-    """ MatInterface : Class for Interface between two materials
+    r""" MatInterface : Class for Interface between two materials
 
     l distance from the next Interface
 
@@ -588,9 +592,9 @@ class MatInterface(Interface):
 
     .. math::
 
-    I_p = \left| \\begin{array}{cc} \\frac{1}{T_p} & \\frac{R_p}{T_p} \\\\ \\frac{R_p}{T_p} & \\frac{1}{T_p} \end{array}\\right|
+    I_p = \left| \begin{array}{cc} \frac{1}{T_p} & \frac{R_p}{T_p} \\ \frac{R_p}{T_p} & \frac{1}{T_p} \end{array}\right|
 
-    I_o = \left| \\begin{array}{cc} \\frac{1}{T_o} & \\frac{R_o}{T_o} \\\\ \\frac{R_o}{T_o} & \\frac{1}{T_o} \end{array}\\right|
+    I_o = \left| \begin{array}{cc} \frac{1}{T_o} & \frac{R_o}{T_o} \\ \frac{R_o}{T_o} & \frac{1}{T_o} \end{array}\right|
 
 
     .. todo::
@@ -714,17 +718,17 @@ class Mat(PyLayers,dict):
 
     """
     def __init__(self, name="AIR", index=1, epr=1 + 0.0j, mur=1 + 0.0j, sigma=0.0, roughness=0.):
-        """
+        """ class constructor
 
         Parameters
         ----------
 
-        name :
+        name : string
         index : int
-        epr :
-        mur :
-        sigma :
-        roughness :
+        epr : complex
+        mur : complex
+        sigma : float
+        roughness : float
 
         Examples
         --------
@@ -823,7 +827,8 @@ class MatDB(PyLayers,dict):
 
     """
     def __init__(self, _fileini='matDB.ini'):
-        """
+        """ class constructor
+
         Parameters
         ----------
 
@@ -837,6 +842,8 @@ class MatDB(PyLayers,dict):
 
     def info(self):
         """ get MatDB info
+
+        TODO : make a __repr__
         """
         for i in self:
             S = self[i]
@@ -1282,7 +1289,7 @@ class Slab(dict, Interface):
 
     """
     def __init__(self, mat, name='NEWSLAB'):
-        """
+        """ class constructor
 
         Parameters
         ----------
@@ -1408,14 +1415,14 @@ class Slab(dict, Interface):
         #self.thick.append(0.0)
 
     def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
-        """ Evaluation of the slab
+        """ evaluation of the slab
 
         Parameters
         ----------
 
         fGHz : frequency GHz ( np.array([1.0]) )
         theta : np.array
-        incidence angle (from normal) radians
+            incidence angle (from normal) radians
 
         """
 
@@ -1631,11 +1638,13 @@ class Slab(dict, Interface):
         return (delayo,delayp)
 
     def tocolor(self, fGHz=np.array([2.4])):
-        """
+        """  convert slab properrties into a color
+
         Parameters
         ----------
 
         fGHz : np.array
+
         Examples
         --------
 
@@ -1791,7 +1800,7 @@ class SlabDB(dict):
 
     """
     def __init__(self, filemat='matDB.ini', fileslab='slabDB.ini'):
-        """
+        """ class constructor
 
         Parameters
         ----------
@@ -1811,7 +1820,7 @@ class SlabDB(dict):
             self.dass()
 
     def showall(self):
-        """ show all
+        """ show all slabs
 
         """
         lsl = self.keys()
@@ -1858,6 +1867,12 @@ class SlabDB(dict):
 
     def delete(self, name):
         """ delete an element from the database
+
+        Parameters
+        ----------
+
+        name : string
+
         """
         self.__delitem__(name)
         self.dass()
@@ -1867,14 +1882,15 @@ class SlabDB(dict):
 
         Parameters
         ----------
-        name
+
+        name : string
 
         """
         slab = self[name]
         slab.edit()
 
     def show(self, name='WOOD', fGHz=np.array([2.4])):
-        """ show
+        """ evaluate and show a given slab
 
         Parameters
         ----------

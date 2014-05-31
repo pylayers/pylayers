@@ -28,8 +28,6 @@ Ctilde class
     Ctilde.energy
     Ctilde.sort
     Ctilde.prop2tran
-    Ctilde.vec2scal
-    Ctilde.vec2scalA
     Ctilde.PLoss
 
 Tchannel Class
@@ -40,7 +38,6 @@ Tchannel Class
 
     Tchannel.__init__
     Tchannel.__repr__
-    Tchannel.info
     Tchannel.apply
     Tchannel.chantap
     Tchannel.applywavA
@@ -110,12 +107,16 @@ class Ctilde(PyLayers):
 
     """
     def __init__(self):
-        """
-            transpose == False   (r,f)
-            transpose == True    (f,r)
+        """ class constructor
 
-            A Ctilde object is the output of eval method
-            of a Rays object.
+        Notes
+        -----
+
+        transpose == False   (r,f)
+        transpose == True    (f,r)
+
+        A Ctilde object is the output of eval method
+        of a Rays object.
 
         """
         self.fail = False
@@ -478,7 +479,7 @@ class Ctilde(PyLayers):
             self.rang = tmp[0:nray,:]
 
     def mobility(self, v, dt):
-        """ Modify channel for uniform mobility
+        """ modify channel for uniform mobility
 
         Parameters
         ----------
@@ -523,14 +524,8 @@ class Ctilde(PyLayers):
 
         return(tauk_ch)
 
-    def PLoss(self,f):
-        """
-        """
-        pass
-
-
     def plotd (self, d='doa', **kwargs):
-        """plot direction of arrival/departure
+        """ plot direction of arrival/departure
 
         Parameters
         ----------
@@ -1048,6 +1043,20 @@ class Ctilde(PyLayers):
         return fig, (ax1, ax2, ax3, ax4)
 
     def check_reciprocity(self, C):
+        """ check channel reciprocity
+
+        Parameters
+        ----------
+
+        C : Ctilde
+
+
+        Notes
+        -----
+
+        This is not properly implemented
+
+        """
         assert np.allclose(self.tauk, C.tauk)
         for r in range(self.nray):
             if np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
@@ -1058,7 +1067,7 @@ class Ctilde(PyLayers):
 
 
     def energy(self,mode='mean',Friis=True,sumray=False):
-        """ Calculates energy on each channel
+        """ calculates energy on each channel
 
         Parameters
         ----------
@@ -1108,7 +1117,8 @@ class Ctilde(PyLayers):
         return ECtt, ECpp, ECtp, ECpt
 
     def cut(self,threshold=0.99):
-        """
+        """ cut rays from a energy threshold
+
         Parameters
         ----------
 
@@ -1272,9 +1282,10 @@ class Ctilde(PyLayers):
         H.tk = H.taud
         return(H)
 
-    def vec2scal(self):
+    def _vec2scal(self):
         """ calculate scalChannel from VectChannel and antenna
 
+        DEPRECTATED
         Returns
         -------
 
@@ -1298,8 +1309,10 @@ class Ctilde(PyLayers):
     # Inclusion of realistic antenna behaviour
     # Specify transmitter antenna and receiver antenna
 
-    def vec2scalA(self, At, Ar, alpha=1.0):
-        """
+    def _vec2scalA(self, At, Ar, alpha=1.0):
+        """ calculate scalChannel from Vectchannel
+
+        DEPRECATED
 
         Parameters
         ----------
@@ -1391,7 +1404,7 @@ class Tchannel(PyLayers,bs.FUDAsignal):
                 tau  = np.array(([],)),
                 dod  = np.array(([[],[]])).T,
                 doa  = np.array(([[],[]])).T):
-        """
+        """ class constructor
 
         Parameters
         ----------
@@ -1439,7 +1452,7 @@ class Tchannel(PyLayers,bs.FUDAsignal):
         filenameh5=pyu.getlong(filename,pstruc['DIRH'])
 
         f=h5py.File(filenameh5,'w')
-                
+
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
@@ -1456,10 +1469,11 @@ class Tchannel(PyLayers,bs.FUDAsignal):
             raise NameError('Channel Tchannel: issue when writting h5py file')
 
     def loadh5(self,Lfilename,idx, output = True):
-        """ Load Ctilde object in hdf5 format
+        """ load Ctilde object in hdf5 format
 
         Parameters
         ----------
+
         Lfilename  : string
             Layout filename
         idx : int
@@ -1469,9 +1483,10 @@ class Tchannel(PyLayers,bs.FUDAsignal):
 
         Returns
         -------
+
         if output:
         (a,b,Ta,Tb) 
-        
+
         with 
             a = np.ndarray
                 postion of point a (transmitter)
@@ -1483,10 +1498,10 @@ class Tchannel(PyLayers,bs.FUDAsignal):
                 rotation matrice of antenna b
 
 
-        """    
+        """
         filename = Lfilename.split('.')[0] +'_' + str(idx).zfill(5) + '.h5'
         filenameh5 = pyu.getlong(filename,pstruc['DIRH'])
-        
+
         f=h5py.File(filenameh5, 'r')
         try:
             # keys not saved as attribute of h5py file
@@ -1514,7 +1529,6 @@ class Tchannel(PyLayers,bs.FUDAsignal):
     def _saveh5(self,filenameh5,grpname):
         """ save Tchannel object in hdf5 format compliant with Link Class
 
-        
         Parameters
         ----------
 
@@ -1527,7 +1541,7 @@ class Tchannel(PyLayers,bs.FUDAsignal):
 
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-                
+
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
@@ -1537,7 +1551,7 @@ class Tchannel(PyLayers,bs.FUDAsignal):
             else :
                 print 'Warning : H/'+grpname +'already exists in '+filenameh5
             f=fh5['H/'+grpname]
-            
+
             for k,va in self.__dict__.items():
                 f.create_dataset(k,shape = np.shape(va),data=va)
             fh5.close()
@@ -1556,7 +1570,7 @@ class Tchannel(PyLayers,bs.FUDAsignal):
         grpname  : int
             groupname in filenameh5
 
-        """    
+        """
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         try:
             fh5=h5py.File(filename,'r')
@@ -1576,16 +1590,6 @@ class Tchannel(PyLayers,bs.FUDAsignal):
             fh5.close()
             raise NameError('Channel Tchannel: issue when reading h5py file')
 
-
-    def info(self):
-        """ display information
-
-        """
-        print 'Ftt,Ftp,Frt,Frp'
-        print 'dod,doa,tau'
-        print 'H - FUDsignal '
-        print 'tau min , tau max :', min(self.tau), max(self.tau)
-        self.H.info()
 
     def apply(self, W):
         """ Apply a FUsignal W to the ScalChannel.
@@ -2332,8 +2336,7 @@ class Tchannel(PyLayers,bs.FUDAsignal):
         # qHk.x[0]==Wk.x[0]
 
     def RSSI(self,ufreq=0) :
-        """ Compute RSSI value from a
-        specific frequency of the transmission channel
+        """ Compute RSSI value for a frequency index
 
         Parameters
         ----------

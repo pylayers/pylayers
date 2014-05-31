@@ -30,8 +30,6 @@ Utility Functions
     Antenna.__repr__
     Antenna.ls
 
-    Antenna.demo
-
     Antenna.errel
     Antenna.checkpole
     Antenna.info
@@ -181,7 +179,7 @@ class Antenna(PyLayers):
 
 
     def __init__(self,typ='S2R2.sh3',**kwargs):
-        """
+        """ class constructor
 
         Parameters
         ----------

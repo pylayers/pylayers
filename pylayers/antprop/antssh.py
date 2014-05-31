@@ -26,9 +26,11 @@ import doctest
 
 
 def SSHFunc(L, theta,phi):
-    """
+    """ ssh function
+
     Parameters
     ----------
+
     L : integer,
         spherical harmonics order
     theta: numpy array(1, nth)
@@ -41,7 +43,7 @@ def SSHFunc(L, theta,phi):
     return a spherical matrix ((1+L)*(2+L)/2,nth*nph) and the index (l,m) of the shperical harmonics
 
     """
-  
+
     l = np.arange(0,1+L).reshape(1,(1+L))
     m = np.arange(0,1+L).reshape(((1+L),1))
     # normalize the associated Legendre polynoms
@@ -78,7 +80,8 @@ def SSHFunc(L, theta,phi):
     return Y,  indx
 
 def SSHFunc2(L, theta,phi):
-    """
+    """ ssh function version 2
+
     Parameters
     ----------
 
@@ -133,9 +136,18 @@ def SSHFunc2(L, theta,phi):
     return Y, indx
 
 def SphereToCart (theta, phi, eth, eph, bfreq ):
-    """
-    Convert from spherical to cartesian coordinates
-    bfreq : boolean parameter to indicate if the conversion is done for all frequencies of only one.
+    """ Spherical to Cartesian
+
+    Parameters
+    ----------
+
+    theta :
+    phi   :
+    eth   :
+    eph   :
+    bfreq: boolean
+        indicate if the conversion is done for all frequencies or only one.
+
     """
 
     if bfreq == False:
@@ -156,7 +168,8 @@ def SphereToCart (theta, phi, eth, eph, bfreq ):
     return ec
 
 def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
-    """
+    """ Cartesian to spherical
+
     Parameters
     ----------
     theta

@@ -85,7 +85,7 @@ from pylayers.util.project import *
 from pylayers.antprop.slab import *
 from pylayers.antprop.interactions import *
 
-class Ray3D(object):
+class Ray3D(PyLayers):
     """ Ray3D class
 
     This class handles a 3D ray
@@ -327,14 +327,7 @@ class Ray3D(object):
     # def show3(self,bdis=True,bbas=False,col=np.array([1,0,1]),id=0):
 
     def delay(self):
-        """ delay
-
-        Returns
-        -------
-
-        delay : float
-            delay in ns for each segment of the ray
-
+        """ calculates delay
         """
         pt = self.pt[0:-1, :].T
         ph = self.pt[1::, :].T
@@ -346,7 +339,17 @@ class Ray3D(object):
     def show(self, fig=[], ax=[], col='b', node=False):
         """ show a Ray projection in 2D
 
+        Parameters
+        ----------
+
+        fig : figure
+        ax  : axes
+        col : string
+        node : boolean
+            (default False)
+
         """
+
         if fig == []:
             fig = plt.gcf()
         if ax == []:
@@ -369,7 +372,7 @@ class Ray3D(object):
         return fig, ax
 
     def show3(self, _filestr='defstr', bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
-        """ show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
+        """ show in geomview
 
         Parameters
         ----------
@@ -446,7 +449,7 @@ class Ray3D(object):
         else:
             return(filename)
 
-class RayTud(object):
+class RayTud(PyLayers):
     """ Ray Tud
 
     Attributes
@@ -482,8 +485,7 @@ class RayTud(object):
             self.inter[i].info()
 
     def delay(self):
-        """
-            calculate delay of the ray
+        """ calculates delay of the ray
         """
         nbi = self.ni
         d = 0
@@ -533,6 +535,7 @@ class RayTud(object):
 
         Parameters
         ----------
+
         fGHz : ndarray
             frequency axis
 
@@ -553,7 +556,7 @@ class RayTud(object):
         self.nf = nf
         self.C = Co
 
-class GrRayTud(dict):
+class GrRayTud(PyLayers,dict):
     """  a cluster of Rays in Tud format
 
     Attributes
@@ -654,7 +657,7 @@ class GrRayTud(dict):
         return lfile_tud, lfile_tang, lfile_rang, lfile_tauk
 
     def delay(self):
-        """ return ray delays in an array
+        """ returns ray delays
         """
         dt = np.array([])
         for nr in range(self.nray):
@@ -663,7 +666,7 @@ class GrRayTud(dict):
         return(dt)
 
     def choose(self):
-        """ Choose a tud  file in tuddir
+        """ choose a tud  file in tuddir
         """
         import tkFileDialog
         FD = tkFileDialog
@@ -759,7 +762,7 @@ class GrRayTud(dict):
         fo.close()
 
     def load(self, _filetud, _filetang, _filerang, sl):
-        """ Load a set of Ray from the PulsRay .tud file
+        """ load a set of Ray from the PulsRay .tud file
 
         Parameters
         ----------
@@ -771,17 +774,6 @@ class GrRayTud(dict):
         Notes
         -----
         a filename beginning with _ is a short filename
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            >>> from pylayers.gis.layout import *
-            >>> from pylayers.antprop.raysc import *
-
-
 
         """
 
@@ -1023,23 +1015,20 @@ class GrRayTud(dict):
         self.I.add([B, L, R, T, D])
 
     def ray(self, r):
-        """
-            Give the ray number and it returns the index of its interactions
+        """ Give the ray number and it returns the index of its interactions
         """
         raypos = np.nonzero(self[self.rayidx[r]]['rayidx'] == r)
         return(self[self.rayidx[r]]['rays'][raypos][0])
 
     def typ(self, r):
-        """
-            return the list of interaction type of a given ray
+        """ return the list of interaction type of a given ray
         """
 
         a = self.ray(r)
         return(self.I.typ[a])
 
     def eval(self):
-        """
-        evaluation of Ctilde
+        """ evaluation of Ctilde
         """
         print 'GrRayTUD evaluation'
         if not self.I.evaluated:
@@ -1141,14 +1130,14 @@ class GrRayTud(dict):
             self.dis[self[l]['rayidx']] = self[l]['dis']
 
     def info(self, r):
-        '''
-            information for a given ray r
+        """ information for a given ray r
 
-        Attributes
+        Parameters
         ----------
-        r : a ray number
 
-        '''
+        r : int
+
+        """
         print '-------------------------'
         print 'Informations of ray #', r
         print '-------------------------\n'
@@ -1271,7 +1260,7 @@ class GrRayTud(dict):
 #            print "rayon no : ", n
 #            self.rayTud[n].info()
 
-class GrRay3D(object):
+class GrRay3D(PyLayers):
     """ A set of Ray3D with the same Tx and Rx
 
     Attributes
@@ -1302,9 +1291,9 @@ class GrRay3D(object):
     def dir(self):
         """ list the available file in tradir
 
-
         Returns
         -------
+
         lfile_s : list
             sorted list of all the .str file of tradir
 
@@ -1312,8 +1301,9 @@ class GrRay3D(object):
         -----
         tradir is defined in the Project module
 
-        Example
-        -------
+        Examples
+        --------
+
         >>> from pylayers.antprop.raysc import *
         >>> g = GrRay3D()
         >>> lfile = g.dir()
@@ -1332,9 +1322,11 @@ class GrRay3D(object):
         return lfile_s
 
     def info(self, level=1):
-        """
+        """  provides info
+
         Parameters
         ----------
+
         level : int
             level of information
 
@@ -1582,7 +1574,7 @@ class GrRay3D(object):
 #               print "Le fichier", filename, "est introuvable"
 
     def delay(self):
-        """ delay
+        """ calculates delay
 
         Returns
         -------
@@ -1597,11 +1589,10 @@ class GrRay3D(object):
         return(td)
 
     def save(self, _filename):
-        """
-        save
+        """ save object
 
         Parameters
-        ---------
+        ----------
         _filename : str
 
         Save a  GrRay3d object in a .tra de PulsRay

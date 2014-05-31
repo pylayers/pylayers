@@ -109,7 +109,6 @@ Layout visibility
 .. autosummary::
     :toctree: generated/
 
-    Layout.checkvis
     Layout.visilist
     Layout.closest_edge
     Layout.visi_papb

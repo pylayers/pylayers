@@ -1,3 +1,21 @@
+"""
+.. currentmodule:: pylayers.network.net
+
+This class handle the description of an Indoor layout
+
+.. autosummary::
+    :toctree: generated
+
+Class Network
+=============
+
+.. autosummary::
+    :toctree: generated/
+
+    Network.__init__
+    Network.connect
+
+"""
 import networkx as nx
 import numpy as np
 import math
@@ -7,6 +25,7 @@ import matplotlib.pylab as plt
 import pdb
 from prioritydict import priorityDictionary
 from pylayers.util.project import *
+
 #
 # This module is adapted from WSN-SIM from Berkeley
 #

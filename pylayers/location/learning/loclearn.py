@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 #
 """
-.. currentmodule:: pylayers.location.learning.loclearn
 
-This class handle the description of an Indoor layout
+.. currentmodule:: pylayers.location.learning.loclearn
 
 .. autosummary::
     :toctree: generated/

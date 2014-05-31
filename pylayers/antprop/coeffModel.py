@@ -93,7 +93,8 @@ def relative_error(Eth_original, Eph_original,Eth_model, Eph_model,theta, phi, d
     return(errelTh, errelPh, errel)
 
 def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = 'Gain'):
-    """
+    """  response in azimuth
+
     Parameters
     ----------
     Ec
@@ -108,12 +109,14 @@ def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = 'Gain'):
     start = pos_th*len(phi)
     stop =  start + len(phi)
     if typ=='Gain':
-        V   =  np.sqrt(np.real(Ec[0,:,start:stop]*np.conj(Ec[0,:,start:stop])+Ec[1,:,start:stop]*np.conj(Ec[1,:,start:stop])+Ec[2,:,start:stop]*np.conj(Ec[2,:,start:stop])))
+        V   =  np.sqrt(np.real(Ec[0,:,start:stop]*
+                       np.conj(Ec[0,:,start:stop]) +
+                       Ec[1,:,start:stop]*np.conj(Ec[1,:,start:stop]) +
+                       Ec[2,:,start:stop]*np.conj(Ec[2,:,start:stop])))
     if typ=='Ex':
         V = np.abs(Ec[0,:,start:stop])
     if typ=='Ey':
         V = np.abs(Ec[1,:,start:stop])
-
     if typ=='Ez':
         V = np.abs(Ec[2,:,start:stop])
 
@@ -126,7 +129,7 @@ def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = 'Gain'):
     return V
 
 def mode_energy(C,M,L =20, ifreq = 46):
-    """ calculates mode energy 
+    """ calculates mode energy
 
     Parameters
     ----------
@@ -175,13 +178,14 @@ def mode_energy2(A,m, ifreq=46, L= 20):
     return em/Et
 
 def level_energy(A,l, ifreq = 46,L=20):
-    """ energy of the level
+    """ calculates energy of the level
 
     Parameters
     ----------
 
     A : Antenna
-    l
+    l : int
+        level
     ifreq
     L
     """
@@ -194,31 +198,64 @@ def level_energy(A,l, ifreq = 46,L=20):
     return el/Et
 
 def modeMax(coeff,L= 20, ifreq  = 46):
-    
+    """ calulates maximal mode 
+
+    Parameters
+    ----------
+
+    L  : int
+    ifreq : int
+
+    """
+
     Em_dB = 20*np.log10(mode_energy(C = coeff,M = L))
-    
+
     max_mode = np.where(Em_dB <-20 )[0][0]-1
     return max_mode
 
 def lmreshape(coeff,L= 20):
-    
+    """ level and mode reshaping
+
+    Parameters
+    ----------
+
+    coeff
+    L : int
+        maximum level
+    """
+
     sh = coeff.shape
-    
+
     coeff_lm = zeros(shape = (sh[0],1+L, 1+2*L), dtype = complex )
-    
-    for m in range(0,1+L):        
+
+    for m in range(0,1+L):
         im = m*(2*L+3-m)/2
         coeff_lm[:,m:L+1,L+m] = coeff[:,im:im +L+1-m]
-       
+
     for m in range(1,L):
         im = m*(2*L+3-m)/2
-        bind = (1+L)*(L+2)/2 + im-L-1 
+        bind = (1+L)*(L+2)/2 + im-L-1
         coeff_lm[:,m:L+1,L-m]= coeff[:,bind: bind + L-m+1]
-    
-    return coeff_lm 
+
+    return coeff_lm
 
 def sshModel(c,d, L = 20):
-    """ sshModel
+    """ calculates sshModel
+
+    Parameters
+    ----------
+
+    c : ssh coeff
+        free space antenna coeff
+    d : float
+        distance (meters)
+    L : int
+
+    Returns
+    -------
+
+    cm : ssh coeff
+        perturbed antenna coeff
 
     """
 
@@ -265,10 +302,6 @@ def sshModel(c,d, L = 20):
 
     cm[0:2] = c[0:2]
     return cm
-
-
-
-
 
 if (__name__=="__main__"):
     doctest.testmod()

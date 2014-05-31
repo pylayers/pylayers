@@ -28,8 +28,8 @@ Nodes Class
 .. autosummary::
     :toctree: generated/
 
-    Coords.nodes
-    Coords.clean
+    Nodes.nodes
+    Nodes.clean
 
 Ways Class
 ============
@@ -87,6 +87,7 @@ Utility Functions
 #
 
 
+from pylayers.util.project import *
 import pylayers.util.geomutil as geu
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
@@ -101,7 +102,7 @@ import numpy as np
 import pdb
 
 # classes that handle the OSM data file format.
-class Way(object):
+class Way(PyLayers):
     """
 
     A Way is a polyline or a Polygon (if closed)
@@ -153,7 +154,7 @@ class Way(object):
         fig,ax = self.shp.plot(fig=fig,ax=ax)
         return(fig,ax)
 
-class Coords(object):
+class Coords(PyLayers):
     """
     Coords is a point in OSM
 
@@ -252,7 +253,7 @@ class Coords(object):
 
         return(m)
 
-class Nodes(object):
+class Nodes(PyLayers):
     """
 
     osm Nodes container
