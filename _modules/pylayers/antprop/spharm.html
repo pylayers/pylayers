@@ -251,11 +251,10 @@
     <span class="k">return</span> <span class="n">t</span>
 </div>
 <div class="viewcode-block" id="indexvsh"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.indexvsh.html#pylayers.antprop.spharm.indexvsh">[docs]</a><span class="k">def</span> <span class="nf">indexvsh</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; indexvsh(L)</span>
+    <span class="sd">&quot;&quot;&quot; calculate index of vsh</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-
 <span class="sd">    L : int</span>
 <span class="sd">      degree max</span>
 
@@ -339,22 +338,23 @@
     <span class="n">t</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 </div>
-<span class="k">class</span> <span class="nc">VectorCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
+<span class="k">class</span> <span class="nc">VectorCoeff</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
 <div class="viewcode-block" id="VectorCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VectorCoeff.__init__.html#pylayers.antprop.spharm.VectorCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
                  <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;  class constructor</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        typ :</span>
-<span class="sd">        fmin :</span>
+<span class="sd">        typ : string </span>
+<span class="sd">        fmin : float</span>
 <span class="sd">            min frequency GHz</span>
-<span class="sd">        fmax :</span>
+<span class="sd">        fmax : float</span>
+<span class="sd">            max frequency GHz</span>
 <span class="sd">        data : np.array</span>
 <span class="sd">        ind : np.array</span>
 
-<span class="sd">        Notes </span>
+<span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
 <span class="sd">        .. warning::</span>
@@ -372,7 +372,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">inits1</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">ind</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="VectorCoeff.inits1"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VectorCoeff.inits1.html#pylayers.antprop.spharm.VectorCoeff.inits1">[docs]</a>    <span class="k">def</span> <span class="nf">inits1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; init shape 1</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -386,9 +386,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ind_s1</span> <span class="o">=</span> <span class="n">ind</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </div>
-<span class="k">class</span> <span class="nc">SSHCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SSHCoeff</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
 <div class="viewcode-block" id="SSHCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SSHCoeff.__init__.html#pylayers.antprop.spharm.SSHCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -406,8 +406,7 @@
 
 </div>
 <div class="viewcode-block" id="SSHCoeff.s2tos3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SSHCoeff.s2tos3.html#pylayers.antprop.spharm.SSHCoeff.s2tos3">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        convert scalar spherical coefficients from shape 2 to shape 3</span>
+        <span class="sd">&quot;&quot;&quot; convert scalar spherical coefficients from shape 2 to shape 3</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -415,7 +414,10 @@
 <span class="sd">        threshold : float</span>
 <span class="sd">            default 1e-20</span>
 
-<span class="sd">        Energy thresholded coefficients</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        s3 corresponds to energy thresholded coefficients</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -440,7 +442,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">ind</span>
 </div>
 <div class="viewcode-block" id="SSHCoeff.sets3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SSHCoeff.sets3.html#pylayers.antprop.spharm.SSHCoeff.sets3">[docs]</a>    <span class="k">def</span> <span class="nf">sets3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; set shape 3</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -464,7 +466,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">Cz</span><span class="o">.</span><span class="n">k2</span>
 
 </div>
-<span class="k">class</span> <span class="nc">SCoeff</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SCoeff</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Scalar Spherical Harmonics Coefficient</span>
 
 <span class="sd">    d = np.array [Nf,N+1,M+1]</span>
@@ -480,12 +482,11 @@
 
 <div class="viewcode-block" id="SCoeff.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.__init__.html#pylayers.antprop.spharm.SCoeff.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">lmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>  <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
                  <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">k</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
-
-    <span class="c">#~ def __init__(self, **kwargs):</span>
         <span class="sd">&quot;&quot;&quot; init VCoeff</span>
 
 <span class="sd">         Parameters</span>
 <span class="sd">         ----------</span>
+
 <span class="sd">         typ : string</span>
 <span class="sd">            &#39;s2&#39; | &#39;s3&#39;</span>
 <span class="sd">         fmin : float</span>
@@ -508,8 +509,6 @@
         <span class="c">#~ for key, value in defaults.items():</span>
             <span class="c">#~ if key not in kwargs:</span>
                 <span class="c">#~ kwargs[key] = value</span>
-
-
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fmin</span> <span class="o">=</span> <span class="n">fmin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fmax</span> <span class="o">=</span> <span class="n">fmax</span>
@@ -665,11 +664,12 @@
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_s3</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SCoeff.delete3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.delete3.html#pylayers.antprop.spharm.SCoeff.delete3">[docs]</a>    <span class="k">def</span> <span class="nf">delete3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; delete3(self,ind): delete coeff.s3</span>
+        <span class="sd">&quot;&quot;&quot; delete coeff.s3</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        ind :</span>
+
+<span class="sd">        ind : int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ind3</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -680,12 +680,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="n">c</span>
 </div>
 <div class="viewcode-block" id="SCoeff.put3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.put3.html#pylayers.antprop.spharm.SCoeff.put3">[docs]</a>    <span class="k">def</span> <span class="nf">put3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; put3</span>
+        <span class="sd">&quot;&quot;&quot; function put3</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        i  :</span>
-<span class="sd">        i3 :</span>
+<span class="sd">        i  : int</span>
+<span class="sd">        i3 : int</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">k2</span> <span class="o">=</span> <span class="n">i3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">i3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">i3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -730,15 +731,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ind2</span> <span class="o">=</span> <span class="n">indexvsh</span><span class="p">(</span><span class="n">Lmax</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SCoeff.plot"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.SCoeff.plot.html#pylayers.antprop.spharm.SCoeff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">xl</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">yl</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; plot coeff</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        typ : string</span>
 <span class="sd">            &#39;s3&#39;</span>
-<span class="sd">        title </span>
-<span class="sd">        xl </span>
-<span class="sd">        yl </span>
+<span class="sd">        title</span>
+<span class="sd">        xl</span>
+<span class="sd">        yl</span>
 <span class="sd">        log</span>
 <span class="sd">        stem: boolean</span>
 <span class="sd">        color</span>
@@ -1129,11 +1131,12 @@
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_s3</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="VCoeff.delete3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VCoeff.delete3.html#pylayers.antprop.spharm.VCoeff.delete3">[docs]</a>    <span class="k">def</span> <span class="nf">delete3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; delete3(self,ind): delete coeff.s3</span>
+        <span class="sd">&quot;&quot;&quot; delete coeff.s3</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        ind :</span>
+
+<span class="sd">        ind : int</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ind3</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1144,12 +1147,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="n">c</span>
 </div>
 <div class="viewcode-block" id="VCoeff.put3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VCoeff.put3.html#pylayers.antprop.spharm.VCoeff.put3">[docs]</a>    <span class="k">def</span> <span class="nf">put3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; put3</span>
+        <span class="sd">&quot;&quot;&quot; function put 3</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        i  :</span>
-<span class="sd">        i3 :</span>
+<span class="sd">        i  : int</span>
+<span class="sd">        i3 : int</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">k2</span> <span class="o">=</span> <span class="n">i3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">i3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">i3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1529,7 +1533,7 @@
         <span class="n">E</span>  <span class="o">=</span> <span class="n">EBr</span> <span class="o">+</span> <span class="n">EBi</span> <span class="o">+</span> <span class="n">ECr</span> <span class="o">+</span> <span class="n">ECi</span>
 
         <span class="n">ib</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">E</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        
+
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">ind2</span><span class="p">[</span><span class="n">ib</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cr</span><span class="o">.</span><span class="n">ind2</span><span class="p">[</span><span class="n">ib</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">ind2</span><span class="p">[</span><span class="n">ib</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
@@ -1551,7 +1555,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s2</span><span class="p">[:,</span> <span class="n">ib</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="n">ib</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">E</span><span class="p">[</span><span class="n">ib</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-    </div>
+</div>
 <div class="viewcode-block" id="VSHCoeff.s2tos3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.s2tos3.html#pylayers.antprop.spharm.VSHCoeff.s2tos3">[docs]</a>    <span class="k">def</span> <span class="nf">s2tos3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert vector spherical coefficients from shape 2 to shape 3</span>
 
@@ -1593,8 +1597,8 @@
 
 </div>
 <div class="viewcode-block" id="VSHCoeff.s3tos2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.s3tos2.html#pylayers.antprop.spharm.VSHCoeff.s3tos2">[docs]</a>    <span class="k">def</span> <span class="nf">s3tos2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        s3tos2</span>
+        <span class="sd">&quot;&quot;&quot; shape 3 to shape 2</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">s3tos2</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">s3tos2</span><span class="p">()</span>
@@ -1604,12 +1608,14 @@
 <div class="viewcode-block" id="VSHCoeff.strip3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.strip3.html#pylayers.antprop.spharm.VSHCoeff.strip3">[docs]</a>    <span class="k">def</span> <span class="nf">strip3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Thresholded coefficient conversion</span>
 
-<span class="sd">        The s3 minimmum energy coefficient is deleted</span>
+<span class="sd">        The s3 minimum energy coefficient is deleted</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">           ind</span>
-<span class="sd">           ind3</span>
+
+<span class="sd">        ind : int</span>
+<span class="sd">        ind3 : int</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">EBr</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">s3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">EBi</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">s3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1650,7 +1656,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">Es</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="VSHCoeff.drag3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.drag3.html#pylayers.antprop.spharm.VSHCoeff.drag3">[docs]</a>    <span class="k">def</span> <span class="nf">drag3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Emin</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Thresholded coefficient conversion</span>
+        <span class="sd">&quot;&quot;&quot; thresholded coefficient conversion</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1675,7 +1681,14 @@
         <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="n">ind3</span>
 </div>
 <div class="viewcode-block" id="VSHCoeff.put3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.spharm.VSHCoeff.put3.html#pylayers.antprop.spharm.VSHCoeff.put3">[docs]</a>    <span class="k">def</span> <span class="nf">put3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;  put 3</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        i : int</span>
+<span class="sd">        i3 : int</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">put3</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">put3</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">)</span>
@@ -2278,7 +2291,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on May 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -230,15 +230,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Interface.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.__init__.html#pylayers.antprop.slab.Interface.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span> <span class="o">+</span> <span class="mi">0</span> <span class="o">*</span> <span class="mi">1j</span><span class="p">]]),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-
 <span class="sd">        fGHz : np.array</span>
 <span class="sd">            frequency in GHz (default 2.4)</span>
 <span class="sd">        theta : np.array</span>
 <span class="sd">        angle taken from surface normal expressed in radians</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c">#</span>
         <span class="c"># reshape theta if necessary</span>
@@ -264,15 +264,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 </div>
 <div class="viewcode-block" id="Interface.RT"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.RT.html#pylayers.antprop.slab.Interface.RT">[docs]</a>    <span class="k">def</span> <span class="nf">RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metalic</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; evaluate Reflection and Transmission matrix</span>
+        <span class="sd">r&quot;&quot;&quot; evaluate Reflection and Transmission matrix</span>
 
-<span class="sd">        .. math::</span>
-
-<span class="sd">        R = \\matrix(R_o &amp; 0\\\\0 &amp; R_p)</span>
-<span class="sd">        T = \\matrix(T_o &amp; 0\\\\0 &amp; T_p)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metalic : boolean</span>
+<span class="sd">        RT : string</span>
+<span class="sd">            choose R or T</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            R = \matrix(R_o &amp; 0\\0 &amp; R_p)</span>
+<span class="sd">            T = \matrix(T_o &amp; 0\\0 &amp; T_p)</span>
 
 <span class="sd">        R : np.array (f , th , 2, 2)</span>
 <span class="sd">        T : np.array (f , th , 2, 2)</span>
@@ -364,17 +370,15 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-
 <span class="sd">        fGHz : np.array</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-
 <span class="sd">        col : string</span>
 <span class="sd">            hexadecimal color</span>
 
 
-<span class="sd">        See Also </span>
+<span class="sd">        See Also</span>
 <span class="sd">        ---------</span>
 
 <span class="sd">        pylayers.gis.layout.showGs</span>
@@ -412,7 +416,7 @@
 
 </div>
 <div class="viewcode-block" id="Interface.loss0"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.loss0.html#pylayers.antprop.slab.Interface.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Evaluate Loss at normal incidence theta=0</span>
+        <span class="sd">&quot;&quot;&quot; evaluate Loss at normal incidence theta=0</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -446,7 +450,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Interface.losst"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Interface.losst.html#pylayers.antprop.slab.Interface.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Evaluate Loss</span>
+        <span class="sd">&quot;&quot;&quot; evaluate Loss</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -541,19 +545,19 @@
 
         <span class="c">#fGHz = self.fGHz[k]</span>
         <span class="n">rtd</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-        
+
         <span class="c"># filtering kwargs argument for mulplot function</span>
         <span class="n">args</span> <span class="o">=</span><span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">args</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        
+
         <span class="k">if</span> <span class="s">&#39;labels&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">args</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-            
+
         <span class="n">args</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">args</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
-        
+
         <span class="c"># Reflexion</span>
         <span class="k">if</span> <span class="s">&#39;R&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;coeff&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="s">&#39;o&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">]:</span>
@@ -608,7 +612,7 @@
                         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">Tp</span><span class="p">))</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="n">y</span> <span class="o">=</span> <span class="n">To</span>
-        
+
         <span class="c"># setting the x axis</span>
         <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;f&#39;</span><span class="p">:</span> <span class="c"># wrt frequency</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
@@ -642,7 +646,7 @@
 
 </div>
 <span class="k">class</span> <span class="nc">MatInterface</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; MatInterface : Class for Interface between two materials</span>
+    <span class="sd">r&quot;&quot;&quot; MatInterface : Class for Interface between two materials</span>
 
 <span class="sd">    l distance from the next Interface</span>
 
@@ -667,9 +671,9 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">    I_p = \left| \\begin{array}{cc} \\frac{1}{T_p} &amp; \\frac{R_p}{T_p} \\\\ \\frac{R_p}{T_p} &amp; \\frac{1}{T_p} \end{array}\\right|</span>
+<span class="sd">    I_p = \left| \begin{array}{cc} \frac{1}{T_p} &amp; \frac{R_p}{T_p} \\ \frac{R_p}{T_p} &amp; \frac{1}{T_p} \end{array}\right|</span>
 
-<span class="sd">    I_o = \left| \\begin{array}{cc} \\frac{1}{T_o} &amp; \\frac{R_o}{T_o} \\\\ \\frac{R_o}{T_o} &amp; \\frac{1}{T_o} \end{array}\\right|</span>
+<span class="sd">    I_o = \left| \begin{array}{cc} \frac{1}{T_o} &amp; \frac{R_o}{T_o} \\ \frac{R_o}{T_o} &amp; \frac{1}{T_o} \end{array}\right|</span>
 
 
 <span class="sd">    .. todo::</span>
@@ -793,17 +797,17 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Mat.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Mat.__init__.html#pylayers.antprop.slab.Mat.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;AIR&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">epr</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> <span class="n">mur</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.0j</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">roughness</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        name :</span>
+<span class="sd">        name : string</span>
 <span class="sd">        index : int</span>
-<span class="sd">        epr :</span>
-<span class="sd">        mur :</span>
-<span class="sd">        sigma :</span>
-<span class="sd">        roughness :</span>
+<span class="sd">        epr : complex</span>
+<span class="sd">        mur : complex</span>
+<span class="sd">        sigma : float</span>
+<span class="sd">        roughness : float</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -902,7 +906,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="MatDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.__init__.html#pylayers.antprop.slab.MatDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -916,6 +921,8 @@
 </div>
 <div class="viewcode-block" id="MatDB.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.MatDB.info.html#pylayers.antprop.slab.MatDB.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get MatDB info</span>
+
+<span class="sd">        TODO : make a __repr__</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -1361,7 +1368,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Slab.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.__init__.html#pylayers.antprop.slab.Slab.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;NEWSLAB&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1487,14 +1494,14 @@
         <span class="c">#self.thick.append(0.0)</span>
 </div>
     <span class="k">def</span> <span class="nf">ev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Evaluation of the slab</span>
+        <span class="sd">&quot;&quot;&quot; evaluation of the slab</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        fGHz : frequency GHz ( np.array([1.0]) )</span>
 <span class="sd">        theta : np.array</span>
-<span class="sd">        incidence angle (from normal) radians</span>
+<span class="sd">            incidence angle (from normal) radians</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1710,11 +1717,13 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">delayo</span><span class="p">,</span><span class="n">delayp</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Slab.tocolor"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.Slab.tocolor.html#pylayers.antprop.slab.Slab.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;  convert slab properrties into a color</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        fGHz : np.array</span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
@@ -1870,7 +1879,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="SlabDB.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.__init__.html#pylayers.antprop.slab.SlabDB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">fileslab</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1890,7 +1899,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="SlabDB.showall"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.showall.html#pylayers.antprop.slab.SlabDB.showall">[docs]</a>    <span class="k">def</span> <span class="nf">showall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; show all</span>
+        <span class="sd">&quot;&quot;&quot; show all slabs</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lsl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -1937,6 +1946,12 @@
 </div>
 <div class="viewcode-block" id="SlabDB.delete"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.delete.html#pylayers.antprop.slab.SlabDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete an element from the database</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        name : string</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__delitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
@@ -1946,14 +1961,15 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        name</span>
+
+<span class="sd">        name : string</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="n">slab</span><span class="o">.</span><span class="n">edit</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="SlabDB.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.slab.SlabDB.show.html#pylayers.antprop.slab.SlabDB.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
-        <span class="sd">&quot;&quot;&quot; show</span>
+        <span class="sd">&quot;&quot;&quot; evaluate and show a given slab</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2440,7 +2456,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on May 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

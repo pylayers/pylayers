@@ -406,7 +406,7 @@ class Ray3D(object):
     # def show3(self,bdis=True,bbas=False,col=np.array([1,0,1]),id=0):
 </div>
 <div class="viewcode-block" id="Ray3D.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.delay.html#pylayers.antprop.raysc.Ray3D.delay">[docs]</a>    def delay(self):
-        &quot;&quot;&quot; delay
+        &quot;&quot;&quot; calculates delay
 
         Returns
         -------
@@ -448,7 +448,7 @@ class Ray3D(object):
         return fig, ax
 </div>
 <div class="viewcode-block" id="Ray3D.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.show3.html#pylayers.antprop.raysc.Ray3D.show3">[docs]</a>    def show3(self, _filestr=&#39;defstr&#39;, bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
-        &quot;&quot;&quot; show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
+        &quot;&quot;&quot; show in geomview
 
         Parameters
         ----------
@@ -561,8 +561,7 @@ class RayTud(object):
             self.inter[i].info()
 </div>
 <div class="viewcode-block" id="RayTud.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.RayTud.delay.html#pylayers.antprop.raysc.RayTud.delay">[docs]</a>    def delay(self):
-        &quot;&quot;&quot;
-            calculate delay of the ray
+        &quot;&quot;&quot; calculates delay of the ray
         &quot;&quot;&quot;
         nbi = self.ni
         d = 0
@@ -612,6 +611,7 @@ class RayTud(object):
 
         Parameters
         ----------
+
         fGHz : ndarray
             frequency axis
 
@@ -850,17 +850,6 @@ class GrRayTud(dict):
         Notes
         -----
         a filename beginning with _ is a short filename
-
-        Examples
-        --------
-
-        .. plot::
-            :include-source:
-
-            &gt;&gt;&gt; from pylayers.gis.layout import *
-            &gt;&gt;&gt; from pylayers.antprop.raysc import *
-
-
 
         &quot;&quot;&quot;
 
@@ -1381,9 +1370,9 @@ class GrRay3D(object):
 <div class="viewcode-block" id="GrRay3D.dir"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.dir.html#pylayers.antprop.raysc.GrRay3D.dir">[docs]</a>    def dir(self):
         &quot;&quot;&quot; list the available file in tradir
 
-
         Returns
         -------
+
         lfile_s : list
             sorted list of all the .str file of tradir
 
@@ -1391,8 +1380,9 @@ class GrRay3D(object):
         -----
         tradir is defined in the Project module
 
-        Example
-        -------
+        Examples
+        --------
+
         &gt;&gt;&gt; from pylayers.antprop.raysc import *
         &gt;&gt;&gt; g = GrRay3D()
         &gt;&gt;&gt; lfile = g.dir()
@@ -1411,9 +1401,11 @@ class GrRay3D(object):
         return lfile_s
 </div>
 <div class="viewcode-block" id="GrRay3D.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.info.html#pylayers.antprop.raysc.GrRay3D.info">[docs]</a>    def info(self, level=1):
-        &quot;&quot;&quot;
+        &quot;&quot;&quot;  provides info
+
         Parameters
         ----------
+
         level : int
             level of information
 
@@ -1931,7 +1923,7 @@ if __name__ == &quot;__main__&quot;:
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on May 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

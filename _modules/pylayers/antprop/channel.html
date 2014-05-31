@@ -107,8 +107,6 @@
 <span class="sd">    Ctilde.energy</span>
 <span class="sd">    Ctilde.sort</span>
 <span class="sd">    Ctilde.prop2tran</span>
-<span class="sd">    Ctilde.vec2scal</span>
-<span class="sd">    Ctilde.vec2scalA</span>
 <span class="sd">    Ctilde.PLoss</span>
 
 <span class="sd">Tchannel Class</span>
@@ -119,7 +117,6 @@
 
 <span class="sd">    Tchannel.__init__</span>
 <span class="sd">    Tchannel.__repr__</span>
-<span class="sd">    Tchannel.info</span>
 <span class="sd">    Tchannel.apply</span>
 <span class="sd">    Tchannel.chantap</span>
 <span class="sd">    Tchannel.applywavA</span>
@@ -189,12 +186,16 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Ctilde.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.__init__.html#pylayers.antprop.channel.Ctilde.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            transpose == False   (r,f)</span>
-<span class="sd">            transpose == True    (f,r)</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
 
-<span class="sd">            A Ctilde object is the output of eval method</span>
-<span class="sd">            of a Rays object.</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        transpose == False   (r,f)</span>
+<span class="sd">        transpose == True    (f,r)</span>
+
+<span class="sd">        A Ctilde object is the output of eval method</span>
+<span class="sd">        of a Rays object.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">False</span>
@@ -557,7 +558,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">nray</span><span class="p">,:]</span>
 </div>
 <div class="viewcode-block" id="Ctilde.mobility"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.mobility.html#pylayers.antprop.channel.Ctilde.mobility">[docs]</a>    <span class="k">def</span> <span class="nf">mobility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Modify channel for uniform mobility</span>
+        <span class="sd">&quot;&quot;&quot; modify channel for uniform mobility</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -602,14 +603,8 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">tauk_ch</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Ctilde.PLoss"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.PLoss.html#pylayers.antprop.channel.Ctilde.PLoss">[docs]</a>    <span class="k">def</span> <span class="nf">PLoss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-
-</div>
 <div class="viewcode-block" id="Ctilde.plotd"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.plotd.html#pylayers.antprop.channel.Ctilde.plotd">[docs]</a>    <span class="k">def</span> <span class="nf">plotd</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="s">&#39;doa&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;plot direction of arrival/departure</span>
+        <span class="sd">&quot;&quot;&quot; plot direction of arrival/departure</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1127,6 +1122,20 @@
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">,</span> <span class="n">ax4</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Ctilde.check_reciprocity"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.check_reciprocity.html#pylayers.antprop.channel.Ctilde.check_reciprocity">[docs]</a>    <span class="k">def</span> <span class="nf">check_reciprocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; check channel reciprocity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        C : Ctilde</span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        This is not properly implemented</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span> <span class="n">C</span><span class="o">.</span><span class="n">tauk</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">r</span><span class="p">,:],</span> <span class="n">C</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">r</span><span class="p">,:]):</span>
@@ -1137,7 +1146,7 @@
 
 </div>
 <div class="viewcode-block" id="Ctilde.energy"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.energy.html#pylayers.antprop.channel.Ctilde.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;mean&#39;</span><span class="p">,</span><span class="n">Friis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">sumray</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Calculates energy on each channel</span>
+        <span class="sd">&quot;&quot;&quot; calculates energy on each channel</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1187,7 +1196,8 @@
         <span class="k">return</span> <span class="n">ECtt</span><span class="p">,</span> <span class="n">ECpp</span><span class="p">,</span> <span class="n">ECtp</span><span class="p">,</span> <span class="n">ECpt</span>
 </div>
     <span class="k">def</span> <span class="nf">cut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.99</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; cut rays from a energy threshold</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -1351,9 +1361,10 @@
         <span class="n">H</span><span class="o">.</span><span class="n">tk</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">taud</span>
         <span class="k">return</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Ctilde.vec2scal"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.vec2scal.html#pylayers.antprop.channel.Ctilde.vec2scal">[docs]</a>    <span class="k">def</span> <span class="nf">vec2scal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_vec2scal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate scalChannel from VectChannel and antenna</span>
 
+<span class="sd">        DEPRECTATED</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
@@ -1376,9 +1387,11 @@
 
     <span class="c"># Inclusion of realistic antenna behaviour</span>
     <span class="c"># Specify transmitter antenna and receiver antenna</span>
-</div>
-<div class="viewcode-block" id="Ctilde.vec2scalA"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.vec2scalA.html#pylayers.antprop.channel.Ctilde.vec2scalA">[docs]</a>    <span class="k">def</span> <span class="nf">vec2scalA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">At</span><span class="p">,</span> <span class="n">Ar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_vec2scalA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">At</span><span class="p">,</span> <span class="n">Ar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate scalChannel from Vectchannel</span>
+
+<span class="sd">        DEPRECATED</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1412,7 +1425,7 @@
 
         <span class="n">scalch</span> <span class="o">=</span> <span class="n">ScalChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span><span class="p">,</span> <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">scalch</span><span class="p">)</span>
-</div>
+
 <div class="viewcode-block" id="Ctilde.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Ctilde.info.html#pylayers.antprop.channel.Ctilde.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Info (Nf,Nray,shape(y))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1470,7 +1483,7 @@
                 <span class="n">tau</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([],)),</span>
                 <span class="n">dod</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([[],[]]))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
                 <span class="n">doa</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([[],[]]))</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; class constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1518,7 +1531,7 @@
         <span class="n">filenameh5</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRH&#39;</span><span class="p">])</span>
 
         <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
-                
+
         <span class="c"># try/except to avoid loosing the h5 file if </span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1535,10 +1548,11 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Channel Tchannel: issue when writting h5py file&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Tchannel.loadh5"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.loadh5.html#pylayers.antprop.channel.Tchannel.loadh5">[docs]</a>    <span class="k">def</span> <span class="nf">loadh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Lfilename</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Load Ctilde object in hdf5 format</span>
+        <span class="sd">&quot;&quot;&quot; load Ctilde object in hdf5 format</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        Lfilename  : string</span>
 <span class="sd">            Layout filename</span>
 <span class="sd">        idx : int</span>
@@ -1548,9 +1562,10 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        if output:</span>
 <span class="sd">        (a,b,Ta,Tb) </span>
-<span class="sd">        </span>
+
 <span class="sd">        with </span>
 <span class="sd">            a = np.ndarray</span>
 <span class="sd">                postion of point a (transmitter)</span>
@@ -1562,10 +1577,10 @@
 <span class="sd">                rotation matrice of antenna b</span>
 
 
-<span class="sd">        &quot;&quot;&quot;</span>    
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">Lfilename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.h5&#39;</span>
         <span class="n">filenameh5</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRH&#39;</span><span class="p">])</span>
-        
+
         <span class="n">f</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c"># keys not saved as attribute of h5py file</span>
@@ -1593,7 +1608,6 @@
     <span class="k">def</span> <span class="nf">_saveh5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">grpname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; save Tchannel object in hdf5 format compliant with Link Class</span>
 
-<span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -1606,7 +1620,7 @@
 
 
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
-                
+
         <span class="c"># try/except to avoid loosing the h5 file if </span>
         <span class="c"># read/write error</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1616,7 +1630,7 @@
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">print</span> <span class="s">&#39;Warning : H/&#39;</span><span class="o">+</span><span class="n">grpname</span> <span class="o">+</span><span class="s">&#39;already exists in &#39;</span><span class="o">+</span><span class="n">filenameh5</span>
             <span class="n">f</span><span class="o">=</span><span class="n">fh5</span><span class="p">[</span><span class="s">&#39;H/&#39;</span><span class="o">+</span><span class="n">grpname</span><span class="p">]</span>
-            
+
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">va</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">va</span><span class="p">),</span><span class="n">data</span><span class="o">=</span><span class="n">va</span><span class="p">)</span>
             <span class="n">fh5</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -1635,7 +1649,7 @@
 <span class="sd">        grpname  : int</span>
 <span class="sd">            groupname in filenameh5</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>    
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">filename</span><span class="o">=</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filenameh5</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRLNK&#39;</span><span class="p">])</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fh5</span><span class="o">=</span><span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
@@ -1656,16 +1670,6 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Channel Tchannel: issue when reading h5py file&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Tchannel.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.info.html#pylayers.antprop.channel.Tchannel.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; display information</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="s">&#39;Ftt,Ftp,Frt,Frp&#39;</span>
-        <span class="k">print</span> <span class="s">&#39;dod,doa,tau&#39;</span>
-        <span class="k">print</span> <span class="s">&#39;H - FUDsignal &#39;</span>
-        <span class="k">print</span> <span class="s">&#39;tau min , tau max :&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</div>
 <div class="viewcode-block" id="Tchannel.apply"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.apply.html#pylayers.antprop.channel.Tchannel.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">W</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply a FUsignal W to the ScalChannel.</span>
 
@@ -2411,8 +2415,7 @@
         <span class="c"># qHk.x[0]==Wk.x[0]</span>
 </div>
 <div class="viewcode-block" id="Tchannel.RSSI"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.channel.Tchannel.RSSI.html#pylayers.antprop.channel.Tchannel.RSSI">[docs]</a>    <span class="k">def</span> <span class="nf">RSSI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ufreq</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Compute RSSI value from a</span>
-<span class="sd">        specific frequency of the transmission channel</span>
+        <span class="sd">&quot;&quot;&quot; Compute RSSI value for a frequency index</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2468,7 +2471,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on May 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
