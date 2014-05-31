@@ -272,7 +272,3 @@ class Furniture(object):
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()
-
-#   fig.savefig(figuredir+filename+ext1,orientation='portrait')
-#   fig.savefig(figuredir+filename+ext2,orientation='portrait')
-#   fig.savefig(figuredir+filename+ext3,orientation='portrait')

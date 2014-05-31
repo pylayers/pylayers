@@ -91,15 +91,15 @@ from pylayers.util.project import *
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
-    """
-    
+    """ show signature
+
     Parameters
     ----------
 
-    L  : Layout 
-    s  : 
+    L  : Layout
+    s  :
     tx :
-    rx : 
+    rx :
 
     """
     L.display['thin']=True
@@ -3026,7 +3026,7 @@ class Signature(object):
         return pta,phe
 
     def evtx(self, L, tx, rx):
-        """ evtx ( deprecated )
+        """ evaluate transmitter
 
         Parameters
         ----------
@@ -3035,6 +3035,7 @@ class Signature(object):
         tx : np.array (2xN)
         rx : np.array (2xM)
 
+        DEPRECATED
 
         """
         self.pa = tx.reshape(2, 1)
