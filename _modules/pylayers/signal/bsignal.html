@@ -393,7 +393,7 @@
 <span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">st</span>
 
 
-<span class="k">class</span> <span class="nc">Bsignal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Bsignal</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot; Signal with an embedded time base</span>
 
 <span class="sd">    This class gathers a 1D signal and its axis indexation.</span>
@@ -409,7 +409,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Bsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.__init__.html#pylayers.signal.bsignal.Bsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
-        <span class="sd">r&quot;&quot;&quot;</span>
+        <span class="sd">r&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -438,41 +438,6 @@
                     <span class="k">print</span> <span class="s">&quot;y : &quot;</span><span class="p">,</span> <span class="n">ly</span>
 
 </div>
-    <span class="k">def</span> <span class="nf">help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">letter</span><span class="o">=</span><span class="s">&#39;az&#39;</span><span class="p">,</span><span class="n">mod</span><span class="o">=</span><span class="s">&#39;meth&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; help</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-
-<span class="sd">        txt : string</span>
-<span class="sd">            &#39;members&#39; | &#39;methods&#39;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="n">lmeth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="n">mod</span><span class="o">==</span><span class="s">&#39;memb&#39;</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">if</span> <span class="n">mod</span><span class="o">==</span><span class="s">&#39;meth&#39;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lmeth</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s">&#39;_&#39;</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">letter</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="n">letter</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                                <span class="k">try</span><span class="p">:</span>
-                                    <span class="n">doc</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;self.&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s">&#39;.__doc__&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-                                    <span class="k">print</span> <span class="n">s</span><span class="o">+</span><span class="s">&#39;: &#39;</span><span class="o">+</span> <span class="n">doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                                <span class="k">except</span><span class="p">:</span>
-                                    <span class="k">pass</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">letter</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-                                <span class="k">try</span><span class="p">:</span>
-                                    <span class="n">doc</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;self.&#39;</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s">&#39;.__doc__&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-                                    <span class="k">print</span> <span class="n">s</span><span class="o">+</span><span class="s">&#39;: &#39;</span><span class="o">+</span> <span class="n">doc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                                <span class="k">except</span><span class="p">:</span>
-                                    <span class="k">pass</span>
-
-
 <div class="viewcode-block" id="Bsignal.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.__repr__.html#pylayers.signal.bsignal.Bsignal.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> :  </span><span class="si">%s</span><span class="s">  </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
@@ -482,7 +447,12 @@
 
 </div>
 <div class="viewcode-block" id="Bsignal.extract"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.extract.html#pylayers.signal.bsignal.Bsignal.extract">[docs]</a>    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; extract y[u,:]</span>
+        <span class="sd">r&quot;&quot;&quot; extract a subset of signal from index</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        u : np.array</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -498,7 +468,8 @@
 <span class="sd">        &gt;&gt;&gt; y = np.sin(2*np.pi*x)</span>
 <span class="sd">        &gt;&gt;&gt; s = Bsignal(x,y)</span>
 <span class="sd">        &gt;&gt;&gt; su = s.extract(np.arange(4,20))</span>
-
+<span class="sd">        &gt;&gt;&gt; s.plot()</span>
+<span class="sd">        &gt;&gt;&gt; su.plot()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">O</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -510,8 +481,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">O</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.save.html#pylayers.signal.bsignal.Bsignal.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;</span>
-<span class="sd">        Save Bsignal in Matlab File Format</span>
+        <span class="sd">r&quot;&quot;&quot; save Bsignal in Matlab File Format</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -549,7 +519,7 @@
         <span class="n">ios</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Bsignal.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Bsignal.load.html#pylayers.signal.bsignal.Bsignal.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; load a Bsignal saved in a Matlab File</span>
+        <span class="sd">r&quot;&quot;&quot; load a Bsignal from a Matlab File</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -3269,11 +3239,12 @@
                 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Phase&#39;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FBsignal.stem"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FBsignal.stem.html#pylayers.signal.bsignal.FBsignal.stem">[docs]</a>    <span class="k">def</span> <span class="nf">stem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b-&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; stem(self,color=&#39;b- &#39;)</span>
+        <span class="sd">&quot;&quot;&quot; stem plot</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        color : string</span>
-<span class="sd">           </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">ndim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">ndim</span>
@@ -4124,7 +4095,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="FUDsignal.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.__init__.html#pylayers.signal.bsignal.FUDsignal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">taud</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -4381,7 +4353,7 @@
 
 </div>
 <div class="viewcode-block" id="FUDsignal.plot3d"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDsignal.plot3d.html#pylayers.signal.bsignal.FUDsignal.plot3d">[docs]</a>    <span class="k">def</span> <span class="nf">plot3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; plot in 3D</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -4550,7 +4522,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
 </div>
 <div class="viewcode-block" id="FUDAsignal.showtap"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUDAsignal.showtap.html#pylayers.signal.bsignal.FUDAsignal.showtap">[docs]</a>    <span class="k">def</span> <span class="nf">showtap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; showtap</span>
+        <span class="sd">&quot;&quot;&quot; show tap</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        same as tap</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        tap</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c"># f x s  x m x tap</span>
@@ -4826,11 +4809,10 @@
 
 </div>
 <span class="k">class</span> <span class="nc">Noise</span><span class="p">(</span><span class="n">TUsignal</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create noise</span>
+    <span class="sd">&quot;&quot;&quot; Create noise</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Noise.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.__init__.html#pylayers.signal.bsignal.Noise.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tobs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fe</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">DSPdBmpHz</span><span class="o">=-</span><span class="mi">174</span><span class="p">,</span> <span class="n">NF</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="p">[]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -4862,7 +4844,15 @@
         <span class="k">pass</span>
 </div>
 <div class="viewcode-block" id="Noise.gating"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.Noise.gating.html#pylayers.signal.bsignal.Noise.gating">[docs]</a>    <span class="k">def</span> <span class="nf">gating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fcGHz</span><span class="p">,</span> <span class="n">BGHz</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s">&#39;rect&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; apply a gating</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        fcGHz</span>
+<span class="sd">        BGHz</span>
+<span class="sd">        window</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -4926,7 +4916,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">fc</span>
 </div>
 <div class="viewcode-block" id="EnImpulse.demo"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.EnImpulse.demo.html#pylayers.signal.bsignal.EnImpulse.demo">[docs]</a>    <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; small demo in the docsting</span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
@@ -4940,6 +4931,7 @@
 <span class="sd">        &gt;&gt;&gt; Eipb  = sum(ESDb.y)*df</span>
 <span class="sd">        &gt;&gt;&gt; erru  = Eip1-Eipu</span>
 <span class="sd">        &gt;&gt;&gt; errb  = Eip1-Eipb</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 </div>
@@ -4964,7 +4956,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="MaskImpulse.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.MaskImpulse.__init__.html#pylayers.signal.bsignal.MaskImpulse.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">fc</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Tp</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">Pm</span><span class="o">=-</span><span class="mf">41.3</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fe</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        fc     : center frequency (GHz)</span>
@@ -5002,8 +4995,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
 </div>
 <div class="viewcode-block" id="MaskImpulse.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.MaskImpulse.show.html#pylayers.signal.bsignal.MaskImpulse.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
@@ -5163,7 +5154,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on May 31, 2014.
+      Last updated on mai 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

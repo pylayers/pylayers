@@ -164,7 +164,7 @@ from pylayers.util.project import *
 from pylayers.antprop.slab import *
 from pylayers.antprop.interactions import *
 
-class Ray3D(object):
+class Ray3D(PyLayers):
     &quot;&quot;&quot; Ray3D class
 
     This class handles a 3D ray
@@ -407,13 +407,6 @@ class Ray3D(object):
 </div>
 <div class="viewcode-block" id="Ray3D.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.delay.html#pylayers.antprop.raysc.Ray3D.delay">[docs]</a>    def delay(self):
         &quot;&quot;&quot; calculates delay
-
-        Returns
-        -------
-
-        delay : float
-            delay in ns for each segment of the ray
-
         &quot;&quot;&quot;
         pt = self.pt[0:-1, :].T
         ph = self.pt[1::, :].T
@@ -425,7 +418,17 @@ class Ray3D(object):
 <div class="viewcode-block" id="Ray3D.show"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.Ray3D.show.html#pylayers.antprop.raysc.Ray3D.show">[docs]</a>    def show(self, fig=[], ax=[], col=&#39;b&#39;, node=False):
         &quot;&quot;&quot; show a Ray projection in 2D
 
+        Parameters
+        ----------
+
+        fig : figure
+        ax  : axes
+        col : string
+        node : boolean
+            (default False)
+
         &quot;&quot;&quot;
+
         if fig == []:
             fig = plt.gcf()
         if ax == []:
@@ -525,7 +528,7 @@ class Ray3D(object):
         else:
             return(filename)
 </div>
-class RayTud(object):
+class RayTud(PyLayers):
     &quot;&quot;&quot; Ray Tud
 
     Attributes
@@ -632,7 +635,7 @@ class RayTud(object):
         self.nf = nf
         self.C = Co
 </div>
-class GrRayTud(dict):
+class GrRayTud(PyLayers,dict):
     &quot;&quot;&quot;  a cluster of Rays in Tud format
 
     Attributes
@@ -733,7 +736,7 @@ class GrRayTud(dict):
         return lfile_tud, lfile_tang, lfile_rang, lfile_tauk
 </div>
 <div class="viewcode-block" id="GrRayTud.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.delay.html#pylayers.antprop.raysc.GrRayTud.delay">[docs]</a>    def delay(self):
-        &quot;&quot;&quot; return ray delays in an array
+        &quot;&quot;&quot; returns ray delays
         &quot;&quot;&quot;
         dt = np.array([])
         for nr in range(self.nray):
@@ -742,7 +745,7 @@ class GrRayTud(dict):
         return(dt)
 </div>
 <div class="viewcode-block" id="GrRayTud.choose"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.choose.html#pylayers.antprop.raysc.GrRayTud.choose">[docs]</a>    def choose(self):
-        &quot;&quot;&quot; Choose a tud  file in tuddir
+        &quot;&quot;&quot; choose a tud  file in tuddir
         &quot;&quot;&quot;
         import tkFileDialog
         FD = tkFileDialog
@@ -838,7 +841,7 @@ class GrRayTud(dict):
         fo.close()
 </div>
 <div class="viewcode-block" id="GrRayTud.load"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.load.html#pylayers.antprop.raysc.GrRayTud.load">[docs]</a>    def load(self, _filetud, _filetang, _filerang, sl):
-        &quot;&quot;&quot; Load a set of Ray from the PulsRay .tud file
+        &quot;&quot;&quot; load a set of Ray from the PulsRay .tud file
 
         Parameters
         ----------
@@ -1091,23 +1094,20 @@ class GrRayTud(dict):
         self.I.add([B, L, R, T, D])
 </div>
 <div class="viewcode-block" id="GrRayTud.ray"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.ray.html#pylayers.antprop.raysc.GrRayTud.ray">[docs]</a>    def ray(self, r):
-        &quot;&quot;&quot;
-            Give the ray number and it returns the index of its interactions
+        &quot;&quot;&quot; Give the ray number and it returns the index of its interactions
         &quot;&quot;&quot;
         raypos = np.nonzero(self[self.rayidx[r]][&#39;rayidx&#39;] == r)
         return(self[self.rayidx[r]][&#39;rays&#39;][raypos][0])
 </div>
 <div class="viewcode-block" id="GrRayTud.typ"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.typ.html#pylayers.antprop.raysc.GrRayTud.typ">[docs]</a>    def typ(self, r):
-        &quot;&quot;&quot;
-            return the list of interaction type of a given ray
+        &quot;&quot;&quot; return the list of interaction type of a given ray
         &quot;&quot;&quot;
 
         a = self.ray(r)
         return(self.I.typ[a])
 </div>
 <div class="viewcode-block" id="GrRayTud.eval"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.eval.html#pylayers.antprop.raysc.GrRayTud.eval">[docs]</a>    def eval(self):
-        &quot;&quot;&quot;
-        evaluation of Ctilde
+        &quot;&quot;&quot; evaluation of Ctilde
         &quot;&quot;&quot;
         print &#39;GrRayTUD evaluation&#39;
         if not self.I.evaluated:
@@ -1209,14 +1209,14 @@ class GrRayTud(dict):
             self.dis[self[l][&#39;rayidx&#39;]] = self[l][&#39;dis&#39;]
 </div>
 <div class="viewcode-block" id="GrRayTud.info"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRayTud.info.html#pylayers.antprop.raysc.GrRayTud.info">[docs]</a>    def info(self, r):
-        &#39;&#39;&#39;
-            information for a given ray r
+        &quot;&quot;&quot; information for a given ray r
 
-        Attributes
+        Parameters
         ----------
-        r : a ray number
 
-        &#39;&#39;&#39;
+        r : int
+
+        &quot;&quot;&quot;
         print &#39;-------------------------&#39;
         print &#39;Informations of ray #&#39;, r
         print &#39;-------------------------\n&#39;
@@ -1339,7 +1339,7 @@ class GrRayTud(dict):
 #            print &quot;rayon no : &quot;, n
 #            self.rayTud[n].info()
 </div>
-class GrRay3D(object):
+class GrRay3D(PyLayers):
     &quot;&quot;&quot; A set of Ray3D with the same Tx and Rx
 
     Attributes
@@ -1653,7 +1653,7 @@ class GrRay3D(object):
 #               print &quot;Le fichier&quot;, filename, &quot;est introuvable&quot;
 </div>
 <div class="viewcode-block" id="GrRay3D.delay"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.delay.html#pylayers.antprop.raysc.GrRay3D.delay">[docs]</a>    def delay(self):
-        &quot;&quot;&quot; delay
+        &quot;&quot;&quot; calculates delay
 
         Returns
         -------
@@ -1668,11 +1668,10 @@ class GrRay3D(object):
         return(td)
 </div>
 <div class="viewcode-block" id="GrRay3D.save"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.raysc.GrRay3D.save.html#pylayers.antprop.raysc.GrRay3D.save">[docs]</a>    def save(self, _filename):
-        &quot;&quot;&quot;
-        save
+        &quot;&quot;&quot; save object
 
         Parameters
-        ---------
+        ----------
         _filename : str
 
         Save a  GrRay3d object in a .tra de PulsRay
@@ -1923,7 +1922,7 @@ if __name__ == &quot;__main__&quot;:
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on May 31, 2014.
+      Last updated on mai 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

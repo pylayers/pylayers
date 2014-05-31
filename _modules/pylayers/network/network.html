@@ -182,6 +182,9 @@
 
 <span class="sd">    SimPy Process compliant version of the Network class</span>
 
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
 <span class="sd">     PNetwork.__init__</span>
 <span class="sd">     PNetwork.run</span>
 
@@ -252,10 +255,10 @@
 <span class="c"># How to take into account  1 specific key specifique for 1 MultiGraph</span>
 <span class="c"># MULTIGRAPH !!!! G.add_edge(10,11,key=&#39;wifi&#39;,attr_dict=dict(Pr=0,TOA=10))</span>
 
-<span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Class Node</span>
 
-<span class="sd">    inherit of networkx.Graph()</span>
+<span class="sd">    inherit from networkx.MultiGraph()</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -294,7 +297,7 @@
                      <span class="s">&#39;typ&#39;</span><span class="p">:</span><span class="s">&#39;ag&#39;</span><span class="p">,</span>
                      <span class="s">&#39;grp&#39;</span><span class="p">:</span><span class="s">&#39;&#39;</span><span class="p">,</span>
                     <span class="p">}</span>
-        
+
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
@@ -347,7 +350,7 @@
         <span class="k">return</span> <span class="s">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">&quot;</span><span class="si">%02x</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">x</span><span class="p">,</span> <span class="n">mac</span><span class="p">))</span>
 
 </div>
-<span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Network class</span>
 
 <span class="sd">    inherits from networkx.Graph()</span>
@@ -386,11 +389,13 @@
 
 
 <div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.__init__.html#pylayers.network.network.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">owner</span><span class="o">=</span><span class="s">&#39;sim&#39;</span><span class="p">,</span><span class="n">EMS</span><span class="o">=</span><span class="n">EMSolver</span><span class="p">(),</span><span class="n">PN</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        owner : string</span>
+<span class="sd">            &#39;sim&#39; |</span>
 <span class="sd">        EMS : EMSolver</span>
 <span class="sd">        PN : Boolean</span>
 <span class="sd">            personal network activation</span>
@@ -414,7 +419,6 @@
 </div>
 <div class="viewcode-block" id="Network.__repr__"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.__repr__.html#pylayers.network.network.Network.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isPN</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Network information</span><span class="se">\n</span><span class="s">*******************</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="s">&#39;number of nodes: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
@@ -422,7 +426,7 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">title</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
                 <span class="c"># for compliance with simulnet and simultraj</span>
-                <span class="c"># to be merged </span>
+                <span class="c"># to be merged</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">wstd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;wstd&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
                 <span class="k">except</span><span class="p">:</span>
@@ -434,7 +438,7 @@
 
     <span class="c">#             try:</span>
     <span class="c">#                 s = s + &#39;node ID: &#39; + str(self.node[n][&#39;ID&#39;]) + &#39;\n&#39;</span>
-    <span class="c">#             except: </span>
+    <span class="c">#             except:</span>
     <span class="c">#                 s = s + &#39;node ID: &#39; + str(n) + &#39;\n&#39;</span>
     <span class="c">#             try :</span>
     <span class="c">#                 s = s + &#39;wstd: &#39; + str(self.node[n][&#39;wstd&#39;].keys()) + &#39;\n&#39;</span>
@@ -500,12 +504,16 @@
 <div class="viewcode-block" id="Network.add_devices"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.add_devices.html#pylayers.network.network.Network.add_devices">[docs]</a>    <span class="k">def</span> <span class="nf">add_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[],</span> <span class="n">grp</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; add devices to the current network</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
 <span class="sd">        dev : list</span>
-<span class="sd">            list of Devices </span>
+<span class="sd">            list of Devices</span>
 <span class="sd">        p : ndarray (Ndev x 3)</span>
 <span class="sd">            np.array of devices&#39; positions</span>
 <span class="sd">        grp : string</span>
 <span class="sd">            name of the group of device belong to.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
@@ -557,9 +565,16 @@
 
 </div>
 <div class="viewcode-block" id="Network.perm"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.perm.html#pylayers.network.network.Network.perm">[docs]</a>    <span class="k">def</span> <span class="nf">perm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
-        <span class="sd">&quot;&quot;&quot; combi = itertools.permutation(iterable,r) adapted</span>
+        <span class="sd">&quot;&quot;&quot;  calculate permutation</span>
 
-<span class="sd">        This is an adapted version of itertools.permutations in order to be compliant with the networkx.add_edges_from method.</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        combi = itertools.permutation(iterable,r) adapted</span>
+
+<span class="sd">        This is an adapted version of itertools.permutations to</span>
+<span class="sd">        comply with the networkx.add_edges_from method.</span>
+
 <span class="sd">        itertools.permutations(range(4), 3) --&gt; 012 013 021 023 031 302 102 103 ...</span>
 
 <span class="sd">        self.perm([10,11],2,&#39;wifi&#39;) --&gt;     (10, 11, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []}) </span>
@@ -633,9 +648,15 @@
 
 </div>
 <div class="viewcode-block" id="Network.combi"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.combi.html#pylayers.network.network.Network.combi">[docs]</a>    <span class="k">def</span> <span class="nf">combi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
-        <span class="sd">&quot;&quot;&quot; combi = itertools.combination(iterable,r) adapted </span>
+        <span class="sd">&quot;&quot;&quot; calculate combination</span>
 
-<span class="sd">        This is an adapted version of itertools.combinations in order to be complient with the networkx.add_edges_from method.</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        combi = itertools.combination(iterable,r) adapted</span>
+
+<span class="sd">        This is an adapted version of itertools.combinations in order</span>
+<span class="sd">        to comply with the networkx.add_edges_from method.</span>
 <span class="sd">        itertools.combinations(&#39;ABCD&#39;, 2) --&gt; AB AC AD BC BD CD</span>
 <span class="sd">        itertools.combinations(range(4), 3) --&gt; 012 013 023 123</span>
 
@@ -654,10 +675,10 @@
 
 
 <span class="sd">        Returns</span>
-<span class="sd">        ------     </span>
+<span class="sd">        -------</span>
 
 <span class="sd">        out : tuple(node_list,r,wstd,d):</span>
-<span class="sd">        node_list    : list of node1        </span>
+<span class="sd">        node_list    : list of node1</span>
 <span class="sd">        r        : gather r node in the tuple</span>
 <span class="sd">        wstd        : the specified wstd</span>
 <span class="sd">        d        : dictionnary of wstd attribute</span>
@@ -704,13 +725,12 @@
 
 </div>
 <div class="viewcode-block" id="Network.Gen_tuple"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.Gen_tuple.html#pylayers.network.network.Network.Gen_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">Gen_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">gene</span><span class="p">,</span><span class="n">wstd</span><span class="p">,</span><span class="n">var</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        generate a specific tuple  </span>
+        <span class="sd">&quot;&quot;&quot; generate a specific tuple</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        gene : tuple(x,y) iterator </span>
+<span class="sd">        gene : tuple(x,y) iterator</span>
 <span class="sd">        wstd  : str</span>
 <span class="sd">        var  : list</span>
 <span class="sd">            len(var) = len(gene)</span>
@@ -749,9 +769,7 @@
 <div class="viewcode-block" id="Network._get_wstd"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network._get_wstd.html#pylayers.network.network.Network._get_wstd">[docs]</a>    <span class="k">def</span> <span class="nf">_get_wstd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get wireless standards from nodes of the network</span>
 
-
-
-<span class="sd">        wstd argument specifies which wireless standards to append to the network. </span>
+<span class="sd">        wstd argument specifies which wireless standard to append to the network.</span>
 <span class="sd">        If None, all wireless standards are appended.</span>
 
 <span class="sd">        Examples</span>
@@ -806,7 +824,7 @@
             <span class="n">wstd</span> <span class="o">=</span> <span class="n">wstd</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wstd</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">wstd</span> <span class="o">=</span> <span class="p">[</span><span class="n">wstd</span><span class="p">]</span>
-        
+
         <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wstd</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">nodes</span> <span class="o">==</span> <span class="p">[]:</span>
                 <span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">perm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wstd</span><span class="p">[</span><span class="n">w</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
@@ -823,11 +841,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
-            
+
 
 </div>
 <div class="viewcode-block" id="Network._connect"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network._connect.html#pylayers.network.network.Network._connect">[docs]</a>    <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; connect nodes</span>
+
 <span class="sd">        This method </span>
 <span class="sd">        1) Connect all nodes from the network sharing the same wstd </span>
 <span class="sd">        2) Create the associated SubNetworks</span>
@@ -845,13 +864,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">update_edges</span><span class="p">(</span><span class="n">edge_dict</span><span class="p">,</span><span class="n">wstd</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_SubNet</span><span class="p">(</span><span class="n">wstd</span><span class="p">)</span>
 
-        <span class="c"># update  edges type informatiosn </span>
+        <span class="c"># update  edges type informatiosn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_edges_typ</span><span class="p">()</span>
         <span class="c"># create lists of links</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_llinks</span><span class="p">()</span>
 </div>
     <span class="k">def</span> <span class="nf">_get_llinks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; get list of links from the Network </span>
+        <span class="sd">&quot;&quot;&quot; get list of links from the Network</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -875,25 +894,24 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">relinks</span><span class="p">[</span><span class="n">wstd</span><span class="p">]</span><span class="o">=</span><span class="p">[[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="n">wstd</span><span class="p">]]</span>
 
 <div class="viewcode-block" id="Network._get_edges_typ"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network._get_edges_typ.html#pylayers.network.network.Network._get_edges_typ">[docs]</a>    <span class="k">def</span> <span class="nf">_get_edges_typ</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">            apply specific type on edges </span>
+        <span class="sd">&quot;&quot;&quot; apply specific type on edges</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
 <span class="sd">        types are :</span>
 <span class="sd">            OB : On body</span>
-<span class="sd">             when link&#39; nodes of a link are: </span>
-<span class="sd">                on the same agent </span>
+<span class="sd">             when link&#39; nodes of a link are:</span>
+<span class="sd">                on the same agent</span>
 <span class="sd">                and belong to the same group</span>
 <span class="sd">            B2B : Body to Body</span>
-<span class="sd">                when link&#39; nodes of a link are: </span>
+<span class="sd">                when link&#39; nodes of a link are:</span>
 <span class="sd">                    between 2 agents</span>
 <span class="sd">            B2I : Body to Infrastructure</span>
-<span class="sd">                when link&#39; nodes of a link are: </span>
+<span class="sd">                when link&#39; nodes of a link are:</span>
 <span class="sd">                    between an agent and an access point</span>
 <span class="sd">            I2I : Infrastructure to Infrastructure</span>
-<span class="sd">                when link&#39; nodes of a link are: </span>
+<span class="sd">                when link&#39; nodes of a link are:</span>
 <span class="sd">                    between 2 access points</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1317,23 +1335,22 @@
 
 </div>
 <div class="viewcode-block" id="Network.overview"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.Network.overview.html#pylayers.network.network.Network.overview">[docs]</a>    <span class="k">def</span> <span class="nf">overview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; overview</span>
+        <span class="sd">&quot;&quot;&quot; overview of the network</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        O : dict </span>
+<span class="sd">        O : dict</span>
+
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">O</span><span class="o">=</span><span class="p">{}</span>
         <span class="k">for</span> <span class="n">sn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">ldp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span><span class="p">:</span>    
+            <span class="k">for</span> <span class="n">ldp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">O</span><span class="p">[</span><span class="n">sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">ldp</span><span class="p">:</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="n">sn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ldp</span><span class="p">)})</span> 
-                <span class="k">except</span><span class="p">:</span>            
-                    <span class="n">O</span><span class="p">[</span><span class="n">sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="p">{</span><span class="n">ldp</span><span class="p">:</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="n">sn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ldp</span><span class="p">)}</span> 
-
-
+                    <span class="n">O</span><span class="p">[</span><span class="n">sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">ldp</span><span class="p">:</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="n">sn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ldp</span><span class="p">)})</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">O</span><span class="p">[</span><span class="n">sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="p">{</span><span class="n">ldp</span><span class="p">:</span><span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="n">sn</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ldp</span><span class="p">)}</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">O</span><span class="p">)</span>
 
@@ -2019,7 +2036,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process version of the Network class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="PNetwork.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.PNetwork.__init__.html#pylayers.network.network.PNetwork.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">):</span>
         <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;net&#39;</span><span class="p">:</span><span class="n">Network</span><span class="p">(),</span>
                   <span class="s">&#39;L&#39;</span><span class="p">:[],</span>
                   <span class="s">&#39;net_updt_time&#39;</span><span class="p">:</span><span class="mf">0.001</span><span class="p">,</span>
@@ -2049,8 +2066,8 @@
 
 
 
-
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="PNetwork.run"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.network.PNetwork.run.html#pylayers.network.network.PNetwork.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
 
         <span class="c">####################################################################################</span>
@@ -2132,7 +2149,7 @@
                 <span class="k">print</span> <span class="s">&#39;network updated @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span>
             <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_updt_time</span>
-</pre></div>
+</pre></div></div>
 
           </div>
         </div>
@@ -2159,7 +2176,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on May 31, 2014.
+      Last updated on mai 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -167,7 +167,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Seek.calculate"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.transit.SteeringBehavior.Seek.calculate.html#pylayers.mobility.transit.SteeringBehavior.Seek.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; calculate boid behavior</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -177,10 +178,11 @@
 <span class="sd">        -----</span>
 
 <span class="sd">        This behavior is the attraction by the destination POI</span>
-<span class="sd">        The desired velocity is oriented towrd the destination and scaled with</span>
+<span class="sd">        The desired velocity is oriented toward the destination and scaled with</span>
 <span class="sd">        the desired velocity.</span>
-<span class="sd">        If the distance between current position and detination is less than</span>
-<span class="sd">        25cm the boid is arrived</span>
+
+<span class="sd">        If the distance between current position and destination is less than</span>
+<span class="sd">        25cm the boid has got its target point.</span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -192,7 +194,7 @@
         <span class="k">return</span> <span class="n">steering</span>
 </div>
 <span class="k">class</span> <span class="nc">Arrive</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Class Arrive </span>
+    <span class="sd">&quot;&quot;&quot; Class Arrive</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
@@ -205,7 +207,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Arrive.calculate"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.transit.SteeringBehavior.Arrive.calculate.html#pylayers.mobility.transit.SteeringBehavior.Arrive.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; calculate boid behavior</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -216,13 +219,20 @@
 
 <span class="sd">        steering</span>
 
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">current_speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+
+        <span class="c"># limit speed to a minimal value</span>
+        <span class="c"># speed can&#39;t be 0</span>
+
         <span class="k">if</span> <span class="n">current_speed</span> <span class="o">&lt;</span> <span class="mf">0.0001</span><span class="p">:</span>
             <span class="n">current_speed</span> <span class="o">=</span> <span class="mf">0.0001</span>
 
         <span class="n">slowing_distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_speed</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_acceleration</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">current_speed</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
+        <span class="c"># target offset is teh distance between current position and</span>
+        <span class="c"># destination</span>
         <span class="n">target_offset</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">destination</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
         <span class="n">distance</span> <span class="o">=</span> <span class="n">target_offset</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
 
@@ -234,6 +244,7 @@
 
         <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">boid</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span>
             <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
+
         <span class="k">return</span> <span class="n">steering</span>
 </div>
 <span class="k">class</span> <span class="nc">Wander</span><span class="p">:</span>
@@ -246,6 +257,20 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Wander.calculate"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.transit.SteeringBehavior.Wander.calculate.html#pylayers.mobility.transit.SteeringBehavior.Wander.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate boid behavior</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        boid</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        steering</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">wander_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="s">&#39;wander_value&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">wander_value</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
             <span class="n">wander_value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
@@ -253,19 +278,34 @@
             <span class="n">wander_value</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">boid</span><span class="o">.</span><span class="n">wander_value</span> <span class="o">=</span> <span class="n">wander_value</span>
         <span class="n">desired_velocity</span> <span class="o">=</span> <span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">wander_value</span><span class="p">))</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
-        <span class="k">return</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="n">steering</span> <span class="o">=</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="k">return</span> <span class="n">steering</span>
 
 </div>
 <span class="k">class</span> <span class="nc">FollowWaypoints</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Class FollowWaypoints</span>
 
-<span class="sd">    Methods </span>
+<span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    calculate </span>
+<span class="sd">    calculate</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="FollowWaypoints.calculate"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.transit.SteeringBehavior.FollowWaypoints.calculate.html#pylayers.mobility.transit.SteeringBehavior.FollowWaypoints.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate boid behavior</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        boid</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        steering</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">waypoints</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">waypoints</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">waypoints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
@@ -274,13 +314,29 @@
         <span class="k">if</span> <span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">del</span> <span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
-        <span class="k">return</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="n">steering</span> <span class="o">=</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="k">return</span> <span class="n">steering</span>
 </div>
 <span class="k">class</span> <span class="nc">Separation</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Class Separation </span>
+    <span class="sd">&quot;&quot;&quot; Class Separation</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Separation.calculate"><a class="viewcode-back" href="../../../../modules/generated/pylayers.mobility.transit.SteeringBehavior.Separation.calculate.html#pylayers.mobility.transit.SteeringBehavior.Separation.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate boid behavior</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        boid</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        steering</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
         <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
         <span class="n">others</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">boids</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">)</span>
         <span class="n">separation_distance</span> <span class="o">=</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span>
@@ -291,17 +347,29 @@
             <span class="k">if</span> <span class="n">in_front</span> <span class="ow">and</span> <span class="n">local_position</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">separation_distance</span><span class="p">:</span>
                 <span class="n">separation</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
                 <span class="n">force</span> <span class="o">=</span> <span class="n">separation</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">separation</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-                <span class="c"># create orthogonal vector in order to make boids avoidance</span>
-<span class="c">#                force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)</span>
                 <span class="n">force2</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">force</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">force</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">force2</span> <span class="c">#3*force2</span>
         <span class="k">return</span> <span class="n">acceleration</span>
 </div>
 <span class="k">class</span> <span class="nc">Queuing</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Class Queuing </span>
+    <span class="sd">&quot;&quot;&quot; Class Queuing</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate boid behavior</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        boid</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        steering</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
         <span class="n">others</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">boids</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="n">speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
@@ -317,10 +385,22 @@
 <span class="k">class</span> <span class="nc">Containment</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Class Containment </span>
 
-
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate boid behavior</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        boid</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        steering</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
         <span class="n">walls</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">obstacles</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
         <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
@@ -357,8 +437,8 @@
                 <span class="n">right_direction</span> <span class="o">=</span> <span class="n">direction</span>
             <span class="k">if</span> <span class="n">front_intersect</span> <span class="ow">or</span> <span class="n">left_intersect</span> <span class="ow">or</span> <span class="n">right_intersect</span> <span class="p">:</span>
                 <span class="k">break</span>
-    
-    
+
+
 <span class="c">#    print speed</span>
 <span class="c">#    # parabolic speed </span>
         <span class="n">d_no_influ</span> <span class="o">=</span> <span class="mf">1.0</span><span class="c">#0.3 # m</span>
@@ -414,16 +494,17 @@
 <span class="c">#            return False, None, None</span>
 
     <span class="k">def</span> <span class="nf">test_intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; test intersection </span>
+        <span class="sd">&quot;&quot;&quot; test intersection</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        boid </span>
-<span class="sd">        wall </span>
-<span class="sd">        position </span>
-<span class="sd">        vector </span>
-
+<span class="sd">        boid</span>
+<span class="sd">        wall</span>
+<span class="sd">        position</span>
+<span class="sd">        vector</span>
+<span class="sd">        method : string</span>
+<span class="sd">            &#39;direct&#39; | &#39;gauss&#39; | &#39;ellipse&#39; | &#39;uniform&#39;</span>
 
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
@@ -436,18 +517,18 @@
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;direct&#39;</span><span class="p">:</span>
             <span class="n">VR</span><span class="o">=</span><span class="n">vector</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;uniform&#39;</span><span class="p">:</span>
-    <span class="c">######## version uniform</span>
+    <span class="c">######## uniform version </span>
             <span class="n">r</span><span class="o">=</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="o">/</span><span class="mf">12.0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mf">12.0</span><span class="p">)</span>
             <span class="n">v0</span><span class="o">=</span><span class="n">vector</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span>
             <span class="n">vl</span><span class="o">=</span><span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
             <span class="n">VR</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">v0</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">sin</span><span class="p">(</span><span class="n">v0</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">vector</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;gauss&#39;</span><span class="p">:</span>
-    <span class="c">######## version gaussienne</span>
+    <span class="c">######## gaussian version </span>
             <span class="n">vl</span><span class="o">=</span><span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
             <span class="n">r</span><span class="o">=</span><span class="n">gauss</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">ang0</span><span class="p">(),</span><span class="n">pi</span><span class="o">/</span><span class="mf">12.0</span><span class="p">)</span>
             <span class="n">VR</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">vector</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;ellipse&#39;</span><span class="p">:</span>
-    <span class="c">######## version ellipse</span>
+    <span class="c">######## ellipse vesrion</span>
             <span class="n">theta</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">ang0</span><span class="p">(),</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">))</span> <span class="c"># random angle to test</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>                 <span class="c"># create an elipse... </span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">/</span><span class="mf">1.5</span>                            <span class="c"># ...to test  collision if b=a/1. ellipse =circle</span>
@@ -483,7 +564,7 @@
             <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">None</span>
 
 <span class="k">class</span> <span class="nc">InterpenetrationConstraint</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Class InterpenetrationConstaint </span>
+    <span class="sd">&quot;&quot;&quot; Class InterpenetrationConstaint</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
@@ -537,23 +618,23 @@
     <span class="k">def</span> <span class="nf">distance_from_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; distance from line</span>
 
-<span class="sd">        Parameters </span>
-<span class="sd">        ------------</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
-<span class="sd">        position </span>
-<span class="sd">        line </span>
+<span class="sd">        position : 2D vector</span>
+<span class="sd">        line : np.array</span>
 
-<span class="sd">        Returns </span>
+<span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        True  , distance , vector</span>
+<span class="sd">        True , distance , vector</span>
 <span class="sd">        or </span>
 <span class="sd">        False , None , None </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">line_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">vec3</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">vec3</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
         <span class="n">u</span> <span class="o">=</span> <span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-             <span class="o">+</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span> \
+           <span class="o">+</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span> \
             <span class="o">/</span> <span class="n">line_length</span> <span class="o">**</span> <span class="mi">2</span>
         <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
             <span class="c"># point is tangent to line</span>
@@ -567,15 +648,19 @@
 <span class="k">def</span> <span class="nf">default_steering_mind</span><span class="p">(</span><span class="n">boid</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Sum all steering vectors.</span>
 
-<span class="sd">    Notes </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    boid</span>
+
+<span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 
 <span class="sd">    This is the place where all acceleration from all behaviors are summed.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
 
+    <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">behavior</span> <span class="ow">in</span> <span class="n">boid</span><span class="o">.</span><span class="n">behaviors</span><span class="p">:</span>
         <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">behavior</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">acceleration</span>
@@ -586,7 +671,7 @@
 <span class="sd">    The Separation steering vector will be ignored if any prior</span>
 <span class="sd">    steering behavior gave a non-zero acceleration, typically</span>
 <span class="sd">    Containment.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
@@ -621,7 +706,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on May 31, 2014.
+      Last updated on mai 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

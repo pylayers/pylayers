@@ -390,7 +390,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Layout.__init__"><a class="viewcode-back" href="../../../modules/pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">,</span><span class="n">_filematini</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="n">_fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">,</span><span class="n">_filefur</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -553,6 +553,7 @@
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
+
 <span class="sd">        strdir is defined in the Project module</span>
 
 <span class="sd">        Examples</span>
@@ -605,11 +606,16 @@
         <span class="sd">&quot;&quot;&quot; Check Layout consistency</span>
 
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        level : int</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">            consistent : Boolean</span>
-<span class="sd">                        True if consistent</span>
+<span class="sd">        consistent : Boolean</span>
+<span class="sd">              True if consistent</span>
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
@@ -618,6 +624,7 @@
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
+
 <span class="sd">        For all segments</span>
 <span class="sd">            get the 2 vertices</span>
 <span class="sd">                for all the other vertices</span>
@@ -718,19 +725,20 @@
 <div class="viewcode-block" id="Layout.clip"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.clip.html#pylayers.gis.layout.Layout.clip">[docs]</a>    <span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return the list of edges which cross or belong to the clipping zone</span>
 
-<span class="sd">         Parameters</span>
-<span class="sd">         ----------</span>
-<span class="sd">            xmin</span>
-<span class="sd">            xmax</span>
-<span class="sd">            ymin</span>
-<span class="sd">            ymax</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
-<span class="sd">         Notes</span>
-<span class="sd">         -----</span>
+<span class="sd">        xmin : float</span>
+<span class="sd">        xmax : float</span>
+<span class="sd">        ymin : float</span>
+<span class="sd">        ymax : float</span>
 
-<span class="sd">              1) Determine all segments outside the clipping zone</span>
-<span class="sd">              2) Union of the 4 conditions</span>
-<span class="sd">              3) setdiff1d between the whole array of segments and the segments outside</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">          1) Determine all segments outside the clipping zone</span>
+<span class="sd">          2) Union of the 4 conditions</span>
+<span class="sd">          3) setdiff1d between the whole array of segments and the segments outside</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pt</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tahe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]]</span>
@@ -756,7 +764,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">iseg</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Layout.g2npy"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.g2npy.html#pylayers.gis.layout.Layout.g2npy">[docs]</a>    <span class="k">def</span> <span class="nf">g2npy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; from graphs to numpy arrays conversion</span>
+        <span class="sd">&quot;&quot;&quot; conversion from graphs to numpy arrays </span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -1307,12 +1315,12 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        Available format are :</span>
+<span class="sd">        Available formats are :</span>
 
-<span class="sd">            .ini   : ini file format (natural one) DIRINI</span>
-<span class="sd">            .str2  : native Pyray (C implementation) DIRSTRUC</span>
-<span class="sd">            .str   : binary file with visibility DIRSTRUC</span>
-<span class="sd">            .osm   : opens street map format  DIROSM</span>
+<span class="sd">        +  .ini   : ini file format (natural one) DIRINI</span>
+<span class="sd">        +  .str2  : native Pyray (C implementation) DIRSTRUC</span>
+<span class="sd">        +  .str   : binary file with visibility DIRSTRUC</span>
+<span class="sd">        +  .osm   : opens street map format  DIROSM</span>
 
 
 <span class="sd">        layout files are stored in the directory pstruc[&#39;DIRxxx&#39;]</span>
@@ -1365,6 +1373,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        _filename : string</span>
 <span class="sd">        _filematini  : string</span>
 <span class="sd">            default &#39;matDB.ini&#39;</span>
@@ -7494,12 +7503,12 @@
         <span class="k">return</span> <span class="n">nbu</span>
 </div>
 <div class="viewcode-block" id="Layout.facet3D"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.facet3D.html#pylayers.gis.layout.Layout.facet3D">[docs]</a>    <span class="k">def</span> <span class="nf">facet3D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">subseg</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; facet3D</span>
+        <span class="sd">&quot;&quot;&quot; calculate 3D facet from segment</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        e : int</span>
+<span class="sd">        s : int</span>
 <span class="sd">            segment number</span>
 <span class="sd">        subseg : boolean</span>
 <span class="sd">            default False</span>
@@ -7509,30 +7518,30 @@
         <span class="n">P2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">P3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="n">P4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-        <span class="n">nebr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">nebr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="n">n1</span> <span class="o">=</span> <span class="n">nebr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">n2</span> <span class="o">=</span> <span class="n">nebr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">P1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span>
-        <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">P2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">])</span>
-        <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">P3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n2</span><span class="p">])</span>
-        <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">P4</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">n1</span><span class="p">])</span>
-        <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">cold</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">coldict</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">subseg</span><span class="p">:</span>
-            <span class="n">nsseg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span>
+            <span class="n">nsseg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">nsseg</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;fa&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;fa&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
         <span class="n">filestruc</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRGEOM&#39;</span><span class="p">])</span>
         <span class="n">fos</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filestruc</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
         <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;OFF</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
@@ -7540,34 +7549,34 @@
         <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;0.000 0.000 0.000</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">subseg</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]):</span>
-                    <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]):</span>
+                    <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ss_z&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
                     <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
                     <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
                     <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P4</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="k">print</span> <span class="s">&#39;no subsegment on &#39;</span><span class="p">,</span> <span class="n">e</span>
+                <span class="k">print</span> <span class="s">&#39;no subsegment on &#39;</span><span class="p">,</span> <span class="n">s</span>
                 <span class="k">return</span><span class="p">(</span><span class="s">&#39;void&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
             <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P1</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
             <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P2</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
             <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P3</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P3</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
             <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">P4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">P4</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">P4</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
 
         <span class="k">if</span> <span class="n">subseg</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]):</span>
                 <span class="n">colname</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
                 <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span>
                 <span class="n">col</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
                 <span class="n">fos</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;4 </span><span class="si">%i</span><span class="s"> </span><span class="si">%i</span><span class="s"> </span><span class="si">%i</span><span class="s"> </span><span class="si">%i</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> 0.4</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">k</span><span class="p">,</span>
                 <span class="mi">3</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">k</span><span class="p">,</span> <span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">k</span><span class="p">,</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
             <span class="n">colname</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
             <span class="n">colhex</span> <span class="o">=</span> <span class="n">cold</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span>
             <span class="n">col</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">rgb</span><span class="p">(</span><span class="n">colhex</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
@@ -7735,7 +7744,7 @@
         <span class="k">return</span> <span class="n">pg</span>
 </div>
     <span class="nd">@mlab.show</span>
-<div class="viewcode-block" id="Layout._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._show3.html#pylayers.gis.layout.Layout._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a .off geomview file</span>
 
 <span class="sd">        Parameters</span>
@@ -7955,7 +7964,7 @@
                                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Layout &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
 
-</div>
+
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show3.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
@@ -8368,7 +8377,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on May 31, 2014.
+      Last updated on mai 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

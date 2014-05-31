@@ -140,15 +140,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.__init__.html#pylayers.network.network.Network.__init__" title="pylayers.network.network.Network.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Network.__init__</span></tt></a>([owner,&nbsp;EMS,&nbsp;PN])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
+<td>object constructor</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.__repr__.html#pylayers.network.network.Network.__repr__" title="pylayers.network.network.Network.__repr__"><tt class="xref py py-obj docutils literal"><span class="pre">Network.__repr__</span></tt></a>()</td>
 <td></td>
@@ -185,7 +177,7 @@
 <td>get SubNetworks of a network</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network._connect.html#pylayers.network.network.Network._connect" title="pylayers.network.network.Network._connect"><tt class="xref py py-obj docutils literal"><span class="pre">Network._connect</span></tt></a>()</td>
-<td>This method</td>
+<td>connect nodes</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network._init_PN.html#pylayers.network.network.Network._init_PN" title="pylayers.network.network.Network._init_PN"><tt class="xref py py-obj docutils literal"><span class="pre">Network._init_PN</span></tt></a>()</td>
 <td>Initializing personnal networks</td>
@@ -211,15 +203,7 @@
 <td>get node estimated  positions ( only available in PN network)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.overview.html#pylayers.network.network.Network.overview" title="pylayers.network.network.Network.overview"><tt class="xref py py-obj docutils literal"><span class="pre">Network.overview</span></tt></a>()</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
+<td>overview of the network</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.haspe.html#pylayers.network.network.Network.haspe" title="pylayers.network.network.Network.haspe"><tt class="xref py py-obj docutils literal"><span class="pre">Network.haspe</span></tt></a>(n)</td>
 <td>Test if a node has an estimated point  pe key</td>
@@ -268,10 +252,10 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.perm.html#pylayers.network.network.Network.perm" title="pylayers.network.network.Network.perm"><tt class="xref py py-obj docutils literal"><span class="pre">Network.perm</span></tt></a>(iterable,&nbsp;r,&nbsp;key[,&nbsp;d])</td>
-<td>combi = itertools.permutation(iterable,r) adapted</td>
+<td>calculate permutation</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.Network.combi.html#pylayers.network.network.Network.combi" title="pylayers.network.network.Network.combi"><tt class="xref py py-obj docutils literal"><span class="pre">Network.combi</span></tt></a>(iterable,&nbsp;r,&nbsp;key[,&nbsp;d])</td>
-<td>combi = itertools.combination(iterable,r) adapted</td>
+<td>calculate combination</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.Network.Gen_tuple.html#pylayers.network.network.Network.Gen_tuple" title="pylayers.network.network.Network.Gen_tuple"><tt class="xref py py-obj docutils literal"><span class="pre">Network.Gen_tuple</span></tt></a>(gene,&nbsp;wstd,&nbsp;var)</td>
 <td>generate a specific tuple</td>
@@ -324,11 +308,21 @@
 <div class="section" id="pnetwork-class">
 <h2>PNetwork Class<a class="headerlink" href="#pnetwork-class" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>SimPy Process compliant version of the Network class</p>
-<blockquote>
-<div>PNetwork.__init__
-PNetwork.run</div></blockquote>
-</div></blockquote>
+<div>SimPy Process compliant version of the Network class</div></blockquote>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.network.network.PNetwork.__init__.html#pylayers.network.network.PNetwork.__init__" title="pylayers.network.network.PNetwork.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">PNetwork.__init__</span></tt></a>(**args)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.network.network.PNetwork.run.html#pylayers.network.network.PNetwork.run" title="pylayers.network.network.PNetwork.run"><tt class="xref py py-obj docutils literal"><span class="pre">PNetwork.run</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 

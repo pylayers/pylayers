@@ -264,7 +264,7 @@
     <span class="bp">False</span><span class="p">:</span> <span class="s">&#39;#ff3333&#39;</span>
 <span class="p">}</span>
 
-<span class="k">class</span> <span class="nc">Plot_shapely</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Plot_shapely</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;draw Shapely with matplotlib - pylab</span>
 <span class="sd">     Plot_shapely.py</span>
 <span class="sd">     Author : Martin Laloux 2010</span>
@@ -272,7 +272,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Plot_shapely.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Plot_shapely.__init__.html#pylayers.util.geomutil.Plot_shapely.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">coul</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">alph</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">         Parameters</span>
 <span class="sd">         ----------</span>
@@ -324,7 +324,7 @@
 </div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;dessine en fonction du type geometrique&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;draw w.r.t geometrical type&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;Point&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_coords</span><span class="p">()</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;Polygon&#39;</span><span class="p">:</span>
@@ -339,10 +339,10 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;LinearRing&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_line</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;inconnu au bataillon: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;unknown: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">LineString</span><span class="p">(</span><span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">LineString</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Overloaded shapely LineString class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="LineString.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.LineString.__init__.html#pylayers.util.geomutil.LineString.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
@@ -446,7 +446,7 @@
 <span class="c">#   Functions used for calculation of visibility graph Gv</span>
 <span class="c">#-----------------------------------------------------------</span>
 </div>
-<span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">shg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="n">shg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Overloaded shapely Polygon class</span>
 
 <span class="sd">    Attributes</span>
@@ -465,7 +465,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Polygon.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__init__.html#pylayers.util.geomutil.Polygon.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span>
                  <span class="n">vnodes</span><span class="o">=</span><span class="p">[],</span><span class="n">delta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; object constructor</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -539,7 +539,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Polygon.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.__add__.html#pylayers.util.geomutil.Polygon.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; add 2 polygons</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -679,15 +679,15 @@
 
     <span class="k">def</span> <span class="nf">isconvex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Determine if a polygon is convex</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        tol : tolerence on aligned point</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">         True if convex</span>
-<span class="sd">        </span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
@@ -713,21 +713,21 @@
 
     <span class="k">def</span> <span class="nf">isconvex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Determine if a polygon is convex</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        tol : tolerence on aligned point</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">         True if convex</span>
-<span class="sd">        </span>
+<span class="sd">        True if convex</span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        the algorithm tests all triplet of point and L.determine </span>
+<span class="sd">        the algorithm tests all triplet of point and L.determine</span>
 <span class="sd">        if the third point is left to the 2 first.</span>
-<span class="sd">        a tolerance can be introduce in cases where the polygon is </span>
+<span class="sd">        a tolerance can be introduce in cases where the polygon is</span>
 <span class="sd">        almost convex.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -745,6 +745,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        color :  string</span>
 <span class="sd">            default #abcdef&quot;</span>
 <span class="sd">        alpha :  float</span>
@@ -821,37 +822,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
 
-    <span class="k">def</span> <span class="nf">isconvex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Determine if a polygon is convex</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        tol : tolerence on aligned point</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">         True if convex</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        the algorithm tests all triplet of point and L.determine</span>
-<span class="sd">        if the third point is left to the 2 first.</span>
-<span class="sd">        a tolerance can be introduce in cases where the polygon is</span>
-<span class="sd">        almost convex.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coorddeter</span><span class="p">()</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">p</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">isleft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="ow">or</span> \
-                <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">isleft</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-
-
 <div class="viewcode-block" id="Polygon.simplify"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.Polygon.simplify.html#pylayers.util.geomutil.Polygon.simplify">[docs]</a>    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Simplify polygon - suppress adjacent colinear segments</span>
+        <span class="sd">&quot;&quot;&quot; simplify polygon - suppress adjacent colinear segments</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1750,7 +1722,7 @@
         <span class="n">upos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">&gt;</span> <span class="mf">1e-4</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span><span class="p">(</span><span class="n">tcc</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 </div>
-<span class="k">class</span> <span class="nc">Geomview</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Geomview</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Geomview file class</span>
 
 <span class="sd">    This class is parent of  GeomVect Geomlist Geomoff</span>
@@ -1855,7 +1827,7 @@
         <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="n">clear</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="GeomVect.segments"><a class="viewcode-back" href="../../../modules/generated/pylayers.util.geomutil.GeomVect.segments.html#pylayers.util.geomutil.GeomVect.segments">[docs]</a>    <span class="k">def</span> <span class="nf">segments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">i2d</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; display segments</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1893,7 +1865,11 @@
     <span class="k">def</span> <span class="nf">geomBase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span> <span class="n">col</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Construct a geomview vect file for vizualisation of a frame</span>
-<span class="sd">            by default the geomview filename is base0.vect</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        by default the geomview filename is base0.vect</span>
 
 
 <span class="sd">        Parameters</span>
@@ -1907,8 +1883,9 @@
 <span class="sd">        linewidth :</span>
 <span class="sd">            linewidth (default 3)</span>
 
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
 <span class="sd">        &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; v1 = np.array([1,0,0])</span>
@@ -4251,7 +4228,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on May 31, 2014.
+      Last updated on mai 31, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
