@@ -173,10 +173,6 @@ except:
 # How to take into account  1 specific key specifique for 1 MultiGraph
 # MULTIGRAPH !!!! G.add_edge(10,11,key='wifi',attr_dict=dict(Pr=0,TOA=10))
 
-
-
-
-
 class Node(nx.MultiGraph):
     """ Class Node
 
@@ -270,8 +266,6 @@ class Node(nx.MultiGraph):
         random.randint(0x00, 0xff),
         random.randint(0x00, 0xff) ]
         return ':'.join(map(lambda x: "%02x" % x, mac))
-
-
 
 
 class Network(nx.MultiDiGraph):

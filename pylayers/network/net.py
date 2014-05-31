@@ -1,18 +1,19 @@
 import networkx as nx
-import numpy as np 
+import numpy as np
 import math
 import random
 import doctest
-import matplotlib.pylab as plt 
+import matplotlib.pylab as plt
 import pdb
 from prioritydict import priorityDictionary
+from pylayers.util.project import *
 #
 # This module is adapted from WSN-SIM from Berkeley
 #
 #   http://wsn.eecs.berkeley.edu/trac/simulation
 #
 col = ['b','g','r','c','m','y','k','w','b','g','r','c','m','y','k','w']
-class Network(nx.Graph):
+class Network(PyLayers,nx.Graph):
     def __init__(self, numMotes=100, numGateways=10, loadBalance=10,dx=316,dy=316):
         nx.Graph.__init__(self)
         self.numMotes = numMotes
@@ -46,6 +47,7 @@ class Network(nx.Graph):
 
     def connect(self,dmax=175,pdrValue = 0.80,n=2,sensitivitydBm=-85,fGHz=2.4,PtdBm=0):
         """  connect nodes based on a connectivity model
+
         Parameters
         ----------
 
@@ -148,11 +150,14 @@ class Network(nx.Graph):
 #        return (P, G)
 
     def scheduling(self, numTimeSlots, numOffsets,export=False):
-        """
+        """ scheduling
+
         Parameters
         ----------
+
         numTimeSlots
         numOffsets
+        export : boolean
 
         """
         paths = []

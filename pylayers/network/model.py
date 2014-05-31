@@ -23,12 +23,12 @@
 #####################################################################
 import numpy as np
 import scipy as sp
-
+from pylayers.util.project import *
 import pdb
 import doctest
 
 
-class PLSmodel(object):
+class PLSmodel(PyLayers):
     """ Path Loss Shadowing model
 
     Attributes
@@ -96,8 +96,7 @@ class PLSmodel(object):
 
 
     def OneSlope(self,r):
-        """
-        OneSlope model : give Power Level from distance  with OneSlope method
+        """ OneSlope model : give Power Level from distance  with OneSlope method
 
         Parameters
         ----------
@@ -160,8 +159,7 @@ class PLSmodel(object):
 
 
     def getPL(self,r,RSSStd):
-        """
-        Get Power Level from a given distance
+        """ Get Power Level from a given distance
 
         Parameters
         ----------
@@ -197,15 +195,23 @@ class PLSmodel(object):
 
 
     def getRange(self,RSS,RSSStd):
-        """
-        Get  distance from a given Power Level
+        """ Get  distance from a given Power Level
 
-        r : range
+        Parameters
+        ----------
+
+        RSS :
+        R
+
+        Returns
+        -------
+
+        r :
         """
         if self.method =='OneSlope':
             r    = self.iOneSlope(RSS)
 
-        elif self.method == 'mode': 
+        elif self.method == 'mode':
             S    = -(np.log(10)/10)* RSSStd/self.rssnp                    # STD of ranges distribution
             M    = (np.log(10)/10)*(self.PL0-RSS)/self.rssnp + np.log(self.d0)        # Mean of ranges distribution
             r    =  np.exp(M-S**2)
@@ -230,10 +236,16 @@ class PLSmodel(object):
     def getRangeStd(self, RSS, RSSStd):
         """Compute Ranges std associated to "Rest" estimator
 
+        Parameters
+        ----------
+
+        RSS :
+        RSSStd :
+
 
         """
 
-        if self.method == 'mode': 
+        if self.method == 'mode':
             S       = -(np.log(10)/10)* RSSStd/self.rssnp                                    # STD of ranges distribution
             M       = (np.log(10)/10)*(self.PL0-RSS)/self.rssnp + np.log(self.d0)             # Mean of ranges distribution
             r    =  np.sqrt((np.exp(2*M-2*S**2))*(-np.exp(-S**2)+1))
