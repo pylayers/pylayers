@@ -138,7 +138,7 @@ from pylayers.util.easygui import *
 from scipy.interpolate import interp1d
 import pdb
 
-class Interface(object):
+class Interface(PyLayers):
     """ Interface between 2 medium
 
     Attributes
@@ -693,7 +693,7 @@ class MatInterface(Interface):
         #print 'Slab MatInterface Io11',self.Io[15,31,1,1]
 
 
-class Mat(dict):
+class Mat(PyLayers,dict):
     """ Handle constitutive materials dictionnary
 
     Attributes
@@ -812,7 +812,7 @@ class Mat(dict):
         return Ro, Rp
 
 
-class MatDB(dict):
+class MatDB(PyLayers,dict):
     """ MatDB Class : Material database
 
 

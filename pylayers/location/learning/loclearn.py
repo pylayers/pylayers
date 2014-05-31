@@ -1,7 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
+"""
+.. currentmodule:: pylayers.location.learning.loclearn
 
+This class handle the description of an Indoor layout
+
+.. autosummary::
+    :toctree: generated/
+
+    ffnetwork
+    knn_learn
+    ffann_learn
+    svm_learn
+    lreg_learn
+
+"""
 
 import numpy as np
 import scipy as sp

@@ -18,6 +18,9 @@ Loss module
     Loss_obstacle
     Loss_2obstacle
     OneSlopeMdl
+    cost231
+    cost259
+    cost2100
     Dgrid_points
     Dgrid_zone
     calnu
@@ -161,6 +164,9 @@ def OneSlopeMdl(D,n,fGHz):
 
 def cost231(pBS,pMS,hroof,phir,wr,fMHz,wb=20,dB=True,city='medium'):
     """ Walfish Ikegami model (COST 231)
+
+    Parameters
+    ----------
 
     pBS   : np.array (3xNlink)
     pMS   : np.array (3xNlink)
