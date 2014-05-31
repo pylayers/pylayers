@@ -154,14 +154,14 @@ def frontline(L,nc,v):
     Returns
     -------
 
-    nsegf : list 
+    nsegf : list
 
     Example
     -------
 
-    >>> from pylayers.gis.layout import * 
+    >>> from pylayers.gis.layout import *
     >>> L = Layout()
-    >>> L.build()
+    >>> L.dumpr()
     >>> v = np.array([1,1])
     >>> frontline(L,0,v)
     [3, 4]
@@ -172,8 +172,8 @@ def frontline(L,nc,v):
     run3
 
     """
-    npt = filter(lambda x: x<0, L.Gt.node[nc]['cycle'].cycle)  # points 
-    nseg = filter(lambda x: x>0, L.Gt.node[nc]['cycle'].cycle) # segments
+    npt = filter(lambda x: x<0, L.Gt.node[nc]['polyg'].vnodes)  # points
+    nseg = filter(lambda x: x>0, L.Gt.node[nc]['polyg'].vnodes) # segments
     pt  = map(lambda npt : [L.Gs.pos[npt][0],L.Gs.pos[npt][1]],npt)
     pt1 = np.array(pt)   # convert in ndarray
     n1 = geu.Lr2n(pt1.T) # get the normals of the cycle
@@ -381,7 +381,7 @@ class Signatures(PyLayers,dict):
     """
 
     def __init__(self,L,source,target,cutoff=3):
-        """
+        """ object constructor
 
         Parameters
         ----------
@@ -442,45 +442,7 @@ class Signatures(PyLayers,dict):
             self.nsig += size
             self.nint += size*k
 
-
-    def help(self,letter='az',mod='meth'):
-        """ help function
-
-        List all available methods or members of the class
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
     def info(self):
-        """
-        """
         # print "Signatures for scenario defined by :"
         # print "Layout"
         # print "======"
@@ -524,7 +486,6 @@ class Signatures(PyLayers,dict):
 
     def saveh5(self):
         """ save signatures in hdf5 format
-
         """
 
         filename=pyu.getlong(self.filename+'.h5',pstruc['DIRSIG'])
@@ -546,7 +507,6 @@ class Signatures(PyLayers,dict):
 
     def loadh5(self,filename=[]):
         """ load signatures hdf5 format
-
         """
         if filename == []:
             _filename = self.filename
@@ -577,7 +537,7 @@ class Signatures(PyLayers,dict):
 
 
     def _saveh5(self,filenameh5,grpname):
-        """ Save H5py compliant with Links
+        """ Save in hdf5 compliant with Links
         """
 
 
@@ -607,7 +567,7 @@ class Signatures(PyLayers,dict):
 
 
     def _loadh5(self,filenameh5,grpname):
-        """ Load signatures h5py format compliant with Links Class
+        """ load signatures in hdf5 format compliant with class Links
 
         Parameters
         ----------
@@ -624,7 +584,6 @@ class Signatures(PyLayers,dict):
         pylayers.simul.links
 
         """
-
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         # if grpname =='':
@@ -652,7 +611,7 @@ class Signatures(PyLayers,dict):
 
 
     def save(self):
-        """ Save signatures
+        """ save signatures
         """
         L=copy.deepcopy(self.L)
         del(self.L)
@@ -662,7 +621,7 @@ class Signatures(PyLayers,dict):
         self.L=L
 
     def load(self,filename=[]):
-        """ Load signatures
+        """ load signatures
         """
 
 
@@ -692,7 +651,7 @@ class Signatures(PyLayers,dict):
             self.L.dumpw()
 
     def sp(self,G, source, target, cutoff=None):
-        """
+        """ algorithm for signature determination
 
         Parameters
         ----------
@@ -1240,7 +1199,7 @@ class Signatures(PyLayers,dict):
     #             lawp.pop()
 
     def calsig(self,G,dia={},cutoff=None):
-        """
+        """ calculates signature
 
         Parameters
         ----------
@@ -1303,7 +1262,7 @@ class Signatures(PyLayers,dict):
         return d
 
     def exist(self,seq):
-        """ verify if seq exists in  signatures
+        """ verifies if seq exists in signatures
 
         Parameters
         ----------
@@ -1330,6 +1289,13 @@ class Signatures(PyLayers,dict):
 
     def run(self,cutoff=1,dcut=2):
         """ run signature calculation
+
+        Parameters
+        ----------
+
+        cutoff : int
+        dcut : int
+
         """
 
         lcil=self.L.cycleinline(self.source,self.target)
@@ -2423,6 +2389,13 @@ class Signatures(PyLayers,dict):
 
     def lineofcycle(self,cs=[],ct=[]):
         """ shortest path between 2 cycle
+
+        Parameters
+        ----------
+
+        cs : list
+        ct : list
+
         """
         if cs == []:
             cs = self.source
@@ -2476,7 +2449,8 @@ class Signatures(PyLayers,dict):
     def unfold(self,L,i=0,s=0):
         """ unfold a given signature
 
-            return 2 np.ndarray of pta and phe "aligned" (reflexion interaction are mirrored)
+        return 2 np.ndarray of pta and phe "aligned"
+        (reflexion interaction are mirrored)
 
         Parameters
         ----------
@@ -2508,7 +2482,6 @@ class Signatures(PyLayers,dict):
     def show(self,L,**kwargs):
         """  plot signatures within the simulated environment
 
-
         Parameters
         ----------
 
@@ -2520,6 +2493,14 @@ class Signatures(PyLayers,dict):
         ctx : cycle of tx (optional)
         crx : cycle of rx (optional)
         graph : type of graph to be displayed
+        color : string
+        alphasig : float
+        widthsig : float
+        colsig : string
+        ms : int
+        ctx  : int
+        crx :int
+
 
 
         """
@@ -2672,10 +2653,10 @@ class Signatures(PyLayers,dict):
         Parameters
         ----------
 
-        tx : numpy.array or int
+        ptx : numpy.array or int
             Tx coordinates is the center of gravity of the cycle number if
             type(tx)=int
-        rx :  numpy.array or int
+        prx :  numpy.array or int
             Rx coordinates is the center of gravity of the cycle number if
             type(rx)=int
 
@@ -2807,7 +2788,7 @@ class Signature(object):
 
     """
     def __init__(self, sig):
-        """
+        """ object constructor
 
         Parameters
         ----------
@@ -2842,24 +2823,14 @@ class Signature(object):
             self.typ = map(typinter,sig)
 
     def __repr__(self):
-        #s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
         s = ''
         s = s + str(self.seq) + '\n' 
         s = s + str(self.typ) + '\n'
         return s
 
     def info(self):
-        """
-        """
         for k in self.__dict__.keys():
             print k, ':', self.__dict__[k]
-
-    def split(self):
-        """
-        split signature
-        """
-        pass
-
 
     def ev2(self, L):
         """  evaluation of Signature
@@ -2876,8 +2847,8 @@ class Signature(object):
         which contains coordinates of segments extremities involved in the 
         signature. At that level the coordinates of extremities (tx and rx) is 
         not known yet.
-        
-        members data 
+
+        members data
 
         pa  tail of segment  (2xN) 
         pb  head of segment  (2xN)  
@@ -2885,7 +2856,7 @@ class Signature(object):
 
         norm normal to the segment if segment 
         in case the interaction is a point the normal is undefined and then
-        set to 0. 
+        set to 0
 
         """
         def seqpointa(k,L=L):
@@ -2896,7 +2867,7 @@ class Signature(object):
                 pc = np.array(L.Gs.pos[k]).reshape(2,1)
                 nor1 = L.Gs.node[k]['norm']
                 norm = np.array([nor1[0], nor1[1]]).reshape(2,1)
-            else:    
+            else:
                 pa = np.array(L.Gs.pos[k]).reshape(2,1)
                 pb = pa
                 pc = pc
@@ -2908,7 +2879,7 @@ class Signature(object):
         self.pa = v[:,0:2,:]
         self.pb = v[:,2:4,:]
         self.pc = v[:,4:6,:]
-        self.norm = v[:,6:,:] 
+        self.norm = v[:,6:,:]
 
 
     def evf(self, L):
@@ -2925,7 +2896,7 @@ class Signature(object):
         This function converts the sequence of interactions into numpy arrays
         which contains coordinates of segments extremities involved in the 
         signature. 
-        
+
         members data 
 
         pa  tail of segment  (2xN) 
@@ -3114,7 +3085,7 @@ class Signature(object):
 
 
     def image(self, tx):
-        """ Compute the tx's images with respect to the signature segments
+        """ compute the tx's images with respect to the signature segments
 
         Parameters
         ----------
@@ -3229,8 +3200,7 @@ class Signature(object):
             >>> from pylayers.gis.layout import *
             >>> from pylayers.antprop.signature import *
             >>> L = Layout()
-            >>> L.buildGt()
-            >>> L.buildGr()
+            >>> L.dumpr()
             >>> seq = np.array([[1,5,1],[1,1,1]])
             >>> s = Signature(seq)
             >>> tx = np.array([4,-1])
@@ -3246,7 +3216,7 @@ class Signature(object):
             >>> l4 = ax.plot(Y[0,:],Y[1,:],'xk')
             >>> ray = np.hstack((np.hstack((tx.reshape(2,1),Y)),rx.reshape(2,1)))
             >>> l5 = ax.plot(ray[0,:],ray[1,:],color='#999999',alpha=0.6,linewidth=0.6)
-            >>> fig,ax = L.showGs(fig,ax)
+            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
             >>> plt.show()
 
         Notes
@@ -3319,7 +3289,15 @@ class Signature(object):
 
 
     def sig2beam(self, L, p, mode='incremental'):
-        """
+        """ signature to beam
+
+        Parameters
+        ----------
+
+        L : Layout
+        p : point
+        mode : string
+
         """
         try:
             L.Gr
@@ -3330,7 +3308,7 @@ class Signature(object):
         # necessary for image calculation
         self.ev(L)
         # calculates images from pTx
-        M = self.image(pTx)
+        M = self.image(p)
 
 
     def sig2ray(self, L, pTx, pRx, mode='incremental'):
