@@ -3606,7 +3606,8 @@
         <span class="k">return</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FUsignal.dftresamp"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.dftresamp.html#pylayers.signal.bsignal.FUsignal.dftresamp">[docs]</a>    <span class="k">def</span> <span class="nf">dftresamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_new</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; unfinished </span>
+        <span class="sd">&quot;&quot;&quot; non finished </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -3615,6 +3616,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">FH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">symH</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">fh</span> <span class="o">=</span> <span class="n">FH</span><span class="o">.</span><span class="n">ifft</span><span class="p">()</span>
+
 </div>
 <div class="viewcode-block" id="FUsignal.resample"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.resample.html#pylayers.signal.bsignal.FUsignal.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_new</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; resample</span>
@@ -3860,7 +3862,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="FUsignal.ifft"><a class="viewcode-back" href="../../../modules/generated/pylayers.signal.bsignal.FUsignal.ifft.html#pylayers.signal.bsignal.FUsignal.ifft">[docs]</a>    <span class="k">def</span> <span class="nf">ifft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Npt</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Inverse Fourier transform</span>
+        <span class="sd">r&quot;&quot;&quot; Inverse Fourier transform</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
