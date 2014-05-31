@@ -140,7 +140,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.__init__.html#pylayers.gis.layout.Layout.__init__" title="pylayers.gis.layout.Layout.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.__init__</span></tt></a>([_filename,&nbsp;_filematini,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pylayers.gis.layout.Layout.html#pylayers.gis.layout.Layout.__init__" title="pylayers.gis.layout.Layout.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.__init__</span></tt></a>([_filename,&nbsp;_filematini,&nbsp;...])</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -164,7 +164,7 @@
 <td>delete Layout graphs</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.check.html#pylayers.gis.layout.Layout.check" title="pylayers.gis.layout.Layout.check"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.check</span></tt></a>([level])</td>
-<td>Check Layout consistency   :Returns:      <strong>consistent</strong> : Boolean          True if consistent  ..</td>
+<td>Check Layout consistency</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.clip.html#pylayers.gis.layout.Layout.clip" title="pylayers.gis.layout.Layout.clip"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.clip</span></tt></a>(xmin,&nbsp;xmax,&nbsp;ymin,&nbsp;ymax)</td>
 <td>return the list of edges which cross or belong to the clipping zone</td>
@@ -300,7 +300,7 @@
 <td>delete segment e</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.thwall.html#pylayers.gis.layout.Layout.thwall" title="pylayers.gis.layout.Layout.thwall"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.thwall</span></tt></a>(offx,&nbsp;offy)</td>
-<td>Create a list of wall tuples (Transit.world format )   :Parameters:      <strong>offx</strong> :                 <strong>offy</strong> :             :Returns:      <strong>walls</strong> : list of wall tuples  (Transit format)            ..</td>
+<td>Create a list of wall tuples (Transit.world format )</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.edit_point.html#pylayers.gis.layout.Layout.edit_point" title="pylayers.gis.layout.Layout.edit_point"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.edit_point</span></tt></a>(np)</td>
 <td>edit point</td>
@@ -387,25 +387,22 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">Layout.checkvis</span></tt></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.visilist.html#pylayers.gis.layout.Layout.visilist" title="pylayers.gis.layout.Layout.visilist"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.visilist</span></tt></a>(p)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.visilist.html#pylayers.gis.layout.Layout.visilist" title="pylayers.gis.layout.Layout.visilist"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.visilist</span></tt></a>(p)</td>
 <td>returns the list of nodes from Gc which are visible from point p</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.closest_edge.html#pylayers.gis.layout.Layout.closest_edge" title="pylayers.gis.layout.Layout.closest_edge"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.closest_edge</span></tt></a>(p,&nbsp;AAS)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.closest_edge.html#pylayers.gis.layout.Layout.closest_edge" title="pylayers.gis.layout.Layout.closest_edge"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.closest_edge</span></tt></a>(p,&nbsp;AAS)</td>
 <td>not implemented</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.visi_papb.html#pylayers.gis.layout.Layout.visi_papb" title="pylayers.gis.layout.Layout.visi_papb"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.visi_papb</span></tt></a>(pa,&nbsp;pb[,&nbsp;edgelist,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.visi_papb.html#pylayers.gis.layout.Layout.visi_papb" title="pylayers.gis.layout.Layout.visi_papb"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.visi_papb</span></tt></a>(pa,&nbsp;pb[,&nbsp;edgelist,&nbsp;dtype])</td>
 <td>visi_papb : determine if pa and pb are in visibility for the structure graph</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.angleonlink.html#pylayers.gis.layout.Layout.angleonlink" title="pylayers.gis.layout.Layout.angleonlink"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.angleonlink</span></tt></a>([p1,&nbsp;p2])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.angleonlink.html#pylayers.gis.layout.Layout.angleonlink" title="pylayers.gis.layout.Layout.angleonlink"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.angleonlink</span></tt></a>([p1,&nbsp;p2])</td>
 <td>angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.angleonlinkold.html#pylayers.gis.layout.Layout.angleonlinkold" title="pylayers.gis.layout.Layout.angleonlinkold"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.angleonlinkold</span></tt></a>([p1,&nbsp;p2])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.angleonlinkold.html#pylayers.gis.layout.Layout.angleonlinkold" title="pylayers.gis.layout.Layout.angleonlinkold"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.angleonlinkold</span></tt></a>([p1,&nbsp;p2])</td>
 <td>angleonlink(self,p1,p2) returns seglist between p1 and p2</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.layeronlink.html#pylayers.gis.layout.Layout.layeronlink" title="pylayers.gis.layout.Layout.layeronlink"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.layeronlink</span></tt></a>(p1,&nbsp;p2)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.layeronlink.html#pylayers.gis.layout.Layout.layeronlink" title="pylayers.gis.layout.Layout.layeronlink"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.layeronlink</span></tt></a>(p1,&nbsp;p2)</td>
 <td>layeronlink(self,p1,p2) return seglist between p1 and p2</td>
 </tr>
 </tbody>
@@ -532,7 +529,7 @@
 <td>build graphs</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGt.html#pylayers.gis.layout.Layout.buildGt" title="pylayers.gis.layout.Layout.buildGt"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.buildGt</span></tt></a>()</td>
-<td>Built topological graph Gt   ..</td>
+<td>Built topological graph Gt</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGw.html#pylayers.gis.layout.Layout.buildGw" title="pylayers.gis.layout.Layout.buildGw"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.buildGw</span></tt></a>()</td>
 <td>build Graph of waypaths</td>
@@ -639,7 +636,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.signature.html#pylayers.gis.layout.Layout.signature" title="pylayers.gis.layout.Layout.signature"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.signature</span></tt></a>(iTx,&nbsp;iRx)</td>
-<td>Determine signature between node iTx and node iRx   :Parameters:      <strong>cy1</strong> : int          source cycle      <strong>cy2</strong> : int          target cycle  :Returns:      <strong>sigarr    :</strong> :                 <strong>signature :</strong> :             ..</td>
+<td>Determine signature between node iTx and node iRx</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.showSig.html#pylayers.gis.layout.Layout.showSig" title="pylayers.gis.layout.Layout.showSig"><tt class="xref py py-obj docutils literal"><span class="pre">Layout.showSig</span></tt></a>(sigarr[,&nbsp;Tx,&nbsp;Rx,&nbsp;fig,&nbsp;ax])</td>
 <td>Show signature</td>
@@ -685,8 +682,8 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 30, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on mai 31, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

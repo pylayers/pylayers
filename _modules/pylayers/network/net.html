@@ -77,22 +77,42 @@
           <div class="body">
             
   <h1>Source code for pylayers.network.net</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: pylayers.network.net</span>
+
+<span class="sd">This class handle the description of an Indoor layout</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated</span>
+
+<span class="sd">Class Network</span>
+<span class="sd">=============</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Network.__init__</span>
+<span class="sd">    Network.connect</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">from</span> <span class="nn">prioritydict</span> <span class="kn">import</span> <span class="n">priorityDictionary</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+
 <span class="c">#</span>
 <span class="c"># This module is adapted from WSN-SIM from Berkeley</span>
 <span class="c">#</span>
 <span class="c">#   http://wsn.eecs.berkeley.edu/trac/simulation</span>
 <span class="c">#</span>
 <span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="s">&#39;m&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="s">&#39;m&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">]</span>
-<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numMotes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">numGateways</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loadBalance</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">dx</span><span class="o">=</span><span class="mi">316</span><span class="p">,</span><span class="n">dy</span><span class="o">=</span><span class="mi">316</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">PyLayers</span><span class="p">,</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.net.Network.__init__.html#pylayers.network.net.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numMotes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">numGateways</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loadBalance</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">dx</span><span class="o">=</span><span class="mi">316</span><span class="p">,</span><span class="n">dy</span><span class="o">=</span><span class="mi">316</span><span class="p">):</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">numMotes</span> <span class="o">=</span> <span class="n">numMotes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">numGateways</span> <span class="o">=</span> <span class="n">numGateways</span>
@@ -122,9 +142,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">gateway</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">gateway</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Network.connect"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dmax</span><span class="o">=</span><span class="mi">175</span><span class="p">,</span><span class="n">pdrValue</span> <span class="o">=</span> <span class="mf">0.80</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sensitivitydBm</span><span class="o">=-</span><span class="mi">85</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">PtdBm</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="Network.connect"><a class="viewcode-back" href="../../../modules/generated/pylayers.network.net.Network.connect.html#pylayers.network.net.Network.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dmax</span><span class="o">=</span><span class="mi">175</span><span class="p">,</span><span class="n">pdrValue</span> <span class="o">=</span> <span class="mf">0.80</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sensitivitydBm</span><span class="o">=-</span><span class="mi">85</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">PtdBm</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  connect nodes based on a connectivity model</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -162,11 +183,11 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">pdrValue</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">cxns</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">pdrValue</span>
 </div>
-<div class="viewcode-block" id="Network.disconnect"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
 
-</div>
-<div class="viewcode-block" id="Network.routing"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.routing">[docs]</a>    <span class="k">def</span> <span class="nf">routing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">routing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of node -&gt; final Costs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># dictionary of node -&gt; Gateway</span>
@@ -225,13 +246,16 @@
 <span class="c">#    #       print &quot;Added, new total = &quot;, HopsCounter[H[n]]</span>
 <span class="c">#</span>
 <span class="c">#        return (P, G)</span>
-</div>
-<div class="viewcode-block" id="Network.scheduling"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.scheduling">[docs]</a>    <span class="k">def</span> <span class="nf">scheduling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numTimeSlots</span><span class="p">,</span> <span class="n">numOffsets</span><span class="p">,</span><span class="n">export</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">scheduling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numTimeSlots</span><span class="p">,</span> <span class="n">numOffsets</span><span class="p">,</span><span class="n">export</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; scheduling</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        numTimeSlots</span>
 <span class="sd">        numOffsets</span>
+<span class="sd">        export : boolean</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
@@ -419,8 +443,8 @@
 
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-</div>
-<div class="viewcode-block" id="Network.show"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.Network.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">connectivity</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">routes</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">connectivity</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">routes</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -455,8 +479,8 @@
 
 <span class="c">#For all potentially interfering nodes (under 175 m) cxns of link = 2. For all connected, this value is 1.</span>
 
-</div></div>
-<div class="viewcode-block" id="connectModel"><a class="viewcode-back" href="../../../modules/pylayers.network.net.html#pylayers.network.net.connectModel">[docs]</a><span class="k">def</span> <span class="nf">connectModel</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">sensitivitydBm</span><span class="o">=-</span><span class="mi">85</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">PtdBm</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">connectModel</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">sensitivitydBm</span><span class="o">=-</span><span class="mi">85</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">PtdBm</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; connectivity model</span>
 
 <span class="sd">    Parameters</span>
@@ -484,7 +508,7 @@
 
     <span class="k">return</span> <span class="n">cdf</span><span class="p">,</span><span class="n">rssi</span>
 
-</div>
+
 <span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="k">print</span> <span class="s">&quot;testing net.py&quot;</span>
@@ -517,8 +541,8 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mars 12, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on mai 31, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
