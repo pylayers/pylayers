@@ -303,20 +303,38 @@ class Containment:
         # sf = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*df)))
         # sl = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dl)))
         # sr = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dr)))
+        sf = 1 / max(df**2,1e-9)
+        sl = 1 / max(dl**2,1e-9)
+        sr = 1 / max(dr**2,1e-9)
         acceleration = vec3()
         if front_intersect:
             if front_direction == 'left':
-                acceleration = boid.localx.scale(speed) 
+                acceleration = boid.localx.scale(sl) 
+                acceleration = -boid.localy.scale(sf) 
             else:
-                acceleration = -boid.localx.scale(speed) 
-        elif left_intersect:
-            acceleration = boid.localx.scale(speed)
-        elif right_intersect:
-            acceleration = -boid.localx.scale(speed)
-        else:
-            acceleration = vec3()
+                acceleration = boid.localx.scale(sr) 
+                acceleration = -boid.localy.scale(sf) 
+        # if left_intersect:
+        #     acceleration = boid.localx.scale(sl)
+        # if right_intersect:
+        #     acceleration = boid.localx.scale(sr)
+        
 
         return acceleration
+
+        # if front_intersect:
+        #     if front_direction == 'left':
+        #         acceleration = boid.localx.scale(speed) 
+        #     else:
+        #         acceleration = -boid.localx.scale(speed) 
+        # elif left_intersect:
+        #     acceleration = boid.localx.scale(speed)
+        # elif right_intersect:
+        #     acceleration = -boid.localx.scale(speed)
+        # else:
+        #     acceleration = vec3()
+
+        # return acceleration
 
 
 #    def test_intersection(self, boid, wall, position, vector):
