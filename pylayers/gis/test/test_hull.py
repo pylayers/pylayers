@@ -21,16 +21,15 @@ P = ch.difference(L.ma)
 polys = []
 if isinstance(P,sh.MultiPolygon):
     for p in P:
-        import ipdb
-        ipdb.set_trace()
-        print p.area
-        if p.area > 1e-3:
+        if p.area > 1e-4:
             polys.append(geu.Polygon(p))
             polys[-1].setvnodes(L)
 
 
 ncy = max(L.Gt.nodes())+1
 for p in polys:
+    # import ipdb
+    # ipdb.set_trace()
     uaw = np.where(p.vnodes == 0)
     for aw in uaw :
         print p.vnodes[aw-1][0], p.vnodes[aw+1][0]
@@ -45,6 +44,10 @@ for p in polys:
         L.Gt.node[ncy]['polyg'] = p
         L.Gt.node[ncy]['isopen'] = True
         L.Gt.node[ncy]['indoor'] = False
+
+        # 1 - add link between created cycle and outdoor
+        L.Gt.add_edge(ncy, 0)
+        # 2 - search and add link between the created cycle and indoor cycles
         for k in L.Gt.nodes():
             if (k != ncy) and (k != 0):
                 vnodes0 = np.array(L.Gt.node[ncy]['cycle'].cycle)
@@ -58,6 +61,7 @@ for p in polys:
                     segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                     L.Gt.add_edge(ncy, k,segment= segment)
 
+        # 3 - Update Gs
         for v in filter(lambda x: x>0,p.vnodes):
             # add new ncycle to Gs for the new airwall
             # that new airwall always separate the new created cycle
