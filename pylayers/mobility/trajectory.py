@@ -687,8 +687,9 @@ class Trajectory(pd.DataFrame):
 
         """
         t = self.time()
-       
+        #pdb.set_trace()
         u = np.where((t >= tk-self.ts/2.) & (t <= tk+self.ts/2.))[0][0]
+        
 
         return(self['s'][u])
 

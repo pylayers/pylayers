@@ -1315,7 +1315,7 @@ class Body(object):
 
         intersect = 0
 
-        for k in [10]:        
+        for k in [0]:        
 
             if topos  == True:
                 kta  = int(self.sl[k,0])
@@ -1370,7 +1370,7 @@ class Body(object):
         loss_dB = 0 # in dB
         loss_lin  =1/10**(loss_dB/10.0)
 
-        for k in [10]:        
+        for k in [0]:        
 
             if topos  == True:
                 kta  = int(self.sl[k,0])
@@ -1403,7 +1403,7 @@ class Body(object):
             loss2_dB = 0 
 
 
-
+            
 
             if dmin < self.sl[k,2]:
                 
@@ -1434,7 +1434,80 @@ class Body(object):
                 
                 loss_lin  =1.0/10**(loss_dB/10.0)
               
-        return loss_lin#, loss_dB, loss1_dB, loss2_dB 
+        return loss_lin
+        
+        
+    def intersectBody4(self,A,B, topos = True, frameId = 0):
+        """
+
+        Parameters
+        ----------
+
+        A
+        B
+        topos
+        frameId
+        cyl
+
+
+        Returns
+        -------
+
+        intersect : np.array (,ncyl)
+            O : AB not intersected by cylinder
+            1 : AB intersected by cylinder
+
+        """
+
+        loss_dB = 0 # in dB
+        
+
+        for k in [0]:        
+
+            if topos  == True:
+                kta  = int(self.sl[k,0])
+                khe  = int(self.sl[k,1])
+                C = self.topos[:,kta]
+                D = self.topos[:,khe]
+            else:
+                kta  = self.sl[k,0]
+                khe  = self.sl[k,1]
+                C = self.d[:,kta,frameId]
+                D = self.d[:,khe,frameId]
+
+            alpha, beta,dmin = seg.dmin3d(A,B,C,D)
+            if alpha < 0:
+                alpha = 0
+            if alpha > 1 :
+                alpha  = 1
+            if beta < 0:
+                beta = 0
+            if beta > 1:
+                beta = 1
+            dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
+            
+            diff = 0.85*self.sl[k,2] - dmin
+            
+            if dmin < self.sl[k,2] and diff > 0:
+                
+
+                """
+                in this case intersection is True
+                                
+                """
+                
+                
+                a = (-6+10)/(0-self.sl[k,2])
+                b = -3
+                
+                loss_dB = a*diff + b               
+                
+        
+        #print 'diff = ', diff , 'loss_sB = ', loss_dB
+        
+        loss_lin  =10**(loss_dB/10.0)
+          
+        return loss_lin
 
 
     def body_link(self, topos = True,frameId = 0):

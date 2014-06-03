@@ -1178,6 +1178,12 @@ class DLink(Link):
         self.H = H
 
         return self.H.ak, self.H.tk
+        
+    def update (self,a, t):
+        self.H.ak = a
+        self.H.tk = t
+
+        return a, t
 
     def show(self,**kwargs):
         """ show the link

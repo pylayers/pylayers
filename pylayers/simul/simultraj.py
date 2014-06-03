@@ -256,6 +256,7 @@ class Simul(object):
         self.DL.Ta = self.N.node[na]['T']
         self.DL.b = self.N.node[nb]['p']
         self.DL.Tb = self.N.node[nb]['T']
+        print 'na = ', na,' nb = ', nb
         if fmode == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
         else:
@@ -263,7 +264,20 @@ class Simul(object):
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
         a, t = self.DL.eval()
-
+        
+        intersecta =1
+        if self.N.node[na]['typ'] == 'ag':
+            person_name = na.split('_')[1]
+            intersecta = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
+        intersectb =1
+        if self.N.node[nb]['typ'] == 'ag':
+            person_name = na.split('_')[1]
+            intersectb = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
+        intersect = np.min(np.array([intersecta,intersectb])) 
+        
+        
+        a = intersect*a  
+        self.DL.update(a,t)
         return a, t
 
     def evalstat(self, na, nb):
@@ -543,7 +557,7 @@ class Simul(object):
             orient = []
             for up, person in enumerate(self.dpersons.values()):   
                 #person.settopos(self._traj[up], t=t, cs=True)
-                person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,2.5]))
+                person.settopos(self._traj[up], t=t, cs=True,treadmill = True, p0 = np.array([1.5,2.0]))
                 name = person.name
                 dev = person.dev.keys()
                 nodeid.extend([n + '_' + name for n in dev])
