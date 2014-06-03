@@ -53,6 +53,7 @@ import pylayers.antprop.antenna as ant
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
 import pdb as pdb
+from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 import pylayers.util.geomutil as geu
@@ -69,7 +70,7 @@ except:
 
 
 class Body(PyLayers):
-    """ Class to manage a Body model
+    """ Class  to manage a Body model
 
     Members
     -------
