@@ -86,20 +86,25 @@ L = Layout('TA-Office.ini',force=True)
 L.build('t')
 fig,ax=L.showG('s',labels=True)
         
-def polyplot(poly):
-    fig,ax=L.showG('s')
+def polyplot(poly,fig=[]):
+    if fig == []:
+        fig=plt.figure()
+    fig,ax=L.showG('s',fig=fig)
     color=['r','b','g']*10
     for ip, p in enumerate(poly):
         fig,ax = p.plot(fig=fig,ax=ax,color=color[ip],alpha =0.5)
 
-
+# lacy : list of added cycles
+lacy =[]
 for n in L.Gt.nodes():
     # if indoor cycles
     if n > 0:
+        ncy=max(L.Gt.nodes())
 
         ####
         #### 1 Determine if pt convex in cycle
         ####
+
         if L.Gt.node[n]['indoor']:
             no = L.Gt.node[n]['cycle'].cycle
             tcc, nn = L.Gt.node[n]['polyg'].ptconvex()
@@ -131,43 +136,34 @@ for n in L.Gt.nodes():
                     naw = []
                     for t in tri:
                         ts = geu.Polygon(pucs[t])
-                        #check if inside the original polygon
-                        # U = L.Gt.node[n]['polyg'].contains(ts)
+                        # check if the new polygon is contained into 
+                        # the original polygon (non guaratee by Delaunay)
+                        #U = L.Gt.node[n]['polyg'].contains(ts)
                         U = L.Gt.node[n]['polyg'].intersection(ts)
-                        ats = ts.area
-                        if U.area > (1*ats/100):
-                            #pkt.append(pucs[t])
-                            #if 2 convex nodes are directly following in the list 
-                            # of all convex nodes (ucs) they are already connected
-                            # otherwise, an airwall has to be create.
-                            # 
-                            # ucs[t]
-                            daucs = np.diff(aucs[t])
-                            # search where an airwall is required
-                            # ncp : not connected points
-                            ncp = np.where(daucs != 1)[0]
-                            for i in ncp:
-                                # keep trace of created airwalls, because some 
-                                # of them will be destroyed in step 3
-                                naw.append(L.add_segment(ucs[t][i],ucs[t][i+1],name='AIR'))
-                            kt.append(t) 
-                            polys.append(ts)
-                # polyplot(polys)
+                        if not isinstance(U,sh.MultiPolygon):
+                            U=[U]
+                        for p in U:
+                            if L.Gt.node[n]['polyg'].contains(p):
+                                cp = geu.Polygon(p)
+                                cp.setvnodes(L)
+                                uaw = np.where(cp.vnodes == 0)[0]
+                                lvn = len(cp.vnodes)
+                                for i in uaw:
+                                    # keep trace of created airwalls, because some 
+                                    # of them will be destroyed in step 3.
+                                    naw.append(L.add_segment(
+                                               cp.vnodes[np.mod(i-1,lvn)],
+                                               cp.vnodes[np.mod(i+1,lvn)]
+                                               ,name='AIR'))
+                                polys.append(cp)
 
-                # kt = array(kt)
-                # npttri = np.arange(0,np.max(kt))
-                # # search for each triangle, which is connected
-                # conecttri = [np.where(kt == i) for i in npttri]
-
-                ####
-                #### 3. merge delaunay triangulation in order to obtain
-                ###    the larger convex polygons partioning 
-                ####
+                #
+                # 3. merge delaunay triangulation in order to obtain
+                #   the larger convex polygons partioning 
+                #
                 cpolys = []
                 nbpolys = len(polys)
                 while polys !=[]:
-                    # import ipdb
-                    # ipdb.set_trace()
                     p = polys.pop(0)
                     for ip2,p2 in enumerate(polys):
                         conv=False
@@ -177,6 +173,9 @@ for n in L.Gt.nodes():
                         if isinstance(inter,sh.LineString):
                             p = p + p2
                             if p.isconvex():
+                                if p.area < 1e-1:
+                                    import ipdb
+                                    ipdb.set_trace()
                                 polys.pop(ip2)
                                 polys.insert(0,p)
                                 conv=True
@@ -194,25 +193,68 @@ for n in L.Gt.nodes():
                             cpolys.append(pold)
                     if len(polys) == 0:
                         cpolys.append(p)
+                    # polyplot(cpolys,fig=plt.gcf())
+                    # plt.draw()
+                    # import ipdb
+                    # ipdb.set_trace()
                 ####
                 #### 4. ensure the correct vnode numerotaion of the polygons
                 #### and remove unecessary airwalls
+
+                # ncpol : new created polygons
                 ncpol = []
                 vnodes=[]
                 for p in cpolys:
-                    ptmp = geu.Polygon(L.Gt.node[n]['polyg'].intersection(p))
+                    interpoly = L.Gt.node[n]['polyg'].intersection(p)
+                    if isinstance(interpoly,sh.MultiPolygon):
+                        raise AttributeError('multi polygon encountered')
+                    else :
+                        ptmp = geu.Polygon(interpoly)
                     ptmp.setvnodes(L)
                     ncpol.append(ptmp)
                     vnodes.extend(ptmp.vnodes)
                 # air walls to be deleted (because origin Delaunay triangle
                 # has been merged )
                 daw = filter(lambda x: x not in vnodes,naw)
-                [L.del_segment(d) for d in daw]
-        # manage outdoor cycle
+                [L.del_segment(d,verbose=False) for d in daw]
+                nbpolys=len(ncpol)
+
+                # remove old cycle
+                L.Gt.remove_node(n)
+                # lcyid: (new) list of cycle id 
+                lcyid = [n] + range(ncy+1,ncy+(nbpolys))
+                lacy.extend(lcyid)
+                for ip,p in enumerate(ncpol):
+                    cyid = lcyid[ip]
+                    # replace by new ones
+                    lnode = p.vnodes
+                    G = nx.subgraph(L.Gs,lnode)
+                    G.pos = {}
+                    G.pos.update({l: L.Gs.pos[l] for l in lnode})
+                    cy  = cycl.Cycle(G)
+                    L.Gt.add_node(cyid,cycle=cy)
+                    L.Gt.node[cyid]['polyg']=p
+                    L.Gt.node[cyid]['indoor']=True
+                    L.Gt.node[cyid]['isopen']=True
+                    L.Gt.pos[cyid] = tuple(cy.g)
+
+                Gtnodes= filter(lambda x: x>0,L.Gt.nodes())
+                for k in combinations(Gtnodes, 2):
+                    vnodes0 = np.array(L.Gt.node[k[0]]['cycle'].cycle)
+                    vnodes1 = np.array(L.Gt.node[k[1]]['cycle'].cycle)
+                    #
+                    # Connect Cycles if they share at least one segments
+                    #
+                    intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+
+                    if len(intersection_vnodes) > 1:
+                        segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                        L.Gt.add_edge(k[0], k[1],segment= segment)
+L._updGsncy()
+L._interlist(nodelist=lacy)
 
 
-
-polyplot(ncpol)
+# polyplot(ncpol)
 
 
 
