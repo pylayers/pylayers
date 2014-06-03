@@ -268,7 +268,7 @@ class Body(PyLayers):
             self.centered = True
 
     def posvel(self,traj,t):
-        r""" calculate position and velocity
+        """ calculate position and velocity
 
         traj : Tajectory DataFrame
             nx3

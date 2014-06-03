@@ -1,14 +1,13 @@
 from pylayers.gis.layout import *
 import pylayers.util.geomutil as geu
-L=Layout('WHERE1.ini')
-L.build()
+Lfile = 'scattering_nonconvex.ini'
+data = '/home/niamiot/Documents/code/pylayers/data/struc/ini/'+Lfile
+proj = '/home/niamiot/Documents/Pylayers_project/P1/struc/ini/'+Lfile
 
-lc = [(n,L.Gt.node[n]['polyg'].isconvex()) for n in L.Gt.nodes()]
-cnc = [n for n in L.Gt.nodes() if not L.Gt.node[n]['polyg'].isconvex()]
-fig,ax=L.showG('st',labels=True)
-for cy,c in lc:
-    if c:
-        print cy,  
-        fig,ax= L.Gt.node[cy]['polyg'].plot(color='blue',alpha=0.5,fig=fig,ax=ax)
-    else:
-        fig, ax = L.Gt.node[cy]['polyg'].plot(color='red', alpha=0.5,fig=fig,ax=ax)
+shutil.copyfile(data,proj)
+
+L = Layout(Lfile,force=True)
+L.build('t')
+L._convex_hull()
+# L.showG('st',airwalls=True)
+# L._convexify()

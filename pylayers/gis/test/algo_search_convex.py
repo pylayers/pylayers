@@ -81,7 +81,14 @@ from pylayers.gis.layout import *
 from itertools import combinations
 from scipy.spatial import Delaunay
 import shapely.geometry as sh
-L = Layout('TA-Office.ini',force=True)
+
+Lfile = 'scattering_nonconvex.ini'
+data = '/home/niamiot/Documents/code/pylayers/data/struc/ini/'+Lfile
+proj = '/home/niamiot/Documents/Pylayers_project/P1/struc/ini/'+Lfile
+
+shutil.copyfile(data,proj)
+
+L = Layout(Lfile,force=True)
 #L.dumpr()
 L.build('t')
 fig,ax=L.showG('s',labels=True)
@@ -225,15 +232,19 @@ for n in L.Gt.nodes():
                 lcyid = [n] + range(ncy+1,ncy+(nbpolys))
                 lacy.extend(lcyid)
                 for ip,p in enumerate(ncpol):
+                    #p.coorddeter()
                     cyid = lcyid[ip]
                     # replace by new ones
                     lnode = p.vnodes
                     G = nx.subgraph(L.Gs,lnode)
                     G.pos = {}
                     G.pos.update({l: L.Gs.pos[l] for l in lnode})
-                    cy  = cycl.Cycle(G)
+                    cy  = cycl.Cycle(G,lnode=p.vnodes)
                     L.Gt.add_node(cyid,cycle=cy)
-                    L.Gt.node[cyid]['polyg']=p
+                    # WARNING
+                    # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
+                    # are shifted.
+                    L.Gt.node[cyid]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                     L.Gt.node[cyid]['indoor']=True
                     L.Gt.node[cyid]['isopen']=True
                     L.Gt.pos[cyid] = tuple(cy.g)
@@ -251,11 +262,11 @@ for n in L.Gt.nodes():
                         segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                         L.Gt.add_edge(k[0], k[1],segment= segment)
 
+# update self.Gs.node[x]['ncycles']
 L._updGsncy()
-for ns in L.Gs.node:
-    if ns>0: #segment number
-        if len(L.Gs.node[ns]['ncycles'])==1:
-            L.Gs.node[ns]['ncycles'].append(0)
+# add outside cycle to Gs.node[x]['ncycles']
+L._addoutcy()
+# update interaction list into Gt.nodes (cycles)
 L._interlist(nodelist=lacy)
 
 

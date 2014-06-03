@@ -5188,6 +5188,7 @@ class Layout(PyLayers):
         ncy = max(self.Gt.nodes())+1
         lncy=[]
         for p in polys:
+            # p.coorddeter()
             uaw = np.where(p.vnodes == 0)
             for aw in uaw :
                 # 2 - non existing segments are created as airwalls
@@ -5196,10 +5197,13 @@ class Layout(PyLayers):
                 G = nx.subgraph(self.Gs,p.vnodes)
                 G.pos = {}
                 G.pos.update({l: self.Gs.pos[l] for l in p.vnodes})
-                cy  = cycl.Cycle(G)
+                cy  = cycl.Cycle(G,lnode=p.vnodes)
                 self.Gt.add_node(ncy,cycle=cy)
                 self.Gt.pos[ncy] = tuple(cy.g)
-                self.Gt.node[ncy]['polyg'] = p
+                # WARNING
+                # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
+                # are shifted.
+                self.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                 self.Gt.node[ncy]['isopen'] = True
                 self.Gt.node[ncy]['indoor'] = False
                 # 3 - add link between created cycle and outdoor
@@ -5270,19 +5274,25 @@ class Layout(PyLayers):
         pylayers.gis.layout._interlist
 
         """
-
+        # function for debug purpose
+        def polyplot(poly):
+            fig,ax=self.showG('s')
+            color=['r','b','g']*10
+            for ip, p in enumerate(poly):
+                fig,ax = p.plot(fig=fig,ax=ax,color=color[ip],alpha =0.5)
         # lacy : list of added cycles
         lacy =[]
         for n in self.Gt.nodes():
             # if indoor cycle
             if n > 0:
+                
                 ncy=max(self.Gt.nodes())
 
                 ####
                 #### 1 Determine if pt convex in cycle
                 ####
 
-                if self.Gt.node[n]['indoor']:
+                if not self.Gt.node[n]['polyg'].isconvex():#self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
                     tcc, nn = self.Gt.node[n]['polyg'].ptconvex()
                     # diffracting points 
@@ -5329,7 +5339,7 @@ class Layout(PyLayers):
                                                        cp.vnodes[np.mod(i+1,lvn)]
                                                        ,name='AIR'))
                                         polys.append(cp)
-
+                        
                         #
                         # 3. merge delaunay triangulation in order to obtain
                         #   the larger convex polygons partioning 
@@ -5395,15 +5405,16 @@ class Layout(PyLayers):
                         lcyid = [n] + range(ncy+1,ncy+(nbpolys))
                         lacy.extend(lcyid)
                         for ip,p in enumerate(ncpol):
+                            # in order to obtain p.xy
                             cyid = lcyid[ip]
                             # replace by new ones
                             lnode = p.vnodes
                             G = nx.subgraph(self.Gs,lnode)
                             G.pos = {}
                             G.pos.update({l: self.Gs.pos[l] for l in lnode})
-                            cy  = cycl.Cycle(G)
+                            cy  = cycl.Cycle(G,lnode=p.vnodes)
                             self.Gt.add_node(cyid,cycle=cy)
-                            self.Gt.node[cyid]['polyg']=p
+                            self.Gt.node[cyid]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
                             self.Gt.node[cyid]['indoor']=True
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
@@ -6510,8 +6521,7 @@ class Layout(PyLayers):
                         kwargs['edge_color']='k'
                         kwargs['width']=1
 
-                    kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
-
+                kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
 
             kwargs['nodelist'] = nodelistbkup
             kwargs['width'] = widthbkup
