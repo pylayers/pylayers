@@ -99,12 +99,12 @@ class Rays(PyLayers,dict):
     It is a container for a set of rays between a source
     and a target point defining a radio link.
 
-    Once a Rays object has been obtained in 2D, it is transform
+    Once a Rays object has been obtained in 2D, it is transformed
     in 3D via the **to3D** method. This method has two parameters :
     the height from floor to ceil, and the number N of
     multiple reflections to take into account.
 
-    Once the 3d rays have been calculated, the
+    Once the 3d rays have been calculated, 
     the local basis are evaluated along those rays. This is
     done through the **locbas** method
 
@@ -116,6 +116,16 @@ class Rays(PyLayers,dict):
     be evaluated via the **eval** method
     """
     def __init__(self, pTx, pRx):
+        """ object constructor
+
+        Parameters
+        ----------
+
+        pTx : np.array
+        pRx : np.array
+
+        """
+
         self.pTx = pTx
         self.pRx = pRx
         self.nray = 0
