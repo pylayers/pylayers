@@ -247,6 +247,7 @@ class Body(PyLayers):
         It also calculates :
         self.smocap : total distance along trajectory
         self.vmocap : averaged speed along trajectory
+
         Here only the projection of the body centroid in the plan 0xy is calculated
 
         """
@@ -262,6 +263,9 @@ class Body(PyLayers):
             self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
             # length of trajectory
             d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+            # creates a trajectory associated to mocap file
+            self.traj = tr.Trajectory()
+            self.traj.generate(t=self.time,pt=self.pg.T,name=self.filename)
             self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
             self.vmocap = self.smocap[-1]/self.Tmocap
             self.centered = True
@@ -620,6 +624,9 @@ class Body(PyLayers):
 
         self.Tmocap = self.nframes / info['VideoFrameRate']
 
+        # time base of the motion capture file (sec)
+        self.time = np.linspace(0,self.Tmocap,self.nframes)
+
         #
         # motion capture data
         #
@@ -661,6 +668,13 @@ class Body(PyLayers):
         if centered:
             self.centered = False
             self.center()
+
+
+    def c3d2traj(self):
+        """ convert c3d file to trajectory
+        """
+        traj = tr.trajectory()
+        return traj
 
 
 
