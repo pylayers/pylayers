@@ -4666,9 +4666,10 @@ class Layout(PyLayers):
             if verbose:
                 print "Gt"
             self.buildGt()
+            #Make the layout convex in regard of the outddor
+            # self._convex_hull()
+            # # Ensure convexity of all cycles
             # self._convexify()
-            #   12 - Make the layout convex in regard of the outddor
-            self._convex_hull()
             self.lbltg.extend('t')
 
         if 'c' in graph:
@@ -4867,6 +4868,9 @@ class Layout(PyLayers):
         --------
 
         nx.algorithms.cycles.cycle_basis
+        pylayers.gis.layout._updGsncy
+        pylayers.gis.layout._addoutcy
+        pylayers.gis.layout._interlist
 
         """
         #
@@ -4932,37 +4936,18 @@ class Layout(PyLayers):
                 segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                 self.Gt.add_edge(k[0], k[1],segment= segment)
 
-
         #
         #   6 - Update graph Gs segment with their 2 cycles  information
         #
         #   initialize a void list 'ncycles' for each segment of Gs
         #
         self._updGsncy()
-        # for k in self.Gs.node:
-        #     if k>0:
-        #         self.Gs.node[k]['ncycles']=[]
-
-        # for k in self.Gt.node.keys():
-        #     #vnodes = np.array(self.Gt.node[k]['vnodes'])
-        #     vnodes = np.array(self.Gt.node[k]['cycle'].cycle)
-        #     #vnodes = self.Gt.node[k]['polyg'].vnodes
-        #     for n in vnodes:
-        #         if n>0:
-        #             if k not in self.Gs.node[n]['ncycles']:
-        #                 self.Gs.node[n]['ncycles'].append(k)
-        #                 if len(self.Gs.node[n]['ncycles'])>2:
-        #                     print n,self.Gs.node[n]['ncycles']
-        #                     logging.warning('A segment cannot relate more than 2 cycles')
 
         #   7 -  add outside cycle (absorbant region index 0 )
         #   if ncycles is a list which has only one element then the adjascent cycle is the
         #   outside region (cycle 0)
+        self._addoutcy()
 
-        for ns in self.Gs.node:
-            if ns>0: #segment number
-                if len(self.Gs.node[ns]['ncycles'])==1:
-                    self.Gs.node[ns]['ncycles'].append(0)
         #
         #   9 - Construct the polygon associated to each cycle
         #
@@ -4982,13 +4967,12 @@ class Layout(PyLayers):
 
             self.Gt.add_node(k, polyg=polk)
             #
-            # By default a Layout cycle is defined has indoor
-            # unless it is separated from outside cycle by an airwall
+            # By default a Layout cycle is defined as indoor
+            # unless it is separated from the outside cycle by an airwall
             #
             # The user should be able to set this boolean to false for a patio
             #
             # An outdoor cycle has no ceil reflection
-
             self.Gt.add_node(k, indoor=True)
             lair = filter(lambda x: x in self.name['AIR'],nseg)
             if len(lair)>0:
@@ -5066,35 +5050,7 @@ class Layout(PyLayers):
         #   known yet
         #
         self._interlist()
-        # for k in self.Gt.nodes():
-        #     #vnodes = self.Gt.node[k]['vnodes']
-        #     vnodes = self.Gt.node[k]['polyg'].vnodes
-        #     ListInteractions = []
-        #     for inode in vnodes:
-        #         if inode > 0:   # segments
-        #             cy = set(self.Gs.node[inode]['ncycles'])
-        #             name = self.Gs.node[inode]['name']  # segment name
-        #             #
-        #             # Reflexion occurs on segment different
-        #             # from AIR and ABSORBENT  (segment number, cycle)
-        #             #
-        #             if (name<>'AIR') & (name<>'ABSORBENT'):
-        #                 ListInteractions.append((inode, k))
-        #             #
-        #             # Transmission requires 2 cycles separated by a
-        #             # segment which is different from METAL and ABSORBENT
-        #             #
-        #             # (segment number, cycle in , cycle out )
-        #             if len(cy) == 2:
-        #                 if (name<>'METAL') & (name<>'ABSORBENT'):
-        #                     ncy = list(cy.difference({k}))[0]
-        #                     ListInteractions.append((inode, k, ncy))
-        #                     ListInteractions.append((inode, ncy, k))
-        #         else:  # points
-        #             pass
-        #     # add list of interactions of a cycle
-        #     self.Gt.add_node(k, inter=ListInteractions)
-        #
+
 
     def _updGsncy(self):
         """ update Gs ncycles using Gt information
@@ -5127,6 +5083,16 @@ class Layout(PyLayers):
                             print n,self.Gs.node[n]['ncycles']
                             logging.warning('A segment cannot relate more than 2 cycles')
 
+
+    def _addoutcy(self):
+        """ add outside cycle (absorbant region index 0 )
+        #   if ncycles is a list which has only one element then the adjascent 
+        #   cycle is the  outside region (cycle 0)
+        """
+        for ns in self.Gs.node:
+            if ns>0: #segment number
+                if len(self.Gs.node[ns]['ncycles'])==1:
+                    self.Gs.node[ns]['ncycles'].append(0)
 
     def _interlist(self,nodelist=[]):
         """ Construct the list of interactions associated to each cycle
@@ -5276,13 +5242,20 @@ class Layout(PyLayers):
 
 
     def _convexify(self):
-        """ Determine which cycles are not convex and convexify it.
+        """ determine which cycles are not convex and convexify it.
+            if a cycle is tagged as non convex 
+            1- find its polygon
+            2- partion polygon into convex polygons (Delaunay)
+            3- try to merge partioned polygon in order to obtain
+               the minimal number of convex polygon
+            4- re-number/re-create Gt by creating  new 'convex' cycles
+               from those convex polygons
 
         Notes
         -----
             
-        Because new air walls are added into non convex cycles
-        A new self.buildGt processing is done at the end of convexify
+        The algorithm update the Gt nodes and edges created into self.buildGt
+        by adding new nodes and connnections
 
         See Also
         --------
@@ -5291,17 +5264,24 @@ class Layout(PyLayers):
         pylayers.gis.layout.add_segment
         pylayers.gis.layout.del_segment
         pylayers.util.geomutil.Polygon
-        spcipy.spatial.Delaunay
+        sp.spatial.Delaunay
+        pylayers.gis.layout._updGsncy
+        pylayers.gis.layout._addoutcy
+        pylayers.gis.layout._interlist
 
         """
-        print "convexify"
+
+        # lacy : list of added cycles
+        lacy =[]
         for n in self.Gt.nodes():
-            # if indoor cycles
+            # if indoor cycle
             if n > 0:
+                ncy=max(self.Gt.nodes())
 
                 ####
                 #### 1 Determine if pt convex in cycle
                 ####
+
                 if self.Gt.node[n]['indoor']:
                     no = self.Gt.node[n]['cycle'].cycle
                     tcc, nn = self.Gt.node[n]['polyg'].ptconvex()
@@ -5313,6 +5293,7 @@ class Layout(PyLayers):
                         # get points ID in the cycle
                         uus = filter(lambda x: x<0,no)
                         # get point convex ID
+                        uc = np.array(uus)[utconvex]
                         ucs = np.array(uus)[utsconvex]
                         pucs = array(map(lambda x: self.Gs.pos[x], ucs))
                         pucs = np.vstack((pucs,pucs[-1]))
@@ -5324,56 +5305,50 @@ class Layout(PyLayers):
                         if len(ucs) >2:
                             trid=sp.spatial.Delaunay(pucs)
                             tri =trid.simplices
-                            aucs = np.arange(len(ucs))
-                            # filter tri in the cycle
-                            kt = []
                             polys = []
                             naw = []
                             for t in tri:
                                 ts = geu.Polygon(pucs[t])
                                 # check if the new polygon is contained into 
                                 # the original polygon (non guaratee by Delaunay)
-                                # U = self.Gt.node[n]['polyg'].contains(ts)
+                                #U = self.Gt.node[n]['polyg'].contains(ts)
                                 U = self.Gt.node[n]['polyg'].intersection(ts)
-                                ats = ts.area
-                                if U.area > (1*ats/100):
-                                    # Rule used here: 
-                                    # if 2 convex nodes are directly following 
-                                    # in the list of all convex nodes (ucs) 
-                                    # they are already connected
-                                    # otherwise, an airwall has to be create.
-                                    daucs = np.diff(aucs[t])
-                                    # search where an airwall is required
-                                    # ncp : not connected points
-                                    ncp = np.where(daucs != 1)[0]
-                                    for i in ncp:
-                                        # keep trace of created airwalls,because
-                                        # someof them are destroyed in step 3.
-                                        naw.append(self.add_segment(ucs[t][i],
-                                                                    ucs[t][i+1],
-                                                                    name='AIR'))
-                                    kt.append(t) 
-                                    polys.append(ts)
+                                if not isinstance(U,sh.MultiPolygon):
+                                    U=[U]
+                                for p in U:
+                                    if self.Gt.node[n]['polyg'].contains(p):
+                                        cp = geu.Polygon(p)
+                                        cp.setvnodes(self)
+                                        uaw = np.where(cp.vnodes == 0)[0]
+                                        lvn = len(cp.vnodes)
+                                        for i in uaw:
+                                            # keep trace of created airwalls, because some 
+                                            # of them will be destroyed in step 3.
+                                            naw.append(self.add_segment(
+                                                       cp.vnodes[np.mod(i-1,lvn)],
+                                                       cp.vnodes[np.mod(i+1,lvn)]
+                                                       ,name='AIR'))
+                                        polys.append(cp)
+
                         #
                         # 3. merge delaunay triangulation in order to obtain
                         #   the larger convex polygons partioning 
                         #
                         cpolys = []
-                        while polys != []:
-                            # import ipdb
-                            # ipdb.set_trace()
+                        nbpolys = len(polys)
+                        while polys !=[]:
                             p = polys.pop(0)
-                            for ip2, p2 in enumerate(polys):
-                                conv= False
-                                inter= p.intersection(p2)
+                            for ip2,p2 in enumerate(polys):
+                                conv=False
+                                inter = p.intersection(p2)
                                 # if 2 triangles have a common segment
                                 pold = p
-                                if isinstance(inter, sh.LineString):
+                                if isinstance(inter,sh.LineString):
                                     p = p + p2
                                     if p.isconvex():
                                         polys.pop(ip2)
                                         polys.insert(0, p)
-                                        conv = True
+                                        conv=True
                                         break
                                     else:
                                         # if pold not in cpolys:
@@ -5388,25 +5363,70 @@ class Layout(PyLayers):
                                     cpolys.append(pold)
                             if len(polys) == 0:
                                 cpolys.append(p)
+                            # polyplot(cpolys,fig=plt.gcf())
+                            # plt.draw()
+                            # import ipdb
+                            # ipdb.set_trace()
                         ####
                         #### 4. ensure the correct vnode numerotaion of the polygons
                         #### and remove unecessary airwalls
+
+                        # ncpol : new created polygons
                         ncpol = []
-                        vnodes = []
+                        vnodes=[]
                         for p in cpolys:
-                            ptmp = geu.Polygon(
-                                self.Gt.node[n]['polyg'].intersection(p).convex_hull)
+                            interpoly = self.Gt.node[n]['polyg'].intersection(p)
+                            if isinstance(interpoly,sh.MultiPolygon):
+                                raise AttributeError('multi polygon encountered')
+                            else :
+                                ptmp = geu.Polygon(interpoly)
                             ptmp.setvnodes(self)
                             ncpol.append(ptmp)
                             vnodes.extend(ptmp.vnodes)
                         # air walls to be deleted (because origin Delaunay triangle
                         # has been merged )
-                        daw = filter(lambda x: x not in vnodes, naw)
-                        [self.del_segment(d, verbose=False) for d in daw]
-        import ipdb
-        ipdb.set_trace()
-        print "buildGt 2"
-        self.buildGt()
+                        daw = filter(lambda x: x not in vnodes,naw)
+                        [self.del_segment(d,verbose=False) for d in daw]
+                        nbpolys=len(ncpol)
+
+                        # remove old cycle
+                        self.Gt.remove_node(n)
+                        # lcyid: (new) list of cycle id 
+                        lcyid = [n] + range(ncy+1,ncy+(nbpolys))
+                        lacy.extend(lcyid)
+                        for ip,p in enumerate(ncpol):
+                            cyid = lcyid[ip]
+                            # replace by new ones
+                            lnode = p.vnodes
+                            G = nx.subgraph(self.Gs,lnode)
+                            G.pos = {}
+                            G.pos.update({l: self.Gs.pos[l] for l in lnode})
+                            cy  = cycl.Cycle(G)
+                            self.Gt.add_node(cyid,cycle=cy)
+                            self.Gt.node[cyid]['polyg']=p
+                            self.Gt.node[cyid]['indoor']=True
+                            self.Gt.node[cyid]['isopen']=True
+                            self.Gt.pos[cyid] = tuple(cy.g)
+
+                        Gtnodes= filter(lambda x: x>0,self.Gt.nodes())
+                        for k in combinations(Gtnodes, 2):
+                            vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+                            vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+                            #
+                            # Connect Cycles if they share at least one segments
+                            #
+                            intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+
+                            if len(intersection_vnodes) > 1:
+                                segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                                self.Gt.add_edge(k[0], k[1],segment= segment)
+
+        # update self.Gs.node[x]['ncycles']
+        self._updGsncy()
+        # add outside cycle to Gs.node[x]['ncycles']
+        self._addoutcy()
+        # update interaction list into Gt.nodes (cycles)
+        self._interlist(nodelist=lacy)
 
     def buildGw(self):
         """ build Graph of waypaths
@@ -6340,6 +6360,8 @@ class Layout(PyLayers):
         linter : list
             list of interaction for Gi
             ['RR','TT','RT','TR','RD','DR','TD','DT','DD']
+        show0 : boolean
+            If true display connection to cycle  0 of Gt (False)
         eded : boolean
             True
         ndnd : boolean
@@ -6376,7 +6398,9 @@ class Layout(PyLayers):
                     'alphacy':0.8,
                     'colorcy':'#abcdef',
                     'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'show0':False,
                     'axis':False
+                    }
 
 
         Examples
@@ -6433,7 +6457,9 @@ class Layout(PyLayers):
                     'mode':'nocycle',
                     'alphacy':0.8,
                     'colorcy':'#abcdef',
+                    'lvis':['nn','ne','ee'],
                     'linter':['RR','TT','RT','TR','RD','DR','TD','DT','DD'],
+                    'show0':False,
                     'axis':False
                     }
 
@@ -6517,15 +6543,18 @@ class Layout(PyLayers):
 
         if 't' in graph:
             G = self.Gt
-
-            # filter out the 0 cycle 
-            nodes = G.nodes()
-            edges = G.edges()
-            nodf = filter(lambda x : x<>0,nodes)
-            edf  = filter(lambda x: ((edges[x][0]<>0) & (edges[x][1]<>0)),np.arange(len(edges)))
-            kwargs['nodelist']=nodf
-            kwargs['edgelist']=edf
-
+            if not kwargs['show0']:
+                # filter out the 0 cycle 
+                nodes = G.nodes()
+                edges = G.edges()
+                nodf = filter(lambda x : x<>0,nodes)
+                edf  = filter(lambda x: ((edges[x][0]<>0) & (edges[x][1]<>0)),np.arange(len(edges)))
+                kwargs['nodelist']=nodf
+                kwargs['edgelist']=edf
+            else : 
+                kwargs['nodelist'] = G.nodes()
+                kwargs['edgelist'] = np.arange(len(G.edges()))
+                
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='r'
             fig,ax = gru.draw(G,**kwargs)
@@ -6566,16 +6595,19 @@ class Layout(PyLayers):
             ndnd  = filter(lambda x: (edges[x][0]<0) & (edges[x][1]<0),rle)
             nded  = filter(lambda x: (((edges[x][0]<0) & (edges[x][1]>0)) |
                                      ((edges[x][0]>0) & (edges[x][1]<0))),rle)
-            kwargs['edgelist'] = eded
-            kwargs['edge_color']='blue'
-            kwargs['node_size'] = 200
-            kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
-            kwargs['edgelist'] = ndnd
-            kwargs['edge_color'] ='red'
-            kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
-            kwargs['edgelist'] = nded
-            kwargs['edge_color']='green'
-            kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+            if 'ee' in kwargs['lvis']:
+                kwargs['edgelist'] = eded
+                kwargs['edge_color']='blue'
+                kwargs['node_size'] = 200
+                kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+            if 'nn' in kwargs['lvis']:
+                kwargs['edgelist'] = ndnd
+                kwargs['edge_color'] ='red'
+                kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
+            if 'ne' in kwargs['lvis']:
+                kwargs['edgelist'] = nded
+                kwargs['edge_color']='green'
+                kwargs['fig'],kwargs['ax'] = gru.draw(G,**kwargs)
         #
         # c : connectivity graph (pulsray deprecated)
         #

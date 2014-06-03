@@ -3,7 +3,7 @@ from scipy.spatial import Delaunay
 
 from pylayers.gis.layout import *
 import shapely.geometry as sh
-L = Layout('WHERE2_2.ini',force=True)
+L = Layout('scattering_nonconvex.ini',force=True)
 #L.dumpr()
 L.build('t')
 

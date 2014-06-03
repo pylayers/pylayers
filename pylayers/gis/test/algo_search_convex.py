@@ -250,7 +250,12 @@ for n in L.Gt.nodes():
                     if len(intersection_vnodes) > 1:
                         segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                         L.Gt.add_edge(k[0], k[1],segment= segment)
+
 L._updGsncy()
+for ns in L.Gs.node:
+    if ns>0: #segment number
+        if len(L.Gs.node[ns]['ncycles'])==1:
+            L.Gs.node[ns]['ncycles'].append(0)
 L._interlist(nodelist=lacy)
 
 

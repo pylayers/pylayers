@@ -59,6 +59,7 @@ import pylayers.util.geomutil as geu
 import pylayers.mobility.ban.DeuxSeg as seg
 import doctest
 import itertools as itt
+from pylayers.util.project import *
 try:
     from mayavi import mlab
     from tvtk.tools import visual
