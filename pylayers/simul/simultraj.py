@@ -59,7 +59,7 @@ from pylayers.antprop.statModel import *
 import pandas as pd
 import csv
 
-class Simul(object):
+class Simul(PyLayers):
     """
     Link oriented simulation
 
@@ -72,7 +72,8 @@ class Simul(object):
     """
 
     def __init__(self, _filetraj='simulnet_TA-Office.h5',verbose=False):
-        """
+        """ object constructor
+
         Parameters
         ----------
 
@@ -155,8 +156,10 @@ class Simul(object):
         # get the trajectory
         traj = tr.Trajectories()
         traj.loadh5(self.filetraj)
+
         # get the layout
         self.L = Layout(traj.Lfilename)
+
         # resample trajectory
 
         for ut, t in enumerate(traj):
@@ -220,7 +223,7 @@ class Simul(object):
         return fig, ax
 
     def evaldeter(self, na, nb, wstd, fmode='band', nf=10):
-        """ Deterministic evaluation of a link
+        """ deterministic evaluation of a link
 
         Parameters
         ----------
@@ -281,7 +284,7 @@ class Simul(object):
         return a, t
 
     def evalstat(self, na, nb):
-        """ Statistical evaluation of a link
+        """ statistical evaluation of a link
 
         Parameters
         ----------
@@ -318,7 +321,7 @@ class Simul(object):
         return ak, tk, eng
 
     def run(self, **kwargs):
-        """ Run the link evaluation along a trajectory
+        """ run the link evaluation along a trajectory
 
 
         Parameters
@@ -499,21 +502,21 @@ class Simul(object):
 
     def check_exist(self, df):
         """check if a dataframe df already exists in self.data
-        
+
         Parameters
         ----------
         df : pd.DataFrame
-        
+
         Returns
         -------
-        
+
         boolean
             True if already exists
             False otherwise
-        
+
         """
 
-        ud = self.data[(self.data.index == df.index) 
+        ud = self.data[(self.data.index == df.index)
                         & (self.data['id_a'] == df['id_a'].values[0])
                         & (self.data['id_b'] == df['id_b'].values[0])
                         & (self.data['wstd'] == df['wstd'].values[0])
@@ -542,13 +545,13 @@ class Simul(object):
 
 
     def update_pos(self, t):
-        ''' update positions of devices and bodies for a given time index
+        """ update positions of devices and bodies for a given time index
 
         Parameters
         ----------
-        ut : int
+        t : int
             time value 
-        '''
+        """ 
 
         # if a bodies are involved in simulation
         if ((self.todo['OB']) or (self.todo['B2B']) or (self.todo['B2I'])):

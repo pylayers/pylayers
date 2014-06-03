@@ -59,7 +59,7 @@ try:
 except:
     print 'Layout:Mayavi is not installed'
 
-class Rays(dict):
+class Rays(PyLayers,dict):
     """ A set af rays
 
     Attributes
@@ -171,41 +171,6 @@ class Rays(dict):
             return(s)
 
         return(s)
-
-
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
 
 
     def saveh5(self,idx=0):
@@ -353,7 +318,7 @@ class Rays(dict):
             raise NameError('Rays: issue when writting h5py file')
 
     def _loadh5(self,filenameh5,grpname):
-        """ Load rays  h5py format compliant with Links Class
+        """ load rays  h5py format compliant with Links Class
 
         Parameters
         ----------
@@ -592,7 +557,7 @@ class Rays(dict):
         return(fig,ax)
 
     def mirror(self, H=3, N=1):
-        """ mirror
+        """ mirror a ray termination
 
         Parameters
         ----------
@@ -1154,6 +1119,12 @@ class Rays(dict):
     def length(self,typ=2):
         """ calculate length of rays
 
+        Parameters
+        ----------
+
+        typ : int
+            1 : length of all segments
+            2 : accumulated length
         """
         dk = {}
         for k in self:   # for all interaction group k
@@ -2026,7 +1997,7 @@ class Rays(dict):
 
 
     def ray(self, r):
-        """
+        """ returns the index of interactions of r
 
         Parameters
         ----------
@@ -2034,10 +2005,11 @@ class Rays(dict):
         r : integer
             ray index
 
-        Notes
-        -----
+        Returns
+        -------
 
-        Give the ray number and it returns the index of its interactions
+        ir : index of interactions of r
+
 
         """
         raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
@@ -2049,6 +2021,7 @@ class Rays(dict):
 
         Parameters
         ----------
+
         r : integer
             ray index
         """
@@ -2057,15 +2030,17 @@ class Rays(dict):
         return(self.I.typ[a])
 
     def info(self, r,ifGHz=0):
-        '''
-            provides information for a given ray r
+        """ provides information for a given ray r
 
         Parameters
         ----------
+
         r : int
             ray index
+        ifGHz : int
+            frequency index
 
-        '''
+        """
 
         if self.evaluated:
             print '-------------------------'
@@ -2218,8 +2193,7 @@ class Rays(dict):
 
     @mlab.show
     def _show3(self,L=[],ilist=[],rlist=[],newfig=False):
-        """ plot 3D rays within the simulated environment
-            using Mayavi
+        """ plot 3D rays in environment using Mayavi
 
         Parameters
         ----------
@@ -2231,7 +2205,7 @@ class Rays(dict):
         rlist : list
             list of index rays
         newfig : boolean (default: False)
-            if true create a new mayavi figure 
+            if true create a new mayavi figure
             else : use the current
 
         """
@@ -2241,7 +2215,7 @@ class Rays(dict):
         else :
             f = mlab.gcf()
 
-        
+
         if L != []:
             try:
                 L.filename
@@ -2274,8 +2248,6 @@ class Rays(dict):
             pt = self[i]['pt'][:,:,r].reshape(3,cnbi*nbr,order='F')
             # lines = np.arange(cnbi*nbr).reshape(cnbi,nbr)
             lines = np.arange(cnbi*nbr).reshape(nbr,cnbi)
-            import ipdb
-            ipdb.set_trace()
             mesh = tvtk.PolyData(points=pt.T, polys=lines)
             mlab.pipeline.surface(mlab.pipeline.extract_edges(mesh),
                                                  color=(0, 0, 0), )

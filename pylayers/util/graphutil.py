@@ -154,7 +154,10 @@ def draw(G,**kwargs):
     return fig,ax
 
 def edgetype(G):
-    """
+    """  edge type
+
+    Examples
+    --------
 
     .. plot::
         :include-source: 
@@ -186,7 +189,8 @@ def edgetype(G):
 
 
 def find_all_paths(graph, start, end):
-    """
+    """ find all paths
+
     Parameters
     ----------
 

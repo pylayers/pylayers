@@ -53,6 +53,7 @@ import pylayers.antprop.antenna as ant
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
 import pdb as pdb
+from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 import pylayers.util.geomutil as geu
@@ -67,8 +68,8 @@ except:
     print 'mayavi not installed'
 
 
-class Body(object):
-    """ Class to manage a Body model
+class Body(PyLayers):
+    """ Class  to manage a Body model
 
     Members
     -------
@@ -99,7 +100,8 @@ class Body(object):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
-        """
+        """ object constructor
+
         Parameters
         ----------
 
@@ -221,7 +223,7 @@ class Body(object):
 
         return(di)
 
-    def center(self):
+    def center(self,force=False):
         """ centering the body
 
         Returns
@@ -246,7 +248,7 @@ class Body(object):
         """
         # self.d : 3 x 16 x Nf
         # self.pg : 3 x Nf
-        if not self.centered:
+        if not self.centered or force:
             self.pg = np.sum(self.d,axis=1)/self.npoints
             self.pg[2,:] = 0
             self.d = self.d - self.pg[:,np.newaxis,:]
@@ -261,7 +263,8 @@ class Body(object):
             self.centered = True
 
     def posvel(self,traj,t):
-        """
+        r""" calculate position and velocity
+
         traj : Tajectory DataFrame
             nx3
         t : float
@@ -277,14 +280,46 @@ class Body(object):
         vtn : normalized speed vector along motion trajectory (target)
         wtn : planar vector orthogonal to wtn
 
+        Notes
+        -----
+
+        This funtion takes as argument a trajectory which is a panda dataframe
+        and a time value in the time scale of the trajectory.
+
+        t value should of course be in the interval between trajecroty
+        extremal times tmin and tmax.
+
+        smax is the maximum distance covered in the whole motion capture
+        sequence.
+
+        sk is the distance covered from the begining of the trajectory until
+        the trajectory time t.
+
+        The ratio between those 2 distance is  rounded to the nearest integer.
+
+        :math:`\delta = s_k -\lceil \frac{s_k}{s_{max}} s_{max}`
+
+        k_f is the index of the topos motion capture into the MOCAP 
+
+
+         _____________________________________________________
+        |__________|__________|____________|___________|_____
+                                     kf=2
+        tmin                                                   tmax
+        0         smax               sk
+
         """
         # t should be in the trajectory time range
         assert ((t>=traj.tmin) & (t<=traj.tmax)),'posvel: t not in trajectory time range'
 
         sk = traj.distance(t) # covered distance along trajectory at time t
         smax = self.smocap[-1]
-        ks = int(np.floor(sk/smax)) # number of sequences
-        df = sk - ks*smax # covered distance into the sequence
+
+
+        ks = int(np.floor(sk/smax)) # number of full MOCAP sequences of frames
+
+        df = sk - ks*smax  # covered distance into the sequence
+
         kf = np.where(self.smocap>=df)[0][0]
         alpha = (smax-df)/smax
         #tf = self.Tmocap/(1.0*self.nframes) # frame body time sampling period
@@ -324,7 +359,9 @@ class Body(object):
 
         return(kf,kt,vsn,wsn,vtn,wtn,alpha)
 
-    def settopos(self,traj,t=0,cs=False,treadmill = False, p0 = np.array([0,0])):
+
+    def settopos(self,traj,t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
+
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -368,6 +405,8 @@ class Body(object):
         -----
 
         topos is the current spatial global position of a body configuration.
+        this method takes as argument a trajectory and a time value t in the
+        trajectory time-scale.
 
 
         See Also
@@ -378,23 +417,26 @@ class Body(object):
         """
 
         #
-        #
         # psa : origin source
         # psb = psa+vsn : a point in the direction of pedestrian motion
         #
         # pta : target translation
         # ptb = pta+vtn : a point in the direction of trajectory
         #
+
         # kt : trajectory integer index  
         # kf : frame integer index  
         
         kf,kt,vsn,wsn,vtn,wtn, alpha = self.posvel(traj,t)
 
+
         psa = np.array([0,0])
         psb = psa + vsn
         psc = psa + wsn
         if treadmill:
+
             pta = p0
+
         else:
             pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
@@ -682,6 +724,7 @@ class Body(object):
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
+
         Parameters
         ----------
 
@@ -689,6 +732,7 @@ class Body(object):
         topos : boolean
         fig :
         ax :
+        col : string
 
         Returns
         -------
@@ -764,6 +808,7 @@ class Body(object):
                 args[k] = kwargs[k]
 
         visual.set_viewer(mlab.gcf())
+
 
         fId = kwargs['iframe']
 
@@ -1240,7 +1285,7 @@ class Body(object):
 
 
     def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):
-        """
+        """ intersect Body
 
         Parameters
         ----------
@@ -1346,7 +1391,7 @@ class Body(object):
         
  
     def intersectBody3(self,A,B, topos = True, frameId = 0):
-        """
+        """ intersect body new version
 
         Parameters
         ----------
@@ -1397,7 +1442,7 @@ class Body(object):
             #~ if dmin  < self.sl[k,2]:
                 #~ intersect=1
             lmd = 0.06 
-               
+
             #~ if 0 < alpha < 1 and 0 < beta < 1 :
             loss1_dB = 0
             loss2_dB = 0 
@@ -1406,33 +1451,35 @@ class Body(object):
             
 
             if dmin < self.sl[k,2]:
-                
+
 
                 """
                 in this case intersection is True
                 """
-                #pdb.set_trace()                                                            
+                #pdb.set_trace()
                 dAB = np.sqrt(sum((A-B)**2))
                 #nu1 =(self.sl[k,2]-dmin)*np.sqrt((2/lmd)*dAB*abs(alpha)*abs(1-alpha)))
 
                 nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
                 nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
 
+
               
                 if -0.7 < nu1 : 
-                
+
                     loss1_dB = 6.9 + 20*np.log10(np.sqrt((nu1-0.1)**2+1)+nu1-0.1)
                 else :
-                    loss1_dB = 0.0 
-                
-                if -0.7 < nu2 : 
+                    loss1_dB = 0.0
+
+                if -0.7 < nu2 :
                     loss2_dB = 6.9 + 20*np.log10(np.sqrt((nu2-0.1)**2+1)+nu2-0.1)
                 else :
-                    loss2_dB = 0.0 
-                    
+                    loss2_dB = 0.0
+
                 loss_dB  =10*np.log10(10**(loss1_dB/10.0)+10**(loss2_dB/10.0))
-                
+
                 loss_lin  =1.0/10**(loss_dB/10.0)
+
               
         return loss_lin
         
@@ -1510,8 +1557,9 @@ class Body(object):
         return loss_lin
 
 
+
     def body_link(self, topos = True,frameId = 0):
-        """
+        """ body link
 
         Parameters
         ----------
@@ -1547,7 +1595,7 @@ class Body(object):
 
 
     def cylinder_basis_k(self, frameId):
-        """
+        """ cylinder basis k
 
         Parameters
         ----------
@@ -1569,7 +1617,7 @@ class Body(object):
             self.basisk[i, 6:] = wk
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
-        """
+        """ cylinder antenna
 
         Parameters
         ----------
@@ -1661,7 +1709,8 @@ def rotation(cycle, alpha=np.pi/2):
 
 
 def Global_Trajectory(cycle, traj):
-    """
+    """ global trajectory
+
     Parameters
     ----------
 
@@ -1715,7 +1764,7 @@ def Global_Trajectory(cycle, traj):
     return data
 
 def ChangeBasis(u0, v0, w0, v1):
-    """
+    """ change basis
 
     Parameters
     ----------
@@ -1739,8 +1788,14 @@ def ChangeBasis(u0, v0, w0, v1):
     return u1, v1, w1
 
 def dist(A, B):
-    """
-    evaluate the distance between two points A and B
+    """ evaluate the distance between two points A and B
+
+    Parameters
+    ----------
+
+    A : 2D point
+    B : 2D point
+
     """
 
     d = np.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2)

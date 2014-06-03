@@ -94,7 +94,8 @@ class VectChannel(Ctilde):
     """
 
     def __init__(self, S, itx, irx, transpose=False):
-        """
+        """ class constructor
+
         Parameters
         ----------
         S

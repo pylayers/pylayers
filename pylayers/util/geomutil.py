@@ -185,7 +185,7 @@ COLOR = {
     False: '#ff3333'
 }
 
-class Plot_shapely(object):
+class Plot_shapely(PyLayers):
     """draw Shapely with matplotlib - pylab
      Plot_shapely.py
      Author : Martin Laloux 2010
@@ -193,7 +193,7 @@ class Plot_shapely(object):
     """
 
     def __init__(self, obj, ax, coul=None, alph=1):
-        """
+        """ object constructor
 
          Parameters
          ----------
@@ -245,7 +245,7 @@ class Plot_shapely(object):
 
     @property
     def plot(self):
-        """dessine en fonction du type geometrique"""
+        """draw w.r.t geometrical type"""
         if self.type == 'Point':
             self.plot_coords()
         elif self.type == 'Polygon':
@@ -260,10 +260,10 @@ class Plot_shapely(object):
         elif self.type == 'LinearRing':
             self.plot_line()
         else:
-            raise ValueError("inconnu au bataillon: %s" % self.type)
+            raise ValueError("unknown: %s" % self.type)
 
 
-class LineString(shg.LineString):
+class LineString(PyLayers,shg.LineString):
     """ Overloaded shapely LineString class
     """
     def __init__(self,p):
@@ -367,7 +367,7 @@ class LineString(shg.LineString):
 #   Functions used for calculation of visibility graph Gv
 #-----------------------------------------------------------
 
-class Polygon(shg.Polygon):
+class Polygon(PyLayers,shg.Polygon):
     """ Overloaded shapely Polygon class
 
     Attributes
@@ -384,9 +384,8 @@ class Polygon(shg.Polygon):
         get the signed area of the polygon
 
     """
-    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]],
-                 vnodes=[],delta=0):
-        """
+    def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[],delta=0):
+        """ object constructor
 
         Parameters
         ----------
@@ -460,7 +459,7 @@ class Polygon(shg.Polygon):
             self.vnodes = np.kron(v, u)
 
     def __add__(self,p):
-        """
+        """ add 2 polygons
 
         Parameters
         ----------
@@ -600,15 +599,15 @@ class Polygon(shg.Polygon):
 
     def isconvex(self,tol = 1e-2):
         """ Determine if a polygon is convex
-        
+
         Parameters
         ----------
         tol : tolerence on aligned point
-        
+
         Returns
         -------
          True if convex
-        
+
         Notes
         -----
 
@@ -634,21 +633,21 @@ class Polygon(shg.Polygon):
 
     def isconvex(self,tol = 1e-2):
         """ Determine if a polygon is convex
-        
+
         Parameters
         ----------
         tol : tolerence on aligned point
-        
+
         Returns
         -------
-         True if convex
-        
+        True if convex
+
         Notes
         -----
 
-        the algorithm tests all triplet of point and L.determine 
+        the algorithm tests all triplet of point and L.determine
         if the third point is left to the 2 first.
-        a tolerance can be introduce in cases where the polygon is 
+        a tolerance can be introduce in cases where the polygon is
         almost convex.
 
         """
@@ -666,6 +665,7 @@ class Polygon(shg.Polygon):
 
         Parameters
         ----------
+
         color :  string
             default #abcdef"
         alpha :  float
@@ -742,37 +742,8 @@ class Polygon(shg.Polygon):
 
         self.xy = np.array([self.exterior.xy[0],self.exterior.xy[1]])
 
-    def isconvex(self,tol = 1e-2):
-        """ Determine if a polygon is convex
-
-        Parameters
-        ----------
-        tol : tolerence on aligned point
-
-        Returns
-        -------
-         True if convex
-
-        Notes
-        -----
-
-        the algorithm tests all triplet of point and L.determine
-        if the third point is left to the 2 first.
-        a tolerance can be introduce in cases where the polygon is
-        almost convex.
-
-        """
-        self.coorddeter()
-        p = self.xy[:,:-1]
-        a = p
-        b = np.roll(p,1,axis=1)
-        c = np.roll(p,2,axis=1)
-        return ( np.sum(isleft(a,b,c,tol=tol)) == 0 ) or \
-                (np.sum(isleft(c,b,a,tol=tol)) == 0)
-
-
     def simplify(self):
-        """ Simplify polygon - suppress adjacent colinear segments
+        """ simplify polygon - suppress adjacent colinear segments
 
         Returns
         -------
@@ -1671,7 +1642,7 @@ class Polygon(shg.Polygon):
         upos = np.nonzero(tcc > 1e-4)[0]
         return(tcc, n)
 
-class Geomview(object):
+class Geomview(PyLayers):
     """ Geomview file class
 
     This class is parent of  GeomVect Geomlist Geomoff
@@ -1776,7 +1747,7 @@ class GeomVect(Geomview):
         Geomview.__init__(self, _filename,clear=clear)
 
     def segments(self, ds, i2d=True, linewidth=2):
-        """
+        """ display segments
 
         Parameters
         ----------
@@ -1814,7 +1785,11 @@ class GeomVect(Geomview):
     def geomBase(self, M, pt=np.array([0., 0., 0.]), col=np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]]),
                  linewidth=3,scale=1):
         """ Construct a geomview vect file for vizualisation of a frame
-            by default the geomview filename is base0.vect
+
+        Notes
+        -----
+
+        by default the geomview filename is base0.vect
 
 
         Parameters
@@ -1828,8 +1803,9 @@ class GeomVect(Geomview):
         linewidth :
             linewidth (default 3)
 
-        Example
-        -------
+        Examples
+        --------
+
         >>> from pylayers.util.geomutil import *
         >>> import numpy as np
         >>> v1 = np.array([1,0,0])
@@ -3438,9 +3414,11 @@ def plot_coords(ax, ob, color='#999999'):
 
 
 def plot_bounds(ax, ob, color='#000000'):
-    """
+    """ plot bounds
+
     Parameters
     ----------
+
     ax : matplotlib axes
     ob : shapely object
     color : string
@@ -3458,7 +3436,7 @@ def plot_bounds(ax, ob, color='#000000'):
 
 
 def plot_line(ax, ob, color="#999999"):
-    """
+    """ plot line
 
     Parameters
     ----------
@@ -3497,13 +3475,16 @@ def plot_line(ax, ob, color="#999999"):
 
 
 def v_color(ob):
-    """
+    """ return color
 
     Parameters
     ----------
 
+    ob :
+
     References
     ----------
+
     http://pypi.python.org/pypi/Shapely
     """
     return COLOR[ob.is_simple]
@@ -3517,8 +3498,9 @@ def plotPolygon(poly, color="#abcdef", alpha=0.8):
 
     Parameters
     ----------
-    poly  : shapely poligon
-    color : defauld #abcdef"
+
+    poly  : shapely polygon
+    color : default "#abcdef"
     alpha : float
            transparency   (default 0.8)
     """
@@ -3572,8 +3554,13 @@ def shrinkPolygon(poly, d=0.1):
 
 
 def shrinkPolygon2(poly1, d=0.1):
-    """
-    shrinkPolygon(poly1,d=0.1)
+    """ shrink Polygon
+
+    Parameters
+    ----------
+
+    poly1 Polygon
+
     """
     poly1 = simplifyPolygon(poly)
     p = np.array(poly1.exterior.xy)
@@ -3614,10 +3601,11 @@ def shrinkPolygon2(poly1, d=0.1):
 
 
 def simplifyPolygon(poly1):
-    """
-    Simplify polygon : suppress adjacent colinear segments
+    """ Simplify polygon : suppress adjacent colinear segments
+
     Parameters
     ----------
+
     poly1
 
     """
@@ -3712,9 +3700,12 @@ def wall_delta(x1, y1, x2, y2, delta=0.0001):
 
 def plot_coords2(ax, ob):
     """  plot point from coordinates
+
     References
     ----------
+
     http://pypi.python.org/pypi/Shapely
+
     """
     x, y = ob.xy
 
@@ -3722,9 +3713,11 @@ def plot_coords2(ax, ob):
 
 
 def plot_bounds2(ax, ob):
-    """
+    """ plot bounds v2
+
     References
     ----------
+
     http://pypi.python.org/pypi/Shapely
     """
     x, y = zip(*list((p.x, p.y) for p in ob.boundary))
@@ -3732,7 +3725,8 @@ def plot_bounds2(ax, ob):
 
 
 def plot_line2(ax, ob):
-    """
+    """ plot line v2
+
     References
     ----------
     http://pypi.python.org/pypi/Shapely
@@ -3743,9 +3737,11 @@ def plot_line2(ax, ob):
 
 
 def plot_coords3(ax, ob, color):
-    """
+    """ plot coors v3
+
     References
     ----------
+
     http://pypi.python.org/pypi/Shapely
     """
     x, y = ob.xy
@@ -3754,7 +3750,8 @@ def plot_coords3(ax, ob, color):
 
 
 def plot_bounds3(ax, ob, color):
-    """
+    """ plot bounds v3
+
     References
     ----------
     http://pypi.python.org/pypi/Shapely
@@ -3764,10 +3761,13 @@ def plot_bounds3(ax, ob, color):
 
 
 def plot_line3(ax, ob, color):
-    """
+    """ plot lines v3
+
     References
     ----------
+
     http://pypi.python.org/pypi/Shapely
+
     """
     x, y = ob.xy
     ax.plot(x, y, color=color, alpha=0.7, linewidth=2,
@@ -3800,6 +3800,7 @@ def valid_wedge(ps, pw, p1, p2, grazing):
 
     Returns
     -------
+
     valid : np.array (Nx1)
             valid = 1 if ps is in the convex sector
             valid = 0 if ps is in the concav sector
@@ -3904,8 +3905,8 @@ def sector(p1, p2, pt):
 
 
 def dist(x,y,ax):
-        """
-        calculates distance between two arrays along a given axis
+        """ calculates distance between two arrays along a given axis
+
         Parameters
         ----------
             x : numpy.ndarray
@@ -3935,14 +3936,18 @@ def line_intersection(l1,l2):
 
     Parameters
     ----------
-        l1: numpy.ndarray
-            coordinates of l1 points
-        l2: numpy.ndarray
-            coordinates of l2 points
+
+    l1: numpy.ndarray
+        coordinates of l1 points
+    l2: numpy.ndarray
+        coordinates of l2 points
+
     Returns
     -------
-        p: numpy.ndarray
-            coordinates of intersection point
+
+    p: numpy.ndarray
+        coordinates of intersection point
+
     """
     shl1 = sh.LineString((l1[:,0],l1[:,1]))
     shl2 = sh.LineString((l2[:,0],l2[:,1]))
@@ -3954,16 +3959,21 @@ def line_intersection(l1,l2):
 
 def linepoly_intersection(l,poly):
     """ intersection between a 2D line and a 2D polygon using shapely
+
     Parameters
     ----------
-        l: numpy.ndarray
-            coordinates of l points
-        poly: numpy.ndarray
-            coordinates of poly points
+
+    l: numpy.ndarray
+        coordinates of l points
+    poly: numpy.ndarray
+        coordinates of poly points
+
     Returns
     -------
-        p: numpy.ndarray
-            coordinates of intersection point
+
+    p: numpy.ndarray
+        coordinates of intersection point
+
     """
     shl = sh.LineString((l[:,0],l[:,1]))
     shpoly = sh.polygon((poly[:,0],poly[:,1],poly[:,2]))
@@ -3994,16 +4004,16 @@ def mirror(p,pa,pb):
     .. plot::
         :include-source:
 
-        >>> from pylayers.util.geomutil import *
-        >>> from pylayers.util.plotutil import *
-        >>> import matplotlib.pyplot as plt
-        >>> import numpy as np
-        >>> p = np.random.randn(2,1000)
-        >>> pa  = np.array([0,0])
-        >>> pb  = np.array([0,1])
-        >>> M = mirror(p,pa,pb)
-        >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
-        >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
+    >>> from pylayers.util.geomutil import *
+    >>> from pylayers.util.plotutil import *
+    >>> import matplotlib.pyplot as plt
+    >>> import numpy as np
+    >>> p = np.random.randn(2,1000)
+    >>> pa  = np.array([0,0])
+    >>> pb  = np.array([0,1])
+    >>> M = mirror(p,pa,pb)
+    >>> plt.plot(p[0,:],p[1,:],'or',alpha=0.2)
+    >>> plt.plot(M[0,:],M[1,:],'ob',alpha=0.2)
 
     """
 
@@ -4072,7 +4082,7 @@ def distseg(a,b,c,d,alpha,beta):
     >>> alpha[alpha>1]=1
     >>> beta[beta<0]=0
     >>> beta[beta>1]=1
-	>>> f = distseg(a,b,c,d,alpha,beta)
+    >>> f = distseg(a,b,c,d,alpha,beta)
     >>> p1 = a - alpha*(a-b)
     >>> p2 = c + beta*(d-c)
     >>> v = p1-p2

@@ -69,6 +69,8 @@ class Trajectories(list):
         self.t = []
 
     def __repr__(self):
+        """
+        """
 
         try:
             s = 'Trajectories performed in Layout : ' + self.Lfilename + '\n\n'
@@ -143,9 +145,10 @@ class Trajectories(list):
         
            
 
+
+
+
     def loadh5(self, _filename='simulnet_TA-Office.h5',append =False):
-
-
         """ import simulnet h5 file
 
         Parameters
@@ -168,7 +171,7 @@ class Trajectories(list):
             :include-source:
 
             >>> from pylayers.mobility.trajectory import *
-            >>> T=Trajectories()
+            >>> T = Trajectories()
             >>> T.loadh5()
 
         """
@@ -249,8 +252,7 @@ class Trajectories(list):
         self.t = self[ut].time()
 
     def replay(self, fig=[], ax=[], **kwargs):
-        """
-            replay a trajectory
+        """ replay a trajectory
 
         Parameters
         ----------
@@ -286,7 +288,7 @@ class Trajectories(list):
         fig, ax = L.showG('s',fig=fig, ax=ax, **kwargs)
 
         time=self[0].time()
-        
+
 
         line, = ax.plot([], [], 'ob', lw=2)
         time_template = 'time = %.1fs'

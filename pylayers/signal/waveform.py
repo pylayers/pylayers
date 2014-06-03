@@ -138,7 +138,7 @@ class Waveform(dict):
         psd.plotdB(mask=True)
 
     def ip_generic(self):
-        """    Create an Energy normalized Gaussian impulse (Usignal)
+        """   Create an Energy normalized Gaussian impulse (Usignal)
 
         ip_generic(self,parameters)
 

@@ -109,7 +109,6 @@ Layout visibility
 .. autosummary::
     :toctree: generated/
 
-    Layout.checkvis
     Layout.visilist
     Layout.closest_edge
     Layout.visi_papb
@@ -157,12 +156,12 @@ Showing Graphs
 .. autosummary::
     :toctree: generated/
 
-    Layout.showGi
-    Layout.showGt
+    Layout._showGi
+    Layout._showGt
     Layout.showGs
     Layout.show
     Layout.showG
-    Layout.showGv
+    Layout._showGv
 
 Building Graphs
 ---------------
@@ -286,11 +285,8 @@ try:
 except:
     print 'Layout:Mayavi is not installed'
 
-#
-#
 
-
-class Layout(object):
+class Layout(PyLayers):
     """ Handling Layout
 
     Attributes
@@ -306,107 +302,8 @@ class Layout(object):
     pt     : points sequence
     tahe   : tail head
 
-    Methods
-    -------
-
-    add_door
-    add_fnod
-    add_furniture
-    add_furniture_file
-    add_nfpe
-    add_pnod
-    add_pons
-    add_segment
-    add_subseg
-    add_window
-    angleonlink
-    boundary
-    build
-    buildGc
-    buildGi
-    buildGr
-    buildGt
-    buildGv
-    buildGw
-    check
-    check2
-    checkvis
-    cleanup
-    clip
-    closest_edge
-    cycleinline
-    del_cycle
-    delete
-    del_points
-    del_segment
-    del_subseg
-    diag
-    displaygui
-    distwall
-    dumpr
-    dumpw
-    ed2nd
-    editor
-    edit_point
-    edit_segment
-    facet3D
-    facets3D
-    find_edgelist
-    g2npy
-    geomfile
-    get_paths
-    get_Sg_pos
-    get_zone
-    have_subseg
-    help
-    info
-    info_edge
-    ispoint
-    layerongrid
-    layeronlink
-    load
-    loadfur
-    loadG
-    loadini
-    loadstr
-    loadstr2
-    ls
-    nd2seg
-    onseg
-    plot_segments
-    pt2cy
-    pt2ro
-    randTxRx
-    room2nodes
-    room2segments
-    save
-    saveini
-    savestr2
-    seg2ro
-    seginframe
-    seginline
-    segpt
-    seguv
-    show3
-    showG
-    showGs
-    showGt
-    showGv
-    show_layer
-    show_nodes
-    show_seg1
-    show_segment
-    showSig
-    signature
-    subseg
-    thwall
-    visilist
-    visi_papb
-    waypoint
-    waypointGw
-
     Notes
-    ------
+    -----
 
     This class exploits `networkx` to store Layout information
 
@@ -414,7 +311,7 @@ class Layout(object):
 
     """
     def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur='',force=False):
-        """
+        """ object constructor
 
         Parameters
         ----------
@@ -577,6 +474,7 @@ class Layout(object):
 
         Notes
         -----
+
         strdir is defined in the Project module
 
         Examples
@@ -629,11 +527,16 @@ class Layout(object):
         """ Check Layout consistency
 
 
+        Parameters
+        ----------
+
+        level : int
+
         Returns
         -------
 
-            consistent : Boolean
-                        True if consistent
+        consistent : Boolean
+              True if consistent
 
         See Also
         --------
@@ -642,6 +545,7 @@ class Layout(object):
 
         Notes
         -----
+
         For all segments
             get the 2 vertices
                 for all the other vertices
@@ -742,19 +646,20 @@ class Layout(object):
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
 
-         Parameters
-         ----------
-            xmin
-            xmax
-            ymin
-            ymax
+        Parameters
+        ----------
 
-         Notes
-         -----
+        xmin : float
+        xmax : float
+        ymin : float
+        ymax : float
 
-              1) Determine all segments outside the clipping zone
-              2) Union of the 4 conditions
-              3) setdiff1d between the whole array of segments and the segments outside
+        Notes
+        -----
+
+          1) Determine all segments outside the clipping zone
+          2) Union of the 4 conditions
+          3) setdiff1d between the whole array of segments and the segments outside
 
         """
         p0 = self.pt[:, self.tahe[0, :]]
@@ -779,44 +684,8 @@ class Layout(object):
 
         return np.setdiff1d(iseg, u)
 
-
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-
-
     def g2npy(self):
-        """ from graphs to numpy arrays conversion
+        """ conversion from graphs to numpy arrays 
 
         Notes
         -----
@@ -1367,12 +1236,12 @@ class Layout(object):
         Notes
         -----
 
-        Available format are :
+        Available formats are :
 
-            .ini   : ini file format (natural one) DIRINI
-            .str2  : native Pyray (C implementation) DIRSTRUC
-            .str   : binary file with visibility DIRSTRUC
-            .osm   : opens street map format  DIROSM
+        +  .ini   : ini file format (natural one) DIRINI
+        +  .str2  : native Pyray (C implementation) DIRSTRUC
+        +  .str   : binary file with visibility DIRSTRUC
+        +  .osm   : opens street map format  DIROSM
 
 
         layout files are stored in the directory pstruc['DIRxxx']
@@ -1425,6 +1294,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         _filename : string
         _filematini  : string
             default 'matDB.ini'
@@ -1436,7 +1306,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('example.str')
+        >>> L.loadstr('defstr.str')
 
         """
 
@@ -1914,7 +1784,7 @@ class Layout(object):
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> L.loadstr2('Lstruc.str2')
+            >>> L.loadstr2('defstr.str2')
 
         """
 
@@ -3719,12 +3589,9 @@ class Layout(object):
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
         >>> idx = np.array([1,2,3,17])
-        >>> L.seguv(idx)
-        array([[-1.,  0.,  1., -1.],
-               [ 0., -1.,  0.,  0.]])
+        >>> v1 = L.seguv(idx)
         >>> idx = np.array([1])
-        >>> L.seguv(idx)
-        array([-1.,  0.])
+        >>> v2= L.seguv(idx)
 
         """
         # idx : npt
@@ -3772,10 +3639,10 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('example.str')
+        >>> L = Layout('TA-Office.ini')
         >>> ptlist  = np.array([0,1])
         >>> L.segpt(ptlist)
-        array([0, 1, 5, 7])
+        array([44, 61, 62, 86])
 
         """
 
@@ -3814,7 +3681,8 @@ class Layout(object):
         >>> import numpy as np
         >>> L = Layout('defstr.ini')
         >>> aseg = np.array([1,3,6])
-        >>> L.seg2pts(aseg)
+        >>> pt =  L.seg2pts(aseg)
+
         """
 
         if not isinstance(aseg,np.ndarray):
@@ -3846,10 +3714,9 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('example.str')
+        >>> L = Layout('TA-Office.ini')
         >>> ptlist  = np.array([0,1])
-        >>> L.segpt(ptlist)
-        array([0, 1, 5, 7])
+        >>> seg = L.segpt(ptlist)
 
         Notes
         -----
@@ -3916,7 +3783,7 @@ class Layout(object):
             >>> p2 = np.array([[10,10,10],[10,10,10]])
             >>> seglist = L.seginframe2(p1,p2)
             >>> edlist  = map(lambda x: L.tsg[x],seglist)
-            >>> fig,ax = L.showGs(edlist=edlist)
+            >>> fig,ax = L.showG('s',edlist=edlist)
 
         """
 
@@ -3986,18 +3853,16 @@ class Layout(object):
             --------
 
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('office.str')
+            >>> L = Layout('TA-Office.ini')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,10])
             >>> L.seginframe(p1,p2)
-            array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35,  36,
-                    37,  38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60,
-                    61,  62,  63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,
-                    98,  99, 109, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
-                   122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 141,
-                   144, 145, 148, 151, 160, 161, 162, 163, 164, 166, 167, 168, 169,
-                   170, 171, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188,
-                   191, 192, 193, 194, 195, 217])
+            array([ 1,  3,  7,  8, 14, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30,
+                   32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 44, 46, 47, 52, 53, 54,
+                   55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
+                   72, 73, 74, 75, 76, 77, 78, 81, 82, 85, 86, 87, 88, 89, 90, 91, 92,
+                   93])
+
         """
         max_x = max(p1[0], p2[0])
         min_x = min(p1[0], p2[0])
@@ -4506,7 +4371,7 @@ class Layout(object):
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
 
-    def showGi(self, **kwargs):
+    def _showGi(self, **kwargs):
         """  show graph of interactions Gi
 
         Parameters
@@ -4579,7 +4444,7 @@ class Layout(object):
 
         return(fig,ax)
 
-    def showGt(self, ax=[], roomlist=[],mode='area'):
+    def _showGt(self, ax=[], roomlist=[],mode='area'):
         """ show topological graph Gt
 
         Parameters
@@ -5595,7 +5460,7 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('example.ini')
+        >>> L = Layout('TA-Office.ini')
         >>> L.buildGt()
         >>> Ga = L.buildGr()
         >>> L.buildGv()
@@ -6492,7 +6357,7 @@ class Layout(object):
 
         return kwargs['fig'],kwargs['ax']
 
-    def showGv(self, **kwargs):
+    def _showGv(self, **kwargs):
         """ show graph Gv (visibility)
 
         Parameters
@@ -6509,22 +6374,6 @@ class Layout(object):
         -------
         fig : figure instance
         ax  : axes instance
-
-        Examples
-        --------
-
-        .. plot::
-           :include-source:
-
-            >>> from pylayers.gis.layout import *
-            >>> L = Layout('example.ini')
-            >>> L.build()
-            >>> fig = plt.figure()
-            >>> fig,ax = L.showGs(fig=fig)
-            >>> ax = L.showGv(ax=ax)
-            >>> ti = plt.title('Show Gv')
-            >>> t = plt.axis('off')
-            >>> plt.show()
 
         """
         defaults = {'show': False,
@@ -6582,8 +6431,8 @@ class Layout(object):
         Parameters
         ----------
 
-            nroom1
-            nroom2
+        nroom1
+        nroom2
 
         Examples
         --------
@@ -6591,11 +6440,11 @@ class Layout(object):
             >>> from pylayers.gis.layout import *
             >>> L = Layout('WHERE1.ini')
             >>> L.dumpr()
-            >>> nroom1 = 1
-            >>> nroom2 = 6
-            >>> l = L.waypointGw(nroom1,nroom2)
-            >>> len(l)
-            4
+
+        Notes
+        -----
+
+        nodes of Gw are no longer room number
 
         """
         rooms = nx.dijkstra_path(self.Gw, nroom1, nroom2)
@@ -7575,12 +7424,12 @@ class Layout(object):
         return nbu
 
     def facet3D(self, e, subseg=False):
-        """ facet3D
+        """ calculate 3D facet from segment
 
         Parameters
         ----------
 
-        e : int
+        s : int
             segment number
         subseg : boolean
             default False
@@ -7590,30 +7439,30 @@ class Layout(object):
         P2 = np.array(np.zeros(3), dtype=np.float64)
         P3 = np.array(np.zeros(3), dtype=np.float64)
         P4 = np.array(np.zeros(3), dtype=np.float64)
-        nebr = self.Gs.neighbors(e)
+        nebr = self.Gs.neighbors(s)
         n1 = nebr[0]
         n2 = nebr[1]
 
         P1[0:2] = np.array(self.Gs.pos[n1])
-        P1[2] = self.Gs.node[e]['z'][0]
+        P1[2] = self.Gs.node[s]['z'][0]
 
         P2[0:2] = np.array(self.Gs.pos[n2])
-        P2[2] = self.Gs.node[e]['z'][0]
+        P2[2] = self.Gs.node[s]['z'][0]
 
         P3[0:2] = np.array(self.Gs.pos[n2])
-        P3[2] = self.Gs.node[e]['z'][1]
+        P3[2] = self.Gs.node[s]['z'][1]
 
         P4[0:2] = np.array(self.Gs.pos[n1])
-        P4[2] = self.Gs.node[e]['z'][1]
+        P4[2] = self.Gs.node[s]['z'][1]
 
         cold = pyu.coldict()
 
         if subseg:
-            nsseg = len(self.Gs.node[e]['ss_name'])
+            nsseg = len(self.Gs.node[s]['ss_name'])
         else:
             nsseg = 0
 
-        filename = 'fa' + str(e) + '.off'
+        filename = 'fa' + str(s) + '.off'
         filestruc = pyu.getlong(filename, pstruc['DIRGEOM'])
         fos = open(filestruc, "w")
         fos.write("OFF\n")
@@ -7621,34 +7470,34 @@ class Layout(object):
         fos.write("0.000 0.000 0.000\n")
         if subseg:
             try:
-                for k,name in enumerate(self.Gs.node[e]['ss_name']):
-                    P1[2] = self.Gs.node[e]['ss_z'][k][0]
-                    P2[2] = self.Gs.node[e]['ss_z'][k][0]
-                    P3[2] = self.Gs.node[e]['ss_z'][k][1]
-                    P4[2] = self.Gs.node[e]['ss_z'][k][1]
+                for k,name in enumerate(self.Gs.node[s]['ss_name']):
+                    P1[2] = self.Gs.node[s]['ss_z'][k][0]
+                    P2[2] = self.Gs.node[s]['ss_z'][k][0]
+                    P3[2] = self.Gs.node[s]['ss_z'][k][1]
+                    P4[2] = self.Gs.node[s]['ss_z'][k][1]
                     fos.write("%6.3f %6.3f %6.3f \n" % (P1[0], P1[1], P1[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P2[0], P2[1], P2[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P3[0], P3[1], P3[2]))
                     fos.write("%6.3f %6.3f %6.3f \n" % (P4[0], P4[1], P4[2]))
             except:
-                print 'no subsegment on ', e
+                print 'no subsegment on ', s
                 return('void')
         else:
-            name = self.Gs.node[e]['name']
+            name = self.Gs.node[s]['name']
             fos.write("%6.3f %6.3f %6.3f \n" % (P1[0], P1[1], P1[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P2[0], P2[1], P2[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P3[0], P3[1], P3[2]))
             fos.write("%6.3f %6.3f %6.3f \n" % (P4[0], P4[1], P4[2]))
 
         if subseg:
-            for k,name in enumerate(self.Gs.node[e]['ss_name']):
+            for k,name in enumerate(self.Gs.node[s]['ss_name']):
                 colname = sl[name]['color']
                 colhex = cold[colname]
                 col = pyu.rgb(colhex) / 255.
                 fos.write("4 %i %i %i %i %6.3f %6.3f %6.3f 0.4\n" % (1+4*k, 2+4*k,
                 3+4*k, 4+4*k, col[0], col[1], col[2]))
         else:
-            name = self.Gs.node[e]['name']
+            name = self.Gs.node[s]['name']
             colname = sl[name]['color']
             colhex = cold[colname]
             col = pyu.rgb(colhex) / 255.
@@ -8339,7 +8188,7 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('example.str','matDB.ini','slabDB.ini')
+        >>> L = Layout('defstr.ini')
         >>> p_Tx,p_Rx = L.randTxRx()
 
         Notes
@@ -8378,10 +8227,8 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('example.str','matDB.ini','slabDB.ini')
+        >>> L = Layout('defstr.str')
         >>> L.boundary()
-        >>> L.ax
-        (0.0, 10.0, -2.0, 2.0)
 
         """
         if len(self.Gs.pos.values())<>0:
@@ -8422,5 +8269,5 @@ class Layout(object):
 if __name__ == "__main__":
     pass
     #plt.ion()
-    #doctest.testmod()
+    doctest.testmod()
     #L = Layout('defstr3.ini')

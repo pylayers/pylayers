@@ -28,8 +28,8 @@ Nodes Class
 .. autosummary::
     :toctree: generated/
 
-    Coords.nodes
-    Coords.clean
+    Nodes.nodes
+    Nodes.clean
 
 Ways Class
 ============
@@ -87,6 +87,7 @@ Utility Functions
 #
 
 
+from pylayers.util.project import *
 import pylayers.util.geomutil as geu
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
@@ -101,7 +102,7 @@ import numpy as np
 import pdb
 
 # classes that handle the OSM data file format.
-class Way(object):
+class Way(PyLayers):
     """
 
     A Way is a polyline or a Polygon (if closed)
@@ -111,7 +112,8 @@ class Way(object):
 
     """
     def __init__(self,refs,tags,coords):
-        """
+        """ object constructor
+
         Parameters
         ----------
 
@@ -149,11 +151,17 @@ class Way(object):
     def show(self,fig=[],ax=[]):
         """ show way
 
+        Parameters
+        ----------
+
+        fig : matplotlib figure
+        ax  : axes
+
         """
         fig,ax = self.shp.plot(fig=fig,ax=ax)
         return(fig,ax)
 
-class Coords(object):
+class Coords(PyLayers):
     """
     Coords is a point in OSM
 
@@ -200,6 +208,14 @@ class Coords(object):
         self.maxlat =-1000
 
     def coords(self, coords):
+        """ calculates extrema of coords
+
+        Parameters
+        ----------
+
+        coords
+
+        """
         # callback method for coords
         for osmid, lon, lat in coords:
             self.latlon[osmid] = np.array([lon, lat])
@@ -213,29 +229,30 @@ class Coords(object):
         self.boundary=np.array([self.minlat,self.minlon,self.maxlat,self.maxlon])
 
     def cartesian(self):
-        """ Convert Latitude/Longitude in cartesian
+        """ convert Latitude/Longitude in cartesian
 
-        This method converst latlon coordinates into cartesian x,y coordinates in
+        Notes
+        -----
+
+        This method converts latlon coordinates into cartesian x,y coordinates in
         Cassini projection relatively to specified latlon boundary + an offset
         of 0.01 degrees.(to be parameterized ? )
         The basemap objet for back and forth coordinates.
         conversion is returned.
 
+        The transformation is centered on the mean of latitude and longitude
 
         Returns
         -------
 
         m : Basemap converter
 
-        Notes
-        -----
 
-        The transformation is centered on the mean of latitude and longitude
 
         Warning
         -------
 
-        If boundary are modified coordinates changes.
+        If boundariee are modified coordinates change.
 
         """
         bd = self.boundary
@@ -252,7 +269,7 @@ class Coords(object):
 
         return(m)
 
-class Nodes(object):
+class Nodes(PyLayers):
     """
 
     osm Nodes container
@@ -277,7 +294,7 @@ class Nodes(object):
         self.node= {}
         self.cpt = 0
 
-class Ways(object):
+class Ways(PyLayers):
     """
 
     Attributes
@@ -300,8 +317,7 @@ class Ways(object):
     cpt = 0
 
     def ways(self, ways):
-        """
-            general callback function
+        """ general callback function
         """
         for osmid, tags, refs in ways:
                 self.w[osmid] = (refs,tags)
@@ -313,8 +329,7 @@ class Ways(object):
         self.cpt = 0
 
     def building(self, ways):
-        """
-            building callback function
+        """ building callback function
         """
         for osmid, tags, refs in ways:
             if 'building' in tags:
@@ -322,8 +337,13 @@ class Ways(object):
                 self.cpt += 1
 
     def eval(self,coords):
-        """
-            convert into a Way object
+        """ convert into a Way object
+
+        Parameters
+        ----------
+
+        coords : osm coordinates
+
         """
         for osmid in self.w:
             refs = self.w[osmid][0]
@@ -417,6 +437,13 @@ class Ways(object):
 
     def showold(self,fig=[],ax=[]):
         """ show ways
+
+        Parameters
+        ----------
+
+        fig
+        ax
+
         """
         if fig==[]:
             fig = plt.figure()
@@ -452,14 +479,24 @@ class Relations(object):
         self.relation= {}
         self.cpt = 0
 
-class FloorPlan(nx.DiGraph):
-    """
-
-    FloorPlan class derived from nx.DigGraph
+class FloorPlan(PyLayers,nx.DiGraph):
+    """ FloorPlan class derived from nx.DigGraph
 
     """
 
     def __init__(self,rootid,coords,nodes,ways,relations):
+        """ object constructor
+
+        Parameters
+        ----------
+
+        rootid
+        coords
+        nodes
+        ways
+        relations
+
+        """
         nx.DiGraph.__init__(self)
         self.rootid=rootid
         self.coords = coords
@@ -480,9 +517,13 @@ class FloorPlan(nx.DiGraph):
 
 
     def build(self,typ,eid):
-        """
+        """ Notes : recursive construction
 
-        Notes : recursive construction
+        Parameters
+        ----------
+
+        typ : string
+            'relation' | 'way' | 'node'
 
         """
         if typ=='relation':
@@ -514,8 +555,14 @@ class FloorPlan(nx.DiGraph):
 
 
     def show(self,nid=None,fig=[],ax=[]):
-        """
-        show the floorplan
+        """ show the floorplan
+
+        Parameters
+        ----------
+        nid :
+        fig :
+        ax  :
+
         """
         if fig==[]:
             fig = plt.figure()
@@ -539,7 +586,7 @@ class FloorPlan(nx.DiGraph):
 #
 #
 def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True):
-    """
+    """ parse osm files
 
     Parameters
     ----------
@@ -637,14 +684,6 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
 def extract(alat,alon,fileosm,fileout):
     """ extraction of an osm sub region using osmconvert
 
-    This function takes two (1xn) arrays of latitude an longitude values
-    Calculates extrema of those values.
-    Invokes osmconvert script on a source fileosm and extract the
-    corresponding zone in the fileout file.
-
-    The functions returns a basemap object for coordinates conversion on this
-    file.
-
     Parameters
     ----------
 
@@ -657,6 +696,20 @@ def extract(alat,alon,fileosm,fileout):
     -------
 
     m : Basemap oject for coordinates conversion
+
+
+
+    Notes
+    -----
+
+    This function takes two (1xn) arrays of latitude an longitude values
+    Calculates extrema of those values.
+    Invokes osmconvert script on a source fileosm and extract the
+    corresponding zone in the fileout file.
+
+    The functions returns a basemap object for coordinates conversion on this
+    file.
+
 
 
     """
@@ -685,7 +738,6 @@ def getbdg(fileosm):
     ----------
 
     fileosm : string
-    m : Basemap object
 
     Returns
     -------
@@ -702,7 +754,13 @@ def getbdg(fileosm):
     return(zone)
 
 def buildingsparse(filename):
-    """
+    """ parse buildings
+
+    Parameters
+    ----------
+
+    filename : string
+
     """
     coords,nodes,ways,relations,m = osmparse(filename)
     for bid in relations.relation:

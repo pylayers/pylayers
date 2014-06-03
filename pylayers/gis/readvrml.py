@@ -42,6 +42,7 @@ import scipy as sp
 import matplotlib.pyplot as plt
 from pylayers.util import geomutil as geo
 from pylayers.util import pyutil as pyu
+from pylayers.util.project import * 
 from descartes.patch import PolygonPatch
 import shapely.geometry as shg
 import shapely.ops as sho
@@ -563,7 +564,7 @@ def vrml2geom(tg, rac):
         fd.close()
 
 
-class VLayout(object):
+class VLayout(PyLayers):
     def load(self, filename):
         """
         Parameters

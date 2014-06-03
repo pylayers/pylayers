@@ -1,15 +1,60 @@
 # -*- coding: latin1 -*-
+#class Project(object)
+#       """
+#       Création d'une arborescence de projet
+#       """
+#       def __init__(self):
+#       def
+
+#-*- coding:Utf-8 -*-
+"""
+"""
+import numpy as np
 import os
 import sys
 import shutil
 import pkgutil
 import pdb
-#class Project(object)
-#       """
-#       Création d'une arborescence de projet 
-#       """
-#       def __init__(self):
-#       def
+
+class PyLayers(object):
+    """ Generic PyLayers Meta Class
+    """
+
+    def help(self,letter='az',typ='mt'):
+        """ generic help
+
+        Parameters
+        ----------
+
+        txt : string
+            'mb' | 'mt'
+
+        """
+
+        members = self.__dict__.keys()
+        lmeth = np.sort(dir(self))
+
+        if typ=='mb':
+            print np.sort(self.__dict__.keys())
+        if typ=='mt':
+            for s in lmeth:
+                if s not in members:
+                    if s[0]!='_':
+                        if len(letter)>1:
+                            if (s[0]>=letter[0])&(s[0]<letter[1]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+                        else:
+                            if (s[0]==letter[0]):
+                                try:
+                                    doc = eval('self.'+s+'.__doc__').split('\n')
+                                    print s+': '+ doc[0]
+                                except:
+                                    pass
+
 
 currentdir = os.getcwd()
 

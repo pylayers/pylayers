@@ -39,7 +39,7 @@ def cloud(p, name="cloud", display=False, color='r', dice=2, R=0.5, access='new'
     R            : sphere radius   (0.5)
     access       : 'new' create a new file append mode neither
 
-	"""
+    """
     sh = np.shape(p)
     if len(sh) == 1 :
         p = p.reshape((1, len(p)))
@@ -80,7 +80,7 @@ def cloud(p, name="cloud", display=False, color='r', dice=2, R=0.5, access='new'
     fd.close()
 
     if display:
-        
+
         chaine = "geomview  -nopanel  -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(chaine)
 

@@ -103,6 +103,9 @@ PNetwork Class
 
     SimPy Process compliant version of the Network class
 
+.. autosummary::
+    :toctree: generated/
+
      PNetwork.__init__
      PNetwork.run
 
@@ -173,14 +176,10 @@ except:
 # How to take into account  1 specific key specifique for 1 MultiGraph
 # MULTIGRAPH !!!! G.add_edge(10,11,key='wifi',attr_dict=dict(Pr=0,TOA=10))
 
-
-
-
-
-class Node(nx.MultiGraph):
+class Node(PyLayers,nx.MultiGraph):
     """ Class Node
 
-    inherit of networkx.Graph()
+    inherit from networkx.MultiGraph()
 
     Attributes
     ----------
@@ -219,7 +218,7 @@ class Node(nx.MultiGraph):
                      'typ':'ag',
                      'grp':'',
                     }
-        
+
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
@@ -272,9 +271,7 @@ class Node(nx.MultiGraph):
         return ':'.join(map(lambda x: "%02x" % x, mac))
 
 
-
-
-class Network(nx.MultiDiGraph):
+class Network(PyLayers,nx.MultiDiGraph):
     """ Network class
 
     inherits from networkx.Graph()
@@ -313,11 +310,13 @@ class Network(nx.MultiDiGraph):
 
 
     def __init__(self,owner='sim',EMS=EMSolver(),PN=False):
-        """
+        """ object constructor
+
         Parameters
         ----------
 
         owner : string
+            'sim' |
         EMS : EMSolver
         PN : Boolean
             personal network activation
@@ -341,7 +340,6 @@ class Network(nx.MultiDiGraph):
 
     def __repr__(self):
 
-
         if not self.isPN:
             s = 'Network information\n*******************\n'
             s = s + 'number of nodes: ' + str(len(self.nodes())) +'\n'
@@ -349,7 +347,7 @@ class Network(nx.MultiDiGraph):
             s = s + title + '\n' + '-'*len(title) + '\n'
             for n in self.nodes():
                 # for compliance with simulnet and simultraj
-                # to be merged 
+                # to be merged
                 try:
                     wstd = self.node[n]['wstd'].keys()
                 except:
@@ -361,7 +359,7 @@ class Network(nx.MultiDiGraph):
 
     #             try:
     #                 s = s + 'node ID: ' + str(self.node[n]['ID']) + '\n'
-    #             except: 
+    #             except:
     #                 s = s + 'node ID: ' + str(n) + '\n'
     #             try :
     #                 s = s + 'wstd: ' + str(self.node[n]['wstd'].keys()) + '\n'
@@ -427,12 +425,16 @@ class Network(nx.MultiDiGraph):
     def add_devices(self, dev, p=[], grp=''):
         """ add devices to the current network
 
+        Parameters
+        ----------
+
         dev : list
-            list of Devices 
+            list of Devices
         p : ndarray (Ndev x 3)
             np.array of devices' positions
         grp : string
             name of the group of device belong to.
+
         """
 
         if not isinstance(dev,list):
@@ -484,9 +486,16 @@ class Network(nx.MultiDiGraph):
 
 
     def perm(self,iterable,r,key,d=dict()):
-        """ combi = itertools.permutation(iterable,r) adapted
+        """  calculate permutation
 
-        This is an adapted version of itertools.permutations in order to be compliant with the networkx.add_edges_from method.
+        Notes
+        -----
+
+        combi = itertools.permutation(iterable,r) adapted
+
+        This is an adapted version of itertools.permutations to
+        comply with the networkx.add_edges_from method.
+
         itertools.permutations(range(4), 3) --> 012 013 021 023 031 302 102 103 ...
 
         self.perm([10,11],2,'wifi') -->     (10, 11, 'wifi', {'Pr': [], 'TOA': []}) 
@@ -560,9 +569,15 @@ class Network(nx.MultiDiGraph):
 
 
     def combi(self,iterable,r,key,d=dict()):
-        """ combi = itertools.combination(iterable,r) adapted 
+        """ calculate combination
 
-        This is an adapted version of itertools.combinations in order to be complient with the networkx.add_edges_from method.
+        Notes
+        -----
+
+        combi = itertools.combination(iterable,r) adapted
+
+        This is an adapted version of itertools.combinations in order
+        to comply with the networkx.add_edges_from method.
         itertools.combinations('ABCD', 2) --> AB AC AD BC BD CD
         itertools.combinations(range(4), 3) --> 012 013 023 123
 
@@ -581,10 +596,10 @@ class Network(nx.MultiDiGraph):
 
 
         Returns
-        ------     
+        -------
 
         out : tuple(node_list,r,wstd,d):
-        node_list    : list of node1        
+        node_list    : list of node1
         r        : gather r node in the tuple
         wstd        : the specified wstd
         d        : dictionnary of wstd attribute
@@ -631,13 +646,12 @@ class Network(nx.MultiDiGraph):
 
 
     def Gen_tuple(self,gene,wstd,var):
-        """
-        generate a specific tuple  
+        """ generate a specific tuple
 
         Parameters
         ----------
 
-        gene : tuple(x,y) iterator 
+        gene : tuple(x,y) iterator
         wstd  : str
         var  : list
             len(var) = len(gene)
@@ -676,9 +690,7 @@ class Network(nx.MultiDiGraph):
     def _get_wstd(self):
         """ get wireless standards from nodes of the network
 
-
-
-        wstd argument specifies which wireless standards to append to the network. 
+        wstd argument specifies which wireless standard to append to the network.
         If None, all wireless standards are appended.
 
         Examples
@@ -733,7 +745,7 @@ class Network(nx.MultiDiGraph):
             wstd = wstd.keys()
         elif not isinstance(wstd, list):
             wstd = [wstd]
-        
+
         for w in wstd:
             if nodes == []:
                 edges=self.perm(self.wstd[w], 2, w, d=d)
@@ -750,11 +762,12 @@ class Network(nx.MultiDiGraph):
                 self.SubNet[w].add_edges_from(edges)
             except:
                 self.add_edges_from(edges)
-            
+
 
 
     def _connect(self):
-        """
+        """ connect nodes
+
         This method 
         1) Connect all nodes from the network sharing the same wstd 
         2) Create the associated SubNetworks
@@ -772,13 +785,13 @@ class Network(nx.MultiDiGraph):
             self.update_edges(edge_dict,wstd)
             self._get_SubNet(wstd)
 
-        # update  edges type informatiosn 
+        # update  edges type informatiosn
         self._get_edges_typ()
         # create lists of links
         self._get_llinks()
 
     def _get_llinks(self):
-        """ get list of links from the Network 
+        """ get list of links from the Network
 
         Notes
         -----
@@ -802,25 +815,24 @@ class Network(nx.MultiDiGraph):
             self.relinks[wstd]=[[i[1],i[0],i[2]] for i in self.links[wstd]]
 
     def _get_edges_typ(self):
-        """ 
-            apply specific type on edges 
+        """ apply specific type on edges
 
         Notes
         -----
 
         types are :
             OB : On body
-             when link' nodes of a link are: 
-                on the same agent 
+             when link' nodes of a link are:
+                on the same agent
                 and belong to the same group
             B2B : Body to Body
-                when link' nodes of a link are: 
+                when link' nodes of a link are:
                     between 2 agents
             B2I : Body to Infrastructure
-                when link' nodes of a link are: 
+                when link' nodes of a link are:
                     between an agent and an access point
             I2I : Infrastructure to Infrastructure
-                when link' nodes of a link are: 
+                when link' nodes of a link are:
                     between 2 access points
         """
         d = {}
@@ -1244,23 +1256,22 @@ class Network(nx.MultiDiGraph):
 
 
     def overview(self):
-        """ overview
+        """ overview of the network
 
         Returns
         -------
 
-        O : dict 
+        O : dict
+
 
         """
         O={}
         for sn in self.SubNet.iteritems():
-            for ldp in self.LDP:    
+            for ldp in self.LDP:
                 try:
-                    O[sn[0]].update({ldp:nx.get_edge_attributes(sn[1],ldp)}) 
-                except:            
-                    O[sn[0]]={ldp:nx.get_edge_attributes(sn[1],ldp)} 
-
-
+                    O[sn[0]].update({ldp:nx.get_edge_attributes(sn[1],ldp)})
+                except:
+                    O[sn[0]]={ldp:nx.get_edge_attributes(sn[1],ldp)}
 
         return (O)
 

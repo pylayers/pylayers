@@ -40,19 +40,20 @@ class Scenario(object):
     """
     Class Scenario : definition of a static localization scenario
 
-    MEMBERS
+    Attributes
+    ----------
 
     an      : Anchor nodes coordinates
     bn      : Blind nodes coordinates
-    CDF     : list 
-    parmsc  : parameters dictionary 
+    CDF     : list
+    parmsc  : parameters dictionary
         scenar_type     :  'simulated' | 'monte-carlo'
         err_type    :  'homogene'  | 'hybrid'
         Constrain_Type  :  'TOA' | 'TDOA' | 'RSS' | 'MIX'
         Algebraic_method     :  'TLS' | 'WLS'
         rss_mode    :  'mean'
         'rss0'      :  -34.7 dB
-        'd0'        :  1 m 
+        'd0'        :  1 m
         'pn'        :  2.64
         'std_dev_range' :  arange(1,5,.5)
         'dec_mode'      : 'monodec'
@@ -137,7 +138,6 @@ class Scenario(object):
             self.parmsc_dis['display']=False
             self.parmsc_dis['save_fig']=True
 
-    
         else :
 
             self.parmsc_dis['display']=True
@@ -155,7 +155,7 @@ class Scenario(object):
             plt.rcParams['font.size']=20
             plt.rcParams['grid.linewidth']=3.5
             plt.rcParams['xtick.major.pad']=20
-        
+
 
         if self.parmsc_dis['save_fig']:
             self.fig = plt.figure(figsize=(28, 20))
@@ -164,13 +164,13 @@ class Scenario(object):
             self.fig = plt.figure()     
             self.ax = self.fig.add_subplot(111)
         self.marker=[[':r',':g',':b',':k',':m',':c'],['--r','--g','--b','--k','--m','--c'],['-r','-g','-b','-k','--m','--c']]
-        
+
         if self.parmsc['Constrain_Type']=='TDOA':
             self.dan=[]
             for i in range(len(self.an)-1):
                 self.dan.append(vstack((an[0],an[i+1])))
 
-        
+
 
     def info(self):
         """
@@ -190,7 +190,7 @@ class Scenario(object):
             print "nb of AN couple : ", len(self.dan)
         else :
             print "nb AN  : ", len(self.an)
-        
+
         print "nb BN  : ", len(self.bn)
         print 'limit of BNs positions',self.parmsc_dis['room'],'m'
 
@@ -214,7 +214,7 @@ class Scenario(object):
             if self.parmsc['algebraic']:
                 if self.parmsc['Constrain_Type']=='TDOA':
                     print 'algebraic TDOA method :',self.parmsc['Algebraic_method']  # if ['Constrain_Type']='TDOA' chose the TDOA method WLS/TLS
-                    
+
             ####### RSS
             if self.parmsc['Constrain_Type']=='RSS':
                 print 'rss mode :',self.parmsc['rss_mode']
@@ -240,16 +240,16 @@ class Scenario(object):
                     print 'decimation :',self.CDF[i]['dec']
                     print 'sigma max :',self.CDF[i]['sigma_max'],self.std_v,'ns'
                     print '\n'
-                    
 
 
-        
+
+
     def show3(self,amb=True,sc='all'):
         """
         show3(param) : Geomview 3D vizualization of the scenario
 
         The scene is stored in the file scene.list in the geom directory 
-        
+
         param :
             display : True
             R       : Sphere radius (meter) 
@@ -268,10 +268,6 @@ class Scenario(object):
         self.time_compute={}
         self.time_compute['RGPA']=[]
         self.time_compute['algebraic']=[]
-
-
-
-
 
         self.CRB=[]
         Nbn    = len(self.bn)
@@ -292,11 +288,11 @@ class Scenario(object):
         self.erryLS  = np.array([])
         self.errzLS  = np.array([])
         # list for algebraic 
-    
+
         atoabn = []
         astdbn = []
         P      = []
-        
+
         if self.parmsc['Constrain_Type']=='TDOA':
             lbcl=Nan-1
         else :              
@@ -327,12 +323,12 @@ class Scenario(object):
             self.ibn=ibn
             errli   = []
             Constraint.C_Id = 0         # reset constraint Id for each BN
-        
+
             print "                    Blind Node N°",ibn+1,"/",Nbn
             atv=[]
             pbn = self.bn[ibn] 
             #print "Blind Node N° ",ibn,pbn
-            
+
             self.tic_ensemblist=time.time()
             cla = CLA(self.parmsh)
             cla.bn = self.bn[ibn] 
@@ -341,7 +337,7 @@ class Scenario(object):
             clatoa = CLA(self.parmsh)
             clatdoa = CLA(self.parmsh)
 
-        
+
             #cla.C_Id=0         
             if parmsc['exclude_out'] != None :
                 E = Exclude(nodes=parmsc['exclude_out'])    
@@ -354,12 +350,12 @@ class Scenario(object):
             for ian in range(lbcl):    # for each AN or couple of AN (TDOA)
                 #print "Anchor Node N° ",ian
 
-            
+
                 try :
                     self.parmsc['Constrain_Type'] = self.parmsc['l_connect'][ian]
                 except :
                     pass
-                
+
 #                   pdb.set_trace()
                 rgpatimea=time.time()
                 if self.parmsc['Constrain_Type']=='TOA':
@@ -388,7 +384,7 @@ class Scenario(object):
                 if self.parmsc['Constrain_Type']=='TDOA':
 
 
-                    
+
                     pan = vstack((self.an[tdoa_idx[0]],self.an[ian+1]))
                     # dan : delay between 2 AN (ns)
                     dan = np.sqrt(dot(pan[0]-pan[1],pan[0]-pan[1]))/3e8
@@ -398,11 +394,11 @@ class Scenario(object):
                     toa1 = np.sqrt(np.dot(pan[0]-pbn,pan[0]-pbn))/3e8
                     toa2 = np.sqrt(np.dot(pan[1]-pbn,pan[1]-pbn))/3e8
                     tvalue = toa2-toa1
-                    
+
                     err    = self.std_v[ibn,ian]*sp.randn()
                     while ((tvalue + err) < minvalue) or ((tvalue + err) > maxvalue):
                         err    = self.std_v[ibn,ian]*sp.randn()
-            
+
 
                     self.errTDOA=np.vstack((self.errTDOA,err))
                     # tvalue : true value (ns)
@@ -443,9 +439,9 @@ class Scenario(object):
                     err = (RSSStd*randn(shape(value)[0],shape(value)[1]))[0][0]
 
                     self.errRSS=np.vstack((self.errRSS,err))
-                
+
                     value = value[0] + err
-            
+
 #                       value  = rssloc.getPL(PA.T, PP.T, PL0, d0, RSSnp, RSSStd)
                     value  = value
 
@@ -519,7 +515,7 @@ class Scenario(object):
                     self.petoa=clatoa.pe
                     errli.append(np.sqrt(np.dot(self.petoa[:2]-pbn[:2],self.petoa[:2]-pbn[:2])))
 
-            
+
                 if len(nonzero(np.array(parmsc['l_connect'])=='TDOA')[0]) != 0:
                     for i in range(3):
                         clatdoa.c[i].Id=i
@@ -539,7 +535,7 @@ class Scenario(object):
             self.err1  = np.hstack((self.err1,err1))    
 
             #self.err2  = np.hstack((self.err2,err2))       
-            
+
 
             #if err >3:
             #       pdb.set_trace()
@@ -563,9 +559,9 @@ class Scenario(object):
 
                 #elif self.parmsc['Algebraic_method'] == 'CRB': 
                 #       errLS = np.sqrt(self.CRB)
-    
+
                 else :
-                    
+
                     errLS   = np.sqrt(np.dot(p_LS[:2]-pbn[:2],p_LS[:2]-pbn[:2]))        
                 self.errLS  = np.hstack((self.errLS,errLS))     
 
@@ -574,7 +570,7 @@ class Scenario(object):
 
 
     def algebraic_compute(self,atv):
-        
+
         rss_idx = self.rss_idx
         toa_idx = self.toa_idx
         tdoa_idx = self.tdoa_idx
@@ -599,8 +595,6 @@ class Scenario(object):
 
 
         if len(rss_idx) != 0:
-        
-            
             for i in rss_idx:
 
                 aa=np.array(self.an[i])
@@ -616,15 +610,10 @@ class Scenario(object):
             Rss=np.delete(Rss,0,0)
 
 
-
-            
-
         else :
 
             RN_RSS=None
 
-        
-        
         ############### TOA ##############
         RN_TOA=zeros(3)
         ToA=zeros(1)
@@ -632,7 +621,7 @@ class Scenario(object):
 
         if len(toa_idx) != 0:
 
-            
+
             for i in toa_idx:
 
                 aa=np.array(self.an[i])
@@ -647,7 +636,7 @@ class Scenario(object):
             RN_TOA = RN_TOA[:2]
             ToA=np.delete(ToA,0,0)
             ToAStd=np.delete(ToAStd,0,0)
-            
+
 
 
         else : 
@@ -662,14 +651,14 @@ class Scenario(object):
 
         if len(tdoa_idx) != 0:
             #RN_TDOA=zeros(3)
-            
+
             #for i in tdoa_idx:
 
             #       aa=np.array(self.an[i])
             #       RN_TDOA=np.vstack((RN_TDOA,aa)) 
             RN_TDOA=(self.an[tdoa_idx[1:]]).T
             RN_TDOA_ref=(self.an[tdoa_idx[0]]*ones(np.shape(RN_TDOA))).T        
-            
+
 
 
             for i in tdoa_idx[0:-1]:
@@ -689,8 +678,8 @@ class Scenario(object):
 
             RN_TDOA=None
             RN_TDOA_ref=None
-        
-        
+
+
 
 #           if RN_RSS != None :
 #               print '############### RSS ##################'  
@@ -713,7 +702,7 @@ class Scenario(object):
 #               print 'RNTDOA_ref\n', RN_TDOA_ref
 #               print   'TDOA\n', TDoA
 #               print   'TDOASTD\n', TDoAStd
-#       
+
         self.tic_algebric=time.time()
         S1=HDFLocation(RN_RSS, RN_TOA, RN_TDOA)
         S2=RSSLocation(RN_RSS)
@@ -762,9 +751,9 @@ class Scenario(object):
                 P=S2.SDPRSSLocate(RN_RSS, PL0, d0, -Rss, RSSnp, RSSStd, 'mode')
             else:
                 P=S1.SDPHDFLocate(RN_RSS, RN_TOA, RN_TDOA,RN_TDOA_ref, ToA, ToAStd, TDoA, TDoAStd, PL0, d0, Rss, RSSnp, RSSStd, 'mode')
-           
 
-              
+
+
 
 
         else : 
@@ -774,7 +763,7 @@ class Scenario(object):
         if self.parmsc['CRB'] :
 
             CRBL=CRBLocation(None)
-                            
+
             if len(rss_idx) != 0:   
                 RSSStdX = self.errRSS#[rss_idx]#*ones(len(self.an[rss_idx]))
 
@@ -794,14 +783,14 @@ class Scenario(object):
 ###################################### TOA PUR
             elif RN_RSS==None and RN_TDOA==None:  # TOA
                 print 'TOA CRB'
-                
+
                 self.CRB.append(sqrt(CRBL.CRB_TOA_fim(PP, RN_TOA,TOAStdX)))
 
 ###################################### TDOA PUR
             elif RN_RSS ==None and RN_TOA==None : # TDOA
                 print 'TDOA'
                 self.CRB.append(sqrt(CRBL.CRB_TDOA_fim(PP,  RN_TDOA,RN_TDOA_ref,TDOAStdX)))
-               
+
             elif RN_TOA==None and RN_TDOA!= None:
 ###################################### TDOA 
                 if RN_RSS==None: 
@@ -812,7 +801,7 @@ class Scenario(object):
                     print 'RSS+TDOA'
                     self.CRB.append(sqrt(CRBL.CRB_RSS_TDOA_fim(PP, RN_RSS, RN_TDOA,RN_TDOA_ref,RSSnp, RSSStdX, TDOAStdX ))) 
 
-            
+
             elif RN_TOA!=None and RN_TDOA== None:
 ##################################### TOA
                 if RN_RSS==None: 
@@ -841,10 +830,10 @@ class Scenario(object):
 
 
 
-    
+
     def CDF_figure_gen(self,in_cdf,c_nb):
-        
-        
+
+
         bound=self.parmsc_dis['CDF_bound']
 
 
@@ -852,23 +841,23 @@ class Scenario(object):
             cdf=in_cdf['cdf_alg']
         else:
             cdf=in_cdf['cdf']
-        
-    
-        
+
+
+
 
          #size ko           
         room=self.parmsc_dis['room']
         lbound=len(bound)
         cmpt=in_cdf['cmpt']
-        
+
         c=('c' +str(c_nb))
 
         if self.parmsc['scenar_type']=='simulated' :
-            
+
             c=self.ax.plot(bound,cdf[:lbound],self.marker[cmpt][c_nb],linewidth=3)
         return c
 
-        
+
 
     def CDFdisplay(self):
         title = 'CDF : ' + self.parmsc['Constrain_Type'] + '\n'+'for '+str(len(self.bn)) +' random BNs positions '   +'\n' +r'  $\sigma_{max}(RSS)$=' +str(self.parmsc['sigma_max_RSS']) +'m $\sigma_{max}(TOA)$=' +str(self.parmsc['sigma_max_TOA']) +' m ' +'$\sigma_{max}(TDOA)$=' +str(self.parmsc['sigma_max_TDOA']) +' m ' 
@@ -876,9 +865,9 @@ class Scenario(object):
 
         leg_alg   = 'Algebraic methode :' +self.parmsc['Algebraic_method'] 
         leg2   = 'Geometric Box' +r'  $\sigma_{max} RSS$=' +str(self.parmsc['sigma_max_RSS']) +'TOA' +str(self.parmsc['sigma_max_TOA']) +'TDOA' +str(self.parmsc['sigma_max_TDOA']) +' ns ' +str(self.std_v) +'  '  +'  vcw:' +str(self.parmsc['vcw'])
-        
+
         LEG = 'Hybrid ensemblist' 
-        
+
         ld = []
         """
         d0 = {}
@@ -904,7 +893,7 @@ class Scenario(object):
         d2['linewidth'] = 3  
         d2['filename']  = 'essai.png'  
         ld.append(d2)
-        
+
         if self.parmsc['algebraic']:
             d1 = {}
             d1['values'] = self.errLS
@@ -919,7 +908,7 @@ class Scenario(object):
             ld.append(d1)
 #           c1 = CDF.CDF(ld)
 #           c1.show()
-        
+
         fname=filename
         self.CDF[fname]={}
         self.CDF[fname]['L']=[]
@@ -962,14 +951,14 @@ class Scenario(object):
         """
         self.std_v_save=[]
 
-            
+
         if self.parmsc['scenar_type']=='simulated':
             if self.parmsc['err_type']=='homogene':
                 if self.parmsc['Constrain_Type'] != 'hybrid':
 
                     self.std_v=self.parmsc['sigma_max']*sp.ones(len(self.bn),len(self.an))
                     self.std_v_save.append(self.std_v)
-                
+
                 else :
 
 
@@ -1000,7 +989,7 @@ class Scenario(object):
                     pstdv=nonzero(array(self.parmsc['l_connect'])=='TDOA')[0]
                     self.std_v[:,pstdv]=(self.parmsc['sigma_max_TDOA']/3e8)*sp.ones((len(self.bn),len(self.an[pstdv])))
 
-            
+
             elif self.parmsc['err_type']=='test':
 
 
@@ -1019,16 +1008,16 @@ class Scenario(object):
             self.run()
             self.CDFdisplay()
 
-        
 
-        
+
+
 if __name__=="__main__":
 
     L  = 20
     H1 = 0.0
     H2 = H1
     H3 = H1
-    
+
     Nbn  = 1000
     save_time={}
     np.random.seed(0)
@@ -1036,7 +1025,7 @@ if __name__=="__main__":
     connect['RSS']  = 0
     connect['TOA']  = 0
     connect['TDOA'] = 1
-    
+
 
     filename = ''
     sp.random.seed(0)
@@ -1060,7 +1049,7 @@ if __name__=="__main__":
         an = vstack((an,BS4))
         filename = filename + '_RSSI'
 
-    
+
 
     if connect['TOA']:
         MS1 = np.array([L/3.0,0.0,H1])
@@ -1092,12 +1081,12 @@ if __name__=="__main__":
         an = vstack((an,Ap3))
         an = vstack((an,Ap4))
         filename = filename + '_TDOA'
-    
+
 
     an=np.delete(an,0,0)
 
 #                    filename = filename + '.pdf'
-    
+
     ##### LIMITE POUR CONTRAINTE EXCLUDE
 
     BOUND1 = np.array([0,0,-0.5])
