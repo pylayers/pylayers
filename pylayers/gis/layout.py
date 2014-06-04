@@ -4644,7 +4644,7 @@ class Layout(PyLayers):
 
         return fig,ax
 
-    def build(self, graph='tcvirw',verbose=False):
+    def build(self, graph='tcvirw',verbose=False,convex=False):
         """ build graphs
 
         Parameters
@@ -4666,10 +4666,13 @@ class Layout(PyLayers):
             if verbose:
                 print "Gt"
             self.buildGt()
-            #Make the layout convex in regard of the outddor
-            # self._convex_hull()
-            # # Ensure convexity of all cycles
-            # self._convexify()
+            if convex:
+                #Make the layout convex in regard of the outddor
+                self._convex_hull()
+                # # Ensure convexity of all cycles
+                self._convexify()
+                # re-attach new cycles 
+                self.buildGt()
             self.lbltg.extend('t')
 
         if 'c' in graph:
@@ -4922,6 +4925,7 @@ class Layout(PyLayers):
         #
         #  5 - connect cycle which share at least one segment
         #
+
         for k in combinations(self.Gt.nodes(), 2):
 
             vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
@@ -5170,6 +5174,11 @@ class Layout(PyLayers):
 
         This is a post processing of BuildGt
         
+        See Also
+        --------
+
+        pylayers.gis.layout._interlist
+
 
         """
 
@@ -5269,9 +5278,6 @@ class Layout(PyLayers):
         pylayers.gis.layout.del_segment
         pylayers.util.geomutil.Polygon
         sp.spatial.Delaunay
-        pylayers.gis.layout._updGsncy
-        pylayers.gis.layout._addoutcy
-        pylayers.gis.layout._interlist
 
         """
         # function for debug purpose
@@ -5307,7 +5313,6 @@ class Layout(PyLayers):
                         ucs = np.array(uus)[utsconvex]
                         pucs = array(map(lambda x: self.Gs.pos[x], ucs))
                         pucs = np.vstack((pucs,pucs[-1]))
-
                         ####
                         #### 2 perform a Delaunay Partioning 
                         ####
@@ -5398,7 +5403,6 @@ class Layout(PyLayers):
                         daw = filter(lambda x: x not in vnodes,naw)
                         [self.del_segment(d,verbose=False) for d in daw]
                         nbpolys=len(ncpol)
-
                         # remove old cycle
                         self.Gt.remove_node(n)
                         # lcyid: (new) list of cycle id 
@@ -5419,25 +5423,37 @@ class Layout(PyLayers):
                             self.Gt.node[cyid]['isopen']=True
                             self.Gt.pos[cyid] = tuple(cy.g)
 
-                        Gtnodes= filter(lambda x: x>0,self.Gt.nodes())
-                        for k in combinations(Gtnodes, 2):
-                            vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
-                            vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
-                            #
-                            # Connect Cycles if they share at least one segments
-                            #
-                            intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+                        
+                        for k in combinations(self.Gt.nodes(), 2):
+                            if not 0 in k:
+                                vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+                                vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
+                                #
+                                # Connect Cycles if they share at least one segments
+                                #
+                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
 
-                            if len(intersection_vnodes) > 1:
-                                segment = intersection_vnodes[np.where(intersection_vnodes>0)]
-                                self.Gt.add_edge(k[0], k[1],segment= segment)
+                                if len(intersection_vnodes) > 1:
+                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                                    self.Gt.add_edge(k[0], k[1],segment= segment)
+                            else:
 
-        # update self.Gs.node[x]['ncycles']
-        self._updGsncy()
-        # add outside cycle to Gs.node[x]['ncycles']
-        self._addoutcy()
-        # update interaction list into Gt.nodes (cycles)
-        self._interlist(nodelist=lacy)
+                                vnodes0 = self.Gt.node[k[0]]['polyg'].vnodes
+                                vnodes1 = self.Gt.node[k[1]]['polyg'].vnodes
+                                intersection_vnodes = np.intersect1d(vnodes0, vnodes1)
+
+                                if len(intersection_vnodes) > 1:
+                                    segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                                    self.Gt.add_edge(k[0], k[1],segment= segment)
+                               
+                                
+
+        # # update self.Gs.node[x]['ncycles']
+        # self._updGsncy()
+        # # add outside cycle to Gs.node[x]['ncycles']
+        # self._addoutcy()
+        # # update interaction list into Gt.nodes (cycles)
+        # self._interlist(nodelist=lacy)
 
     def buildGw(self):
         """ build Graph of waypaths

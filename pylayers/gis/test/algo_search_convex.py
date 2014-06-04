@@ -163,7 +163,8 @@ for n in L.Gt.nodes():
                                                cp.vnodes[np.mod(i+1,lvn)]
                                                ,name='AIR'))
                                 polys.append(cp)
-
+                import ipdb
+                ipdb.set_trace()
                 #
                 # 3. merge delaunay triangulation in order to obtain
                 #   the larger convex polygons partioning 
