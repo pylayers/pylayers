@@ -720,6 +720,18 @@ class Body(PyLayers):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
+    def _plot3d(self,text=True):
+        """
+            just help to assign points
+        """
+        s, p, f, info = c3d.read_c3d(self.filename)
+        mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
+        [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
+                     scale=3,
+                     color=(0,0,0)) for i in range(len(p))]
+
+
+
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
 
