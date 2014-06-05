@@ -757,6 +757,7 @@ class Body(PyLayers):
         if kwargs['typ'] == 'c3d':
             s, p, f, info = c3d.read_c3d(self.filename)
             mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
+            f.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
                          scale=3,
