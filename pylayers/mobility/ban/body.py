@@ -720,17 +720,76 @@ class Body(PyLayers):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
-    def _plot3d(self,text=True):
+    def _plot3d(self,**kwargs):
         """
-            just help to assign points
+            display points and their name for body or original C3D file
+
+        Parameters
+        ----------
+
+        typ : str (body|c3d)
+            choose points to be displayed (body or c3d)
+        text: boolean
+            diplay nodes name
+
         """
-        s, p, f, info = c3d.read_c3d(self.filename)
-        mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
-        [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
-                     scale=3,
-                     color=(0,0,0)) for i in range(len(p))]
 
+        defaults={'typ':'body',
+                  'text':True,
+                  'edge':False,
+                  'ncolor':'b',
+                  'ecolor':'b',
+                  'iframe' : 0
+                  }
 
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        f = mlab.gcf()
+
+        cold = pyu.coldict()
+        ncolhex = cold[kwargs['ncolor']]
+        pt_color = tuple(pyu.rgb(ncolhex)/255.)
+        ecolhex = cold[kwargs['ecolor']]
+        ed_color = tuple(pyu.rgb(ecolhex)/255.)
+
+        if kwargs['typ'] == 'c3d':
+            s, p, f, info = c3d.read_c3d(self.filename)
+            mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
+            if kwargs['text']:
+                [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
+                         scale=3,
+                         color=(0,0,0)) for i in range(len(p))]
+        else :
+            fId = kwargs['iframe']
+            kta = self.sl[:,0].astype(int)
+            khe = self.sl[:,1].astype(int)
+            cylrad = self.sl[:,2]
+            if 'topos' in dir(self):
+                pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+                phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+            else:
+                pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
+                phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+
+            X=np.hstack((pta,phe))
+            s = np.hstack((cylrad,cylrad))
+            pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                                5*s ,
+                                scale_factor=0.1,
+                                resolution=10,
+                                color =pt_color)
+            if kwargs['edge']:
+                connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                pts.mlab_source.dataset.lines = np.array(connections)
+                tube = mlab.pipeline.tube(pts, tube_radius=0.005)
+                mlab.pipeline.surface(tube,color=ed_color)
+                f.children[-1].__setattr__('name',self.name )
+            if kwargs['text']:
+                [mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
+                         scale=0.05,
+                         color=(0,0,0)) for i in range(self.ncyl)]
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
@@ -819,7 +878,8 @@ class Body(PyLayers):
                     'ccs':False,
                     'dcs':False,
                     'color':'white',
-                    'k':0}
+                    'k':0,
+                    'save':False}
 
         for k in defaults:
             if k not in kwargs:
@@ -936,9 +996,9 @@ class Body(PyLayers):
                            newfig=False,
                            title=False,
                            colorbar=False)
-
-        fig = mlab.gcf()
-        mlab.savefig('Body.png',figure=fig)
+        if kwargs['save']:
+            fig = mlab.gcf()
+            mlab.savefig('Body.png',figure=fig)
 
 
     def show(self,**kwargs):
