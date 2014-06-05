@@ -60,6 +60,7 @@ import pylayers.util.geomutil as geu
 import pylayers.mobility.ban.DeuxSeg as seg
 import doctest
 import itertools as itt
+from pylayers.util.project import *
 try:
     from mayavi import mlab
     from tvtk.tools import visual
@@ -271,7 +272,7 @@ class Body(PyLayers):
             self.centered = True
 
     def posvel(self,traj,t):
-        r""" calculate position and velocity
+        """ calculate position and velocity
 
         traj : Tajectory DataFrame
             nx3
@@ -733,6 +734,18 @@ class Body(PyLayers):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
+    def _plot3d(self,text=True):
+        """
+            just help to assign points
+        """
+        s, p, f, info = c3d.read_c3d(self.filename)
+        mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
+        [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
+                     scale=3,
+                     color=(0,0,0)) for i in range(len(p))]
+
+
+
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
 
@@ -815,6 +828,7 @@ class Body(PyLayers):
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
+                    'tube_sides' : 6,
                     'pattern':False,
                     'ccs':False,
                     'dcs':False,
@@ -851,17 +865,33 @@ class Body(PyLayers):
         else:
             pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
             phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
-        ax = phe-pta
-        l = np.sqrt(np.sum((ax**2), axis=0))
-        cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
-                               axis=(ax[0, i],ax[1, i],ax[2, i]), 
-                               radius=cylrad[i]*kwargs['widthfactor'],
-                               length=l[i]) for i in range(self.ncyl)]
-        [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
-         for i in range(self.ncyl)]
-        partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
-        [f.children[k].__setattr__('name', partnames[k]+str(k))
-         for k in range(self.ncyl)]
+
+        connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+        X=np.hstack((pta,phe))
+        s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
+        #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
+                                             # scale_factor=0.1, resolution=10)
+        pts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
+                                             scale_factor=0.001, resolution=10)
+        pts.mlab_source.dataset.lines = np.array(connections)
+        tube = mlab.pipeline.tube(pts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
+        tube.filter.radius_factor = 1.
+        tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
+        mlab.pipeline.surface(tube, color=body_color)
+        f.children[-1].__setattr__('name',self.name )
+                
+        # ax = phe-pta
+        # l = np.sqrt(np.sum((ax**2), axis=0))
+        # cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
+        #                        axis=(ax[0, i],ax[1, i],ax[2, i]), 
+        #                        radius=cylrad[i]*kwargs['widthfactor'],
+        #                        length=l[i], resolution=1) for i in range(self.ncyl)
+        #                        ]
+        # [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
+        #  for i in range(self.ncyl)]
+        # partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
+        # [f.children[k].__setattr__('name', partnames[k]+str(k))
+        #  for k in range(self.ncyl)]
 
         if kwargs['ccs']:
             # to be improved
