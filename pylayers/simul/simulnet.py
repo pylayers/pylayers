@@ -99,14 +99,16 @@ class Simul(SimulationRT): # Sympy 2
 
     Parameters
     ----------
+
     self.lAg  : list of Agent(Object)
         list of agents involved in simulation
     self.L : Layout
-        Layout used in simulation   
+        Layout used in simulation
 
     Notes
-    ------
-     All the prvious dictionnary are obtained from the chosen simulnet.ini file
+    -----
+
+    All the previous dictionnary are obtained from the chosen simulnet.ini file
     in the project directory
 
     """
@@ -152,7 +154,7 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\nNumber of agents :' + str(len(self.lAg))
         s = s + '\nAgents IDs: ' + str([self.lAg[i].ID for i in range(len(self.lAg))])
         s = s + '\nAgents names: ' + str([self.lAg[i].name for i in range(len(self.lAg))])
-        s = s + '\nDestination of agents choosed: ' + self.meca_opt['choose_destination']
+        s = s + '\nDestination of chosen agents: ' + self.meca_opt['choose_destination']
 
         s = s + '\n\nNetwork' + '\n-------' 
         s = s + '\nNodes per wstd: ' + str(self.net.wstd)
@@ -161,13 +163,12 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\nLocalization enable: ' + self.loc_opt['localization'] 
         s = s + '\nPostion estimation methods: ' + self.loc_opt['method'] 
 
-        
+
         return s
 
 
     def create_layout(self):
-        """
-        Create Layout in Simpy the_world thanks to Tk backend
+        """ create Layout in Simpy the_world thanks to Tk backend
 
         """
 
@@ -197,8 +198,7 @@ class Simul(SimulationRT): # Sympy 2
                 self.the_world.add_wall(wall[ii], wall[ii + 1])
 
     def create_agent(self):
-        """    
-        create simulation's Agents
+        """ create simulation's Agents
 
         ..todo:: change lAg list to a dictionnary ( modification in show.py too) 
 
@@ -242,14 +242,12 @@ class Simul(SimulationRT): # Sympy 2
 
 
     def create_EMS(self):
-        """
-            Electromagnetic Solver object
+        """ electromagnetic Solver object
         """
         self.EMS = EMSolver(L=self.L)
 
     def create_network(self):
-        """
-            create the whole network
+        """ create the whole network
         """
 
         self.net = Network(EMS=self.EMS)
@@ -278,7 +276,7 @@ class Simul(SimulationRT): # Sympy 2
             self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):
-        """ Create visual Tk process
+        """ create visual Tk process
         """
 
         self.visu = Updater(
@@ -286,7 +284,7 @@ class Simul(SimulationRT): # Sympy 2
         self.activate(self.visu, self.visu.execute(), 0.0)
 
     def create(self):
-        """ Create the simulation 
+        """ create the simulation
             This method is called at the end of __init__
 
         """
@@ -311,7 +309,7 @@ class Simul(SimulationRT): # Sympy 2
                                 os.remove(basename+'/output/'+f)
                         except:
                             pass
-                        
+
         self.create_layout()
         self.create_EMS()
         self.create_network()
@@ -324,7 +322,7 @@ class Simul(SimulationRT): # Sympy 2
             self.activate(self.save,self.save.run(),0.0)
 
     def create_show(self):
-        """
+        """ create a vizualization
         """
 
         plt.ion()
@@ -345,7 +343,7 @@ class Simul(SimulationRT): # Sympy 2
 
 
     def savepandas(self):
-        """ Save mechanic in pandas hdf5 format
+        """ save mechanics in pandas hdf5 format
         """
         filename=pyu.getlong(eval(self.sim_opt["filename"]),pstruc['DIRNETSAVE'])
         layfile = self.L.filename.split('.')[0]
@@ -353,7 +351,7 @@ class Simul(SimulationRT): # Sympy 2
         for a in self.lAg :
 
             if a.typ != 'ap':
-                store.put( a.ID,a.meca.df.convert_objects() ) 
+                store.put( a.ID,a.meca.df.convert_objects() )
 
             else : # if agent acces point, its position is saved
                 store.put( a.ID,a.posdf )
@@ -369,7 +367,7 @@ class Simul(SimulationRT): # Sympy 2
 
 
     def runsimul(self):
-        """ Run simulation
+        """ run simulation
         """
         if not self.finish :
             seed(self.seed)
