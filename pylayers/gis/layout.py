@@ -8195,18 +8195,7 @@ class Layout(PyLayers):
         boxes[:,2]=b+2*npt_s
         boxes[:,3]=b+3*npt_s
 
-        # manage floor
-        floorx= np.array((points[:,0].min(),points[:,0].max()))
-        floory= np.array((points[:,1].min(),points[:,1].max()))
-        zmin= np.min(points[:,2])
-        Pf = np.array([floorx[0],floory[0],zmin])
-        Pf = np.vstack((Pf,np.array([floorx[0],floory[1],zmin])))
-        Pf = np.vstack((Pf,np.array([floorx[1],floory[1],zmin])))
-        Pf = np.vstack((Pf,np.array([floorx[1],floory[0],zmin])))
 
-        points = np.vstack((points,Pf))
-        bf =np.arange(npt,npt+4)
-        boxes = np.vstack((boxes,bf))
 
 
 
@@ -8256,6 +8245,38 @@ class Layout(PyLayers):
 
         sc=tvtk.UnsignedCharArray()
         sc.from_array(color)
+
+
+        # manage floor
+        
+        # if Gt doesn't exists
+        try:
+            self.ma.coorddeter()
+            z=np.ones(self.ma.xy.shape[1])
+            F=np.vstack((self.ma.xy,z))
+            tri = np.arange(len(z))
+            meshf = tvtk.PolyData(points=F.T, polys=np.array([tri]))
+            meshf.point_data.scalars = sc
+            meshf.point_data.scalars.name = 'scalars'
+            surff = mlab.pipeline.surface(meshf, opacity=opacity)
+            mlab.pipeline.surface(mlab.pipeline.extract_edges(surff),
+                                        color=(0, 0, 0), )
+            
+        # otherwise
+        except:
+            
+            floorx= np.array((points[:,0].min(),points[:,0].max()))
+            floory= np.array((points[:,1].min(),points[:,1].max()))
+            zmin= np.min(points[:,2])
+            Pf = np.array([floorx[0],floory[0],zmin])
+            Pf = np.vstack((Pf,np.array([floorx[0],floory[1],zmin])))
+            Pf = np.vstack((Pf,np.array([floorx[1],floory[1],zmin])))
+            Pf = np.vstack((Pf,np.array([floorx[1],floory[0],zmin])))
+
+            points = np.vstack((points,Pf))
+            bf =np.arange(npt,npt+4)
+            boxes = np.vstack((boxes,bf))
+
 
 
 
