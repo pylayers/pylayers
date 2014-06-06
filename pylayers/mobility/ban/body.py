@@ -1,3 +1,4 @@
+# -*- coding:Utf-8 -*-
 """
 
 Body Class
@@ -464,7 +465,12 @@ class Body(PyLayers):
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
+        self.traj=traj
 
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        self._pta = np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+        self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         # if asked for calculation of coordinates systems
         if cs:
             # calculate cylinder coordinate system 
@@ -743,15 +749,51 @@ class Body(PyLayers):
         kta = self.sl[:,0].astype(int)
         khe = self.sl[:,1].astype(int)
         cylrad = self.sl[:,2]
+        t=self.traj.time()
+
+        # init antennas
+        Ant = {}
+
+        for key in self.dcs.keys():
+            Ant[key]=ant.Antenna(self.dev[key]['file'])
+            if not hasattr(Ant[key],'SqG'):
+                Ant[key].Fsynth()
+            Ant[key]._show3(po=self.dcs[key][:,0],
+                           T=self.acs[key],
+                           ilog=False,
+                           minr=0.01,
+                           maxr=0.2,
+                           newfig=False,
+                           title=False,
+                           colorbar=False)
         while True:
-            for k in range(lenmocap):
-                pta =  np.array([self.d[0, kta, k], self.d[1, kta, k], self.d[2, kta, k]])
-                phe =  np.array([self.d[0, khe, k], self.d[1, khe, k], self.d[2, khe, k]])
+            if 'topos' in dir(self):
+                for k in range(len(t)):
+                    self.settopos(self.traj,t=t[k],cs=True)
+                    # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                    X=np.hstack((self._pta,self._phe))
+                    # s = np.hstack((cylrad,cylrad))
+                    self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
+                    for key in self.dcs.keys():
+                        x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
+                                                   T=self.acs[key],
+                                                   ilog=False,
+                                                   minr=0.01,
+                                                   maxr=0.2,
+                                                   newfig=False,
+                                                   title=False,
+                                                   colorbar=False)
+                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
+                    yield
+            else:
+                for k in range(lenmocap):
+                    pta =  np.array([self.d[0, kta, k], self.d[1, kta, k], self.d[2, kta, k]])
+                    phe =  np.array([self.d[0, khe, k], self.d[1, khe, k], self.d[2, khe, k]])
                 # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
-                X=np.hstack((pta,phe))
-                # s = np.hstack((cylrad,cylrad))
-                self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
-                yield
+                    X=np.hstack((pta,phe))
+                    # s = np.hstack((cylrad,cylrad))
+                    self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
+                    yield
 
 
     def _plot3d(self,**kwargs):
@@ -942,14 +984,13 @@ class Body(PyLayers):
         khe = self.sl[:,1].astype(int)
         cylrad = self.sl[:,2]
         if 'topos' in dir(self):
-            pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
-            phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+            X=np.hstack((self._pta,self._phe))
         else:
             pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
             phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+            X=np.hstack((pta,phe))
 
         connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
-        X=np.hstack((pta,phe))
         s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
         #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
                                              # scale_factor=0.1, resolution=10)
