@@ -60,6 +60,7 @@ import pylayers.util.geomutil as geu
 import pylayers.mobility.body.DeuxSeg as seg
 import doctest
 import itertools as itt
+from pylayers.util.project import *
 try:
     from mayavi import mlab 
     from tvtk.tools import visual
@@ -243,6 +244,7 @@ class Body(PyLayers):
         It also calculates :
         self.smocap : total distance along trajectory
         self.vmocap : averaged speed along trajectory
+
         Here only the projection of the body centroid in the plan 0xy is calculated
 
         """
@@ -258,12 +260,15 @@ class Body(PyLayers):
             self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
             # length of trajectory
             d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+            # creates a trajectory associated to mocap file
+            self.traj = tr.Trajectory()
+            self.traj.generate(t=self.time,pt=self.pg.T,name=self.filename)
             self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
             self.vmocap = self.smocap[-1]/self.Tmocap
             self.centered = True
 
     def posvel(self,traj,t):
-        r""" calculate position and velocity
+        """ calculate position and velocity
 
         traj : Tajectory DataFrame
             nx3
@@ -623,6 +628,9 @@ class Body(PyLayers):
 
         self.Tmocap = self.nframes / info['VideoFrameRate']
 
+        # time base of the motion capture file (sec)
+        self.time = np.linspace(0,self.Tmocap,self.nframes)
+
         #
         # motion capture data
         #
@@ -665,7 +673,16 @@ class Body(PyLayers):
             self.centered = False
             self.center()
 
-        
+
+
+    def c3d2traj(self):
+        """ convert c3d file to trajectory
+        """
+        traj = tr.trajectory()
+        return traj
+
+
+
 
     def movie(self,**kwargs):
         """ creates a geomview movie
@@ -721,6 +738,79 @@ class Body(PyLayers):
                     self.setdcs()
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
+
+    def _plot3d(self,**kwargs):
+        """
+            display points and their name for body or original C3D file
+
+        Parameters
+        ----------
+
+        typ : str (body|c3d)
+            choose points to be displayed (body or c3d)
+        text: boolean
+            diplay nodes name
+
+        """
+
+        defaults={'typ':'body',
+                  'text':True,
+                  'edge':False,
+                  'ncolor':'b',
+                  'ecolor':'b',
+                  'iframe' : 0
+                  }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        fig = mlab.gcf()
+
+        cold = pyu.coldict()
+        ncolhex = cold[kwargs['ncolor']]
+        pt_color = tuple(pyu.rgb(ncolhex)/255.)
+        ecolhex = cold[kwargs['ecolor']]
+        ed_color = tuple(pyu.rgb(ecolhex)/255.)
+
+        if kwargs['typ'] == 'c3d':
+            s, p, f, info = c3d.read_c3d(self.filename)
+            mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
+            fig.children[-1].__setattr__('name',self.filename )
+            if kwargs['text']:
+                [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
+                         scale=3,
+                         color=(0,0,0)) for i in range(len(p))]
+
+        else :
+            fId = kwargs['iframe']
+            kta = self.sl[:,0].astype(int)
+            khe = self.sl[:,1].astype(int)
+            cylrad = self.sl[:,2]
+            if 'topos' in dir(self):
+                pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+                phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+            else:
+                pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
+                phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+
+            X=np.hstack((pta,phe))
+            s = np.hstack((cylrad,cylrad))
+            pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                                5*s ,
+                                scale_factor=0.1,
+                                resolution=10,
+                                color =pt_color)
+            if kwargs['edge']:
+                connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                pts.mlab_source.dataset.lines = np.array(connections)
+                tube = mlab.pipeline.tube(pts, tube_radius=0.005)
+                mlab.pipeline.surface(tube,color=ed_color)
+                f.children[-1].__setattr__('name',self.name )
+            if kwargs['text']:
+                [mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
+                         scale=0.05,
+                         color=(0,0,0)) for i in range(self.ncyl)]
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
@@ -789,13 +879,15 @@ class Body(PyLayers):
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
+                    'tube_sides' : 6,
                     'pattern':False,
                     'lccs':[],
                     'ccs':False,
 
                     'dcs':False,
                     'color':'white',
-                    'k':0}
+                    'k':0,
+                    'save':False}
 
 
         for k in defaults:
@@ -827,17 +919,33 @@ class Body(PyLayers):
         else:
             pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
             phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
-        ax = phe-pta
-        l = np.sqrt(np.sum((ax**2), axis=0))
-        cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
-                               axis=(ax[0, i],ax[1, i],ax[2, i]), 
-                               radius=cylrad[i]*kwargs['widthfactor'],
-                               length=l[i]) for i in range(self.ncyl)]
-        [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
-         for i in range(self.ncyl)]
-        partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
-        [f.children[k].__setattr__('name', partnames[k]+str(k))
-         for k in range(self.ncyl)]
+
+        connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+        X=np.hstack((pta,phe))
+        s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
+        #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
+                                             # scale_factor=0.1, resolution=10)
+        pts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
+                                             scale_factor=0.001, resolution=10)
+        pts.mlab_source.dataset.lines = np.array(connections)
+        tube = mlab.pipeline.tube(pts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
+        tube.filter.radius_factor = 1.
+        tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
+        mlab.pipeline.surface(tube, color=body_color)
+        f.children[-1].__setattr__('name',self.name )
+                
+        # ax = phe-pta
+        # l = np.sqrt(np.sum((ax**2), axis=0))
+        # cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
+        #                        axis=(ax[0, i],ax[1, i],ax[2, i]), 
+        #                        radius=cylrad[i]*kwargs['widthfactor'],
+        #                        length=l[i], resolution=1) for i in range(self.ncyl)
+        #                        ]
+        # [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
+        #  for i in range(self.ncyl)]
+        # partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
+        # [f.children[k].__setattr__('name', partnames[k]+str(k))
+        #  for k in range(self.ncyl)]
 
         if kwargs['ccs']:
             # to be improved
@@ -891,7 +999,13 @@ class Body(PyLayers):
                            newfig=False,
                            title=False,
                            colorbar=False)
+<<<<<<< HEAD
 
+=======
+        if kwargs['save']:
+            fig = mlab.gcf()
+            mlab.savefig('Body.png',figure=fig)
+>>>>>>> 8aa0cc867dd9623e675e24a9693d771e5ee6948e
 
 
     def show(self,**kwargs):

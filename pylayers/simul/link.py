@@ -496,21 +496,32 @@ class DLink(Link):
 
     @Aa.setter
     def Aa(self,Ant):
+        position = self.a
+        rot = self.Ta
         self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
                             _fileant = Ant._filename
                             )
         self._Aa = Ant
+        # to be removed when radionode will be updated
+        self.a = position
+        self.Ta = rot
+
 
     @Ab.setter
     def Ab(self,Ant):
+        position = self.b
+        rot = self.Tb
         self.rx = RadioNode(name = '',
                             typ = 'rx',
                             _fileini = 'radiorx.ini',
                             _fileant = Ant._filename,
                             )
         self._Ab = Ant
+        # to be removed when radionode will be updated
+        self.b = position
+        self.Tb = rot
 
     @Ta.setter
     def Ta(self,orientation):

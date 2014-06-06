@@ -268,6 +268,7 @@ class Antenna(PyLayers):
                 self.loadhfss(typ, self.Nt, self.Np)
 
         else :
+            self._filename = typ
             if typ == 'Gauss':
                 self.typ = typ
 
@@ -1360,9 +1361,9 @@ class Antenna(PyLayers):
             r = 10*np.log10(abs(r))
         else:
             r = abs(r)
-
-        u = (r - r.min()) /(r.max() - r.min())
-
+        if r.max() != r.min():
+            u = (r - r.min()) /(r.max() - r.min())
+        else : u = r
         r = minr + (maxr-minr) * u
 
         x = r * np.sin(th) * np.cos(phi) 
