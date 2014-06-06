@@ -760,7 +760,7 @@ class Body(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
-        f = mlab.gcf()
+        fig = mlab.gcf()
 
         cold = pyu.coldict()
         ncolhex = cold[kwargs['ncolor']]
@@ -771,11 +771,12 @@ class Body(PyLayers):
         if kwargs['typ'] == 'c3d':
             s, p, f, info = c3d.read_c3d(self.filename)
             mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
-            f.children[-1].__setattr__('name',self.filename )
+            fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
                          scale=3,
                          color=(0,0,0)) for i in range(len(p))]
+
         else :
             fId = kwargs['iframe']
             kta = self.sl[:,0].astype(int)
