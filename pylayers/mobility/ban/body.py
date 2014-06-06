@@ -734,6 +734,26 @@ class Body(PyLayers):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
+    @mlab.animate(delay=10)
+    def anim(self):
+        """ animate body
+        """
+        self._show3()
+        lenmocap = 300
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        cylrad = self.sl[:,2]
+        while True:
+            for k in range(lenmocap):
+                pta =  np.array([self.d[0, kta, k], self.d[1, kta, k], self.d[2, kta, k]])
+                phe =  np.array([self.d[0, khe, k], self.d[1, khe, k], self.d[2, khe, k]])
+                # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                X=np.hstack((pta,phe))
+                # s = np.hstack((cylrad,cylrad))
+                self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
+                yield
+
+
     def _plot3d(self,**kwargs):
         """
             display points and their name for body or original C3D file
@@ -770,7 +790,7 @@ class Body(PyLayers):
 
         if kwargs['typ'] == 'c3d':
             s, p, f, info = c3d.read_c3d(self.filename)
-            mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
+            self._mayapts=mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
@@ -791,17 +811,17 @@ class Body(PyLayers):
 
             X=np.hstack((pta,phe))
             s = np.hstack((cylrad,cylrad))
-            pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 
+            self._mayapts = mlab.points3d(X[0,:],X[1,:], X[2,:], 
                                 5*s ,
                                 scale_factor=0.1,
                                 resolution=10,
                                 color =pt_color)
             if kwargs['edge']:
                 connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
-                pts.mlab_source.dataset.lines = np.array(connections)
-                tube = mlab.pipeline.tube(pts, tube_radius=0.005)
+                self._mayapts.mlab_source.dataset.lines = np.array(connections)
+                tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.005)
                 mlab.pipeline.surface(tube,color=ed_color)
-                f.children[-1].__setattr__('name',self.name )
+                fig.children[-1].__setattr__('name',self.name )
             if kwargs['text']:
                 [mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
                          scale=0.05,
@@ -933,10 +953,10 @@ class Body(PyLayers):
         s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
         #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
                                              # scale_factor=0.1, resolution=10)
-        pts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
+        self._mayapts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
                                              scale_factor=0.001, resolution=10)
-        pts.mlab_source.dataset.lines = np.array(connections)
-        tube = mlab.pipeline.tube(pts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
+        self._mayapts.mlab_source.dataset.lines = np.array(connections)
+        tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
         tube.filter.radius_factor = 1.
         tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
         mlab.pipeline.surface(tube, color=body_color)
@@ -960,7 +980,7 @@ class Body(PyLayers):
             for k,key in enumerate(self.ccs):
                 pt = pta[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
-                mlab.quiver3d(pte[0], pte[1], pte[2],
+                ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
                               scale_factor=0.2)
 
@@ -989,7 +1009,7 @@ class Body(PyLayers):
                 U = self.dcs[key]               
                 pt = U[:,0]
                 pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
-                mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
+                dcs = mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
 
 
         if kwargs['pattern']:
@@ -1015,7 +1035,6 @@ class Body(PyLayers):
         if kwargs['save']:
             fig = mlab.gcf()
             mlab.savefig('Body.png',figure=fig)
-
 
     def show(self,**kwargs):
         """ show a 2D plane projection of the body
