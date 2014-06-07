@@ -1522,15 +1522,15 @@ class Signatures(PyLayers,dict):
         #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
         #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
 
-        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
-        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
+        lisT = filter(lambda l: len(l)>2,lis) # Transmission
+        lisR = filter(lambda l: len(l)<3,lis) # Reflexion
 
         # target
         # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
         # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
 
-        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
-        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
+        litT = filter(lambda l: len(l)>2,lit) # Transmission
+        litR = filter(lambda l: len(l)<3,lit) # Reflexion
 
         # tx,rx : attaching rule
         #
@@ -1547,8 +1547,8 @@ class Signatures(PyLayers,dict):
         #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
         #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
 
-        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
-        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
+        lisT = filter(lambda l: l[2]<>self.source,lisT)
+        litT = filter(lambda l: l[1]<>self.target,litT)
 
         #ndt = ndt1 + ndt2
         #ndr = ndr1 + ndr2
@@ -1686,7 +1686,7 @@ class Signatures(PyLayers,dict):
         if diffraction:
             lis  = lisT + lisR + lisD
         else:
-            lis  = lisT + lisR 
+            lis  = lisT + lisR
 
         # list of interactions visible from target
         litT,litR,litD = self.L.intercy(self.target,typ='target')
