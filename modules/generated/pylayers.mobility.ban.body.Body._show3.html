@@ -81,6 +81,51 @@
             
   <div class="section" id="pylayers-mobility-ban-body-body-show3">
 <h1>pylayers.mobility.ban.body.Body._show3<a class="headerlink" href="#pylayers-mobility-ban-body-body-show3" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.mobility.ban.body.Body._show3">
+<tt class="descclassname">Body.</tt><tt class="descname">_show3</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/mobility/ban/body.html#Body._show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.ban.body.Body._show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>mayavi visualization</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>iframe</strong> : int</p>
+<blockquote>
+<div><p>frame index (default 0 )</p>
+</div></blockquote>
+<p><strong>widthfactor</strong> : float</p>
+<blockquote>
+<div><p>cylinder scaling factor (default 1.0)</p>
+</div></blockquote>
+<p><strong>pattern</strong> : boolean</p>
+<blockquote>
+<div><p>show pattern if True</p>
+</div></blockquote>
+<p><strong>ccs</strong> : boolean</p>
+<blockquote>
+<div><p>show ccs if True</p>
+</div></blockquote>
+<p><strong>k</strong> : frequency index</p>
+<blockquote class="last">
+<div><p>select frequency index for displaying antenna pattern</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.trajectory</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.mobility.ban.body</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traj</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">settopos</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">cs</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">#&gt;&gt;&gt; b._show3(topos=True,pattern=True)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-mobility-ban-body-Body-_show3-1.py">Source code</a>)</p>
+</dd></dl>
+
 </div>
 
 
@@ -108,7 +153,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

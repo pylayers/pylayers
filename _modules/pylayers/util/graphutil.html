@@ -189,9 +189,6 @@
         <span class="n">edgelist</span> <span class="o">=</span>  <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">edgelist</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="n">x</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">])</span> <span class="c"># for nx an edge list is a list of tuple</span>
-        <span class="c">#edgelist = map(lambda x : tuple(G[x]),kwargs[&#39;edgelist&#39;]) # for nx an edge list is a list of tuple</span>
-        <span class="c"># import ipdb</span>
-        <span class="c"># ipdb.set_trace()</span>
     <span class="c"># remove airwalls</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;airwalls&#39;</span><span class="p">]:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -329,7 +326,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

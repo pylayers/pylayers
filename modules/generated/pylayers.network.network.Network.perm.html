@@ -101,13 +101,7 @@
 <dl class="method">
 <dt id="pylayers.network.network.Network.perm">
 <tt class="descclassname">Network.</tt><tt class="descname">perm</tt><big>(</big><em>iterable</em>, <em>r</em>, <em>key</em>, <em>d={}</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/network/network.html#Network.perm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.perm" title="Permalink to this definition">¶</a></dt>
-<dd><p>combi = itertools.permutation(iterable,r) adapted</p>
-<p>This is an adapted version of itertools.permutations in order to be compliant with the networkx.add_edges_from method.
-itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 ...</p>
-<dl class="docutils">
-<dt>self.perm([10,11],2,&#8217;wifi&#8217;) &#8211;&gt;     (10, 11, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []}) </dt>
-<dd>(11, 10, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []})</dd>
-</dl>
+<dd><p>calculate permutation</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -131,6 +125,15 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>combi = itertools.permutation(iterable,r) adapted</p>
+<p>This is an adapted version of itertools.permutations to
+comply with the networkx.add_edges_from method.</p>
+<p>itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 ...</p>
+<dl class="docutils">
+<dt>self.perm([10,11],2,&#8217;wifi&#8217;) &#8211;&gt;     (10, 11, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []}) </dt>
+<dd>(11, 10, &#8216;wifi&#8217;, {&#8216;Pr&#8217;: [], &#8216;TOA&#8217;: []})</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
@@ -189,7 +192,7 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

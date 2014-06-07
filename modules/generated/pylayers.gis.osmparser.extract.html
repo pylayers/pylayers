@@ -102,12 +102,6 @@
 <dt id="pylayers.gis.osmparser.extract">
 <tt class="descclassname">pylayers.gis.osmparser.</tt><tt class="descname">extract</tt><big>(</big><em>alat</em>, <em>alon</em>, <em>fileosm</em>, <em>fileout</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/gis/osmparser.html#extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.osmparser.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>extraction of an osm sub region using osmconvert</p>
-<p>This function takes two (1xn) arrays of latitude an longitude values
-Calculates extrema of those values.
-Invokes osmconvert script on a source fileosm and extract the
-corresponding zone in the fileout file.</p>
-<p>The functions returns a basemap object for coordinates conversion on this
-file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -123,6 +117,13 @@ file.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>This function takes two (1xn) arrays of latitude an longitude values
+Calculates extrema of those values.
+Invokes osmconvert script on a source fileosm and extract the
+corresponding zone in the fileout file.</p>
+<p>The functions returns a basemap object for coordinates conversion on this
+file.</p>
 </dd></dl>
 
 </div>
@@ -160,7 +161,7 @@ file.</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

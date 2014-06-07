@@ -115,7 +115,8 @@
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.__init__">
 <tt class="descname">__init__</tt><big>(</big><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em>, <em>force=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>object constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -149,15 +150,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#pylayers.gis.layout.Layout.__init__" title="pylayers.gis.layout.Layout.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>([_filename,&nbsp;_filematini,&nbsp;...])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
+<td>object constructor</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_door.html#pylayers.gis.layout.Layout.add_door" title="pylayers.gis.layout.Layout.add_door"><tt class="xref py py-obj docutils literal"><span class="pre">add_door</span></tt></a>(s1,&nbsp;zmin,&nbsp;zmax)</td>
 <td>add a door on segment</td>
@@ -201,7 +194,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.builGr2.html#pylayers.gis.layout.Layout.builGr2" title="pylayers.gis.layout.Layout.builGr2"><tt class="xref py py-obj docutils literal"><span class="pre">builGr2</span></tt></a>(v)</td>
 <td>alternative buildGr method (deprecated)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.build.html#pylayers.gis.layout.Layout.build" title="pylayers.gis.layout.Layout.build"><tt class="xref py py-obj docutils literal"><span class="pre">build</span></tt></a>([graph,&nbsp;verbose])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.build.html#pylayers.gis.layout.Layout.build" title="pylayers.gis.layout.Layout.build"><tt class="xref py py-obj docutils literal"><span class="pre">build</span></tt></a>([graph,&nbsp;verbose,&nbsp;convex])</td>
 <td>build graphs</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">buildGc</span></tt>()</td>
@@ -261,10 +254,10 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_points.html#pylayers.gis.layout.Layout.del_points" title="pylayers.gis.layout.Layout.del_points"><tt class="xref py py-obj docutils literal"><span class="pre">del_points</span></tt></a>(lp)</td>
 <td>delete points in list lp</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_segment.html#pylayers.gis.layout.Layout.del_segment" title="pylayers.gis.layout.Layout.del_segment"><tt class="xref py py-obj docutils literal"><span class="pre">del_segment</span></tt></a>(le)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_segment.html#pylayers.gis.layout.Layout.del_segment" title="pylayers.gis.layout.Layout.del_segment"><tt class="xref py py-obj docutils literal"><span class="pre">del_segment</span></tt></a>(le[,&nbsp;verbose])</td>
 <td>delete segment e</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_subseg.html#pylayers.gis.layout.Layout.del_subseg" title="pylayers.gis.layout.Layout.del_subseg"><tt class="xref py py-obj docutils literal"><span class="pre">del_subseg</span></tt></a>(e1)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_subseg.html#pylayers.gis.layout.Layout.del_subseg" title="pylayers.gis.layout.Layout.del_subseg"><tt class="xref py py-obj docutils literal"><span class="pre">del_subseg</span></tt></a>(e1[,&nbsp;verbose])</td>
 <td>delete sub subsegent</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.delete.html#pylayers.gis.layout.Layout.delete" title="pylayers.gis.layout.Layout.delete"><tt class="xref py py-obj docutils literal"><span class="pre">delete</span></tt></a>()</td>
@@ -307,15 +300,7 @@
 <td>calculate extremum of segments</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.facet3D.html#pylayers.gis.layout.Layout.facet3D" title="pylayers.gis.layout.Layout.facet3D"><tt class="xref py py-obj docutils literal"><span class="pre">facet3D</span></tt></a>(e[,&nbsp;subseg])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
+<td>calculate 3D facet from segment</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.facets3D.html#pylayers.gis.layout.Layout.facets3D" title="pylayers.gis.layout.Layout.facets3D"><tt class="xref py py-obj docutils literal"><span class="pre">facets3D</span></tt></a>(edlist,name)</td>
 <td></td>
@@ -324,7 +309,7 @@
 <td>edgelist : input edgelist</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.g2npy.html#pylayers.gis.layout.Layout.g2npy" title="pylayers.gis.layout.Layout.g2npy"><tt class="xref py py-obj docutils literal"><span class="pre">g2npy</span></tt></a>()</td>
-<td>from graphs to numpy arrays conversion</td>
+<td>conversion from graphs to numpy arrays</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.geomfile.html#pylayers.gis.layout.Layout.geomfile" title="pylayers.gis.layout.Layout.geomfile"><tt class="xref py py-obj docutils literal"><span class="pre">geomfile</span></tt></a>([centered])</td>
 <td>create a .off geomview file</td>
@@ -546,7 +531,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

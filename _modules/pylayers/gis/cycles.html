@@ -377,7 +377,7 @@
 <span class="sd">    cycle    : np.array</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Cycle.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.__init__.html#pylayers.gis.cycles.Cycle.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">):</span>
+<div class="viewcode-block" id="Cycle.__init__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.__init__.html#pylayers.gis.cycles.Cycle.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">lnode</span><span class="o">=</span><span class="p">[]):</span>
         <span class="c"># This call to cycle_basis is to obtained an ordered cycle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span>  <span class="o">=</span> <span class="n">G</span>
         <span class="n">cycle</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">cycle_basis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -386,7 +386,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span> <span class="n">node</span> <span class="p">:</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">cycle</span><span class="p">})</span>
         <span class="c">#for node in cycle:</span>
         <span class="c">#    self.G.pos[node] = G.pos[node]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">lnode</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="c"># lnodes allow to give the order of the cycle</span>
+            <span class="c"># used in Layout._convexify</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">lnode</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">cycle</span><span class="p">)</span>
+            <span class="n">uc</span> <span class="o">=</span><span class="n">cycle</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">lnode</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">rcycle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span><span class="o">-</span><span class="n">uc</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rcycle</span><span class="o">-</span><span class="n">lnode</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="o">=</span><span class="n">rcycle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Cycle.__add__"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.cycles.Cycle.__add__.html#pylayers.gis.cycles.Cycle.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cy</span><span class="p">):</span>
@@ -873,7 +882,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

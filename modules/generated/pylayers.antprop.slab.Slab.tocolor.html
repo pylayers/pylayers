@@ -101,22 +101,23 @@
 <dl class="method">
 <dt id="pylayers.antprop.slab.Slab.tocolor">
 <tt class="descclassname">Slab.</tt><tt class="descname">tocolor</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#Slab.tocolor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.tocolor" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>convert slab properrties into a color</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array</p>
-<p><strong>Examples</strong> :</p>
-<p><strong>&#8212;&#8212;&#8211;</strong> :</p>
-<p><strong>&gt;&gt;&gt; sl = SlabDB(&#8216;matDB.ini&#8217;,&#8217;slabDB.ini&#8217;)</strong> :</p>
-<p><strong>&gt;&gt;&gt; s1 = sl[&#8216;PARTITION&#8217;]</strong> :</p>
-<p><strong>&gt;&gt;&gt; col24 = s1.tocolor(np.array([2.4]))</strong> :</p>
-<p><strong>&gt;&gt;&gt; fGHz = np.arange(0.5,8,100)</strong> :</p>
-<p class="last"><strong>&gt;&gt;&gt; col8 = s1.tocolor(fGHz)</strong> :</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fGHz</strong> : np.array</td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col24</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col8</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -154,7 +155,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -2444,7 +2444,7 @@
         <span class="c"># 3) updating structures</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">g2npy</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Layout.del_segment"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.del_segment.html#pylayers.gis.layout.Layout.del_segment">[docs]</a>    <span class="k">def</span> <span class="nf">del_segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">le</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.del_segment"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.del_segment.html#pylayers.gis.layout.Layout.del_segment">[docs]</a>    <span class="k">def</span> <span class="nf">del_segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">le</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete segment e</span>
 
 <span class="sd">        Parameters</span>
@@ -2466,7 +2466,7 @@
 
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">le</span><span class="p">:</span>
             <span class="k">assert</span><span class="p">(</span><span class="n">e</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">del_subseg</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">del_subseg</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
             <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="c"># delete edge position</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
@@ -2836,7 +2836,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 </div>
-<div class="viewcode-block" id="Layout.del_subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.del_subseg.html#pylayers.gis.layout.Layout.del_subseg">[docs]</a>    <span class="k">def</span> <span class="nf">del_subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.del_subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.del_subseg.html#pylayers.gis.layout.Layout.del_subseg">[docs]</a>    <span class="k">def</span> <span class="nf">del_subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; delete sub subsegent</span>
 
 <span class="sd">        Parameters</span>
@@ -2854,7 +2854,7 @@
                 <span class="k">pass</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e1</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;transition&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Nss</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;no subseg to delete&quot;</span>
 </div>
 <div class="viewcode-block" id="Layout.add_subseg"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.add_subseg.html#pylayers.gis.layout.Layout.add_subseg">[docs]</a>    <span class="k">def</span> <span class="nf">add_subseg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;DOOR&#39;</span><span class="p">,</span><span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">zmax</span><span class="o">=</span><span class="mf">2.24</span><span class="p">):</span>
@@ -4723,7 +4723,7 @@
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
-<div class="viewcode-block" id="Layout.build"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.build.html#pylayers.gis.layout.Layout.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="s">&#39;tcvirw&#39;</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.build"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.build.html#pylayers.gis.layout.Layout.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="s">&#39;tcvirw&#39;</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">convex</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build graphs</span>
 
 <span class="sd">        Parameters</span>
@@ -4745,7 +4745,13 @@
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="k">print</span> <span class="s">&quot;Gt&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
-
+            <span class="k">if</span> <span class="n">convex</span><span class="p">:</span>
+                <span class="c">#Make the layout convex in regard of the outddor</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_convex_hull</span><span class="p">()</span>
+                <span class="c"># # Ensure convexity of all cycles</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_convexify</span><span class="p">()</span>
+                <span class="c"># re-attach new cycles </span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lbltg</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s">&#39;c&#39;</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
@@ -4914,58 +4920,8 @@
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;ldiffin&#39;</span><span class="p">,</span> <span class="n">read_gpickle</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;/ldiffin.gpickle&#39;</span><span class="p">))</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;ldiffout&#39;</span><span class="p">,</span> <span class="n">read_gpickle</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;/ldiffout.gpickle&#39;</span><span class="p">))</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;dca&#39;</span><span class="p">,</span> <span class="n">read_gpickle</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">&#39;/dca.gpickle&#39;</span><span class="p">))</span>
+
 </div>
-    <span class="k">def</span> <span class="nf">hull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Makes Layout mask convex </span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        Add air walls around th layout in order the Layout be convex</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">ch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">convex_hull</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ma</span><span class="p">)</span>
-        <span class="n">polys</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">sh</span><span class="o">.</span><span class="n">MultiPolygon</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">area</span> <span class="o">&gt;</span> <span class="mf">5e-2</span><span class="p">:</span>
-                    <span class="n">polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
-                    <span class="n">polys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">setvnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-
-        <span class="n">ncy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span>
-        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">polys</span><span class="p">:</span>
-            <span class="n">uaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">aw</span> <span class="ow">in</span> <span class="n">uaw</span> <span class="p">:</span>
-                <span class="n">awid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">aw</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">aw</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;AIR&#39;</span><span class="p">)</span>
-                <span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">aw</span><span class="p">]</span> <span class="o">=</span> <span class="n">awid</span>
-                <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
-                <span class="n">G</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">l</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">})</span>
-                <span class="n">cy</span>  <span class="o">=</span> <span class="n">cycl</span><span class="o">.</span><span class="n">Cycle</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">ncy</span><span class="p">,</span><span class="n">cycle</span><span class="o">=</span><span class="n">cy</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">ncy</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cy</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;isopen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;indoor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">!=</span> <span class="n">ncy</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
-                        <span class="k">print</span> <span class="n">k</span>
-                        <span class="n">vnodes0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
-                        <span class="n">vnodes1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
-                        <span class="c">#</span>
-                        <span class="c"># Connect Cycles if they share at least one segments</span>
-                        <span class="c">#</span>
-                        <span class="n">intersection_vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">vnodes0</span><span class="p">,</span> <span class="n">vnodes1</span><span class="p">)</span>
-
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="n">segment</span> <span class="o">=</span> <span class="n">intersection_vnodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">ncy</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span><span class="n">segment</span><span class="o">=</span> <span class="n">segment</span><span class="p">)</span>
-                <span class="n">ncy</span><span class="o">=</span><span class="n">ncy</span><span class="o">+</span><span class="mi">1</span>
-
-
-
 <div class="viewcode-block" id="Layout.buildGt"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGt.html#pylayers.gis.layout.Layout.buildGt">[docs]</a>    <span class="k">def</span> <span class="nf">buildGt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Built topological graph Gt</span>
 
@@ -4994,6 +4950,9 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        nx.algorithms.cycles.cycle_basis</span>
+<span class="sd">        pylayers.gis.layout._updGsncy</span>
+<span class="sd">        pylayers.gis.layout._addoutcy</span>
+<span class="sd">        pylayers.gis.layout._interlist</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c">#</span>
@@ -5045,6 +5004,7 @@
         <span class="c">#</span>
         <span class="c">#  5 - connect cycle which share at least one segment</span>
         <span class="c">#</span>
+
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
 
             <span class="n">vnodes0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
@@ -5059,36 +5019,18 @@
                 <span class="n">segment</span> <span class="o">=</span> <span class="n">intersection_vnodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">segment</span><span class="o">=</span> <span class="n">segment</span><span class="p">)</span>
 
-
         <span class="c">#</span>
         <span class="c">#   6 - Update graph Gs segment with their 2 cycles  information</span>
         <span class="c">#</span>
         <span class="c">#   initialize a void list &#39;ncycles&#39; for each segment of Gs</span>
         <span class="c">#</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="c">#vnodes = np.array(self.Gt.node[k][&#39;vnodes&#39;])</span>
-            <span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
-            <span class="c">#vnodes = self.Gt.node[k][&#39;polyg&#39;].vnodes</span>
-            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">vnodes</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
-                            <span class="k">print</span> <span class="n">n</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span>
-                            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;A segment cannot relate more than 2 cycles&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updGsncy</span><span class="p">()</span>
 
         <span class="c">#   7 -  add outside cycle (absorbant region index 0 )</span>
         <span class="c">#   if ncycles is a list which has only one element then the adjascent cycle is the</span>
         <span class="c">#   outside region (cycle 0)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_addoutcy</span><span class="p">()</span>
 
-        <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ns</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="c">#segment number</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">])</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="c">#</span>
         <span class="c">#   9 - Construct the polygon associated to each cycle</span>
         <span class="c">#</span>
@@ -5108,13 +5050,12 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">polyg</span><span class="o">=</span><span class="n">polk</span><span class="p">)</span>
             <span class="c">#</span>
-            <span class="c"># By default a Layout cycle is defined has indoor</span>
-            <span class="c"># unless it is separated from outside cycle by an airwall</span>
+            <span class="c"># By default a Layout cycle is defined as indoor</span>
+            <span class="c"># unless it is separated from the outside cycle by an airwall</span>
             <span class="c">#</span>
             <span class="c"># The user should be able to set this boolean to false for a patio</span>
             <span class="c">#</span>
             <span class="c"># An outdoor cycle has no ceil reflection</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">indoor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">lair</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">],</span><span class="n">nseg</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lair</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
@@ -5191,7 +5132,89 @@
         <span class="c">#   not enough information available. The diffraction point are not</span>
         <span class="c">#   known yet</span>
         <span class="c">#</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlist</span><span class="p">()</span>
+
+</div>
+    <span class="k">def</span> <span class="nf">_updGsncy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; update Gs ncycles using Gt information</span>
+
+<span class="sd">        Update graph Gs segment with their 2 cycles  information</span>
+<span class="sd">        initialize a void list &#39;ncycles&#39; for each segment of Gs</span>
+<span class="sd">        </span>
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout.buildGt</span>
+<span class="sd">        pylayers.gis.layout.convexify</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="c"># remove node 0</span>
+        <span class="n">Gtnodes</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">Gtnodes</span><span class="p">:</span>
+            <span class="c">#vnodes = np.array(self.Gt.node[k][&#39;vnodes&#39;])</span>
+            <span class="n">vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
+            <span class="c">#vnodes = self.Gt.node[k][&#39;polyg&#39;].vnodes</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">vnodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">n</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                            <span class="k">print</span> <span class="n">n</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;A segment cannot relate more than 2 cycles&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_addoutcy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add outside cycle (absorbant region index 0 )</span>
+<span class="sd">        #   if ncycles is a list which has only one element then the adjascent </span>
+<span class="sd">        #   cycle is the  outside region (cycle 0)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ns</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="c">#segment number</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">])</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ns</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_interlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nodelist</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot; Construct the list of interactions associated to each cycle</span>
+<span class="sd">        </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        nodelist: list</span>
+<span class="sd">        list of Gt nodes (cycles) for which interactions have to be found</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+
+<span class="sd">         Interaction labeling convention</span>
+<span class="sd">        </span>
+<span class="sd">           tuple (npoint,)  : Diffraction on point npoint</span>
+<span class="sd">           tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle</span>
+<span class="sd">           tuple (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg</span>
+<span class="sd">        </span>
+<span class="sd">           At that stage the diffraction points are not included</span>
+<span class="sd">           not enough information available. The diffraction point are not</span>
+<span class="sd">           known yet</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout.buildGt</span>
+<span class="sd">        pylayers.gis.layout._convex_hull</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">nodelist</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">nodelist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nodelist</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="n">nodelist</span><span class="o">=</span><span class="p">[</span><span class="n">nodelist</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">nodelist</span><span class="p">:</span>
             <span class="c">#vnodes = self.Gt.node[k][&#39;vnodes&#39;]</span>
             <span class="n">vnodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vnodes</span>
             <span class="n">ListInteractions</span> <span class="o">=</span> <span class="p">[]</span>
@@ -5220,8 +5243,297 @@
             <span class="c"># add list of interactions of a cycle</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">inter</span><span class="o">=</span><span class="n">ListInteractions</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">_convex_hull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add air walls to the layout enveloppe in order the hull of the Layout </span>
+<span class="sd">        to be convex.</span>
 
-</div>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        This is a post processing of BuildGt</span>
+<span class="sd">        </span>
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout._interlist</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># 1 - Find differences between the convex hull and the Layout contour</span>
+        <span class="c">#     The result of the difference are polygons </span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">convex_hull</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ma</span><span class="p">)</span>
+        <span class="n">polys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">sh</span><span class="o">.</span><span class="n">MultiPolygon</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">area</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">:</span>
+                    <span class="n">polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+                    <span class="n">polys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">setvnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        
+        <span class="n">ncy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">lncy</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">polys</span><span class="p">:</span>
+            <span class="c"># p.coorddeter()</span>
+            <span class="n">uaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aw</span> <span class="ow">in</span> <span class="n">uaw</span> <span class="p">:</span>
+                <span class="c"># 2 - non existing segments are created as airwalls</span>
+                <span class="n">awid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">aw</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">aw</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;AIR&#39;</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">aw</span><span class="p">]</span> <span class="o">=</span> <span class="n">awid</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">l</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">})</span>
+                <span class="n">cy</span>  <span class="o">=</span> <span class="n">cycl</span><span class="o">.</span><span class="n">Cycle</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">lnode</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">ncy</span><span class="p">,</span><span class="n">cycle</span><span class="o">=</span><span class="n">cy</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">ncy</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cy</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+                <span class="c"># WARNING</span>
+                <span class="c"># recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes</span>
+                <span class="c"># are shifted.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="c">#geu.Polygon(p.xy,cy.cycle)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;isopen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;indoor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="c"># 3 - add link between created cycle and outdoor</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">ncy</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="c"># 4 - search and add link between the created cycle and indoor cycles</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">!=</span> <span class="n">ncy</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="n">vnodes0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
+                        <span class="n">vnodes1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
+                        <span class="n">intersection_vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">vnodes0</span><span class="p">,</span> <span class="n">vnodes1</span><span class="p">)</span>
+                        <span class="c"># Connect Cycles if they share at least one segments</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">segment</span> <span class="o">=</span> \
+                            <span class="n">intersection_vnodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
+
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">ncy</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span><span class="n">segment</span><span class="o">=</span> <span class="n">segment</span><span class="p">)</span>
+
+                <span class="c"># 5 - Update Gs</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">):</span>
+                    <span class="c"># add new ncycle to Gs for the new airwall</span>
+                    <span class="c"># that new airwall always separate the new created cycle</span>
+                    <span class="c"># and the outdoor cycle</span>
+                    <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">awid</span> <span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">awid</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">ncy</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c"># other wise update the cycles seen by segments</span>
+                    <span class="k">else</span> <span class="p">:</span>
+                        <span class="n">cy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                        <span class="c"># if the pop cycle is the outdoor cycle, </span>
+                        <span class="c"># replace it with the new cycle</span>
+                        <span class="k">if</span> <span class="n">cy</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ncy</span><span class="p">)</span>
+                        <span class="c"># else replace old value with [pos cycle , new cycle]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">cy</span><span class="p">,</span><span class="n">ncy</span><span class="p">]</span>
+                <span class="n">lncy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ncy</span><span class="p">)</span>
+                <span class="n">ncy</span><span class="o">=</span><span class="n">ncy</span><span class="o">+</span><span class="mi">1</span>
+
+        <span class="c"># 6- Determine interaction into the new created cycles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interlist</span><span class="p">(</span><span class="n">nodelist</span><span class="o">=</span><span class="n">lncy</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_convexify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; determine which cycles are not convex and convexify it.</span>
+<span class="sd">            if a cycle is tagged as non convex </span>
+<span class="sd">            1- find its polygon</span>
+<span class="sd">            2- partion polygon into convex polygons (Delaunay)</span>
+<span class="sd">            3- try to merge partioned polygon in order to obtain</span>
+<span class="sd">               the minimal number of convex polygon</span>
+<span class="sd">            4- re-number/re-create Gt by creating  new &#39;convex&#39; cycles</span>
+<span class="sd">               from those convex polygons</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">            </span>
+<span class="sd">        The algorithm update the Gt nodes and edges created into self.buildGt</span>
+<span class="sd">        by adding new nodes and connnections</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout.buildGt</span>
+<span class="sd">        pylayers.gis.layout.add_segment</span>
+<span class="sd">        pylayers.gis.layout.del_segment</span>
+<span class="sd">        pylayers.util.geomutil.Polygon</span>
+<span class="sd">        sp.spatial.Delaunay</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># function for debug purpose</span>
+        <span class="k">def</span> <span class="nf">polyplot</span><span class="p">(</span><span class="n">poly</span><span class="p">):</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+            <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;g&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span>
+            <span class="k">for</span> <span class="n">ip</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">poly</span><span class="p">):</span>
+                <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="n">ip</span><span class="p">],</span><span class="n">alpha</span> <span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="c"># lacy : list of added cycles</span>
+        <span class="n">lacy</span> <span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="c"># if indoor cycle</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                
+                <span class="n">ncy</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+
+                <span class="c">####</span>
+                <span class="c">#### 1 Determine if pt convex in cycle</span>
+                <span class="c">####</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isconvex</span><span class="p">():</span><span class="c">#self.Gt.node[n][&#39;indoor&#39;]:</span>
+                    <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span>
+                    <span class="n">tcc</span><span class="p">,</span> <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ptconvex</span><span class="p">()</span>
+                    <span class="c"># diffracting points </span>
+                    <span class="n">utconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c"># all possible diffracting point (in and out of cycle)</span>
+                    <span class="n">utsconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">tcc</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">utconvex</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c"># get points ID in the cycle</span>
+                        <span class="n">uus</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span><span class="n">no</span><span class="p">)</span>
+                        <span class="c"># get point convex ID</span>
+                        <span class="n">uc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uus</span><span class="p">)[</span><span class="n">utconvex</span><span class="p">]</span>
+                        <span class="n">ucs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uus</span><span class="p">)[</span><span class="n">utsconvex</span><span class="p">]</span>
+                        <span class="n">pucs</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">ucs</span><span class="p">))</span>
+                        <span class="n">pucs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">pucs</span><span class="p">,</span><span class="n">pucs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+                        <span class="c">####</span>
+                        <span class="c">#### 2 perform a Delaunay Partioning </span>
+                        <span class="c">####</span>
+
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ucs</span><span class="p">)</span> <span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                            <span class="n">trid</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">Delaunay</span><span class="p">(</span><span class="n">pucs</span><span class="p">)</span>
+                            <span class="n">tri</span> <span class="o">=</span><span class="n">trid</span><span class="o">.</span><span class="n">simplices</span>
+                            <span class="n">polys</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="n">naw</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tri</span><span class="p">:</span>
+                                <span class="n">ts</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">pucs</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
+                                <span class="c"># check if the new polygon is contained into </span>
+                                <span class="c"># the original polygon (non guaratee by Delaunay)</span>
+                                <span class="c">#U = self.Gt.node[n][&#39;polyg&#39;].contains(ts)</span>
+                                <span class="n">U</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">U</span><span class="p">,</span><span class="n">sh</span><span class="o">.</span><span class="n">MultiPolygon</span><span class="p">):</span>
+                                    <span class="n">U</span><span class="o">=</span><span class="p">[</span><span class="n">U</span><span class="p">]</span>
+                                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">U</span><span class="p">:</span>
+                                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+                                        <span class="n">cp</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                                        <span class="n">cp</span><span class="o">.</span><span class="n">setvnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                                        <span class="n">uaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">vnodes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                                        <span class="n">lvn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">uaw</span><span class="p">:</span>
+                                            <span class="c"># keep trace of created airwalls, because some </span>
+                                            <span class="c"># of them will be destroyed in step 3.</span>
+                                            <span class="n">naw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_segment</span><span class="p">(</span>
+                                                       <span class="n">cp</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">lvn</span><span class="p">)],</span>
+                                                       <span class="n">cp</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">lvn</span><span class="p">)]</span>
+                                                       <span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;AIR&#39;</span><span class="p">))</span>
+                                        <span class="n">polys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span>
+                        
+                        <span class="c">#</span>
+                        <span class="c"># 3. merge delaunay triangulation in order to obtain</span>
+                        <span class="c">#   the larger convex polygons partioning </span>
+                        <span class="c">#</span>
+                        <span class="n">cpolys</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">nbpolys</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">polys</span><span class="p">)</span>
+                        <span class="k">while</span> <span class="n">polys</span> <span class="o">!=</span><span class="p">[]:</span>
+                            <span class="n">p</span> <span class="o">=</span> <span class="n">polys</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">ip2</span><span class="p">,</span><span class="n">p2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">polys</span><span class="p">):</span>
+                                <span class="n">conv</span><span class="o">=</span><span class="bp">False</span>
+                                <span class="n">inter</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+                                <span class="c"># if 2 triangles have a common segment</span>
+                                <span class="n">pold</span> <span class="o">=</span> <span class="n">p</span>
+                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inter</span><span class="p">,</span><span class="n">sh</span><span class="o">.</span><span class="n">LineString</span><span class="p">):</span>
+                                    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">p2</span>
+                                    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">isconvex</span><span class="p">():</span>
+                                        <span class="n">polys</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">ip2</span><span class="p">)</span>
+                                        <span class="n">polys</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+                                        <span class="n">conv</span><span class="o">=</span><span class="bp">True</span>
+                                        <span class="k">break</span>
+                                    <span class="k">else</span><span class="p">:</span>
+                                        <span class="c"># if pold not in cpolys:</span>
+                                        <span class="c">#     cpolys.append(pold)</span>
+                                        <span class="n">p</span> <span class="o">=</span> <span class="n">pold</span>
+                            <span class="c"># if (ip2 &gt;= len(polys)):# and (conv):</span>
+                            <span class="c"># if conv :</span>
+                            <span class="c">#     if p not in cpolys:</span>
+                            <span class="c">#         cpolys.append(p)</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="n">conv</span><span class="p">:</span><span class="c">#else:</span>
+                                <span class="k">if</span> <span class="n">pold</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cpolys</span><span class="p">:</span>
+                                    <span class="n">cpolys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pold</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">polys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">cpolys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                            <span class="c"># polyplot(cpolys,fig=plt.gcf())</span>
+                            <span class="c"># plt.draw()</span>
+                            <span class="c"># import ipdb</span>
+                            <span class="c"># ipdb.set_trace()</span>
+                        <span class="c">####</span>
+                        <span class="c">#### 4. ensure the correct vnode numerotaion of the polygons</span>
+                        <span class="c">#### and remove unecessary airwalls</span>
+
+                        <span class="c"># ncpol : new created polygons</span>
+                        <span class="n">ncpol</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">vnodes</span><span class="o">=</span><span class="p">[]</span>
+                        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">cpolys</span><span class="p">:</span>
+                            <span class="n">interpoly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">interpoly</span><span class="p">,</span><span class="n">sh</span><span class="o">.</span><span class="n">MultiPolygon</span><span class="p">):</span>
+                                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;multi polygon encountered&#39;</span><span class="p">)</span>
+                            <span class="k">else</span> <span class="p">:</span>
+                                <span class="n">ptmp</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">interpoly</span><span class="p">)</span>
+                            <span class="n">ptmp</span><span class="o">.</span><span class="n">setvnodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                            <span class="n">ncpol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ptmp</span><span class="p">)</span>
+                            <span class="n">vnodes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ptmp</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
+                        <span class="c"># air walls to be deleted (because origin Delaunay triangle</span>
+                        <span class="c"># has been merged )</span>
+                        <span class="n">daw</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vnodes</span><span class="p">,</span><span class="n">naw</span><span class="p">)</span>
+                        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">del_segment</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">daw</span><span class="p">]</span>
+                        <span class="n">nbpolys</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ncpol</span><span class="p">)</span>
+                        <span class="c"># remove old cycle</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                        <span class="c"># lcyid: (new) list of cycle id </span>
+                        <span class="n">lcyid</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncy</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ncy</span><span class="o">+</span><span class="p">(</span><span class="n">nbpolys</span><span class="p">))</span>
+                        <span class="n">lacy</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lcyid</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">ip</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ncpol</span><span class="p">):</span>
+                            <span class="c"># in order to obtain p.xy</span>
+                            <span class="n">cyid</span> <span class="o">=</span> <span class="n">lcyid</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span>
+                            <span class="c"># replace by new ones</span>
+                            <span class="n">lnode</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">vnodes</span>
+                            <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="p">,</span><span class="n">lnode</span><span class="p">)</span>
+                            <span class="n">G</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
+                            <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">l</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lnode</span><span class="p">})</span>
+                            <span class="n">cy</span>  <span class="o">=</span> <span class="n">cycl</span><span class="o">.</span><span class="n">Cycle</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">lnode</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">vnodes</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">cyid</span><span class="p">,</span><span class="n">cycle</span><span class="o">=</span><span class="n">cy</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyid</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="c">#geu.Polygon(p.xy,cy.cycle)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyid</span><span class="p">][</span><span class="s">&#39;indoor&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cyid</span><span class="p">][</span><span class="s">&#39;isopen&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">cyid</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cy</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+
+                        
+                        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+                                <span class="n">vnodes0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
+                                <span class="n">vnodes1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cycle</span><span class="p">)</span>
+                                <span class="c">#</span>
+                                <span class="c"># Connect Cycles if they share at least one segments</span>
+                                <span class="c">#</span>
+                                <span class="n">intersection_vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">vnodes0</span><span class="p">,</span> <span class="n">vnodes1</span><span class="p">)</span>
+
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="n">segment</span> <span class="o">=</span> <span class="n">intersection_vnodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">segment</span><span class="o">=</span> <span class="n">segment</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+
+                                <span class="n">vnodes0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vnodes</span>
+                                <span class="n">vnodes1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vnodes</span>
+                                <span class="n">intersection_vnodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">vnodes0</span><span class="p">,</span> <span class="n">vnodes1</span><span class="p">)</span>
+
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="n">segment</span> <span class="o">=</span> <span class="n">intersection_vnodes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">intersection_vnodes</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)]</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">segment</span><span class="o">=</span> <span class="n">segment</span><span class="p">)</span>
+                               
+                                
+
+        <span class="c"># # update self.Gs.node[x][&#39;ncycles&#39;]</span>
+        <span class="c"># self._updGsncy()</span>
+        <span class="c"># # add outside cycle to Gs.node[x][&#39;ncycles&#39;]</span>
+        <span class="c"># self._addoutcy()</span>
+        <span class="c"># # update interaction list into Gt.nodes (cycles)</span>
+        <span class="c"># self._interlist(nodelist=lacy)</span>
+
 <div class="viewcode-block" id="Layout.buildGw"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.buildGw.html#pylayers.gis.layout.Layout.buildGw">[docs]</a>    <span class="k">def</span> <span class="nf">buildGw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build Graph of waypaths</span>
 
@@ -6109,14 +6421,53 @@
 
 <span class="sd">        graph : char</span>
 <span class="sd">            &#39;t&#39; : Gt &#39;r&#39; : Gr &#39;s&#39; : Gs &#39;v&#39; : Gv  &#39;c&#39;: Gc &#39;i&#39; : Gi</span>
-<span class="sd">        show : boolean</span>
-<span class="sd">            False</span>
 <span class="sd">        fig : matplotlib figure</span>
 <span class="sd">            []</span>
 <span class="sd">        ax : matplotlib figure</span>
 <span class="sd">            []</span>
+<span class="sd">        show : boolean</span>
+<span class="sd">            False</span>
 <span class="sd">        nodes : boolean</span>
 <span class="sd">            False</span>
+<span class="sd">        edges : boolean</span>
+<span class="sd">            True</span>
+<span class="sd">        airwalls : boolean </span>
+<span class="sd">            display airwalls (False)</span>
+<span class="sd">        subseg: boolean</span>
+<span class="sd">            display subsegments (False)</span>
+<span class="sd">        slab : boolean</span>
+<span class="sd">            display color and width of slabs (False)</span>
+<span class="sd">        labels : boolean</span>
+<span class="sd">            display graph labels (False)</span>
+<span class="sd">        alphan : float</span>
+<span class="sd">            transparency of nodes (1.0)</span>
+<span class="sd">        alphae : float</span>
+<span class="sd">            transparency of edges (1.0)</span>
+<span class="sd">        width : float</span>
+<span class="sd">            line width (2)</span>
+<span class="sd">        node_color: string</span>
+<span class="sd">            w</span>
+<span class="sd">        edge_color : string</span>
+<span class="sd">            k</span>
+<span class="sd">        node_size : float </span>
+<span class="sd">            20</span>
+<span class="sd">        font_size : float </span>
+<span class="sd">            15,</span>
+<span class="sd">        nodelist : list </span>
+<span class="sd">            list of nodes to be displayed (all)</span>
+<span class="sd">        edgelist : list </span>
+<span class="sd">            list of edges to be displayed (all)</span>
+<span class="sd">        mode : string</span>
+<span class="sd">            &#39;cycle&#39; | &#39;none&#39; | &#39;room&#39;</span>
+<span class="sd">        alphacy : string</span>
+<span class="sd">            transparency of cycles (0.8)</span>
+<span class="sd">        colorcy :</span>
+<span class="sd">            &#39;#abcdef&#39;</span>
+<span class="sd">        linter : list</span>
+<span class="sd">            list of interaction for Gi</span>
+<span class="sd">            [&#39;RR&#39;,&#39;TT&#39;,&#39;RT&#39;,&#39;TR&#39;,&#39;RD&#39;,&#39;DR&#39;,&#39;TD&#39;,&#39;DT&#39;,&#39;DD&#39;]</span>
+<span class="sd">        show0 : boolean</span>
+<span class="sd">            If true display connection to cycle  0 of Gt (False)</span>
 <span class="sd">        eded : boolean</span>
 <span class="sd">            True</span>
 <span class="sd">        ndnd : boolean</span>
@@ -6127,8 +6478,36 @@
 <span class="sd">            2</span>
 <span class="sd">        nodelist : list</span>
 <span class="sd">            []</span>
-<span class="sd">        mode : string</span>
-<span class="sd">            &#39;cycle&#39; | &#39;none&#39; | &#39;room&#39;</span>
+
+
+<span class="sd">        defaults = {&#39;show&#39;: False,</span>
+<span class="sd">                    &#39;fig&#39;: [],</span>
+<span class="sd">                    &#39;ax&#39;: [],</span>
+<span class="sd">                    &#39;nodes&#39;: False,</span>
+<span class="sd">                    &#39;edges&#39;: True,</span>
+<span class="sd">                    &#39;sllist&#39;:[],</span>
+<span class="sd">                    &#39;airwalls&#39;: False,</span>
+<span class="sd">                    &#39;subseg&#39;: False,</span>
+<span class="sd">                    &#39;slab&#39;: False,</span>
+<span class="sd">                    &#39;labels&#39;: False,</span>
+<span class="sd">                    &#39;alphan&#39;: 1.0,</span>
+<span class="sd">                    &#39;alphae&#39;: 1.0,</span>
+<span class="sd">                    &#39;width&#39;: 2,</span>
+<span class="sd">                    &#39;node_color&#39;:&#39;w&#39;,</span>
+<span class="sd">                    &#39;edge_color&#39;:&#39;k&#39;,</span>
+<span class="sd">                    &#39;node_size&#39;:20,</span>
+<span class="sd">                    &#39;font_size&#39;:15,</span>
+<span class="sd">                    &#39;nodelist&#39;: [],</span>
+<span class="sd">                    &#39;edgelist&#39;: [],</span>
+<span class="sd">                    &#39;figsize&#39;: (5,5),</span>
+<span class="sd">                    &#39;mode&#39;:&#39;nocycle&#39;,</span>
+<span class="sd">                    &#39;alphacy&#39;:0.8,</span>
+<span class="sd">                    &#39;colorcy&#39;:&#39;#abcdef&#39;,</span>
+<span class="sd">                    &#39;linter&#39;:[&#39;RR&#39;,&#39;TT&#39;,&#39;RT&#39;,&#39;TR&#39;,&#39;RD&#39;,&#39;DR&#39;,&#39;TD&#39;,&#39;DT&#39;,&#39;DD&#39;],</span>
+<span class="sd">                    &#39;show0&#39;:False,</span>
+<span class="sd">                    &#39;axis&#39;:False</span>
+<span class="sd">                    }</span>
+
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -6184,7 +6563,9 @@
                     <span class="s">&#39;mode&#39;</span><span class="p">:</span><span class="s">&#39;nocycle&#39;</span><span class="p">,</span>
                     <span class="s">&#39;alphacy&#39;</span><span class="p">:</span><span class="mf">0.8</span><span class="p">,</span>
                     <span class="s">&#39;colorcy&#39;</span><span class="p">:</span><span class="s">&#39;#abcdef&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;lvis&#39;</span><span class="p">:[</span><span class="s">&#39;nn&#39;</span><span class="p">,</span><span class="s">&#39;ne&#39;</span><span class="p">,</span><span class="s">&#39;ee&#39;</span><span class="p">],</span>
                     <span class="s">&#39;linter&#39;</span><span class="p">:[</span><span class="s">&#39;RR&#39;</span><span class="p">,</span><span class="s">&#39;TT&#39;</span><span class="p">,</span><span class="s">&#39;RT&#39;</span><span class="p">,</span><span class="s">&#39;TR&#39;</span><span class="p">,</span><span class="s">&#39;RD&#39;</span><span class="p">,</span><span class="s">&#39;DR&#39;</span><span class="p">,</span><span class="s">&#39;TD&#39;</span><span class="p">,</span><span class="s">&#39;DT&#39;</span><span class="p">,</span><span class="s">&#39;DD&#39;</span><span class="p">],</span>
+                    <span class="s">&#39;show0&#39;</span><span class="p">:</span><span class="bp">False</span><span class="p">,</span>
                     <span class="s">&#39;axis&#39;</span><span class="p">:</span><span class="bp">False</span>
                     <span class="p">}</span>
 
@@ -6235,8 +6616,7 @@
                         <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;k&#39;</span>
                         <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
 
-                    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
             <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodelistbkup</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">widthbkup</span>
@@ -6268,15 +6648,18 @@
 
         <span class="k">if</span> <span class="s">&#39;t&#39;</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
             <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span>
-
-            <span class="c"># filter out the 0 cycle </span>
-            <span class="n">nodes</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
-            <span class="n">edges</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
-            <span class="n">nodf</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">nodes</span><span class="p">)</span>
-            <span class="n">edf</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">((</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)))</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodelist&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">nodf</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">edf</span>
-
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show0&#39;</span><span class="p">]:</span>
+                <span class="c"># filter out the 0 cycle </span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+                <span class="n">edges</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+                <span class="n">nodf</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">,</span><span class="n">nodes</span><span class="p">)</span>
+                <span class="n">edf</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">((</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)))</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodelist&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">nodf</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">edf</span>
+            <span class="k">else</span> <span class="p">:</span> 
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()))</span>
+                
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;&#39;</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span> <span class="o">=</span><span class="s">&#39;r&#39;</span>
             <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -6317,16 +6700,19 @@
             <span class="n">ndnd</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">),</span><span class="n">rle</span><span class="p">)</span>
             <span class="n">nded</span>  <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(((</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">))</span> <span class="o">|</span>
                                      <span class="p">((</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))),</span><span class="n">rle</span><span class="p">)</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eded</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;blue&#39;</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">200</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndnd</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span> <span class="o">=</span><span class="s">&#39;red&#39;</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nded</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;green&#39;</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;ee&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;lvis&#39;</span><span class="p">]:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eded</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;blue&#39;</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">200</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;nn&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;lvis&#39;</span><span class="p">]:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndnd</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span> <span class="o">=</span><span class="s">&#39;red&#39;</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;ne&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;lvis&#39;</span><span class="p">]:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nded</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;green&#39;</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;fig&#39;</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gru</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c">#</span>
         <span class="c"># c : connectivity graph (pulsray deprecated)</span>
         <span class="c">#</span>
@@ -6902,7 +7288,12 @@
                 <span class="n">ncy</span> <span class="o">=</span> <span class="n">tomerge</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                 <span class="c">#print &quot;ncy = &quot;,ncy</span>
                 <span class="c"># testing cycle contiguity before merging</span>
-                <span class="n">croot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gc</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">root</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+
+                    <span class="n">croot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gc</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">root</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="kn">import</span> <span class="nn">ipdb</span>
+                    <span class="n">ipdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
                 <span class="n">cy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gc</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
                 <span class="n">flip</span><span class="p">,</span><span class="n">path</span> <span class="o">=</span> <span class="n">croot</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">cy</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -7744,7 +8135,7 @@
         <span class="k">return</span> <span class="n">pg</span>
 </div>
     <span class="nd">@mlab.show</span>
-    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout._show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout._show3.html#pylayers.gis.layout.Layout._show3">[docs]</a>    <span class="k">def</span> <span class="nf">_show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">newfig</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; create a .off geomview file</span>
 
 <span class="sd">        Parameters</span>
@@ -7883,18 +8274,7 @@
         <span class="n">boxes</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">npt_s</span>
         <span class="n">boxes</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">npt_s</span>
 
-        <span class="c"># manage floor</span>
-        <span class="n">floorx</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
-        <span class="n">floory</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
-        <span class="n">zmin</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">zmin</span><span class="p">])</span>
-        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span>
-        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span>
-        <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span>
 
-        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">Pf</span><span class="p">))</span>
-        <span class="n">bf</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npt</span><span class="p">,</span><span class="n">npt</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">boxes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">boxes</span><span class="p">,</span><span class="n">bf</span><span class="p">))</span>
 
 
 
@@ -7946,6 +8326,38 @@
         <span class="n">sc</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
 
 
+        <span class="c"># manage floor</span>
+        
+        <span class="c"># if Gt doesn&#39;t exists</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">coorddeter</span><span class="p">()</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">xy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">F</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">xy</span><span class="p">,</span><span class="n">z</span><span class="p">))</span>
+            <span class="n">tri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+            <span class="n">meshf</span> <span class="o">=</span> <span class="n">tvtk</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">polys</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">tri</span><span class="p">]))</span>
+            <span class="n">meshf</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span> <span class="o">=</span> <span class="n">sc</span>
+            <span class="n">meshf</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;scalars&#39;</span>
+            <span class="n">surff</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">meshf</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="n">opacity</span><span class="p">)</span>
+            <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">surface</span><span class="p">(</span><span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">extract_edges</span><span class="p">(</span><span class="n">surff</span><span class="p">),</span>
+                                        <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
+            
+        <span class="c"># otherwise</span>
+        <span class="k">except</span><span class="p">:</span>
+            
+            <span class="n">floorx</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+            <span class="n">floory</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+            <span class="n">zmin</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">zmin</span><span class="p">])</span>
+            <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span>
+            <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span>
+            <span class="n">Pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">Pf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">floorx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">floory</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">zmin</span><span class="p">])))</span>
+
+            <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">points</span><span class="p">,</span><span class="n">Pf</span><span class="p">))</span>
+            <span class="n">bf</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npt</span><span class="p">,</span><span class="n">npt</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">boxes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">boxes</span><span class="p">,</span><span class="n">bf</span><span class="p">))</span>
+
+
+
 
         <span class="n">mesh</span> <span class="o">=</span> <span class="n">tvtk</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">polys</span><span class="o">=</span><span class="n">boxes</span><span class="p">)</span>
         <span class="n">mesh</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">scalars</span> <span class="o">=</span> <span class="n">sc</span>
@@ -7964,7 +8376,7 @@
                                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Layout &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
 
-
+</div>
 <div class="viewcode-block" id="Layout.show3"><a class="viewcode-back" href="../../../modules/generated/pylayers.gis.layout.Layout.show3.html#pylayers.gis.layout.Layout.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bdis</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">centered</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; geomview display of the indoor structure</span>
 
@@ -8377,7 +8789,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

@@ -110,10 +110,6 @@
 <blockquote>
 <div><p>&#8216;t&#8217; : Gt &#8216;r&#8217; : Gr &#8216;s&#8217; : Gs &#8216;v&#8217; : Gv  &#8216;c&#8217;: Gc &#8216;i&#8217; : Gi</p>
 </div></blockquote>
-<p><strong>show</strong> : boolean</p>
-<blockquote>
-<div><p>False</p>
-</div></blockquote>
 <p><strong>fig</strong> : matplotlib figure</p>
 <blockquote>
 <div><p>[]</p>
@@ -122,9 +118,90 @@
 <blockquote>
 <div><p>[]</p>
 </div></blockquote>
+<p><strong>show</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
 <p><strong>nodes</strong> : boolean</p>
 <blockquote>
 <div><p>False</p>
+</div></blockquote>
+<p><strong>edges</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>airwalls</strong> : boolean</p>
+<blockquote>
+<div><p>display airwalls (False)</p>
+</div></blockquote>
+<p><strong>subseg: boolean</strong> :</p>
+<blockquote>
+<div><p>display subsegments (False)</p>
+</div></blockquote>
+<p><strong>slab</strong> : boolean</p>
+<blockquote>
+<div><p>display color and width of slabs (False)</p>
+</div></blockquote>
+<p><strong>labels</strong> : boolean</p>
+<blockquote>
+<div><p>display graph labels (False)</p>
+</div></blockquote>
+<p><strong>alphan</strong> : float</p>
+<blockquote>
+<div><p>transparency of nodes (1.0)</p>
+</div></blockquote>
+<p><strong>alphae</strong> : float</p>
+<blockquote>
+<div><p>transparency of edges (1.0)</p>
+</div></blockquote>
+<p><strong>width</strong> : float</p>
+<blockquote>
+<div><p>line width (2)</p>
+</div></blockquote>
+<p><strong>node_color: string</strong> :</p>
+<blockquote>
+<div><p>w</p>
+</div></blockquote>
+<p><strong>edge_color</strong> : string</p>
+<blockquote>
+<div><p>k</p>
+</div></blockquote>
+<p><strong>node_size</strong> : float</p>
+<blockquote>
+<div><p>20</p>
+</div></blockquote>
+<p><strong>font_size</strong> : float</p>
+<blockquote>
+<div><p>15,</p>
+</div></blockquote>
+<p><strong>nodelist</strong> : list</p>
+<blockquote>
+<div><p>list of nodes to be displayed (all)</p>
+</div></blockquote>
+<p><strong>edgelist</strong> : list</p>
+<blockquote>
+<div><p>list of edges to be displayed (all)</p>
+</div></blockquote>
+<p><strong>mode</strong> : string</p>
+<blockquote>
+<div><p>&#8216;cycle&#8217; | &#8216;none&#8217; | &#8216;room&#8217;</p>
+</div></blockquote>
+<p><strong>alphacy</strong> : string</p>
+<blockquote>
+<div><p>transparency of cycles (0.8)</p>
+</div></blockquote>
+<p><strong>colorcy :</strong> :</p>
+<blockquote>
+<div><p>&#8216;#abcdef&#8217;</p>
+</div></blockquote>
+<p><strong>linter</strong> : list</p>
+<blockquote>
+<div><p>list of interaction for Gi
+[&#8216;RR&#8217;,&#8217;TT&#8217;,&#8217;RT&#8217;,&#8217;TR&#8217;,&#8217;RD&#8217;,&#8217;DR&#8217;,&#8217;TD&#8217;,&#8217;DT&#8217;,&#8217;DD&#8217;]</p>
+</div></blockquote>
+<p><strong>show0</strong> : boolean</p>
+<blockquote>
+<div><p>If true display connection to cycle  0 of Gt (False)</p>
 </div></blockquote>
 <p><strong>eded</strong> : boolean</p>
 <blockquote>
@@ -146,9 +223,34 @@
 <blockquote>
 <div><p>[]</p>
 </div></blockquote>
-<p><strong>mode</strong> : string</p>
+<p><strong>defaults = {&#8216;show&#8217;: False,</strong> :</p>
 <blockquote class="last">
-<div><p>&#8216;cycle&#8217; | &#8216;none&#8217; | &#8216;room&#8217;</p>
+<div><p>&#8216;fig&#8217;: [],
+&#8216;ax&#8217;: [],
+&#8216;nodes&#8217;: False,
+&#8216;edges&#8217;: True,
+&#8216;sllist&#8217;:[],
+&#8216;airwalls&#8217;: False,
+&#8216;subseg&#8217;: False,
+&#8216;slab&#8217;: False,
+&#8216;labels&#8217;: False,
+&#8216;alphan&#8217;: 1.0,
+&#8216;alphae&#8217;: 1.0,
+&#8216;width&#8217;: 2,
+&#8216;node_color&#8217;:&#8217;w&#8217;,
+&#8216;edge_color&#8217;:&#8217;k&#8217;,
+&#8216;node_size&#8217;:20,
+&#8216;font_size&#8217;:15,
+&#8216;nodelist&#8217;: [],
+&#8216;edgelist&#8217;: [],
+&#8216;figsize&#8217;: (5,5),
+&#8216;mode&#8217;:&#8217;nocycle&#8217;,
+&#8216;alphacy&#8217;:0.8,
+&#8216;colorcy&#8217;:&#8217;#abcdef&#8217;,
+&#8216;linter&#8217;:[&#8216;RR&#8217;,&#8217;TT&#8217;,&#8217;RT&#8217;,&#8217;TR&#8217;,&#8217;RD&#8217;,&#8217;DR&#8217;,&#8217;TD&#8217;,&#8217;DT&#8217;,&#8217;DD&#8217;],
+&#8216;show0&#8217;:False,
+&#8216;axis&#8217;:False
+}</p>
 </div></blockquote>
 </td>
 </tr>
@@ -220,7 +322,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

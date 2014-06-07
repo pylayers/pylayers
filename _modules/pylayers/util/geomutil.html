@@ -1706,12 +1706,9 @@
             <span class="n">nconcav</span> <span class="o">=</span> <span class="n">uneg</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">upos</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">uneg</span><span class="p">):</span>
-            <span class="k">print</span> <span class="s">&quot;error polygon is a star &quot;</span>
-            <span class="k">print</span> <span class="s">&quot;tcc&quot;</span><span class="p">,</span><span class="n">tcc</span>
-            <span class="k">print</span> <span class="s">&quot;upos&quot;</span><span class="p">,</span><span class="n">upos</span>
-            <span class="k">print</span> <span class="s">&quot;uneg&quot;</span><span class="p">,</span><span class="n">uneg</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-            <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;polygon is a star&quot;</span><span class="p">)</span>
+            <span class="c"># self.plot()</span>
+            <span class="c"># pdb.set_trace()</span>
 
 
         <span class="n">tcc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
@@ -4261,7 +4258,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">

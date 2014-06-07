@@ -102,12 +102,24 @@
 <dt id="pylayers.antprop.slab.Interface.RT">
 <tt class="descclassname">Interface.</tt><tt class="descname">RT</tt><big>(</big><em>metalic=False</em>, <em>RT='RT'</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/slab.html#Interface.RT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.RT" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Reflection and Transmission matrix</p>
-<div class="math">
-<p><img src="../../_images/math/b606edea521a130e1064a48a5147e4930dc8b55c.png" alt=""/></p>
-</div><p>R = matrix(R_o &amp; 0\0 &amp; R_p)
-T = matrix(T_o &amp; 0\0 &amp; T_p)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>metalic</strong> : boolean</p>
+<p><strong>RT</strong> : string</p>
+<blockquote class="last">
+<div><p>choose R or T</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Notes</p>
-<p>R : np.array (f , th , 2, 2)
+<div class="math">
+<p><img src="../../_images/math/e2af35e870c0359f438f10ceb962c6351b7498d9.png" alt="R = \begin{matrix}(R_o &amp; 0\\0 &amp; R_p)\end{matrix}
+T = \begin{matrix}(T_o &amp; 0\\0 &amp; T_p)\end{matrix}"/></p>
+</div><p>R : np.array (f , th , 2, 2)
 T : np.array (f , th , 2, 2)</p>
 </dd></dl>
 
@@ -146,7 +158,7 @@ T : np.array (f , th , 2, 2)</p>
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on mai 31, 2014.
+      Last updated on juin 07, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
