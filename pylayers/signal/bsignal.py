@@ -3888,6 +3888,10 @@ class FUsignal(FBsignal, Usignal):
 
         if 'fig' not in kwargs:
             fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+            kwargs.pop('fig')
+
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
@@ -4409,7 +4413,7 @@ class FUDAsignal(FUDsignal):
         """
         self.sort(typ='energy')
         E = self.eprfl()
-        cuE = np.cumsum(E)/sum(E)
+        cumE = np.cumsum(E)/sum(E)
         v = np.where(cumE<threshold)[0]
         self.taud = self.taud[v]
         self.taue = self.taue[v]
