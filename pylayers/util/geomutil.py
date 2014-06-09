@@ -1238,7 +1238,7 @@ class Polygon(PyLayers,shg.Polygon):
         #        else:
         #           the point is not kept
         #
-        if indoor:
+        if kwargs['indoor']:
             uconvex = np.nonzero(tcc == 1)[0] # convex point position
         else:
             uconvex = np.nonzero(tcc == -1)[0] # convex point position

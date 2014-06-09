@@ -4389,25 +4389,24 @@ class Layout(PyLayers):
         print "int1 : ",int1
 
         # if interaction is tuple (R or T)
-        if ((type(eval(int0))==tuple) & (type(eval(int1))==tuple)):
-            # segment number associated to interaction
-            nstr0 = eval(int0)[0]
-            nstr1 = eval(int1)[0]
+        if ((len(int0)>1) & (len(int1)>1)):
+            nstr0 = int0[0]
+            nstr1 = int1[0]
             output = self.Gi.edge[int0][int1]['output']
             print " output ", output
-            ltup = filter(lambda x : type(eval(x))==tuple,output.keys())
-            lref = filter(lambda x : len(eval(x))==2,ltup)
-            ltran =filter(lambda x : len(eval(x))==3,ltup)
-            lseg = np.unique(np.array(map(lambda x : eval(x)[0],output.keys())))
+            ltup = filter(lambda x : type(x)==tuple,output.keys())
+            lref = filter(lambda x : len(x)==2,ltup)
+            ltran =filter(lambda x : len(x)==3,ltup)
+            lseg = np.unique(np.array(map(lambda x : x[0],output.keys())))
             probR = np.array(map(lambda x : output[x],lref))
-            segR = np.array(map(lambda x : eval(x)[0],lref))
+            segR = np.array(map(lambda x : x[0],lref))
             probT = np.array(map(lambda x : output[x],ltran))
-            segT = np.array(map(lambda x : eval(x)[0],lref))
+            segT = np.array(map(lambda x : x[0],lref))
             dprobR = dict(zip(segR,probR))
             dprobT = dict(zip(segT,probT))
-            print " Sum pR : ",sum(dprobR.values())
-            print " Sum pT : ",sum(dprobT.values())
-            print "lseg", lseg
+            #print " Sum pR : ",sum(dprobR.values())
+            #print " Sum pT : ",sum(dprobT.values())
+            #print "lseg", lseg
             # termination points from seg0 and seg1
             pseg0 = self.seg2pts(nstr0).reshape(2,2).T
             pseg1 = self.seg2pts(nstr1).reshape(2,2).T
@@ -4442,7 +4441,7 @@ class Layout(PyLayers):
                                   [pta[1],phe[1]],
                                    'g',linewidth=7, visible=True,alpha=alpha)
 
-        return(fig,ax)
+            return(fig,ax)
 
     def _showGt(self, ax=[], roomlist=[],mode='area'):
         """ show topological graph Gt
