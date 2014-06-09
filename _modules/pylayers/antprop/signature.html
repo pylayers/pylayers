@@ -959,6 +959,39 @@
                 <span class="k">except</span><span class="p">:</span>
                     <span class="k">pass</span>
 </div>
+    <span class="k">def</span> <span class="nf">propaths3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Gi</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; seek shortest path from source to target</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Gi : graph of interactions</span>
+<span class="sd">        source : source interaction</span>
+<span class="sd">        target : target interaction</span>
+<span class="sd">        cutoff : cutoff</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">nextlevel</span><span class="o">=</span><span class="p">{</span><span class="n">source</span><span class="p">:</span><span class="n">Gi</span><span class="p">[</span><span class="n">source</span><span class="p">]}</span>   <span class="c"># list of nodes to check at next level</span>
+        <span class="n">paths</span><span class="o">=</span><span class="p">{</span><span class="n">source</span><span class="p">:[</span><span class="n">source</span><span class="p">]}</span>         <span class="c"># paths dictionary  (paths to key from source)</span>
+
+        <span class="k">while</span> <span class="n">nextlevel</span><span class="p">:</span>
+            <span class="n">thislevel</span> <span class="o">=</span> <span class="n">nextlevel</span>
+            <span class="n">nextlevel</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">thislevel</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">thislevel</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                    <span class="c"># reach a node which is not in paths</span>
+                    <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+                        <span class="n">paths</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">=</span><span class="n">paths</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
+                        <span class="n">nextlevel</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">w</span><span class="p">][</span><span class="s">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">w</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                        <span class="n">nstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">paths</span><span class="p">[</span><span class="n">w</span><span class="p">]))</span>
+                        <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">),</span><span class="n">paths</span><span class="p">[</span><span class="n">w</span><span class="p">]))</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cutoff</span> <span class="o">&lt;=</span> <span class="n">level</span><span class="p">):</span>  <span class="k">break</span>
+
+
 <div class="viewcode-block" id="Signatures.propaths2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.propaths2.html#pylayers.antprop.signature.Signatures.propaths2">[docs]</a>    <span class="k">def</span> <span class="nf">propaths2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; seek all simple_path from source to target</span>
 
@@ -976,6 +1009,14 @@
 <span class="sd">        bt : bool</span>
 <span class="sd">            allow backtrace (visite nodes already visited)</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        dout : dictionnary</span>
+<span class="sd">            key : int</span>
+<span class="sd">               number of interactions</span>
+<span class="sd">            values : list</span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
@@ -989,6 +1030,7 @@
 
         <span class="k">if</span> <span class="n">cutoff</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span>
+
 
         <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="n">source</span><span class="p">]</span>
         <span class="c"># stack is a list of iterators</span>
@@ -1067,7 +1109,6 @@
                 <span class="k">except</span><span class="p">:</span>
                     <span class="k">pass</span>
         <span class="k">return</span> <span class="n">dout</span>
-
 
 </div>
 <div class="viewcode-block" id="Signatures.procone2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.procone2.html#pylayers.antprop.signature.Signatures.procone2">[docs]</a>    <span class="k">def</span> <span class="nf">procone2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">dout</span><span class="o">=</span><span class="p">{},</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -1601,15 +1642,15 @@
         <span class="c">#ndt1 = filter(lambda l: len(eval(l))&gt;2,ndt) # Transmission</span>
         <span class="c">#ndt2 = filter(lambda l: len(eval(l))&lt;3,ndt) # Reflexion</span>
 
-        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Transmission</span>
-        <span class="n">lisR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Reflexion</span>
+        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Transmission</span>
+        <span class="n">lisR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="n">lis</span><span class="p">)</span> <span class="c"># Reflexion</span>
 
         <span class="c"># target</span>
         <span class="c"># ndr1 = filter(lambda l: len(eval(l))&gt;2,ndr) # Transmission</span>
         <span class="c"># ndr2 = filter(lambda l: len(eval(l))&lt;3,ndr) # Reflexion</span>
 
-        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Transmission</span>
-        <span class="n">litR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">))</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Reflexion</span>
+        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Transmission</span>
+        <span class="n">litR</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">,</span><span class="n">lit</span><span class="p">)</span> <span class="c"># Reflexion</span>
 
         <span class="c"># tx,rx : attaching rule</span>
         <span class="c">#</span>
@@ -1626,8 +1667,8 @@
         <span class="c">#ndt1 = filter(lambda l: eval(l)[2]&lt;&gt;ncytx,ndt1)</span>
         <span class="c">#ndr1 = filter(lambda l: eval(l)[1]&lt;&gt;ncyrx,ndr1)</span>
 
-        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">lisT</span><span class="p">)</span>
-        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">eval</span><span class="p">(</span><span class="n">l</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">litT</span><span class="p">)</span>
+        <span class="n">lisT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">lisT</span><span class="p">)</span>
+        <span class="n">litT</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">litT</span><span class="p">)</span>
 
         <span class="c">#ndt = ndt1 + ndt2</span>
         <span class="c">#ndr = ndr1 + ndr2</span>
@@ -1707,15 +1748,14 @@
                     <span class="n">sigarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">interaction</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
                         <span class="c">#print interaction + &#39;-&gt;&#39;,</span>
-                        <span class="n">it</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">interaction</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">it</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="c">#reflexion</span>
-                                <span class="n">sigarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">sigarr</span><span class="p">,</span>
-                                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="mi">1</span><span class="p">]],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
-                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">it</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span> <span class="c">#transmission</span>
-                                <span class="n">sigarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">sigarr</span><span class="p">,</span>
-                                                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="mi">2</span><span class="p">]],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
-                        <span class="k">elif</span> <span class="n">it</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="c">#diffraction</span>
+                        <span class="n">it</span> <span class="o">=</span> <span class="n">interaction</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">it</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="c">#reflexion</span>
+                            <span class="n">sigarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">sigarr</span><span class="p">,</span>
+                                            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="mi">1</span><span class="p">]],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">it</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span> <span class="c">#transmission</span>
+                            <span class="n">sigarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">sigarr</span><span class="p">,</span>
+                                            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="mi">2</span><span class="p">]],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">it</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c">#diffraction</span>
                             <span class="n">sigarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">sigarr</span><span class="p">,</span>
                                                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">it</span><span class="p">],[</span><span class="mi">3</span><span class="p">]],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
                     <span class="c">#print sigarr</span>
@@ -1765,7 +1805,7 @@
         <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
             <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span> <span class="o">+</span> <span class="n">lisD</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span> 
+            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span>
 
         <span class="c"># list of interactions visible from target</span>
         <span class="n">litT</span><span class="p">,</span><span class="n">litR</span><span class="p">,</span><span class="n">litD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;target&#39;</span><span class="p">)</span>
@@ -1830,18 +1870,322 @@
 
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dout</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">adout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">dout</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
-            <span class="n">shad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">adout</span><span class="p">)</span>
+            <span class="n">shad</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">adout</span><span class="p">)</span>
             <span class="c"># manage the case of signatures with only 1 interaction</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">adout</span><span class="o">=</span><span class="n">adout</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shad</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">shad</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">shad</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">adout</span><span class="p">)</span>
+                <span class="n">adout</span> <span class="o">=</span> <span class="n">adout</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shad</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">shad</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">shad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">adout</span><span class="p">)</span>
             <span class="c"># rehape (rays * 2 , interaction)</span>
-            <span class="c"># the 2 dimension comes from the signature definition :</span>
+            <span class="c"># the 2 dimensions come from the signature definition :</span>
             <span class="c"># 1st row = segment index</span>
             <span class="c"># 2nd row = type of interaction</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">adout</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shad</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">shad</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">shad</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
 </div>
+    <span class="k">def</span> <span class="nf">run7</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">algo</span><span class="o">=</span><span class="s">&#39;old&#39;</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        cutoff : int</span>
+<span class="sd">            limit the exploration of all_simple_path</span>
+<span class="sd">        algo: string</span>
+<span class="sd">            &#39;old&#39; : call propaths2</span>
+<span class="sd">            &#39;new&#39; : call procone2</span>
+<span class="sd">        bt : bool</span>
+<span class="sd">            backtrace (allow to visit already visited nodes in simple path algorithm)</span>
+<span class="sd">        progress : bool</span>
+<span class="sd">            display the time passed in the loop</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        sigslist :  numpy.ndarray</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.simul.link.Dlink.eval</span>
+<span class="sd">        pylayers.antprop.signature.Signatures.propath2</span>
+<span class="sd">        pylayers.antprop.signature.Signatures.procone2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span>   <span class="o">=</span> <span class="n">cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;.sig&#39;</span>
+
+        <span class="c"># list of interactions visible from source</span>
+        <span class="n">lisT</span><span class="p">,</span><span class="n">lisR</span><span class="p">,</span><span class="n">lisD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
+            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span> <span class="o">+</span> <span class="n">lisD</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span>
+
+        <span class="c"># list of interactions visible from target</span>
+        <span class="n">litT</span><span class="p">,</span><span class="n">litR</span><span class="p">,</span><span class="n">litD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;target&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
+           <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span> <span class="o">+</span> <span class="n">litD</span>
+        <span class="k">else</span><span class="p">:</span>
+           <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span>
+        <span class="c">#print &quot;source,lis :&quot;,self.source,lis</span>
+        <span class="c">#print &quot;target,lit :&quot;,self.target,lit</span>
+
+
+        <span class="n">Gi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span>
+        <span class="n">Gi</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span>
+        <span class="c">#</span>
+        <span class="c"># remove diffractions from Gi</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">diffraction</span><span class="p">:</span>
+            <span class="n">Gi</span> <span class="o">=</span> <span class="n">gidl</span><span class="p">(</span><span class="n">Gi</span><span class="p">)</span>
+
+        <span class="c"># initialize dout dictionnary</span>
+        <span class="n">dout</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c"># progresss stuff...</span>
+        <span class="n">lmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lis</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">lit</span><span class="p">)</span>
+        <span class="n">pe</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">tic0</span> <span class="o">=</span> <span class="n">tic</span>
+        <span class="c">#for interaction source  in list of source interactions</span>
+        <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lis</span><span class="p">):</span>
+            <span class="c">#for target interaction in list of target interactions</span>
+            <span class="c">#print &quot;---&gt; &quot;,s</span>
+
+            <span class="k">for</span> <span class="n">ut</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lit</span><span class="p">):</span>
+                <span class="c">#print &quot;   ---&gt; &quot;,t</span>
+                <span class="c"># progress bar</span>
+                <span class="k">if</span> <span class="n">progress</span> <span class="p">:</span>
+
+                    <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((((</span><span class="n">us</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">lit</span><span class="p">)</span><span class="o">+</span><span class="n">ut</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="n">lmax</span><span class="p">))</span><span class="o">*</span><span class="mi">10</span> <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="n">pe</span><span class="p">:</span>
+                        <span class="n">pe</span> <span class="o">=</span> <span class="n">ratio</span>
+                        <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                        <span class="k">print</span> <span class="s">&#39;~</span><span class="si">%d</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ratio</span><span class="o">*</span><span class="mi">10</span><span class="p">),</span>
+                        <span class="k">print</span> <span class="s">&#39;%&#39;</span><span class="p">,</span>
+                        <span class="k">print</span> <span class="s">&#39;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">,</span> <span class="n">toc</span><span class="o">-</span><span class="n">tic0</span><span class="p">)</span>
+                        <span class="n">tic</span> <span class="o">=</span> <span class="n">toc</span>
+
+                <span class="c"># if source and target interaction are different</span>
+                <span class="c"># and R | T</span>
+                <span class="c">#if ((type(eval(s))==tuple) &amp; (s != t)):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="n">t</span><span class="p">):</span>
+                    <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">]</span>
+                    <span class="c"># stack is a list of iterators</span>
+                    <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">Gi</span><span class="p">[</span><span class="n">s</span><span class="p">])]</span>
+                    <span class="c"># lawp = list of airwall position in visited</span>
+                    <span class="n">lawp</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="c"># while the list of iterators is not void</span>
+                    <span class="c"># import ipdb</span>
+                    <span class="c"># ipdb.set_trace()</span>
+                    <span class="k">while</span> <span class="n">stack</span><span class="p">:</span> <span class="c">#</span>
+                        <span class="c"># children is the last iterator of stack</span>
+                        <span class="n">children</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="c"># next child</span>
+
+                        <span class="n">child</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+                        <span class="c"># update number of useful segments</span>
+                        <span class="c"># if there is airwall in visited</span>
+                        <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="p">:</span> <span class="c"># if no more child</span>
+                            <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>   <span class="c"># remove last iterator</span>
+                            <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="c"># remove from visited list</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="k">except</span><span class="p">:</span>
+                                <span class="k">pass</span>
+
+                        <span class="k">elif</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">cutoff</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lawp</span><span class="p">))):</span><span class="c"># if visited list length is less than cutoff</span>
+                            <span class="k">if</span> <span class="n">child</span> <span class="o">==</span> <span class="n">t</span><span class="p">:</span>  <span class="c"># if child is the target point</span>
+                                <span class="c">#print visited + [target]</span>
+                                <span class="n">path</span> <span class="o">=</span> <span class="n">visited</span> <span class="o">+</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+                                <span class="n">nstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">path</span><span class="p">))</span>
+                                <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">path</span><span class="p">))</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                <span class="c">#try:</span>
+                                <span class="c">#    dout[len(path)].append([[p[0],len(p)] for p in path])</span>
+                                <span class="c">#except:</span>
+                                <span class="c">#    dout[len(path)]=[]</span>
+                                <span class="c">#    dout[len(path)].append([[p[0],len(p)] for p in path])</span>
+                                <span class="c">#yield visited + [target] # output signature</span>
+                            <span class="k">elif</span> <span class="p">(</span><span class="n">child</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">bt</span><span class="p">):</span> <span class="c"># else visit other node</span>
+                                <span class="c"># only visit output nodes except if bt</span>
+                                <span class="c">#pdb.set_trace()</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">nexti</span>  <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="n">child</span><span class="p">][</span><span class="s">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                                    <span class="c">#prob  = Gi[visited[-1]][child][&#39;output&#39;].values()</span>
+                                    <span class="c">#nexti = map(lambda x:x[0]</span>
+                                    <span class="c">#               ,filter(lambda x</span>
+                                    <span class="c">#                       :x[1]&gt;threshold,zip(out,prob)))</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="n">nexti</span> <span class="o">=</span> <span class="p">[]</span>
+
+                                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">nexti</span><span class="p">))</span>
+                                <span class="c">#stack.append(iter(G[visited[-1]][child][&#39;output&#39;]))</span>
+                                <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+                                <span class="c"># check if child (current segment) is an airwall</span>
+                                <span class="c"># warning not efficient if many airwalls</span>
+                                <span class="k">if</span> <span class="n">child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">]:</span>
+                                    <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">lawp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+
+                        <span class="k">else</span><span class="p">:</span> <span class="c">#len(visited) == cutoff (visited list is too long)</span>
+                            <span class="k">if</span> <span class="n">child</span> <span class="o">==</span> <span class="n">t</span> <span class="ow">or</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+                                <span class="n">path</span> <span class="o">=</span> <span class="n">visited</span> <span class="o">+</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+                                <span class="n">nstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">path</span><span class="p">))</span>
+                                <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">path</span><span class="p">))</span>
+                                <span class="k">try</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)],</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="c">#print &quot;non existing : &quot;,len(path)</span>
+                                    <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                <span class="c">#print visited + [target]</span>
+                                <span class="c">#yield visited + [target]</span>
+
+                            <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">lawp</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="k">except</span><span class="p">:</span>
+                                <span class="k">pass</span>
+
+                <span class="k">else</span><span class="p">:</span> <span class="c"># s==t</span>
+                    <span class="n">nstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)])</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="c">#print &quot;non existing : &quot;,len(path)</span>
+                        <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">run6</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">bt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">diffraction</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        cutoff : int</span>
+<span class="sd">            limit the exploration of all_simple_path</span>
+<span class="sd">        bt : bool</span>
+<span class="sd">            backtrace (allow to visit already visited nodes in simple path algorithm)</span>
+<span class="sd">        progress : bool</span>
+<span class="sd">            display the time passed in the loop</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        sigslist :  numpy.ndarray</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.simul.link.Dlink.eval</span>
+<span class="sd">        pylayers.antprop.signature.Signatures.propath2</span>
+<span class="sd">        pylayers.antprop.signature.Signatures.procone2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;.sig&#39;</span>
+
+        <span class="c"># list of interactions visible from source</span>
+        <span class="n">lisT</span><span class="p">,</span><span class="n">lisR</span><span class="p">,</span><span class="n">lisD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
+            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span> <span class="o">+</span> <span class="n">lisD</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lis</span>  <span class="o">=</span> <span class="n">lisT</span> <span class="o">+</span> <span class="n">lisR</span>
+
+        <span class="c"># list of interactions visible from target</span>
+        <span class="n">litT</span><span class="p">,</span><span class="n">litR</span><span class="p">,</span><span class="n">litD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">intercy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;target&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">diffraction</span><span class="p">:</span>
+           <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span> <span class="o">+</span> <span class="n">litD</span>
+        <span class="k">else</span><span class="p">:</span>
+           <span class="n">lit</span>  <span class="o">=</span> <span class="n">litT</span> <span class="o">+</span> <span class="n">litR</span>
+        <span class="k">print</span> <span class="s">&quot;source,lis :&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span><span class="n">lis</span>
+        <span class="k">print</span> <span class="s">&quot;target,lit :&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="n">lit</span>
+
+
+        <span class="n">Gi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span>
+        <span class="n">Gi</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="o">.</span><span class="n">pos</span>
+        <span class="c">#</span>
+        <span class="c"># remove diffractions from Gi</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">diffraction</span><span class="p">:</span>
+            <span class="n">Gi</span> <span class="o">=</span> <span class="n">gidl</span><span class="p">(</span><span class="n">Gi</span><span class="p">)</span>
+
+        <span class="n">lmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lis</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">lit</span><span class="p">)</span>
+        <span class="n">pe</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">tic0</span> <span class="o">=</span> <span class="n">tic</span>
+        <span class="c">#for interaction source  in list of source interactions</span>
+        <span class="k">for</span> <span class="n">us</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lis</span><span class="p">):</span>
+            <span class="c">#for target interaction in list of target interactions</span>
+            <span class="c">#print &quot;---&gt; &quot;,s</span>
+
+            <span class="k">for</span> <span class="n">ut</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lit</span><span class="p">):</span>
+                <span class="c">#print &quot;   ---&gt; &quot;,t</span>
+                <span class="c"># progress bar</span>
+                <span class="k">if</span> <span class="n">progress</span> <span class="p">:</span>
+
+                    <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((((</span><span class="n">us</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">lit</span><span class="p">)</span><span class="o">+</span><span class="n">ut</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="n">lmax</span><span class="p">))</span><span class="o">*</span><span class="mi">10</span> <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="n">pe</span><span class="p">:</span>
+                        <span class="n">pe</span> <span class="o">=</span> <span class="n">ratio</span>
+                        <span class="n">toc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                        <span class="k">print</span> <span class="s">&#39;~</span><span class="si">%d</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ratio</span><span class="o">*</span><span class="mi">10</span><span class="p">),</span>
+                        <span class="k">print</span> <span class="s">&#39;%&#39;</span><span class="p">,</span>
+                        <span class="k">print</span> <span class="s">&#39;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">toc</span><span class="o">-</span><span class="n">tic</span><span class="p">,</span> <span class="n">toc</span><span class="o">-</span><span class="n">tic0</span><span class="p">)</span>
+                        <span class="n">tic</span> <span class="o">=</span> <span class="n">toc</span>
+
+                <span class="c"># if source and target interaction are different</span>
+                <span class="c"># and R | T</span>
+                <span class="c">#if ((type(eval(s))==tuple) &amp; (s != t)):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="n">t</span><span class="p">):</span>
+                    <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">nextlevel</span><span class="o">=</span><span class="p">{</span><span class="n">s</span><span class="p">:</span><span class="n">Gi</span><span class="p">[</span><span class="n">s</span><span class="p">]}</span>   <span class="c"># list of nodes to check at next level</span>
+                    <span class="n">paths</span><span class="o">=</span><span class="p">{</span><span class="n">s</span><span class="p">:[</span><span class="n">s</span><span class="p">]}</span>         <span class="c"># paths dictionary  (paths to key from source)</span>
+
+                    <span class="n">getout</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">while</span> <span class="n">nextlevel</span><span class="p">:</span>
+                        <span class="n">thislevel</span> <span class="o">=</span> <span class="n">nextlevel</span>
+                        <span class="n">nextlevel</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">thislevel</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">thislevel</span><span class="p">[</span><span class="n">v</span><span class="p">]:</span>
+                                <span class="c"># reach a node which is not in paths</span>
+                                <span class="n">paths</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
+                                <span class="n">out</span>  <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">w</span><span class="p">][</span><span class="s">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                                <span class="n">prob</span> <span class="o">=</span> <span class="n">Gi</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">w</span><span class="p">][</span><span class="s">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                                <span class="n">nextlevel</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                                   <span class="p">,</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span>
+                                                           <span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.6</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">prob</span><span class="p">)))</span>
+                                <span class="c"># get to target</span>
+                                <span class="k">if</span> <span class="n">w</span> <span class="o">==</span> <span class="n">t</span><span class="p">:</span>
+                                    <span class="n">nstr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">paths</span><span class="p">[</span><span class="n">w</span><span class="p">]))</span>
+                                    <span class="n">typ</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">paths</span><span class="p">[</span><span class="n">w</span><span class="p">]))</span>
+                                    <span class="n">getout</span> <span class="o">=</span> <span class="bp">True</span>
+                                    <span class="c">#del(paths[w])</span>
+                                    <span class="k">try</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)],</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                                    <span class="k">except</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">typ</span><span class="p">)]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nstr</span><span class="p">,</span><span class="n">typ</span><span class="p">))</span>
+                        <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="o">+</span><span class="mi">1</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">cutoff</span> <span class="o">&gt;=</span> <span class="n">level</span><span class="p">):</span>  <span class="k">break</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                    <span class="c">#try:</span>
+                    <span class="c">#    if [s[0],len(s)] not in dout[1]:</span>
+                    <span class="c">#        dout[1].append([s[0],len(s)])</span>
+                    <span class="c">#except:</span>
+                    <span class="c">#    dout[1]=[]</span>
+                    <span class="c">#    dout[1].append([s[0],len(s)])</span>
+
 <div class="viewcode-block" id="Signatures.run2"><a class="viewcode-back" href="../../../modules/generated/pylayers.antprop.signature.Signatures.run2.html#pylayers.antprop.signature.Signatures.run2">[docs]</a>    <span class="k">def</span> <span class="nf">run2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">dcut</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; get signatures (in one list of arrays) between tx and rx</span>
 
@@ -2263,12 +2607,12 @@
                     <span class="c">#     if len(ds[j]) &lt;&gt; 0:</span>
                     <span class="c">#         pdb.set_trace()</span>
                     <span class="c">#         [ds[j][k].extend(a[0][:-1]) for k in range(len(ds[j]))]</span>
-                    <span class="c">#     else :    </span>
+                    <span class="c">#     else :</span>
                     <span class="c">#         ds[j]=a[0][:-1]</span>
                     <span class="c"># elif len(a)&gt; 1:</span>
                     <span class="c">#     if len(ds[j]) &lt;&gt; 0:</span>
                     <span class="c">#         [[ds[j][k].extend(a[l][:-1]) for k in range(len(ds[j]))] for l in range(len(a))]</span>
-                    <span class="c">#     else :    </span>
+                    <span class="c">#     else :</span>
                     <span class="c">#         ds[j]=a[:-1]</span>
 
 
@@ -2923,17 +3267,17 @@
 <span class="sd">        -----</span>
 
 <span class="sd">        This function converts the sequence of interactions into numpy arrays</span>
-<span class="sd">        which contains coordinates of segments extremities involved in the </span>
-<span class="sd">        signature. At that level the coordinates of extremities (tx and rx) is </span>
+<span class="sd">        which contains coordinates of segments extremities involved in the</span>
+<span class="sd">        signature. At that level the coordinates of extremities (tx and rx) is</span>
 <span class="sd">        not known yet.</span>
 
 <span class="sd">        members data</span>
 
-<span class="sd">        pa  tail of segment  (2xN) </span>
-<span class="sd">        pb  head of segment  (2xN)  </span>
-<span class="sd">        pc  the center of segment (2xN) </span>
+<span class="sd">        pa  tail of segment  (2xN)</span>
+<span class="sd">        pb  head of segment  (2xN)</span>
+<span class="sd">        pc  the center of segment (2xN)</span>
 
-<span class="sd">        norm normal to the segment if segment </span>
+<span class="sd">        norm normal to the segment if segment</span>
 <span class="sd">        in case the interaction is a point the normal is undefined and then</span>
 <span class="sd">        set to 0</span>
 
@@ -3733,7 +4077,7 @@
 
     <div class="footer">
         &copy; Copyright 2014, PyLayers developer team.
-      Last updated on juin 07, 2014.
+      Last updated on juin 09, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
 <script type="text/javascript">
