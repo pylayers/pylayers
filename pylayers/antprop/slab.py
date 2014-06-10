@@ -1360,7 +1360,7 @@ class Slab(dict, Interface):
         for name in self['lmatname']:
             self.mat[name].info()
             if self['evaluated']:
-                epsrc = self.mat[name].epsc(self.fGHz[0])
+                epsrc = self.mat[name].eval(self.fGHz[0])
                 print "epsrc : ", epsrc
             chaine = chaine + name + ' '
             chaine = chaine + ']'

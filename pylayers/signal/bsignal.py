@@ -1269,13 +1269,43 @@ class Usignal(Bsignal):
         return(A)
 
     def eprfl(self,axis=1):
-        """ Energy profile
+        r""" Energy profile
+
+        Parameters
+        ----------
+
+        axis : int
+
+        Notes
+        -----
+
+
+        if axis==0
+
+        $$\delta_x \sum_l |y(l,k)|^2$$
+
+        if axis==1
+
+        $$\delta_x \sum_k |y(l,k)|^2$$
+
+        See Also
+        --------
+
+        cut
+
         """
+
         eprfl = np.real(np.sum(self.y * np.conj(self.y),axis=axis))*self.dx()
         return eprfl
 
     def energy(self,axis=0):
         """ calculate the energy of an Usignal
+
+        Parameters
+        ----------
+
+        axis : int
+            (default : 0)
 
         Returns
         -------
@@ -1283,7 +1313,7 @@ class Usignal(Bsignal):
         energy : float
 
         """
-        energy = self.dx() * sum(self.y * np.conj(self.y))
+        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=0)
         return(energy)
 
     def fftshift(self):
@@ -2816,6 +2846,7 @@ class TUsignal(TBsignal, Usignal):
 
         Parameters
         ----------
+
         alpha : float
         tau0 : float
 
@@ -3376,30 +3407,47 @@ class FUsignal(FBsignal, Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self, axis=0,Friis=False,mode='mean'):
-        """ calculate energy along given axis
+    def energy(self,axis=0,Friis=False,mode='mean'):
+        r""" calculate energy along given axis
 
         Parameters
         ----------
 
         axis : (default 0)
-        Friis :  c/(4 pi fGHz)
+        Friis :  -j*c/(4 pi fGHz)
         mode : string
-            mean | center | integ
+            mean | center | integ | first | last
 
         Examples
         --------
 
-        >>> e   = EnImpulse()
+        >>> S = FUsignal()
         >>> En1 = e.energy()
         >>> assert((En1>0.99) & (En1<1.01))
+
+        Notes
+        -----
+
+        axis = 0 is ray axis
+
+        if mode == 'mean'
+
+        $$E=\frac{1}{K} \sum_k |y_k|^2$$
+
+        if mode == 'integ'
+
+        $$E=\delta_x \sum_k |y_k|^2$$
+
+        if mode == 'center'
+
+        $$E= |y_{K/2}|^2$$
 
         """
 
         H = self.y
 
         if Friis:
-            factor = 0.3/(4*np.pi*self.x)
+            factor = -j*0.3/(4*np.pi*self.x)
             H = H*factor[np.newaxis,:]
 
         MH2 = abs(H * np.conjugate(H))
@@ -3412,6 +3460,12 @@ class FUsignal(FBsignal, Usignal):
 
         if mode=='center':
             EMH2  = MH2[:,len(self.x)/2]
+
+        if mode=='first':
+            EMH2  = MH2[:,0]
+
+        if mode=='last':
+            EMH2  = MH2[:,-1]
 
         return(EMH2)
 

@@ -1010,7 +1010,7 @@ class Ctilde(PyLayers):
         """
 
         defaults = {'typ': 'm',
-                   'cmap': plt.cm.hot,
+                    'cmap': plt.cm.hot,
                     'fontsize':14}
 
         for key, value in defaults.items():
@@ -1277,6 +1277,7 @@ class Ctilde(PyLayers):
         if Friis:
             H.applyFriis()
 
+        #average w.r.t frequency
         H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
                                                              / len(H.y))
         H.tk = H.taud
@@ -1424,6 +1425,8 @@ class Tchannel(bs.FUDAsignal):
         st = st + 'shape  :'+str(np.shape(self.y))+"\n"
         st = st + 'tau :'+str(min(self.taud))+' '+str(max(self.taud))+"\n"
         st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
+        if self.isFriis:
+            st = st + 'Friis factor -j c/(4 pi f) has been applied'
         return(st)
 
 
@@ -1975,7 +1978,7 @@ class Tchannel(bs.FUDAsignal):
         if dmax == []:
             dmax= max(delay)
 
-        
+
 
 
         Etot = self.energy(mode=mode) + 1e-15
