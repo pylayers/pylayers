@@ -743,29 +743,42 @@ class Body(PyLayers):
     @mlab.animate(delay=10)
     def anim(self):
         """ animate body
+
+        Example
+        -------
+
+        >>> from pylayers.mobility.trajectory import *
+        >>> from pylayers.mobility.ban.body import *
+        >>> from pylayers.gis.layout import *
+        >>> T=Trajectories()
+        >>> T.loadh5()
+        >>> L=Layout(T.Lfilename)
+        >>> B = Body()
+        >>> B.settopos(T[0],t=0,cs=True) 
+        >>> L._show3()
+        >>> B.anim(B)
+
         """
         self._show3()
-        lenmocap = 300
         kta = self.sl[:,0].astype(int)
         khe = self.sl[:,1].astype(int)
-        cylrad = self.sl[:,2]
         t=self.traj.time()
 
         # init antennas
-        Ant = {}
-
-        for key in self.dcs.keys():
-            Ant[key]=ant.Antenna(self.dev[key]['file'])
-            if not hasattr(Ant[key],'SqG'):
-                Ant[key].Fsynth()
-            Ant[key]._show3(po=self.dcs[key][:,0],
-                           T=self.acs[key],
-                           ilog=False,
-                           minr=0.01,
-                           maxr=0.2,
-                           newfig=False,
-                           title=False,
-                           colorbar=False)
+        if 'topos' in dir(self):
+            Ant = {}
+            for key in self.dcs.keys():
+                Ant[key]=ant.Antenna(self.dev[key]['file'])
+                if not hasattr(Ant[key],'SqG'):
+                    Ant[key].Fsynth()
+                Ant[key]._show3(po=self.dcs[key][:,0],
+                               T=self.acs[key],
+                               ilog=False,
+                               minr=0.01,
+                               maxr=0.2,
+                               newfig=False,
+                               title=False,
+                               colorbar=False)
         while True:
             if 'topos' in dir(self):
                 for k in range(len(t)):
@@ -786,15 +799,40 @@ class Body(PyLayers):
                         Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
                     yield
             else:
-                for k in range(lenmocap):
+                for k in range(self.nframes):
                     pta =  np.array([self.d[0, kta, k], self.d[1, kta, k], self.d[2, kta, k]])
                     phe =  np.array([self.d[0, khe, k], self.d[1, khe, k], self.d[2, khe, k]])
-                # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                    # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
                     X=np.hstack((pta,phe))
                     # s = np.hstack((cylrad,cylrad))
                     self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
                     yield
 
+    @mlab.animate(delay=10)
+    def animc3d(self):
+        """ animate c3d file
+
+        Example
+        -------
+
+        >>> from pylayers.mobility.trajectory import *
+        >>> from pylayers.mobility.ban.body import *
+        >>> B = Body()
+        >>> B.animc3d(B)
+
+        """
+        self._plot3d(typ='c3d',text=False)
+        s, p, f, info = c3d.read_c3d(self.filename)
+
+
+        while True:
+            
+            for k in range(self.nframes):
+                # s = np.hstack((cylrad,cylrad))
+                self._mayapts.mlab_source.set(x=f[k,:,0],
+                                              y=f[k,:,1],
+                                              z=f[k,:,2])
+                yield
 
     def _plot3d(self,**kwargs):
         """
@@ -824,6 +862,8 @@ class Body(PyLayers):
 
         fig = mlab.gcf()
 
+        fId = kwargs['iframe']
+
         cold = pyu.coldict()
         ncolhex = cold[kwargs['ncolor']]
         pt_color = tuple(pyu.rgb(ncolhex)/255.)
@@ -832,15 +872,15 @@ class Body(PyLayers):
 
         if kwargs['typ'] == 'c3d':
             s, p, f, info = c3d.read_c3d(self.filename)
-            self._mayapts=mlab.points3d(f[0,:,0],f[0,:,1],f[0,:,2],scale_factor=5,opacity=0.5)
+            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=5,opacity=0.5)
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
-                [mlab.text3d(f[0,i,0],f[0,i,1],f[0,i,2],p[i][4:],
-                         scale=3,
-                         color=(0,0,0)) for i in range(len(p))]
+                self._mayaptstxt=[mlab.text3d(f[fId,i,0],f[fId,i,1],f[fId,i,2],p[i][4:],
+                                    scale=3,
+                                    color=(0,0,0)) for i in range(len(p))]
 
         else :
-            fId = kwargs['iframe']
+            
             kta = self.sl[:,0].astype(int)
             khe = self.sl[:,1].astype(int)
             cylrad = self.sl[:,2]
@@ -865,9 +905,9 @@ class Body(PyLayers):
                 mlab.pipeline.surface(tube,color=ed_color)
                 fig.children[-1].__setattr__('name',self.name )
             if kwargs['text']:
-                [mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
-                         scale=0.05,
-                         color=(0,0,0)) for i in range(self.ncyl)]
+                self._mayaptstxt=[mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
+                                scale=0.05,
+                                color=(0,0,0)) for i in range(self.ncyl)]
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
