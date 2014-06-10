@@ -88,6 +88,7 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 from pylayers.antprop.rays import Rays
 from pylayers.util.project import *
+import heapq
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
@@ -787,6 +788,63 @@ class Signatures(PyLayers,dict):
                     yield visited + [target]
                 stack.pop()
                 visited.pop()
+
+
+    def short_propath(self,G,source,target=None,dout={},cutoff=None):
+        """ updated dijkstra
+        """
+        if source==target:
+            return ({source:0}, {source:[source]})
+        dist = {}  # dictionary of final distances
+        paths = {source:[source]}  # dictionary of paths
+        seen = {source:0}
+        fringe=[] # use heapq with (distance,label) tuples
+        heapq.heappush(fringe,(0,source))
+        firstloop=True
+        while fringe:
+            if not firstloop:
+                oldv = v
+            (d,v)=heapq.heappop(fringe)
+
+            if v in dist:
+                continue # already searched this node.
+            dist[v] = d
+            if v == target:
+                break
+            #for ignore,w,edgedata in G.edges_iter(v,data=True):
+            #is about 30% slower than the following
+            if firstloop:
+                edata = iter(G[v].items())
+            else:
+                try:
+                    edata = iter(G[oldv][v]['output'].items())
+                except:
+                    break
+            for w,edgedata in edata:
+                vw_dist = dist[v] #+ edgedata.get(weight,1) #<= proba should be add here
+                if cutoff is not None:
+                    if vw_dist>cutoff:
+                        continue
+                if w in dist:
+                    if vw_dist < dist[w]:
+                        raise ValueError('Contradictory paths found:',
+                                         'negative weights?')
+                elif w not in seen or vw_dist < seen[w]:
+                    seen[w] = vw_dist
+                    heapq.heappush(fringe,(vw_dist,w))
+                    paths[w] = paths[v]+[w]
+            firstloop=False
+
+
+        if paths.has_key(target):
+            if dout.has_key(len(paths[target])):
+                dout[len(paths[target])].append([[p[0], len(p)] for p in paths[target]])
+            else :
+                dout[len(paths[target])]=[]
+                dout[len(paths[target])].append([[p[0], len(p)] for p in paths[target]])
+
+        return dout
+
 
     def propaths(self,G, source, target, cutoff=1,bt=False):
         """ seek all simple_path from source to target
@@ -1739,8 +1797,10 @@ class Signatures(PyLayers,dict):
                 if (s != t):
                     if algo=='new':
                         dout = self.procone2(self.L,Gi,dout=dout,source=s,target=t,cutoff=cutoff)
-                    else :
+                    elif algo == 'old' :
                         dout = self.propaths2(Gi,source=s,target=t,dout=dout,cutoff=cutoff,bt=bt)
+                    elif algo == 'dij':
+                        dout = self.short_propath(Gi,source=s,target=t,dout=dout,cutoff=cutoff)
                 else:
                     try:
                         if [s[0],len(s)] not in dout[1]:
