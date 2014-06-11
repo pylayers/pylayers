@@ -1278,8 +1278,7 @@ class Ctilde(PyLayers):
             H.applyFriis()
 
         #average w.r.t frequency
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
-                                                             / len(H.y))
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/self.nfreq, axis=1)))
         H.tk = H.taud
         return(H)
 
