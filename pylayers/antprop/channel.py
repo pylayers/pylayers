@@ -1071,6 +1071,7 @@ class Ctilde(PyLayers):
 
         Parameters
         ----------
+
         mode : string
             'mean'
         Friis: boolean
@@ -1096,6 +1097,10 @@ class Ctilde(PyLayers):
         Notes
         -----
 
+        r x f
+          axis 0 : ray
+          axis 1 : frequency
+
 
         """
 
@@ -1104,10 +1109,12 @@ class Ctilde(PyLayers):
         #  axis 0 : ray
         #  axis 1 : frequency
         #
+
         ECtt = self.Ctt.energy(axis=1,Friis=Friis,mode=mode)
         ECtp = self.Ctp.energy(axis=1,Friis=Friis,mode=mode)
         ECpt = self.Cpt.energy(axis=1,Friis=Friis,mode=mode)
         ECpp = self.Cpp.energy(axis=1,Friis=Friis,mode=mode)
+
         if sumray:
             ECtt = np.sum(ECtt,axis=0)
             ECtp = np.sum(ECtp,axis=0)

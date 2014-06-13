@@ -41,7 +41,7 @@ if __name__ == "__main__":
     wn = sqrt(Var_w)*randn(Npoints)
 
     #
-    # Filter 1 : Filtre passe bande d'entree
+    # Filter 1 : Input Band Pass Filter
     #
     w1       = 0.05
     w2       = 0.1
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     filter1.ellip_bp(wp,ws,gpass,gstop)
 
     #
-    # Filter 2 : Filtre moyenneur en sortie
+    # Filter 2 : Averaging Filter
     #
     N       = 40
     b       = (1./N)*ones(N)
