@@ -2416,6 +2416,7 @@ class Layout(PyLayers):
         """
         """
         pass
+
     def translate(self,vec):
         """ translate layout
 
@@ -2430,7 +2431,7 @@ class Layout(PyLayers):
             self.Gs.pos[k]=(pt[0]+vec[0],pt[1]+vec[1])
 
     def rotate(self,angle=90):
-        """ rotate layout
+        """ rotate the layout
 
         Parameters
         ----------
@@ -2441,7 +2442,7 @@ class Layout(PyLayers):
         """
         a = angle*np.pi/180
         for k in self.Gs.pos:
-            pt=self.Gs.pos[k]
+            pt  = self.Gs.pos[k]
             ptr = np.dot(array([[np.cos(a), -np.sin(a)],[np.sin(a),np.cos(a)]]),array(pt))
             self.Gs.pos[k]=(ptr[0],ptr[1])
 
