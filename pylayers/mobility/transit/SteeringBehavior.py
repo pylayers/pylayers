@@ -215,11 +215,11 @@ class Separation:
             in_front = local_position[1] > -boid.radius
             if in_front and local_position.length() < separation_distance:
                 separation = other.position - boid.position
-                force = separation.scale(-1 / separation.length() ** 2)
+                force = separation.scale(-1 / max(1e-9,separation.length() ** 2))
                 # create orthogonal vector in order to make boids avoidance
-#                force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
-                force2 = vec3(-force[1],force[0],0)
-                acceleration += force2 #3*force2
+                force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
+#                force2 = vec3(-force[1],force[0],0)
+                acceleration += 0.5*force2 #3*force2
         return acceleration
 
 class Queuing:

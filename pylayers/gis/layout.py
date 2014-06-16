@@ -5316,7 +5316,7 @@ class Layout(object):
 
             name = self.Gs.node[Id]['name']
 
-            if name != 'AIR':
+            if True:#name != 'AIR':
                 pn = self.Gs.node[Id]['norm']
                 sl = self.sl[name]
                 thick = (sum(sl['lthick'])/2.)+0.2
@@ -5366,6 +5366,7 @@ class Layout(object):
                 self.Gw.add_edges_from([(upd0,upd1)])
             # Airwalls case
             else :
+
                 pdoor = (np.array(up0)+np.array(up1)) / 2  
                 self.Gw.pos[d_id_index] = pdoor
                 self.Gw.add_edges_from([(e[0],d_id_index),(e[1],d_id_index)])
@@ -7021,8 +7022,16 @@ class Layout(object):
             ldif = map(lambda x: lpnt[x],ucvx)
             tldif.append(ldif)
 
-    def buildGr(self):
+    def buildGr(self,aw=True):
         """ build the graph of rooms Gr
+
+        Parameters
+        ----------
+
+        aw : boolean
+
+        Consider airwalls separation as a new room
+        (a.k.a use Gt instead of Gc)
 
         Returns
         -------
@@ -7039,7 +7048,11 @@ class Layout(object):
         segments
 
         """
-        self.Gr = copy.deepcopy(self.Gc)
+        if aw :
+            self.Gr = copy.deepcopy(self.Gt)
+        else:
+            self.Gr = copy.deepcopy(self.Gc)
+
         try:
             del(self.Gr.node[0])
         except:
