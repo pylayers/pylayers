@@ -21,11 +21,12 @@ This class implements a LTI digital filter
 """
 import numpy as np
 from scipy import io
+from pylayers.util.project import *
 import scipy.signal as si
 import matplotlib.pyplot as plt
 #from EnergyDetector import *
 
-class DF(object):
+class DF(PyLayers):
     """ Digital Filter Class
 
     Methods

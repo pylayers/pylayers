@@ -3,6 +3,7 @@ from scipy.signal import *
 from pylab import *
 from pylayers.signal.DF import *
 from pylayers.util.project import *
+import matplotlib.pyplot as plt
 
 
 class EnergyDetector(PyLayers):
