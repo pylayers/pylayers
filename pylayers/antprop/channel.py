@@ -28,8 +28,6 @@ Ctilde class
     Ctilde.energy
     Ctilde.sort
     Ctilde.prop2tran
-    Ctilde.vec2scal
-    Ctilde.vec2scalA
     Ctilde.PLoss
 
 Tchannel Class
@@ -40,7 +38,6 @@ Tchannel Class
 
     Tchannel.__init__
     Tchannel.__repr__
-    Tchannel.info
     Tchannel.apply
     Tchannel.chantap
     Tchannel.applywavA
@@ -74,7 +71,7 @@ try:
 except:
     print 'h5py is not installed: Ctilde(object cannot be saved)'
 
-class Ctilde(object):
+class Ctilde(PyLayers):
     """ container for the 4 components of the polarimetric ray channel
 
     Attributes
@@ -110,12 +107,16 @@ class Ctilde(object):
 
     """
     def __init__(self):
-        """
-            transpose == False   (r,f)
-            transpose == True    (f,r)
+        """ class constructor
 
-            A Ctilde object is the output of eval method
-            of a Rays object.
+        Notes
+        -----
+
+        transpose == False   (r,f)
+        transpose == True    (f,r)
+
+        A Ctilde object is the output of eval method
+        of a Rays object.
 
         """
         self.fail = False
@@ -132,42 +133,6 @@ class Ctilde(object):
             s = s + 'fmin(GHz) : ' + str(self.Cpp.x[0])+'\n'
             s = s + 'fmax(GHz): ' + str(self.Cpp.x[-1])+'\n'
             s = s + 'Nfreq : ' + str(self.nfreq)+'\n'
-        return(s)
-
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-
         return(s)
 
     def choose(self):
@@ -398,7 +363,7 @@ class Ctilde(object):
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
 
-        Load the three files .tauk .tang .rang which contain  respectively
+        Load the three files .tauk .tang .rang which contain respectively
         delay , angle of departure , angle of arrival.
 
         Parameters
@@ -514,7 +479,7 @@ class Ctilde(object):
             self.rang = tmp[0:nray,:]
 
     def mobility(self, v, dt):
-        """ Modify channel for uniform mobility
+        """ modify channel for uniform mobility
 
         Parameters
         ----------
@@ -559,14 +524,8 @@ class Ctilde(object):
 
         return(tauk_ch)
 
-    def PLoss(sef,f):
-        """
-        """
-        pass
-
-
     def plotd (self, d='doa', **kwargs):
-        """plot direction of arrival/departure
+        """ plot direction of arrival/departure
 
         Parameters
         ----------
@@ -800,131 +759,6 @@ class Ctilde(object):
             fig,ax2 = self.plotd(d='dod',ax=ax2,**kwargs)
 
         return fig,[ax1,ax2]
-        #return fig,ax1
-
-
-    # def doadod(self, **kwargs):
-    #     """ doadod scatter plot
-
-    #     Parameters
-    #     -----------
-
-    #     cmap : color map
-    #     s    : float
-    #         size (default 30)
-    #     fontsize : integer
-    #         default 12
-
-    #     Summary
-    #     --------
-
-    #     scatter plot of the DoA-DoD channel structure
-    #     the energy is colorcoded over all couples of DoA-DoD
-
-    #     """
-    #     defaults = {'cmap' : plt.cm.hot_r,
-    #                 's': 30,
-    #                 'fontsize' : 12,
-    #                 'reverse' :False,
-    #                 'phi':(-180,180),
-    #                 'normalize':False,
-    #                 'polar':False,
-    #                 'mode':'center'}
-
-    #     for k in defaults:
-    #         if k not in kwargs:
-    #             kwargs[k] = defaults[k]
-
-    #     args = {}
-    #     for k in kwargs:
-    #         if k not in defaults:
-    #             args[k] = kwargs[k]
-
-    #     the = (0,180)
-    #     dod = self.tang
-    #     doa = self.rang
-
-    #     # determine Energy in each channel
-
-    #     Ett, Epp, Etp, Ept = self.energy(mode=kwargs['mode'])
-    #     Etot = Ett+Epp+Etp+Ept + 1e-15
-
-    #     if kwargs['normalize']:
-    #         Emax = max(Etot)
-    #         Etot = Etot / Emax
-
-    #     Emax = max(10 * np.log10(Etot))
-    #     Emin = min(10 * np.log10(Etot))
-    #     #
-    #     #
-    #     #
-    #     # col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
-    #     # WARNING polar plot require radian angles 
-    #     if kwargs['polar'] :
-    #         al = 1.
-    #         phi=np.array(phi)
-    #         the=np.array(the)
-    #         phi[0] = phi[0]*np.pi/180
-    #         phi[1] = phi[1]*np.pi/180
-    #         the[0] = the[0]*np.pi/180
-    #         the[1] = the[1]*np.pi/180
-    #     else :
-    #         al = 180./np.pi
-
-    #     col = 10 * np.log10(Etot)
-
-    #     if len(col) != len(dod):
-    #         print "len(col):", len(col)
-    #         print "len(dod):", len(dod)
-    #     plt.subplot(121, polar=kwargs['polar'])
-    #     if kwargs['reverse']:
-    #         plt.scatter(dod[:, 1] * al, dod[:, 0] * al,
-    #                     s=kwargs['s'], c=col,
-    #                     cmap=kwargs['cmap'],
-    #                     edgecolors='none')
-    #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
-    #     else:
-    #         plt.scatter(dod[:, 0] * al, dod[:, 1] * al,
-    #                     s=kwargs['s'], c=col,
-    #                     cmap=kwargs['cmap'],
-    #                     edgecolors='none')
-    #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_t(^{\circ})$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel('$\phi(^{\circ})$', fontsize=kwargs['fontsize'])
-    #     # ylabel('$\phi_t(^{\circ})$',fontsize=18)
-    #     plt.title('DoD', fontsize=kwargs['fontsize']+2)
-
-
-    #     plt.subplot(122, polar=kwargs['polar'])
-    #     if kwargs['reverse']:
-    #         plt.scatter(doa[:, 1] * al, doa[:, 0] * al, s=30, c=col,
-    #                     cmap=plt.cm.hot_r, edgecolors='none')
-    #         plt.axis((kwargs['phi'][0], kwargs['phi'][1],the[0],the[1]))
-    #         plt.xlabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
-    #     else :
-    #         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
-    #                     cmap=plt.cm.hot_r, edgecolors='none')
-    #         plt.axis((the[0], the[1], kwargs['phi'][0], kwargs['phi'][1]))
-    #         plt.xlabel("$\\theta_r(^{\circ})$", fontsize=kwargs['fontsize'])
-    #         plt.ylabel("$\phi_r (^{\circ})$", fontsize=kwargs['fontsize'])
-
-    #     plt.title('DoA', fontsize=kwargs['fontsize']+2)
-
-    #     # plt.xticks(fontsize=20)
-    #     # plt.yticks(fontsize=20)
-    #     b = plt.colorbar()
-    #     if kwargs['normalize']:
-    #         b.set_label('dB')
-    #     else:
-    #         b.set_label('Path Loss (dB)')
-    #     # for t in b.ax.get_yticklabels():
-    #     #    t.set_fontsize(20)
-    #     plt.axis
-
-
 
 
     def locbas(self, Tt=[], Tr=[],b2g=False):
@@ -1176,7 +1010,7 @@ class Ctilde(object):
         """
 
         defaults = {'typ': 'm',
-                   'cmap': plt.cm.hot,
+                    'cmap': plt.cm.hot,
                     'fontsize':14}
 
         for key, value in defaults.items():
@@ -1209,6 +1043,20 @@ class Ctilde(object):
         return fig, (ax1, ax2, ax3, ax4)
 
     def check_reciprocity(self, C):
+        """ check channel reciprocity
+
+        Parameters
+        ----------
+
+        C : Ctilde
+
+
+        Notes
+        -----
+
+        This is not properly implemented
+
+        """
         assert np.allclose(self.tauk, C.tauk)
         for r in range(self.nray):
             if np.allclose(self.Ctt.y[r,:], C.Ctt.y[r,:]):
@@ -1219,10 +1067,11 @@ class Ctilde(object):
 
 
     def energy(self,mode='mean',Friis=True,sumray=False):
-        """ Calculates energy on each channel
+        """ calculates energy on each channel
 
         Parameters
         ----------
+
         mode : string
             'mean'
         Friis: boolean
@@ -1248,6 +1097,10 @@ class Ctilde(object):
         Notes
         -----
 
+        r x f
+          axis 0 : ray
+          axis 1 : frequency
+
 
         """
 
@@ -1256,10 +1109,12 @@ class Ctilde(object):
         #  axis 0 : ray
         #  axis 1 : frequency
         #
+
         ECtt = self.Ctt.energy(axis=1,Friis=Friis,mode=mode)
         ECtp = self.Ctp.energy(axis=1,Friis=Friis,mode=mode)
         ECpt = self.Cpt.energy(axis=1,Friis=Friis,mode=mode)
         ECpp = self.Cpp.energy(axis=1,Friis=Friis,mode=mode)
+
         if sumray:
             ECtt = np.sum(ECtt,axis=0)
             ECtp = np.sum(ECtp,axis=0)
@@ -1269,7 +1124,8 @@ class Ctilde(object):
         return ECtt, ECpp, ECtp, ECpt
 
     def cut(self,threshold=0.99):
-        """
+        """ cut rays from a energy threshold
+
         Parameters
         ----------
 
@@ -1428,14 +1284,15 @@ class Ctilde(object):
         if Friis:
             H.applyFriis()
 
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
-                                                             / len(H.y))
+        #average w.r.t frequency
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/self.nfreq, axis=1)))
         H.tk = H.taud
         return(H)
 
-    def vec2scal(self):
+    def _vec2scal(self):
         """ calculate scalChannel from VectChannel and antenna
 
+        DEPRECTATED
         Returns
         -------
 
@@ -1459,8 +1316,10 @@ class Ctilde(object):
     # Inclusion of realistic antenna behaviour
     # Specify transmitter antenna and receiver antenna
 
-    def vec2scalA(self, At, Ar, alpha=1.0):
-        """
+    def _vec2scalA(self, At, Ar, alpha=1.0):
+        """ calculate scalChannel from Vectchannel
+
+        DEPRECATED
 
         Parameters
         ----------
@@ -1552,7 +1411,7 @@ class Tchannel(bs.FUDAsignal):
                 tau  = np.array(([],)),
                 dod  = np.array(([[],[]])).T,
                 doa  = np.array(([[],[]])).T):
-        """
+        """ class constructor
 
         Parameters
         ----------
@@ -1572,6 +1431,8 @@ class Tchannel(bs.FUDAsignal):
         st = st + 'shape  :'+str(np.shape(self.y))+"\n"
         st = st + 'tau :'+str(min(self.taud))+' '+str(max(self.taud))+"\n"
         st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
+        if self.isFriis:
+            st = st + 'Friis factor -j c/(4 pi f) has been applied'
         return(st)
 
 
@@ -1600,7 +1461,7 @@ class Tchannel(bs.FUDAsignal):
         filenameh5=pyu.getlong(filename,pstruc['DIRH'])
 
         f=h5py.File(filenameh5,'w')
-                
+
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
@@ -1617,10 +1478,11 @@ class Tchannel(bs.FUDAsignal):
             raise NameError('Channel Tchannel: issue when writting h5py file')
 
     def loadh5(self,Lfilename,idx, output = True):
-        """ Load Ctilde object in hdf5 format
+        """ load Ctilde object in hdf5 format
 
         Parameters
         ----------
+
         Lfilename  : string
             Layout filename
         idx : int
@@ -1630,9 +1492,10 @@ class Tchannel(bs.FUDAsignal):
 
         Returns
         -------
+
         if output:
         (a,b,Ta,Tb) 
-        
+
         with 
             a = np.ndarray
                 postion of point a (transmitter)
@@ -1644,10 +1507,10 @@ class Tchannel(bs.FUDAsignal):
                 rotation matrice of antenna b
 
 
-        """    
+        """
         filename = Lfilename.split('.')[0] +'_' + str(idx).zfill(5) + '.h5'
         filenameh5 = pyu.getlong(filename,pstruc['DIRH'])
-        
+
         f=h5py.File(filenameh5, 'r')
         try:
             # keys not saved as attribute of h5py file
@@ -1675,7 +1538,6 @@ class Tchannel(bs.FUDAsignal):
     def _saveh5(self,filenameh5,grpname):
         """ save Tchannel object in hdf5 format compliant with Link Class
 
-        
         Parameters
         ----------
 
@@ -1688,7 +1550,7 @@ class Tchannel(bs.FUDAsignal):
 
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
-                
+
         # try/except to avoid loosing the h5 file if 
         # read/write error
         try:
@@ -1698,7 +1560,7 @@ class Tchannel(bs.FUDAsignal):
             else :
                 print 'Warning : H/'+grpname +'already exists in '+filenameh5
             f=fh5['H/'+grpname]
-            
+
             for k,va in self.__dict__.items():
                 f.create_dataset(k,shape = np.shape(va),data=va)
             fh5.close()
@@ -1717,7 +1579,7 @@ class Tchannel(bs.FUDAsignal):
         grpname  : int
             groupname in filenameh5
 
-        """    
+        """
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
         try:
             fh5=h5py.File(filename,'r')
@@ -1737,16 +1599,6 @@ class Tchannel(bs.FUDAsignal):
             fh5.close()
             raise NameError('Channel Tchannel: issue when reading h5py file')
 
-
-    def info(self):
-        """ display information
-
-        """
-        print 'Ftt,Ftp,Frt,Frp'
-        print 'dod,doa,tau'
-        print 'H - FUDsignal '
-        print 'tau min , tau max :', min(self.tau), max(self.tau)
-        self.H.info()
 
     def apply(self, W):
         """ Apply a FUsignal W to the ScalChannel.
@@ -2132,7 +1984,7 @@ class Tchannel(bs.FUDAsignal):
         if dmax == []:
             dmax= max(delay)
 
-        
+
 
 
         Etot = self.energy(mode=mode) + 1e-15
@@ -2493,8 +2345,7 @@ class Tchannel(bs.FUDAsignal):
         # qHk.x[0]==Wk.x[0]
 
     def RSSI(self,ufreq=0) :
-        """ Compute RSSI value from a
-        specific frequency of the transmission channel
+        """ Compute RSSI value for a frequency index
 
         Parameters
         ----------
@@ -2518,79 +2369,6 @@ class Tchannel(bs.FUDAsignal):
 
         Tk = np.real(self.y[:, ufreq])
         return(20*np.log(np.sum(Tk**2)))
-
-#def Cg2Cl(Cg, Tt, Tr):
-#    """ global reference frame to local reference frame
-#
-#    Parameters
-#    ----------
-#
-#    Cg  : Ctilde global
-#    Tt  : Tx rotation matrix 3x3
-#    Tr  : Rx rotation matrix 3x3
-#
-#    Returns
-#    -------
-#
-#    Cl : Ctilde local
-#
-#    Examples
-#    --------
-#
-#    """
-#    import copy
-#   
-#    # don't loose the global channel
-#    Cl = copy.deepcopy(Cg)
-#   
-#    # get frequency axes   
-#    fGHz = Cl.fGHz
-#   
-#    # get angular axes
-#
-#    # Rt (2x2)
-#    # Rr (2x2)
-#    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
-#    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
-#
-#    Cl.tang = tangl
-#    Cl.rang = rangl
-#
-#    uf = np.ones(VCg.nfreq)
-#    r0 = np.outer(Rr[0, 0,:], uf)
-#    r1 = np.outer(Rr[0, 1,:], uf)
-#
-#    # print "shape r0 = ",np.shape(r0)
-#    # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
-#    # print "shape r1 = ",np.shape(r1)
-#    # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
-#
-#    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-#    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-#
-#    r0 = np.outer(Rr[1, 0,:], uf)
-#    r1 = np.outer(Rr[1, 1,:], uf)
-#
-#    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-#    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-#
-#    r0 = np.outer(Rt[0, 0,:], uf)
-#    r1 = np.outer(Rt[1, 0,:], uf)
-#
-#    Cttl = t00 * r0 + t01 * r1
-#    Cptl = t10 * r0 + t11 * r1
-#
-#    r0 = np.outer(Rt[0, 1,:], uf)
-#    r1 = np.outer(Rt[1, 1,:], uf)
-#    Ctpl = t00 * r0 + t01 * r1
-#    Cppl = t10 * r0 + t11 * r1
-#
-#    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
-#    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
-#    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
-#    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
-#
-#    return Cl
 
 
 if __name__ == "__main__":

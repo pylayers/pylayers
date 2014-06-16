@@ -1344,10 +1344,13 @@ class TFP(object):
         self.chan_param['angular'] = np.array([])
 
     def append(self, FP):
-        """
+        """  append data to fingerprint
+
         Parameters
         ----------
-        FP 
+
+        FP
+
         """
         tx = FP.metadata['Tx'].reshape(3, 1)
         rx = FP.metadata['Rx'].reshape(3, 1)
@@ -1392,11 +1395,8 @@ class TFP(object):
         #self .chan_param['toa_th_tmt']=hstack((self.chan_param['toa_th_tmt'],FP.chan_param['toa_th_tmt']))
 
 class FP(object):
-    """
-    Fingerprint
+    """ Fingerprint class
 
-    F = FP(M,Rxid, alpha = 0.1,Tint=0.225,sym=0.25,nint=7,thlos=0.05,
-        thnlos=0.65,thcum=0.15)
     Rxid : 1 | 2 | 3 | 4
     alpha : pdf percentile to suppress below and above (used in tau_rms and tau_moy)
     Tint : Integration time for Emax (ns)
@@ -1410,35 +1410,42 @@ class FP(object):
 
     Attributes
     ----------
-        metadata :  dictionnary
-                    Tx
-                    Rx
-                    distance (m)
-                    type
-        chan_param : dictionnary
-                    Etot
-                    Emax
-                    Etau0
-                    tau_moy
-                    tau_rms
-                    Epercent
-                    toa_max
-                    toa_th
-                    toa_cum
+
+    metadata :  dictionnary
+                Tx
+                Rx
+                distance (m)
+                type
+    chan_param : dictionnary
+                Etot
+                Emax
+                Etau0
+                tau_moy
+                tau_rms
+                Epercent
+                toa_max
+                toa_th
+                toa_cum
     """
     def __init__(self, M, k, alpha=0.1, Tint=0.225, sym=0.25, nint=8, thlos=0.05, thnlos=0.15, thcum=0.15, w=6):
-        """
+        """ object constructor
 
         Parameters
         ----------
-            M : UWB Mesure
-            k : Rx index
-            alpha : quantile parameter
-            Tint  : Integation time (ns)
-            sym   : Symmetry
-            nint  : int
-            thlos : float
-            w     : w
+
+        M : UWB Mesure
+        k : int
+            Rx index
+        alpha : quantile parameter
+            0.1
+        Tint  : Integation time (ns)
+            0.225
+        sym   : float
+            0.25
+        nint  : int
+            8
+        thlos : float
+        w     : w
         """
         #
         # Metadata : general parameters links to measurement configuration
@@ -1616,7 +1623,7 @@ class UWBMeasure(PyLayers):
     """
 
     def __init__(self, nTx=1, h=1, display=False):
-        """
+        """ object constructor
 
         Parameters
         ----------
@@ -1626,10 +1633,10 @@ class UWBMeasure(PyLayers):
         h : int
             height indicator (default 1 - 1.2m)  0 - 1.5 m
 
-         Examples
-         --------
+        Examples
+        --------
 
-         .. plot::
+        .. plot::
             :include-source:
 
             >>> from pylayers.measures.mesuwb import *
@@ -1739,19 +1746,6 @@ class UWBMeasure(PyLayers):
             raise AttributeError("non valid Rx point ")
             self.valid = False
 
-#    def __del__(self):
-#        if self.valid:
-#            del self.F1
-#            del self.F2
-#            del self.F3
-#            del self.F4
-#            print "Detruit: ",self.Tx_position
-
-
-
-
-         
-
 
     def info(self):
         print "Date_Time :", self.Date_Time
@@ -1778,74 +1772,13 @@ class UWBMeasure(PyLayers):
                 print "LQI Meth1", self.LQI['Method1_CH4'], " (dB)"
                 print "LQI Meth2", self.LQI['Method2_CH4'], " (dB)"
 
-    #def pass_loss(self):
-        #"""
-        #calculate the path Loss for each subband
-        #"""
-
-        #y1 = self.fdd.ch1
-        #y2 = self.fdd.ch2
-        #y3 = self.fdd.ch3
-        #y4 = self.fdd.ch4
-        #f  = self.fdd.freq
-        #yt = self.fdd.tx
-
-        #PL1 = np.array([])
-        #PL2 = np.array([])
-        #PL3 = np.array([])
-        #PL4 = np.array([])
-        #delta = 0.02
-        #df = 0.005
-
-        #s1 = 20*log10(abs(y1))
-        #s2 = 20*log10(abs(y2))
-        #s3 = 20*log10(abs(y3))
-        #s4 = 20*log10(abs(y4))
-        #st = 20*log10(abs(yt))
-
-        #for i in range (399):
-
-            #es1 = s1[((delta*(i+1)-delta/2)/df):((delta*(i+1)+delta/2)/df)]
-            #es2 = s2[((delta*(i+1)-delta/2)/df):((delta*(i+1)+delta/2)/df)]
-            #es3 = s3[((delta*(i+1)-delta/2)/df):((delta*(i+1)+delta/2)/df)]
-            #es4 = s4[((delta*(i+1)-delta/2)/df):((delta*(i+1)+delta/2)/df)]
-            #est = st[((delta*(i+1)-delta/2)/df):((delta*(i+1)+delta/2)/df)]
-
-            #cumS1 = cumsum(es1)
-            #cumS2 = cumsum(es2)
-            #cumS3 = cumsum(es3)
-            #cumS4 = cumsum(es4)
-            #cumSt = cumsum(est)
-
-            #S1 = cumS1[-1]
-            #S2 = cumS2[-1]
-            #S3 = cumS3[-1]
-            #S4 = cumS4[-1]
-            #St = cumSt[-1]
-
-            #Pr1 = S1*df
-            #Pr2 = S2*df
-            #Pr3 = S3*df
-            #Pr4 = S4*df
-            #Pt  = St*df
-
-            #pl1  = Pt-Pr1
-            #pl2  = Pt-Pr2
-            #pl3  = Pt-Pr3
-            #pl4  = Pt-Pr4
-
-            #PL1 = hstack((PL1,pl1))
-            #PL2 = hstack((PL1,pl2))
-            #PL3 = hstack((PL1,pl3))
-            #PL4 = hstack((PL1,pl4))
-
-        #return PL1,PL2,PL3,PL4
     def show(self, delay=np.array([[0], [0], [0], [0]]), display=True,
              col=['k', 'b', 'g', 'c'], xmin=0, xmax=100, C=0, NC=1,typ='v'):
         """ show measurement in time domain
 
         Parameters
         ----------
+
         delay : np.array(1,4)
         display
             optional
@@ -1874,8 +1807,6 @@ class UWBMeasure(PyLayers):
                      typ='v')
 
     def Epercent(self):
-        """
-        """
 
         epercent1 = self.tdd.ch1.Epercent()
         epercent2 = self.tdd.ch2.Epercent()
@@ -1885,35 +1816,6 @@ class UWBMeasure(PyLayers):
 
         return epercent
 
-    #def TDoA(self):
-        #"""
-        #"""
-
-        #y1 = self.tdd.ch1.TDoA()
-        #y2 = self.tdd.ch2.TDoA()
-        #y3 = self.tdd.ch3.TDoA()
-        #y4 = self.tdd.ch4.TDoA()
-
-                #c12 = correlate(abs(y1),abs(y2),mode='full')
-                #c13 = correlate(abs(y1),abs(y3),mode='full')
-                #c14 = correlate(abs(y1),abs(y4),mode='full')
-                #n12 = find(c12==max(c12))
-                ##n12 = len(y1)-1-n12
-                #t12 = 0.005*(n12-int(len(c12)/2))
-                ##tdoa12 = abs((self.de[1]-self.de[0])/0.3)
-                ##err12 = t12-tdoa12
-                #n13 = find(c13==max(c13))
-                ##n13 = len(y1)-1-n13
-                #t13 = 0.005*(n13-int(len(c13)/2))
-                ##tdoa13 = abs((self.de[2]-self.de[0])/0.3)
-                ##err13 = t13-tdoa13
-                #n14 = find(c14==max(c14))
-                ##n14 = len(y1)-1-n14
-                #t14 = 0.005*(n14-int(len(c14)/2))
-                ##tdoa14 = abs((self.de[3]-self.de[0])/0.3)
-                ##err14 = t14-tdoa14
-                #tdoa = np.array([t12,t13,t14])
-                #return tdoa
     def toa_max2(self):
         """ calculate toa_max (meth2)
         """
@@ -1923,8 +1825,7 @@ class UWBMeasure(PyLayers):
         toa_max24 = self.tdd.ch4.toa_max2()
 
     def tau_Emax(self):
-        """
-        Calculate the delay of energy peak
+        """ calculate the delay of energy peak
         """
         tau_Emax1 = self.tdd.ch1.tau_Emax()
         tau_Emax2 = self.tdd.ch2.tau_Emax()
@@ -1936,8 +1837,7 @@ class UWBMeasure(PyLayers):
         return tau_Emax
 
     def tau_moy(self, display=False):
-        """
-            calculate mean excess delay
+        """ calculate mean excess delay
         """
 
         taum1 = self.tdd.ch1.tau_moy()
@@ -1951,7 +1851,7 @@ class UWBMeasure(PyLayers):
         return taum
 
     def tau_rms(self, display=False):
-        """ calculate the RMS delay spread
+        """ calculate the rms delay spread
         """
 
         taurms1 = self.tdd.ch1.tau_rms()
@@ -1997,8 +1897,7 @@ class UWBMeasure(PyLayers):
         return toa
 
     def toa_max(self, n, display=False):
-        """
-            descendant threshold based toa estimation
+        """ descendant threshold based toa estimation
         """
 
         toa1 = self.tdd.ch1.toa_max(nint=n)
@@ -2012,8 +1911,7 @@ class UWBMeasure(PyLayers):
         return toa
 
     def toa_th(self, r, k, display=False):
-        """
-            threshold based toa estimation using energy pic
+        """ threshold based toa estimation using energy peak
         """
 
         toa1 = self.tdd.ch1.toa_th(visibility=self.type[0], thlos=r, thnlos=k)
@@ -2084,10 +1982,15 @@ class UWBMeasure(PyLayers):
         return  taumx
 
     def Emax(self, Tint=1, sym=0.25, dB=True):
-        """
-            Emax(Tint=0.225,sym=0.25)
-            calculate maximum energy
-            Time integration 0.225 ns , sym=0.25
+        """ calculate maximum energy
+
+        Parameters
+        ----------
+
+        Tint : float
+        sym :float
+        dB : boolean
+
         """
         taumax = self.taumax()
         Emax1 = self.tdd.ch1.Ewin(taumax[0], Tint=Tint, sym=sym, dB=dB)
@@ -2098,28 +2001,51 @@ class UWBMeasure(PyLayers):
         emax = np.array([Emax1, Emax2, Emax3, Emax4])
         return emax
 
-    def Etot(self):
-        """
-            Etot
+    def Etot(self,toffns=0.7,tdns=75,dB=True):
+        """ Calculate total energy for the 4 channels
 
-            Calculate total energy for the 4 channels
-        """
-        de0 = self.de[0] + 0.7
-        de1 = self.de[1] + 0.7
-        de2 = self.de[2] + 0.7
-        de3 = self.de[3] + 0.7
-        Etot1 = self.tdd.ch1.Etot(de0, de0 + 75)
-        Etot2 = self.tdd.ch2.Etot(de1, de1 + 75)
-        Etot3 = self.tdd.ch3.Etot(de2, de2 + 75)
-        Etot4 = self.tdd.ch4.Etot(de3, de3 + 75)
+        Parameters
+        ----------
 
-        etot = np.array([10 * log10(Etot1), 10 * log10(Etot2), 10 *
-                         log10(Etot3), 10 * log10(Etot4)])
+        toffns : float
+            time offset for selecting time window
+
+        tdns : float
+            time duration of the window
+
+        Notes
+        -----
+
+        This function gets the total energy of the channel
+
+        from [tau_0 + tofffset , tau_0 + toffset +tduration ]
+
+        """
+        de0 = self.de[0] + toffns
+        de1 = self.de[1] + toffns
+        de2 = self.de[2] + toffns
+        de3 = self.de[3] + toffns
+        Etot1 = self.tdd.ch1.Etot(de0, de0 + tdns)
+        Etot2 = self.tdd.ch2.Etot(de1, de1 + tdns)
+        Etot3 = self.tdd.ch3.Etot(de2, de2 + tdns)
+        Etot4 = self.tdd.ch4.Etot(de3, de3 + tdns)
+
+        etot = np.array([Etot1, Etot2, Etot3, Etot4])
+        if dB==True:
+            etot = 10*np.log10(etot),
 
         return etot
 
     def Efirst(self, Tint=1, sym=0.25, dB=True):
-        """
+        """ calculate energy in first path
+
+        Parameters
+        ----------
+
+        Tint : float
+        sym : float
+        dB : boolean
+
         """
         # ???
         #sig = 1/(2*np.sqrt(22))
@@ -2143,8 +2069,7 @@ class UWBMeasure(PyLayers):
         return  efirst
 
     def Etau0(self, Tint=1, sym=0.25, dB=True):
-        """
-        calculate the energy around delay tau0
+        """ calculate the energy around delay tau0
         """
         Etau01 = self.tdd.ch1.Ewin(tau=self.de[0], Tint=Tint, sym=sym, dB=dB)
         Etau02 = self.tdd.ch2.Ewin(tau=self.de[1], Tint=Tint, sym=sym, dB=dB)
@@ -2156,10 +2081,18 @@ class UWBMeasure(PyLayers):
         return etau0
 
     def ecdf(self, Tnoise=10, rem_noise=True, in_positivity=False, display=False, normalize=True, delay=0):
-        """
-        ecdf
+        """ calculate energy cumulative density function
 
-        calculate energy cumulative density function
+        Parameters
+        ----------
+
+        Tnoise
+        rem_noise
+        in_positivity
+        display
+        normalize
+        delay
+
         """
 
         ecdf1, var1 = self.tdd.ch1.ecdf(delay=self.de[0])
@@ -2173,10 +2106,15 @@ class UWBMeasure(PyLayers):
         return ecdf, var
 
     def tdelay(self):
-        """
-        Build an array with delay values
+        """ build an array with delay values
 
-        tau0
+        Returns
+        -------
+
+        t2 : np.array
+            [tau0 , tau_th , toa_cum , toa_max , tau_moy ,tau_rms,
+            tau_moy+tau_rms]
+
         """
 
         tau0 = self.de
@@ -2210,10 +2148,13 @@ class UWBMeasure(PyLayers):
         t2 = t1.T
         return(t2)
 
-    def fp(self, alpha=0.1, type='all'):
-        """
-            Build fingerprint
+    def fp(self, alpha=0.1):
+        """ build fingerprint
 
+        Parameters
+        ----------
+
+        alpha : float
             alpha is a quantile parameter for taum and taurms calculation
 
         """
@@ -2223,8 +2164,7 @@ class UWBMeasure(PyLayers):
         self.F4 = FP(self, 4, alpha=alpha)
 
     def outlatex(self, S):
-        """
-        Measurement output latex
+        """ measurement output latex
 
         M.outlatex(S)
 

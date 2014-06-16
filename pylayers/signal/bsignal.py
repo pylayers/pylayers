@@ -314,7 +314,7 @@ from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilte
 import scipy.stats as st
 
 
-class Bsignal(object):
+class Bsignal(PyLayers):
     r""" Signal with an embedded time base
 
     This class gathers a 1D signal and its axis indexation.
@@ -330,7 +330,7 @@ class Bsignal(object):
     """
 
     def __init__(self, x=np.array([]), y=np.array([])):
-        r"""
+        r""" object constructor
 
         Parameters
         ----------
@@ -359,41 +359,6 @@ class Bsignal(object):
                     print "y : ", ly
 
 
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-
-
     def __repr__(self):
         return '%s :  %s  %s' % (
                             self.__class__.__name__,
@@ -403,7 +368,12 @@ class Bsignal(object):
 
 
     def extract(self,u):
-        r""" extract y[u,:]
+        r""" extract a subset of signal from index
+
+        Parameters
+        ----------
+
+        u : np.array
 
         Returns
         -------
@@ -419,7 +389,8 @@ class Bsignal(object):
         >>> y = np.sin(2*np.pi*x)
         >>> s = Bsignal(x,y)
         >>> su = s.extract(np.arange(4,20))
-
+        >>> s.plot()
+        >>> su.plot()
 
         """
         O = copy(self)
@@ -431,8 +402,7 @@ class Bsignal(object):
         return(O)
 
     def save(self, filename):
-        r"""
-        Save Bsignal in Matlab File Format
+        r""" save Bsignal in Matlab File Format
 
         Parameters
         ----------
@@ -470,7 +440,7 @@ class Bsignal(object):
         ios.savemat(filename, d)
 
     def load(self, filename):
-        r""" load a Bsignal saved in a Matlab File
+        r""" load a Bsignal from a Matlab File
 
         Parameters
         ----------
@@ -1299,13 +1269,43 @@ class Usignal(Bsignal):
         return(A)
 
     def eprfl(self,axis=1):
-        """ Energy profile
+        r""" Energy profile
+
+        Parameters
+        ----------
+
+        axis : int
+
+        Notes
+        -----
+
+
+        if axis==0
+
+        $$\delta_x \sum_l |y(l,k)|^2$$
+
+        if axis==1
+
+        $$\delta_x \sum_k |y(l,k)|^2$$
+
+        See Also
+        --------
+
+        cut
+
         """
+
         eprfl = np.real(np.sum(self.y * np.conj(self.y),axis=axis))*self.dx()
         return eprfl
 
     def energy(self,axis=0):
         """ calculate the energy of an Usignal
+
+        Parameters
+        ----------
+
+        axis : int
+            (default : 0)
 
         Returns
         -------
@@ -1313,7 +1313,7 @@ class Usignal(Bsignal):
         energy : float
 
         """
-        energy = self.dx() * sum(self.y * np.conj(self.y))
+        energy = self.dx() * np.sum(self.y * np.conj(self.y),axis=0)
         return(energy)
 
     def fftshift(self):
@@ -2846,6 +2846,7 @@ class TUsignal(TBsignal, Usignal):
 
         Parameters
         ----------
+
         alpha : float
         tau0 : float
 
@@ -3190,11 +3191,12 @@ class FBsignal(Bsignal):
                 plt.ylabel('Phase')
 
     def stem(self, color='b-'):
-        """ stem(self,color='b- ')
+        """ stem plot
+
         Parameters
         ----------
         color : string
-           
+
         """
 
         ndim = self.y.ndim
@@ -3405,30 +3407,47 @@ class FUsignal(FBsignal, Usignal):
         print 'Duration (ns) :', T
         print 'Frequency sampling step : ', df
 
-    def energy(self, axis=0,Friis=False,mode='mean'):
-        """ calculate energy along given axis
+    def energy(self,axis=0,Friis=False,mode='mean'):
+        r""" calculate energy along given axis
 
         Parameters
         ----------
 
         axis : (default 0)
-        Friis :  c/(4 pi fGHz)
+        Friis :  -j*c/(4 pi fGHz)
         mode : string
-            mean | center | integ
+            mean | center | integ | first | last
 
         Examples
         --------
 
-        >>> e   = EnImpulse()
+        >>> S = FUsignal()
         >>> En1 = e.energy()
         >>> assert((En1>0.99) & (En1<1.01))
+
+        Notes
+        -----
+
+        axis = 0 is ray axis
+
+        if mode == 'mean'
+
+        $$E=\frac{1}{K} \sum_k |y_k|^2$$
+
+        if mode == 'integ'
+
+        $$E=\delta_x \sum_k |y_k|^2$$
+
+        if mode == 'center'
+
+        $$E= |y_{K/2}|^2$$
 
         """
 
         H = self.y
 
         if Friis:
-            factor = 0.3/(4*np.pi*self.x)
+            factor = -j*0.3/(4*np.pi*self.x)
             H = H*factor[np.newaxis,:]
 
         MH2 = abs(H * np.conjugate(H))
@@ -3441,6 +3460,12 @@ class FUsignal(FBsignal, Usignal):
 
         if mode=='center':
             EMH2  = MH2[:,len(self.x)/2]
+
+        if mode=='first':
+            EMH2  = MH2[:,0]
+
+        if mode=='last':
+            EMH2  = MH2[:,-1]
 
         return(EMH2)
 
@@ -3556,7 +3581,8 @@ class FUsignal(FBsignal, Usignal):
         return(U)
 
     def dftresamp(self, df_new):
-        """ unfinished 
+        """ non finished 
+
         Parameters
         ----------
 
@@ -3565,6 +3591,7 @@ class FUsignal(FBsignal, Usignal):
         """
         FH = self.symH(0)
         fh = FH.ifft()
+
 
     def resample(self, x_new, kind='linear'):
         """ resample
@@ -3810,7 +3837,7 @@ class FUsignal(FBsignal, Usignal):
         return(u1, u2)
 
     def ifft(self, Npt=-1):
-        """ Inverse Fourier transform
+        r""" Inverse Fourier transform
 
         Parameters
         ----------
@@ -3915,6 +3942,10 @@ class FUsignal(FBsignal, Usignal):
 
         if 'fig' not in kwargs:
             fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+            kwargs.pop('fig')
+
         ax1 = fig.add_subplot(121)
         fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
         ax2 = fig.add_subplot(122)
@@ -4045,7 +4076,8 @@ class FUDsignal(FUsignal):
 
     """
     def __init__(self, x=np.array([]), y=np.array([]), taud=np.array([])):
-        """
+        """ object constructor
+
         Parameters
         ----------
 
@@ -4302,7 +4334,7 @@ class FUDsignal(FUsignal):
 
 
     def plot3d(self,fig=[],ax=[]):
-        """
+        """ plot in 3D
 
         Examples
         --------
@@ -4435,7 +4467,7 @@ class FUDAsignal(FUDsignal):
         """
         self.sort(typ='energy')
         E = self.eprfl()
-        cuE = np.cumsum(E)/sum(E)
+        cumE = np.cumsum(E)/sum(E)
         v = np.where(cumE<threshold)[0]
         self.taud = self.taud[v]
         self.taue = self.taue[v]
@@ -4471,7 +4503,18 @@ class FUDAsignal(FUDsignal):
         self.y = self.y[u,:]
 
     def showtap(self,**kwargs):
-        """ showtap
+        """ show tap
+
+        Parameters
+        ----------
+
+        same as tap
+
+        See Also
+        --------
+
+        tap
+
         """
 
         # f x s  x m x tap
@@ -4747,11 +4790,10 @@ class FHsignal(FUsignal):
 
 
 class Noise(TUsignal):
-    """
-    Create noise
+    """ Create noise
     """
     def __init__(self, Tobs=100, fe=50, DSPdBmpHz=-174, NF=0, R=50, seed=[]):
-        """
+        """ object constructor
 
         Parameters
         ----------
@@ -4783,7 +4825,15 @@ class Noise(TUsignal):
         pass
 
     def gating(self, fcGHz, BGHz, window='rect'):
-        """
+        """ apply a gating
+
+        Parameters
+        ----------
+
+        fcGHz
+        BGHz
+        window
+
         """
         N = self.fft()
         if len(self.x) % 2 == 0:
@@ -4847,7 +4897,8 @@ class EnImpulse(TUsignal):
         self.fc = fc
 
     def demo():
-        """
+        """ small demo in the docsting
+
         Examples
         --------
 
@@ -4861,6 +4912,7 @@ class EnImpulse(TUsignal):
         >>> Eipb  = sum(ESDb.y)*df
         >>> erru  = Eip1-Eipu
         >>> errb  = Eip1-Eipb
+
         """
         pass
 
@@ -4885,7 +4937,8 @@ class MaskImpulse(TUsignal):
 
     """
     def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, Tp=100, Pm=-41.3, R=50, fe=100):
-        """
+        """ object constructor
+
         Parameters
         ----------
         fc     : center frequency (GHz)
@@ -4923,8 +4976,6 @@ class MaskImpulse(TUsignal):
         self.y = y
 
     def show(self):
-        """
-        """
         plt.subplot(211)
         self.plot()
         plt.subplot(212)

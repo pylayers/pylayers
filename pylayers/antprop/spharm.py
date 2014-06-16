@@ -172,11 +172,10 @@ def indexssh(L,mirror=True):
     return t
 
 def indexvsh(L):
-    """ indexvsh(L)
+    """ calculate index of vsh
 
     Parameters
     ----------
-
     L : int
       degree max
 
@@ -260,28 +259,34 @@ def index_vsh(L, M):
     t = u.astype(int)
     return(t)
 
-class VectorCoeff(object):
+class VectorCoeff(PyLayers):
+    """  class vector spherical harmonics
 
+
+    """
     def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
                  ind=np.array([]) ):
-        """
+        """  class constructor
+
         Parameters
         ----------
 
-        typ :
-        fmin :
+        typ : string
+        fmin : float
             min frequency GHz
-        fmax :
+        fmax : float
+            max frequency GHz
         data : np.array
         ind : np.array
 
-        Notes 
+        Notes
         -----
 
         .. warning::
             seems deprecated
 
         """
+
         self.s1 = np.array([])
         self.s4 = np.array([])
         self.s3 = np.array([])
@@ -293,7 +298,7 @@ class VectorCoeff(object):
             self.inits1(data,ind)
 
     def inits1(self, data, ind):
-        """
+        """ init shape 1
 
         Parameters
         ----------
@@ -307,9 +312,19 @@ class VectorCoeff(object):
         self.ind_s1 = ind
         self.Nf = sh[0]
 
-class SSHCoeff(object):
+class SSHCoeff(PyLayers):
+    """ scalar spherical harmonics
+
+    Attributes
+    ----------
+
+    Cx : coefficient for x axis
+    Cy : coefficient for y axis
+    Cz : coefficient for z axis
+
+    """
     def __init__(self, Cx,Cy,Cz):
-        """
+        """ class constructor
 
         Parameters
         ----------
@@ -327,8 +342,7 @@ class SSHCoeff(object):
 
 
     def s2tos3(self, threshold=1e-5):
-        """
-        convert scalar spherical coefficients from shape 2 to shape 3
+        """ convert scalar spherical coefficients from shape 2 to shape 3
 
         Parameters
         ----------
@@ -336,11 +350,15 @@ class SSHCoeff(object):
         threshold : float
             default 1e-20
 
-        Energy thresholded coefficients
+        Notes
+        -----
+
+        s3 corresponds to energy thresholded coefficients
 
         """
 
-        Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0) # integrates energy over freq axis = 0
+        # integrates energy over freq axis = 0
+        Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0)
         Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
         Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
 
@@ -361,7 +379,7 @@ class SSHCoeff(object):
         self.Cz.k2 = ind
 
     def sets3(self,Cx,Cy,Cz):
-        """
+        """ set shape 3
 
         Parameters
         ----------
@@ -385,7 +403,7 @@ class SSHCoeff(object):
         self.Cz.k2 = Cz.k2
 
 
-class SCoeff(object):
+class SCoeff(PyLayers):
     """ Scalar Spherical Harmonics Coefficient
 
     d = np.array [Nf,N+1,M+1]
@@ -401,12 +419,11 @@ class SCoeff(object):
 
     def __init__(self, typ='s2', fmin=0.6, fmax=6,lmax=20,  data=np.array([]),
                  ind=np.array([]), k=np.array([])):
-
-    #~ def __init__(self, **kwargs):
         """ init VCoeff
 
          Parameters
          ----------
+
          typ : string
             's2' | 's3'
          fmin : float
@@ -429,8 +446,6 @@ class SCoeff(object):
         #~ for key, value in defaults.items():
             #~ if key not in kwargs:
                 #~ kwargs[key] = value
-
-
 
         self.fmin = fmin
         self.fmax = fmax
@@ -586,11 +601,12 @@ class SCoeff(object):
             os.remove(file_s3)
 
     def delete3(self, ind):
-        """ delete3(self,ind): delete coeff.s3
+        """ delete coeff.s3
 
         Parameters
         ----------
-        ind :
+
+        ind : int
 
         """
         a = delete(self.ind3, ind, axis=0)
@@ -601,12 +617,13 @@ class SCoeff(object):
         self.s3 = c
 
     def put3(self, i, i3):
-        """ put3
+        """ function put3
 
         Parameters
         ----------
-        i  :
-        i3 :
+        i  : int
+        i3 : int
+
         """
 
         k2 = i3[0] * (i3[0] + 1) / 2 + i3[1]
@@ -651,15 +668,16 @@ class SCoeff(object):
         self.ind2 = indexvsh(Lmax)
 
     def plot(self,typ='s3',title='',xl=False,yl=False,log=False,stem=True,color='b'):
-        """
+        """ plot coeff
+
         Parameters
         ----------
 
         typ : string
             's3'
-        title 
-        xl 
-        yl 
+        title
+        xl
+        yl
         log
         stem: boolean
         color
@@ -1050,11 +1068,12 @@ class VCoeff(object):
             os.remove(file_s3)
 
     def delete3(self, ind):
-        """ delete3(self,ind): delete coeff.s3
+        """ delete coeff.s3
 
         Parameters
         ----------
-        ind :
+
+        ind : int
 
         """
         a = delete(self.ind3, ind, axis=0)
@@ -1065,12 +1084,13 @@ class VCoeff(object):
         self.s3 = c
 
     def put3(self, i, i3):
-        """ put3
+        """ function put 3
 
         Parameters
         ----------
-        i  :
-        i3 :
+        i  : int
+        i3 : int
+
         """
 
         k2 = i3[0] * (i3[0] + 1) / 2 + i3[1]
@@ -1450,7 +1470,7 @@ class VSHCoeff(object):
         E  = EBr + EBi + ECr + ECi
 
         ib = np.argsort(E)[::-1]
-        
+
         print self.Br.ind2[ib[k-1]]
         print self.Cr.ind2[ib[k-1]]
         print self.Ci.ind2[ib[k-1]]
@@ -1472,7 +1492,7 @@ class VSHCoeff(object):
         self.Ci.s3 = self.Ci.s2[:, ib[range(k)]]
         self.Ci.k2 = ib[range(k)]
         return E[ib[k-1]]
-    
+
     def s2tos3(self, threshold=1e-5):
         """ convert vector spherical coefficients from shape 2 to shape 3
 
@@ -1514,8 +1534,8 @@ class VSHCoeff(object):
 
 
     def s3tos2(self):
-        """
-        s3tos2
+        """ shape 3 to shape 2
+
         """
         self.Br.s3tos2()
         self.Bi.s3tos2()
@@ -1525,12 +1545,14 @@ class VSHCoeff(object):
     def strip3(self):
         """ Thresholded coefficient conversion
 
-        The s3 minimmum energy coefficient is deleted
+        The s3 minimum energy coefficient is deleted
 
         Returns
         -------
-           ind
-           ind3
+
+        ind : int
+        ind3 : int
+
         """
         EBr = sum(abs(self.Br.s3) ** 2, axis=0)
         EBi = sum(abs(self.Bi.s3) ** 2, axis=0)
@@ -1571,7 +1593,7 @@ class VSHCoeff(object):
         return(Es,u)
 
     def drag3(self, Emin):
-        """ Thresholded coefficient conversion
+        """ thresholded coefficient conversion
 
         Parameters
         ----------
@@ -1596,7 +1618,14 @@ class VSHCoeff(object):
         return ind, ind3
 
     def put3(self, i, i3):
-        """
+        """  put 3
+
+        Parameters
+        ----------
+
+        i : int
+        i3 : int
+
         """
         self.Br.put3(i, i3)
         self.Bi.put3(i, i3)

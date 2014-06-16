@@ -1,14 +1,42 @@
 from pylayers.gis.layout import *
 import pylayers.util.geomutil as geu
-L=Layout('WHERE1.ini')
-L.build()
+Lfile = 'WHERE1_nc.ini'
+Lfile = 'TA-Office.ini'
 
-lc = [(n,L.Gt.node[n]['polyg'].isconvex()) for n in L.Gt.nodes()]
-cnc = [n for n in L.Gt.nodes() if not L.Gt.node[n]['polyg'].isconvex()]
-fig,ax=L.showG('st',labels=True)
-for cy,c in lc:
-    if c:
-        print cy,  
-        fig,ax= L.Gt.node[cy]['polyg'].plot(color='blue',alpha=0.5,fig=fig,ax=ax)
-    else:
-        fig, ax = L.Gt.node[cy]['polyg'].plot(color='red', alpha=0.5,fig=fig,ax=ax)
+
+data = '/home/niamiot/Documents/code/pylayers/data/struc/ini/'+Lfile
+proj = '/home/niamiot/Documents/Pylayers_project/P1/struc/ini/'+Lfile
+
+shutil.copyfile(data,proj)
+
+L = Layout(Lfile,force=True)
+L.build('t',convex=True)
+# L._convex_hull()
+# # L.showG('st',airwalls=True)
+# L._convexify()
+
+
+# p1 = geu.Polygon(L.ax,delta=5)
+# L.ma = L.mask()
+# p2 = p1.difference(L.ma)
+# boundary = geu.Polygon(p2)
+# boundary.vnodes = L.ma.vnodes
+# L.Gt.add_node(0,polyg=boundary)
+# L.Gt.add_node(0, indoor = False)
+# L.Gt.pos[0]=(L.ax[0],L.ax[2])
+
+
+# # all segments of the building boundary
+# nseg = filter(lambda x : x >0 , boundary.vnodes)
+# # air segments of the building boundary
+# nsegair = filter(lambda x : x in L.name['AIR'],nseg)
+# # wall segments of the building boundary
+# nsegwall = filter(lambda x : x not in L.name['AIR'],nseg)
+
+# #
+# # ldiffin  : list of indoor diffraction points
+# # ldiffout : list of outdoor diffraction points (belong to layout boundary)
+# #
+
+# L.ldiffin  = filter(lambda x : x not in boundary.vnodes,L.ldiff)
+# L.ldiffout = filter(lambda x : x in boundary.vnodes,L.ldiff)

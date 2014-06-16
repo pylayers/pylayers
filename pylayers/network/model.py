@@ -22,13 +22,13 @@
 #Mohamed LAARAIEDH    : mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
 import numpy as np
-import scipy as sp 
-
+import scipy as sp
+from pylayers.util.project import *
 import pdb
-import doctest 
+import doctest
 
 
-class PLSmodel(object):
+class PLSmodel(PyLayers):
     """ Path Loss Shadowing model
 
     Attributes
@@ -42,7 +42,7 @@ class PLSmodel(object):
         PL0 distance
     sigrss : float
         shadowing variance
-        
+
     method : used model
 
 
@@ -74,16 +74,17 @@ class PLSmodel(object):
 
         Parameters
         ----------
-        
+
         PL0_c : PL0 compute
-        Gt : transmitting antenna gain dB (default 0 dB) 
-        Gr : receiving antenna gain dB (default 0 dB) 
+        Gt : transmitting antenna gain dB (default 0 dB)
+        Gr : receiving antenna gain dB (default 0 dB)
 
         Examples
         --------
-            >>> from pylayers.network.model import *   
-            >>> plm = PLSmodel()
-            >>> plm.getPL0()
+
+        >>> from pylayers.network.model import *
+        >>> plm = PLSmodel()
+        >>> plm.getPL0()
 
         """
 
@@ -91,12 +92,11 @@ class PLSmodel(object):
         Gr  = 10**(Gr/10.)
         ld  = 0.3/self.f
 
-        self.PL0 = -20*np.log10(ld/(4.0*np.pi*self.d0)) 
+        self.PL0 = -20*np.log10(ld/(4.0*np.pi*self.d0))
 
-    
+
     def OneSlope(self,r):
-        """
-        OneSlope model : give Power Level from distance  with OneSlope method
+        """ OneSlope model : give Power Level from distance  with OneSlope method
 
         Parameters
         ----------
@@ -105,8 +105,8 @@ class PLSmodel(object):
 
         Returns
         -------
-    
-        PL : 
+
+        PL : float
             path loss values
 
         """
@@ -125,19 +125,19 @@ class PLSmodel(object):
         Parameters
         ----------
 
-        PL : 
-            path loss in dB 
+        PL :
+            path loss in dB
 
         Returns
         -------
 
-        r : range array 
+        r : range array
 
         """
 
         try :
             r = 10**((PL-self.PL0)/(10*self.rssnp))
-        except: 
+        except:
             self.getPL0()
             r = 10**((PL-self.PL0)/(10*self.rssnp))
 
@@ -152,16 +152,15 @@ class PLSmodel(object):
             $$\bar{PL}=PL_0 - 10 n_p \log_{10}{\frac{d}{d_0}}$$
 
         """
-        
+
         PLmean = self.PL0-10*self.rssnp*np.log10(d/self.d0)
 
-        return  PLmean  
+        return  PLmean
 
 
     def getPL(self,r,RSSStd):
-        """
-        Get Power Level from a given distance
-        
+        """ Get Power Level from a given distance
+
         Parameters
         ----------
 
@@ -196,15 +195,23 @@ class PLSmodel(object):
 
 
     def getRange(self,RSS,RSSStd):
-        """
-        Get  distance from a given Power Level
+        """ Get  distance from a given Power Level
 
-        r : range
+        Parameters
+        ----------
+
+        RSS :
+        R
+
+        Returns
+        -------
+
+        r :
         """
         if self.method =='OneSlope':
             r    = self.iOneSlope(RSS)
 
-        elif self.method == 'mode': 
+        elif self.method == 'mode':
             S    = -(np.log(10)/10)* RSSStd/self.rssnp                    # STD of ranges distribution
             M    = (np.log(10)/10)*(self.PL0-RSS)/self.rssnp + np.log(self.d0)        # Mean of ranges distribution
             r    =  np.exp(M-S**2)
@@ -229,10 +236,16 @@ class PLSmodel(object):
     def getRangeStd(self, RSS, RSSStd):
         """Compute Ranges std associated to "Rest" estimator
 
+        Parameters
+        ----------
+
+        RSS :
+        RSSStd :
+
 
         """
 
-        if self.method == 'mode': 
+        if self.method == 'mode':
             S       = -(np.log(10)/10)* RSSStd/self.rssnp                                    # STD of ranges distribution
             M       = (np.log(10)/10)*(self.PL0-RSS)/self.rssnp + np.log(self.d0)             # Mean of ranges distribution
             r    =  np.sqrt((np.exp(2*M-2*S**2))*(-np.exp(-S**2)+1))
@@ -255,6 +268,4 @@ class PLSmodel(object):
 
 if __name__=='__main__':
     doctest.testmod()
-
-
 

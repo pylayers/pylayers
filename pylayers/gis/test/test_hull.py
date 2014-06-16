@@ -3,7 +3,13 @@ from scipy.spatial import Delaunay
 
 from pylayers.gis.layout import *
 import shapely.geometry as sh
-L = Layout('WHERE2_2.ini',force=True)
+Lfile = 'scattering_nonconvex.ini'
+data = '/home/niamiot/Documents/code/pylayers/data/struc/ini/'+Lfile
+proj = '/home/niamiot/Documents/Pylayers_project/P1/struc/ini/'+Lfile
+
+shutil.copyfile(data,proj)
+
+L = Layout(Lfile,force=True)
 #L.dumpr()
 L.build('t')
 
@@ -21,30 +27,34 @@ P = ch.difference(L.ma)
 polys = []
 if isinstance(P,sh.MultiPolygon):
     for p in P:
-        import ipdb
-        ipdb.set_trace()
-        print p.area
-        if p.area > 1e-3:
-            polys.append(geu.Polygon(p))
-            polys[-1].setvnodes(L)
-
+        polys.append(geu.Polygon(p))
+        polys[-1].setvnodes(L)
 
 ncy = max(L.Gt.nodes())+1
 for p in polys:
+    # import ipdb
+    # ipdb.set_trace()
+    # p.coorddeter()
     uaw = np.where(p.vnodes == 0)
     for aw in uaw :
-        print p.vnodes[aw-1][0], p.vnodes[aw+1][0]
         awid = L.add_segment(p.vnodes[aw-1][0], p.vnodes[aw+1][0], name='AIR')
         p.vnodes[aw] = awid
         G = nx.subgraph(L.Gs,p.vnodes)
         G.pos = {}
         G.pos.update({l: L.Gs.pos[l] for l in p.vnodes})
-        cy  = cycl.Cycle(G)
+        cy  = cycl.Cycle(G,lnode=p.vnodes)
         L.Gt.add_node(ncy,cycle=cy)
         L.Gt.pos[ncy] = tuple(cy.g)
-        L.Gt.node[ncy]['polyg'] = p
+        # WARNING
+        # recreate polygon is mandatory otherwise cycle.cycle and polygon.vnodes
+        # are shifted.
+        L.Gt.node[ncy]['polyg'] = p#geu.Polygon(p.xy,cy.cycle)
+        # L.Gt.node[ncy]['polyg'].setvnodes()
         L.Gt.node[ncy]['isopen'] = True
         L.Gt.node[ncy]['indoor'] = False
+        # 1 - add link between created cycle and outdoor
+        L.Gt.add_edge(ncy, 0)
+        # 2 - search and add link between the created cycle and indoor cycles
         for k in L.Gt.nodes():
             if (k != ncy) and (k != 0):
                 vnodes0 = np.array(L.Gt.node[ncy]['cycle'].cycle)
@@ -58,6 +68,7 @@ for p in polys:
                     segment = intersection_vnodes[np.where(intersection_vnodes>0)]
                     L.Gt.add_edge(ncy, k,segment= segment)
 
+        # 3 - Update Gs
         for v in filter(lambda x: x>0,p.vnodes):
             # add new ncycle to Gs for the new airwall
             # that new airwall always separate the new created cycle

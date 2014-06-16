@@ -30,8 +30,6 @@ Utility Functions
     Antenna.__repr__
     Antenna.ls
 
-    Antenna.demo
-
     Antenna.errel
     Antenna.checkpole
     Antenna.info
@@ -110,6 +108,7 @@ import glob
 import re
 import sys
 import pdb
+import Image
 import numpy as np
 import scipy as sp
 import scipy.linalg as la
@@ -132,7 +131,7 @@ try:
 except:
     print 'mayavi not installed'
 
-class Antenna(object):
+class Antenna(PyLayers):
     """ Antenna
 
     Attributes
@@ -180,7 +179,7 @@ class Antenna(object):
 
 
     def __init__(self,typ='S2R2.sh3',**kwargs):
-        """
+        """ class constructor
 
         Parameters
         ----------
@@ -269,6 +268,7 @@ class Antenna(object):
                 self.loadhfss(typ, self.Nt, self.Np)
 
         else :
+            self._filename = typ
             if typ == 'Gauss':
                 self.typ = typ
 
@@ -298,40 +298,6 @@ class Antenna(object):
             else:
                 raise NameError('antenna typ is not known')
 
-
-    def help(self,letter='az',mod='meth'):
-        """ help
-
-        Parameters
-        ----------
-
-        txt : string
-            'members' | 'methods'
-        """
-
-        members = self.__dict__.keys()
-        lmeth = np.sort(dir(self))
-
-        if mod=='memb':
-            print np.sort(self.__dict__.keys())
-        if mod=='meth':
-            for s in lmeth:
-                if s not in members:
-                    if s[0]!='_':
-                        if len(letter)>1:
-                            if (s[0]>=letter[0])&(s[0]<letter[1]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
-                        else:
-                            if (s[0]==letter[0]):
-                                try:
-                                    doc = eval('self.'+s+'.__doc__').split('\n')
-                                    print s+': '+ doc[0]
-                                except:
-                                    pass
 
     def __repr__(self):
 
@@ -405,13 +371,13 @@ class Antenna(object):
         return(st)
 
     def ls(self, typ='vsh3'):
-        """ list the available file in dirant
+        """ list the antenna files in antenna project directory
 
         Parameters
         ----------
 
         typ : string optional
-            {'mat'|'trx'|'vsh3'|'sh3'}
+            {'mat'|'trx'|'vsh2'|'sh2'|'vsh3'|'sh3'}
 
         Returns
         -------
@@ -440,6 +406,13 @@ class Antenna(object):
         return lfile_s
 
 
+    def photo(self,directory='ant/UWBAN/PhotosVideos'):
+        """ show a picture of the antenna """
+
+        _filename = 'IMG_'+self.PhotoFile.split('-')[1]+'.JPG'
+        filename = pyu.getlong(_filename,directory)
+        I = Image.open(filename)
+        I.show()
 
     def Fpatt(self,th=[],ph=[],pattern=True):
         """  generate antenna pattern
@@ -578,7 +551,7 @@ class Antenna(object):
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('S1R1.mat',directory='ant/UWBAN/Matfile')
             >>> f,a = A.polar(phd=0)
-            >>> A.polar(thd=90,fig=f,ax=a)
+            >>> f,a = A.polar(thd=90,fig=f,ax=a)
             >>> txt = plt.title('S1R1 antenna : st loadmat')
             >>> plt.show()
 
@@ -855,22 +828,30 @@ class Antenna(object):
 
 
     def loadhfss(self,lfa = [], Nt=72,Np=37):
-        """
+        """ load antenna from HFSS file
+
         Parameters
         ----------
 
-        lfa :
+        lfa : list of antenna file
         Nt  : int
             Number of angle theta
         Np  : int
             Number of angle phi
 
+        Notes
+        -----
+
+        One file per frequency point
+
+        th , ph , abs_grlz,th_absdB,th_phase,ph_absdB,ph_phase_ax_ratio
+
         """
 
         # lfa : list file antenna
         self.Nf = len(lfa)
-        fGHz=[]
-        lacsv=[]
+        fGHz  = []
+        lacsv = []
         Fphi = np.empty((self.Nf,self.Nt,self.Np))
         Ftheta = np.empty((self.Nf,self.Nt,self.Np))
         SqG = np.empty((self.Nf,self.Nt,self.Np))
@@ -878,7 +859,12 @@ class Antenna(object):
         for i in range (len(lfa)):
 
             fGHz.append(eval(lfa[i].split('.csv')[0][-4]))
-            lacsv.append(pd.read_csv(lfa[i],header=False,sep=',',names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio'],index_col=False))
+            lacsv.append(pd.read_csv(lfa[i],
+                                     header=False,
+                                     sep=',',
+            names=['th','ph','abs_grlz','th_absdB','th_phase','ph_absdB','ph_phase','ax_ratio'],
+                                     index_col=False))
+
             th=lacsv[i].th.reshape(Np,Nt)*np.pi/180.
             ph=lacsv[i].ph.reshape(Np,Nt)*np.pi/180.
             Greal = lacsv[i].abs_grlz.reshape(Np,Nt)
@@ -888,7 +874,6 @@ class Antenna(object):
 
             th_lin = pow(10,th_dB/20.)
             ph_lin = pow(10,ph_dB/20.)
-
 
             #th_phase = lacsv[i].th_phase.reshape(72,37)*np.pi/180.
             #ph_phase = lacsv[i].ph_phase.reshape(72,37)*np.pi/180.
@@ -1311,7 +1296,8 @@ class Antenna(object):
         return(fig,ax)
 
     @mlab.show
-    def _show3(self,**kwargs):
+    def _show3(self,newfig = True,colorbar =True,
+                    name=[],title=True,**kwargs ):
         """ show3 mayavi
 
         fGHz : float
@@ -1322,8 +1308,44 @@ class Antenna(object):
             display colorbar
         """
 
-        defaults = { 'newfig':True, 
-                     'fGHz' :[],
+        
+
+
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
+
+        
+        x, y, z, k = self._computemesh(**kwargs)
+
+        if newfig:
+            mlab.clf()
+            f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+        else :
+            f=mlab.gcf()
+        self._mayamesh = mlab.mesh(x, y, z)
+
+        if name == []:
+            f.children[-1].name = 'Antenna ' + self._filename
+        else :
+            f.children[-1].name = name + self._filename
+
+        if colorbar :
+            mlab.colorbar()
+        if title:
+            mlab.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
+
+    def _computemesh(self,**kwargs):
+        """ compute mesh from theta phi
+
+        Returns
+        -------
+
+        (x, y, z, k)
+        x , y z value in carteisan axis
+        k frequency point evaluated
+
+        """
+        defaults = { 'fGHz' :[],
                      'po': np.array([0,0,0]),
                      'T' : np.eye(3),
                      'minr' : 0.1,
@@ -1331,9 +1353,7 @@ class Antenna(object):
                      'tag' : 'Pat',
                      'ilog' : False,
                      'title':True,
-                     'colorbar':True,
-                     'ilog':False,
-                     'name':[]
+                     'ilog':False
                      }
 
 
@@ -1349,11 +1369,6 @@ class Antenna(object):
         po = kwargs['po']
         # T is an unitary matrix
         T  = kwargs['T']
-
-
-        if not self.evaluated:
-            self.Fsynth(pattern=True)
-
         if fGHz == []:
             k = len(self.fa)/2
         else :
@@ -1367,9 +1382,9 @@ class Antenna(object):
             r = 10*np.log10(abs(r))
         else:
             r = abs(r)
-
-        u = (r - r.min()) /(r.max() - r.min())
-
+        if r.max() != r.min():
+            u = (r - r.min()) /(r.max() - r.min())
+        else : u = r
         r = minr + (maxr-minr) * u
 
         x = r * np.sin(th) * np.cos(phi) 
@@ -1392,24 +1407,7 @@ class Antenna(object):
         y = q[...,1]
         z = q[...,2]
 
-
-        if kwargs['newfig']:
-            mlab.clf()
-            f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
-        else :
-            f=mlab.gcf()
-        mlab.mesh(x, y, z)
-
-        if kwargs['name'] == []:
-            f.children[-1].name = 'Antenna ' + self._filename
-        else :
-            f.children[-1].name = kwargs['name'] + self._filename
-
-        if kwargs['colorbar'] :
-            mlab.colorbar()
-        if kwargs['title']:
-            mlab.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
-
+        return x, y, z, k
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
         """ show3 geomview
@@ -1579,7 +1577,7 @@ class Antenna(object):
             os.system(chaine)
 
     def mse(self, Fth, Fph, N=0):
-        """ mean square error
+        """ mean square error between original and reconstructed
 
         Parameters
         ----------
@@ -1587,6 +1585,7 @@ class Antenna(object):
         Fth  : np.array
         Fph  : np.array
         N    : int
+
 
         Notes
         -----
@@ -1645,7 +1644,7 @@ class Antenna(object):
         return Err_rel, Errth_rel, Errph_rel
 
     def getdelay(self,delayCandidates = np.arange(-10,10,0.001)):
-        """ getelectrical delay
+        """ get electrical delay
 
         Parameters
         ----------
@@ -1725,15 +1724,6 @@ class Antenna(object):
             #self.Fphi = EFph.reshape(sh[0], sh[1], sh[2])
         else:
             raise Warning('antenna has not been evaluated')
-
-    def demo(self):
-        """ display few commands for executing little demo
-        """
-        print "A.C.s1tos2(30)"
-        print "Fth , Fph = A.Fsynth2(th,ph)"
-        print "FTh = Fth.reshape(A.Nf,A.Nt,A.Np)"
-        print "FPh = Fph.reshape(A.Nf,A.Nt,A.Np)"
-        print "compdiag(20,A,A.theta,A.phi,FTh,FPh) "
 
 
     def Fsynth(self, theta = [], phi=[], pattern=True):
@@ -2082,7 +2072,8 @@ class Antenna(object):
 
 
     def Fsynth3(self, theta = [], phi=[], pattern=True,typ='sh3'):
-        """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
+        r""" synthesis of a complex antenna pattern from VSH coefficients (shape 3)
+
 
         Ndir is the number of directions
 
@@ -2122,6 +2113,9 @@ class Antenna(object):
 
         All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
         once the V,W function
+
+        If the data comes from a cst file like the antenna used in WHERE1 D4.1
+        the pattern is multiplied by $\frac{4\pi}{120\pi}=\frac{1}{\sqrt{30}$
 
         """
 
@@ -2241,8 +2235,12 @@ class Antenna(object):
 
 
     def movie_vsh(self, mode='linear'):
-        """
-            movie_vsh
+        """ animates vector spherical coeff w.r.t frequency
+
+        Parameters
+        ----------
+        mode : string
+            'linear' |
         """
 
         Brmin = abs(self.C.Br[:, 0:20, 0:20]).min()
@@ -2390,8 +2388,7 @@ class Antenna(object):
             io.savemat(filevsh3, coeff, appendmat=False)
 
     def savesh2(self):
-        """
-        Create a .sh2 antenna file
+        """ save coeff in  .sh2 antenna file
 
         """
 
@@ -2423,8 +2420,7 @@ class Antenna(object):
             io.savemat(filesh2, coeff, appendmat=False)
 
     def savesh3(self):
-        """
-        save antenna in sh3 format
+        """ save antenna in sh3 format
 
         Create a .sh3 antenna file
 
@@ -2579,9 +2575,7 @@ class Antenna(object):
             print _filesh3, ' does not exist'
 
     def savevsh2(self, filename = ''):
-        """
-
-        Create a .vsh2 antenna file
+        """ save coeff in  a .vsh2 antenna file
 
         """
 
@@ -2589,7 +2583,7 @@ class Antenna(object):
         if filename == '':
             _filevsh2 = self._filename.replace('.trx', '.vsh2')
 
-        _filevsh2  = filename 
+        _filevsh2  = filename
         filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
@@ -2670,8 +2664,7 @@ class Antenna(object):
 
 
     def loadvsh2(self):
-        """
-            A.loadvsh2()
+        """ load antenna from .vsh2 file format
 
         Load antenna's vsh2 file which only contains
         the vsh coefficients in shape 2
@@ -2733,12 +2726,24 @@ class Antenna(object):
             print _filevsh3, ' does not exist'
 
     def pol2cart(self, ith):
-        """
-        Conversion FTheta, FPhi to Fx,Fy,Fz for theta=ith
+        """ converts FTheta, FPhi to Fx,Fy,Fz for theta=ith
 
         Parameters
         ----------
         ith : theta index
+
+        Returns
+        -------
+
+        Fx
+        Fy
+        Fz
+
+        See Also
+        --------
+
+        cart2pol
+
         """
         Fth = self.Ftheta[:, ith, :]
         Fph = self.Fphi[:, ith, :]
@@ -2752,22 +2757,26 @@ class Antenna(object):
         return(Fx, Fy, Fz)
 
     def cart2pol(self, Fx, Fy, Fz, ith):
-        """
-        Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith
+        """ converts Fx,Fy,Fz to Ftheta, Fphi for theta=ith
 
         Parameters
         ----------
-        Fx
-        Fy
-        Fz
+
+        Fx  : np.array
+        Fy  : np.array
+        Fz  : np.array
         ith : theta index
+
+        See Also
+        --------
+
+        pol2cart
 
         """
         th = self.theta[ith]
         ph = self.phi
 
-        Fth = Fx * np.cos(th) * np.cos(
-            ph) + Fy * np.cos(th) * np.sin(ph) - Fz * np.sin(th)
+        Fth = Fx * np.cos(th) * np.cos(ph) + Fy * np.cos(th) * np.sin(ph) - Fz * np.sin(th)
         Fph = -Fx * np.sin(ph) + Fy * np.cos(th)
 
         SqG = np.sqrt(np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth)))
@@ -2997,9 +3006,7 @@ def forcesympol(A):
         print "Error: m>n!!!"
 
 def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=18):
-    """
-
-    Comparison between Antenna diagram and reconstructed diagram
+    """ makes comparison between original pattern and reconstructed pattern
 
     Parameters
     ----------
@@ -3265,18 +3272,8 @@ def show3D(F, theta, phi, k, col=True):
 
         >>> import matplotlib.pyplot as plt
         >>> from pylayers.antprop.antenna import *
-        >>> ifreq = 0
-        >>> A     = Antenna('defant.vsh3')
-        >>> A.Nt  = 30
-        >>> A.Np  = 60
-        >>> A.Nf  = len(A.fa)
-        >>> theta = np.linspace(0,np.pi,A.Nt)
-        >>> phi   = np.linspace(0,2*np.pi,A.Np)
-        >>> Fth3,Fph3 = A.Fsynth3(theta,phi)
-        >>> FTh3 = Fth3.reshape(A.Nf,A.Nt,A.Np)
-        >>> FPh3 = Fph3.reshape(A.Nf,A.Nt,A.Np)
-        >>> show3D(FTh3,theta,phi,ifreq)
-        >>> txt = plt.title('show3D example')
+        >>> A = Antenna('defant.vsh3')
+        >>> A.Fsynth()
 
 
     Warnings

@@ -20,8 +20,7 @@ import pdb
 
 
 class Agent(object):
-
-    """   Agent 
+    """   Class Agent
 
     Members
     -------
@@ -30,19 +29,19 @@ class Agent(object):
     ID
     name
     typ
-    net 
-    epwr 
+    net
+    epwr
     gcom
-    sim 
-    wstd 
+    sim
+    wstd
     sens
-    dcond 
+    dcond
     meca : transit.Person
-    net : pylayers.network.Network 
-    sim : 
-    PN :    
+    net : pylayers.network.Network
+    sim :
+    PN :
     rxt
-    rxr 
+    rxr
 
 
 

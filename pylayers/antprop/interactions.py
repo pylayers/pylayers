@@ -95,7 +95,7 @@ from pylayers.util.project import *
 from pylayers.antprop.slab import *
 
 
-class Inter(object):
+class Inter(PyLayers):
     """ Interactions
 
     Meta class of interactions ( Interactions, IntB/IntL/IntT/intR/intD)
@@ -125,18 +125,17 @@ class Inter(object):
 
     """
 
-    def __init__(self, typ=0, data=np.array(()), idx=[],
-                 _filemat='matDB.ini',_fileslab='slabDB.ini'):
-        """
+    def __init__(self, typ=0, data=np.array(()), idx=[], _filemat='matDB.ini',_fileslab='slabDB.ini'):
+        """ object constructor
 
         Parameters
         ----------
 
-        typ
+        typ : int
         data  : ndarray
-        idx
-        _filemat
-        _fileslab
+        idx : list
+        _filemat : string
+        _fileslab : string
 
         """
 
@@ -192,6 +191,7 @@ class Inter(object):
         if typ = 0
 
         if typ = -1
+
         """
 
         if self.typ in [1, 2, 3]:
@@ -293,9 +293,8 @@ class Interactions(Inter,dict):
     """
 
     def __init__(self):
+        """ object constructor
         """
-
-                """
         Inter.__init__(self)
         self['B'] = []
         self['L'] = []
@@ -324,7 +323,7 @@ class Interactions(Inter,dict):
             self.addi(i)
 
     def addi(self, i):
-        """ Add interactions as a member of Interactions class
+        """ add interactions into Interactions class
 
         Parameters
         ----------
@@ -332,7 +331,6 @@ class Interactions(Inter,dict):
         i : Inter object
 
         """
-
 
         if not isinstance(self.typ, np.ndarray):
             self.typ = np.zeros((self.nimax), dtype=str)
@@ -359,7 +357,7 @@ class Interactions(Inter,dict):
             self.typ[i.idx] = 'T'
 
     def eval(self,fGHz=np.array([2.4])):
-        ''' evaluate all the interactions
+        """ evaluate all the interactions
 
         Parameters
         ----------
@@ -381,7 +379,7 @@ class Interactions(Inter,dict):
         self.gamma :
             !! gamma**2 !!! (squared included) as described
 
-        '''
+        """
 
         # Initialize the global I matrix which gathers all interactions
         # into a single np.array
@@ -491,7 +489,6 @@ class IntB(Inter):
         fGHz : np.array()
             freqeuncy range
 
-
         Returns
         -------
 
@@ -533,20 +530,17 @@ class IntB(Inter):
 
 
 class IntL(Inter):
-    """
-        Loss interaction
+    """ Loss interaction
 
-        Attributes
-        ----------
+    (nf ,ninter, 2, 2)
 
-            data : np.array((ninter x [dist]))
-            idx : list
-                index of the corresponding ray and interaction
+    Attributes
+    ----------
 
-        Returns
-        -------
-        np.array:
-            (nf ,ninter, 2, 2)
+        data : np.array((ninter x [dist]))
+        idx : list
+            index of the corresponding ray and interaction
+
     """
     def __init__(self, data=np.array(()), idx=[]):
         Inter.__init__(self, data=data, idx=idx, typ=0)
@@ -556,8 +550,10 @@ class IntL(Inter):
         return(s)
 
     def eval(self,fGHz=np.array([2.4])):
-        """
-            evaluation of B interactions
+        """ evaluation of B interactions
+
+        Examples
+        --------
 
         >>> from pylayers.antprop.rays import *
         >>> d = np.array(([3]))
@@ -573,6 +569,7 @@ class IntL(Inter):
         >>> nf = L.nf
         >>> np.shape(eL)
         (1, 1, 2, 2)
+
         """
 
 
@@ -683,15 +680,10 @@ class IntR(Inter):
 
         """
 
-
-
         self.sinsout()
-
 
         self.fGHz=fGHz
         self.nf=len(fGHz)
-
-
 
         # A : f ri 2 2
 
@@ -754,9 +746,7 @@ class IntT(Inter):
         return(s)
 
     def eval(self,fGHz=np.array([2.4])):
-        """
-        example given for
-
+        """ evaluate transmission
 
         Examples
         --------
@@ -802,9 +792,6 @@ class IntT(Inter):
 
         self.fGHz=fGHz
         self.nf=len(fGHz)
-
-
-
 
         self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
         self.alpha = np.zeros((len(self.idx)), dtype=complex)
@@ -856,7 +843,7 @@ class IntT(Inter):
 
 
 class IntD(Inter):
-    """ Diffraction interaction class
+    """ diffraction interaction class
         .. todo to be implemented
     """
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
@@ -876,6 +863,14 @@ class IntD(Inter):
                 str(np.shape(self.idx)))
 
     def eval(self,fGHz=np.array([2.4])):
+        """ evaluate diffraction interaction
+
+        Parameters
+        ----------
+
+        fGHz : np.array
+
+        """
 
         self.fGHz=fGHz
         self.nf=len(fGHz)

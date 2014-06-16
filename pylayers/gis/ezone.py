@@ -31,6 +31,7 @@ from scipy.interpolate import interp2d
 #from geomutil import *
 #from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
+from pylayers.util.project import *
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
@@ -117,8 +118,8 @@ def conv(extent,m,mode='tocart'):
         out = np.array([lllon,rulon,lllat,rulat])
     return(out)
 
-class DEM(object):
-    """
+class DEM(PyLayers):
+    """ Class Digital Elevation Model
     """
     def __init__(self):
         pass
@@ -175,7 +176,8 @@ class DEM(object):
 
 
     def show(self,**kwargs):
-        """
+        """ Ezone vizualisation
+
         Parameters
         ----------
 
@@ -207,7 +209,7 @@ class DEM(object):
         cb = fig.colorbar(im,cax)
         cb.set_label('Height (meters)')
 
-class Ezone(object):
+class Ezone(PyLayers):
     """
         An Ezone is a region of earth delimited by
         (lonmin,lonmax,latmin,latmax)
@@ -322,7 +324,8 @@ class Ezone(object):
         self.tocart(Nx=Nlon,Ny=Nlat)
 
     def tocart(self,Nx=1201,Ny=1201):
-        """
+        """ convert to cartesian coordinates
+
         Parameters
         ----------
 
@@ -330,6 +333,7 @@ class Ezone(object):
             Number of points along x
         Nx : int
             Number of points along y
+
         """
 
         # x : longitude axis (axis = 1)
@@ -357,20 +361,32 @@ class Ezone(object):
         self.x = x
         self.y = y[::-1]
 
-    def link(self,pt,pr,**kwargs):
-        """ ??
-        """
-        defaults = {
-            'tmp':0
-        }
+    def profile(self,pa,pb,**kwargs):
+        """ profile extraction between 2 points
 
-    def extract(self,pt,pr,**kwargs):
-        """
+        Parameters
+        ----------
+
+        pa : tuple
+            termination point a
+        pb : tuple
+            termination point b
+        Npt : int
+            number of points
+        ha : float
+            antenna height a
+        hb :
+            antenna height b
+        K : float
+            K factor
+        fGHz : float
+            frequency in GHz
+
         """
 
         defaults = {'Npt':1000,
-                    'ht':30,
-                    'hr':1.5,
+                    'ha':30,
+                    'hb':1.5,
                     'K':1.3333,
                     'fGHz':.3}
 
@@ -382,13 +398,13 @@ class Ezone(object):
         lmbda = 0.3/kwargs['fGHz']
 
         # transmitter coordinates
-        x_t,y_t = self.m(pt[0],pt[1])
+        x_a,y_a = self.m(pa[0],pa[1])
 
         # receiver coordinates
-        x_r,y_r = self.m(pr[0],pr[1])
+        x_b,y_b = self.m(pb[0],pb[1])
 
-        x = np.linspace(x_t,x_r,kwargs['Npt'])
-        y = np.linspace(y_t,y_r,kwargs['Npt'])
+        x = np.linspace(x_a,x_b,kwargs['Npt'])
+        y = np.linspace(y_a,y_b,kwargs['Npt'])
 
         d = np.sqrt((x-x[0])*(x-x[0])+(y-y[0])*(y-y[0]))
 
@@ -408,22 +424,23 @@ class Ezone(object):
         # seek for local maxima along link profile
         m = maxloc(height[np.newaxis,:])
 
-        ha = height[0] + kwargs['ht']
-        hb = height[-1]+ kwargs['hr']
+        ha = height[0] + kwargs['ha']
+        hb = height[-1]+ kwargs['hb']
         LOS = ha+(hb-ha)*d/d[-1]
         diff = height-LOS
         fac  = np.sqrt(2*d[-1]/(lmbda*d*d[::-1]))
         nu   = diff*fac
         num  = maxloc(nu[np.newaxis,:])
 
-        plt.plot(d,dh,'r',d,height,'b',d,m[0,:],d,LOS,'k')
+        #plt.plot(d,dh,'r',d,height,'b',d,m[0,:],d,LOS,'k')
         #plt.figure()
         #plt.plot(d,nu,num)
 
-        return(height,d,nu,num)
+        return(height,d,dh,nu,num,m,LOS)
 
     def cover(self,**kwargs):
-        """
+        """ coverage around a point
+
         Parameters
         ----------
 
@@ -511,7 +528,7 @@ class Ezone(object):
 
 
     def show(self,**kwargs):
-        """
+        """ Ezone vizualization 
 
         Parameters
         ----------
@@ -650,7 +667,8 @@ class Ezone(object):
         #vertices = np.ma.masked_array(pt, ma)
 
     def saveh5(self,_fileh5='N48W002.h5'):
-        """
+        """ save Ezone in hdf5 format
+
         Parameters
         ----------
 

@@ -40,6 +40,7 @@ Channel
    pylayers.antprop.rays
    pylayers.antprop.raysc
 
+
 Ray Tracing 
 ~~~~~~~~~~~~
 
@@ -49,14 +50,14 @@ Ray Tracing
    pylayers.antprop.interactions
    pylayers.antprop.signature
 
-MultiWall
+Path Loss
 ~~~~~~~~~
 
 
 .. toctree::
    :maxdepth: 1
 
-   pylayers.antprop.multiwall
+   pylayers.antprop.loss
    pylayers.antprop.coverage
 
 Geographical Information 
@@ -131,7 +132,7 @@ Learning
 .. toctree::
    :maxdepth: 2
 
-   pylayers.location.location.loclearn
+   pylayers.location.learning.loclearn
 
 Measurement Data 
 ----------------

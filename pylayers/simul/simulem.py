@@ -700,62 +700,64 @@ class Launch(object):
 
 
 
-class Simul(object):
+class Simul(PyLayers):
     """ Simulation Class
 
     Methods
     -------
-        gui()
-            graphical user interface
-        choose()
-            choose a simulation file in simuldir
-        info()
-            info about the simulation
-        showray(itx,irx,iray)
-            show a single ray
-        help()
-            help on using Simulation object
-        structure2()
-            get .str2 file (ASCII description structure)
-        freq()
-            return the frequency base
-        getlaunch(k)
-            return the launching tree kth Transmittter
-        save()
-            save Simulation file
-        layout
-            load a Layout file
-        load()
-            load Simulation
-        show3()
-            geomview vizualization
-        show3l(itx,irx)
-            geomview vizualization of link itx irx
-        show()
-            2D visualization of simulation with furniture
-        launching()
-            ray launching
-        tracing(k)
-            ray tracing
-        tratotud(k,l)
-            convert ray for tud
-        field(l)
-            evaluate field
-        run(itx,irx)
-            run simulation for links (itx,irx)
-        cir(itx,irx,store_level=0,alpha=1.0)
-            Channel Impulse Response calculation
+
+    gui()
+        graphical user interface
+    choose()
+        choose a simulation file in simuldir
+    info()
+        info about the simulation
+    showray(itx,irx,iray)
+        show a single ray
+    help()
+        help on using Simulation object
+    structure2()
+        get .str2 file (ASCII description structure)
+    freq()
+        return the frequency base
+    getlaunch(k)
+        return the launching tree kth Transmittter
+    save()
+        save Simulation file
+    layout
+        load a Layout file
+    load()
+        load Simulation
+    show3()
+        geomview vizualization
+    show3l(itx,irx)
+        geomview vizualization of link itx irx
+    show()
+        2D visualization of simulation with furniture
+    launching()
+        ray launching
+    tracing(k)
+        ray tracing
+    tratotud(k,l)
+        convert ray for tud
+    field(l)
+        evaluate field
+    run(itx,irx)
+        run simulation for links (itx,irx)
+    cir(itx,irx,store_level=0,alpha=1.0)
+        Channel Impulse Response calculation
 
 
     Attributes
     ----------
-        fileconf
-        filestr
-        filemat
-        fileslab
-        filepalch
-        filepatra
-        filefreq
+
+    fileconf
+    filestr
+    filemat
+    fileslab
+    filepalch
+    filepatra
+    filefreq
 
 
     filefield

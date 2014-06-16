@@ -1,3 +1,4 @@
+# -*- coding:Utf-8 -*-
 """
 
 Body Class
@@ -53,12 +54,14 @@ import pylayers.antprop.antenna as ant
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
 import pdb as pdb
+from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
 import pylayers.util.geomutil as geu
 import pylayers.mobility.ban.DeuxSeg as seg
 import doctest
 import itertools as itt
+from pylayers.util.project import *
 try:
     from mayavi import mlab
     from tvtk.tools import visual
@@ -67,8 +70,8 @@ except:
     print 'mayavi not installed'
 
 
-class Body(object):
-    """ Class to manage a Body model
+class Body(PyLayers):
+    """ Class  to manage a Body model
 
     Members
     -------
@@ -99,7 +102,8 @@ class Body(object):
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
-        """
+        """ object constructor
+
         Parameters
         ----------
 
@@ -245,6 +249,7 @@ class Body(object):
         It also calculates :
         self.smocap : total distance along trajectory
         self.vmocap : averaged speed along trajectory
+
         Here only the projection of the body centroid in the plan 0xy is calculated
 
         """
@@ -260,12 +265,15 @@ class Body(object):
             self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
             # length of trajectory
             d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+            # creates a trajectory associated to mocap file
+            self.traj = tr.Trajectory()
+            self.traj.generate(t=self.time,pt=self.pg.T,name=self.filename)
             self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
             self.vmocap = self.smocap[-1]/self.Tmocap
             self.centered = True
 
     def posvel(self,traj,t):
-        r""" calculate position and velocity
+        """ calculate position and velocity
 
         traj : Tajectory DataFrame
             nx3
@@ -457,7 +465,12 @@ class Body(object):
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
+        self.traj=traj
 
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        self._pta = np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+        self._phe = np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
         # if asked for calculation of coordinates systems
         if cs:
             # calculate cylinder coordinate system 
@@ -618,6 +631,9 @@ class Body(object):
 
         self.Tmocap = self.nframes / info['VideoFrameRate']
 
+        # time base of the motion capture file (sec)
+        self.time = np.linspace(0,self.Tmocap,self.nframes)
+
         #
         # motion capture data
         #
@@ -659,6 +675,13 @@ class Body(object):
         if centered:
             self.centered = False
             self.center()
+
+
+    def c3d2traj(self):
+        """ convert c3d file to trajectory
+        """
+        traj = tr.trajectory()
+        return traj
 
 
 
@@ -717,8 +740,178 @@ class Body(object):
                 kwargs['tag']=stk
                 self.geomfile(**kwargs)
 
+    @mlab.animate(delay=10)
+    def anim(self):
+        """ animate body
+
+        Example
+        -------
+
+        >>> from pylayers.mobility.trajectory import *
+        >>> from pylayers.mobility.ban.body import *
+        >>> from pylayers.gis.layout import *
+        >>> T=Trajectories()
+        >>> T.loadh5()
+        >>> L=Layout(T.Lfilename)
+        >>> B = Body()
+        >>> B.settopos(T[0],t=0,cs=True) 
+        >>> L._show3()
+        >>> B.anim(B)
+
+        """
+        self._show3()
+        kta = self.sl[:,0].astype(int)
+        khe = self.sl[:,1].astype(int)
+        t=self.traj.time()
+
+        # init antennas
+        if 'topos' in dir(self):
+            Ant = {}
+            for key in self.dcs.keys():
+                Ant[key]=ant.Antenna(self.dev[key]['file'])
+                if not hasattr(Ant[key],'SqG'):
+                    Ant[key].Fsynth()
+                Ant[key]._show3(po=self.dcs[key][:,0],
+                               T=self.acs[key],
+                               ilog=False,
+                               minr=0.01,
+                               maxr=0.2,
+                               newfig=False,
+                               title=False,
+                               colorbar=False)
+        while True:
+            if 'topos' in dir(self):
+                for k in range(len(t)):
+                    self.settopos(self.traj,t=t[k],cs=True)
+                    # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                    X=np.hstack((self._pta,self._phe))
+                    # s = np.hstack((cylrad,cylrad))
+                    self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
+                    for key in self.dcs.keys():
+                        x, y, z ,k = Ant[key]._computemesh(po=self.dcs[key][:,0],
+                                                   T=self.acs[key],
+                                                   ilog=False,
+                                                   minr=0.01,
+                                                   maxr=0.2,
+                                                   newfig=False,
+                                                   title=False,
+                                                   colorbar=False)
+                        Ant[key]._mayamesh.mlab_source.set(x=x, y=y, z=z)
+                    yield
+            else:
+                for k in range(self.nframes):
+                    pta =  np.array([self.d[0, kta, k], self.d[1, kta, k], self.d[2, kta, k]])
+                    phe =  np.array([self.d[0, khe, k], self.d[1, khe, k], self.d[2, khe, k]])
+                    # connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                    X=np.hstack((pta,phe))
+                    # s = np.hstack((cylrad,cylrad))
+                    self._mayapts.mlab_source.set(x=X[0,:], y=X[1,:], z=X[2,:])
+                    yield
+
+    @mlab.animate(delay=10)
+    def animc3d(self):
+        """ animate c3d file
+
+        Example
+        -------
+
+        >>> from pylayers.mobility.trajectory import *
+        >>> from pylayers.mobility.ban.body import *
+        >>> B = Body()
+        >>> B.animc3d(B)
+
+        """
+        self._plot3d(typ='c3d',text=False)
+        s, p, f, info = c3d.read_c3d(self.filename)
+
+
+        while True:
+            
+            for k in range(self.nframes):
+                # s = np.hstack((cylrad,cylrad))
+                self._mayapts.mlab_source.set(x=f[k,:,0],
+                                              y=f[k,:,1],
+                                              z=f[k,:,2])
+                yield
+
+    def _plot3d(self,**kwargs):
+        """
+            display points and their name for body or original C3D file
+
+        Parameters
+        ----------
+
+        typ : str (body|c3d)
+            choose points to be displayed (body or c3d)
+        text: boolean
+            diplay nodes name
+
+        """
+
+        defaults={'typ':'body',
+                  'text':True,
+                  'edge':False,
+                  'ncolor':'b',
+                  'ecolor':'b',
+                  'iframe' : 0
+                  }
+
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults[k]
+
+        fig = mlab.gcf()
+
+        fId = kwargs['iframe']
+
+        cold = pyu.coldict()
+        ncolhex = cold[kwargs['ncolor']]
+        pt_color = tuple(pyu.rgb(ncolhex)/255.)
+        ecolhex = cold[kwargs['ecolor']]
+        ed_color = tuple(pyu.rgb(ecolhex)/255.)
+
+        if kwargs['typ'] == 'c3d':
+            s, p, f, info = c3d.read_c3d(self.filename)
+            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=5,opacity=0.5)
+            fig.children[-1].__setattr__('name',self.filename )
+            if kwargs['text']:
+                self._mayaptstxt=[mlab.text3d(f[fId,i,0],f[fId,i,1],f[fId,i,2],p[i][4:],
+                                    scale=3,
+                                    color=(0,0,0)) for i in range(len(p))]
+
+        else :
+            
+            kta = self.sl[:,0].astype(int)
+            khe = self.sl[:,1].astype(int)
+            cylrad = self.sl[:,2]
+            if 'topos' in dir(self):
+                pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
+                phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+            else:
+                pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
+                phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
+
+            X=np.hstack((pta,phe))
+            s = np.hstack((cylrad,cylrad))
+            self._mayapts = mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                                5*s ,
+                                scale_factor=0.1,
+                                resolution=10,
+                                color =pt_color)
+            if kwargs['edge']:
+                connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+                self._mayapts.mlab_source.dataset.lines = np.array(connections)
+                tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.005)
+                mlab.pipeline.surface(tube,color=ed_color)
+                fig.children[-1].__setattr__('name',self.name )
+            if kwargs['text']:
+                self._mayaptstxt=[mlab.text3d(X[0,i],X[1,i], X[2,i],self.idcyl[i],
+                                scale=0.05,
+                                color=(0,0,0)) for i in range(self.ncyl)]
+
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot
+
         Parameters
         ----------
 
@@ -726,6 +919,7 @@ class Body(object):
         topos : boolean
         fig :
         ax :
+        col : string
 
         Returns
         -------
@@ -797,11 +991,13 @@ class Body(object):
         """
         defaults = {'iframe' : 0,
                     'widthfactor' : 1.,
+                    'tube_sides' : 6,
                     'pattern':False,
                     'ccs':False,
                     'dcs':False,
                     'color':'white',
-                    'k':0}
+                    'k':0,
+                    'save':False}
 
         for k in defaults:
             if k not in kwargs:
@@ -816,7 +1012,7 @@ class Body(object):
         #visual.set_viewer(f)
         #f.scene.background=(1,1,1)
 
-        
+
         fId = kwargs['iframe']
 
 
@@ -828,29 +1024,44 @@ class Body(object):
         khe = self.sl[:,1].astype(int)
         cylrad = self.sl[:,2]
         if 'topos' in dir(self):
-            pta =  np.array([self.topos[0, kta], self.topos[1, kta], self.topos[2, kta]])
-            phe =  np.array([self.topos[0, khe], self.topos[1, khe], self.topos[2, khe]])
+            X=np.hstack((self._pta,self._phe))
         else:
             pta =  np.array([self.d[0, kta, fId], self.d[1, kta, fId], self.d[2, kta, fId]])
             phe =  np.array([self.d[0, khe, fId], self.d[1, khe, fId], self.d[2, khe, fId]])
-        ax = phe-pta
-        l = np.sqrt(np.sum((ax**2), axis=0))
-        cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
-                               axis=(ax[0, i],ax[1, i],ax[2, i]), 
-                               radius=cylrad[i]*kwargs['widthfactor'],
-                               length=l[i]) for i in range(self.ncyl)]
-        [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
-         for i in range(self.ncyl)]
-        partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
-        [f.children[k].__setattr__('name', partnames[k]+str(k))
-         for k in range(self.ncyl)]
+            X=np.hstack((pta,phe))
+
+        connections=zip(range(0,self.ncyl),range(self.ncyl,2*self.ncyl))
+        s = np.hstack((cylrad*kwargs['widthfactor'],cylrad*kwargs['widthfactor']))
+        #pts = mlab.points3d(X[0,:],X[1,:], X[2,:], 5*s ,
+                                             # scale_factor=0.1, resolution=10)
+        self._mayapts = mlab.pipeline.line_source(X[0,:],X[1,:], X[2,:], s ,
+                                             scale_factor=0.001, resolution=10)
+        self._mayapts.mlab_source.dataset.lines = np.array(connections)
+        tube = mlab.pipeline.tube(self._mayapts, tube_radius=0.05,tube_sides=kwargs['tube_sides'])
+        tube.filter.radius_factor = 1.
+        tube.filter.vary_radius = 'vary_radius_by_absolute_scalar'
+        mlab.pipeline.surface(tube, color=body_color)
+        f.children[-1].__setattr__('name',self.name )
+                
+        # ax = phe-pta
+        # l = np.sqrt(np.sum((ax**2), axis=0))
+        # cyl = [visual.Cylinder(pos=(pta[0, i],pta[1, i],pta[2, i]),
+        #                        axis=(ax[0, i],ax[1, i],ax[2, i]), 
+        #                        radius=cylrad[i]*kwargs['widthfactor'],
+        #                        length=l[i], resolution=1) for i in range(self.ncyl)
+        #                        ]
+        # [mlab.pipeline.surface(cyl[i].polydata, color=body_color) 
+        #  for i in range(self.ncyl)]
+        # partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
+        # [f.children[k].__setattr__('name', partnames[k]+str(k))
+        #  for k in range(self.ncyl)]
 
         if kwargs['ccs']:
             # to be improved
             for k,key in enumerate(self.ccs):
                 pt = pta[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
-                mlab.quiver3d(pte[0], pte[1], pte[2],
+                ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
                               scale_factor=0.2)
 
@@ -879,7 +1090,7 @@ class Body(object):
                 U = self.dcs[key]               
                 pt = U[:,0]
                 pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
-                mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
+                dcs = mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
 
 
         if kwargs['pattern']:
@@ -902,10 +1113,9 @@ class Body(object):
                            newfig=False,
                            title=False,
                            colorbar=False)
-
-        fig = mlab.gcf()
-        mlab.savefig('Body.png',figure=fig)
-
+        if kwargs['save']:
+            fig = mlab.gcf()
+            mlab.savefig('Body.png',figure=fig)
 
     def show(self,**kwargs):
         """ show a 2D plane projection of the body
@@ -1297,7 +1507,7 @@ class Body(object):
 
 
     def intersectBody(self,A,B, topos = True, frameId = 0, cyl =[]):
-        """
+        """ intersect Body
 
         Parameters
         ----------
@@ -1359,7 +1569,7 @@ class Body(object):
         return intersect
 
     def intersectBody3(self,A,B, topos = True, frameId = 0):
-        """
+        """ intersect body new version
 
         Parameters
         ----------
@@ -1409,7 +1619,7 @@ class Body(object):
             #~ if dmin  < self.sl[k,2]:
                 #~ intersect=1
             lmd = 0.06 
-               
+
             #~ if 0 < alpha < 1 and 0 < beta < 1 :
             loss1_dB = 0
             loss2_dB = 0 
@@ -1417,35 +1627,35 @@ class Body(object):
 
 
             if dmin < self.sl[k,2]:
-                
+
                 """
                 in this case intersection is True
                 """
-                #pdb.set_trace()                                                            
+                #pdb.set_trace()
                 dAB = np.sqrt(sum((A-B)**2))
                 #nu1 =(self.sl[k,2]-dmin)*np.sqrt((2/lmd)*dAB*abs(alpha)*abs(1-alpha)))
                 nu1 =(self.sl[k,2]-dmin)*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
                 nu2 =(dmin+self.sl[k,2])*np.sqrt(2/(lmd*dAB*abs(alpha)*abs(1-alpha)))*0.05
-              
-                if -0.7 < nu1 : 
-                
+
+                if -0.7 < nu1 :
+
                     loss1_dB = 6.9 + 20*np.log10(np.sqrt((nu1-0.1)**2+1)+nu1-0.1)
                 else :
-                    loss1_dB = 0.0 
-                
-                if -0.7 < nu2 : 
+                    loss1_dB = 0.0
+
+                if -0.7 < nu2 :
                     loss2_dB = 6.9 + 20*np.log10(np.sqrt((nu2-0.1)**2+1)+nu2-0.1)
                 else :
-                    loss2_dB = 0.0 
-                    
+                    loss2_dB = 0.0
+
                 loss_dB  =10*np.log10(10**(loss1_dB/10.0)+10**(loss2_dB/10.0))
-                
+
                 loss_lin  =1.0/10**(loss_dB/10.0)
-              
-        return loss_lin#, loss_dB, loss1_dB, loss2_dB 
+
+        return loss_lin#, loss_dB, loss1_dB, loss2_dB
 
     def body_link(self, topos = True,frameId = 0):
-        """
+        """ body link
 
         Parameters
         ----------
@@ -1481,7 +1691,7 @@ class Body(object):
 
 
     def cylinder_basis_k(self, frameId):
-        """
+        """ cylinder basis k
 
         Parameters
         ----------
@@ -1503,7 +1713,7 @@ class Body(object):
             self.basisk[i, 6:] = wk
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
-        """
+        """ cylinder antenna
 
         Parameters
         ----------
@@ -1594,7 +1804,8 @@ def rotation(cycle, alpha=np.pi/2):
     return cycle_rot
 
 def Global_Trajectory(cycle, traj):
-    """
+    """ global trajectory
+
     Parameters
     ----------
 
@@ -1648,7 +1859,7 @@ def Global_Trajectory(cycle, traj):
     return data
 
 def ChangeBasis(u0, v0, w0, v1):
-    """
+    """ change basis
 
     Parameters
     ----------
@@ -1672,8 +1883,14 @@ def ChangeBasis(u0, v0, w0, v1):
     return u1, v1, w1
 
 def dist(A, B):
-    """
-    evaluate the distance between two points A and B
+    """ evaluate the distance between two points A and B
+
+    Parameters
+    ----------
+
+    A : 2D point
+    B : 2D point
+
     """
 
     d = np.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2)
