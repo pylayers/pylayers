@@ -140,28 +140,28 @@ class Simul(SimulationRT): # Sympy 2
     def __repr__(self):
 
         s = 'Simulation information' + '\n----------------------'
-        s = s + '\nLayout: ' + self.lay_opt['filename'] 
-        s = s + '\nSimulation duration: ' + self.sim_opt['duration'] 
+        s = s + '\nLayout: ' + self.lay_opt['filename']
+        s = s + '\nSimulation duration: ' + self.sim_opt['duration']
         s = s + '\nRandom seed: ' + self.sim_opt['seed']
         s = s + '\nSave simulation: ' + self.save_opt['savep']
 
-        s = s + '\n\nUpdate times' + '\n-------------' 
-        s = s + '\nMechanical update: ' + self.meca_opt['mecanic_update_time'] 
-        s = s + '\nNetwork update: ' + self.net_opt['network_update_time'] 
-        s = s + '\nLocalization update: ' + self.net_opt['communication_mode'] 
+        s = s + '\n\nUpdate times' + '\n-------------'
+        s = s + '\nMechanical update: ' + self.meca_opt['mecanic_update_time']
+        s = s + '\nNetwork update: ' + self.net_opt['network_update_time']
+        s = s + '\nLocalization update: ' + self.net_opt['communication_mode']
 
-        s = s + '\n\nAgents => self.lAg[i]' + '\n------' 
+        s = s + '\n\nAgents => self.lAg[i]' + '\n------'
         s = s + '\nNumber of agents :' + str(len(self.lAg))
         s = s + '\nAgents IDs: ' + str([self.lAg[i].ID for i in range(len(self.lAg))])
         s = s + '\nAgents names: ' + str([self.lAg[i].name for i in range(len(self.lAg))])
         s = s + '\nDestination of chosen agents: ' + self.meca_opt['choose_destination']
 
-        s = s + '\n\nNetwork' + '\n-------' 
+        s = s + '\n\nNetwork' + '\n-------'
         s = s + '\nNodes per wstd: ' + str(self.net.wstd)
 
-        s = s + '\n\nLocalization'  + '------------' 
-        s = s + '\nLocalization enable: ' + self.loc_opt['localization'] 
-        s = s + '\nPostion estimation methods: ' + self.loc_opt['method'] 
+        s = s + '\n\nLocalization'  + '------------'
+        s = s + '\nLocalization enable: ' + self.loc_opt['localization']
+        s = s + '\nPostion estimation methods: ' + self.loc_opt['method']
 
 
         return s

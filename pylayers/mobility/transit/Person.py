@@ -40,6 +40,7 @@ import matplotlib.pylab as plt
 import pandas as pd
 #from pylayers.util.pymysqldb import Database 
 import pylayers.util.pyutil as pyu
+import pylayers.util.plotutil as plu
 
 import pdb
 
@@ -217,7 +218,6 @@ class Person(Process):
         self.localy = vec3(0, 1)
         self.world.add_boid(self)
 
-
         # from Helbing, et al "Self-organizing pedestrian movement"
         maxspeed = 0.8
         self.max_speed = maxspeed#random.normalvariate(maxspeed, 0.1)
@@ -271,8 +271,10 @@ class Person(Process):
 
         """
         if self.pdshow:
-            self.L.showG('w',labels=True,alphacy=0.,edges=False)
-
+            fig =plt.gcf()
+            fig,ax=self.L.showG('w',labels=False,alphacy=0.,edges=False,fig=fig)
+            plt.draw()
+            plt.ion()
         while True:
             if self.moving:
                 if self.sim.verbose:
@@ -329,10 +331,23 @@ class Person(Process):
                 columns=['t','x','y','vx','vy','ax','ay']))
 
                 if self.pdshow:
-                    plt.scatter(self.df['x'].tail(1),self.df['y'].tail(1),
-                                c=self.color,s=self.radius*4**4,alpha=0.3)
-                    plt.draw()
+                    ptmp =np.array([p[:2,0],p[:2,0]+v[:2,0]])
 
+                    if hasattr(self, 'pl'):
+                        self.pl[0].set_data(self.df['x'].tail(1),self.df['y'].tail(1))
+                        self.pla[0].set_data(ptmp[:,0],ptmp[:,1])
+                    else :
+                        self.pl = ax.plot(self.df['x'].tail(1),self.df['y'].tail(1),'o',color=self.color,ms=self.radius*10)
+                        self.pla = ax.plot(ptmp[:,0],ptmp[:,1],'r')
+
+                    # try:
+                    #     fig,ax=plu.displot(p[:2],p[:2]+v[:2],'r')
+                    # except:
+                    #     pass
+                    # import ipdb
+                    # ipdb.set_trace()
+                    plt.draw()
+                    plt.pause(0.0001) 
                 if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
 

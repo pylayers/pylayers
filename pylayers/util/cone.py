@@ -4,7 +4,7 @@ r"""
 Class Cone
 ==========
 
-To facilitate algorithms implementation, the following conventions have been introduced.
+The following conventions have been introduced.
 
 + A Cone has an apex which is a point in the plane.
 + A cone has two vectors which define the cone aperture. Those two vectors can always been distinguished as a right vector (u) and a left vector (v).
@@ -36,13 +36,14 @@ import numpy as np
 import shapely as shp
 import matplotlib.pyplot as plt
 import pylayers.util.geomutil as geu
+from pylayers.util.project import *
 from matplotlib.path import Path
 import matplotlib.patches as patches
 import pdb
 import logging
 
 
-class Cone(object):
+class Cone(PyLayers):
 
     def __init__(self, a=np.array([1,0]), b = np.array([0,1]), apex=np.array([0, 0])):
         """
@@ -250,7 +251,7 @@ class Cone(object):
 
         Returns
         -------
-        
+
         ~b1 & ~b2 : boolean (outside on the left)  (,Np)
         b1 & b2 : boolean (outside on the right)  (,Np) 
 
@@ -259,7 +260,7 @@ class Cone(object):
 
         Notes
         -----
-        
+
         If one of the two output booleans is True the point is outside 
         There are 2 output bits but only 3 states due to (uv) convention.
 
@@ -267,25 +268,25 @@ class Cone(object):
         p    \  /       lv & lu
               \/
 
-             \p /  
+             \p /
               \/        ~lv & lu
 
-             \  /  p 
+             \  /  p
               \/        ~lu & ~lv
 
-              
+
         """
 
         a = self.apex[:,np.newaxis]
-        b = a + self.u.reshape(2,1) 
-        c = a + self.v.reshape(2,1) 
+        b = a + self.u.reshape(2,1)
+        c = a + self.v.reshape(2,1)
 
         p0a0 = p[0,:]-a[0,:]
         p1a1 = p[1,:]-a[1,:]
         lu = ((b[0,:]-a[0,:])* p1a1 - ((b[1,:]-a[1,:])* p0a0 ))>0
         lv = ((c[0,:]-a[0,:])* p1a1 - ((c[1,:]-a[1,:])* p0a0 ))>0
 
-        return(~lu & ~lv , lu & lv) 
+        return(~lu & ~lv , lu & lv)
 
     def belong_point2(self,p):
         """
@@ -299,7 +300,7 @@ class Cone(object):
         p0a0 = p[0,:]-a[0,:]
         b1 = ((b[0,:]-a[0,:])* p1a1 - ((b[1,:]-a[1,:])* p0a0 ))>0
         b2 = ((c[0,:]-a[0,:])* p1a1 - ((c[1,:]-a[1,:])* p0a0 ))>0
-        
+
         return(b1^b2)
 
     def belong_point(self, p):
@@ -321,8 +322,8 @@ class Cone(object):
         if not self.degenerated:
             pt  = p - self.apex[:,np.newaxis]
             #puv = np.sum(self.bv[:,:,np.newaxis]*pt[:,np.newaxis,:],axis=0)
-        
-            #alpha = puv[0,:]-self.gamma*puv[1,:] 
+
+            #alpha = puv[0,:]-self.gamma*puv[1,:]
             #beta  = puv[1,:]-self.gamma*puv[0,:]
             pu = np.sum(self.u[:,np.newaxis]*pt,axis=0)
             pv = np.sum(self.v[:,np.newaxis]*pt,axis=0)
@@ -339,23 +340,29 @@ class Cone(object):
                 slope = self.u[1]/self.u[0]
                 y0 = a0[1]-slope*a0[0]
                 y1 = b0[1]-slope*b0[0]
-                b = (p[1,:] > slope*p[0,:] + min(y0,y1) ) & (p[1,:]<slope*p[0,:]+max(y0,y1) ) 
-            else:    
+                b = (p[1,:] > slope*p[0,:] + min(y0,y1) ) & (p[1,:]<slope*p[0,:]+max(y0,y1) )
+            else:
                 b = (p[0,:] >  min(a0[0],b0[0]) ) & (p[0,:]< max(a0[0],b0[0]) )
         return(b)
 
     def above(self, p):
+        """ check if above
+        Parameters
+        ----------
+
+        p :
+        """
         bo1 = self.belong(p)
         pb = p[:,bo1]
         if self.v[1]<>0:
             slope1 = self.v[1]/self.v[0]
             b1 = self.v[1] - slope1*self.v[0]
-            bo2 = pb[1,:] > slope1*pb[0,:]+b  
+            bo2 = pb[1,:] > slope1*pb[0,:]+b
         else:
-            bo2 = pb[1,:] > self.seg1[1,0]   
-           
-        return(bo1,bo2)    
-        
+            bo2 = pb[1,:] > self.seg1[1,0]
+
+        return(bo1,bo2)
+
     def fromptseg(self,pt,seg):
         """ creates a Cone from one point and one segment
 

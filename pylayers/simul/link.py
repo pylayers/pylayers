@@ -1101,6 +1101,8 @@ class DLink(Link):
                    'ra_ceil_height_meter':3,
                    'ra_number_mirror_cf':1,
                    'force':False,
+                   'alg':7,
+                   'threshold':0.1,
                    }
         for key, value in defaults.items():
             if key not in kwargs:
@@ -1121,7 +1123,15 @@ class DLink(Link):
             self.load(Si,self.dexist['sig']['grpname'])
 
         else :
-            Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
+            if kwargs['alg']==5:
+                Si.run5(cutoff=kwargs['cutoff'],algo=kwargs['si_algo'],diffraction=kwargs['diffraction'])
+            if kwargs['alg']==7:
+                Si.run7(cutoff=kwargs['cutoff'],
+                    algo=kwargs['si_algo'],
+                    diffraction=kwargs['diffraction'],
+                    threshold=kwargs['threshold'])
+
+            #Si.run6(diffraction=kwargs['diffraction'])
             # save sig
             self.save(Si,'sig',self.dexist['sig']['grpname'],force = kwargs['force'])
 
@@ -1148,7 +1158,7 @@ class DLink(Link):
         self.R = R
 
         if self.R.nray == 0:
-            raise NameError('No ray has been found. Try to re-run the simulation with a higher S.cutoff ')
+            raise NameError('No rays have been found. Try to re-run the simulation with a higher S.cutoff ')
 
 
 
