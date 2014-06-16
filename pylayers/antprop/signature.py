@@ -790,7 +790,7 @@ class Signatures(PyLayers,dict):
                 visited.pop()
 
 
-    def short_propath(self,G,source,target=None,dout={},cutoff=None):
+    def short_propath(self,G,source,target=None,dout={},cutoff=None,weight=False):
         """ updated dijkstra
         """
         if source==target:
@@ -821,7 +821,13 @@ class Signatures(PyLayers,dict):
                 except:
                     break
             for w,edgedata in edata:
-                vw_dist = dist[v] #+ edgedata.get(weight,1) #<= proba should be add here
+                if weight :
+                    if not firstloop:
+                        vw_dist = dist[v] + edgedata 
+                    else :
+                        vw_dist = dist[v] #+ edgedata.get(weight,1) #<= proba should be add here
+                else :
+                    vw_dist = dist[v]
                 if cutoff is not None:
                     if vw_dist>cutoff:
                         continue
@@ -1772,6 +1778,8 @@ class Signatures(PyLayers,dict):
         pe = 0
         tic = time.time()
         tic0 = tic
+        lis=lis+lit
+        lit=lis+lit
         #for interaction source  in list of source interactions
         for us,s in enumerate(lis):
             #for target interaction in list of target interactions
@@ -1801,6 +1809,7 @@ class Signatures(PyLayers,dict):
                         dout = self.propaths2(Gi,source=s,target=t,dout=dout,cutoff=cutoff,bt=bt)
                     elif algo == 'dij':
                         dout = self.short_propath(Gi,source=s,target=t,dout=dout,cutoff=cutoff)
+                        # dout = self.short_propath(Gi,source=t,target=s,dout=dout,cutoff=cutoff)
                 else:
                     try:
                         if [s[0],len(s)] not in dout[1]:
