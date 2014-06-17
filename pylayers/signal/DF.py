@@ -247,6 +247,32 @@ class DF(PyLayers):
             self.H.plot(typ=['d'],xlabels=['relative frequency'],fig=fig,ax=ax2)
             plt.grid()
         #show()
+    def butter(self,order=5,w=0.25,typ='low'):
+        """ Butterwoth digital filter design
+
+        Parameters
+        ----------
+
+        order : int
+            filter order
+        w : array_like
+            a scalar or length-2 sequnce (relative frequency 0<1  fN <=> 1)
+        typ : string
+            'lowpass' | 'highpass' | 'bandpass' | 'bandstop'
+
+        Examples
+        --------
+
+         >>> from pylayers.signal.bsignal import *
+         >>> flt = DF()
+         >>> flt.butter()
+         >>> flt.freqz()
+
+        """
+        self.order = order
+        b,a = si.butter(order,w,typ,analog=False)
+        self.b  = b
+        self.a  = a
 
     def ellip_bp(self,wp,ws,gpass=0.5,gstop=20):
         """ Elliptic Bandpath filter
