@@ -57,12 +57,13 @@ if __name__ == "__main__":
     filter1.ellip_bp(wp,ws,gpass,gstop)
 
     #
-    # Filter 2 : Averaging Filter
+    # Filter 2 : averaging filter
     #
     N       = 40
     b       = (1./N)*ones(N)
     a       = array([1])
     filter2 = DF(b,a)
+
     #
     #
     #
@@ -71,3 +72,7 @@ if __name__ == "__main__":
 
     ED = EnergyDetector(filter1,beta,filter2,pfa)
     y  = ED.apply(wn)
+
+
+
+

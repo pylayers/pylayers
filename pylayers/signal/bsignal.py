@@ -904,8 +904,6 @@ class Bsignal(PyLayers):
         """
         return(len(self.x))
 
-
-
 class Usignal(Bsignal):
     r""" Signal with an embedded uniform Base
 
@@ -939,6 +937,7 @@ class Usignal(Bsignal):
         return(U)
 
     def __sub__(self, u):
+
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
             U = Usignal(self.x, self.y - u)
@@ -956,7 +955,7 @@ class Usignal(Bsignal):
 
     def __mul__(self, u):
         t = type(u).__name__
-        if ((t == 'int') | (t == 'float')):
+        if ((t == 'int') | (t == 'float') | (t== 'float64') ):
             U = Usignal(self.x, self.y * u)
         else:
             assert  (u.y.ndim == 1) | (u.y.shape[0]==1)
@@ -1188,7 +1187,7 @@ class Usignal(Bsignal):
 
         if (bool):
         # same x support
-            L = Usignal(u1.x, np.vstack(u1.y,u2.y))
+            L = Usignal(u1.x, np.vstack((u1.y,u2.y)))
         else:
         # different x support
             xstart = min(u1_start, u2_start)
@@ -1403,7 +1402,6 @@ class Usignal(Bsignal):
             u = np.nonzero(self.x <= xmax)
             self.x = self.x[u[0]]
             self.y = self.y[u[0]]
-
 
 class TBsignal(Bsignal):
     """  Based signal in Time domain
@@ -1747,23 +1745,32 @@ class TUsignal(TBsignal, Usignal):
         AU = A.unrex()
         return(AU)
 
-    def psd(self, Tpns=100, R=50):
+    def psd(self, Tpns=100, R=50,periodic=True):
         """ calculate power spectral density
 
         Parameters
         ----------
 
         R    : Resistance (default 50 Ohms)
+            Ohms
         Tpns : real
-            PRP (default 100 ns)
+            Signal period PRP (default 100 ns)
 
         .. note::
 
-            If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)
+            Notice this interesting property that if time is iepressed in ns
+            the resulting PSD is expressed in dBm/MHz because there is the
+            same scale factor 1e-9 between second and nanosecond as between
+            dBW/Hz and dBm/MHz
+
+            If periodic is False the signal duration is taken as period.
 
         """
         P = self.esd(mode='unilateral')
-        P.y = P.y / (R * Tpns)
+        if periodic:
+            P.y = P.y / (R * Tpns)
+        else:
+            P.y = P.y/ (R* (P.x[-1]-P.x[0]))
         return(P)
 
     def show(self,fig=[],ax=[],display=True,PRPns=100):
@@ -3101,7 +3108,11 @@ class FBsignal(Bsignal):
         dB : boolean
             default True
         iy : index of y value to be displayed
-            default [0]  only first the line is displayed
+            default [0]  only the first is displayed
+        typ : string
+            ['l10','l20','d','r','du','ru'] 
+        xlabels    
+        ylabels    
 
         Examples
         --------
@@ -3183,7 +3194,7 @@ class FBsignal(Bsignal):
             plt.ylabel('PSD (dBm/MHz)')
             if phase:
                 plt.subplot(211)
-            plt.plot(self.x, 10 * n * np.log10(abs(self.y) + 1.0e-15))
+            plt.plot(self.x, 10 * n * np.log10(abs(self.y) + 1.0e-15),linewidth=0.3)
             if phase:
                 plt.subplot(212)
                 plt.plot(self.x, np.unwrap(np.angle(self.y)))
@@ -4792,14 +4803,14 @@ class FHsignal(FUsignal):
 class Noise(TUsignal):
     """ Create noise
     """
-    def __init__(self, Tobs=100, fe=50, DSPdBmpHz=-174, NF=0, R=50, seed=[]):
+    def __init__(self, Tobs=100, fsGHz = 50, DSPdBmpHz=-174, NF=0, R=50, seed=[]):
         """ object constructor
 
         Parameters
         ----------
 
         Tobs      : Time duration
-        fe        : sampling frequency
+        fs        : sampling frequency
         DSPdBmpHz : Power Spectral Density Noise (dBm/Hz)
         R         : 50 Ohms
         NF        : 0
@@ -4808,18 +4819,26 @@ class Noise(TUsignal):
 
         """
         TUsignal.__init__(self)
-        P = DSPdBmpHz + NF
-        pmW = 10 ** (P / 10.)  # mW/Hz
-        pW = pmW / 1e3  # W/Hz
-        #PW    = pW*2*(fe*1e9)        #   W
-        PW = pW * (fe * 1e9)  # W
-        std = np.sqrt(R * PW)
+
+        # power spectral density are in lower case
+        # Power is in capital letter
+
+        p = DSPdBmpHz + NF
+        pmW = 10 ** (p / 10.)  # DSP : dBm/Hz -> mW/Hz
+        pW = pmW / 1e3         # DSP : mw/Hz  -> W/Hz
+
+        PW = pW * (fsGHz * 1e9)   # Power : p * Bandwith Hz
+        std = np.sqrt(R * PW)     # Voltage P = V^2/R
+
         if seed != []:
             np.random.seed(seed)
-        self.x = np.arange(0, Tobs, 1. / fe)
+
+        tsns   = 1./fsGHz
+        self.x = np.arange(0, Tobs, tsns)
         N = len(self.x)
         n = std * np.random.randn(N)
-        self.y = n
+        self.y   = n
+        self.var = std*std
 
     def amplify(self, GdB, NF):
         pass
