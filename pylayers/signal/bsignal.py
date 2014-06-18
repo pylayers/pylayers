@@ -4819,6 +4819,11 @@ class Noise(TUsignal):
 
         """
         TUsignal.__init__(self)
+        self.Tobs = Tobs
+        self.fsGHz = fsGHz
+        self.DSPdBmpHz = DSPdBmpHz
+        self.NF = NF
+        self.R = R
 
         # power spectral density are in lower case
         # Power is in capital letter
@@ -4849,9 +4854,9 @@ class Noise(TUsignal):
         Parameters
         ----------
 
-        fcGHz
-        BGHz
-        window
+        fcGHz : float
+        BGHz  : float
+        window : float
 
         """
         N = self.fft()
