@@ -21,11 +21,13 @@ This class implements a LTI digital filter
 """
 import numpy as np
 from scipy import io
+from pylayers.util.project import *
+import pylayers.signal.bsignal  as bs
 import scipy.signal as si
+import numpy.fft as fft
 import matplotlib.pyplot as plt
-#from EnergyDetector import *
 
-class DF(object):
+class DF(PyLayers):
     """ Digital Filter Class
 
     Methods
@@ -187,27 +189,91 @@ class DF(object):
         """
         return self.order
 
-    def freqz(self):
-        """ freqz : display filter transfer function
+    def wnxcorr(self,**kwargs):
+        """ filtered noise output autocorrelation
+
+        Parameters
+        ---------
+
+        var : float
+            input noise variance
 
         """
 
+        defaults = {'var':1}
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k] = defaults['var']
+
+        HH = self.H.symH(0)
+        H2 = HH.y*np.conj(HH.y)
+        N  = len(H2)
+        tap = np.linspace(-N/2,N/2,N)
+        Rn = bs.Usignal(tap,np.real(fft.ifft(H2)))*kwargs['var']
+        return(Rn)
+
+
+    def freqz(self,**kwargs):
+        """ freqz :  evaluation of filter transfer function
+
+        The function evaluates an FUsignal
+
+        Parameters
+        ----------
+
+        display : boolean 
+            True
+
+        """
+
+        defaults = {'display':True}
+        for k in defaults:
+            if k not in kwargs:
+                kwargs[k]=defaults[k]
+
         (w,h)    = si.freqz(self.b,self.a)
-        self.w   = w
-        self.h   = h
-        plt.subplot(211)
-        plt.plot(w/np.pi,20*np.log10(abs(h)+1e-15))
-        plt.ylabel('dB')
-        plt.title('Modulus')
-        plt.grid()
-        plt.subplot(212)
-        plt.plot(w/np.pi,np.angle(h)*180./np.pi)
-        plt.ylabel('deg')
-        plt.xlabel('Relative frequency')
-        plt.title('Phase')
-        plt.grid()
+        self.H   = bs.FUsignal(w/np.pi,h)
+
+        if 'fig' not in kwargs:
+            fig = plt.figure()
+        else:
+            fig = kwargs['fig']
+
+        if kwargs['display']:
+            ax1 = fig.add_subplot(211)
+            self.H.plot(typ=['l20'],xlabels=['relative frequency'],fig=fig,ax=ax1)
+            plt.grid()
+            ax2 = fig.add_subplot(212)
+            self.H.plot(typ=['d'],xlabels=['relative frequency'],fig=fig,ax=ax2)
+            plt.grid()
 
         #show()
+    def butter(self,order=5,w=0.25,typ='low'):
+        """ Butterwoth digital filter design
+
+        Parameters
+        ----------
+
+        order : int
+            filter order
+        w : array_like
+            a scalar or length-2 sequnce (relative frequency 0<1  fN <=> 1)
+        typ : string
+            'lowpass' | 'highpass' | 'bandpass' | 'bandstop'
+
+        Examples
+        --------
+
+         >>> from pylayers.signal.bsignal import *
+         >>> flt = DF()
+         >>> flt.butter()
+         >>> flt.freqz()
+
+        """
+        self.order = order
+        b,a = si.butter(order,w,typ,analog=False)
+        self.b  = b
+        self.a  = a
 
     def ellip_bp(self,wp,ws,gpass=0.5,gstop=20):
         """ Elliptic Bandpath filter
