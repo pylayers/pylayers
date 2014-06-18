@@ -1,0 +1,3211 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' upload='true' generator='JOSM'>
+  <node id='-2409' action='modify' visible='true' lat='48.04507996589221' lon='-1.7465089148450412' />
+  <node id='-2239' action='modify' visible='true' lat='48.04508519847737' lon='-1.746923474037981' />
+  <node id='-2226' action='modify' visible='true' lat='48.045006753634226' lon='-1.746813700705144' />
+  <node id='-2174' action='modify' visible='true' lat='48.045105321098454' lon='-1.7465747317774922' />
+  <node id='-1962' action='modify' visible='true' lat='48.045533715137836' lon='-1.7463627829902078' />
+  <node id='-1849' action='modify' visible='true' lat='48.04513767107191' lon='-1.7465630843510005' />
+  <node id='-1817' action='modify' visible='true' lat='48.04512400052448' lon='-1.7467639533344592' />
+  <node id='-1781' action='modify' visible='true' lat='48.04507390684346' lon='-1.7466766795872852' />
+  <node id='-1742' action='modify' visible='true' lat='48.045082158424364' lon='-1.7469040332387602' />
+  <node id='-1725' action='modify' visible='true' lat='48.04506668395047' lon='-1.7467848604923857' />
+  <node id='-1717' action='modify' visible='true' lat='48.04506196929979' lon='-1.7467345485151908' />
+  <node id='-1703' action='modify' visible='true' lat='48.04505736995522' lon='-1.746699488709265' />
+  <node id='-1675' action='modify' visible='true' lat='48.045067656930286' lon='-1.7465333654563338' />
+  <node id='-1668' action='modify' visible='true' lat='48.04505150167661' lon='-1.7465334697433297' />
+  <node id='-1642' action='modify' visible='true' lat='48.04514864418445' lon='-1.7465595628304413' />
+  <node id='-1622' action='modify' visible='true' lat='48.04515470335528' lon='-1.7464952149413762' />
+  <node id='-1607' action='modify' visible='true' lat='48.04512388999703' lon='-1.7464559266624964' />
+  <node id='-1600' action='modify' visible='true' lat='48.04512876917954' lon='-1.7464947533400799' />
+  <node id='-1563' action='modify' visible='true' lat='48.045267739590095' lon='-1.7464182317600097' />
+  <node id='-1556' action='modify' visible='true' lat='48.045271734632465' lon='-1.7464418415833298' />
+  <node id='-1541' action='modify' visible='true' lat='48.04530965925643' lon='-1.746457383449194' />
+  <node id='-1511' action='modify' visible='true' lat='48.0454203806655' lon='-1.7463632155699298' />
+  <node id='-608' action='modify' visible='true' lat='48.045067305977774' lon='-1.7465844765892031' />
+  <node id='-606' action='modify' visible='true' lat='48.045066883770275' lon='-1.7465722669880428' />
+  <node id='-604' action='modify' visible='true' lat='48.045073668384426' lon='-1.7466738974583047' />
+  <node id='-602' action='modify' visible='true' lat='48.04507416596067' lon='-1.7466797027372574' />
+  <node id='-600' action='modify' visible='true' lat='48.04508477391163' lon='-1.7466784938084312' />
+  <node id='-598' action='modify' visible='true' lat='48.04522384228787' lon='-1.746728911322469' />
+  <node id='-596' action='modify' visible='true' lat='48.04522576646869' lon='-1.7467409627570314' />
+  <node id='-594' action='modify' visible='true' lat='48.045240728522096' lon='-1.746736262148275' />
+  <node id='-592' action='modify' visible='true' lat='48.04509972387172' lon='-1.746914200470912' />
+  <node id='-590' action='modify' visible='true' lat='48.0450947690236' lon='-1.7468906265969604' />
+  <node id='-588' action='modify' visible='true' lat='48.04514448187071' lon='-1.7468856252367717' />
+  <node id='-586' action='modify' visible='true' lat='48.04512804314357' lon='-1.7467877884924736' />
+  <node id='-584' action='modify' visible='true' lat='48.04509540216576' lon='-1.7467993246237266' />
+  <node id='-582' action='modify' visible='true' lat='48.045086644826725' lon='-1.7468023016898564' />
+  <node id='-580' action='modify' visible='true' lat='48.0450833110666' lon='-1.746803343663002' />
+  <node id='-578' action='modify' visible='true' lat='48.045092864527895' lon='-1.7468765050631383' />
+  <node id='-576' action='modify' visible='true' lat='48.04499530275693' lon='-1.7466868587312072' />
+  <node id='-574' action='modify' visible='true' lat='48.04501834838919' lon='-1.7464713858212064' />
+  <node id='-572' action='modify' visible='true' lat='48.045017801054726' lon='-1.746497509576494' />
+  <node id='-570' action='modify' visible='true' lat='48.04501755305216' lon='-1.7465167877979029' />
+  <node id='-568' action='modify' visible='true' lat='48.044989537564604' lon='-1.7465164530384993' />
+  <node id='-566' action='modify' visible='true' lat='48.04505125291233' lon='-1.7465171904805912' />
+  <node id='-564' action='modify' visible='true' lat='48.04505153438408' lon='-1.7465356101375142' />
+  <node id='-562' action='modify' visible='true' lat='48.04505209732757' lon='-1.746555713877356' />
+  <node id='-560' action='modify' visible='true' lat='48.04505209732757' lon='-1.746558450512099' />
+  <node id='-558' action='modify' visible='true' lat='48.04504344207054' lon='-1.746558766277646' />
+  <node id='-556' action='modify' visible='true' lat='48.045043934646195' lon='-1.746572975727272' />
+  <node id='-554' action='modify' visible='true' lat='48.045044216117994' lon='-1.7465789752726701' />
+  <node id='-552' action='modify' visible='true' lat='48.045052730639014' lon='-1.7465788700174876' />
+  <node id='-550' action='modify' visible='true' lat='48.04505357505424' lon='-1.7466086572341113' />
+  <node id='-548' action='modify' visible='true' lat='48.04505441946945' lon='-1.7466283399532232' />
+  <node id='-546' action='modify' visible='true' lat='48.045054841677064' lon='-1.7466398127681066' />
+  <node id='-544' action='modify' visible='true' lat='48.045046608628155' lon='-1.7466405495543837' />
+  <node id='-542' action='modify' visible='true' lat='48.045047453043495' lon='-1.7466548642591921' />
+  <node id='-540' action='modify' visible='true' lat='48.04504773451526' lon='-1.74666086380459' />
+  <node id='-538' action='modify' visible='true' lat='48.045054700941186' lon='-1.74666002176313' />
+  <node id='-536' action='modify' visible='true' lat='48.045056460139506' lon='-1.7466861250483698' />
+  <node id='-534' action='modify' visible='true' lat='48.04505596756398' lon='-1.7466784414200531' />
+  <node id='-532' action='modify' visible='true' lat='48.04504393464619' lon='-1.7466798097374243' />
+  <node id='-530' action='modify' visible='true' lat='48.04504716674752' lon='-1.746721629985096' />
+  <node id='-528' action='modify' visible='true' lat='48.04504548274103' lon='-1.7467010712842728' />
+  <node id='-526' action='modify' visible='true' lat='48.04505892301705' lon='-1.7466992819461717' />
+  <node id='-524' action='modify' visible='true' lat='48.04505941559255' lon='-1.7467042289397454' />
+  <node id='-522' action='modify' visible='true' lat='48.044998917644264' lon='-1.7467289324486097' />
+  <node id='-520' action='modify' visible='true' lat='48.04506062325831' lon='-1.746719593351642' />
+  <node id='-518' action='modify' visible='true' lat='48.04506047111144' lon='-1.7467182278790065' />
+  <node id='-516' action='modify' visible='true' lat='48.04506082295107' lon='-1.746721385534479' />
+  <node id='-514' action='modify' visible='true' lat='48.045433207339975' lon='-1.746319622704839' />
+  <node id='-512' action='modify' visible='true' lat='48.04543136558335' lon='-1.746325256224165' />
+  <node id='-510' action='modify' visible='true' lat='48.045190805792075' lon='-1.746470275448315' />
+  <node id='-508' action='modify' visible='true' lat='48.045191591341506' lon='-1.7464745244079602' />
+  <node id='-506' action='modify' visible='true' lat='48.04519653259604' lon='-1.7464728255434214' />
+  <node id='-504' action='modify' visible='true' lat='48.045218892726446' lon='-1.7464602839791705' />
+  <node id='-502' action='modify' visible='true' lat='48.045223419509234' lon='-1.746487816547748' />
+  <node id='-500' action='modify' visible='true' lat='48.04522835457437' lon='-1.7464569856562202' />
+  <node id='-498' action='modify' visible='true' lat='48.045232941150125' lon='-1.7464844315458243' />
+  <node id='-496' action='modify' visible='true' lat='48.04531631409974' lon='-1.7464959552781627' />
+  <node id='-494' action='modify' visible='true' lat='48.0453224840158' lon='-1.7464812188008207' />
+  <node id='-492' action='modify' visible='true' lat='48.045321231678884' lon='-1.7464074321776992' />
+  <node id='-490' action='modify' visible='true' lat='48.04533629430593' lon='-1.7464025222606474' />
+  <node id='-488' action='modify' visible='true' lat='48.045323703005714' lon='-1.7463990681789947' />
+  <node id='-486' action='modify' visible='true' lat='48.045534865871616' lon='-1.7463696345017083' />
+  <node id='-484' action='modify' visible='true' lat='48.045539364308446' lon='-1.746367847068345' />
+  <node id='-482' action='modify' visible='true' lat='48.04557271155683' lon='-1.7463110671087736' />
+  <node id='-480' action='modify' visible='true' lat='48.04557461829951' lon='-1.7463223768295404' />
+  <node id='-478' action='modify' visible='true' lat='48.04557701078507' lon='-1.746336481023984' />
+  <node id='-476' action='modify' visible='true' lat='48.04537154925656' lon='-1.7464550288497915' />
+  <node id='-474' action='modify' visible='true' lat='48.04537292601917' lon='-1.7464634059566075' />
+  <node id='-472' action='modify' visible='true' lat='48.04537921188591' lon='-1.7464547311431786' />
+  <node id='-470' action='modify' visible='true' lat='48.045380313344864' lon='-1.7464608785841074' />
+  <node id='-468' action='modify' visible='true' lat='48.04535979577216' lon='-1.7464270861710605' />
+  <node id='-466' action='modify' visible='true' lat='48.04537386392517' lon='-1.7464223817636026' />
+  <node id='-464' action='modify' visible='true' lat='48.04535331996769' lon='-1.7463889726309754' />
+  <node id='-462' action='modify' visible='true' lat='48.04535423370032' lon='-1.7463945944073596' />
+  <node id='-460' action='modify' visible='true' lat='48.04536067192462' lon='-1.7463863655837644' />
+  <node id='-458' action='modify' visible='true' lat='48.045361995846946' lon='-1.7463945944073596' />
+  <node id='-456' action='modify' visible='true' lat='48.04537027591068' lon='-1.746401510387282' />
+  <node id='-454' action='modify' visible='true' lat='48.04535632350914' lon='-1.7464065026718782' />
+  <node id='-452' action='modify' visible='true' lat='48.045357119626765' lon='-1.7464109682710727' />
+  <node id='-450' action='modify' visible='true' lat='48.045344182713876' lon='-1.746392212754456' />
+  <node id='-448' action='modify' visible='true' lat='48.0453672701254' lon='-1.7463840258225987' />
+  <node id='-446' action='modify' visible='true' lat='48.04537443518204' lon='-1.746425704748414' />
+  <node id='-444' action='modify' visible='true' lat='48.04535920943548' lon='-1.7464236208021233' />
+  <node id='-442' action='modify' visible='true' lat='48.04536328953794' lon='-1.7464477350377738' />
+  <node id='-440' action='modify' visible='true' lat='48.04537742062202' lon='-1.74644282287866' />
+  <node id='-438' action='modify' visible='true' lat='48.04537652499004' lon='-1.746438208426159' />
+  <node id='-436' action='modify' visible='true' lat='48.04538805075158' lon='-1.7463767256220228' />
+  <node id='-434' action='modify' visible='true' lat='48.04538976043874' lon='-1.746387747155261' />
+  <node id='-432' action='modify' visible='true' lat='48.04538743169942' lon='-1.7463885066037552' />
+  <node id='-430' action='modify' visible='true' lat='48.045392810176445' lon='-1.7464201348490525' />
+  <node id='-428' action='modify' visible='true' lat='48.0453998114163' lon='-1.7464176666698643' />
+  <node id='-426' action='modify' visible='true' lat='48.04539851772623' lon='-1.7464097774446206' />
+  <node id='-424' action='modify' visible='true' lat='48.045405486735426' lon='-1.7464072076735506' />
+  <node id='-422' action='modify' visible='true' lat='48.045398665004285' lon='-1.746454564288976' />
+  <node id='-420' action='modify' visible='true' lat='48.04538557565579' lon='-1.7463775921015952' />
+  <node id='-418' action='modify' visible='true' lat='48.04537612693137' lon='-1.7463808999031625' />
+  <node id='-416' action='modify' visible='true' lat='48.045399512872436' lon='-1.7463727129713058' />
+  <node id='-414' action='modify' visible='true' lat='48.045402796854795' lon='-1.746391617341229' />
+  <node id='-412' action='modify' visible='true' lat='48.04540508569086' lon='-1.7464048652855062' />
+  <node id='-410' action='modify' visible='true' lat='48.04540717549762' lon='-1.7464170712566378' />
+  <node id='-408' action='modify' visible='true' lat='48.045412658574286' lon='-1.7464494320483102' />
+  <node id='-406' action='modify' visible='true' lat='48.045409464333495' lon='-1.746430319200915' />
+  <node id='-404' action='modify' visible='true' lat='48.04565375454099' lon='-1.7463965682390592' />
+  <node id='-402' action='modify' visible='true' lat='48.045656442072136' lon='-1.746413282158624' />
+  <node id='-400' action='modify' visible='true' lat='48.045662256679' lon='-1.7464116880111777' />
+  <node id='-398' action='modify' visible='true' lat='48.0455218731112' lon='-1.7463537019044306' />
+  <node id='-396' action='modify' visible='true' lat='48.04551779180789' lon='-1.7463551754769844' />
+  <node id='-394' action='modify' visible='true' lat='48.04551976209228' lon='-1.74636717456778' />
+  <node id='-392' action='modify' visible='true' lat='48.0455242655992' lon='-1.746365911505591' />
+  <node id='-390' action='modify' visible='true' lat='48.04550160235197' lon='-1.746373649092712' />
+  <node id='-388' action='modify' visible='true' lat='48.04551089581191' lon='-1.7463703322232524' />
+  <node id='-386' action='modify' visible='true' lat='48.04540562620764' lon='-1.746353912414795' />
+  <node id='-384' action='modify' visible='true' lat='48.045348206332804' lon='-1.7463155995283954' />
+  <node id='-382' action='modify' visible='true' lat='48.045335540175316' lon='-1.746358754153186' />
+  <node id='-380' action='modify' visible='true' lat='48.04528223568178' lon='-1.7464738249355205' />
+  <node id='-378' action='modify' visible='true' lat='48.045292234356445' lon='-1.7464702720189567' />
+  <node id='-376' action='modify' visible='true' lat='48.04529113969334' lon='-1.746463573620165' />
+  <node id='-374' action='modify' visible='true' lat='48.045300195542026' lon='-1.7464605965540352' />
+  <node id='-372' action='modify' visible='true' lat='48.045295418830825' lon='-1.746433654105562' />
+  <node id='-370' action='modify' visible='true' lat='48.04525063714174' lon='-1.746449134849436' />
+  <node id='-368' action='modify' visible='true' lat='48.04525558998782' lon='-1.7464763797421576' />
+  <node id='-366' action='modify' visible='true' lat='48.0452414817694' lon='-1.746452409622179' />
+  <node id='-364' action='modify' visible='true' lat='48.04520561266283' lon='-1.7464649132999237' />
+  <node id='-362' action='modify' visible='true' lat='48.04520041936821' lon='-1.7464959932368163' />
+  <node id='-360' action='modify' visible='true' lat='48.04528114448855' lon='-1.746467294952827' />
+  <node id='-356' action='modify' visible='true' lat='48.04506827322258' lon='-1.7468000141860278' />
+  <node id='-354' action='modify' visible='true' lat='48.045068056807615' lon='-1.7467981798294197' />
+  <node id='-352' action='modify' visible='true' lat='48.045068479015114' lon='-1.7468017585056215' />
+  <node id='-350' action='modify' visible='true' lat='48.04507016784504' lon='-1.7468145996378763' />
+  <node id='-348' action='modify' visible='true' lat='48.0450799610572' lon='-1.7468880378341813' />
+  <node id='-346' action='modify' visible='true' lat='48.0451459128108' lon='-1.7465604008920848' />
+  <node id='-344' action='modify' visible='true' lat='48.04515140149963' lon='-1.7465587168091659' />
+  <node id='-342' action='modify' visible='true' lat='48.04512015818618' lon='-1.7465694528377727' />
+  <node id='-340' action='modify' visible='true' lat='48.04509116662611' lon='-1.7465797678456494' />
+  <node id='-338' action='modify' visible='true' lat='48.04507793746222' lon='-1.7465843990736751' />
+  <node id='-336' action='modify' visible='true' lat='48.045069493313285' lon='-1.7465875567291478' />
+  <node id='-334' action='modify' visible='true' lat='48.04507371538792' lon='-1.7466109233796445' />
+  <node id='-332' action='modify' visible='true' lat='48.04507667083997' lon='-1.7466300798228445' />
+  <node id='-330' action='modify' visible='true' lat='48.04508018923504' lon='-1.746649867797139' />
+  <node id='-328' action='modify' visible='true' lat='48.0450832854225' lon='-1.7466698662817979' />
+  <node id='-326' action='modify' visible='true' lat='48.04508666308134' lon='-1.7466894437457277' />
+  <node id='-324' action='modify' visible='true' lat='48.045090040739964' lon='-1.746709021209657' />
+  <node id='-322' action='modify' visible='true' lat='48.045093418398366' lon='-1.7467285986735863' />
+  <node id='-320' action='modify' visible='true' lat='48.04509651458503' lon='-1.7467490181789755' />
+  <node id='-318' action='modify' visible='true' lat='48.04510045518598' lon='-1.7467725953398368' />
+  <node id='-316' action='modify' visible='true' lat='48.0451038328437' lon='-1.7467713322776477' />
+  <node id='-314' action='modify' visible='true' lat='48.045116639793854' lon='-1.7467664905392566' />
+  <node id='-312' action='modify' visible='true' lat='48.04518320773622' lon='-1.7467435449094897' />
+  <node id='-310' action='modify' visible='true' lat='48.04519601466665' lon='-1.7467384926607334' />
+  <node id='-308' action='modify' visible='true' lat='48.04523864049616' lon='-1.746723816143944' />
+  <node id='-306' action='modify' visible='true' lat='48.0450937193329' lon='-1.7464564530683542' />
+  <node id='-304' action='modify' visible='true' lat='48.04506657224051' lon='-1.7465581187742698' />
+  <node id='-302' action='modify' visible='true' lat='48.04506783886301' lon='-1.7465581187742698' />
+  <node id='-300' action='modify' visible='true' lat='48.04506783886301' lon='-1.7465555926498917' />
+  <node id='-298' action='modify' visible='true' lat='48.04506769812718' lon='-1.7465360151859624' />
+  <node id='-296' action='modify' visible='true' lat='48.045067346287595' lon='-1.7465133853217425' />
+  <node id='-294' action='modify' visible='true' lat='48.04506847217425' lon='-1.746512964301013' />
+  <node id='-292' action='modify' visible='true' lat='48.04509654896471' lon='-1.7465595923468238' />
+  <node id='-290' action='modify' visible='true' lat='48.045094719399884' lon='-1.746547803766393' />
+  <node id='-288' action='modify' visible='true' lat='48.04510018539176' lon='-1.7465456802124324' />
+  <node id='-286' action='modify' visible='true' lat='48.04509260836346' lon='-1.7465359099307798' />
+  <node id='-284' action='modify' visible='true' lat='48.04509812433726' lon='-1.7465337670299572' />
+  <node id='-282' action='modify' visible='true' lat='48.04509300985641' lon='-1.7465042046195571' />
+  <node id='-280' action='modify' visible='true' lat='48.045102178394544' lon='-1.7465573819879932' />
+  <node id='-278' action='modify' visible='true' lat='48.04509148247735' lon='-1.746504754396785' />
+  <node id='-276' action='modify' visible='true' lat='48.045104641269894' lon='-1.7465000179135763' />
+  <node id='-274' action='modify' visible='true' lat='48.04510604862718' lon='-1.7465075962867103' />
+  <node id='-272' action='modify' visible='true' lat='48.045105204212824' lon='-1.7465030703138662' />
+  <node id='-270' action='modify' visible='true' lat='48.045136517903174' lon='-1.7464920185197128' />
+  <node id='-268' action='modify' visible='true' lat='48.04513820673087' lon='-1.746491281733436' />
+  <node id='-266' action='modify' visible='true' lat='48.045139729645406' lon='-1.7465005239109699' />
+  <node id='-264' action='modify' visible='true' lat='48.04514038813324' lon='-1.7465002284239415' />
+  <node id='-262' action='modify' visible='true' lat='48.045138277098694' lon='-1.7465011757205828' />
+  <node id='-260' action='modify' visible='true' lat='48.04514559535142' lon='-1.7465428567728198' />
+  <node id='-258' action='modify' visible='true' lat='48.04520386159354' lon='-1.7465402533435626' />
+  <node id='-256' action='modify' visible='true' lat='48.04520761376195' lon='-1.7465388765134913' />
+  <node id='-254' action='modify' visible='true' lat='48.04517757048178' lon='-1.7465496258125313' />
+  <node id='-252' action='modify' visible='true' lat='48.04516523061423' lon='-1.7465542402650323' />
+  <node id='-250' action='modify' visible='true' lat='48.04516085195084' lon='-1.7465310191492207' />
+  <node id='-248' action='modify' visible='true' lat='48.04498925007406' lon='-1.7464500144796498' />
+  <node id='-246' action='modify' visible='true' lat='48.04498981301824' lon='-1.7465801098851164' />
+  <node id='-244' action='modify' visible='true' lat='48.04499544245974' lon='-1.7466895752748297' />
+  <node id='-242' action='modify' visible='true' lat='48.045005293980864' lon='-1.7468011457681913' />
+  <node id='-240' action='modify' visible='true' lat='48.0450168343318' lon='-1.7468920862457995' />
+  <node id='-238' action='modify' visible='true' lat='48.045027530264484' lon='-1.746960291604005' />
+  <node id='-236' action='modify' visible='true' lat='48.04532966419788' lon='-1.7463788930218207' />
+  <node id='-234' action='modify' visible='true' lat='48.04531573141947' lon='-1.7464260473435433' />
+  <node id='-232' action='modify' visible='true' lat='48.04530489481143' lon='-1.7464300470404752' />
+  <node id='-230' action='modify' visible='true' lat='48.045314324067895' lon='-1.7464841482042373' />
+  <node id='-228' action='modify' visible='true' lat='48.045285614087604' lon='-1.7464940421913846' />
+  <node id='-226' action='modify' visible='true' lat='48.04528688070471' lon='-1.746500989033424' />
+  <node id='-224' action='modify' visible='true' lat='48.04531868685763' lon='-1.7465094094480174' />
+  <node id='-222' action='modify' visible='true' lat='48.045290030133906' lon='-1.7465193395530347' />
+  <node id='-220' action='modify' visible='true' lat='48.045291124797046' lon='-1.7465252936852937' />
+  <node id='-218' action='modify' visible='true' lat='48.045294266889734' lon='-1.746544142595006' />
+  <node id='-216' action='modify' visible='true' lat='48.045322466216504' lon='-1.7467073410163987' />
+  <node id='-214' action='modify' visible='true' lat='48.04532574434492' lon='-1.7467282431995754' />
+  <node id='-212' action='modify' visible='true' lat='48.0451584936108' lon='-1.7465175015963499' />
+  <node id='-210' action='modify' visible='true' lat='48.04515272173549' lon='-1.7464835630424718' />
+  <node id='-208' action='modify' visible='true' lat='48.04519581175448' lon='-1.746468528858517' />
+  <node id='-206' action='modify' visible='true' lat='48.045254050863974' lon='-1.7468156720574766' />
+  <node id='-204' action='modify' visible='true' lat='48.04533560691911' lon='-1.7467871479030426' />
+  <node id='-202' action='modify' visible='true' lat='48.0453347625085' lon='-1.7467812536128273' />
+  <node id='-200' action='modify' visible='true' lat='48.045606616635446' lon='-1.7466853879218183' />
+  <node id='-198' action='modify' visible='true' lat='48.04560452683678' lon='-1.746671544564315' />
+  <node id='-196' action='modify' visible='true' lat='48.04559298318549' lon='-1.7466035186032522' />
+  <node id='-194' action='modify' visible='true' lat='48.04533506314417' lon='-1.7463953637104297' />
+  <node id='-192' action='modify' visible='true' lat='48.04534829860353' lon='-1.746472320869882' />
+  <node id='-190' action='modify' visible='true' lat='48.04535725492747' lon='-1.7464691949504458' />
+  <node id='-188' action='modify' visible='true' lat='48.0453660122205' lon='-1.7464657713243967' />
+  <node id='-186' action='modify' visible='true' lat='48.04538472097787' lon='-1.7464593706322178' />
+  <node id='-184' action='modify' visible='true' lat='48.04539367729547' lon='-1.7464563935660882' />
+  <node id='-182' action='modify' visible='true' lat='48.045414376334676' lon='-1.7464488020474576' />
+  <node id='-180' action='modify' visible='true' lat='48.04543756322927' lon='-1.7464407639689075' />
+  <node id='-178' action='modify' visible='true' lat='48.04554523785628' lon='-1.7464034017889802' />
+  <node id='-176' action='modify' visible='true' lat='48.04555607491635' lon='-1.7463996187992592' />
+  <node id='-174' action='modify' visible='true' lat='48.045557776661425' lon='-1.7463989361897854' />
+  <node id='-172' action='modify' visible='true' lat='48.04556643440606' lon='-1.7464488020474573' />
+  <node id='-170' action='modify' visible='true' lat='48.04557230574929' lon='-1.7464830383079488' />
+  <node id='-168' action='modify' visible='true' lat='48.045587730461364' lon='-1.7465713083186936' />
+  <node id='-166' action='modify' visible='true' lat='48.0455761868063' lon='-1.7465073013969055' />
+  <node id='-164' action='modify' visible='true' lat='48.045634004569905' lon='-1.74648765276045' />
+  <node id='-162' action='modify' visible='true' lat='48.045646543353435' lon='-1.7464830383079488' />
+  <node id='-160' action='modify' visible='true' lat='48.04544903013992' lon='-1.7463306325958272' />
+  <node id='-158' action='modify' visible='true' lat='48.045442432625705' lon='-1.7463532010758778' />
+  <node id='-156' action='modify' visible='true' lat='48.04542636479311' lon='-1.74634247025922' />
+  <node id='-154' action='modify' visible='true' lat='48.04542728115335' lon='-1.746339293492192' />
+  <node id='-152' action='modify' visible='true' lat='48.04541882241449' lon='-1.7463686175935693' />
+  <node id='-150' action='modify' visible='true' lat='48.045430568092904' lon='-1.7463766487012722' />
+  <node id='-148' action='modify' visible='true' lat='48.04547226171781' lon='-1.7463491178104198' />
+  <node id='-146' action='modify' visible='true' lat='48.045448577266185' lon='-1.7463573047422767' />
+  <node id='-144' action='modify' visible='true' lat='48.04542847532813' lon='-1.7463645985542944' />
+  <node id='-142' action='modify' visible='true' lat='48.045437730181774' lon='-1.7464178880380157' />
+  <node id='-140' action='modify' visible='true' lat='48.045486094228615' lon='-1.7464012164676896' />
+  <node id='-138' action='modify' visible='true' lat='48.04549972770686' lon='-1.7463963043085757' />
+  <node id='-136' action='modify' visible='true' lat='48.045495537433524' lon='-1.7463377356763998' />
+  <node id='-134' action='modify' visible='true' lat='48.045505101485624' lon='-1.7463943692155917' />
+  <node id='-132' action='modify' visible='true' lat='48.04552769125315' lon='-1.7463864799903477' />
+  <node id='-130' action='modify' visible='true' lat='48.04552765037998' lon='-1.746326673200216' />
+  <node id='-128' action='modify' visible='true' lat='48.04553714511769' lon='-1.7463832052176054' />
+  <node id='-126' action='modify' visible='true' lat='48.045541722777784' lon='-1.746381567831234' />
+  <node id='-124' action='modify' visible='true' lat='48.04555207226868' lon='-1.746377846498572' />
+  <node id='-122' action='modify' visible='true' lat='48.045562123214566' lon='-1.7463744228725224' />
+  <node id='-120' action='modify' visible='true' lat='48.04557187561564' lon='-1.7463711480997794' />
+  <node id='-118' action='modify' visible='true' lat='48.045582324614756' lon='-1.7463675756204247' />
+  <node id='-116' action='modify' visible='true' lat='48.045583717814466' lon='-1.7463668313538923' />
+  <node id='-114' action='modify' visible='true' lat='48.045593967782686' lon='-1.7463632588745368' />
+  <node id='-112' action='modify' visible='true' lat='48.0456095915167' lon='-1.7463579001555034' />
+  <node id='-110' action='modify' visible='true' lat='48.045599907238916' lon='-1.74630143008974' />
+  <node id='-108' action='modify' visible='true' lat='48.04564124002265' lon='-1.7462864871737696' />
+  <node id='-106' action='modify' visible='true' lat='48.04565100672507' lon='-1.7463420999079207' />
+  <node id='-104' action='modify' visible='true' lat='48.045670814441664' lon='-1.7463351035097558' />
+  <node id='-102' action='modify' visible='true' lat='48.04563944330242' lon='-1.7463461585641382' />
+  <node id='-100' action='modify' visible='true' lat='48.04564841664967' lon='-1.7463979850539841' />
+  <node id='-98' action='modify' visible='true' lat='48.04567970927386' lon='-1.7463874803717263' />
+  <node id='-96' action='modify' visible='true' lat='48.045659346129916' lon='-1.7463945358887456' />
+  <node id='-94' action='modify' visible='true' lat='48.04567288004821' lon='-1.746474321261021' />
+  <node id='-92' action='modify' visible='true' lat='48.04501855456608' lon='-1.7464516801229888' />
+  <node id='-90' action='modify' visible='true' lat='48.04506696771579' lon='-1.7464547325232782' />
+  <node id='-88' action='modify' visible='true' lat='48.04507639701583' lon='-1.7464552587991904' />
+  <node id='-86' action='modify' visible='true' lat='48.04511151058806' lon='-1.7464576796683857' />
+  <node id='-84' action='modify' visible='true' lat='48.045111651323765' lon='-1.7464549430336431' />
+  <node id='-82' action='modify' visible='true' lat='48.04513522455015' lon='-1.7464568376269267' />
+  <node id='-80' action='modify' visible='true' lat='48.04514880553837' lon='-1.7464577849235683' />
+  <node id='-78' action='modify' visible='true' lat='48.0451536609167' lon='-1.7464579954339328' />
+  <node id='-76' action='modify' visible='true' lat='48.04515682746754' lon='-1.7464568376269265' />
+  <node id='-74' action='modify' visible='true' lat='48.045182793177126' lon='-1.7464476804260554' />
+  <node id='-72' action='modify' visible='true' lat='48.0451962334173' lon='-1.7464432597083936' />
+  <node id='-70' action='modify' visible='true' lat='48.04520918107993' lon='-1.7464387337355496' />
+  <node id='-68' action='modify' visible='true' lat='48.04522269168094' lon='-1.7464338919971585' />
+  <node id='-66' action='modify' visible='true' lat='48.04523585044' lon='-1.7464293660243142' />
+  <node id='-64' action='modify' visible='true' lat='48.04524893882799' lon='-1.7464248400514704' />
+  <node id='-62' action='modify' visible='true' lat='48.04526216794798' lon='-1.7464201035682618' />
+  <node id='-60' action='modify' visible='true' lat='48.04527532669694' lon='-1.7464156828506001' />
+  <node id='-58' action='modify' visible='true' lat='48.04528869654537' lon='-1.7464107358570264' />
+  <node id='-56' action='modify' visible='true' lat='48.045302277493114' lon='-1.7464057888634528' />
+  <node id='-54' action='modify' visible='true' lat='48.045307203224574' lon='-1.7463915794138263' />
+  <node id='-52' action='modify' visible='true' lat='48.04531248079348' lon='-1.7463726334809913' />
+  <node id='-50' action='modify' visible='true' lat='48.045315225129094' lon='-1.7463638973008508' />
+  <node id='-48' action='modify' visible='true' lat='48.04532036196203' lon='-1.7463452671335629' />
+  <node id='-46' action='modify' visible='true' lat='48.045323387767496' lon='-1.7463361099326928' />
+  <node id='-44' action='modify' visible='true' lat='48.04532838386448' lon='-1.7463176902757696' />
+  <node id='-42' action='modify' visible='true' lat='48.04533126893436' lon='-1.7463083225645348' />
+  <node id='-40' action='modify' visible='true' lat='48.045336194663044' lon='-1.7462893766316996' />
+  <node id='-38' action='modify' visible='true' lat='48.04534439144618' lon='-1.7462594150225796' />
+  <node id='-36' action='modify' visible='true' lat='48.045414195996685' lon='-1.746306148323573' />
+  <node id='-34' action='modify' visible='true' lat='48.04542842084813' lon='-1.7463162921474757' />
+  <node id='-32' action='modify' visible='true' lat='48.045472049429165' lon='-1.7463461310385788' />
+  <node id='-30' action='modify' visible='true' lat='48.04548982129778' lon='-1.7463397048072107' />
+  <node id='-28' action='modify' visible='true' lat='48.04555550079011' lon='-1.7463170791046254' />
+  <node id='-26' action='modify' visible='true' lat='48.04556883570711' lon='-1.7463123157988178' />
+  <node id='-24' action='modify' visible='true' lat='48.04558177256358' lon='-1.7463081479062361' />
+  <node id='-22' action='modify' visible='true' lat='48.04559510747378' lon='-1.7463030868938156' />
+  <node id='-20' action='modify' visible='true' lat='48.04562098117029' lon='-1.7462941556954268' />
+  <node id='-18' action='modify' visible='true' lat='48.04563524048945' lon='-1.7462886437412546' />
+  <node id='-16' action='modify' visible='true' lat='48.04566091513757' lon='-1.7462794148362528' />
+  <node id='-14' action='modify' visible='true' lat='48.04566628889952' lon='-1.7463085900843236' />
+  <node id='-12' action='modify' visible='true' lat='48.04566907529437' lon='-1.7463252616546496' />
+  <node id='-10' action='modify' visible='true' lat='48.04567186168907' lon='-1.7463402958386047' />
+  <node id='-8' action='modify' visible='true' lat='48.04567624030904' lon='-1.7463663451672393' />
+  <node id='-6' action='modify' visible='true' lat='48.04569285915864' lon='-1.7464669700024218' />
+  <way id='-2452' action='modify' visible='true'>
+    <nd ref='-494' />
+    <nd ref='-192' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2415' action='modify' visible='true'>
+    <nd ref='-2409' />
+    <nd ref='-278' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2410' action='modify' visible='true'>
+    <nd ref='-294' />
+    <nd ref='-2409' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2390' action='modify' visible='true'>
+    <nd ref='-312' />
+    <nd ref='-310' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2357' action='modify' visible='true'>
+    <nd ref='-254' />
+    <nd ref='-258' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2342' action='modify' visible='true'>
+    <nd ref='-338' />
+    <nd ref='-340' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2333' action='modify' visible='true'>
+    <nd ref='-314' />
+    <nd ref='-316' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2285' action='modify' visible='true'>
+    <nd ref='-332' />
+    <nd ref='-334' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2278' action='modify' visible='true'>
+    <nd ref='-328' />
+    <nd ref='-330' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2271' action='modify' visible='true'>
+    <nd ref='-324' />
+    <nd ref='-326' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2266' action='modify' visible='true'>
+    <nd ref='-320' />
+    <nd ref='-322' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2253' action='modify' visible='true'>
+    <nd ref='-548' />
+    <nd ref='-550' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2242' action='modify' visible='true'>
+    <nd ref='-1742' />
+    <nd ref='-2239' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2241' action='modify' visible='true'>
+    <nd ref='-2239' />
+    <nd ref='-238' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2240' action='modify' visible='true'>
+    <nd ref='-592' />
+    <nd ref='-2239' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2229' action='modify' visible='true'>
+    <nd ref='-356' />
+    <nd ref='-2226' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2228' action='modify' visible='true'>
+    <nd ref='-2226' />
+    <nd ref='-242' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2227' action='modify' visible='true'>
+    <nd ref='-240' />
+    <nd ref='-2226' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2211' action='modify' visible='true'>
+    <nd ref='-518' />
+    <nd ref='-524' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2204' action='modify' visible='true'>
+    <nd ref='-1725' />
+    <nd ref='-1717' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2197' action='modify' visible='true'>
+    <nd ref='-348' />
+    <nd ref='-350' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2186' action='modify' visible='true'>
+    <nd ref='-1849' />
+    <nd ref='-342' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2177' action='modify' visible='true'>
+    <nd ref='-280' />
+    <nd ref='-2174' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2176' action='modify' visible='true'>
+    <nd ref='-2174' />
+    <nd ref='-342' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2175' action='modify' visible='true'>
+    <nd ref='-340' />
+    <nd ref='-2174' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2161' action='modify' visible='true'>
+    <nd ref='-562' />
+    <nd ref='-564' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2156' action='modify' visible='true'>
+    <nd ref='-300' />
+    <nd ref='-298' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2149' action='modify' visible='true'>
+    <nd ref='-574' />
+    <nd ref='-572' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2134' action='modify' visible='true'>
+    <nd ref='-74' />
+    <nd ref='-76' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2127' action='modify' visible='true'>
+    <nd ref='-70' />
+    <nd ref='-72' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2122' action='modify' visible='true'>
+    <nd ref='-66' />
+    <nd ref='-68' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2117' action='modify' visible='true'>
+    <nd ref='-62' />
+    <nd ref='-64' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2110' action='modify' visible='true'>
+    <nd ref='-58' />
+    <nd ref='-60' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2105' action='modify' visible='true'>
+    <nd ref='-52' />
+    <nd ref='-54' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2100' action='modify' visible='true'>
+    <nd ref='-48' />
+    <nd ref='-50' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2095' action='modify' visible='true'>
+    <nd ref='-44' />
+    <nd ref='-46' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2090' action='modify' visible='true'>
+    <nd ref='-40' />
+    <nd ref='-42' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2063' action='modify' visible='true'>
+    <nd ref='-28' />
+    <nd ref='-26' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2058' action='modify' visible='true'>
+    <nd ref='-24' />
+    <nd ref='-22' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;WINDOW_GLASS&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2034' action='modify' visible='true'>
+    <nd ref='-214' />
+    <nd ref='-216' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2017' action='modify' visible='true'>
+    <nd ref='-200' />
+    <nd ref='-198' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-2010' action='modify' visible='true'>
+    <nd ref='-196' />
+    <nd ref='-168' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1989' action='modify' visible='true'>
+    <nd ref='-170' />
+    <nd ref='-172' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1972' action='modify' visible='true'>
+    <nd ref='-388' />
+    <nd ref='-394' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1965' action='modify' visible='true'>
+    <nd ref='-392' />
+    <nd ref='-1962' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1964' action='modify' visible='true'>
+    <nd ref='-1962' />
+    <nd ref='-130' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1963' action='modify' visible='true'>
+    <nd ref='-486' />
+    <nd ref='-1962' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1953' action='modify' visible='true'>
+    <nd ref='-408' />
+    <nd ref='-180' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1946' action='modify' visible='true'>
+    <nd ref='-412' />
+    <nd ref='-414' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1941' action='modify' visible='true'>
+    <nd ref='-406' />
+    <nd ref='-410' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1934' action='modify' visible='true'>
+    <nd ref='-452' />
+    <nd ref='-444' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1929' action='modify' visible='true'>
+    <nd ref='-454' />
+    <nd ref='-462' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1924' action='modify' visible='true'>
+    <nd ref='-448' />
+    <nd ref='-418' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1919' action='modify' visible='true'>
+    <nd ref='-438' />
+    <nd ref='-446' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1914' action='modify' visible='true'>
+    <nd ref='-186' />
+    <nd ref='-184' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1909' action='modify' visible='true'>
+    <nd ref='-190' />
+    <nd ref='-188' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1898' action='modify' visible='true'>
+    <nd ref='-194' />
+    <nd ref='-450' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1891' action='modify' visible='true'>
+    <nd ref='-224' />
+    <nd ref='-496' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1876' action='modify' visible='true'>
+    <nd ref='-222' />
+    <nd ref='-226' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1871' action='modify' visible='true'>
+    <nd ref='-218' />
+    <nd ref='-220' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1850' action='modify' visible='true'>
+    <nd ref='-346' />
+    <nd ref='-1849' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1820' action='modify' visible='true'>
+    <nd ref='-586' />
+    <nd ref='-1817' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1819' action='modify' visible='true'>
+    <nd ref='-1817' />
+    <nd ref='-314' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1818' action='modify' visible='true'>
+    <nd ref='-312' />
+    <nd ref='-1817' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1804' action='modify' visible='true'>
+    <nd ref='-578' />
+    <nd ref='-590' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1797' action='modify' visible='true'>
+    <nd ref='-582' />
+    <nd ref='-584' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1784' action='modify' visible='true'>
+    <nd ref='-534' />
+    <nd ref='-1781' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1783' action='modify' visible='true'>
+    <nd ref='-1781' />
+    <nd ref='-604' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1782' action='modify' visible='true'>
+    <nd ref='-602' />
+    <nd ref='-1781' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1768' action='modify' visible='true'>
+    <nd ref='-88' />
+    <nd ref='-90' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1743' action='modify' visible='true'>
+    <nd ref='-348' />
+    <nd ref='-1742' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1733' action='modify' visible='true'>
+    <nd ref='-352' />
+    <nd ref='-350' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1726' action='modify' visible='true'>
+    <nd ref='-354' />
+    <nd ref='-1725' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1718' action='modify' visible='true'>
+    <nd ref='-516' />
+    <nd ref='-1717' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1706' action='modify' visible='true'>
+    <nd ref='-536' />
+    <nd ref='-1703' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1705' action='modify' visible='true'>
+    <nd ref='-1703' />
+    <nd ref='-528' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1704' action='modify' visible='true'>
+    <nd ref='-526' />
+    <nd ref='-1703' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1696' action='modify' visible='true'>
+    <nd ref='-542' />
+    <nd ref='-544' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1687' action='modify' visible='true'>
+    <nd ref='-556' />
+    <nd ref='-558' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1678' action='modify' visible='true'>
+    <nd ref='-1668' />
+    <nd ref='-1675' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1677' action='modify' visible='true'>
+    <nd ref='-1675' />
+    <nd ref='-298' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1676' action='modify' visible='true'>
+    <nd ref='-296' />
+    <nd ref='-1675' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1670' action='modify' visible='true'>
+    <nd ref='-1668' />
+    <nd ref='-566' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1669' action='modify' visible='true'>
+    <nd ref='-564' />
+    <nd ref='-1668' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1656' action='modify' visible='true'>
+    <nd ref='-606' />
+    <nd ref='-304' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1645' action='modify' visible='true'>
+    <nd ref='-260' />
+    <nd ref='-1642' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1644' action='modify' visible='true'>
+    <nd ref='-1642' />
+    <nd ref='-346' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1643' action='modify' visible='true'>
+    <nd ref='-344' />
+    <nd ref='-1642' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1637' action='modify' visible='true'>
+    <nd ref='-250' />
+    <nd ref='-212' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1632' action='modify' visible='true'>
+    <nd ref='-344' />
+    <nd ref='-252' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1625' action='modify' visible='true'>
+    <nd ref='-266' />
+    <nd ref='-1622' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1624' action='modify' visible='true'>
+    <nd ref='-1622' />
+    <nd ref='-212' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1623' action='modify' visible='true'>
+    <nd ref='-210' />
+    <nd ref='-1622' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1617' action='modify' visible='true'>
+    <nd ref='-80' />
+    <nd ref='-82' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1610' action='modify' visible='true'>
+    <nd ref='-1600' />
+    <nd ref='-1607' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1609' action='modify' visible='true'>
+    <nd ref='-1607' />
+    <nd ref='-84' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1608' action='modify' visible='true'>
+    <nd ref='-82' />
+    <nd ref='-1607' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1602' action='modify' visible='true'>
+    <nd ref='-1600' />
+    <nd ref='-272' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1601' action='modify' visible='true'>
+    <nd ref='-270' />
+    <nd ref='-1600' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1586' action='modify' visible='true'>
+    <nd ref='-208' />
+    <nd ref='-364' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1577' action='modify' visible='true'>
+    <nd ref='-366' />
+    <nd ref='-370' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1566' action='modify' visible='true'>
+    <nd ref='-1556' />
+    <nd ref='-1563' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1565' action='modify' visible='true'>
+    <nd ref='-1563' />
+    <nd ref='-62' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1564' action='modify' visible='true'>
+    <nd ref='-60' />
+    <nd ref='-1563' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1558' action='modify' visible='true'>
+    <nd ref='-1556' />
+    <nd ref='-372' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1557' action='modify' visible='true'>
+    <nd ref='-370' />
+    <nd ref='-1556' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1544' action='modify' visible='true'>
+    <nd ref='-374' />
+    <nd ref='-1541' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1543' action='modify' visible='true'>
+    <nd ref='-1541' />
+    <nd ref='-232' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1542' action='modify' visible='true'>
+    <nd ref='-230' />
+    <nd ref='-1541' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1536' action='modify' visible='true'>
+    <nd ref='-372' />
+    <nd ref='-232' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1527' action='modify' visible='true'>
+    <nd ref='-236' />
+    <nd ref='-382' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1514' action='modify' visible='true'>
+    <nd ref='-386' />
+    <nd ref='-1511' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1513' action='modify' visible='true'>
+    <nd ref='-1511' />
+    <nd ref='-156' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1512' action='modify' visible='true'>
+    <nd ref='-152' />
+    <nd ref='-1511' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1504' action='modify' visible='true'>
+    <nd ref='-34' />
+    <nd ref='-36' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1495' action='modify' visible='true'>
+    <nd ref='-30' />
+    <nd ref='-32' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1480' action='modify' visible='true'>
+    <nd ref='-140' />
+    <nd ref='-138' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1471' action='modify' visible='true'>
+    <nd ref='-132' />
+    <nd ref='-128' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1460' action='modify' visible='true'>
+    <nd ref='-176' />
+    <nd ref='-178' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1455' action='modify' visible='true'>
+    <nd ref='-126' />
+    <nd ref='-124' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1450' action='modify' visible='true'>
+    <nd ref='-124' />
+    <nd ref='-176' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1441' action='modify' visible='true'>
+    <nd ref='-120' />
+    <nd ref='-118' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1434' action='modify' visible='true'>
+    <nd ref='-116' />
+    <nd ref='-114' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1429' action='modify' visible='true'>
+    <nd ref='-480' />
+    <nd ref='-478' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1420' action='modify' visible='true'>
+    <nd ref='-18' />
+    <nd ref='-20' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1411' action='modify' visible='true'>
+    <nd ref='-12' />
+    <nd ref='-14' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1404' action='modify' visible='true'>
+    <nd ref='-8' />
+    <nd ref='-10' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1389' action='modify' visible='true'>
+    <nd ref='-164' />
+    <nd ref='-162' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1380' action='modify' visible='true'>
+    <nd ref='-94' />
+    <nd ref='-6' />
+    <tag k='name' v='WALL' />
+    <tag k='ss_name' v='[&quot;DOOR&quot;]' />
+    <tag k='ss_z' v='[(0.0, 2)]' />
+    <tag k='transition' v='True' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1142' action='modify' visible='true'>
+    <nd ref='-608' />
+    <nd ref='-336' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1140' action='modify' visible='true'>
+    <nd ref='-606' />
+    <nd ref='-608' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1138' action='modify' visible='true'>
+    <nd ref='-604' />
+    <nd ref='-328' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1134' action='modify' visible='true'>
+    <nd ref='-600' />
+    <nd ref='-602' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1132' action='modify' visible='true'>
+    <nd ref='-600' />
+    <nd ref='-328' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1130' action='modify' visible='true'>
+    <nd ref='-326' />
+    <nd ref='-600' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1128' action='modify' visible='true'>
+    <nd ref='-596' />
+    <nd ref='-598' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1126' action='modify' visible='true'>
+    <nd ref='-598' />
+    <nd ref='-310' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1124' action='modify' visible='true'>
+    <nd ref='-308' />
+    <nd ref='-598' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1122' action='modify' visible='true'>
+    <nd ref='-594' />
+    <nd ref='-596' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1120' action='modify' visible='true'>
+    <nd ref='-594' />
+    <nd ref='-308' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1118' action='modify' visible='true'>
+    <nd ref='-206' />
+    <nd ref='-594' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1116' action='modify' visible='true'>
+    <nd ref='-590' />
+    <nd ref='-592' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1112' action='modify' visible='true'>
+    <nd ref='-588' />
+    <nd ref='-592' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1110' action='modify' visible='true'>
+    <nd ref='-586' />
+    <nd ref='-588' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1108' action='modify' visible='true'>
+    <nd ref='-206' />
+    <nd ref='-588' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1106' action='modify' visible='true'>
+    <nd ref='-584' />
+    <nd ref='-586' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1104' action='modify' visible='true'>
+    <nd ref='-580' />
+    <nd ref='-582' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1102' action='modify' visible='true'>
+    <nd ref='-578' />
+    <nd ref='-580' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1100' action='modify' visible='true'>
+    <nd ref='-532' />
+    <nd ref='-576' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1098' action='modify' visible='true'>
+    <nd ref='-576' />
+    <nd ref='-246' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1096' action='modify' visible='true'>
+    <nd ref='-244' />
+    <nd ref='-576' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1094' action='modify' visible='true'>
+    <nd ref='-574' />
+    <nd ref='-92' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1092' action='modify' visible='true'>
+    <nd ref='-570' />
+    <nd ref='-572' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1090' action='modify' visible='true'>
+    <nd ref='-570' />
+    <nd ref='-568' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1088' action='modify' visible='true'>
+    <nd ref='-566' />
+    <nd ref='-570' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1086' action='modify' visible='true'>
+    <nd ref='-568' />
+    <nd ref='-248' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1084' action='modify' visible='true'>
+    <nd ref='-246' />
+    <nd ref='-568' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1080' action='modify' visible='true'>
+    <nd ref='-560' />
+    <nd ref='-562' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1078' action='modify' visible='true'>
+    <nd ref='-558' />
+    <nd ref='-560' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1076' action='modify' visible='true'>
+    <nd ref='-554' />
+    <nd ref='-556' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1074' action='modify' visible='true'>
+    <nd ref='-552' />
+    <nd ref='-554' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1072' action='modify' visible='true'>
+    <nd ref='-550' />
+    <nd ref='-552' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1070' action='modify' visible='true'>
+    <nd ref='-546' />
+    <nd ref='-548' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1068' action='modify' visible='true'>
+    <nd ref='-544' />
+    <nd ref='-546' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1066' action='modify' visible='true'>
+    <nd ref='-540' />
+    <nd ref='-542' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1064' action='modify' visible='true'>
+    <nd ref='-538' />
+    <nd ref='-540' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1062' action='modify' visible='true'>
+    <nd ref='-534' />
+    <nd ref='-538' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1060' action='modify' visible='true'>
+    <nd ref='-534' />
+    <nd ref='-536' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1058' action='modify' visible='true'>
+    <nd ref='-532' />
+    <nd ref='-534' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1056' action='modify' visible='true'>
+    <nd ref='-528' />
+    <nd ref='-532' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1054' action='modify' visible='true'>
+    <nd ref='-528' />
+    <nd ref='-530' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1052' action='modify' visible='true'>
+    <nd ref='-530' />
+    <nd ref='-522' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1050' action='modify' visible='true'>
+    <nd ref='-520' />
+    <nd ref='-530' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1046' action='modify' visible='true'>
+    <nd ref='-524' />
+    <nd ref='-526' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1044' action='modify' visible='true'>
+    <nd ref='-522' />
+    <nd ref='-244' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1042' action='modify' visible='true'>
+    <nd ref='-242' />
+    <nd ref='-522' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1040' action='modify' visible='true'>
+    <nd ref='-520' />
+    <nd ref='-518' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1038' action='modify' visible='true'>
+    <nd ref='-516' />
+    <nd ref='-520' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1036' action='modify' visible='true'>
+    <nd ref='-512' />
+    <nd ref='-514' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1034' action='modify' visible='true'>
+    <nd ref='-514' />
+    <nd ref='-34' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1032' action='modify' visible='true'>
+    <nd ref='-160' />
+    <nd ref='-514' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1030' action='modify' visible='true'>
+    <nd ref='-508' />
+    <nd ref='-510' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1028' action='modify' visible='true'>
+    <nd ref='-510' />
+    <nd ref='-210' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1026' action='modify' visible='true'>
+    <nd ref='-208' />
+    <nd ref='-510' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1024' action='modify' visible='true'>
+    <nd ref='-506' />
+    <nd ref='-508' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1022' action='modify' visible='true'>
+    <nd ref='-506' />
+    <nd ref='-208' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1020' action='modify' visible='true'>
+    <nd ref='-362' />
+    <nd ref='-506' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1018' action='modify' visible='true'>
+    <nd ref='-502' />
+    <nd ref='-504' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1016' action='modify' visible='true'>
+    <nd ref='-504' />
+    <nd ref='-500' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1014' action='modify' visible='true'>
+    <nd ref='-364' />
+    <nd ref='-504' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1012' action='modify' visible='true'>
+    <nd ref='-502' />
+    <nd ref='-362' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1010' action='modify' visible='true'>
+    <nd ref='-498' />
+    <nd ref='-502' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1008' action='modify' visible='true'>
+    <nd ref='-498' />
+    <nd ref='-500' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1006' action='modify' visible='true'>
+    <nd ref='-500' />
+    <nd ref='-366' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1004' action='modify' visible='true'>
+    <nd ref='-368' />
+    <nd ref='-498' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1002' action='modify' visible='true'>
+    <nd ref='-230' />
+    <nd ref='-496' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-1000' action='modify' visible='true'>
+    <nd ref='-230' />
+    <nd ref='-494' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-998' action='modify' visible='true'>
+    <nd ref='-490' />
+    <nd ref='-492' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-996' action='modify' visible='true'>
+    <nd ref='-492' />
+    <nd ref='-488' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-994' action='modify' visible='true'>
+    <nd ref='-234' />
+    <nd ref='-492' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-992' action='modify' visible='true'>
+    <nd ref='-490' />
+    <nd ref='-194' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-990' action='modify' visible='true'>
+    <nd ref='-192' />
+    <nd ref='-490' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-988' action='modify' visible='true'>
+    <nd ref='-194' />
+    <nd ref='-488' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-986' action='modify' visible='true'>
+    <nd ref='-488' />
+    <nd ref='-236' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-984' action='modify' visible='true'>
+    <nd ref='-484' />
+    <nd ref='-486' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-980' action='modify' visible='true'>
+    <nd ref='-128' />
+    <nd ref='-486' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-978' action='modify' visible='true'>
+    <nd ref='-126' />
+    <nd ref='-484' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-976' action='modify' visible='true'>
+    <nd ref='-480' />
+    <nd ref='-482' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-974' action='modify' visible='true'>
+    <nd ref='-482' />
+    <nd ref='-26' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-972' action='modify' visible='true'>
+    <nd ref='-24' />
+    <nd ref='-482' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-970' action='modify' visible='true'>
+    <nd ref='-118' />
+    <nd ref='-478' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-968' action='modify' visible='true'>
+    <nd ref='-474' />
+    <nd ref='-476' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-966' action='modify' visible='true'>
+    <nd ref='-474' />
+    <nd ref='-188' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-964' action='modify' visible='true'>
+    <nd ref='-470' />
+    <nd ref='-474' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-962' action='modify' visible='true'>
+    <nd ref='-470' />
+    <nd ref='-472' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-960' action='modify' visible='true'>
+    <nd ref='-186' />
+    <nd ref='-470' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-958' action='modify' visible='true'>
+    <nd ref='-466' />
+    <nd ref='-468' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-956' action='modify' visible='true'>
+    <nd ref='-468' />
+    <nd ref='-444' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-954' action='modify' visible='true'>
+    <nd ref='-442' />
+    <nd ref='-468' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-952' action='modify' visible='true'>
+    <nd ref='-466' />
+    <nd ref='-456' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-950' action='modify' visible='true'>
+    <nd ref='-446' />
+    <nd ref='-466' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-948' action='modify' visible='true'>
+    <nd ref='-462' />
+    <nd ref='-464' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-946' action='modify' visible='true'>
+    <nd ref='-464' />
+    <nd ref='-450' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-944' action='modify' visible='true'>
+    <nd ref='-460' />
+    <nd ref='-464' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-942' action='modify' visible='true'>
+    <nd ref='-458' />
+    <nd ref='-460' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-940' action='modify' visible='true'>
+    <nd ref='-448' />
+    <nd ref='-460' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-938' action='modify' visible='true'>
+    <nd ref='-454' />
+    <nd ref='-456' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-936' action='modify' visible='true'>
+    <nd ref='-456' />
+    <nd ref='-448' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-934' action='modify' visible='true'>
+    <nd ref='-452' />
+    <nd ref='-454' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-932' action='modify' visible='true'>
+    <nd ref='-442' />
+    <nd ref='-188' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-930' action='modify' visible='true'>
+    <nd ref='-440' />
+    <nd ref='-442' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-928' action='modify' visible='true'>
+    <nd ref='-438' />
+    <nd ref='-440' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-926' action='modify' visible='true'>
+    <nd ref='-434' />
+    <nd ref='-436' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-924' action='modify' visible='true'>
+    <nd ref='-436' />
+    <nd ref='-420' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-922' action='modify' visible='true'>
+    <nd ref='-416' />
+    <nd ref='-436' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-920' action='modify' visible='true'>
+    <nd ref='-432' />
+    <nd ref='-434' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-918' action='modify' visible='true'>
+    <nd ref='-432' />
+    <nd ref='-430' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-916' action='modify' visible='true'>
+    <nd ref='-420' />
+    <nd ref='-432' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-914' action='modify' visible='true'>
+    <nd ref='-428' />
+    <nd ref='-430' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-912' action='modify' visible='true'>
+    <nd ref='-430' />
+    <nd ref='-422' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-910' action='modify' visible='true'>
+    <nd ref='-426' />
+    <nd ref='-428' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-908' action='modify' visible='true'>
+    <nd ref='-424' />
+    <nd ref='-426' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-906' action='modify' visible='true'>
+    <nd ref='-424' />
+    <nd ref='-412' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-904' action='modify' visible='true'>
+    <nd ref='-410' />
+    <nd ref='-424' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-902' action='modify' visible='true'>
+    <nd ref='-422' />
+    <nd ref='-184' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-900' action='modify' visible='true'>
+    <nd ref='-408' />
+    <nd ref='-422' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-898' action='modify' visible='true'>
+    <nd ref='-420' />
+    <nd ref='-418' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-896' action='modify' visible='true'>
+    <nd ref='-414' />
+    <nd ref='-416' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-894' action='modify' visible='true'>
+    <nd ref='-406' />
+    <nd ref='-408' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-892' action='modify' visible='true'>
+    <nd ref='-182' />
+    <nd ref='-408' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-890' action='modify' visible='true'>
+    <nd ref='-402' />
+    <nd ref='-404' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-888' action='modify' visible='true'>
+    <nd ref='-404' />
+    <nd ref='-100' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-886' action='modify' visible='true'>
+    <nd ref='-96' />
+    <nd ref='-404' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-884' action='modify' visible='true'>
+    <nd ref='-400' />
+    <nd ref='-402' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-882' action='modify' visible='true'>
+    <nd ref='-400' />
+    <nd ref='-96' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-880' action='modify' visible='true'>
+    <nd ref='-94' />
+    <nd ref='-400' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-878' action='modify' visible='true'>
+    <nd ref='-396' />
+    <nd ref='-398' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-876' action='modify' visible='true'>
+    <nd ref='-394' />
+    <nd ref='-396' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-874' action='modify' visible='true'>
+    <nd ref='-392' />
+    <nd ref='-394' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-872' action='modify' visible='true'>
+    <nd ref='-388' />
+    <nd ref='-390' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-870' action='modify' visible='true'>
+    <nd ref='-390' />
+    <nd ref='-136' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-868' action='modify' visible='true'>
+    <nd ref='-134' />
+    <nd ref='-390' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-866' action='modify' visible='true'>
+    <nd ref='-384' />
+    <nd ref='-386' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-864' action='modify' visible='true'>
+    <nd ref='-382' />
+    <nd ref='-384' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-862' action='modify' visible='true'>
+    <nd ref='-378' />
+    <nd ref='-380' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-860' action='modify' visible='true'>
+    <nd ref='-380' />
+    <nd ref='-360' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-858' action='modify' visible='true'>
+    <nd ref='-228' />
+    <nd ref='-380' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-856' action='modify' visible='true'>
+    <nd ref='-376' />
+    <nd ref='-378' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-854' action='modify' visible='true'>
+    <nd ref='-374' />
+    <nd ref='-376' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-850' action='modify' visible='true'>
+    <nd ref='-368' />
+    <nd ref='-370' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-848' action='modify' visible='true'>
+    <nd ref='-360' />
+    <nd ref='-368' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-846' action='modify' visible='true'>
+    <nd ref='-256' />
+    <nd ref='-362' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-842' action='modify' visible='true'>
+    <nd ref='-356' />
+    <nd ref='-354' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-840' action='modify' visible='true'>
+    <nd ref='-352' />
+    <nd ref='-356' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-832' action='modify' visible='true'>
+    <nd ref='-336' />
+    <nd ref='-338' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-830' action='modify' visible='true'>
+    <nd ref='-334' />
+    <nd ref='-336' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-828' action='modify' visible='true'>
+    <nd ref='-330' />
+    <nd ref='-332' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-826' action='modify' visible='true'>
+    <nd ref='-322' />
+    <nd ref='-324' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-824' action='modify' visible='true'>
+    <nd ref='-318' />
+    <nd ref='-320' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-822' action='modify' visible='true'>
+    <nd ref='-316' />
+    <nd ref='-318' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-818' action='modify' visible='true'>
+    <nd ref='-308' />
+    <nd ref='-256' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-816' action='modify' visible='true'>
+    <nd ref='-306' />
+    <nd ref='-88' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-814' action='modify' visible='true'>
+    <nd ref='-86' />
+    <nd ref='-306' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-812' action='modify' visible='true'>
+    <nd ref='-302' />
+    <nd ref='-304' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-810' action='modify' visible='true'>
+    <nd ref='-300' />
+    <nd ref='-302' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-806' action='modify' visible='true'>
+    <nd ref='-294' />
+    <nd ref='-296' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-804' action='modify' visible='true'>
+    <nd ref='-280' />
+    <nd ref='-292' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-802' action='modify' visible='true'>
+    <nd ref='-288' />
+    <nd ref='-290' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-800' action='modify' visible='true'>
+    <nd ref='-288' />
+    <nd ref='-284' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-798' action='modify' visible='true'>
+    <nd ref='-280' />
+    <nd ref='-288' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-796' action='modify' visible='true'>
+    <nd ref='-284' />
+    <nd ref='-286' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-794' action='modify' visible='true'>
+    <nd ref='-284' />
+    <nd ref='-282' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-792' action='modify' visible='true'>
+    <nd ref='-282' />
+    <nd ref='-278' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-790' action='modify' visible='true'>
+    <nd ref='-276' />
+    <nd ref='-282' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-788' action='modify' visible='true'>
+    <nd ref='-272' />
+    <nd ref='-276' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-786' action='modify' visible='true'>
+    <nd ref='-272' />
+    <nd ref='-274' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-782' action='modify' visible='true'>
+    <nd ref='-270' />
+    <nd ref='-262' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-780' action='modify' visible='true'>
+    <nd ref='-268' />
+    <nd ref='-270' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-778' action='modify' visible='true'>
+    <nd ref='-266' />
+    <nd ref='-268' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-776' action='modify' visible='true'>
+    <nd ref='-266' />
+    <nd ref='-264' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-774' action='modify' visible='true'>
+    <nd ref='-262' />
+    <nd ref='-266' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-772' action='modify' visible='true'>
+    <nd ref='-260' />
+    <nd ref='-262' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-770' action='modify' visible='true'>
+    <nd ref='-256' />
+    <nd ref='-258' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-768' action='modify' visible='true'>
+    <nd ref='-252' />
+    <nd ref='-254' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-766' action='modify' visible='true'>
+    <nd ref='-250' />
+    <nd ref='-252' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-764' action='modify' visible='true'>
+    <nd ref='-248' />
+    <nd ref='-92' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-760' action='modify' visible='true'>
+    <nd ref='-238' />
+    <nd ref='-240' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-758' action='modify' visible='true'>
+    <nd ref='-232' />
+    <nd ref='-234' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-754' action='modify' visible='true'>
+    <nd ref='-228' />
+    <nd ref='-230' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-752' action='modify' visible='true'>
+    <nd ref='-226' />
+    <nd ref='-228' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-750' action='modify' visible='true'>
+    <nd ref='-222' />
+    <nd ref='-224' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-748' action='modify' visible='true'>
+    <nd ref='-220' />
+    <nd ref='-222' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-746' action='modify' visible='true'>
+    <nd ref='-216' />
+    <nd ref='-218' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-744' action='modify' visible='true'>
+    <nd ref='-202' />
+    <nd ref='-214' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-740' action='modify' visible='true'>
+    <nd ref='-204' />
+    <nd ref='-206' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-738' action='modify' visible='true'>
+    <nd ref='-202' />
+    <nd ref='-204' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-736' action='modify' visible='true'>
+    <nd ref='-200' />
+    <nd ref='-202' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-734' action='modify' visible='true'>
+    <nd ref='-196' />
+    <nd ref='-198' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-732' action='modify' visible='true'>
+    <nd ref='-190' />
+    <nd ref='-192' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-730' action='modify' visible='true'>
+    <nd ref='-178' />
+    <nd ref='-180' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-728' action='modify' visible='true'>
+    <nd ref='-174' />
+    <nd ref='-176' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-726' action='modify' visible='true'>
+    <nd ref='-172' />
+    <nd ref='-174' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-724' action='modify' visible='true'>
+    <nd ref='-166' />
+    <nd ref='-170' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-722' action='modify' visible='true'>
+    <nd ref='-166' />
+    <nd ref='-168' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-720' action='modify' visible='true'>
+    <nd ref='-164' />
+    <nd ref='-166' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-718' action='modify' visible='true'>
+    <nd ref='-94' />
+    <nd ref='-162' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-716' action='modify' visible='true'>
+    <nd ref='-158' />
+    <nd ref='-160' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-714' action='modify' visible='true'>
+    <nd ref='-32' />
+    <nd ref='-160' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-712' action='modify' visible='true'>
+    <nd ref='-158' />
+    <nd ref='-146' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-710' action='modify' visible='true'>
+    <nd ref='-156' />
+    <nd ref='-158' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-708' action='modify' visible='true'>
+    <nd ref='-156' />
+    <nd ref='-154' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-704' action='modify' visible='true'>
+    <nd ref='-150' />
+    <nd ref='-152' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-702' action='modify' visible='true'>
+    <nd ref='-150' />
+    <nd ref='-144' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-700' action='modify' visible='true'>
+    <nd ref='-142' />
+    <nd ref='-150' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-698' action='modify' visible='true'>
+    <nd ref='-148' />
+    <nd ref='-32' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-696' action='modify' visible='true'>
+    <nd ref='-146' />
+    <nd ref='-148' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-694' action='modify' visible='true'>
+    <nd ref='-144' />
+    <nd ref='-146' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-692' action='modify' visible='true'>
+    <nd ref='-140' />
+    <nd ref='-142' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-690' action='modify' visible='true'>
+    <nd ref='-134' />
+    <nd ref='-138' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-688' action='modify' visible='true'>
+    <nd ref='-136' />
+    <nd ref='-30' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-686' action='modify' visible='true'>
+    <nd ref='-130' />
+    <nd ref='-136' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-684' action='modify' visible='true'>
+    <nd ref='-132' />
+    <nd ref='-134' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-682' action='modify' visible='true'>
+    <nd ref='-28' />
+    <nd ref='-130' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-680' action='modify' visible='true'>
+    <nd ref='-126' />
+    <nd ref='-128' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-678' action='modify' visible='true'>
+    <nd ref='-122' />
+    <nd ref='-124' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-676' action='modify' visible='true'>
+    <nd ref='-120' />
+    <nd ref='-122' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-674' action='modify' visible='true'>
+    <nd ref='-116' />
+    <nd ref='-118' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-672' action='modify' visible='true'>
+    <nd ref='-112' />
+    <nd ref='-114' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-670' action='modify' visible='true'>
+    <nd ref='-110' />
+    <nd ref='-112' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-668' action='modify' visible='true'>
+    <nd ref='-110' />
+    <nd ref='-22' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-666' action='modify' visible='true'>
+    <nd ref='-20' />
+    <nd ref='-110' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-664' action='modify' visible='true'>
+    <nd ref='-106' />
+    <nd ref='-108' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-662' action='modify' visible='true'>
+    <nd ref='-108' />
+    <nd ref='-18' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-660' action='modify' visible='true'>
+    <nd ref='-16' />
+    <nd ref='-108' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-658' action='modify' visible='true'>
+    <nd ref='-106' />
+    <nd ref='-104' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-656' action='modify' visible='true'>
+    <nd ref='-102' />
+    <nd ref='-106' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-654' action='modify' visible='true'>
+    <nd ref='-104' />
+    <nd ref='-12' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-652' action='modify' visible='true'>
+    <nd ref='-10' />
+    <nd ref='-104' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-650' action='modify' visible='true'>
+    <nd ref='-100' />
+    <nd ref='-102' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-648' action='modify' visible='true'>
+    <nd ref='-96' />
+    <nd ref='-98' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-646' action='modify' visible='true'>
+    <nd ref='-98' />
+    <nd ref='-8' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-644' action='modify' visible='true'>
+    <nd ref='-6' />
+    <nd ref='-98' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-642' action='modify' visible='true'>
+    <nd ref='-90' />
+    <nd ref='-92' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-640' action='modify' visible='true'>
+    <nd ref='-84' />
+    <nd ref='-86' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-636' action='modify' visible='true'>
+    <nd ref='-78' />
+    <nd ref='-80' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-634' action='modify' visible='true'>
+    <nd ref='-76' />
+    <nd ref='-78' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-632' action='modify' visible='true'>
+    <nd ref='-72' />
+    <nd ref='-74' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-630' action='modify' visible='true'>
+    <nd ref='-68' />
+    <nd ref='-70' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-628' action='modify' visible='true'>
+    <nd ref='-64' />
+    <nd ref='-66' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-624' action='modify' visible='true'>
+    <nd ref='-56' />
+    <nd ref='-58' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-622' action='modify' visible='true'>
+    <nd ref='-54' />
+    <nd ref='-56' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-620' action='modify' visible='true'>
+    <nd ref='-50' />
+    <nd ref='-52' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-618' action='modify' visible='true'>
+    <nd ref='-46' />
+    <nd ref='-48' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-616' action='modify' visible='true'>
+    <nd ref='-42' />
+    <nd ref='-44' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-614' action='modify' visible='true'>
+    <nd ref='-38' />
+    <nd ref='-40' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-612' action='modify' visible='true'>
+    <nd ref='-36' />
+    <nd ref='-38' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+  <way id='-610' action='modify' visible='true'>
+    <nd ref='-14' />
+    <nd ref='-16' />
+    <tag k='name' v='WALL' />
+    <tag k='transition' v='False' />
+    <tag k='z' v='(0.0, 10)' />
+  </way>
+</osm>

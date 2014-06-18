@@ -1010,7 +1010,7 @@ class Ctilde(PyLayers):
         """
 
         defaults = {'typ': 'm',
-                   'cmap': plt.cm.hot,
+                    'cmap': plt.cm.hot,
                     'fontsize':14}
 
         for key, value in defaults.items():
@@ -1071,6 +1071,7 @@ class Ctilde(PyLayers):
 
         Parameters
         ----------
+
         mode : string
             'mean'
         Friis: boolean
@@ -1096,6 +1097,10 @@ class Ctilde(PyLayers):
         Notes
         -----
 
+        r x f
+          axis 0 : ray
+          axis 1 : frequency
+
 
         """
 
@@ -1104,10 +1109,12 @@ class Ctilde(PyLayers):
         #  axis 0 : ray
         #  axis 1 : frequency
         #
+
         ECtt = self.Ctt.energy(axis=1,Friis=Friis,mode=mode)
         ECtp = self.Ctp.energy(axis=1,Friis=Friis,mode=mode)
         ECpt = self.Cpt.energy(axis=1,Friis=Friis,mode=mode)
         ECpp = self.Cpp.energy(axis=1,Friis=Friis,mode=mode)
+
         if sumray:
             ECtt = np.sum(ECtt,axis=0)
             ECtp = np.sum(ECtp,axis=0)
@@ -1279,9 +1286,8 @@ class Ctilde(PyLayers):
             H.applyFriis()
 
 
-        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y), axis=1))
-                                                             / np.sqrt(len(H.x)))
-
+        #average w.r.t frequency
+        H.ak = np.real(np.sqrt(np.sum(H.y * np.conj(H.y)/self.nfreq, axis=1)))
         H.tk = H.taud
         return(H)
 
@@ -1427,6 +1433,8 @@ class Tchannel(bs.FUDAsignal):
         st = st + 'shape  :'+str(np.shape(self.y))+"\n"
         st = st + 'tau :'+str(min(self.taud))+' '+str(max(self.taud))+"\n"
         st = st + 'dist :'+str(min(0.3*self.taud))+' '+str(max(0.3*self.taud))+"\n"
+        if self.isFriis:
+            st = st + 'Friis factor -j c/(4 pi f) has been applied'
         return(st)
 
 
@@ -1982,7 +1990,7 @@ class Tchannel(bs.FUDAsignal):
         if dmax == []:
             dmax= max(delay)
 
-        
+
 
 
         Etot = self.energy(mode=mode) + 1e-15
