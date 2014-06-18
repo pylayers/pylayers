@@ -999,13 +999,11 @@ class Body(PyLayers):
                            newfig=False,
                            title=False,
                            colorbar=False)
-<<<<<<< HEAD
 
-=======
         if kwargs['save']:
             fig = mlab.gcf()
             mlab.savefig('Body.png',figure=fig)
->>>>>>> 8aa0cc867dd9623e675e24a9693d771e5ee6948e
+
 
 
     def show(self,**kwargs):
@@ -1647,7 +1645,7 @@ class Body(PyLayers):
                 beta = 1
             dmin = np.sqrt(seg.dist (A,B,C,D,alpha,beta)[1])
             
-            diff = 0.85*self.sl[k,2] - dmin
+            diff = 0.9*self.sl[k,2] - dmin
             
             if dmin < self.sl[k,2] and diff > 0:
                 
@@ -1658,7 +1656,7 @@ class Body(PyLayers):
                 """
                 
                 
-                a = (-6+10)/(0-self.sl[k,2])
+                a = (-3+10)/(0-self.sl[k,2])
                 b = -3
                 
                 loss_dB = a*diff + b               

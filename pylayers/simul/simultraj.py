@@ -222,7 +222,7 @@ class Simul(PyLayers):
         fig, ax = self.N.show(fig=fig, ax=ax)
         return fig, ax
 
-    def evaldeter(self, na, nb, wstd, fmode='band', nf=10):
+    def evaldeter(self, na, nb, wstd, fmode='band', nf=10, trunk = False):
         """ deterministic evaluation of a link
 
         Parameters
@@ -259,7 +259,7 @@ class Simul(PyLayers):
         self.DL.Ta = self.N.node[na]['T']
         self.DL.b = self.N.node[nb]['p']
         self.DL.Tb = self.N.node[nb]['T']
-        print 'na = ', na,' nb = ', nb
+        
         if fmode == 'center':
             self.DL.fGHz = self.N.node[na]['wstd'][wstd]['fcghz']
         else:
@@ -267,20 +267,22 @@ class Simul(PyLayers):
             maxb = self.N.node[na]['wstd'][wstd]['fbmaxghz']
             self.DL.fGHz = np.linspace(minb, maxb, nf)
         a, t = self.DL.eval()
+        if trunk == True:
         
-        intersecta =1
-        if self.N.node[na]['typ'] == 'ag':
-            person_name = na.split('_')[1]
-            intersecta = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
-        intersectb =1
-        if self.N.node[nb]['typ'] == 'ag':
-            person_name = na.split('_')[1]
-            intersectb = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
-        intersect = np.min(np.array([intersecta,intersectb])) 
-        
-        
-        a = intersect*a  
-        self.DL.update(a,t)
+            intersecta =1
+            if self.N.node[na]['typ'] == 'ag':
+                person_name = na.split('_')[1]
+                intersecta = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
+            intersectb =1
+            if self.N.node[nb]['typ'] == 'ag':
+                person_name = na.split('_')[1]
+                intersectb = self.dpersons[person_name].intersectBody4(self.DL.a,self.DL.b, topos = True)
+            intersect = np.min(np.array([intersecta,intersectb])) 
+            
+            
+            a = intersect*a  
+            self.DL.update(a,t)
+            
         return a, t
 
     def evalstat(self, na, nb):
@@ -447,7 +449,7 @@ class Simul(PyLayers):
                             print 'processing: ',na, ' <-> ', nb, 'wstd: ', w
                             print '-'*30
                         eng = 0
-                        self.evaldeter(na, nb, w)
+                        self.evaldeter(na, nb, w, trunk = True)
                         if typ == 'OB':
                             #~ self.evalstat(na, nb)
                             #~ eng = self.SL.eng
