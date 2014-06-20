@@ -52,6 +52,7 @@ import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
 import pylayers.antprop.antenna as ant
 from mpl_toolkits.mplot3d import Axes3D
+import pandas as pd
 import networkx as nx
 import pdb as pdb
 from pylayers.util.project import *
@@ -101,7 +102,7 @@ class Body(PyLayers):
 
     """
 
-    def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
+    def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d',traj=[]):
         """ object constructor
 
         Parameters
@@ -109,12 +110,22 @@ class Body(PyLayers):
 
         _filebody : string
         _filemocap : string
+         traj : tr.Trajectory
+
+        See Also
+        --------
+
+        pylayers.mobility.trajectory
 
         """
 
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
         self.loadC3D(filename=_filemocap,centered=True)
+        if isinstance(traj,tr.Trajectory):
+            self.traj=traj
+        # otherwise self.traj use values from c3d file 
+        # obtain in self.loadC3D
 
     def __repr__(self):
         st = ''
@@ -228,6 +239,46 @@ class Body(PyLayers):
             self.dev[dev]=di['device'][dev]
 
         return(di)
+
+    def dpdf(self):
+        """ device position dataframe
+        return a dataframe with body and devices positions
+
+        Returns
+        -------
+
+        cdf: pd.DataFrame
+            complete device data frame
+        """
+        # complete dataframe
+
+        # dictionary of device dataframe
+        ddf={}
+        {ddf.update(
+            {d:pd.DataFrame(
+                columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
+            for d in self.dev.keys()}
+
+        for it,t in enumerate(self.traj.time()):
+            self.settopos(self.traj,t=t,cs=True)
+            for d in ddf:
+                dp = self.getdevp(d)
+                ddf[d].ix[it,'dev_id']=d
+                ddf[d].ix[it,'dev_x']= dp[0]
+                ddf[d].ix[it,'dev_y']= dp[1]
+                ddf[d].ix[it,'dev_z']= dp[2]
+
+        # gather all devices n a single dataframe:
+        addf = pd.DataFrame()
+        for d in ddf:
+            addf = pd.concat([addf,ddf[d]])
+
+        # join device dataframe with mobility data frame
+        cdf = self.traj.join(addf)
+        cdf['name'] = self.name
+
+        return cdf
+
 
     def center(self,force=False):
         """ centering the body
@@ -683,6 +734,44 @@ class Body(PyLayers):
         traj = tr.trajectory()
         return traj
 
+
+    def getdevp(self,id):
+        """ get device position
+
+        Parameters
+        ----------
+
+        id : str
+            device id
+
+
+        Returns
+        -------
+
+        device position
+        """
+        if not 'topos' in dir(self):
+            raise AttributeError('Body\'s topos not yet set')
+        return self.dcs[id][:,0]
+
+    def getdevT(self,id):
+        """ get device orientation
+
+        Parameters
+        ----------
+
+        id : str
+            device id
+
+
+        Returns
+        -------
+
+        device orientation
+        """
+        if not 'topos' in dir(self):
+            raise AttributeError('Body\'s topos not yet set')
+        return self.dcs[id][:,1:]
 
 
     def movie(self,**kwargs):
@@ -1895,6 +1984,8 @@ def dist(A, B):
 
     d = np.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2)
     return d
+
+
 if __name__ == '__main__':
     # plt.ion()
     # doctest.testmod()
