@@ -1,7 +1,14 @@
 Dependencies 
 ------------
 
-Before to install pylayers you need to install the following dependencies 
+The prefer way to install pylayers is to first install anaconda on your
+platform. 
+
+Install mayavi from anaconda. 
+
+conda install mayavi
+
+The following modules are required 
 
 
 numpy>=1.6.1
@@ -34,7 +41,7 @@ python setup.py install
 
 It is then required to define the two enviroment variables PYLAYERS and BASENAME
 
-in your .bashrc add those 2 lines 
+On linux platforms, in your .bashrc add those 2 lines 
 
 #export PYLAYERS=<path to the directory where pylayers is installed>
 export PYLAYERS=~/pylayers
