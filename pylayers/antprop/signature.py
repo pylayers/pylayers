@@ -1818,8 +1818,8 @@ class Signatures(PyLayers,dict):
         pe = 0
         tic = time.time()
         tic0 = tic
-        lis=lis+lit
-        lit=lis+lit
+        # lis=lis+lit
+        # lit=lis+lit
         #for interaction source  in list of source interactions
         for us,s in enumerate(lis):
             #for target interaction in list of target interactions

@@ -242,43 +242,68 @@ class Body(PyLayers):
 
     def dpdf(self):
         """ device position dataframe
-        return a dataframe with body and devices positions
+        return a dataframe with body and devices positions along the self.traj
 
         Returns
         -------
 
         cdf: pd.DataFrame
             complete device data frame
+
+        Example
+        -------
+
+        >>> from pylayers.mobility.ban.body import *
+        >>> T = tr.Trajectories()
+        >>> T.loadh5()
+        >>> B=Body(traj=T[0])
+        >>> cdf = B.dpdf()
         """
-        # complete dataframe
 
         # dictionary of device dataframe
-        ddf={}
-        {ddf.update(
+        df={}
+        {df.update(
             {d:pd.DataFrame(
                 columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
             for d in self.dev.keys()}
 
         for it,t in enumerate(self.traj.time()):
             self.settopos(self.traj,t=t,cs=True)
-            for d in ddf:
+            for d in df:
                 dp = self.getdevp(d)
-                ddf[d].ix[it,'dev_id']=d
-                ddf[d].ix[it,'dev_x']= dp[0]
-                ddf[d].ix[it,'dev_y']= dp[1]
-                ddf[d].ix[it,'dev_z']= dp[2]
+                df[d].ix[it,'dev_id']=d
+                df[d].ix[it,'dev_x']= dp[0]
+                df[d].ix[it,'dev_y']= dp[1]
+                df[d].ix[it,'dev_z']= dp[2]
 
-        # gather all devices n a single dataframe:
+        # gather all devices in a single dataframe:
         addf = pd.DataFrame()
-        for d in ddf:
-            addf = pd.concat([addf,ddf[d]])
+        for d in df:
+            addf = pd.concat([addf,df[d]])
 
         # join device dataframe with mobility data frame
-        cdf = self.traj.join(addf)
-        cdf['name'] = self.name
+        ddf = self.traj.join(addf)
+        ddf['name'] = self.name
+        # complete dataframe
+        ddf['timestamp']= map(lambda x: str(x.hour).zfill(2) + ':' + str(x.minute).zfill(2) +  ':' + str(x.second).zfill(2) + '.' + str(x.microsecond).zfill(2)[:3],ddf.index)
 
-        return cdf
+        return ddf
 
+    def export_csv(self, _filename ='default.csv', col =['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp']):
+        """
+        """
+        if _filename == 'default.csv':
+            _filename = self.name + '.csv'
+        filename =pyu.getlong(_filename,pstruc['DIRNETSAVE'])
+        ddf = self.dpdf()
+        ldf = ddf[col]
+        ldf.rename(columns={'dev_id':'id',
+                            'dev_x':'x',
+                            'dev_y':'y',
+                            'dev_z':'z'},inplace=True)
+        ldf.to_csv(filename, sep = ' ',index=False)
+
+        return ldf
 
     def center(self,force=False):
         """ centering the body
