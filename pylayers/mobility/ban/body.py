@@ -826,7 +826,7 @@ class Body(PyLayers):
 
 
         while True:
-            
+
             for k in range(self.nframes):
                 # s = np.hstack((cylrad,cylrad))
                 self._mayapts.mlab_source.set(x=f[k,:,0],
@@ -880,7 +880,6 @@ class Body(PyLayers):
                                     color=(0,0,0)) for i in range(len(p))]
 
         else :
-            
             kta = self.sl[:,0].astype(int)
             khe = self.sl[:,1].astype(int)
             cylrad = self.sl[:,2]
@@ -1082,12 +1081,12 @@ class Body(PyLayers):
             # mlab.pipeline.surface(cyl.polydata,color=body_color)
             # f.children[-1].name=self.name +' ' +self.idcyl[k]            
 
-            # 
+            #
 
-            #     
+            #
         if kwargs['dcs']:
-            for key in self.dcs.keys():               
-                U = self.dcs[key]               
+            for key in self.dcs.keys():
+                U = self.dcs[key]
                 pt = U[:,0]
                 pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
                 dcs = mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
