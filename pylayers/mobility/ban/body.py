@@ -190,10 +190,10 @@ class Body(PyLayers):
         Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
 
         """
-        filebody = pyu.getlong(_filebody,'ini')
+        filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
         if not os.path.isfile(filebody):
             raise NameError(_filebody + ' cannot be found in' 
-                             + pyu.getlong('','ini'))
+                             + pyu.getlong('',pstruc['DIRBODY']))
 
         config = ConfigParser.ConfigParser()
         config.read(filebody)
@@ -235,6 +235,8 @@ class Body(PyLayers):
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
         # update devices dict
         self.dev={}
+        # import ipdb
+        # ipdb.set_trace()
         for dev in di['device'].keys():
             self.dev[dev]=di['device'][dev]
 
@@ -686,15 +688,15 @@ class Body(PyLayers):
         #if 'pg' in dir(self):
         # del self.pg
 
-        s, p, f, info = c3d.read_c3d(filename)
-
+        # s, p, f, info = c3d.read_c3d(filename)
+        self._s, self._p, self._f, info = c3d.ReadC3d(filename)
         self.mocapinfo = info
 
         self.filename = filename
         if nframes<>-1:
             self.nframes = nframes
         else:
-            self.nframes = np.shape(f)[0]
+            self.nframes = np.shape(self._f)[0]
         #
         # s : prefix
         # p : list of points name
@@ -725,13 +727,13 @@ class Body(PyLayers):
         ind = []
         for i in self.nodes_Id:
             if self.nodes_Id[i]<>'BOTT':
-                ind.append(p.index(s[0] + self.nodes_Id[i]))
+                ind.append(self._p.index(self._s[0] + self.nodes_Id[i]))
 
         # f.T : 3 x npoints x nframe
         #
         # cm to meter conversion if required
         #
-        self.d = f[0:nframes, ind, :].T
+        self.d = self._f[0:nframes, ind, :].T
         if unit=='cm':
             self.d = self.d*CM_TO_M
 
@@ -936,9 +938,12 @@ class Body(PyLayers):
 
         """
         self._plot3d(typ='c3d',text=False)
-        s, p, f, info = c3d.read_c3d(self.filename)
-
-
+        # s, p, f, info = c3d.read_c3d(self.filename)
+        s, p, f, info = c3d.ReadC3d(self.filename)
+        f=f/10.
+        fig = mlab.gcf()
+        fig.scene.disable_render=False
+        fig.scene.anti_aliasing_frames=0
         while True:
 
             for k in range(self.nframes):
@@ -985,8 +990,8 @@ class Body(PyLayers):
         ed_color = tuple(pyu.rgb(ecolhex)/255.)
 
         if kwargs['typ'] == 'c3d':
-            s, p, f, info = c3d.read_c3d(self.filename)
-            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=5,opacity=0.5)
+            s, p, f, info = c3d.ReadC3d(self.filename)
+            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=50,opacity=0.5)
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(f[fId,i,0],f[fId,i,1],f[fId,i,2],p[i][4:],
