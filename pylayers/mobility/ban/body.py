@@ -233,12 +233,23 @@ class Body(PyLayers):
 
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
-        # update devices dict
+        #
+        # update devices dict from wearble file
+        #
         self.dev={}
-        # import ipdb
-        # ipdb.set_trace()
-        for dev in di['device'].keys():
-            self.dev[dev]=di['device'][dev]
+        devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
+        devconf = ConfigParser.ConfigParser()
+        devconf.read(devfilename)
+        sections = devconf.sections()
+        self.dev = {}
+        for section in sections:
+            self.dev[section] = {}
+            options = devconf.options(section)
+            for option in options:
+                # non case sensitive in .ini file
+                if option=='t':
+                    option=option.upper()
+                self.dev[section][option]=eval(devconf.get(section,option))
 
         return(di)
 
