@@ -121,7 +121,8 @@ class Body(PyLayers):
 
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
-        self.loadC3D(filename=_filemocap,centered=True)
+        self.loadC3D(filename=_filemocap)
+        self.cylfromc3d(centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
         # otherwise self.traj use values from c3d file 
@@ -209,8 +210,14 @@ class Body(PyLayers):
                     di[section][option] = eval(config.get(section,option))
 
         keys = map(lambda x : eval(x),di['nodes'].keys())
-        self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
-
+        nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
+        # identifier are always 4 character. otherwise its a list
+        fnid = filter(lambda x: len(x[1])>4 , nodes_Id.items())
+        for k,v in fnid:
+            # clean bracket and coma
+            vc = v.split('[')[1].split(']')[0].split(',')
+            nodes_Id.update({k:vc})
+        self.nodes_Id=nodes_Id
 
         self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
         self.dcyl = {}
@@ -677,7 +684,7 @@ class Body(PyLayers):
             Rbg = U[:,1:]
             self.acs[dev]  = np.dot(Rbg,Rab)
 
-    def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
+    def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm'):
         """ load nframes of motion capture C3D file
 
         Parameters
@@ -714,7 +721,7 @@ class Body(PyLayers):
         # f : nframe x npoints x 3
         #
 
-        CM_TO_M = 0.01
+        self.unit = unit
 
         # duration of the motion capture snapshot
 
@@ -723,42 +730,56 @@ class Body(PyLayers):
         # time base of the motion capture file (sec)
         self.time = np.linspace(0,self.Tmocap,self.nframes)
 
+
+
+    def cylfromc3d(self,centered = False):
+        """ Create cylinders from C3D file 
+        """
         #
         # motion capture data
         #
         # self.d : 3 x npoints x nframes
         #
 
-        self.npoints = 15
+        # number of point is determine by the ini file
+        self.npoints = len(self.nodes_Id)
 
-        self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
+        # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
 
         #if self.d[2,:,:].max()>50:
         # extract only known nodes in nodes_Id
-        ind = []
+        self.d = np.empty((3, self.npoints, self.nframes))
         for i in self.nodes_Id:
-            if self.nodes_Id[i]<>'BOTT':
-                ind.append(self._p.index(self._s[0] + self.nodes_Id[i]))
+            # node name = 4 characters
+            if not isinstance(self.nodes_Id[i],list) :
+                idx = self._p.index(self._s[0] + self.nodes_Id[i])
+                self.d[:,i,:]=self._f[0:self.nframes, idx, :].T
+            # perform center of mass of the nodes
+
+            else :
+
+                lnid = len(self.nodes_Id[i])
+                for k in range(lnid):
+                    nodename = self.nodes_Id[i][k].replace(' ','')
+                    idx = self._p.index(self._s[0] + nodename)
+                    try:
+                        tmp += self._f[0:self.nframes, idx, :].T
+                    except:
+                        tmp = self._f[0:self.nframes, idx, :].T
+
+                self.d[:,i,:] = tmp / lnid
 
         # f.T : 3 x npoints x nframe
         #
         # cm to meter conversion if required
         #
-        self.d = self._f[0:nframes, ind, :].T
-        if unit=='cm':
+        CM_TO_M = 0.01
+        MM_TO_M = 0.001
+
+        if self.unit=='cm':
             self.d = self.d*CM_TO_M
-
-        #
-        # Extension of cylinder
-        #
-
-        self.npoints = 16
-
-        pm = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
-        pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
-        pmf = pmf[:,np.newaxis,:]
-
-        self.d = np.concatenate((self.d,pmf),axis=1)
+        elif self.unit=='mm':
+            self.d = self.d*MM_TO_M
 
         #self.nodes_Id[15]='bottom'
         if centered:
@@ -956,7 +977,6 @@ class Body(PyLayers):
         fig.scene.disable_render=False
         fig.scene.anti_aliasing_frames=0
         while True:
-
             for k in range(self.nframes):
                 # s = np.hstack((cylrad,cylrad))
                 self._mayapts.mlab_source.set(x=f[k,:,0],
@@ -1002,7 +1022,7 @@ class Body(PyLayers):
 
         if kwargs['typ'] == 'c3d':
             s, p, f, info = c3d.ReadC3d(self.filename)
-            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=50,opacity=0.5)
+            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=15,opacity=0.5)
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(f[fId,i,0],f[fId,i,1],f[fId,i,2],p[i][4:],
