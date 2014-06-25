@@ -3,6 +3,7 @@ from scipy.signal import *
 from pylab import *
 from pylayers.signal.DF import *
 from pylayers.util.project import *
+import matplotlib.pyplot as plt
 
 
 class EnergyDetector(PyLayers):
@@ -41,7 +42,7 @@ if __name__ == "__main__":
     wn = sqrt(Var_w)*randn(Npoints)
 
     #
-    # Filter 1 : Filtre passe bande d'entree
+    # Filter 1 : Input Band Pass Filter
     #
     w1       = 0.05
     w2       = 0.1
@@ -56,12 +57,13 @@ if __name__ == "__main__":
     filter1.ellip_bp(wp,ws,gpass,gstop)
 
     #
-    # Filter 2 : Filtre moyenneur en sortie
+    # Filter 2 : averaging filter
     #
     N       = 40
     b       = (1./N)*ones(N)
     a       = array([1])
     filter2 = DF(b,a)
+
     #
     #
     #
@@ -70,3 +72,7 @@ if __name__ == "__main__":
 
     ED = EnergyDetector(filter1,beta,filter2,pfa)
     y  = ED.apply(wn)
+
+
+
+

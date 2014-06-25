@@ -102,7 +102,7 @@ import numpy as np
 import pdb
 
 # classes that handle the OSM data file format.
-class Way(PyLayers):
+class Way(object):
     """
 
     A Way is a polyline or a Polygon (if closed)
@@ -161,7 +161,7 @@ class Way(PyLayers):
         fig,ax = self.shp.plot(fig=fig,ax=ax)
         return(fig,ax)
 
-class Coords(PyLayers):
+class Coords(object):
     """
     Coords is a point in OSM
 
@@ -269,7 +269,7 @@ class Coords(PyLayers):
 
         return(m)
 
-class Nodes(PyLayers):
+class Nodes(object):
     """
 
     osm Nodes container
@@ -294,7 +294,7 @@ class Nodes(PyLayers):
         self.node= {}
         self.cpt = 0
 
-class Ways(PyLayers):
+class Ways(object):
     """
 
     Attributes
@@ -479,7 +479,7 @@ class Relations(object):
         self.relation= {}
         self.cpt = 0
 
-class FloorPlan(PyLayers,nx.DiGraph):
+class FloorPlan(nx.DiGraph):
     """ FloorPlan class derived from nx.DigGraph
 
     """

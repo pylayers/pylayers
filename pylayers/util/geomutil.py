@@ -1238,7 +1238,7 @@ class Polygon(PyLayers,shg.Polygon):
         #        else:
         #           the point is not kept
         #
-        if indoor:
+        if kwargs['indoor']:
             uconvex = np.nonzero(tcc == 1)[0] # convex point position
         else:
             uconvex = np.nonzero(tcc == -1)[0] # convex point position
@@ -1627,12 +1627,9 @@ class Polygon(PyLayers,shg.Polygon):
             nconcav = uneg
 
         if len(upos) == len(uneg):
-            print "error polygon is a star "
-            print "tcc",tcc
-            print "upos",upos
-            print "uneg",uneg
-            self.plot()
-            pdb.set_trace()
+            logging.warning("polygon is a star")
+            # self.plot()
+            # pdb.set_trace()
 
 
         tcc = np.zeros(Np)

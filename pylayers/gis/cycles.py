@@ -298,7 +298,7 @@ class Cycle(object):
     cycle    : np.array
 
     """
-    def __init__(self,G):
+    def __init__(self,G,lnode=[]):
         # This call to cycle_basis is to obtained an ordered cycle
         self.G  = G
         cycle = nx.algorithms.cycles.cycle_basis(self.G)[0]
@@ -307,7 +307,16 @@ class Cycle(object):
         self.G.pos.update({ node : G.pos[node] for node in cycle})
         #for node in cycle:
         #    self.G.pos[node] = G.pos[node]
-        self.cycle = np.array(cycle)
+        if lnode == []:
+            self.cycle = np.array(cycle)
+        else :
+            # lnodes allow to give the order of the cycle
+            # used in Layout._convexify
+            assert len(lnode) == len(cycle)
+            uc =cycle.index(lnode[0])
+            rcycle = np.roll(cycle,-uc)
+            assert sum(rcycle-lnode)==0
+            self.cycle=rcycle
         self.update()
 
     def __add__(self,cy):

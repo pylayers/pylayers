@@ -54,7 +54,7 @@ import matplotlib.animation as animation
 
 
 
-class Trajectories(list):
+class Trajectories(PyLayers,list):
     """  Define a list of trajectory
 
 
@@ -267,7 +267,7 @@ class Trajectories(list):
         ani = animation.FuncAnimation(fig, animate, np.arange(1, len(time)),
             interval=25, blit=True, init_func=init)
         plt.show()
-       
+
 
 
     def ishow(self):
@@ -352,8 +352,8 @@ class Trajectories(list):
         plt.show(fig)
 
 
-class Trajectory(pd.DataFrame):
-    """  Define a trajectory
+class Trajectory(PyLayers,pd.DataFrame):
+    """  define a trajectory
 
     This class derives from pandas.DataFrame. It handles a full 3D trajectory.
 
@@ -383,7 +383,7 @@ class Trajectory(pd.DataFrame):
 
 
     """
-    def __init__(self, df={}, ID=0, name='', typ=''):
+    def __init__(self, df={}, ID='0', name='', typ=''):
         """ initialization
         """
         super(Trajectory, self).__init__(df)
@@ -455,21 +455,15 @@ class Trajectory(pd.DataFrame):
             return False
 
 
-
-    #def generate(self,ID = 1, name = '',t=np.linspace(0,10,50),pt=np.vstack((np.sin(np.linspace(0,3,50)),np.linspace(0,10,50),np.random.randn(50),)).T,unit='s', sf = 1):
     def generate(self,**kwargs):
-        """
-        Generate a trajectory from a numpy array
+        """ generate a trajectory from a numpy array
 
         Parameters
         ----------
 
         pt : np.ndarray:
-            (npt x x x y)
-            with
-                npt : number of samples
-                x : x values
-                y : y values
+            (npt x 3) (x,y,z)
+
         t = np.ndarray
             (1 x npt)
 
@@ -494,7 +488,7 @@ class Trajectory(pd.DataFrame):
 
 
         """
-        defaults  = { 'ID': 1,
+        defaults  = { 'ID': '1',
                      'name': 'MyNameIsNoBody',
                      'typ':'ag',
                      't': np.linspace(0,10,50),
@@ -746,8 +740,7 @@ class Trajectory(pd.DataFrame):
         return fig, ax
 
     def replay(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[], speed=1, **kwargs):
-        """
-            replay a trajectory
+        """ replay a trajectory
 
         Parameters
         ----------
@@ -827,9 +820,8 @@ class Trajectory(pd.DataFrame):
         #     ax.plot(self['x'][k],self['y'][k],'*r')
         #     plt.draw()
 def importsn(_filename='pos.csv'):
-    """
-    ****DEPRECATED
-    import simulnet csv file
+    """ import simulnet csv file
+
 
     ****DEPRECATED
 

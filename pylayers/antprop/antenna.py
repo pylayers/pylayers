@@ -268,6 +268,7 @@ class Antenna(PyLayers):
                 self.loadhfss(typ, self.Nt, self.Np)
 
         else :
+            self._filename = typ
             if typ == 'Gauss':
                 self.typ = typ
 
@@ -1295,7 +1296,8 @@ class Antenna(PyLayers):
         return(fig,ax)
 
     @mlab.show
-    def _show3(self,**kwargs):
+    def _show3(self,newfig = True,colorbar =True,
+                    name=[],title=True,**kwargs ):
         """ show3 mayavi
 
         fGHz : float
@@ -1306,8 +1308,44 @@ class Antenna(PyLayers):
             display colorbar
         """
 
-        defaults = { 'newfig':True, 
-                     'fGHz' :[],
+        
+
+
+        if not self.evaluated:
+            self.Fsynth(pattern=True)
+
+        
+        x, y, z, k = self._computemesh(**kwargs)
+
+        if newfig:
+            mlab.clf()
+            f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
+        else :
+            f=mlab.gcf()
+        self._mayamesh = mlab.mesh(x, y, z)
+
+        if name == []:
+            f.children[-1].name = 'Antenna ' + self._filename
+        else :
+            f.children[-1].name = name + self._filename
+
+        if colorbar :
+            mlab.colorbar()
+        if title:
+            mlab.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
+
+    def _computemesh(self,**kwargs):
+        """ compute mesh from theta phi
+
+        Returns
+        -------
+
+        (x, y, z, k)
+        x , y z value in carteisan axis
+        k frequency point evaluated
+
+        """
+        defaults = { 'fGHz' :[],
                      'po': np.array([0,0,0]),
                      'T' : np.eye(3),
                      'minr' : 0.1,
@@ -1315,9 +1353,7 @@ class Antenna(PyLayers):
                      'tag' : 'Pat',
                      'ilog' : False,
                      'title':True,
-                     'colorbar':True,
-                     'ilog':False,
-                     'name':[]
+                     'ilog':False
                      }
 
 
@@ -1333,11 +1369,6 @@ class Antenna(PyLayers):
         po = kwargs['po']
         # T is an unitary matrix
         T  = kwargs['T']
-
-
-        if not self.evaluated:
-            self.Fsynth(pattern=True)
-
         if fGHz == []:
             k = len(self.fa)/2
         else :
@@ -1351,9 +1382,9 @@ class Antenna(PyLayers):
             r = 10*np.log10(abs(r))
         else:
             r = abs(r)
-
-        u = (r - r.min()) /(r.max() - r.min())
-
+        if r.max() != r.min():
+            u = (r - r.min()) /(r.max() - r.min())
+        else : u = r
         r = minr + (maxr-minr) * u
 
         x = r * np.sin(th) * np.cos(phi) 
@@ -1376,24 +1407,7 @@ class Antenna(PyLayers):
         y = q[...,1]
         z = q[...,2]
 
-
-        if kwargs['newfig']:
-            mlab.clf()
-            f=mlab.figure(bgcolor=(1, 1, 1), fgcolor=(0, 0, 0))
-        else :
-            f=mlab.gcf()
-        mlab.mesh(x, y, z)
-
-        if kwargs['name'] == []:
-            f.children[-1].name = 'Antenna ' + self._filename
-        else :
-            f.children[-1].name = kwargs['name'] + self._filename
-
-        if kwargs['colorbar'] :
-            mlab.colorbar()
-        if kwargs['title']:
-            mlab.title(self._filename + ' @ ' + str(self.fa[k]) + ' GHz',height=1,size=0.5)
-
+        return x, y, z, k
 
     def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
         """ show3 geomview

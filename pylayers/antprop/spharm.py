@@ -260,6 +260,10 @@ def index_vsh(L, M):
     return(t)
 
 class VectorCoeff(PyLayers):
+    """  class vector spherical harmonics
+
+
+    """
     def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
                  ind=np.array([]) ):
         """  class constructor
@@ -267,7 +271,7 @@ class VectorCoeff(PyLayers):
         Parameters
         ----------
 
-        typ : string 
+        typ : string
         fmin : float
             min frequency GHz
         fmax : float
@@ -282,6 +286,7 @@ class VectorCoeff(PyLayers):
             seems deprecated
 
         """
+
         self.s1 = np.array([])
         self.s4 = np.array([])
         self.s3 = np.array([])
@@ -308,6 +313,16 @@ class VectorCoeff(PyLayers):
         self.Nf = sh[0]
 
 class SSHCoeff(PyLayers):
+    """ scalar spherical harmonics
+
+    Attributes
+    ----------
+
+    Cx : coefficient for x axis
+    Cy : coefficient for y axis
+    Cz : coefficient for z axis
+
+    """
     def __init__(self, Cx,Cy,Cz):
         """ class constructor
 
@@ -342,7 +357,8 @@ class SSHCoeff(PyLayers):
 
         """
 
-        Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0) # integrates energy over freq axis = 0
+        # integrates energy over freq axis = 0
+        Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0)
         Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
         Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
 

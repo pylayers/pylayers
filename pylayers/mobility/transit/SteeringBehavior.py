@@ -77,6 +77,10 @@ from pylayers.mobility.transit.vec3 import vec3
 from random import uniform,gauss,randint
 import pdb
 
+# max front distance to consider 
+FCHK = 2.0
+# max side distance to consider 
+SCHK = 2.
 
 class Seek:
     """ class Seek
@@ -110,7 +114,7 @@ class Seek:
         displacement = boid.destination - boid.position
         desired_velocity = displacement.normalize() * boid.desired_speed
         steering = desired_velocity - boid.velocity
-        if (displacement.length() < 1.5*boid.radius):
+        if (displacement.length() < boid.radius):
             boid.arrived = True
         return steering
 
@@ -267,9 +271,11 @@ class Separation:
             in_front = local_position[1] > -boid.radius
             if in_front and local_position.length() < separation_distance:
                 separation = other.position - boid.position
-                force = separation.scale(-1 / separation.length() ** 2)
-                force2 = vec3(-force[1],force[0],0)
-                acceleration += force2 #3*force2
+                force = separation.scale(-1 / max(1e-9,separation.length() ** 2))
+                # create orthogonal vector in order to make boids avoidance
+                force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
+#                force2 = vec3(-force[1],force[0],0)
+                acceleration += 0.5*force2 #3*force2
         return acceleration
 
 class Queuing:
@@ -307,6 +313,7 @@ class Containment:
     """ Class Containment 
 
     """
+
     def calculate(self, boid):
         """ calculate boid behavior
 
@@ -328,36 +335,44 @@ class Containment:
         front_intersect = left_intersect = right_intersect = False
         front_distance = left_distance = right_distance = 30000
         speed = boid.velocity.length()
-        front_check = 0.1 + speed * 0.5
-        side_check = 0.1 + speed * 0.5
+        front_check = FCHK + speed * 0.5
+        side_check = SCHK + speed * 0.5
         front_test = boid.localy.scale(front_check)
         left_test = (boid.localy - boid.localx).scale(side_check)
         right_test = (boid.localy + boid.localx).scale(side_check)
         position = boid.position
         boid.intersection = None
         checked = []
+        df = FCHK+0.5
+        dl = SCHK
+        dr = SCHK
         for wall in walls:
             if wall in checked: continue
             checked.append(wall)
             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, front_test,method = 'gauss')
-#        if intersect:
-#        pdb.set_trace()
-            if intersect and distance_along_check < front_distance:
-                front_intersect = True
-                front_distance = distance_along_check
-                front_direction = direction
+            if df > distance_along_check:
+                df = distance_along_check
+                if intersect and distance_along_check < front_distance:
+                    front_intersect = True
+                    front_distance = distance_along_check
+                    front_direction = direction
             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, left_test,method = 'direct')
-            if not front_intersect and intersect and distance_along_check < left_distance:
-                left_intersect = True
-                left_distance = distance_along_check
-                left_direction = direction
+            if dl > distance_along_check:
+                dl = distance_along_check
+                if not front_intersect and intersect and distance_along_check < left_distance:
+                    left_intersect = True
+                    left_distance = distance_along_check
+                    left_direction = direction
             intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, right_test,method = 'direct')
-            if not front_intersect and intersect and distance_along_check < right_distance:
-                right_intersect = True
-                right_distance = distance_along_check
-                right_direction = direction
-            if front_intersect or left_intersect or right_intersect :
-                break
+            if dr > distance_along_check:
+                dr = distance_along_check
+                if not front_intersect and intersect and distance_along_check < right_distance:
+                    right_intersect = True
+                    right_distance = distance_along_check
+                    right_direction = direction
+            # if front_intersect or left_intersect or right_intersect :
+            #     break
+
 
 
 #    print speed
@@ -366,21 +381,43 @@ class Containment:
         repuls     = boid.velocity.length() #/ boid.max_speed
 #        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
 #        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
-        speed = max (boid.max_speed, 3.0/max(0.0001,(1.*repuls)))
-       # speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
+        speed = max (boid.max_speed, d_no_influ/max(0.0001,(1.*repuls)))
+        speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
+        # sf = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*df)))
+        # sl = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dl)))
+        # sr = max (boid.max_speed, speed*d_no_influ/max(0.0001,(1.*dr)))
+        sf = 1 / max(df**2,1e-9)
+        sl = 1 / max(dl**2,1e-9)
+        sr = 1 / max(dr**2,1e-9)
+        acceleration = vec3()
         if front_intersect:
             if front_direction == 'left':
-                acceleration = boid.localx.scale(speed) 
+                acceleration = boid.localx.scale(sl) 
+                acceleration = -boid.localy.scale(sf) 
             else:
-                acceleration = -boid.localx.scale(speed) 
-        elif left_intersect:
-            acceleration = boid.localx.scale(speed)
-        elif right_intersect:
-            acceleration = -boid.localx.scale(speed)
-        else:
-            acceleration = vec3()
+                acceleration = boid.localx.scale(sr) 
+                acceleration = -boid.localy.scale(sf) 
+        # if left_intersect:
+        #     acceleration = boid.localx.scale(sl)
+        # if right_intersect:
+        #     acceleration = boid.localx.scale(sr)
+        
 
         return acceleration
+
+        # if front_intersect:
+        #     if front_direction == 'left':
+        #         acceleration = boid.localx.scale(speed) 
+        #     else:
+        #         acceleration = -boid.localx.scale(speed) 
+        # elif left_intersect:
+        #     acceleration = boid.localx.scale(speed)
+        # elif right_intersect:
+        #     acceleration = -boid.localx.scale(speed)
+        # else:
+        #     acceleration = vec3()
+
+        # return acceleration
 
 
 #    def test_intersection(self, boid, wall, position, vector):
