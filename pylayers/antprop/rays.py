@@ -60,7 +60,7 @@ except:
     print 'Layout:Mayavi is not installed'
 
 class Rays(PyLayers,dict):
-    """ A set af rays
+    """ A set of rays
 
     Attributes
     ----------
@@ -102,9 +102,9 @@ class Rays(PyLayers,dict):
     Once a Rays object has been obtained in 2D, it is transformed
     in 3D via the **to3D** method. This method has two parameters :
     the height from floor to ceil, and the number N of
-    multiple reflections to take into account.
+    multiple reflections to account for.
 
-    Once the 3d rays have been calculated, 
+    Once the 3d rays have been calculated,
     the local basis are evaluated along those rays. This is
     done through the **locbas** method
 
@@ -1538,7 +1538,7 @@ class Rays(PyLayers,dict):
 
         """
 
-        # reinitilized ray pointer if not in append mode
+        # reinitialized ray pointer if not in append mode
         if not append:
             self.raypt = 0
 
@@ -1555,7 +1555,7 @@ class Rays(PyLayers,dict):
         # Reflexion
         R = IntR()
 
-        # transmission
+        # Transmission
         T = IntT()
 
         # Diffraction
@@ -1699,9 +1699,9 @@ class Rays(PyLayers,dict):
                 # seek for interactions position
                 ################################
 
-                uD = np.where((itypf == 1))[0]
-                uR = np.where((itypf == 2))[0]
-                uT = np.where((itypf == 3))[0]
+                uD  = np.where((itypf == 1))[0]
+                uR  = np.where((itypf == 2))[0]
+                uT  = np.where((itypf == 3))[0]
                 uRf = np.where((itypf == 4))[0]
                 uRc = np.where((itypf == 5))[0]
 
@@ -1718,6 +1718,7 @@ class Rays(PyLayers,dict):
 
                 # Fill the used slab
                 #####################
+
 
                 tsl = np.hstack((tsl, sl[uT]))
                 rsl = np.hstack((rsl, sl[uR], sl[uRf], sl[uRc]))
@@ -1767,6 +1768,11 @@ class Rays(PyLayers,dict):
                 # Transmision
                 ############
                 T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
+
+                ###
+                # Diffraction 
+                #
+                # D.stack(data=np.array(()))
 
             elif self.los:
                 ze = np.array([0])

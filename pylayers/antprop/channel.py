@@ -1487,16 +1487,16 @@ class Tchannel(bs.FUDAsignal):
             Layout filename
         idx : int
             file identifier number
-        output : bool 
+        output : bool
             return an output precised in return
 
         Returns
         -------
 
         if output:
-        (a,b,Ta,Tb) 
+        (a,b,Ta,Tb)
 
-        with 
+        with
             a = np.ndarray
                 postion of point a (transmitter)
             b = np.ndarray
@@ -1551,11 +1551,11 @@ class Tchannel(bs.FUDAsignal):
 
         filename=pyu.getlong(filenameh5,pstruc['DIRLNK'])
 
-        # try/except to avoid loosing the h5 file if 
+        # try/except to avoid loosing the h5 file if
         # read/write error
         try:
             fh5=h5py.File(filename,'a')
-            if not grpname in fh5['H'].keys(): 
+            if not grpname in fh5['H'].keys():
                 fh5['H'].create_group(grpname)
             else :
                 print 'Warning : H/'+grpname +'already exists in '+filenameh5
@@ -1884,7 +1884,7 @@ class Tchannel(bs.FUDAsignal):
                 b.set_label('dB')
             else:
                 b.set_label('Path Loss (dB)')
-            
+
             for t in b.ax.get_yticklabels():
                 t.set_fontsize(fontsize)
 
@@ -1897,13 +1897,13 @@ class Tchannel(bs.FUDAsignal):
          Parameters
         ----------
 
-        d: 'doa' | 'dod'        
+        d: 'doa' | 'dod'
             display direction of departure | arrival
         typ : 'ns' | 'm'
             display delays in nano seconds ( ns) or meter (m)
         fig : plt.figure
-        ax : plt.axis    
-        a : str 
+        ax : plt.axis
+        a : str
             angle 'theta' | 'phi'
         normalize: bool
             energy normalized
@@ -1921,10 +1921,9 @@ class Tchannel(bs.FUDAsignal):
         colorbar: bool
         titel : bool
         'clipval': float
-            remove values below clipval in dB 
+            remove values below clipval in dB
         """
-        defaults = {
-                    'fig': [],
+        defaults = { 'fig': [],
                     'ax': [],
                     'normalize':False,
                     'cmap':plt.cm.hot_r,
@@ -1945,9 +1944,6 @@ class Tchannel(bs.FUDAsignal):
             if key not in kwargs:
                 kwargs[key] = value
 
-
-
-        
 
         # remove non plt.scatter kwargs
 
@@ -2030,7 +2026,7 @@ class Tchannel(bs.FUDAsignal):
             if typ == 'm' :
                 ax.set_ylabel("distance (m)", fontsize=fontsize-2)
             else :
-                ax.set_ylabel(r"$\phi(^{\circ})$", fontsize=fontsize-2)        
+                ax.set_ylabel(r"$\phi(^{\circ})$", fontsize=fontsize-2)
             if title :
                 ax.set_title('DoA vs delay (ns)', fontsize=fontsize+2)
         if colorbar:

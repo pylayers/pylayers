@@ -126,7 +126,7 @@ class Inter(PyLayers):
     """
 
     def __init__(self, typ=0, data=np.array(()), idx=[], _filemat='matDB.ini',_fileslab='slabDB.ini'):
-        """ object constructor
+        """ Inter object constructor
 
         Parameters
         ----------
@@ -167,7 +167,6 @@ class Inter(PyLayers):
             ordered as in self.idx/self.data
 
         """
-
         for s in self.dusl:
             self.dusl[s]=np.where(a==s)[0]
 
@@ -179,7 +178,7 @@ class Inter(PyLayers):
         Notes
         -----
 
-        if typ
+        typ
 
             1 : Diffraction
             2 : Reflection
@@ -188,9 +187,9 @@ class Inter(PyLayers):
             si : self.data[:,1]
             so : self.data[:,2]
 
-        if typ = 0
+        typ = 0
 
-        if typ = -1
+        typ = -1
 
         """
 
@@ -254,7 +253,7 @@ class Inter(PyLayers):
 
         elif isinstance(idx, list) or isinstance(idx, np.ndarray):
             try:
-                self.data=np.vstack((self.data,data))
+                self.data = np.vstack((self.data,data))
             except:
                 self.data=data
             self.idx.extend(idx)
@@ -309,7 +308,8 @@ class Interactions(Inter,dict):
 
         Parameters
         ----------
-        li :
+
+        li : list
             list of interactions
 
         """
@@ -371,11 +371,11 @@ class Interactions(Inter,dict):
             with self.nf :  number of frequences
             self.nimax : the total number of interactions ( of all rays)
         self.sout :
-            distance from interaction to the next one
+            distance from one interaction to the next one
         self.si0 :
-            distance from the previous interaction to the the considered one
+            distance from the previous interaction to the one
         self.alpha :
-            alpha as described into Legendre Thesis
+            alpha as described in JFL Thesis
         self.gamma :
             !! gamma**2 !!! (squared included) as described
 
@@ -386,8 +386,8 @@ class Interactions(Inter,dict):
 
         # f x i x 2 x 2
 
-        self.fGHz=fGHz
-        self.nf=len(fGHz)
+        self.fGHz = fGHz
+        self.nf = len(fGHz)
 
         self.I = np.zeros((self.nf, self.nimax, 2, 2), dtype=complex)
         self.sout = np.zeros((self.nimax))
@@ -433,7 +433,6 @@ class Interactions(Inter,dict):
 
         except:
             pass
-        # .. todo
         # evaluate D and fill I
         try:
             self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
@@ -599,6 +598,7 @@ class IntL(Inter):
 class IntR(Inter):
     """ Reflexion interaction class
 
+
     """
     def __init__(self, data=np.array(()), idx=[]):
 #        self.theta = data[0]
@@ -611,8 +611,7 @@ class IntR(Inter):
         # WARNING The index of this dictionnary referes to the idex of self.idx
         # not to the global indx
         self.dusl = {}
-#        self.dusl=dict.fromkeys(self.slab,np.array((),dtype=int))
-
+#       self.dusl=dict.fromkeys(self.slab,np.array((),dtype=int))
         self.alpha = [1]
         self.gamma = [1]
 
@@ -830,7 +829,7 @@ class IntT(Inter):
                     except:
                         T = self.slab[m].T
                         mapp.extend(self.dusl[m])
-            # replace in correct order the Transmission coeff
+            # replace in proper order the Transmission coeff
             self.A[:, np.array((mapp)), :, :] = T
             self.alpha[np.array((mapp))] = alpha
             self.gamma[np.array((mapp))] = gamma
