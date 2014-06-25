@@ -772,13 +772,12 @@ class Body(PyLayers):
                     nodename = self.nodes_Id[i][k].replace(' ','')
 
                     idx = self._p.index(self._s[0] + nodename)
-                    print i,self.nodes_Id[i],nodename,idx
                     try:
                         tmp = tmp +self._f[0:self.nframes, idx, :].T
                     except:
                         tmp = self._f[0:self.nframes, idx, :].T
-
                 self.d[:,i,:] = tmp / (1.*lnid)
+                del tmp
 
 
         # f.T : 3 x npoints x nframe
@@ -791,7 +790,7 @@ class Body(PyLayers):
         if self.unit=='cm':
             self.d = self.d*CM_TO_M
         elif self.unit=='mm':
-            self.d = self.d*MM_TO_M
+            self.d = self.d*MM_TO_M/4.
 
         #self.nodes_Id[15]='bottom'
         if centered:
