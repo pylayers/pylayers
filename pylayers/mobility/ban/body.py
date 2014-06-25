@@ -102,7 +102,7 @@ class Body(PyLayers):
 
     """
 
-    def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d',traj=[]):
+    def __init__(self,_filebody='John.ini',_filemocap=[],traj=[]):
         """ object constructor
 
         Parameters
@@ -121,7 +121,8 @@ class Body(PyLayers):
 
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
-        self.loadC3D(filename=_filemocap)
+        if _filemocap != []:
+            self.loadC3D(filename=_filemocap)
         self.cylfromc3d(centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
@@ -257,6 +258,13 @@ class Body(PyLayers):
                 if option=='t':
                     option=option.upper()
                 self.dev[section][option]=eval(devconf.get(section,option))
+
+        
+        # if a mocap file is given in the config file
+        if len(di['mocap']['file']) != 0:
+            unit = di['mocap']['unit']
+            nframes = di['mocap']['nframes']
+            self.loadC3D(di['mocap']['file'],nframes = nframes, unit = unit)
 
         return(di)
 
@@ -748,26 +756,30 @@ class Body(PyLayers):
 
         #if self.d[2,:,:].max()>50:
         # extract only known nodes in nodes_Id
-        self.d = np.empty((3, self.npoints, self.nframes))
+        self.d = np.zeros((3, self.npoints, self.nframes))
         for i in self.nodes_Id:
             # node name = 4 characters
             if not isinstance(self.nodes_Id[i],list) :
                 idx = self._p.index(self._s[0] + self.nodes_Id[i])
-                self.d[:,i,:]=self._f[0:self.nframes, idx, :].T
+                self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
             # perform center of mass of the nodes
 
             else :
 
                 lnid = len(self.nodes_Id[i])
                 for k in range(lnid):
+
                     nodename = self.nodes_Id[i][k].replace(' ','')
+
                     idx = self._p.index(self._s[0] + nodename)
+                    print i,self.nodes_Id[i],nodename,idx
                     try:
-                        tmp += self._f[0:self.nframes, idx, :].T
+                        tmp = tmp +self._f[0:self.nframes, idx, :].T
                     except:
                         tmp = self._f[0:self.nframes, idx, :].T
 
-                self.d[:,i,:] = tmp / lnid
+                self.d[:,i,:] = tmp / (1.*lnid)
+
 
         # f.T : 3 x npoints x nframe
         #
@@ -1021,13 +1033,13 @@ class Body(PyLayers):
         ed_color = tuple(pyu.rgb(ecolhex)/255.)
 
         if kwargs['typ'] == 'c3d':
-            s, p, f, info = c3d.ReadC3d(self.filename)
-            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=15,opacity=0.5)
+            # s, p, f, info = c3d.ReadC3d(self.filename)
+            self._mayapts=mlab.points3d(self._f[fId,:,0],self._f[fId,:,1],self._f[fId,:,2],scale_factor=150,opacity=0.5)
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
-                self._mayaptstxt=[mlab.text3d(f[fId,i,0],f[fId,i,1],f[fId,i,2],p[i][4:],
-                                    scale=3,
-                                    color=(0,0,0)) for i in range(len(p))]
+                self._mayaptstxt=[mlab.text3d(self._f[fId,i,0],self._f[fId,i,1],self._f[fId,i,2],self._p[i].replace(self._s[0],''),
+                                    scale=150,
+                                    color=(0,0,0)) for i in range(len(self._p))]
 
         else :
             kta = self.sl[:,0].astype(int)
