@@ -468,7 +468,11 @@ class Body(PyLayers):
         #
 
         vs = self.pg[0:-1,kf] - self.pg[0:-1,kf-1]
-        vsn = vs/np.sqrt(np.dot(vs,vs))
+        nvs = np.sqrt(np.dot(vs,vs))
+        if nvs != 0 :
+            vsn = vs/nvs
+        else :
+            vsn = vs
         wsn = np.array([vsn[1],-vsn[0]])
 
         #
@@ -480,7 +484,11 @@ class Body(PyLayers):
         #
 
         vt = np.array([traj['vx'][kt],traj['vy'][kt]])
-        vtn = vt/np.sqrt(np.dot(vt,vt))
+        nvt = np.sqrt(np.dot(vt,vt))
+        if nvt != 0:
+            vtn = vt/nvt
+        else :
+            vtn=vt
         wtn = np.array([vtn[1],-vtn[0]])
 
         # vt = traj[kt+1,1:] - traj[kt,1:]
@@ -698,19 +706,26 @@ class Body(PyLayers):
                 self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
             else :
+                if 'toposFrameId'  in dir(self):
+                    fId = self.toposFrameId
+                else :
+                    fId = frameId
                 if len(self.dev[dev]['uc3d']) > 1:
                     # mp : marker pos
-                    mp = self._f[frameId,self.dev[dev]['uc3d'],:]*self._unit
-                    vm = np.diff(mp,axis=00)
-                    T = (vm/np.sum(vm,axis=1))[:3]
+                    mp = self._f[fId,self.dev[dev]['uc3d'],:]
+                    vm = np.diff(mp,axis=0)
+                    vm = vm[:3]
+                    mvm = np.sqrt(np.sum((vm*vm),axis=0))
+                    T = vm/mvm
                     T[:,2]=np.cross(T[:,0],T[:,1])
                     T[:,1]=np.cross(T[:,0],T[:,2])
+                    Tn = T/np.sqrt(np.sum(T*T,axis=0))
                     mp0 = mp[0]
-                    self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
+                    # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
                 else:
-                    mp0 = self._f[frameId,self.dev[dev]['uc3d'][0],:]*self._unit
-                    T= np.eye(3)
-                self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
+                    mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
+                    Tn = np.eye(3)
+                self.dcs[dev] = np.hstack((mp0[:,np.newaxis],Tn))
 
 
     def setacs(self):
@@ -775,6 +790,9 @@ class Body(PyLayers):
             raise AttributeError('unit'+unit + 'not recognized')
         # duration of the motion capture snapshot
 
+
+        self._f=self._f*self._unit
+
         self.Tmocap = self.nframes / info['VideoFrameRate']
 
         # time base of the motion capture file (sec)
@@ -828,7 +846,7 @@ class Body(PyLayers):
         #
 
 
-        self.d = self.d*self._unit
+        self.d = self.d
 
         #self.nodes_Id[15]='bottom'
         if centered:
@@ -1061,7 +1079,10 @@ class Body(PyLayers):
 
         fig = mlab.gcf()
 
-        fId = kwargs['iframe']
+        if 'toposFrameId'  in dir(self):
+            fId = self.toposFrameId
+        else :
+            fId = kwargs['iframe']
 
         cold = pyu.coldict()
         ncolhex = cold[kwargs['ncolor']]
@@ -1071,11 +1092,11 @@ class Body(PyLayers):
 
         if kwargs['typ'] == 'c3d':
             # s, p, f, info = c3d.ReadC3d(self.filename)
-            self._mayapts=mlab.points3d(self._f[fId,:,0],self._f[fId,:,1],self._f[fId,:,2],scale_factor=150,opacity=0.5)
+            self._mayapts=mlab.points3d(self._f[fId,:,0],self._f[fId,:,1],self._f[fId,:,2],scale_factor=0.05,opacity=0.5)
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
                 self._mayaptstxt=[mlab.text3d(self._f[fId,i,0],self._f[fId,i,1],self._f[fId,i,2],self._p[i].replace(self._s[0],''),
-                                    scale=150,
+                                    scale=15,
                                     color=(0,0,0)) for i in range(len(self._p))]
 
         else :
