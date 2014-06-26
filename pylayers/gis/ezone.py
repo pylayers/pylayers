@@ -12,10 +12,6 @@ Class Ezone
 ===========
 
 
-
-
-
-
 """
 import h5py
 import numpy as np
@@ -58,8 +54,7 @@ def maxloc(f,threshold=-0.7):
     return(g)
 
 def decsrtm(_filehgt='N48W002.HGT'):
-    """
-        decode srtm file
+    """ decode srtm file
 
     Parameters
     ----------
@@ -79,7 +74,7 @@ def decsrtm(_filehgt='N48W002.HGT'):
         latmax = latmin+1
 
     if _filehgt[3]=='W':
-        lonmin = -eval(_filehgt[5:8])
+        lonmin = -eval(_filehgt[5:7])
         lonmax = lonmin+1
 
     return (lonmin,lonmax,latmin,latmax)
@@ -93,7 +88,7 @@ def expand(A):
     return(w.reshape(M,N,N).swapaxes(1,2))
 
 def conv(extent,m,mode='tocart'):
-    """
+    """ convet zone to cartesian or lon lat
     Parameters
     ----------
     extent
@@ -118,7 +113,30 @@ def conv(extent,m,mode='tocart'):
         out = np.array([lllon,rulon,lllat,rulat])
     return(out)
 
-class DEM(PyLayers):
+def zone(pt,rm=1000):
+    """ extract a region from a point and a radius
+
+    Parameters
+    ----------
+    pt : np.array
+        lon lat
+    rm : float
+        radius (meters)
+
+    """
+
+    lonc = pt[0]
+    latc = pt[1]
+    Rearth = 6371000.
+    dphi_rad = rm/Rearth
+    lonmin = lonc - dphi_rad*180/np.pi
+    lonmax = lonc + dphi_rad*180/np.pi
+    latmin = latc - dphi_rad*180/np.pi
+    latmax = latc + dphi_rad*180/np.pi
+    return (lonmin,latmin,lonmax,latmax)
+
+
+
     """ Class Digital Elevation Model
     """
     def __init__(self):

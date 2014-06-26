@@ -422,7 +422,7 @@ class Ways(object):
                 pa = self.way[b].shp.ndarray()
                 Np = np.shape(pa)[1]
                 for ip in range(Np+1):
-                    tpt = np.vstack((tpt,pa[:,ip%Np]))
+                    tpt  = np.vstack((tpt,pa[:,ip%Np]))
                     mask = np.vstack((mask,np.array([[0,0]])))
                 tpt = np.vstack((tpt,np.array([[0,0]])))
                 mask = np.vstack((mask,np.array([[1,1]])))

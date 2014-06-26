@@ -124,7 +124,7 @@ class Body(PyLayers):
         self.loadC3D(filename=_filemocap,centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
-        # otherwise self.traj use values from c3d file 
+        # otherwise self.traj use values from c3d file
         # obtain in self.loadC3D
 
     def __repr__(self):
@@ -675,10 +675,6 @@ class Body(PyLayers):
         nframes : int
         number of frames
 
-        Notes
-        -----
-
-        The body is centered at the
 
         """
 
@@ -686,7 +682,8 @@ class Body(PyLayers):
         #if 'pg' in dir(self):
         # del self.pg
 
-        s, p, f, info = c3d.read_c3d(filename)
+        #s, p, f, info = c3d.read_c3d(filename)
+        s, p, f, info = c3d.ReadC3d(filename)
 
         self.mocapinfo = info
 
@@ -723,6 +720,7 @@ class Body(PyLayers):
         #if self.d[2,:,:].max()>50:
         # extract only known nodes in nodes_Id
         ind = []
+        pdb.set_trace()
         for i in self.nodes_Id:
             if self.nodes_Id[i]<>'BOTT':
                 ind.append(p.index(s[0] + self.nodes_Id[i]))
