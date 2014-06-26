@@ -135,17 +135,22 @@ class Body(PyLayers):
         st = "My name is : " + self.name + '\n\n'
 
         for k in self.dev.keys():
-            st = st + 'I have a '+self.dev[k]['name']+' device '
-            side = str(self.dev[k]['cyl'])[-1]
-            if side=='l':
-                st = st+'on the left '
-            if side=='r':
-                st = st+'on the right '
-            if side=='u':
-                st = st+'on the upper part of '
-            if side=='b':
-                st = st+'on the lower part of '
-            st = st + str(self.dev[k]['cyl'])[0:-1]+'\n'
+            if self.dev[k]['status']=='simulated':
+                st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' '
+                side = str(self.dev[k]['cyl'])[-1]
+                if side=='l':
+                    st = st+'on the left '
+                if side=='r':
+                    st = st+'on the right '
+                if side=='u':
+                    st = st+'on the upper part of '
+                if side=='b':
+                    st = st+'on the lower part of '
+                st = st + str(self.dev[k]['cyl'])[0:-1]+'\n'
+            else :
+                st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' on '+\
+                            self.dev[k]['radiomarkname']+'\n'
+            
 
 
 
@@ -282,6 +287,10 @@ class Body(PyLayers):
             self.dev[d]['uc3d'] = np.where(bd)[0]
 
         return(di)
+
+    def rdpdf(self):
+        """ real device position dataframe
+        """
 
     def dpdf(self):
         """ device position dataframe
