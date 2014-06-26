@@ -241,6 +241,14 @@ class Body(PyLayers):
 
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
+
+        # if a mocap file is given in the config file
+        if len(di['mocap']['file']) != 0:
+            unit = di['mocap']['unit']
+            nframes = di['mocap']['nframes']
+            self.loadC3D(di['mocap']['file'],nframes = nframes, unit = unit)
+
+
         #
         # update devices dict from wearble file
         #
@@ -267,11 +275,11 @@ class Body(PyLayers):
                 except:
                     self.dev[section][option]=devconf.get(section,option)
 
-        # if a mocap file is given in the config file
-        if len(di['mocap']['file']) != 0:
-            unit = di['mocap']['unit']
-            nframes = di['mocap']['nframes']
-            self.loadC3D(di['mocap']['file'],nframes = nframes, unit = unit)
+        rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
+        a=[]
+        for d in rd : 
+            bd = [self.dev[d]['radiomarkname'] in p for p in self._p]
+            self.dev[d]['uc3d'] = np.where(bd)[0]
 
         return(di)
 
@@ -480,7 +488,7 @@ class Body(PyLayers):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj,t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
+    def settopos(self,traj=[],t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -544,6 +552,9 @@ class Body(PyLayers):
         #
         # kt : trajectory integer index
         # kf : frame integer index
+
+        if not isinstance(traj,tr.Trajectory):
+            traj = self.traj
 
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
 
@@ -687,7 +698,20 @@ class Body(PyLayers):
                 self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
             else :
-                pass
+                if len(self.dev[dev]['uc3d']) > 1:
+                    # mp : marker pos
+                    mp = self._f[frameId,self.dev[dev]['uc3d'],:]*self._unit
+                    vm = np.diff(mp,axis=00)
+                    T = (vm/np.sum(vm,axis=1))[:3]
+                    T[:,2]=np.cross(T[:,0],T[:,1])
+                    T[:,1]=np.cross(T[:,0],T[:,2])
+                    mp0 = mp[0]
+                    self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
+                else:
+                    mp0 = self._f[frameId,self.dev[dev]['uc3d'][0],:]*self._unit
+                    T= np.eye(3)
+                self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
+
 
     def setacs(self):
         """ set antenna coordinate system (acs) from a topos or a set of frames
@@ -696,11 +720,14 @@ class Body(PyLayers):
 
         self.acs = {}
         for dev in self.dev.keys():
-            Rab = self.dev[dev]['T']
-            U = self.dcs[dev]
-            # extract only orthonormal basis
-            Rbg = U[:,1:]
-            self.acs[dev]  = np.dot(Rbg,Rab)
+            if self.dev[dev]['status'] == 'simulated':
+                Rab = self.dev[dev]['T']
+                U = self.dcs[dev]
+                # extract only orthonormal basis
+                Rbg = U[:,1:]
+                self.acs[dev]  = np.dot(Rbg,Rab)
+            else :
+                self.acs[dev]  = np.array([[1,0,0],[0,1,0],[0,0,1]])
 
     def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm'):
         """ load nframes of motion capture C3D file
@@ -740,7 +767,12 @@ class Body(PyLayers):
         #
 
         self.unit = unit
-
+        if unit == 'cm':
+            self._unit = 1e-2
+        elif unit == 'mm':
+            self._unit = 1e-3
+        else :
+            raise AttributeError('unit'+unit + 'not recognized')
         # duration of the motion capture snapshot
 
         self.Tmocap = self.nframes / info['VideoFrameRate']
@@ -794,13 +826,9 @@ class Body(PyLayers):
         #
         # cm to meter conversion if required
         #
-        CM_TO_M = 0.01
-        MM_TO_M = 0.001
 
-        if self.unit=='cm':
-            self.d = self.d*CM_TO_M
-        elif self.unit=='mm':
-            self.d = self.d*MM_TO_M
+
+        self.d = self.d*self._unit
 
         #self.nodes_Id[15]='bottom'
         if centered:
