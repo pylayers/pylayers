@@ -742,7 +742,7 @@ class Body(PyLayers):
                 Rbg = U[:,1:]
                 self.acs[dev]  = np.dot(Rbg,Rab)
             else :
-                self.acs[dev]  = np.array([[1,0,0],[0,1,0],[0,0,1]])
+                self.acs[dev]  = self.dev[dev]['T']
 
     def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm'):
         """ load nframes of motion capture C3D file
