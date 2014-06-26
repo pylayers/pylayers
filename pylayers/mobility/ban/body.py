@@ -291,6 +291,24 @@ class Body(PyLayers):
     def rdpdf(self):
         """ real device position dataframe
         """
+        # dictionary of device dataframe
+        df={}
+        {df.update(
+            {d:pd.DataFrame(
+                columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
+            for d in self.dev.keys()}
+
+        for d in self.dev:
+            df[d]['dev_id']=d
+            df[d]['dev_x']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
+            df[d]['dev_y']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
+            df[d]['dev_z']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
+            # gather all devices in a single dataframe:
+            addf = pd.DataFrame()
+            for d in df:
+                addf = pd.concat([addf,df[d]])
+        addf=addf.sort_index()
+        return addf
 
     def dpdf(self):
         """ device position dataframe
@@ -318,6 +336,7 @@ class Body(PyLayers):
             {d:pd.DataFrame(
                 columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
             for d in self.dev.keys()}
+
 
         for it,t in enumerate(self.traj.time()):
             self.settopos(self.traj,t=t,cs=True)
