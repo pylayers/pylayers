@@ -205,10 +205,10 @@ class Body(PyLayers):
             di[section] = {}
             options = config.options(section)
             for option in options:
-                if section=='nodes':
-                    di[section][option] = config.get(section,option)
-                else:
+                if section=='cylinder' or option =='nframes':
                     di[section][option] = eval(config.get(section,option))
+                else:
+                    di[section][option] = config.get(section,option)
 
         keys = map(lambda x : eval(x),di['nodes'].keys())
         nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
@@ -246,6 +246,10 @@ class Body(PyLayers):
         #
         self.dev={}
         devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
+        if not os.path.exists(devfilename):
+            raise AttributeError('the wareable file '+di['wearable']['file']+
+                             ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
+
         devconf = ConfigParser.ConfigParser()
         devconf.read(devfilename)
         sections = devconf.sections()
@@ -257,9 +261,12 @@ class Body(PyLayers):
                 # non case sensitive in .ini file
                 if option=='t':
                     option=option.upper()
-                self.dev[section][option]=eval(devconf.get(section,option))
+                #manage non string data
+                try:
+                    self.dev[section][option]=eval(devconf.get(section,option))
+                except:
+                    self.dev[section][option]=devconf.get(section,option)
 
-        
         # if a mocap file is given in the config file
         if len(di['mocap']['file']) != 0:
             unit = di['mocap']['unit']
@@ -635,49 +642,52 @@ class Body(PyLayers):
         """
         self.dcs = {}
         for dev in self.dev.keys():
+            if self.dev[dev]['status'] == 'simulated':
+                # retrieving antenna placement information from dictionnary ant
+                cylname = self.dev[dev]['cyl']
+                Id = self.dcyl[cylname]
+                alpha = self.dev[dev]['a']*np.pi/180.
+                l = self.dev[dev]['l']
+                h = self.dev[dev]['h']
 
-            # retrieving antenna placement information from dictionnary ant
-            cylname = self.dev[dev]['cyl']
-            Id = self.dcyl[cylname]
-            alpha = self.dev[dev]['a']*np.pi/180.
-            l = self.dev[dev]['l']
-            h = self.dev[dev]['h']
+                # getting cylinder information
 
-            # getting cylinder information
+                #pdb.set_trace()
+                #~ a_edge = np.array(l_edge)
+                #~ a_data = a_edge[:,2]
+                #~ dtk = filter(lambda x: x['id']==str(Id),a_data)
+                #~ k = np.where(a_data ==dtk)[0][0]
 
-            #pdb.set_trace()
-            #~ a_edge = np.array(l_edge)
-            #~ a_data = a_edge[:,2]
-            #~ dtk = filter(lambda x: x['id']==str(Id),a_data)
-            #~ k = np.where(a_data ==dtk)[0][0]
+                #~ kta = ed[0]
+                #~ khe = ed[1]
+                kta = int(self.sl[int(Id),0])
+                khe = int(self.sl[int(Id),1])
+                Rcyl = self.sl[int(Id),2]
 
-            #~ kta = ed[0]
-            #~ khe = ed[1]
-            kta = int(self.sl[int(Id),0])
-            khe = int(self.sl[int(Id),1])
-            Rcyl = self.sl[int(Id),2]
-
-            if topos == True :
-                pta = np.array(self.topos[:,kta])
-                phe = np.array(self.topos[:,khe])
-            else:
-                pta = np.array(self.d[:,kta, frameId])
-                phe = np.array(self.d[:,khe, frameId])
+                if topos == True :
+                    pta = np.array(self.topos[:,kta])
+                    phe = np.array(self.topos[:,khe])
+                else:
+                    pta = np.array(self.d[:,kta, frameId])
+                    phe = np.array(self.d[:,khe, frameId])
 
 
-            vl = phe - pta
-            lmax = np.sqrt(np.dot(vl,vl))
+                vl = phe - pta
+                lmax = np.sqrt(np.dot(vl,vl))
 
-            #CCS = self.ccs[k,:,:]
-            CCS = self.ccs[Id,:,:]
-            #self.nodes_Id[kta],self.nodes_Id[khe]
+                #CCS = self.ccs[k,:,:]
+                CCS = self.ccs[Id,:,:]
+                #self.nodes_Id[kta],self.nodes_Id[khe]
 
-            # applying rotation and translation
+                # applying rotation and translation
 
-            Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
-            CCSr = np.dot(CCS,Rot)
-            neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
-            self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
+                Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
+                CCSr = np.dot(CCS,Rot)
+                neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
+                self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
+
+            else :
+                pass
 
     def setacs(self):
         """ set antenna coordinate system (acs) from a topos or a set of frames
@@ -790,7 +800,7 @@ class Body(PyLayers):
         if self.unit=='cm':
             self.d = self.d*CM_TO_M
         elif self.unit=='mm':
-            self.d = self.d*MM_TO_M/4.
+            self.d = self.d*MM_TO_M
 
         #self.nodes_Id[15]='bottom'
         if centered:
@@ -1218,8 +1228,9 @@ class Body(PyLayers):
 
         if kwargs['ccs']:
             # to be improved
+            
             for k,key in enumerate(self.ccs):
-                pt = pta[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
+                pt = self.topos[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
                 ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
