@@ -929,6 +929,77 @@ class Body(PyLayers):
         return self.dcs[id][:,1:]
 
 
+
+    def chronophoto(self,**kwargs):
+        """ chronophotography of the body movement 
+            (a.k.a. position as a function of time)
+
+        Parameters
+        ----------
+        tstart : float
+            starting time in second
+        tend : float
+            ending time in second,
+        tstep : float
+            time step between tstart and tend
+        sstep : float
+            spatial step (distance between 2 instant)
+        planes : list
+            list of planes to be displayed ['xz','xy','yz']
+
+
+        See Also
+        --------
+
+        http://en.wikipedia.org/wiki/Chronophotography
+
+        """
+
+        defaults = {'tstart':10,
+                    'tend':40,
+                    'tstep':5,
+                    'sstep':2,
+                    'planes':['xz','xy','yz']
+                    }
+
+        fargs={}
+        for k in defaults:
+            if k not in kwargs:
+                fargs[k] = defaults[k]
+            else:
+                fargs[k] = kwargs.pop(k)
+
+        fstart=np.where(fargs['tstart']<=self.time)[0][0]
+        fend=np.where(fargs['tend']<=self.time)[0][0]
+        mocaptres = self.Tmocap/self.nframes
+        step = int(fargs['tstep']/mocaptres)
+        trange=np.arange(fargs['tstart'],fargs['tend'],fargs['tstep'])
+        frange=range(fstart,fend,step)
+
+        vstep=np.arange(0,len(frange))*fargs['sstep']
+
+
+        fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=True)
+        import ipdb
+        ipdb.set_trace()
+        if not isinstance(axs,np.ndarray):
+            axs=np.array([axs])
+        for p,ax in enumerate(axs):
+            for uf,f in enumerate(frange):
+                fig,ax=self.show(color='b',plane=fargs['planes'][p],widthfactor=50,offset=vstep[uf],frameId=f,fig=fig,ax=ax)
+
+            ax.set_aspect('auto')
+            ax.set_ylabel(fargs['planes'][p])
+            ax.set_xlabel('time (s)')
+            ax.set_xlim(vstep[0],vstep[-1])
+            if 'z' in fargs['planes'][p]:
+                ax.set_ylim(0,2)
+            else :
+                ax.set_ylim(-2,2)
+            ax.set_xticklabels(trange)
+
+        return fig,ax
+
     def movie(self,**kwargs):
         """ creates a geomview movie
 
@@ -1387,7 +1458,7 @@ class Body(PyLayers):
 
         defaults = {'frameId' : 0,
                     'plane': 'yz',
-                    'widthfactor' : 100,
+                    'widthfactor' : 10,
                     'topos':False,
                     'offset':0}
 
@@ -1395,21 +1466,24 @@ class Body(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+
         offset = np.array([kwargs['offset'],0])[:,np.newaxis]
         args = {}
         for k in kwargs:
             if k not in defaults:
                 args[k] = kwargs[k]
 
-        if kwargs['plane'] == 'yz':
+        if kwargs['plane'] == 'yz' or kwargs['plane'] == 'zy':
             ax1 = 1
             ax2 = 2
-        if kwargs['plane'] == 'xz':
+        elif kwargs['plane'] == 'xz' or kwargs['plane'] == 'zx':
             ax1 = 0
             ax2 = 2
-        if kwargs['plane'] == 'xy':
+        elif kwargs['plane'] == 'xy' or kwargs['plane'] == 'yx':
             ax1 = 0
             ax2 = 1
+        else :
+            raise AttributeError('Incorrect plane')
 
         fId = kwargs['frameId']
 
@@ -1427,7 +1501,7 @@ class Body(PyLayers):
 
             fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
 
-        plt.axis('scaled')
+        # plt.axis('scaled')
         return(fig,ax)
 
 
