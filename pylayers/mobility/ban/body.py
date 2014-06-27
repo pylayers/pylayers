@@ -126,7 +126,7 @@ class Body(PyLayers):
         self.cylfromc3d(centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
-        # otherwise self.traj use values from c3d file 
+        # otherwise self.traj use values from c3d file
         # obtain in self.loadC3D
 
     def __repr__(self):
@@ -193,8 +193,8 @@ class Body(PyLayers):
         Node number = Node name
         + section [cylinder]
         CylinderId = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
-        + section [antennas]
-        Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
+        + section [wearable]
+        + section [mocap]
 
         """
         filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
@@ -255,9 +255,10 @@ class Body(PyLayers):
 
 
         #
-        # update devices dict from wearble file
+        # update devices dict from wearable file
         #
         self.dev={}
+
         devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
         if not os.path.exists(devfilename):
             raise AttributeError('the wareable file '+di['wearable']['file']+
@@ -280,9 +281,13 @@ class Body(PyLayers):
                 except:
                     self.dev[section][option]=devconf.get(section,option)
 
+
+        #
+        # filter real device and get devices 
+        #
         rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
         a=[]
-        for d in rd : 
+        for d in rd :
             bd = [self.dev[d]['radiomarkname'] in p for p in self._p]
             self.dev[d]['uc3d'] = np.where(bd)[0]
 
@@ -772,7 +777,7 @@ class Body(PyLayers):
             else :
                 self.acs[dev]  = self.dev[dev]['T']
 
-    def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm'):
+    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
         """ load nframes of motion capture C3D file
 
         Parameters
@@ -783,19 +788,15 @@ class Body(PyLayers):
         nframes : int
         number of frames
 
-        Notes
-        -----
-
-        The body is centered at the
 
         """
 
 
         #if 'pg' in dir(self):
         # del self.pg
-
         # s, p, f, info = c3d.read_c3d(filename)
         self._s, self._p, self._f, info = c3d.ReadC3d(filename)
+
         self.mocapinfo = info
 
         self.filename = filename
@@ -1377,6 +1378,8 @@ class Body(PyLayers):
         widthfactor : int
         topos : boolean
             default False
+        offset = np.array()
+            1,3
 
 
 
@@ -1384,13 +1387,15 @@ class Body(PyLayers):
 
         defaults = {'frameId' : 0,
                     'plane': 'yz',
-                    'widthfactor' : 40,
-                    'topos':False}
+                    'widthfactor' : 100,
+                    'topos':False,
+                    'offset':0}
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+        offset = np.array([kwargs['offset'],0])[:,np.newaxis]
         args = {}
         for k in kwargs:
             if k not in defaults:
@@ -1420,19 +1425,7 @@ class Body(PyLayers):
                 pta =  np.array([self.d[ax1, kta, fId], self.d[ax2, kta, fId]])[:,np.newaxis]
                 phe =  np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[:,np.newaxis]
 
-            fig,ax = plu.displot(pta,phe,linewidth = cylrad*kwargs['widthfactor'],**args)
-            #try:
-            #
-            #    pta = np.vstack((pta,np.array([self.d[ax1, kta, fId], self.d[ax2, kta, fId]])[np.newaxis,:]))
-            #    phe = np.vstack((phe,np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[np.newaxis,:]))
-            #except:
-            #    pta =  np.array([self.d[ax1, kta, fId], self.d[ax2, kta, fId]])[np.newaxis,:]
-            #    phe =  np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[np.newaxis,:]
-            #print pta
-            #print phe
-            #fig,ax = plu.displot(pta,phe,linewidth = cylrad*kwargs['widthfactor'],**args)
-        #pdb.set_trace()
-        #fig,ax = plu.displot(pta.T,phe.T,**args)
+            fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
 
         plt.axis('scaled')
         return(fig,ax)
