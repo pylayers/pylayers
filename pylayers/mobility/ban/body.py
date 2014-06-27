@@ -102,7 +102,7 @@ class Body(PyLayers):
 
     """
 
-    def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d',traj=[]):
+    def __init__(self,_filebody='John.ini',_filemocap=[],traj=[]):
         """ object constructor
 
         Parameters
@@ -121,7 +121,9 @@ class Body(PyLayers):
 
         self.name = _filebody.replace('.ini','')
         di = self.load(_filebody)
-        self.loadC3D(filename=_filemocap,centered=True)
+        if _filemocap != []:
+            self.loadC3D(filename=_filemocap)
+        self.cylfromc3d(centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
         # otherwise self.traj use values from c3d file
@@ -186,14 +188,14 @@ class Body(PyLayers):
         Node number = Node name
         + section [cylinder]
         CylinderId = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
-        + section [antennas]
-        Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
+        + section [wearable]
+        + section [mocap]
 
         """
-        filebody = pyu.getlong(_filebody,'ini')
+        filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
         if not os.path.isfile(filebody):
             raise NameError(_filebody + ' cannot be found in' 
-                             + pyu.getlong('','ini'))
+                             + pyu.getlong('',pstruc['DIRBODY']))
 
         config = ConfigParser.ConfigParser()
         config.read(filebody)
@@ -203,14 +205,20 @@ class Body(PyLayers):
             di[section] = {}
             options = config.options(section)
             for option in options:
-                if section=='nodes':
-                    di[section][option] = config.get(section,option)
-                else:
+                if section=='cylinder' or option =='nframes':
                     di[section][option] = eval(config.get(section,option))
+                else:
+                    di[section][option] = config.get(section,option)
 
         keys = map(lambda x : eval(x),di['nodes'].keys())
-        self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
-
+        nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
+        # identifier are always 4 character. otherwise its a list
+        fnid = filter(lambda x: len(x[1])>4 , nodes_Id.items())
+        for k,v in fnid:
+            # clean bracket and coma
+            vc = v.split('[')[1].split(']')[0].split(',')
+            nodes_Id.update({k:vc})
+        self.nodes_Id=nodes_Id
 
         self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
         self.dcyl = {}
@@ -233,10 +241,50 @@ class Body(PyLayers):
 
         self.idcyl={}
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
-        # update devices dict
+
+        # if a mocap file is given in the config file
+        if len(di['mocap']['file']) != 0:
+            unit = di['mocap']['unit']
+            nframes = di['mocap']['nframes']
+            self.loadC3D(di['mocap']['file'],nframes = nframes, unit = unit)
+
+
+        #
+        # update devices dict from wearable file
+        #
         self.dev={}
-        for dev in di['device'].keys():
-            self.dev[dev]=di['device'][dev]
+
+        devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
+        if not os.path.exists(devfilename):
+            raise AttributeError('the wareable file '+di['wearable']['file']+
+                             ' cannot be found in $BASENAME/'+pstruc['DIRWEAR'])
+
+        devconf = ConfigParser.ConfigParser()
+        devconf.read(devfilename)
+        sections = devconf.sections()
+        self.dev = {}
+        for section in sections:
+            self.dev[section] = {}
+            options = devconf.options(section)
+            for option in options:
+                # non case sensitive in .ini file
+                if option=='t':
+                    option=option.upper()
+                #manage non string data
+                try:
+                    self.dev[section][option]=eval(devconf.get(section,option))
+                except:
+                    self.dev[section][option]=devconf.get(section,option)
+
+
+        #
+        # filter real device and get devices 
+        #
+        rd = dict(filter(lambda x: x[1]['status']== 'real',self.dev.items()))
+        a=[]
+        for d in rd :
+            bd = [self.dev[d]['radiomarkname'] in p for p in self._p]
+            self.dev[d]['uc3d'] = np.where(bd)[0]
 
         return(di)
 
@@ -425,7 +473,11 @@ class Body(PyLayers):
         #
 
         vs = self.pg[0:-1,kf] - self.pg[0:-1,kf-1]
-        vsn = vs/np.sqrt(np.dot(vs,vs))
+        nvs = np.sqrt(np.dot(vs,vs))
+        if nvs != 0 :
+            vsn = vs/nvs
+        else :
+            vsn = vs
         wsn = np.array([vsn[1],-vsn[0]])
 
         #
@@ -437,7 +489,11 @@ class Body(PyLayers):
         #
 
         vt = np.array([traj['vx'][kt],traj['vy'][kt]])
-        vtn = vt/np.sqrt(np.dot(vt,vt))
+        nvt = np.sqrt(np.dot(vt,vt))
+        if nvt != 0:
+            vtn = vt/nvt
+        else :
+            vtn=vt
         wtn = np.array([vtn[1],-vtn[0]])
 
         # vt = traj[kt+1,1:] - traj[kt,1:]
@@ -445,7 +501,7 @@ class Body(PyLayers):
 
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj,t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
+    def settopos(self,traj=[],t=0,cs=False,treadmill=False,p0=np.array(([0.,0.,0.]))):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -509,6 +565,9 @@ class Body(PyLayers):
         #
         # kt : trajectory integer index
         # kf : frame integer index
+
+        if not isinstance(traj,tr.Trajectory):
+            traj = self.traj
 
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,t)
 
@@ -607,49 +666,72 @@ class Body(PyLayers):
         """
         self.dcs = {}
         for dev in self.dev.keys():
+            if self.dev[dev]['status'] == 'simulated':
+                # retrieving antenna placement information from dictionnary ant
+                cylname = self.dev[dev]['cyl']
+                Id = self.dcyl[cylname]
+                alpha = self.dev[dev]['a']*np.pi/180.
+                l = self.dev[dev]['l']
+                h = self.dev[dev]['h']
 
-            # retrieving antenna placement information from dictionnary ant
-            cylname = self.dev[dev]['cyl']
-            Id = self.dcyl[cylname]
-            alpha = self.dev[dev]['a']*np.pi/180.
-            l = self.dev[dev]['l']
-            h = self.dev[dev]['h']
+                # getting cylinder information
 
-            # getting cylinder information
+                #pdb.set_trace()
+                #~ a_edge = np.array(l_edge)
+                #~ a_data = a_edge[:,2]
+                #~ dtk = filter(lambda x: x['id']==str(Id),a_data)
+                #~ k = np.where(a_data ==dtk)[0][0]
 
-            #pdb.set_trace()
-            #~ a_edge = np.array(l_edge)
-            #~ a_data = a_edge[:,2]
-            #~ dtk = filter(lambda x: x['id']==str(Id),a_data)
-            #~ k = np.where(a_data ==dtk)[0][0]
+                #~ kta = ed[0]
+                #~ khe = ed[1]
+                kta = int(self.sl[int(Id),0])
+                khe = int(self.sl[int(Id),1])
+                Rcyl = self.sl[int(Id),2]
 
-            #~ kta = ed[0]
-            #~ khe = ed[1]
-            kta = int(self.sl[int(Id),0])
-            khe = int(self.sl[int(Id),1])
-            Rcyl = self.sl[int(Id),2]
-
-            if topos == True :
-                pta = np.array(self.topos[:,kta])
-                phe = np.array(self.topos[:,khe])
-            else:
-                pta = np.array(self.d[:,kta, frameId])
-                phe = np.array(self.d[:,khe, frameId])
+                if topos == True :
+                    pta = np.array(self.topos[:,kta])
+                    phe = np.array(self.topos[:,khe])
+                else:
+                    pta = np.array(self.d[:,kta, frameId])
+                    phe = np.array(self.d[:,khe, frameId])
 
 
-            vl = phe - pta
-            lmax = np.sqrt(np.dot(vl,vl))
+                vl = phe - pta
+                lmax = np.sqrt(np.dot(vl,vl))
 
-            #CCS = self.ccs[k,:,:]
-            CCS = self.ccs[Id,:,:]
-            #self.nodes_Id[kta],self.nodes_Id[khe]
+                #CCS = self.ccs[k,:,:]
+                CCS = self.ccs[Id,:,:]
+                #self.nodes_Id[kta],self.nodes_Id[khe]
 
-            # applying rotation and translation
+                # applying rotation and translation
 
-            Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
-            CCSr = np.dot(CCS,Rot)
-            neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
-            self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
+                Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
+                CCSr = np.dot(CCS,Rot)
+                neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
+                self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
+
+            else :
+                if 'toposFrameId'  in dir(self):
+                    fId = self.toposFrameId
+                else :
+                    fId = frameId
+                if len(self.dev[dev]['uc3d']) > 1:
+                    # mp : marker pos
+                    mp = self._f[fId,self.dev[dev]['uc3d'],:]
+                    vm = np.diff(mp,axis=0)
+                    vm = vm[:3]
+                    mvm = np.sqrt(np.sum((vm*vm),axis=0))
+                    T = vm/mvm
+                    T[:,2]=np.cross(T[:,0],T[:,1])
+                    T[:,1]=np.cross(T[:,0],T[:,2])
+                    Tn = T/np.sqrt(np.sum(T*T,axis=0))
+                    mp0 = mp[0]
+                    # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
+                else:
+                    mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
+                    Tn = np.eye(3)
+                self.dcs[dev] = np.hstack((mp0[:,np.newaxis],Tn))
+
 
     def setacs(self):
         """ set antenna coordinate system (acs) from a topos or a set of frames
@@ -658,13 +740,16 @@ class Body(PyLayers):
 
         self.acs = {}
         for dev in self.dev.keys():
-            Rab = self.dev[dev]['T']
-            U = self.dcs[dev]
-            # extract only orthonormal basis
-            Rbg = U[:,1:]
-            self.acs[dev]  = np.dot(Rbg,Rab)
+            if self.dev[dev]['status'] == 'simulated':
+                Rab = self.dev[dev]['T']
+                U = self.dcs[dev]
+                # extract only orthonormal basis
+                Rbg = U[:,1:]
+                self.acs[dev]  = np.dot(Rbg,Rab)
+            else :
+                self.acs[dev]  = np.array([[1,0,0],[0,1,0],[0,0,1]])
 
-    def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
+    def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
         """ load nframes of motion capture C3D file
 
         Parameters
@@ -681,9 +766,8 @@ class Body(PyLayers):
 
         #if 'pg' in dir(self):
         # del self.pg
-
-        #s, p, f, info = c3d.read_c3d(filename)
-        s, p, f, info = c3d.ReadC3d(filename)
+        # s, p, f, info = c3d.read_c3d(filename)
+        self._s, self._p, self._f, info = c3d.ReadC3d(filename)
 
         self.mocapinfo = info
 
@@ -691,59 +775,79 @@ class Body(PyLayers):
         if nframes<>-1:
             self.nframes = nframes
         else:
-            self.nframes = np.shape(f)[0]
+            self.nframes = np.shape(self._f)[0]
         #
         # s : prefix
         # p : list of points name
         # f : nframe x npoints x 3
         #
 
-        CM_TO_M = 0.01
-
+        self.unit = unit
+        if unit == 'cm':
+            self._unit = 1e-2
+        elif unit == 'mm':
+            self._unit = 1e-3
+        else :
+            raise AttributeError('unit'+unit + 'not recognized')
         # duration of the motion capture snapshot
+
+
+        self._f=self._f*self._unit
 
         self.Tmocap = self.nframes / info['VideoFrameRate']
 
         # time base of the motion capture file (sec)
         self.time = np.linspace(0,self.Tmocap,self.nframes)
 
+
+
+    def cylfromc3d(self,centered = False):
+        """ Create cylinders from C3D file 
+        """
         #
         # motion capture data
         #
         # self.d : 3 x npoints x nframes
         #
 
-        self.npoints = 15
+        # number of point is determine by the ini file
+        self.npoints = len(self.nodes_Id)
 
-        self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
+        # self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
 
         #if self.d[2,:,:].max()>50:
         # extract only known nodes in nodes_Id
-        ind = []
-        pdb.set_trace()
+        self.d = np.zeros((3, self.npoints, self.nframes))
         for i in self.nodes_Id:
-            if self.nodes_Id[i]<>'BOTT':
-                ind.append(p.index(s[0] + self.nodes_Id[i]))
+            # node name = 4 characters
+            if not isinstance(self.nodes_Id[i],list) :
+                idx = self._p.index(self._s[0] + self.nodes_Id[i])
+                self.d[:,i,:] = self._f[0:self.nframes, idx, :].T
+            # perform center of mass of the nodes
+
+            else :
+
+                lnid = len(self.nodes_Id[i])
+                for k in range(lnid):
+
+                    nodename = self.nodes_Id[i][k].replace(' ','')
+
+                    idx = self._p.index(self._s[0] + nodename)
+                    try:
+                        tmp = tmp +self._f[0:self.nframes, idx, :].T
+                    except:
+                        tmp = self._f[0:self.nframes, idx, :].T
+                self.d[:,i,:] = tmp / (1.*lnid)
+                del tmp
+
 
         # f.T : 3 x npoints x nframe
         #
         # cm to meter conversion if required
         #
-        self.d = f[0:nframes, ind, :].T
-        if unit=='cm':
-            self.d = self.d*CM_TO_M
 
-        #
-        # Extension of cylinder
-        #
 
-        self.npoints = 16
-
-        pm = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
-        pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
-        pmf = pmf[:,np.newaxis,:]
-
-        self.d = np.concatenate((self.d,pmf),axis=1)
+        self.d = self.d
 
         #self.nodes_Id[15]='bottom'
         if centered:
@@ -934,11 +1038,13 @@ class Body(PyLayers):
 
         """
         self._plot3d(typ='c3d',text=False)
-        s, p, f, info = c3d.read_c3d(self.filename)
-
-
+        # s, p, f, info = c3d.read_c3d(self.filename)
+        s, p, f, info = c3d.ReadC3d(self.filename)
+        f=f/10.
+        fig = mlab.gcf()
+        fig.scene.disable_render=False
+        fig.scene.anti_aliasing_frames=0
         while True:
-
             for k in range(self.nframes):
                 # s = np.hstack((cylrad,cylrad))
                 self._mayapts.mlab_source.set(x=f[k,:,0],
@@ -974,7 +1080,10 @@ class Body(PyLayers):
 
         fig = mlab.gcf()
 
-        fId = kwargs['iframe']
+        if 'toposFrameId'  in dir(self):
+            fId = self.toposFrameId
+        else :
+            fId = kwargs['iframe']
 
         cold = pyu.coldict()
         ncolhex = cold[kwargs['ncolor']]
@@ -983,13 +1092,13 @@ class Body(PyLayers):
         ed_color = tuple(pyu.rgb(ecolhex)/255.)
 
         if kwargs['typ'] == 'c3d':
-            s, p, f, info = c3d.read_c3d(self.filename)
-            self._mayapts=mlab.points3d(f[fId,:,0],f[fId,:,1],f[fId,:,2],scale_factor=5,opacity=0.5)
+            # s, p, f, info = c3d.ReadC3d(self.filename)
+            self._mayapts=mlab.points3d(self._f[fId,:,0],self._f[fId,:,1],self._f[fId,:,2],scale_factor=0.05,opacity=0.5)
             fig.children[-1].__setattr__('name',self.filename )
             if kwargs['text']:
-                self._mayaptstxt=[mlab.text3d(f[fId,i,0],f[fId,i,1],f[fId,i,2],p[i][4:],
-                                    scale=3,
-                                    color=(0,0,0)) for i in range(len(p))]
+                self._mayaptstxt=[mlab.text3d(self._f[fId,i,0],self._f[fId,i,1],self._f[fId,i,2],self._p[i].replace(self._s[0],''),
+                                    scale=15,
+                                    color=(0,0,0)) for i in range(len(self._p))]
 
         else :
             kta = self.sl[:,0].astype(int)
@@ -1169,8 +1278,9 @@ class Body(PyLayers):
 
         if kwargs['ccs']:
             # to be improved
+            
             for k,key in enumerate(self.ccs):
-                pt = pta[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
+                pt = self.topos[:,k]+cylrad[k]*kwargs['widthfactor']*self.ccs[k, :, 0]
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
                 ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
@@ -1240,6 +1350,8 @@ class Body(PyLayers):
         widthfactor : int
         topos : boolean
             default False
+        offset = np.array()
+            1,3
 
 
 
@@ -1247,13 +1359,15 @@ class Body(PyLayers):
 
         defaults = {'frameId' : 0,
                     'plane': 'yz',
-                    'widthfactor' : 40,
-                    'topos':False}
+                    'widthfactor' : 100,
+                    'topos':False,
+                    'offset':0}
 
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+        offset = np.array([kwargs['offset'],0])[:,np.newaxis]
         args = {}
         for k in kwargs:
             if k not in defaults:
@@ -1283,19 +1397,7 @@ class Body(PyLayers):
                 pta =  np.array([self.d[ax1, kta, fId], self.d[ax2, kta, fId]])[:,np.newaxis]
                 phe =  np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[:,np.newaxis]
 
-            fig,ax = plu.displot(pta,phe,linewidth = cylrad*kwargs['widthfactor'],**args)
-            #try:
-            #
-            #    pta = np.vstack((pta,np.array([self.d[ax1, kta, fId], self.d[ax2, kta, fId]])[np.newaxis,:]))
-            #    phe = np.vstack((phe,np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[np.newaxis,:]))
-            #except:
-            #    pta =  np.array([self.d[ax1, kta, fId], self.d[ax2, kta, fId]])[np.newaxis,:]
-            #    phe =  np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[np.newaxis,:]
-            #print pta
-            #print phe
-            #fig,ax = plu.displot(pta,phe,linewidth = cylrad*kwargs['widthfactor'],**args)
-        #pdb.set_trace()
-        #fig,ax = plu.displot(pta.T,phe.T,**args)
+            fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
 
         plt.axis('scaled')
         return(fig,ax)
