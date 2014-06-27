@@ -980,8 +980,6 @@ class Body(PyLayers):
 
 
         fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=True)
-        import ipdb
-        ipdb.set_trace()
         if not isinstance(axs,np.ndarray):
             axs=np.array([axs])
         for p,ax in enumerate(axs):
