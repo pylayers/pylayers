@@ -1632,6 +1632,12 @@ class TUsignal(TBsignal, Usignal):
         print 'ymin :', self.y.min()
         print 'ymax :', self.y.max()
 
+
+    def awgn(self,PSDdBmpHz=-174):
+        """ add a white gaussian noise
+        """
+
+        self.n = Noise(PSDdBmpHz)
     def fft(self, shift=False):
         """  forward fast Fourier transform
 
@@ -1758,7 +1764,7 @@ class TUsignal(TBsignal, Usignal):
 
         .. note::
 
-            Notice this interesting property that if time is iepressed in ns
+            Notice this interesting property that if time is represented in ns
             the resulting PSD is expressed in dBm/MHz because there is the
             same scale factor 1e-9 between second and nanosecond as between
             dBW/Hz and dBm/MHz
@@ -4803,7 +4809,7 @@ class FHsignal(FUsignal):
 class Noise(TUsignal):
     """ Create noise
     """
-    def __init__(self, Tobs=100, fsGHz = 50, DSPdBmpHz=-174, NF=0, R=50, seed=[]):
+    def __init__(self, Tobs=100, fsGHz = 50, PSDdBmpHz=-174, NF=0, R=50, seed=[]):
         """ object constructor
 
         Parameters
@@ -4811,7 +4817,7 @@ class Noise(TUsignal):
 
         Tobs      : Time duration
         fs        : sampling frequency
-        DSPdBmpHz : Power Spectral Density Noise (dBm/Hz)
+        PSDdBmpHz : Power Spectral Density Noise (dBm/Hz)
         R         : 50 Ohms
         NF        : 0
         R         : 50
@@ -4821,19 +4827,19 @@ class Noise(TUsignal):
         TUsignal.__init__(self)
         self.Tobs = Tobs
         self.fsGHz = fsGHz
-        self.DSPdBmpHz = DSPdBmpHz
+        self.PSDdBmpHz = PSDdBmpHz
         self.NF = NF
         self.R = R
 
         # power spectral density are in lower case
         # Power is in capital letter
 
-        p = DSPdBmpHz + NF
+        p = PSDdBmpHz + NF
         pmW = 10 ** (p / 10.)  # DSP : dBm/Hz -> mW/Hz
         pW = pmW / 1e3         # DSP : mw/Hz  -> W/Hz
 
-        PW = pW * (fsGHz * 1e9)   # Power : p * Bandwith Hz
-        std = np.sqrt(R * PW)     # Voltage P = V^2/R
+        self.PW = pW * (fsGHz * 1e9)   # Power : p * Bandwith Hz
+        self.vrms = np.sqrt(R * self.PW)     # Voltage P = V^2/R
 
         if seed != []:
             np.random.seed(seed)
@@ -4841,22 +4847,35 @@ class Noise(TUsignal):
         tsns   = 1./fsGHz
         self.x = np.arange(0, Tobs, tsns)
         N = len(self.x)
-        n = std * np.random.randn(N)
+        n = self.vrms * np.random.randn(N)
         self.y   = n
-        self.var = std*std
+        self.var = np.var(n)
+        self.Pr  = self.var/R
+
+    def __repr__(self):
+        st = ''
+        st = st+ 'Sampling frequency : '+ str(self.fsGHz)+' GHz\n'
+        st = st+ 'DSP : ' + str(self.PSDdBmpHz)+ ' dBm/Hz\n'
+        st = st+ 'NF : ' + str(self.NF)+ ' dB\n'
+        st = st+ 'Vrms : '+ str(self.vrms)+ ' Volts\n'
+        st = st+ 'Variance : '+ str(self.var)+ ' V^2\n'
+        st = st+ 'Power /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
+        st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
+        return(st)
 
     def amplify(self, GdB, NF):
-        pass
+        sel
 
-    def gating(self, fcGHz, BGHz, window='rect'):
-        """ apply a gating
+    def fgating(self, fcGHz, BGHz, window='rect'):
+        """ apply a frequency gating
 
         Parameters
         ----------
 
         fcGHz : float
         BGHz  : float
-        window : float
+        window : string
+            'rect'
 
         """
         N = self.fft()
@@ -4870,7 +4889,9 @@ class Noise(TUsignal):
         f2 = fcGHz + BGHz / 2.
         u = np.nonzero((f > f1) & (f < f2))[0]
         gate = np.zeros(len(f))
-        gate[u] = np.ones(len(u))
+        if window=='rect':
+            gate[u] = np.ones(len(u))
+
         G = FUsignal(f, gate)
         V = G * U
         NF = V.symH(parity)
