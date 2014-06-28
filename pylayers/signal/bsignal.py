@@ -1633,13 +1633,6 @@ class TUsignal(TBsignal, Usignal):
         print 'ymax :', self.y.max()
 
 
-<<<<<<< HEAD
-    def awgn(self,PSDdBmpHz=-174):
-        """ add a white gaussian noise
-        """
-
-        self.n = Noise(PSDdBmpHz)
-=======
     def awgn(self,PSDdBmpHz=-174,snr=0,seed=1,typ='psd',R=50):
         """ add a white Gaussian noise
 
@@ -1688,7 +1681,6 @@ class TUsignal(TBsignal, Usignal):
 
         return sn
 
->>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
     def fft(self, shift=False):
         """  forward fast Fourier transform
 
@@ -4860,22 +4852,12 @@ class FHsignal(FUsignal):
 class Noise(TUsignal):
     """ Create noise
     """
-<<<<<<< HEAD
-    def __init__(self, Tobs=100, fsGHz = 50, PSDdBmpHz=-174, NF=0, R=50, seed=[]):
-=======
     def __init__(self, ti=0,tf = 100, fsGHz = 50, PSDdBmpHz=-174, NF=0, R=50, seed=1):
->>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         """ object constructor
 
         Parameters
         ----------
 
-<<<<<<< HEAD
-        Tobs      : Time duration
-        fs        : sampling frequency
-        PSDdBmpHz : Power Spectral Density Noise (dBm/Hz)
-        R         : 50 Ohms
-=======
         ti        : float
             time start (ns)
         tf        : float
@@ -4886,35 +4868,11 @@ class Noise(TUsignal):
             Power Spectral Density Noise (dBm/Hz)
         R         : float
             50 Ohms
->>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         NF        : 0
         seed      : []
 
         """
         TUsignal.__init__(self)
-<<<<<<< HEAD
-        self.Tobs = Tobs
-        self.fsGHz = fsGHz
-        self.PSDdBmpHz = PSDdBmpHz
-        self.NF = NF
-        self.R = R
-
-        # power spectral density are in lower case
-        # Power is in capital letter
-
-        p = PSDdBmpHz + NF
-        pmW = 10 ** (p / 10.)  # DSP : dBm/Hz -> mW/Hz
-        pW = pmW / 1e3         # DSP : mw/Hz  -> W/Hz
-
-        self.PW = pW * (fsGHz * 1e9)   # Power : p * Bandwith Hz
-        self.vrms = np.sqrt(R * self.PW)     # Voltage P = V^2/R
-
-        if seed != []:
-            np.random.seed(seed)
-
-        tsns   = 1./fsGHz
-        self.x = np.arange(0, Tobs, tsns)
-=======
         self._tsns  = 1./fsGHz
         self._ti = ti
         self._tf = tf
@@ -5012,27 +4970,19 @@ class Noise(TUsignal):
         self.PW = pW * (self._fsGHz * 1e9)   # Power : p * Bandwith Hz
         self.vrms = np.sqrt(self._R*self.PW)
         self.x = np.arange(self.ti, self.tf, self.tsns)
->>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         N = len(self.x)
         n = self.vrms * np.random.randn(N)
         self.y   = n
         self.var = np.var(n)
-<<<<<<< HEAD
-        self.Pr  = self.var/R
-=======
         self.Pr  = self.var/self._R
->>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
 
     def __repr__(self):
         st = ''
         st = st+ 'Sampling frequency : '+ str(self.fsGHz)+' GHz\n'
-<<<<<<< HEAD
-=======
         st = st+ 'ti  : '+ str(self.ti)+'ns \n'
         st = st+ 'tf  : '+ str(self.tf)+'ns \n'
         st = st+ 'ts  : '+ str(self.tsns)+'ns \n'
         st = st + '-------------\n'
->>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         st = st+ 'DSP : ' + str(self.PSDdBmpHz)+ ' dBm/Hz\n'
         st = st+ 'NF : ' + str(self.NF)+ ' dB\n'
         st = st+ 'Vrms : '+ str(self.vrms)+ ' Volts\n'
@@ -5040,8 +4990,6 @@ class Noise(TUsignal):
         st = st+ 'Power /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
         st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
         return(st)
-<<<<<<< HEAD
-=======
 
     def psd(self,mask=True):
         """
@@ -5053,7 +5001,6 @@ class Noise(TUsignal):
         """
         w2 = TUsignal.psd(self,periodic=False)
         w2.plotdB(mask=True)
->>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
 
     def amplify(self, GdB, NF):
         sel
