@@ -383,7 +383,7 @@ class Trajectory(PyLayers,pd.DataFrame):
 
 
     """
-    def __init__(self, df={}, ID=0, name='', typ=''):
+    def __init__(self, df={}, ID='0', name='', typ=''):
         """ initialization
         """
         super(Trajectory, self).__init__(df)
@@ -488,7 +488,7 @@ class Trajectory(PyLayers,pd.DataFrame):
 
 
         """
-        defaults  = { 'ID': 1,
+        defaults  = { 'ID': '1',
                      'name': 'MyNameIsNoBody',
                      'typ':'ag',
                      't': np.linspace(0,10,50),

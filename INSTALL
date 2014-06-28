@@ -35,6 +35,18 @@ comment the only import to the module in pylayers/gis/osmparser.py.
 
 http://imposm.org/docs/imposm/latest/install.html#id1
 
+This sequence of command works on a ubuntu 12.04
+> sudo apt-get install build-essential 
+> sudo apt-get install libgeos-c1
+> sudo apt-get install protobuf-compiler
+> sudo apt-get install libprotobuf-dev
+> sudo apt-get install libtokyocabinet-dev
+> sudo apt-get install libpq-dev
+> sudo apt-get install python-dev
+> pip install simpy 
+> pip install shapely 
+> pip install imposm
+
 Most of this dependencies are handled in the setup.py script.
 
 python setup.py install

@@ -125,7 +125,7 @@ pstruc['DIRH'] = 'output/H'
 pstruc['DIRLNK'] = 'output'
 pstruc['DIRBODY'] = 'body'
 pstruc['DIRC3D'] = 'body/c3d'
-
+pstruc['DIRWEAR'] = 'body/wear'
 # if basename directory does not exit it is created 
 try:
     os.chdir(basename)

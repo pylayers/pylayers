@@ -1633,11 +1633,62 @@ class TUsignal(TBsignal, Usignal):
         print 'ymax :', self.y.max()
 
 
+<<<<<<< HEAD
     def awgn(self,PSDdBmpHz=-174):
         """ add a white gaussian noise
         """
 
         self.n = Noise(PSDdBmpHz)
+=======
+    def awgn(self,PSDdBmpHz=-174,snr=0,seed=1,typ='psd',R=50):
+        """ add a white Gaussian noise
+
+        Parameters
+        ----------
+
+        PSDdBmpHz : float
+        seed : float
+        typ : string
+            'psd' | 'snr'
+
+        Returns
+        -------
+        n
+        sn
+
+        See Also
+        --------
+
+        bsignal.Noise
+
+        """
+        ti = self.x[0]
+        tf = self.x[-1]
+        tsns = self.x[1]-self.x[0]
+        fsGHz = 1./tsns
+
+        if typ=='snr':
+            Ps = self.energy()/(R*(tf-ti))
+            PW = Ps/10**(snr/10.)
+            pWpHz = PW/(fsGHz*1e9)
+            pmWpHz = pWpHz*1e3
+            PSDdBmpHz = 10*np.log10(pmWpHz)
+
+        n = Noise(ti = ti,
+                   tf = tf+tsns,
+                   fsGHz = fsGHz,
+                   PSDdBmpHz = PSDdBmpHz,
+                   R = R,
+                   seed = seed)
+
+
+        sn = TUsignal()
+        sn.y = self.y + n.y
+        sn.x = self.x
+
+        return sn
+
+>>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
     def fft(self, shift=False):
         """  forward fast Fourier transform
 
@@ -4809,22 +4860,39 @@ class FHsignal(FUsignal):
 class Noise(TUsignal):
     """ Create noise
     """
+<<<<<<< HEAD
     def __init__(self, Tobs=100, fsGHz = 50, PSDdBmpHz=-174, NF=0, R=50, seed=[]):
+=======
+    def __init__(self, ti=0,tf = 100, fsGHz = 50, PSDdBmpHz=-174, NF=0, R=50, seed=1):
+>>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         """ object constructor
 
         Parameters
         ----------
 
+<<<<<<< HEAD
         Tobs      : Time duration
         fs        : sampling frequency
         PSDdBmpHz : Power Spectral Density Noise (dBm/Hz)
         R         : 50 Ohms
+=======
+        ti        : float
+            time start (ns)
+        tf        : float
+            time stop (ns)
+        fsGHZ     : float
+            sampling frequency
+        PSDdBmpHz : float
+            Power Spectral Density Noise (dBm/Hz)
+        R         : float
+            50 Ohms
+>>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         NF        : 0
-        R         : 50
         seed      : []
 
         """
         TUsignal.__init__(self)
+<<<<<<< HEAD
         self.Tobs = Tobs
         self.fsGHz = fsGHz
         self.PSDdBmpHz = PSDdBmpHz
@@ -4846,15 +4914,125 @@ class Noise(TUsignal):
 
         tsns   = 1./fsGHz
         self.x = np.arange(0, Tobs, tsns)
+=======
+        self._tsns  = 1./fsGHz
+        self._ti = ti
+        self._tf = tf
+        self._fsGHz = fsGHz
+        self._PSDdBmpHz = PSDdBmpHz
+        self._NF = NF
+        self._R = R
+        self._seed=seed
+        self.eval()
+
+    @property
+    def ti(self):
+        return(self._ti)
+
+    @property
+    def tf(self):
+        return(self._tf)
+
+    @property
+    def tsns(self):
+        return(self._tsns)
+
+    @property
+    def R(self):
+        return(self._R)
+
+    @property
+    def seed(self):
+        return(self._seed)
+
+    @property
+    def NF(self):
+        return(self._NF)
+
+    @property
+    def PSDdBmpHz(self):
+        return(self._PSDdBmpHz)
+
+    @property
+    def fsGHz(self):
+        return(self._fsGHz)
+
+    #-------
+
+    @ti.setter
+    def ti(self,ti):
+        self._ti = ti
+        self.eval()
+
+    @tf.setter
+    def tf(self,tf):
+        self._tf = tf
+        self.eval()
+
+    @tsns.setter
+    def tsns(self,tsns):
+        self._tsns = tsns
+        self._fsGHz = 1./tsns
+        self.eval()
+
+    @R.setter
+    def R(self,R):
+        self._R = R
+        self.eval()
+
+    @fsGHz.setter
+    def fsGHz(self,fsGHz):
+        self._fsGHz=fsGHz
+        self._tsns=1./fsGHz
+        self.eval()
+
+    @NF.setter
+    def NF(self,NF):
+        self._NF = NF
+        self.eval()
+
+    @seed.setter
+    def seed(self,seed):
+        self._seed = seed
+        np.random.seed(seed)
+        self.eval()
+
+    @PSDdBmpHz.setter
+    def PSDdBmpHz(self,PSDdBmpHz):
+        self._PSDdBmpHz = PSDdBmpHz
+        #self.eval()
+
+
+    def eval(self):
+        """ noise evaluation
+        """
+        p = self._PSDdBmpHz + self._NF
+        pmW = 10 ** (p / 10.)  # DSP : dBm/Hz -> mW/Hz
+        pW = pmW / 1e3         # DSP : mw/Hz  -> W/Hz
+        self.PW = pW * (self._fsGHz * 1e9)   # Power : p * Bandwith Hz
+        self.vrms = np.sqrt(self._R*self.PW)
+        self.x = np.arange(self.ti, self.tf, self.tsns)
+>>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         N = len(self.x)
         n = self.vrms * np.random.randn(N)
         self.y   = n
         self.var = np.var(n)
+<<<<<<< HEAD
         self.Pr  = self.var/R
+=======
+        self.Pr  = self.var/self._R
+>>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
 
     def __repr__(self):
         st = ''
         st = st+ 'Sampling frequency : '+ str(self.fsGHz)+' GHz\n'
+<<<<<<< HEAD
+=======
+        st = st+ 'ti  : '+ str(self.ti)+'ns \n'
+        st = st+ 'tf  : '+ str(self.tf)+'ns \n'
+        st = st+ 'ts  : '+ str(self.tsns)+'ns \n'
+        st = st + '-------------\n'
+>>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
         st = st+ 'DSP : ' + str(self.PSDdBmpHz)+ ' dBm/Hz\n'
         st = st+ 'NF : ' + str(self.NF)+ ' dB\n'
         st = st+ 'Vrms : '+ str(self.vrms)+ ' Volts\n'
@@ -4862,6 +5040,20 @@ class Noise(TUsignal):
         st = st+ 'Power /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.PW)-60)+ ' dBm\n'
         st = st+ 'Power realized /'+str(self.R)+' Ohms : '+ str(10*np.log10(self.Pr)-60)+ ' dBm\n'
         return(st)
+<<<<<<< HEAD
+=======
+
+    def psd(self,mask=True):
+        """
+        Parameters
+        ----------
+
+        mask : boolean
+            True
+        """
+        w2 = TUsignal.psd(self,periodic=False)
+        w2.plotdB(mask=True)
+>>>>>>> 0923a474de0e8546753cdf439b73ecb017bca40f
 
     def amplify(self, GdB, NF):
         sel
