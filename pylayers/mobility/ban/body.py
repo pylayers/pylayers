@@ -756,6 +756,18 @@ class Body(PyLayers):
                     mp0 = mp[0]
                     # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
                 else:
+                    # if not self.dev[dev].haskey('asscyl'):
+                        # find the closest cylinder to the device
+                        # c0=self.sl[:,0].astype(int)
+                        # c1=self.sl[:,1].astype(int)
+                        # pta = self.d[:,c0,0]
+                        # phe = self.d[:,c1,0]
+                        # th = phe - pta
+                        # d = self._f[0,self.dev[dev]['uc3d'],:]
+                        # td = pta - d[0,:,np.newaxis]
+                        # do = [np.dot(th[:,i],td[:,i]) for i in range(th.shape[1])]
+                        
+
                     mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
                     Tn = np.eye(3)
                 self.dcs[dev] = np.hstack((mp0[:,np.newaxis],Tn))
