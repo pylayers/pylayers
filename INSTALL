@@ -47,6 +47,8 @@ This sequence of command works on a ubuntu 12.04
 > pip install shapely 
 > pip install imposm
 
+> conda install gdal
+
 Most of this dependencies are handled in the setup.py script.
 
 python setup.py install
