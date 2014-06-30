@@ -5003,7 +5003,7 @@ class Noise(TUsignal):
         w2.plotdB(mask=True)
 
     def amplify(self, GdB, NF):
-        pass
+        sel
 
     def fgating(self, fcGHz, BGHz, window='rect'):
         """ apply a frequency gating
