@@ -358,16 +358,19 @@ class Body(PyLayers):
                 columns=['dev_id','dev_x','dev_y','dev_z'],index=traj.index)})
             for d in self.dev.keys()}
 
-
+        dp=[]
         for it,t in enumerate(traj.time()):
-
             self.settopos(traj = traj,t=t,cs=True)
-            for d in df:
-                dp = self.getdevp(d)
-                df[d].ix[it,'dev_id']=d
-                df[d].ix[it,'dev_x']= dp[0]
-                df[d].ix[it,'dev_y']= dp[1]
-                df[d].ix[it,'dev_z']= dp[2]
+            dp.append(np.array(self.getdevp(df.keys())))
+        dp =np.array(dp)
+        for ud,d in enumerate(df.keys()):
+            df[d]['dev_id']=d
+            df[d].ix[:,['dev_x','dev_y','dev_z']]=dp[:,ud,:]
+
+            # for ud,d in enumerate(df.keys()):
+            #     df[d].ix[it,['dev_id']]=d
+            #     df[d].ix[it,['dev_x','dev_y','dev_z']]=dp[ud]
+
 
         # gather all devices in a single dataframe:
         addf = pd.DataFrame()
@@ -775,6 +778,7 @@ class Body(PyLayers):
                     mp0 = mp[0]
                     # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
                 else:
+                    # associated cylinder
                     if not self.dev[dev].has_key('asscyl'):
                         # find the closest cylinder to the device
                         c0=self.sl[:,0].astype(int)
@@ -938,7 +942,7 @@ class Body(PyLayers):
         Parameters
         ----------
 
-        id : str
+        id : str | list
             device id
 
 
@@ -949,7 +953,10 @@ class Body(PyLayers):
         """
         if not 'topos' in dir(self):
             raise AttributeError('Body\'s topos not yet set')
-        return self.dcs[id][:,0]
+        if isinstance(id,list):
+            return [self.dcs[i][:,0] for i in id]
+        else :
+            return self.dcs[id][:,0]
 
     def getdevT(self,id):
         """ get device orientation
