@@ -47,6 +47,7 @@ import numpy as np
 import scipy.stats as sp
 import ConfigParser
 import os
+import copy
 from pylayers.mobility.ban import c3d
 import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
@@ -315,9 +316,15 @@ class Body(PyLayers):
         addf=addf.sort_index()
         return addf
 
-    def dpdf(self):
+    def dpdf(self,tr=[],unit='ns'):
         """ device position dataframe
         return a dataframe with body and devices positions along the self.traj
+
+        Parameters
+        ----------
+
+        tr : ndarray
+            timerange
 
         Returns
         -------
@@ -335,16 +342,26 @@ class Body(PyLayers):
         >>> cdf = B.dpdf()
         """
 
+        if not isinstance(tr,np.ndarray):
+            traj = self.traj
+        else :
+            traj = self.traj.copy()
+            tstart = tr[0]
+            tstop = tr[-1]
+            tstep = tr[1]-tr[0]
+            sf = traj.ts/tstep
+            traj = traj.resample(sf = sf, tstart = tstart, tstop = tstop)
         # dictionary of device dataframe
         df={}
         {df.update(
             {d:pd.DataFrame(
-                columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
+                columns=['dev_id','dev_x','dev_y','dev_z'],index=traj.index)})
             for d in self.dev.keys()}
 
 
-        for it,t in enumerate(self.traj.time()):
-            self.settopos(self.traj,t=t,cs=True)
+        for it,t in enumerate(traj.time()):
+
+            self.settopos(traj = traj,t=t,cs=True)
             for d in df:
                 dp = self.getdevp(d)
                 df[d].ix[it,'dev_id']=d
@@ -358,20 +375,22 @@ class Body(PyLayers):
             addf = pd.concat([addf,df[d]])
 
         # join device dataframe with mobility data frame
-        ddf = self.traj.join(addf)
+        ddf = traj.join(addf)
         ddf['name'] = self.name
         # complete dataframe
         ddf['timestamp']= map(lambda x: str(x.hour).zfill(2) + ':' + str(x.minute).zfill(2) +  ':' + str(x.second).zfill(2) + '.' + str(x.microsecond).zfill(2)[:3],ddf.index)
-
+        if unit == 'ns':
+            ddf['timestamp']= map(lambda x: x.microsecond*1e3+x.second*1e9+60*1e9*x.minute+3600*1e9*x.hour,ddf.index)
+            
         return ddf
 
-    def export_csv(self, _filename ='default.csv', col =['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp']):
+    def export_csv(self, _filename ='default.csv', col =['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp'],**kwargs):
         """
         """
         if _filename == 'default.csv':
             _filename = self.name + '.csv'
         filename =pyu.getlong(_filename,pstruc['DIRNETSAVE'])
-        ddf = self.dpdf()
+        ddf = self.dpdf(**kwargs)
         ldf = ddf[col]
         ldf.rename(columns={'dev_id':'id',
                             'dev_x':'x',
@@ -488,7 +507,7 @@ class Body(PyLayers):
         #timetraj = traj.time()
         #tt = timetraj[1]-timetraj[0]        # trajectory time sampling period
 
-        kt = int(np.floor(t/traj.ts))        # trajectory time integer index
+        kt = int(np.floor((t-traj.tmin)/traj.ts))        # trajectory time integer index
         # self.pg : 3 x Nframes
         # traj : Nptraj x 3 (t,x,y)
 
@@ -628,7 +647,7 @@ class Body(PyLayers):
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
-        self.traj=traj
+        # self.traj=traj
 
         kta = self.sl[:,0].astype(int)
         khe = self.sl[:,1].astype(int)
@@ -777,8 +796,7 @@ class Body(PyLayers):
                         # closest cylinder
                         md = np.where(min(d)==d)[0]
                         self.dev[dev]['asscyl']= md[0]
-                        import ipdb
-                        ipdb.set_trace()
+
                     mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
                     Tn = self.ccs[self.dev[dev]['asscyl'],:,:]
                     
@@ -1405,7 +1423,7 @@ class Body(PyLayers):
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
                 ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
-                              scale_factor=0.2)
+                              scale_factor=2e2*self._unit)
 
         # for k in range(self.ncyl):
 
@@ -1432,7 +1450,7 @@ class Body(PyLayers):
                 U = self.dcs[key]
                 pt = U[:,0]
                 pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
-                dcs = mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
+                dcs = mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=2e2*self._unit)
 
 
         if kwargs['pattern']:
