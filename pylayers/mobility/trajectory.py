@@ -419,6 +419,13 @@ class Trajectory(PyLayers,pd.DataFrame):
             st = 'void Trajectory'
         return(st)
 
+    def copy(self,deep=True):
+        """ copy of trajectroy
+        """
+        df = super(Trajectory, self).copy(deep=deep)
+        return Trajectory(df=df,ID=self.ID,name=self.name,typ=self.typ)
+        
+
 
     def update(self):
         """ update class member data
@@ -537,7 +544,7 @@ class Trajectory(PyLayers,pd.DataFrame):
         self.update()
         return self
 
-    def resample(self, sf=2, tstart=-1):
+    def resample(self, sf=2, tstart=-1, tstop = -1):
         """ resample trajectory
 
         Parameters
@@ -569,10 +576,15 @@ class Trajectory(PyLayers,pd.DataFrame):
                 tstart = tstart
             else :
                 raise AttributeError('tstart < tmin')
-
+        if tstop != -1:
+            if tstart > tstop:
+                raise AttributeError('tstart > tstop')
         tstep = (t[1]-t[0])/sf
-        # need to add at least 3 values gor generate to estomate acceleration
+        # need to add at least 3 values gor ge nerate to estomate acceleration
         tnew = np.arange(tstart, t[-1], tstep)
+        if tstop != -1:
+            ustop = np.where(tnew <=tstop)[0][-1]
+            tnew=tnew[0:ustop]
 
         # generate requieres 3 measures at least 
         xnew = fx(tnew)
@@ -587,7 +599,9 @@ class Trajectory(PyLayers,pd.DataFrame):
                    unit='s',
                    sf=sf)
         T.update()
+
         return T
+
 
 
 
@@ -675,10 +689,9 @@ class Trajectory(PyLayers,pd.DataFrame):
            time in 10**-unit  s
 
         """
+
         lt = self.index
-        t  = np.array(map(lambda x: x.value, lt))
-        conv = 10**(unit-9)
-        t = t * conv
+        t = (lt.microsecond*1e-6+lt.second+lt.minute*60)*10**(unit)
         return (t)
 
     def plot(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[]):

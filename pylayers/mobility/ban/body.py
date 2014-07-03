@@ -47,6 +47,7 @@ import numpy as np
 import scipy.stats as sp
 import ConfigParser
 import os
+import copy
 from pylayers.mobility.ban import c3d
 import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
@@ -135,17 +136,22 @@ class Body(PyLayers):
         st = "My name is : " + self.name + '\n\n'
 
         for k in self.dev.keys():
-            st = st + 'I have a '+self.dev[k]['name']+' device '
-            side = str(self.dev[k]['cyl'])[-1]
-            if side=='l':
-                st = st+'on the left '
-            if side=='r':
-                st = st+'on the right '
-            if side=='u':
-                st = st+'on the upper part of '
-            if side=='b':
-                st = st+'on the lower part of '
-            st = st + str(self.dev[k]['cyl'])[0:-1]+'\n'
+            if self.dev[k]['status']=='simulated':
+                st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' '
+                side = str(self.dev[k]['cyl'])[-1]
+                if side=='l':
+                    st = st+'on the left '
+                if side=='r':
+                    st = st+'on the right '
+                if side=='u':
+                    st = st+'on the upper part of '
+                if side=='b':
+                    st = st+'on the lower part of '
+                st = st + str(self.dev[k]['cyl'])[0:-1]+'\n'
+            else :
+                st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' on '+\
+                            self.dev[k]['radiomarkname']+'\n'
+            
 
 
 
@@ -288,9 +294,37 @@ class Body(PyLayers):
 
         return(di)
 
-    def dpdf(self):
+    def rdpdf(self):
+        """ real device position dataframe
+        """
+        # dictionary of device dataframe
+        df={}
+        {df.update(
+            {d:pd.DataFrame(
+                columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
+            for d in self.dev.keys()}
+
+        for d in self.dev:
+            df[d]['dev_id']=d
+            df[d]['dev_x']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
+            df[d]['dev_y']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
+            df[d]['dev_z']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
+            # gather all devices in a single dataframe:
+            addf = pd.DataFrame()
+            for d in df:
+                addf = pd.concat([addf,df[d]])
+        addf=addf.sort_index()
+        return addf
+
+    def dpdf(self,tr=[],unit='ns'):
         """ device position dataframe
         return a dataframe with body and devices positions along the self.traj
+
+        Parameters
+        ----------
+
+        tr : ndarray
+            timerange
 
         Returns
         -------
@@ -308,21 +342,35 @@ class Body(PyLayers):
         >>> cdf = B.dpdf()
         """
 
+        if not isinstance(tr,np.ndarray):
+            traj = self.traj
+        else :
+            traj = self.traj.copy()
+            tstart = tr[0]
+            tstop = tr[-1]
+            tstep = tr[1]-tr[0]
+            sf = traj.ts/tstep
+            traj = traj.resample(sf = sf, tstart = tstart, tstop = tstop)
         # dictionary of device dataframe
         df={}
         {df.update(
             {d:pd.DataFrame(
-                columns=['dev_id','dev_x','dev_y','dev_z'],index=self.traj.index)})
+                columns=['dev_id','dev_x','dev_y','dev_z'],index=traj.index)})
             for d in self.dev.keys()}
 
-        for it,t in enumerate(self.traj.time()):
-            self.settopos(self.traj,t=t,cs=True)
-            for d in df:
-                dp = self.getdevp(d)
-                df[d].ix[it,'dev_id']=d
-                df[d].ix[it,'dev_x']= dp[0]
-                df[d].ix[it,'dev_y']= dp[1]
-                df[d].ix[it,'dev_z']= dp[2]
+        dp=[]
+        for it,t in enumerate(traj.time()):
+            self.settopos(traj = traj,t=t,cs=True)
+            dp.append(np.array(self.getdevp(df.keys())))
+        dp =np.array(dp)
+        for ud,d in enumerate(df.keys()):
+            df[d]['dev_id']=d
+            df[d].ix[:,['dev_x','dev_y','dev_z']]=dp[:,ud,:]
+
+            # for ud,d in enumerate(df.keys()):
+            #     df[d].ix[it,['dev_id']]=d
+            #     df[d].ix[it,['dev_x','dev_y','dev_z']]=dp[ud]
+
 
         # gather all devices in a single dataframe:
         addf = pd.DataFrame()
@@ -330,20 +378,22 @@ class Body(PyLayers):
             addf = pd.concat([addf,df[d]])
 
         # join device dataframe with mobility data frame
-        ddf = self.traj.join(addf)
+        ddf = traj.join(addf)
         ddf['name'] = self.name
         # complete dataframe
         ddf['timestamp']= map(lambda x: str(x.hour).zfill(2) + ':' + str(x.minute).zfill(2) +  ':' + str(x.second).zfill(2) + '.' + str(x.microsecond).zfill(2)[:3],ddf.index)
-
+        if unit == 'ns':
+            ddf['timestamp']= map(lambda x: x.microsecond*1e3+x.second*1e9+60*1e9*x.minute+3600*1e9*x.hour,ddf.index)
+            
         return ddf
 
-    def export_csv(self, _filename ='default.csv', col =['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp']):
+    def export_csv(self, _filename ='default.csv', col =['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp'],**kwargs):
         """
         """
         if _filename == 'default.csv':
             _filename = self.name + '.csv'
         filename =pyu.getlong(_filename,pstruc['DIRNETSAVE'])
-        ddf = self.dpdf()
+        ddf = self.dpdf(**kwargs)
         ldf = ddf[col]
         ldf.rename(columns={'dev_id':'id',
                             'dev_x':'x',
@@ -460,7 +510,7 @@ class Body(PyLayers):
         #timetraj = traj.time()
         #tt = timetraj[1]-timetraj[0]        # trajectory time sampling period
 
-        kt = int(np.floor(t/traj.ts))        # trajectory time integer index
+        kt = int(np.floor((t-traj.tmin)/traj.ts))        # trajectory time integer index
         # self.pg : 3 x Nframes
         # traj : Nptraj x 3 (t,x,y)
 
@@ -600,7 +650,7 @@ class Body(PyLayers):
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
-        self.traj=traj
+        # self.traj=traj
 
         kta = self.sl[:,0].astype(int)
         khe = self.sl[:,1].astype(int)
@@ -728,8 +778,32 @@ class Body(PyLayers):
                     mp0 = mp[0]
                     # self.dcs[dev] = np.hstack((mp0[:,np.newaxis],T))
                 else:
+                    # associated cylinder
+                    if not self.dev[dev].has_key('asscyl'):
+                        # find the closest cylinder to the device
+                        c0=self.sl[:,0].astype(int)
+                        c1=self.sl[:,1].astype(int)
+                        pta = self.d[:,c0,0]
+                        phe = self.d[:,c1,0]
+                        # vector tail head
+                        th = phe - pta
+                        thl =  np.sqrt(np.sum(th**2,axis=0))
+
+                        # vector tail device
+                        de = self._f[0,self.dev[dev]['uc3d'],:]
+                        td = pta - de[0,:,np.newaxis]
+                        tdl = np.sqrt(np.sum(td**2,axis=0))
+
+                        do = [np.dot(th[:,i],td[:,i]) for i in range(th.shape[1])]
+                        # distance matrix
+                        d = abs(tdl*np.sin(do/(tdl*thl)))
+                        # closest cylinder
+                        md = np.where(min(d)==d)[0]
+                        self.dev[dev]['asscyl']= md[0]
+
                     mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
-                    Tn = np.eye(3)
+                    Tn = self.ccs[self.dev[dev]['asscyl'],:,:]
+                    
                 self.dcs[dev] = np.hstack((mp0[:,np.newaxis],Tn))
 
 
@@ -747,7 +821,7 @@ class Body(PyLayers):
                 Rbg = U[:,1:]
                 self.acs[dev]  = np.dot(Rbg,Rab)
             else :
-                self.acs[dev]  = np.array([[1,0,0],[0,1,0],[0,0,1]])
+                self.acs[dev]  = self.dev[dev]['T']
 
     def loadC3D(self, filename='07_01.c3d', nframes=-1 ,unit='cm'):
         """ load nframes of motion capture C3D file
@@ -868,7 +942,7 @@ class Body(PyLayers):
         Parameters
         ----------
 
-        id : str
+        id : str | list
             device id
 
 
@@ -879,7 +953,10 @@ class Body(PyLayers):
         """
         if not 'topos' in dir(self):
             raise AttributeError('Body\'s topos not yet set')
-        return self.dcs[id][:,0]
+        if isinstance(id,list):
+            return [self.dcs[i][:,0] for i in id]
+        else :
+            return self.dcs[id][:,0]
 
     def getdevT(self,id):
         """ get device orientation
@@ -900,6 +977,75 @@ class Body(PyLayers):
             raise AttributeError('Body\'s topos not yet set')
         return self.dcs[id][:,1:]
 
+
+
+    def chronophoto(self,**kwargs):
+        """ chronophotography of the body movement 
+            (a.k.a. position as a function of time)
+
+        Parameters
+        ----------
+        tstart : float
+            starting time in second
+        tend : float
+            ending time in second,
+        tstep : float
+            time step between tstart and tend
+        sstep : float
+            spatial step (distance between 2 instant)
+        planes : list
+            list of planes to be displayed ['xz','xy','yz']
+
+
+        See Also
+        --------
+
+        http://en.wikipedia.org/wiki/Chronophotography
+
+        """
+
+        defaults = {'tstart':10,
+                    'tend':40,
+                    'tstep':5,
+                    'sstep':2,
+                    'planes':['xz','xy','yz']
+                    }
+
+        fargs={}
+        for k in defaults:
+            if k not in kwargs:
+                fargs[k] = defaults[k]
+            else:
+                fargs[k] = kwargs.pop(k)
+
+        fstart=np.where(fargs['tstart']<=self.time)[0][0]
+        fend=np.where(fargs['tend']<=self.time)[0][0]
+        mocaptres = self.Tmocap/self.nframes
+        step = int(fargs['tstep']/mocaptres)
+        trange=np.arange(fargs['tstart'],fargs['tend'],fargs['tstep'])
+        frange=range(fstart,fend,step)
+
+        vstep=np.arange(0,len(frange))*fargs['sstep']
+
+
+        fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=True)
+        if not isinstance(axs,np.ndarray):
+            axs=np.array([axs])
+        for p,ax in enumerate(axs):
+            for uf,f in enumerate(frange):
+                fig,ax=self.show(color='b',plane=fargs['planes'][p],widthfactor=50,offset=vstep[uf],frameId=f,fig=fig,ax=ax)
+
+            ax.set_aspect('auto')
+            ax.set_ylabel(fargs['planes'][p])
+            ax.set_xlabel('time (s)')
+            ax.set_xlim(vstep[0],vstep[-1])
+            if 'z' in fargs['planes'][p]:
+                ax.set_ylim(0,2)
+            else :
+                ax.set_ylim(-2,2)
+            ax.set_xticklabels(trange)
+
+        return fig,ax
 
     def movie(self,**kwargs):
         """ creates a geomview movie
@@ -1284,7 +1430,7 @@ class Body(PyLayers):
                 pte = np.repeat(pt[:,np.newaxis],3,axis=1)
                 ccs = mlab.quiver3d(pte[0], pte[1], pte[2],
                               self.ccs[k, 0], self.ccs[k, 1], self.ccs[k, 2],
-                              scale_factor=0.2)
+                              scale_factor=2e2*self._unit)
 
         # for k in range(self.ncyl):
 
@@ -1311,7 +1457,7 @@ class Body(PyLayers):
                 U = self.dcs[key]
                 pt = U[:,0]
                 pte  = np.repeat(pt[:,np.newaxis],3,axis=1)
-                dcs = mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=0.2)
+                dcs = mlab.quiver3d(pte[0],pte[1],pte[2],self.dcs[key][0,1:],self.dcs[key][1,1:],self.dcs[key][2,1:],scale_factor=2e2*self._unit)
 
 
         if kwargs['pattern']:
@@ -1359,7 +1505,7 @@ class Body(PyLayers):
 
         defaults = {'frameId' : 0,
                     'plane': 'yz',
-                    'widthfactor' : 100,
+                    'widthfactor' : 10,
                     'topos':False,
                     'offset':0}
 
@@ -1367,21 +1513,24 @@ class Body(PyLayers):
             if k not in kwargs:
                 kwargs[k] = defaults[k]
 
+
         offset = np.array([kwargs['offset'],0])[:,np.newaxis]
         args = {}
         for k in kwargs:
             if k not in defaults:
                 args[k] = kwargs[k]
 
-        if kwargs['plane'] == 'yz':
+        if kwargs['plane'] == 'yz' or kwargs['plane'] == 'zy':
             ax1 = 1
             ax2 = 2
-        if kwargs['plane'] == 'xz':
+        elif kwargs['plane'] == 'xz' or kwargs['plane'] == 'zx':
             ax1 = 0
             ax2 = 2
-        if kwargs['plane'] == 'xy':
+        elif kwargs['plane'] == 'xy' or kwargs['plane'] == 'yx':
             ax1 = 0
             ax2 = 1
+        else :
+            raise AttributeError('Incorrect plane')
 
         fId = kwargs['frameId']
 
@@ -1399,7 +1548,7 @@ class Body(PyLayers):
 
             fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
 
-        plt.axis('scaled')
+        # plt.axis('scaled')
         return(fig,ax)
 
 
