@@ -153,7 +153,7 @@ class Trajectories(PyLayers,list):
             self.append(Trajectory(df=df,ID=ID,name=name,typ=typ))
         fil.close()
         self.Lfilename = layout
-        self.time()
+        self.t = self.time()
 
 
     def resample(self, sf=2, tstart = -1):
@@ -457,6 +457,7 @@ class Trajectory(PyLayers,pd.DataFrame):
             self.ttime = self.tmax-self.tmin
             self.dtot = self['s'].values[-1]
             self.meansp = self.dtot/self.ttime
+            self.t = self.time()
             return True
         else :
             return False
@@ -564,7 +565,7 @@ class Trajectory(PyLayers,pd.DataFrame):
 
         """
 
-        t = self.time()
+        t = self.t
         x = self.space()[:, 0]
         y = self.space()[:, 1]
         fx = sp.interpolate.interp1d(t, x)
@@ -623,7 +624,7 @@ class Trajectory(PyLayers,pd.DataFrame):
 
         speedms = speedkmph/3.6
         factor = speedms/self.meansp
-        newtime = self.time()/factor
+        newtime = self.t/factor
         pt = self.space(ndim=3)
         t = copy.copy(self)
         t.generate(ID=self.ID, name=self.name, t=newtime, pt=pt)
@@ -647,7 +648,7 @@ class Trajectory(PyLayers,pd.DataFrame):
         >>> T.distance(2)
 
         """
-        t = self.time()
+        t = self.t
         u = np.where((t >= tk-self.ts/2.) & (t <= tk+self.ts/2.))[0][0]
 
         return(self['s'][u])
@@ -691,8 +692,13 @@ class Trajectory(PyLayers,pd.DataFrame):
         """
 
         lt = self.index
-        t = (lt.microsecond*1e-6+lt.second+lt.minute*60)*10**(unit)
-        return (t)
+        # t = (lt.microsecond*1e-6+lt.second+lt.minute*60)*10**(unit)
+        # return (t)
+        self.t = (lt.microsecond*1e-6+
+                 lt.second+
+                 lt.minute*60+
+                 lt.hour*3600)*10**(unit)
+        return  self.t
 
     def plot(self, fig=[], ax=[], Nlabels=5, typ='plot', L=[]):
         """ plot trajectory
@@ -809,10 +815,10 @@ class Trajectory(PyLayers,pd.DataFrame):
             thisx = [-100,self['x'].values[it]]
             thisy = [-100,self['y'].values[it]]
             line.set_data(thisx, thisy)
-            time_text.set_text(time_template%(self.time()[it]))
+            time_text.set_text(time_template%(self.t[it]))
             return line, time_text
 
-        ani = animation.FuncAnimation(fig, animate, np.arange(1, len(self.time())),
+        ani = animation.FuncAnimation(fig, animate, np.arange(1, len(self.t)),
             interval=25, blit=True, init_func=init)
         plt.show()
         # for ik, k in enumerate(self.index):

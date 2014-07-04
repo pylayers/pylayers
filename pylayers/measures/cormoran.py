@@ -14,7 +14,7 @@ class Hikob(PyLayers):
 
     """
 
-    def __init__(self,serie=6,root='/home/uguen/svn2/measures/CORMORAN/'):
+    def __init__(self,serie=6,root='/media/niamiot/DONNEES/svn2/measures/CORMORAN/'):
         self.root =root
         self.load(serie=serie)
 
