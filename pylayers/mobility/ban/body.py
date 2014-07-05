@@ -200,7 +200,7 @@ class Body(PyLayers):
         """
         filebody = pyu.getlong(_filebody,pstruc['DIRBODY'])
         if not os.path.isfile(filebody):
-            raise NameError(_filebody + ' cannot be found in' 
+            raise NameError(_filebody + ' cannot be found in'
                              + pyu.getlong('',pstruc['DIRBODY']))
 
         config = ConfigParser.ConfigParser()
@@ -294,6 +294,35 @@ class Body(PyLayers):
 
         return(di)
 
+    def network(self):
+        """ evaluate network topology and dynamics
+
+        This function evaluates distance , velocity and acceleration of the
+        radio network
+
+        """
+        ddev = {}
+        tdev = []
+        for k in self.dev:
+            ddev[k] = (self.dev[k]['radiomarkname'],Bernard.dev[k]['uc3d'][0])
+            tdev.append(Bernard.dev[k]['uc3d'][0])
+            tdev = np.array(tdev)
+
+        N= self._f[:,tdev,:]
+        D = self.N[:,:,np.newaxis,:]-self.N[:,np.newaxis,:,:]
+        V = (D[1:,:,:,:]-D[0:-1,:,:,:])/0.01
+        A = (V[1:,:,:,:]-V[0:-1,:,:,:])/0.01
+        Nt = D.shape[0]
+        Nd = D.shape[1]
+        self.D2 = np.sqrt(np.sum(D*D,axis=3))
+        D2 = D2.reshape(Nt,Nd*Nd)
+        V2 = np.sqrt(np.sum(V*V,axis=3))
+        self.V2 = V2.reshape(Nt-1,Nd*Nd)
+        A2 = np.sqrt(np.sum(A*A,axis=3))
+        self.A2 = A2.reshape(Nt-2,Nd*Nd)
+
+
+
     def rdpdf(self):
         """ real device position dataframe
         """
@@ -305,15 +334,15 @@ class Body(PyLayers):
             for d in self.dev.keys()}
 
         for d in self.dev:
-            df[d]['dev_id']=d
-            df[d]['dev_x']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
-            df[d]['dev_y']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
-            df[d]['dev_z']=self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
+            df[d]['dev_id'] = d
+            df[d]['dev_x'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],0]
+            df[d]['dev_y'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],1]
+            df[d]['dev_z'] = self._f[:len(self.time)-2,self.dev[d]['uc3d'][0],2]
             # gather all devices in a single dataframe:
             addf = pd.DataFrame()
             for d in df:
                 addf = pd.concat([addf,df[d]])
-        addf=addf.sort_index()
+        addf = addf.sort_index()
         return addf
 
     def dpdf(self,tr=[],unit='ns'):
@@ -980,11 +1009,12 @@ class Body(PyLayers):
 
 
     def chronophoto(self,**kwargs):
-        """ chronophotography of the body movement 
+        """ chronophotography of the body movement
             (a.k.a. position as a function of time)
 
         Parameters
         ----------
+
         tstart : float
             starting time in second
         tend : float
@@ -1008,7 +1038,8 @@ class Body(PyLayers):
                     'tend':40,
                     'tstep':5,
                     'sstep':2,
-                    'planes':['xz','xy','yz']
+                    'planes':['xz','xy','yz'],
+                    'figsize':(10,10)
                     }
 
         fargs={}
@@ -1028,7 +1059,7 @@ class Body(PyLayers):
         vstep=np.arange(0,len(frange))*fargs['sstep']
 
 
-        fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=True)
+        fig,axs = plt.subplots(nrows =len(fargs['planes']),ncols=1,sharex=True,figsize=fargs['figsize'])
         if not isinstance(axs,np.ndarray):
             axs=np.array([axs])
         for p,ax in enumerate(axs):
