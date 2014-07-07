@@ -300,26 +300,30 @@ class Body(PyLayers):
         This function evaluates distance , velocity and acceleration of the
         radio network
 
+        self.D2 : distances between radio nodes
+        self.V2 : velocities between radio nodes
+        self.A2 : accelerations between radio nodes
+
         """
-        ddev = {}
+        self.ddev = {}
         tdev = []
         for k in self.dev:
-            ddev[k] = (self.dev[k]['radiomarkname'],Bernard.dev[k]['uc3d'][0])
-            tdev.append(Bernard.dev[k]['uc3d'][0])
-            tdev = np.array(tdev)
+            self.ddev[k] = self.dev[k]['radiomarkname']
+            tdev.append(self.dev[k]['uc3d'][0])
+        tdev = np.array(tdev)
 
-        N= self._f[:,tdev,:]
-        D = self.N[:,:,np.newaxis,:]-self.N[:,np.newaxis,:,:]
+        Net = self._f[:,tdev,:]
+        D = Net[:,:,np.newaxis,:]-Net[:,np.newaxis,:,:]
         V = (D[1:,:,:,:]-D[0:-1,:,:,:])/0.01
         A = (V[1:,:,:,:]-V[0:-1,:,:,:])/0.01
         Nt = D.shape[0]
         Nd = D.shape[1]
-        self.D2 = np.sqrt(np.sum(D*D,axis=3))
-        D2 = D2.reshape(Nt,Nd*Nd)
+        D2 = np.sqrt(np.sum(D*D,axis=3))
+        self.D2 = D2.reshape(Nt,Nd,Nd)
         V2 = np.sqrt(np.sum(V*V,axis=3))
-        self.V2 = V2.reshape(Nt-1,Nd*Nd)
+        self.V2 = V2.reshape(Nt-1,Nd,Nd)
         A2 = np.sqrt(np.sum(A*A,axis=3))
-        self.A2 = A2.reshape(Nt-2,Nd*Nd)
+        self.A2 = A2.reshape(Nt-2,Nd,Nd)
 
 
 

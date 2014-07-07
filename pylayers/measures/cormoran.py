@@ -18,11 +18,11 @@ class CorSer(PyLayers):
 
     def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/'):
         self.root =root
-        if day=11:
+        if day==11:
             stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
-        if day=12:
+        if day==12:
             stcr = []
             shkb = []
             sbs  = []
@@ -131,13 +131,28 @@ class CorSer(PyLayers):
 
         filename = dirname + '/'+ self._fileTCR
         dtTCR = pd.read_csv(filename)
-        self.tcr={}
+        tcr={}
         for k in self.dTCR:
             for l in self.dTCR:
                 if k!=l:
-                    d = dtTCR[((dtTCR['ida']==k) & (dt['idb']==l))]
+                    d = dtTCR[((dtTCR['ida']==k) & (dtTCR['idb']==l))]
+                    del d['lqi']
+                    del d['ida']
+                    del d['idb']
+                    d = d[d['time']!=-1]
+                    d.index = d['time']
+                    del d['time']
                     if len(d)!=0:
-                        self.tcr[dTCR[k]+'_'dTCR[l]]=d
+                        sr = pd.Series(d['dist']/1000,index=d.index)
+                        sr = sr.drop_duplicates()
+                        tcr[self.dTCR[k]+'_'+self.dTCR[l]]= sr
+
+        self.tcr = pd.DataFrame(tcr)
+        self.tcr = self.tcr.fillna(0)
+        ts = 75366400./1e9
+        t = np.array(self.tcr.index)*ts
+        t = t-t[0]
+        self.tcr.index = t
 
     def loadBS(self,day=11,serie='',scenario='20',run=1):
         """ load BeSpoon data
