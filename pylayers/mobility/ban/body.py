@@ -316,7 +316,7 @@ class Body(PyLayers):
         addf=addf.sort_index()
         return addf
 
-    def dpdf(self,tr=[],unit='ns'):
+    def dpdf(self,tr=[],tunit='ns',poffset=False):
         """ device position dataframe
         return a dataframe with body and devices positions along the self.traj
 
@@ -358,6 +358,11 @@ class Body(PyLayers):
                 columns=['dev_id','dev_x','dev_y','dev_z'],index=traj.index)})
             for d in self.dev.keys()}
 
+
+
+
+
+
         dp=[]
         for it,t in enumerate(traj.time()):
             self.settopos(traj = traj,t=t,cs=True)
@@ -366,6 +371,8 @@ class Body(PyLayers):
         for ud,d in enumerate(df.keys()):
             df[d]['dev_id']=d
             df[d].ix[:,['dev_x','dev_y','dev_z']]=dp[:,ud,:]
+            
+        
 
             # for ud,d in enumerate(df.keys()):
             #     df[d].ix[it,['dev_id']]=d
@@ -377,28 +384,59 @@ class Body(PyLayers):
         for d in df:
             addf = pd.concat([addf,df[d]])
 
+
         # join device dataframe with mobility data frame
         ddf = traj.join(addf)
         ddf['name'] = self.name
         # complete dataframe
         ddf['timestamp']= map(lambda x: str(x.hour).zfill(2) + ':' + str(x.minute).zfill(2) +  ':' + str(x.second).zfill(2) + '.' + str(x.microsecond).zfill(2)[:3],ddf.index)
-        if unit == 'ns':
+        if tunit == 'ns':
             ddf['timestamp']= map(lambda x: x.microsecond*1e3+x.second*1e9+60*1e9*x.minute+3600*1e9*x.hour,ddf.index)
             
+        if poffset:
+            mx = min(min(ddf['x']),min(ddf['dev_x']))
+            ddf['x']=ddf['x']-mx
+            ddf['dev_x']=ddf['dev_x']-mx
+
+            my = min(min(ddf['y']),min(ddf['dev_y']))
+            ddf['y']=ddf['y']-my
+            ddf['dev_y']=ddf['dev_y']-my
+
+            mz = min(min(ddf['z']),min(ddf['dev_z']))
+            ddf['z']=ddf['z']-mz
+            ddf['dev_z']=ddf['dev_z']-mz
+
         return ddf
 
-    def export_csv(self, _filename ='default.csv', col =['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp'],**kwargs):
+    def export_csv(self, unit = 'mm',df = [],_filename ='default.csv', col =['dev_id', 'dev_x', 'dev_y', 'dev_z', 'timestamp'],**kwargs):
         """
         """
         if _filename == 'default.csv':
             _filename = self.name + '.csv'
         filename =pyu.getlong(_filename,pstruc['DIRNETSAVE'])
-        ddf = self.dpdf(**kwargs)
+        if isinstance(df,pd.DataFrame):
+            ddf = df
+        else :
+            ddf = self.dpdf(**kwargs)
+
         ldf = ddf[col]
         ldf.rename(columns={'dev_id':'id',
                             'dev_x':'x',
                             'dev_y':'y',
                             'dev_z':'z'},inplace=True)
+
+        if unit == 'm':
+            _unit = 1.
+        if unit == 'cm':
+            _unit = 1e2
+        if unit == 'mm':
+            _unit = 1e3
+
+        ldf.loc[:,'x']=ldf.loc[:,'x']*_unit
+        ldf.loc[:,'y']=ldf.loc[:,'y']*_unit
+        ldf.loc[:,'z']=ldf.loc[:,'z']*_unit
+
+
         ldf.to_csv(filename, sep = ' ',index=False)
 
         return ldf

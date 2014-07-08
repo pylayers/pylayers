@@ -38,6 +38,15 @@ except:
 import pdb
 
 
+def devicels():
+    """ list available devices in project directory
+    """
+    fp = open(pyu.getlong('devices.json', pstruc['DIRSIMUL']))
+    dev = json.load(fp)
+    fp.close()
+    print dev.keys()
+
+
 class Device(object):
 
     """ Device Class
