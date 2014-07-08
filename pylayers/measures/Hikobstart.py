@@ -176,6 +176,17 @@ def extracts(data2,tstart):
                 #del serie[k][l]['src']
                 #del serie[k][l]['seq']
     return(serie,datao)
+
+tstart[8,6] = 3701
+tstart[6,8] = 3678
+
+print "get serie 2"
+
+s,data3 = extracts(data2,tstart)
+
+S2 = pd.DataFrame(s)
+
+tstart3 = matstart(data3,1).astype('int')
 #
 #
 #for sc in range(25):
