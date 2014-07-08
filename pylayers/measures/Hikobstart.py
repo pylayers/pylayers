@@ -1,3 +1,4 @@
+# -*- coding:Utf-8 -*-
 import os
 import pdb
 import sys
@@ -6,7 +7,7 @@ import numpy as np
 import scipy.io as io
 from pylayers.util.project import *
 import matplotlib.pyplot as plt
-
+import copy
 
 class Hikob(PyLayers):
     """
@@ -162,14 +163,17 @@ def matstart(data,index):
 def extracts(data2,tstart):
     datao ={}
     serie ={}
+    data2c = copy.deepcopy(data2)
     for k in range(1,17):
         datao[k]={}
         for l in range(1,17):
             if k!=l:
-                dt = data2[k][l]
-                datao[k][l] = dt[tstart[k-1][l-1]:]
+                dt = data2c[k][l]
+                datao[k][l] = copy.deepcopy(dt[tstart[k-1][l-1]:])
+                dt.drop_duplicates('seq',inplace=True)
                 rssi = dt[0:tstart[k-1][l-1]]['rssi'].values
                 ind  = dt[0:tstart[k-1][l-1]]['seq'].values
+
                 serie[(k,l)] = pd.Series(rssi,index=ind)
                 #serie[k][l].index = serie[k][l]['seq']
                 #del serie[k][l]['src']
@@ -184,6 +188,49 @@ def plotindex(dd):
         for l in range(1,17):
             if k!=l:
                 ax[k-1,l-1].plot(dd[k,l].index)
+
+def plotindex2(dd):
+    f,ax=plt.subplots(nrows=1,ncols=1)
+    
+    for k in range(1,17):
+        for l in range(1,17):
+            if k!=l:
+                ax.plot(dd[k,l].index,'.')
+
+def plotdata(dd):
+    f,ax=plt.subplots(nrows=16,ncols=16)
+    
+    for k in range(1,17):
+        for l in range(1,17):
+            if k!=l:
+                dd[k][l].plot(ax=ax[k-1,l-1])
+
+def check(dd,ss,ii=1):
+    X={}
+    for k in range(1,17):
+        X[k]={}
+        for l in range(1,17):
+            if k!=l:
+                X[k][l]=np.where(dd[k][l][0:ss[k-1,l-1]]['seq']==ii)[0]
+    return X
+
+
+def dupli(dd,ss):
+    X={}
+    for k in range(1,17):
+        X[k]={}
+        for l in range(1,17):
+            if k!=l:
+                X[k][l]=np.where(dd[k][l][0:ss[k-1,l-1]]['seq'].duplicated())
+    return X
+
+def drop_dupli(df):
+    for k in range(1,17):
+        for l in range(1,17):
+            if k!=l:
+                df[k,l].drop_duplicates('seq',inplace=True)
+
+
 
 print "get serie 2"
 
@@ -284,16 +331,91 @@ s,data12 = extracts(data11,tstart11)
 S11 = pd.DataFrame(s)
 
 
-# print "get serie 12"
-# # TO BE DONE
-# tstart12 = matstart(data12,1).astype('int')
-# tstart12[1,6] = 4332
-# tstart12[8,6] = 4209
-# tstart12[10,6] = 4289
-# s,data13 = extracts(data12,tstart12)
+print "get serie 12"
 
-# S12 = pd.DataFrame(s)
+tstart12 = matstart(data12,1).astype('int')
+tstart12[1,6] = 4110
+s,data13 = extracts(data12,tstart12)
+S12 = pd.DataFrame(s)
 
+print "get serie 13"
+
+tstart13 = matstart(data13,1).astype('int')
+s,data14 = extracts(data13,tstart13)
+S13 = pd.DataFrame(s)
+
+
+print "get serie 14"
+
+tstart14 = matstart(data14,1).astype('int')
+tstart14[7,5]=3030
+tstart14[9,5]=2974
+tstart14[9,6]=3136
+s,data15 = extracts(data14,tstart14)
+S14 = pd.DataFrame(s)
+
+
+print "get serie 15"
+
+tstart15 = matstart(data15,1).astype('int')
+tstart15[7,5]=4036
+tstart15[9,5]=4013
+tstart15[9,6]=4151
+
+s,data16 = extracts(data15,tstart15)
+S15 = pd.DataFrame(s)
+
+print "get serie 16"
+
+tstart16 = matstart(data16,1).astype('int')
+s,data17 = extracts(data16,tstart16)
+S16 = pd.DataFrame(s)
+
+print "get serie 17"
+
+tstart17 = matstart(data17,1).astype('int')
+s,data18 = extracts(data17,tstart17)
+S17 = pd.DataFrame(s)
+
+print "get serie 18"
+
+tstart18 = matstart(data18,1).astype('int')
+s,data19 = extracts(data18,tstart18)
+S18 = pd.DataFrame(s)
+
+print "get serie 19"
+
+tstart19 = matstart(data19,1).astype('int')
+tstart19[0,5]=5112
+tstart19[3,5]=5104
+tstart19[4,5]=5113
+tstart19[6,8]=5027
+tstart19[6,5]=5109
+tstart19[7,5]=5008
+tstart19[8,5]=5098
+tstart19[8,6]=5035
+tstart19[9,5]=4929
+tstart19[10,5]=5114
+tstart19[12,5]=5092
+tstart19[13,5]=5069
+tstart19[14,5]=5102
+tstart19[15,5]=5108
+s,data20 = extracts(data19,tstart19)
+S19 = pd.DataFrame(s)
+
+
+def findmin(ss,value,med):
+    uss = np.array(np.where(ss>value))
+    for k in range(len(uss)):
+        mss = np.min(ss[uss[k][0],uss[k][1]][med-100:med+100])
+        ss[uss[k][0],uss[k][1]]= np.where(ss[uss[k][0],uss[k][1]]==mss)[0]
+    return ss
+
+print "get serie 20"
+
+tstart20 = matstart(data20,1).astype('int')
+s,data21 = extracts(data20,tstart20)
+S20 = pd.DataFrame(s)
 
 #
 #
