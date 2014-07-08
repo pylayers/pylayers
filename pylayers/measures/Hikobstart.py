@@ -46,7 +46,7 @@ def extract(D):
             trssi[k]=rssi[u[k]:]
     return(trssi)
 
-CORMORAN='/media/niamiot/DONNEES/svn2/measures/CORMORAN'
+CORMORAN='/home/uguen/svn2/measures/CORMORAN'
 os.chdir(CORMORAN+'/RAW/11-06-2014/HIKOB')
 files = os.listdir('.')
 rawfiles = filter(lambda x: 'RAW' in x ,files)
@@ -214,7 +214,6 @@ def check(dd,ss,ii=1):
                 X[k][l]=np.where(dd[k][l][0:ss[k-1,l-1]]['seq']==ii)[0]
     return X
 
-
 def dupli(dd,ss):
     X={}
     for k in range(1,17):
@@ -230,7 +229,19 @@ def drop_dupli(df):
             if k!=l:
                 df[k,l].drop_duplicates('seq',inplace=True)
 
-
+def toarray(S):
+    """ convert data frame to array
+    """
+    U  = np.array(S)
+    Nt = U.shape[0]
+    A  = np.empty((Nt,256))
+    A[:] = np.NaN
+    u  = np.arange(256)
+    v  = np.arange(0,256,17)
+    w  = np.setdiff1d(u,v)
+    A[:,w] = U
+    A = A.reshape(Nt,16,16)
+    return(A)
 
 print "get serie 2"
 
@@ -414,9 +425,47 @@ def findmin(ss,value,med):
 print "get serie 20"
 
 tstart20 = matstart(data20,1).astype('int')
+tstart20[0,5] = 3972
+tstart20[3,5] = 3964
+tstart20[4,5] = 3978
+tstart20[6,5] = 3975
+tstart20[6,8] = 3958
+tstart20[6,11] =3580
+tstart20[7,5] = 3728
+tstart20[8,5] = 3968
+tstart20[8,6] = 3858
+tstart20[9,5] = 3750
+tstart20[10,5] = 3978
+tstart20[11,6] = 3574
+tstart20[12,5] = 3970
+tstart20[13,5] = 3928
+tstart20[14,4] = 3570
+tstart20[14,5] = 3964
+tstart20[15,5] = 3964
 s,data21 = extracts(data20,tstart20)
 S20 = pd.DataFrame(s)
 
+print "get serie 21"
+tstart21 = matstart(data21,1).astype('int')
+tstart21[6,8]=7808
+tstart21[6,11]=4820
+tstart21[11,6]=4817
+tstart21[14,4]=4751
+
+s,data22=extracts(data21,tstart21)
+S21 = pd.DataFrame(s)
+
+print "get serie 22"
+
+tstart22 = matstart(data22,1).astype('int')
+s,data22=extracts(data22,tstart22)
+S22 = pd.DataFrame(s)
+
+print "get serie 23"
+
+tstart23 = matstart(data22,1).astype('int')
+s,data23=extracts(data23,tstart23)
+S23 = pd.DataFrame(s)
 #
 #
 #for sc in range(25):
