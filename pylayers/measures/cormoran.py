@@ -16,7 +16,7 @@ class CorSer(PyLayers):
 
     """
 
-    def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/'):
+    def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/',source='UR1'):
         self.root =root
         if day==11:
             stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
@@ -28,7 +28,7 @@ class CorSer(PyLayers):
             sbs  = []
 
         if serie in shkb:
-            self.loadhkb(serie=serie,day=day)
+            self.loadhkb(serie=serie,day=day,source=source)
 
         if serie in stcr:
             self.loadTCR(serie=serie,day=day)
@@ -109,7 +109,7 @@ class CorSer(PyLayers):
                    'Eric:ShoulderLeft':26}
 
         #
-        # TCR  : (name , MAC)
+        # TCR  : (Name , MAC)
         # iTCR : (MAC , Name)
         # dTCR : (NodeId, Name)
         #
@@ -158,6 +158,7 @@ class CorSer(PyLayers):
         """ load BeSpoon data
 
         """
+        self.dBS = {157:'LeftWrist?',74:'RightAnckle?'}
         if day==11:
             dirname = self.root+'/POST-TREATED/11-06-2014/BeSpoon'
         if day==12:
@@ -181,17 +182,23 @@ class CorSer(PyLayers):
         #self.t74 = t74 - t74[0]
 
 
-    def loadhkb(self,day=11,serie='',scenario='20',run=1):
+    def loadhkb(self,day=11,serie='',scenario='20',run=1,source='UR1'):
 
         if day==11:
             self.hkb ={'AP1':1,'AP2':2,'AP3':3,'AP4':4,
                        'HeadRight':5,'TorsoTopRight':6,'TorsoTopLeft':7,'BackCenter':8,'ElbowRight':9,'ElbowLeft':10,'HipRight':11,'WristRight':12,'WristLeft':13,'KneeLeft':14,'AnckleRight':16,'AnckleLeft':15}
-            dirname = self.root+'/POST-TREATED/11-06-2014/HIKOB'
+            if source=='UR1':
+                dirname = self.root+'/POST-TREATED/11-06-2014/HIKOB'
+            elif source=='CITI':
+                dirname = self.root+'/POST-TREATED/11-06-2014/HIKOB/CITI'
         if day==12:
             self.hkb= {'AP1':1,'AP2':2,'AP3':3,'AP4':4,'Jihad:TorsoTopRight':10,'Jihad:TorsoTopLeft':9,'Jihad:BackCenter':11,'JihadShoulderLeft':12,
              'Nicolas:TorsoTopRight':6,'Nicolas:TorsoTopLeft':5,'Nicolas:BackCenter':7,'Nicolas:ShoulderLeft':8,
              'Eric:TorsoTopRight':15,'Eric:TorsoTopLeft':13,'Eric:BackCenter':16,'Eric:ShoulderLeft':14}
-            dirname = self.root+'/POST-TREATED/11-06-2014/HIKOB'
+            if source=='UR1':
+                dirname = self.root+'/POST-TREATED/12-06-2014/HIKOB'
+            elif source=='CITI':
+                dirname = self.root+'/POST-TREATED/12-06-2014/HIKOB/CITI'
 
         files = os.listdir(dirname)
 
@@ -203,12 +210,20 @@ class CorSer(PyLayers):
             self._filename = filter(lambda x : 'S'+str(serie) in x ,files)[0]
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
-            self._filename = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
+            if source=='UR1':
+                self._filename = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
+            else:
+                self._filename = filter(lambda x : 'r'+str(run) in x ,filsc)[0]
 
 
         data = io.loadmat(dirname+'/'+self._filename)
-        self.rssi = data['rssi']
-        self.t = data['t']
+        if source=='UR1':
+            self.rssi = data['rssi']
+            self.t = data['t']
+        else:
+            self.rssi = data['val']
+            self.t = np.arange(np.shape(self.rssi)[2])*25.832e-3
+
         self.topandas()
         self.df = self.df[self.df!=0]
 
@@ -233,7 +248,10 @@ class CorSer(PyLayers):
 
 
     def topandas(self):
-        self.df = pd.DataFrame(index=self.t[0])
+        try:
+            self.df = pd.DataFrame(index=self.t[0])
+        except:
+            self.df = pd.DataFrame(index=self.t)
         for k in self.ihkb:
             for l in self.ihkb:
                 if k!=l:
@@ -250,7 +268,10 @@ class CorSer(PyLayers):
         """
         fig = plt.figure(figsize=(10,10))
         self.D = self.rssi-self.rssi.swapaxes(0,1)
-        timeindex = np.where(self.t[0]-time>0)[0][0]
+        try:
+            timeindex = np.where(self.t[0]-time>0)[0][0]
+        except:
+            timeindex = np.where(self.t-time>0)[0][0]
         ax1 = fig.add_subplot(121)
         img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation='nearest',origin='lower')
         labels = map(lambda x : self.ihkb[x],range(1,17))
