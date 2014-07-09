@@ -864,8 +864,6 @@ class Body(PyLayers):
                         # vector tail head
                         th = phe - pta
                         thl =  np.sqrt(np.sum(th**2,axis=0))
-                        import ipdb
-                        ipdb.set_trace()
                         # vector tail device
                         de = self._f[0,self.dev[dev]['uc3d'],:]
                         td = pta - de[0,:,np.newaxis]
