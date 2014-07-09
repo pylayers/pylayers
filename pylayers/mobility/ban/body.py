@@ -103,7 +103,7 @@ class Body(PyLayers):
 
     """
 
-    def __init__(self,_filebody='John.ini',_filemocap=[],traj=[]):
+    def __init__(self,_filebody='John.ini',_filemocap=[],traj=[],unit=[]):
         """ object constructor
 
         Parameters
@@ -121,9 +121,8 @@ class Body(PyLayers):
         """
 
         self.name = _filebody.replace('.ini','')
-        di = self.load(_filebody)
-        if _filemocap != []:
-            self.loadC3D(filename=_filemocap)
+        di = self.load(_filebody,_filemocap,unit)
+        
         self.cylfromc3d(centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
@@ -177,7 +176,7 @@ class Body(PyLayers):
         return(st)
 
 
-    def load(self,_filebody='John.ini'):
+    def load(self,_filebody='John.ini',_filemocap=[],unit=[]):
         """ load a body ini file
 
         Parameters
@@ -249,15 +248,21 @@ class Body(PyLayers):
         [self.idcyl.update({v:k}) for k,v in self.dcyl.items()]
 
         # if a mocap file is given in the config file
-        if len(di['mocap']['file']) != 0:
+        if _filemocap == []:
             unit = di['mocap']['unit']
             nframes = di['mocap']['nframes']
             self.loadC3D(di['mocap']['file'],nframes = nframes, unit = unit)
+        else:
+            self.loadC3D(_filemocap, unit = unit)
 
 
         #
         # update devices dict from wearable file
         #
+        try :
+            del self.dev
+        except:
+            pass
         self.dev={}
 
         devfilename = pyu.getlong(di['wearable']['file'],pstruc['DIRWEAR'])
@@ -859,7 +864,8 @@ class Body(PyLayers):
                         # vector tail head
                         th = phe - pta
                         thl =  np.sqrt(np.sum(th**2,axis=0))
-
+                        import ipdb
+                        ipdb.set_trace()
                         # vector tail device
                         de = self._f[0,self.dev[dev]['uc3d'],:]
                         td = pta - de[0,:,np.newaxis]
