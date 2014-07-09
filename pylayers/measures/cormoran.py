@@ -16,7 +16,7 @@ class CorSer(PyLayers):
 
     """
 
-    def __init__(self,serie=6,day=11,root='/media/niamiot/DONNEES/svn2/measures/CORMORAN/',source='UR1'):
+    def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/',source='UR1'):
 
         self.root =root
         if day==11:

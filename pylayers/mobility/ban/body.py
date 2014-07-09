@@ -151,7 +151,7 @@ class Body(PyLayers):
             else :
                 st = st + 'I have a '+self.dev[k]['name']+' device with id #'+k+' on '+\
                             self.dev[k]['radiomarkname']+'\n'
-            
+
 
 
 
@@ -874,7 +874,7 @@ class Body(PyLayers):
 
                     mp0 = self._f[fId,self.dev[dev]['uc3d'][0],:]
                     Tn = self.ccs[self.dev[dev]['asscyl'],:,:]
-                    
+
                 self.dcs[dev] = np.hstack((mp0[:,np.newaxis],Tn))
 
 

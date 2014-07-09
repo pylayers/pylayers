@@ -147,7 +147,9 @@ for k in range(1,17):
         else:
             pass
 
-def matstart(data,index):
+def matstart(data,index=1):
+    """ find the index of the start of the next sequence
+    """
     tstart=np.zeros((16,16))
     for k in range(1,17):
         for l in range(1,17):
@@ -155,12 +157,14 @@ def matstart(data,index):
                 dt = data[k][l]
                 seq  = dt['seq'].values
                 rssi =  dt['rssi'].values
-                u = np.where(seq==1)[0][index]
+                v = np.where(seq==1)[0]
+                #print k,l,v
+                u = v[1]
                 tstart[k-1][l-1] = u.astype('int')
     return tstart
 
 
-def extracts(data2,tstart):
+def extracts(data2,tstart=[],last=False):
     datao ={}
     serie ={}
     data2c = copy.deepcopy(data2)
@@ -168,22 +172,37 @@ def extracts(data2,tstart):
         datao[k]={}
         for l in range(1,17):
             if k!=l:
-                dt = data2c[k][l]
-                datao[k][l] = copy.deepcopy(dt[tstart[k-1][l-1]:])
-                dt.drop_duplicates('seq',inplace=True)
-                rssi = dt[0:tstart[k-1][l-1]]['rssi'].values
-                ind  = dt[0:tstart[k-1][l-1]]['seq'].values
+                if not last:
+                    dt = data2c[k][l]
+                    datao[k][l] = copy.deepcopy(dt[tstart[k-1][l-1]:])
+                    dt.drop_duplicates('seq',inplace=True)
+                    rssi = dt[0:tstart[k-1][l-1]]['rssi'].values
+                    ind  = dt[0:tstart[k-1][l-1]]['seq'].values
 
-                serie[(k,l)] = pd.Series(rssi,index=ind)
+                    serie[(k,l)] = pd.Series(rssi,index=ind)
+                else:
+                    dt = data2c[k][l]
+                    dt.drop_duplicates('seq',inplace=True)
+                    rssi = dt['rssi'].values
+                    ind  = dt['seq'].values
+                    serie[(k,l)] = pd.Series(rssi,index=ind)
                 #serie[k][l].index = serie[k][l]['seq']
                 #del serie[k][l]['src']
                 #del serie[k][l]['seq']
     return(serie,datao)
 
 
+def plotseq(dd):
+    f,ax=plt.subplots(nrows=16,ncols=16)
+
+    for k in range(1,17):
+        for l in range(1,17):
+            if k!=l:
+                ax[k-1,l-1].plot(dd[k][l]['seq'])
+
 def plotindex(dd):
     f,ax=plt.subplots(nrows=16,ncols=16)
-    
+
     for k in range(1,17):
         for l in range(1,17):
             if k!=l:
@@ -191,7 +210,7 @@ def plotindex(dd):
 
 def plotindex2(dd):
     f,ax=plt.subplots(nrows=1,ncols=1)
-    
+
     for k in range(1,17):
         for l in range(1,17):
             if k!=l:
@@ -199,7 +218,7 @@ def plotindex2(dd):
 
 def plotdata(dd):
     f,ax=plt.subplots(nrows=16,ncols=16)
-    
+
     for k in range(1,17):
         for l in range(1,17):
             if k!=l:
@@ -237,8 +256,8 @@ def toarray(S):
     A  = np.empty((Nt,256))
     A[:] = np.NaN
     u  = np.arange(256)
-    v  = np.arange(0,256,17)
-    w  = np.setdiff1d(u,v)
+    udiag  = np.arange(0,256,17)
+    w  = np.setdiff1d(u,udiag)
     A[:,w] = U
     A = A.reshape(Nt,16,16)
     return(A)
@@ -458,14 +477,34 @@ S21 = pd.DataFrame(s)
 print "get serie 22"
 
 tstart22 = matstart(data22,1).astype('int')
-s,data22=extracts(data22,tstart22)
+s,data23=extracts(data22,tstart22)
 S22 = pd.DataFrame(s)
+
+#
+# Handle the last sequences problem
+# Warning this treatment is had hoc and modifies the timestamp of the first
+# point data
+#
+
+data23[6][10]['seq'][1317072]=1
+data23[9][13]['seq'][1322088]=1
+data23[10][6]['seq'][1315303]=1
+data23[13][9]['seq'][1324935]=1
 
 print "get serie 23"
 
-tstart23 = matstart(data22,1).astype('int')
-s,data23=extracts(data23,tstart23)
+tstart23 = matstart(data23,1).astype('int')
+s,data24 = extracts(data23,tstart23)
 S23 = pd.DataFrame(s)
+
+
+print "get serie 24"
+
+s,dummy = extracts(data24,last=True)
+S24 = pd.DataFrame(s)
+
+
+tS = [S2,S3,S8,S9,S10,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20,S21,S22,S23,S24]
 #
 #
 #for sc in range(25):
@@ -515,26 +554,41 @@ S23 = pd.DataFrame(s)
 #    print sc,tA[sc].shape[1]*25.832e-3/60.
 #
 #
-#dHKBc={}
-#dHKBc[2]='Sc20_S5_R1_HKBS_8'
-#dHKBc[3]='Sc20_S6_R2_HKBS_9'
-#dHKBc[8]='Sc21a_S13_R1_HKBS_16'
-#dHKBc[9]='Sc21a_S14_R2_HKBS_17'
-#dHKBc[10]='Sc21a_S15_R3_HKBS_18'
-#dHKBc[11]='Sc21a_S16_R4_HKBS_19'
-#dHKBc[12]='Sc21b_S21_R1_HKBS_24'
-#dHKBc[13]='Sc21b_S22_R2_HKBS_25'
-#dHKBc[14]='Sc21b_S23_R3_HKBS_26'
-#dHKBc[15]='Sc21b_S24_R4_HKBS_27'
-#dHKBc[16]='Sc21d_S27_R1_HKBS_31'
-#dHKBc[17]='Sc21d_S28_R2_HKBS_33'
-#dHKBc[18]='Sc21e_S29_R1_HKBS_34'
-#dHKBc[19]='Sc21e_S30_R2_HKBS_35'
-#dHKBc[20]='Sc20_S31_R5_HKBS_36'
-#dHKBc[21]='Sc21a_S32_R1_Full_38'
-#dHKBc[22]='Sc21a_S33_R2_Full_39'
-#dHKBc[23]='Sc21a_S34_R3_Full_40'
-#dHKBc[24]='Sc21a_S35_R4_Full_41'
+dHKBc={}
+dHKBc[2]='Sc20_S5_R1_HKBS_8'
+dHKBc[3]='Sc20_S6_R2_HKBS_9'
+dHKBc[8]='Sc21a_S13_R1_HKBS_16'
+dHKBc[9]='Sc21a_S14_R2_HKBS_17'
+dHKBc[10]='Sc21a_S15_R3_HKBS_18'
+dHKBc[11]='Sc21a_S16_R4_HKBS_19'
+dHKBc[12]='Sc21b_S21_R1_HKBS_24'
+dHKBc[13]='Sc21b_S22_R2_HKBS_25'
+dHKBc[14]='Sc21b_S23_R3_HKBS_26'
+dHKBc[15]='Sc21b_S24_R4_HKBS_27'
+dHKBc[16]='Sc21d_S27_R1_HKBS_31'
+dHKBc[17]='Sc21d_S28_R2_HKBS_33'
+dHKBc[18]='Sc21e_S29_R1_HKBS_34'
+dHKBc[19]='Sc21e_S30_R2_HKBS_35'
+dHKBc[20]='Sc20_S31_R5_HKBS_36'
+dHKBc[21]='Sc21a_S32_R1_Full_38'
+dHKBc[22]='Sc21a_S33_R2_Full_39'
+dHKBc[23]='Sc21a_S34_R3_Full_40'
+dHKBc[24]='Sc21a_S35_R4_Full_41'
+
+tA = map(lambda x : toarray(x),tS)
+
+lscen = [2,3,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+dirname = '/home/uguen/svn2/measures/CORMORAN/POST-TREATED/11-06-2014/HIKOB/'
+
+for k,sc in enumerate(lscen):
+    d = {}
+    data = tA[k]
+    _filename = dHKBc[sc]+'.mat'
+    filename = dirname + _filename
+    d['rssi'] = data.swapaxes(0,1).swapaxes(1,2)
+    d['t'] = tS[k].index.values*25.832e-3
+    io.savemat(filename,d)
+
 #
 #
 #for k in dHKBc:
