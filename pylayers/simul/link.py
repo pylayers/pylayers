@@ -64,6 +64,12 @@ Modify h5py file
 
 
 """
+try:
+    from tvtk.api import tvtk
+    from mayavi.sources.vtk_data_source import VTKDataSource
+    from mayavi import mlab
+except:
+    print 'Layout:Mayavi is not installed'
 import doctest
 import numpy as np
 import matplotlib.pylab as plt
@@ -86,12 +92,6 @@ from pylayers.antprop.channel import Ctilde, Tchannel
 from pylayers.antprop.statModel import getchannel
 
 import h5py
-try:
-    from tvtk.api import tvtk
-    from mayavi.sources.vtk_data_source import VTKDataSource
-    from mayavi import mlab
-except:
-    print 'Layout:Mayavi is not installed'
 import pdb
 
 
@@ -1050,11 +1050,11 @@ class DLink(Link):
 
         force : boolean
             Force the computation (even if obj already exists) AND save (replace previous computations)
-        si.algo : str ('old'|'new')
+        si_algo : str ('old'|'new')
             signature.run algo type
-        ra.ceil_height_meter : int
+        ra_ceil_height_meter : int
             rays.to3D ceil height in meters
-        ra.number_mirror_cf : int
+        ra_number_mirror_cf : int
             rays.to3D number of ceil/floor reflexions
 
 

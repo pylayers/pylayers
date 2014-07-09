@@ -102,6 +102,13 @@ Miscellianous  functions
 
 
 """
+
+try:
+    #from mayavi import mlab
+    import mayavi.mlab as mlab
+except:
+    print 'mayavi not installed'
+
 import doctest
 import os
 import glob
@@ -114,7 +121,6 @@ import scipy as sp
 import scipy.linalg as la
 import scipy.special as special
 from scipy import io
-import matplotlib.pylab as plt
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 from pylayers.util.project import *
@@ -126,11 +132,8 @@ from matplotlib import rc
 from matplotlib import cm # colormaps
 from pylayers.antprop.antssh import *
 import pandas as pd
-try:
-    from mayavi import mlab
-except:
-    print 'mayavi not installed'
 
+import matplotlib.pylab as plt
 class Antenna(PyLayers):
     """ Antenna
 
@@ -1302,7 +1305,7 @@ class Antenna(PyLayers):
             ax.legend()
         return(fig,ax)
 
-    @mlab.show
+    #@mlab.show
     def _show3(self,newfig = True,colorbar =True,
                     name=[],title=True,**kwargs ):
         """ show3 mayavi
@@ -1315,13 +1318,13 @@ class Antenna(PyLayers):
             display colorbar
         """
 
-        
+
 
 
         if not self.evaluated:
             self.Fsynth(pattern=True)
 
-        
+
         x, y, z, k = self._computemesh(**kwargs)
 
         if newfig:

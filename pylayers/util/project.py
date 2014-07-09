@@ -125,7 +125,7 @@ pstruc['DIRH'] = 'output/H'
 pstruc['DIRLNK'] = 'output'
 pstruc['DIRBODY'] = 'body'
 pstruc['DIRC3D'] = 'body/c3d'
-
+pstruc['DIRWEAR'] = 'body/wear'
 # if basename directory does not exit it is created 
 try:
     os.chdir(basename)
@@ -213,7 +213,7 @@ if basename != pylayersdir+'/data':
     ,'struc/images','struc/ini'
     ,'ant','output/Tx001','output'
     ,'geom','output/sig','output/r2d'
-    ,'output/r3d','body/c3d']
+    ,'output/r3d','body','body/c3d','body/wear']
     for dl in dirlist:
         filelist = os.listdir(pylayersdir+'/data/' + dl)
         for fi in filelist:
