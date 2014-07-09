@@ -3,6 +3,7 @@ import pdb
 import sys
 import pandas as pd
 import numpy as np
+import numpy.ma as ma
 import scipy.io as io
 from pylayers.util.project import *
 from moviepy.editor import *
@@ -19,6 +20,9 @@ class CorSer(PyLayers):
     def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/',source='UR1'):
 
         self.root =root
+        self.serie = serie
+        self.day = day
+
         if day==11:
             stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
@@ -39,8 +43,18 @@ class CorSer(PyLayers):
 
     def __repr__(self):
         st = ''
-        st = st + self._filename + '\n'
-        st = st + self._fileBS + '\n'
+        try :
+            st = st+'BeSPoon : '+self._fileBS+'\n'
+        except:
+            pass
+        try :
+            st = st+'HIKOB : '+self._filehkb+'\n'
+        except:
+            pass
+        try :
+            st = st+'TCR : '+self._fileTCR+'\n'
+        except:
+            pass
         return(st)
 
 
@@ -208,16 +222,16 @@ class CorSer(PyLayers):
             self.ihkb[self.hkb[k]]=k
 
         if serie != '':
-            self._filename = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             if source=='UR1':
-                self._filename = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
+                self._filehkb = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
             else:
-                self._filename = filter(lambda x : 'r'+str(run) in x ,filsc)[0]
+                self._filehkb = filter(lambda x : 'r'+str(run) in x ,filsc)[0]
 
 
-        data = io.loadmat(dirname+'/'+self._filename)
+        data = io.loadmat(dirname+'/'+self._filehkb)
         if source=='UR1':
             self.rssi = data['rssi']
             self.t = data['t']
@@ -261,7 +275,7 @@ class CorSer(PyLayers):
                     self.df[column] = rssi
 
 
-    def imshow(self,time):
+    def imshow(self,time=100,kind='time'):
         """
         Parameters
         ----------
@@ -269,22 +283,42 @@ class CorSer(PyLayers):
         """
         fig = plt.figure(figsize=(10,10))
         self.D = self.rssi-self.rssi.swapaxes(0,1)
+
         try:
             timeindex = np.where(self.t[0]-time>0)[0][0]
         except:
             timeindex = np.where(self.t-time>0)[0][0]
+        if kind=='time':
+            dt1 = self.rssi[:,:,timeindex]
+            dt2 = self.D[:,:,timeindex]
+
+        if kind == 'mean':
+            dt1 = ma.masked_invalid(self.rssi).mean(axis=2)
+            dt2 = ma.masked_invalid(self.D).mean(axis=2)
+
+        if kind == 'std':
+            dt1 = ma.masked_invalid(self.rssi).std(axis=2)
+            dt2 = ma.masked_invalid(self.D).std(axis=2)
+
         ax1 = fig.add_subplot(121)
-        img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation='nearest',origin='lower')
+        #img1 = ax1.imshow(self.rssi[:,:,timeindex],interpolation='nearest',origin='lower')
+        img1 = ax1.imshow(dt1,interpolation='nearest')
         labels = map(lambda x : self.ihkb[x],range(1,17))
         plt.xticks(range(16),labels,rotation=80,fontsize=14)
         plt.yticks(range(16),labels,fontsize=14)
-        plt.title('t = '+str(time)+ ' s')
+        if kind=='time':
+            plt.title('t = '+str(time)+ ' s')
+        if kind=='mean':
+            plt.title(u'$mean(\mathbf{L})$')
+        if kind=='std':
+            plt.title(u'$std(\mathbf{L})$')
         divider = make_axes_locatable(ax1)
         cax1 = divider.append_axes("right", size="5%", pad=0.05)
         clb1 = fig.colorbar(img1,cax1)
-        clb1.set_label('level dBm')
+        clb1.set_label('level dBm',fontsize=14)
         ax2 = fig.add_subplot(122)
-        img2 = ax2.imshow(self.D[:,:,timeindex],interpolation='nearest',origin='lower')
+        #img2 = ax2.imshow(self.D[:,:,timeindex],interpolation='nearest',origin='lower')
+        img2 = ax2.imshow(dt2,interpolation='nearest')
         plt.title(u'$\mathbf{L}-\mathbf{L}^T$')
         divider = make_axes_locatable(ax2)
         plt.xticks(range(16),labels,rotation=80,fontsize=14)
