@@ -17,9 +17,12 @@ class CorSer(PyLayers):
 
     """
 
-    def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/',source='UR1'):
+    def __init__(self,serie=6,day=11,source='UR1'):
 
-        self.root =root
+
+        self.root = os.getenv('CORMORAN')
+        if self.root==None:
+            raise NameError('CORMORAN variable not set')
         self.serie = serie
         self.day = day
 
