@@ -277,7 +277,7 @@ class CorSer(PyLayers):
         """
         """
         videofile = self.root+'POST-TREATED/11-06-2014/Videos/'
-        _filename = self._filename.replace('.mat','.mp4')
+        _filename = self._filehkb.replace('.mat','.mp4')
         filename = videofile+_filename
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
