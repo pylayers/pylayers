@@ -289,6 +289,19 @@ class CorSer(PyLayers):
         self.df = self.df[self.df!=0]
 
 
+    def vlc(self):
+        """ play video of the associated serie
+        """
+        videofile = self.root+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        ldir = os.listdir(videofile)
+        luldir = map(lambda x : self._filename in x,ldir)
+        uldir = luldir.index(True)
+        _filename = ldir[uldir]
+        filename = videofile+_filename
+        os.system('vlc '+filename +'&' )
+
+
+
     def snapshot(self,t0=0,offset=15.5,save=False):
         """
         """

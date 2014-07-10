@@ -1088,6 +1088,7 @@ class Body(PyLayers):
                     'tstep':5,
                     'sstep':2,
                     'planes':['xz','xy','yz'],
+                    'dev':False,
                     'figsize':(10,10)
                     }
 
@@ -1113,7 +1114,9 @@ class Body(PyLayers):
             axs=np.array([axs])
         for p,ax in enumerate(axs):
             for uf,f in enumerate(frange):
-                fig,ax=self.show(color='b',plane=fargs['planes'][p],widthfactor=50,offset=vstep[uf],frameId=f,fig=fig,ax=ax)
+                fig,ax=self.show(color='b',plane=fargs['planes'][p],dev=fargs['dev'],
+                                 widthfactor=50,offset=vstep[uf],
+                                 frameId=f,fig=fig,ax=ax)
 
             ax.set_aspect('auto')
             ax.set_ylabel(fargs['planes'][p])
@@ -1599,6 +1602,7 @@ class Body(PyLayers):
         defaults = {'frameId' : 0,
                     'plane': 'yz',
                     'widthfactor' : 10,
+                    'dev':False,
                     'topos':False,
                     'offset':0}
 
@@ -1640,7 +1644,10 @@ class Body(PyLayers):
                 phe =  np.array([self.d[ax1, khe, fId], self.d[ax2, khe, fId]])[:,np.newaxis]
 
             fig,ax = plu.displot(pta+offset,phe+offset,linewidth = cylrad*kwargs['widthfactor'],**args)
-
+        if kwargs['dev']:
+            if 'topos' in dir(self):
+                pdev=np.array(self.getdevp(self.dev.keys()))
+                ax.plot(pdev[:,ax1]+offset[0],pdev[:,ax2]+offset[1],'og')
         # plt.axis('scaled')
         return(fig,ax)
 
