@@ -53,8 +53,12 @@ class CorSer(PyLayers):
                 self.subject=['Nicolas']
             elif (self.typ=='TCR'):
                 self.subject=['Bernard']
-
-        self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
+        if self.typ == 'TCR':
+            scenario = self.scenario[2:].replace('.','')
+            run = self.run.replace('r','')
+            self._filename = 'Sc' + scenario + '_S' + str(self.serie) + '_R' + str(run) + '_' + self.typ
+        else :
+            self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
 
     def __repr__(self):
         st = ''
@@ -172,7 +176,7 @@ class CorSer(PyLayers):
             tt = self._fileTCR.split('_')
             self.scenario=tt[0].replace('Sc','')
             self.run = tt[2].replace('R','')
-            self.typ = tt[3].replace('.csv','')
+            self.typ = tt[3].replace('.csv','').upper()
             self.video = 'NA'
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
@@ -290,11 +294,11 @@ class CorSer(PyLayers):
     def snapshots(self,t0=0,t1=10,offset=15.5):
         """
         """
-        videofile = self.root+'/POST-TREATED/11-06-2014/Videos/'
+        videofile = self.root+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
         ldir = os.listdir(videofile)
         luldir = map(lambda x : self._filename in x,ldir)
         uldir = luldir.index(True)
-        _filename = ldir[8]
+        _filename = ldir[uldir]
         filename = videofile+_filename
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
