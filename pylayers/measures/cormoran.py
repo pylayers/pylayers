@@ -31,6 +31,8 @@ class CorSer(PyLayers):
             stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
+            mocap = [5,6,7,8,17,21,22,23,24,34]
+
         if day==12:
             stcr = []
             shkb = []
@@ -45,8 +47,25 @@ class CorSer(PyLayers):
         if serie in sbs:
             self.loadBS(serie=serie,day=day)
 
+        if day==11:
+            if ((self.typ=='HKBS') or (self.typ=='Full')):
+                self.subject=['Nicolas']
+            elif (self.typ=='TCR'):
+                self.subject=['Bernard']
+
     def __repr__(self):
         st = ''
+        st = st + 'Day : '+ str(self.day)+'/07/2014'+'\n'
+        st = st + 'Serie : '+ str(self.serie)+'\n'
+        st = st + 'Scenario : '+str(self.scenario)+'\n'
+        st = st + 'Run : '+ str(self.run)+'\n'
+        st = st + 'Type : '+ str(self.typ)+'\n'
+        st = st + 'Original Video Id : '+ str(self.video)+'\n'
+        st = st + 'Subject(s) : '
+        for k in self.subject:
+            st = st + k + ' '
+        st = st + '\n\n\n'
+
         try :
             st = st+'BeSPoon : '+self._fileBS+'\n'
         except:
@@ -147,9 +166,16 @@ class CorSer(PyLayers):
                 self._fileTCR = filter(lambda x : 'S'+str(serie) in x ,files)[0]
             except:
                 self._fileTCR = filter(lambda x : 's'+str(serie) in x ,files)[0]
+            tt = self._fileTCR.split('_')
+            self.scenario=tt[0].replace('Sc','')
+            self.run = tt[2].replace('R','')
+            self.typ = tt[3].replace('.csv','')
+            self.video = 'NA'
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             self._fileTCR = filter(lambda x : 'R'+str(run) in x ,filsc)[0]
+            self.scenario= scenario
+            self.run = str(run) 
 
         filename = dirname + '/'+ self._fileTCR
         dtTCR = pd.read_csv(filename)
@@ -234,6 +260,11 @@ class CorSer(PyLayers):
 
         if serie != '':
             self._filehkb = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            tt = self._filehkb.split('_')
+            self.scenario=tt[0].replace('Sc','')
+            self.run = tt[2].replace('R','')
+            self.typ = tt[3]
+            self.video = tt[4].replace('.mat','')
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
             if source=='UR1':

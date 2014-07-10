@@ -121,8 +121,11 @@ class Body(PyLayers):
         """
 
         self.name = _filebody.replace('.ini','')
-        di = self.load(_filebody,_filemocap,unit)
-        
+        di = self.load(_filebody)
+        if _filemocap != []:
+            if unit==[]:
+                raise AttributeError('Please set the unit of the mocap file mm|cm|m')
+            self.loadC3D(filename=_filemocap,unit=unit)
         self.cylfromc3d(centered=True)
         if isinstance(traj,tr.Trajectory):
             self.traj=traj
