@@ -28,6 +28,7 @@ class CorSer(PyLayers):
             shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             sbs  = [5,6,7,8,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
             mocap = [5,6,7,8,17,21,22,23,24,34]
+
         if day==12:
             stcr = []
             shkb = []
@@ -41,7 +42,7 @@ class CorSer(PyLayers):
 
         if serie in sbs:
             self.loadBS(serie=serie,day=day)
-        
+
         if day==11:
             if ((self.typ=='HKBS') or (self.typ=='Full')):
                 self.subject=['Nicolas']
@@ -59,8 +60,8 @@ class CorSer(PyLayers):
         st = st + 'Subject(s) : '
         for k in self.subject:
             st = st + k + ' '
-        st = st + '\n\n\n'    
-            
+        st = st + '\n\n\n'
+
         try :
             st = st+'BeSPoon : '+self._fileBS+'\n'
         except:
