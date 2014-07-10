@@ -58,6 +58,7 @@ class CorSer(PyLayers):
         st = st + 'Type : '+ str(self.typ)+'\n'
         st = st + 'Original Video Id : '+ str(self.video)+'\n'
         st = st + 'Subject(s) : '
+
         for k in self.subject:
             st = st + k + ' '
         st = st + '\n\n\n'
@@ -177,6 +178,7 @@ class CorSer(PyLayers):
             for l in self.dTCR:
                 if k!=l:
                     d = dtTCR[((dtTCR['ida']==k) & (dtTCR['idb']==l))]
+                    d.drop_duplicates('time',inplace=True)
                     del d['lqi']
                     del d['ida']
                     del d['idb']
@@ -185,7 +187,6 @@ class CorSer(PyLayers):
                     del d['time']
                     if len(d)!=0:
                         sr = pd.Series(d['dist']/1000,index=d.index)
-                        sr = sr.drop_duplicates()
                         tcr[self.dTCR[k]+'_'+self.dTCR[l]]= sr
 
         self.tcr = pd.DataFrame(tcr)
@@ -311,6 +312,9 @@ class CorSer(PyLayers):
         Parameters
         ----------
 
+        kind : string 
+
+            'mean','std'
         """
         fig = plt.figure(figsize=(10,10))
         self.D = self.rssi-self.rssi.swapaxes(0,1)
@@ -372,8 +376,9 @@ class CorSer(PyLayers):
 
         a : node name
         b : node name
-        t0 : start time 
+        t0 : start time
         t1 : stop time
+
         """
         ia = self.hkb[a]-1
         ib = self.hkb[b]-1
