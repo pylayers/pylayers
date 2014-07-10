@@ -1439,8 +1439,10 @@ class Body(PyLayers):
                     'widthfactor' : 1.,
                     'tube_sides' : 6,
                     'pattern':False,
+                    'dev':False,
                     'ccs':False,
                     'dcs':False,
+                    'devcolor':'green',
                     'color':'white',
                     'k':0,
                     'save':False}
@@ -1501,6 +1503,17 @@ class Body(PyLayers):
         # partnames = [self.name +' ' +self.idcyl[k] for k in range(self.ncyl)]
         # [f.children[k].__setattr__('name', partnames[k]+str(k))
         #  for k in range(self.ncyl)]
+
+        if kwargs['dev']:
+            if 'topos' in dir(self):
+                colhex = cold[kwargs['devcolor']]
+                dev_color = tuple(pyu.rgb(colhex)/255.)
+                dev = self.dev.keys()
+                X=np.array(self.getdevp(dev)).T
+                mlab.points3d(X[0,:],X[1,:], X[2,:], 
+                              scale_factor=0.1, 
+                              resolution=10, 
+                              color = dev_color)
 
         if kwargs['ccs']:
             # to be improved

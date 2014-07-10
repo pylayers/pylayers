@@ -17,9 +17,13 @@ class CorSer(PyLayers):
 
     """
 
-    def __init__(self,serie=6,day=11,root='/home/uguen/svn2/measures/CORMORAN/',source='UR1'):
+    def __init__(self,serie=6,day=11,source='UR1'):
 
-        self.root =root
+        try:
+            self.root =os.environ['CORMORAN']
+        except:
+            raise NameError('Please add a CORMORAN environement variable \
+                            pointing to the data')  
         self.serie = serie
         self.day = day
 
@@ -48,6 +52,13 @@ class CorSer(PyLayers):
                 self.subject=['Nicolas']
             elif (self.typ=='TCR'):
                 self.subject=['Bernard']
+
+        if self.typ == 'TCR':
+            scenario = self.scenario[2:].replace('.','')
+            run = self.run.replace('r','')
+            self._filename = 'Sc' + scenario + '_S' + str(self.serie) + '_R' + str(run) + '_' + self.typ
+        else :
+            self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
 
     def __repr__(self):
         st = ''
@@ -159,11 +170,14 @@ class CorSer(PyLayers):
 
         files = os.listdir(dirname)
         if serie != '':
-            self._fileTCR = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            try:
+                self._fileTCR = filter(lambda x : 'S'+str(serie) in x ,files)[0]
+            except:
+                self._fileTCR = filter(lambda x : 's'+str(serie) in x ,files)[0]
             tt = self._fileTCR.split('_')
             self.scenario=tt[0].replace('Sc','')
             self.run = tt[2].replace('R','')
-            self.typ = tt[3].replace('.csv','')
+            self.typ = tt[3].replace('.csv','').upper()
             self.video = 'NA'
         else:
             filesc = filter(lambda x : 'Sc'+scenario in x ,files)
@@ -274,11 +288,33 @@ class CorSer(PyLayers):
         self.topandas()
         self.df = self.df[self.df!=0]
 
+
+    def snapshot(self,t0=0,offset=15.5,save=False):
+        """
+        """
+        videofile = self.root+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        ldir = os.listdir(videofile)
+        luldir = map(lambda x : self._filename in x,ldir)
+        uldir = luldir.index(True)
+        _filename = ldir[uldir]
+        filename = videofile+_filename
+        vc = VideoFileClip(filename)
+        F0 = vc.get_frame(t0+offset)
+        I0 = img_as_ubyte(F0)
+        plt.subplot(111)
+        plt.imshow(F0)
+        plt.title('t = '+str(t0)+'s')
+
+
+
     def snapshots(self,t0=0,t1=10,offset=15.5):
         """
         """
-        videofile = self.root+'POST-TREATED/11-06-2014/Videos/'
-        _filename = self._filehkb.replace('.mat','.mp4')
+        videofile = self.root+'/POST-TREATED/' +str(self.day) + '-06-2014/Videos/'
+        ldir = os.listdir(videofile)
+        luldir = map(lambda x : self._filename in x,ldir)
+        uldir = luldir.index(True)
+        _filename = ldir[uldir]
         filename = videofile+_filename
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
