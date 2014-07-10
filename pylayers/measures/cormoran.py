@@ -27,6 +27,7 @@ class CorSer(PyLayers):
         self.serie = serie
         self.day = day
 
+
         if day==11:
             stcr = [1,2,3,4,10,11,12,32,33,34,35,9,17,18,19,20,25,26]
             shkb = [5,6,13,14,15,16,21,22,23,24,27,28,29,30,31,32,33,34,35]
@@ -52,6 +53,8 @@ class CorSer(PyLayers):
                 self.subject=['Nicolas']
             elif (self.typ=='TCR'):
                 self.subject=['Bernard']
+
+        self._filename = 'Sc' + self.scenario + '_S' + str(self.serie) + '_R' + str(self.run) + '_' + self.typ
 
     def __repr__(self):
         st = ''
@@ -287,8 +290,11 @@ class CorSer(PyLayers):
     def snapshots(self,t0=0,t1=10,offset=15.5):
         """
         """
-        videofile = self.root+'POST-TREATED/11-06-2014/Videos/'
-        _filename = self._filename.replace('.mat','.mp4')
+        videofile = self.root+'/POST-TREATED/11-06-2014/Videos/'
+        ldir = os.listdir(videofile)
+        luldir = map(lambda x : self._filename in x,ldir)
+        uldir = luldir.index(True)
+        _filename = ldir[8]
         filename = videofile+_filename
         vc = VideoFileClip(filename)
         F0 = vc.get_frame(t0+offset)
